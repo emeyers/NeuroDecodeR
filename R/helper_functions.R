@@ -1,6 +1,8 @@
 
 
 
+# some utility functions that are useful
+
 
 get.center.bin.time <- function(time.vector)
 {

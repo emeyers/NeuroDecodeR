@@ -1,6 +1,9 @@
 
 
 
+# just contains a bunch of junk, should remove this from the repository...
+
+
 # doing ANOVAs to test how many sites are selective...
 
 
@@ -8,23 +11,26 @@ library('tictoc')
 
 
 
-source('getDataForDecoding.R')
-
-
- binned.file.name <- "ZD_binned_data_150ms_bins_50ms_sampled.Rda"     
-# binned.file.name <- "ZD_binned_data_150ms_bins_10ms_sampled.Rda"     
+binned.file.name <- "../data/ZD_binned_data_150ms_bins_10ms_sampled.Rda"     
+# binned.file.name <- "../data/ZD_binned_data_150ms_bins_50ms_sampled.Rda"     
 
 specific.binned.label.name <- "stimulus.ID"    # which labels to decode
 num.cv.splits <- 20   # the number of cross-validation splits
 
-tic()
-all.neural.data <- getDataForDecoding(binned.file.name, specific.binned.label.name, num.cv.splits)  
-toc()
+
+
+# comparing S4, RC and R6 implementations...
+
+
+
+
+
+
 
 
 # run the code with a profiler on to see how long it takes...
 Rprof(tmp <- tempfile(), line.profiling=TRUE)
-all.neural.data <- getDataForDecoding(binned.file.name, specific.binned.label.name, num.cv.splits)  
+all.neural.data <- get_data_for_decoding(binned.file.name, specific.binned.label.name, num.cv.splits)  
 Rprof()
 summaryRprof(tmp, lines = "show")
 
@@ -88,10 +94,66 @@ ceiling(ave_bin_size)
 
 
 
+# 1.8 seconds in MATLAB - using the reshape2 package I'm not getting similar times in R
 
 
 
 
+# comparing S4, RC and R6 objects...
+
+
+binned.file.name <- "../data/ZD_binned_data_150ms_bins_10ms_sampled.Rda"     
+# binned.file.name <- "../data/ZD_binned_data_150ms_bins_50ms_sampled.Rda"     
+
+specific.binned.label.name <- "stimulus.ID"    # which labels to decode
+num.cv.splits <- 20   # the number of cross-validation splits
+
+
+
+source('basic_DS.R')   # uses Winston's R6 system
+ds <- basic_DS$new(binned.file.name, specific.binned.label.name, num.cv.splits)
+tic()
+all.neural.data <- ds$get_data()
+toc()
+
+
+# RC
+source('alternatives/basic_DS_RC_v2.R')
+# if using the reference class object you need to name all the input values it seems...
+ds <- basic_DS_RC$new(binned.file.name = binned.file.name, specific.binned.label.name = specific.binned.label.name, num.cv.splits = num.cv.splits)
+tic()
+all.neural.data <- ds$get_data()
+toc()
+
+
+# S4
+source('alternatives/basic_DS_S4_v2.R')
+ds <- new("basic_DS_S4", binned.file.name = binned.file.name, specific.binned.label.name = specific.binned.label.name, num.cv.splits = num.cv.splits)
+tic()
+all.neural.data <- get_data(ds)
+toc()
+
+
+# very old version...
+source('get_data_for_decoding.R')
+tic()
+all.neural.data <- get_data_for_decoding(binned.file.name, specific.binned.label.name, num.cv.splits)  
+toc()
+
+
+
+
+
+
+# junk
+
+# sort.row <- function(decision.val.row) {
+#   curr.sorted.decision.vals <- sort(decision.val.row, decreasing = TRUE) 
+#   names(curr.sorted.decision.vals)
+# }
+# tic()
+# blah <- apply(decision.vals, 1, sort.row)
+# toc()
 
 
 

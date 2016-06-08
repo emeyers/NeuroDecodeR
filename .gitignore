@@ -1,3 +1,13 @@
 .Rproj.user
 .Rhistory
 .RData
+R/old
+old
+R/alternatives
+R/not_working
+R/results
+data/
+R/Rprof.out
+
+
+

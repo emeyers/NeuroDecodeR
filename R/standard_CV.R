@@ -1,299 +1,208 @@
 
-# rm(list = ls())
 
-# This will ultimately be an cross-validator S4 object, but for now just a script...
-
-
-source('get_data_for_decoding.R')
-source('max_correlation_CL.R')
-
-library('tictoc')
-
-library('e1071')  # svm package...
-
-# below is the beginning of a cross-validator...
+source('max_correlation_CL.R')   # need to make an OO version of this...
 
 
-binned.file.name <- "../data/ZD_binned_data_150ms_bins_10ms_sampled.Rda"     
-specific.binned.label.name <- "stimulus.ID"    # which labels to decode
-num.cv.splits <- 20   # the number of cross-validation splits
+standard_CV <- R6Class("standard_CV", 
+                    
+    public = list(
+                      
+      # properties
+      data.source = NA,
+      classifier = NA,
+      feature.preprocessors = NA,
+      num.resample.runs = 50,
+      
+                      
+      # constructor
+      initialize = function(data.source, classifier, feature.preprocessors) {
+                        
+        self$data.source <- data.source
+        self$classifier <- classifier
+        self$feature.preprocessors <- feature.preprocessors
+                      
+        },
+                      
+                      
+                      
+      # methods
+      run_decoding = function(){
+
+        
+        data.source <- self$data.source
+        classifier = self$classifier
+        feature.preprocessors = self$feature.preprocessors
+        num.resample.runs = self$num.resample.runs
+        
+
+        
+        DECODING_RESULTS <- NULL
+        
+        
+        # Add a loop over resample runs...
+
+        
+        
+        # get the data from the current cross-validation run        
+        cv.data <- data.source$get_data()
+
+        
+        unique.times <- unique(cv.data$time)
+        num.time.bins <- length(unique.times)
+        
+        all.cv.train.test.inds <- select(cv.data, starts_with("CV"))
+        num.CV <- ncol(all.cv.train.test.inds)
+        
+        
+        # add names for the different dimensions of the results
+        time.names <- grep("time", names(data.source$binned.data), value = TRUE)
+        dim.names <- list(1:num.CV, time.names, time.names)
+        
+        zero.one.loss.results <- array(NA, c(num.CV, num.time.bins, num.time.bins), dimnames = dim.names)
+        decision.value.results <- array(NA, c(num.CV, num.time.bins, num.time.bins), dimnames = dim.names)
+        rank.results <- array(NA, c(num.CV, num.time.bins, num.time.bins), dimnames = dim.names)
+        
+        
+        for (iCV in 1:num.CV) {
+          
+          tic()
+          print(iCV) 
+          
+          for (iTrain in 1:num.time.bins) {
+            
+            train.data <- filter(cv.data, time == unique.times[iTrain], all.cv.train.test.inds[iCV] == "train") %>% select(starts_with("site"), labels)
+
+            test.data <- filter(cv.data, all.cv.train.test.inds[iCV] == "test") %>% select(starts_with("site"), labels, time)
+            
+            
+            # do feature processing...
+            for (iFP in 1:length(feature.preprocessors)) {
+              
+              # get the preprocessed data...
+              processed.data <- fps[[iFP]]$preprocess_data(train.data, test.data)
+              
+              # update the training and test data with this preprocessed data...
+              train.data <- processed.data$train.data
+              test.data <- processed.data$test.data
+            
+            }
+            
+            
+            results <- cl$get_predictions(train.data, test.data)
+            
+            
+            # add more measures of decoding accuracy (rank results, etc)
+            rank.and.decision.val.results <- private$get.rank.results(results)
+            
+            results <- cbind(results, rank.and.decision.val.results)
+            
+            
+            # get the results averaged over all classes for each time period
+            mean.decoding.results <- results %>% group_by(time) %>% 
+              summarize(mean.accuracy = mean(correct), 
+                        mean.rank = mean(normalized.rank.results),
+                        mean.decision.vals = mean(correct.class.decision.val)
+                        )
+            
+            
+            zero.one.loss.results[iCV, iTrain, ] <- mean.decoding.results$mean.accuracy
+            decision.value.results[iCV, iTrain, ] <- mean.decoding.results$mean.rank
+            rank.results[iCV, iTrain, ] <- mean.decoding.results$mean.decision.vals 
+            
+            
+          }   # end the for loop over time bins
+          
+          
+          toc()
+        }  # end the for loop over CV splits
+        
+        
+        # combine all the results in one list to be returned
+        
+        DECODING_RESULTS$zero.one.loss.results <- zero.one.loss.results
+        DECODING_RESULTS$decision.value.results <- decision.value.results
+        DECODING_RESULTS$rank.results <- rank.results
+        
+        return(DECODING_RESULTS)
+        
+
+  }  # end the run_decoding method
 
 
-tic()
-all.neural.data <- get_data_for_decoding(binned.file.name, specific.binned.label.name, num.cv.splits)  
-toc()
+  ),  # end the public methods
 
-
-
-
-unique.times <- unique(all.neural.data$time)
-
-
-# get code to see if it worked...
-
-
-
-
-
-num.CV <- length(unique(all.neural.data$CV.num))
-num.time.bins <- length(unique.times)
-
-
-
-all.results <- array(NA, c(num.CV, num.time.bins, num.time.bins))
-
-
-for (iCV in 1:num.CV)
-{
   
-  tic()
-  print(iCV) 
   
-  for (iTrain in 1:num.time.bins)   # training time bin
-  {
+  # private methods
+  private = list(
     
-    train.data <- filter(all.neural.data, time == unique.times[iTrain], CV.num != iCV) %>% select(starts_with("X"), labels)
-    # test.data <- filter(all.neural.data, time == unique.times[iTime], CV.num == 1) %>% select(starts_with("X"), labels)
     
-    # try to do all the times at once...
-    #test.data <- filter(all.neural.data, CV.num == 1) %>% select(starts_with("X"), labels)
-    test.data <- filter(all.neural.data, CV.num == iCV) 
-    
-    classifiaction.accuracy <- maxCorrelation_CL(train.data, test.data)
-    
-    all.results[iCV, iTrain, ] <- classifiaction.accuracy$mean.accuracy
-    
-  }
-  
-  toc()
-}
+    # get the rank results and the decision value for predicted class...
+    get.rank.results = function(results) {
+      
+      
+      decision.vals <- select(results, starts_with("decision"))
+      
+      num.classes <- ncol(decision.vals)
+      num.test.points <- nrow(decision.vals)
+      
+      # remove the prefix 'decision.vals' from the column names...
+      the.names <- names(decision.vals)
+      the.names <- unlist(strsplit(the.names, "decision.val.", fixed = TRUE))  
+      the.names <- the.names[the.names != ""]
+      names(decision.vals) <- the.names
+      
+      
 
+      decision.vals.aug <- cbind(results$actual.labels, decision.vals)
+      #i <- 1; decision.vals.aug.row <- decision.vals.aug [i, ]
+      
 
+      # get the normalized rank results      
+      get.rank.one.row <- function(decision.vals.aug.row) {
+        which(names(sort(decision.vals.aug.row[2:length(decision.vals.aug.row)], decreasing = TRUE)) == as.character(as.matrix(decision.vals.aug.row[1]))) 
+      }
+        
+      normalized.rank.results <- 1 - ((apply(decision.vals.aug, 1, get.rank.one.row) - 1)/(num.classes - 1))
+      
 
-
-
-# plot full TCT plot
-
-library('fields')
-
-mean.results <- colMeans(all.results)
-
-time.vector <- classifiaction.accuracy$time
-time.bin.centers <- get.center.bin.time(time.vector)
-sorted.times <- sort(time.bin.centers, index.return = TRUE)
-
-
-image.plot(sorted.times$x, sorted.times$x, mean.results[, sorted.times$ix], 
-           legend.lab = "Classification Accuracy", xlab = "Test time (ms)", 
-           ylab = "Train time (ms)")
-
-abline(v = 0)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-# 
-# 
-# # older stuff
-# 
-# 
-# num.time.bins <- length(unique(all.neural.data$time))
-# 
-# test.only.at.training.times <- TRUE
-# 
-# if (test.only.at.training.times) {
-#   all.results <- array(NA, c(num.time.bins, 20))
-# }else{
-#   all.results <- array(NA, c(num.time.bins, num.time.bins, 20))
-# }
-# 
-# 
-# for (iCV in 1:20) 
-# {
-#   
-#   tic()
-#   print(iCV)
-#   
-#   for (iTrain in 1:num.time.bins) 
-#   {
-#     
-#     
-#     neural.data.train <- filter(all.neural.data, time == unique.times[iTrain])
-#     train.data <- filter(neural.data.train, CV.num != iCV) %>% select(starts_with("X"), labels)
-#     
-#      svm.fit <- svm(labels ~., data = train.data, kernel = "linear", scale = TRUE)
-#     #svm.fit <- svm(labels ~., data = train.data, kernel = "linear", scale = FALSE)
-#     
-#     class.accuracy <- NULL
-#     
-#     
-#     if (test.only.at.training.times){
-#       test.times <- iTrain
-#     }else{
-#       test.times <- 1:num.time.bins
-#     }
-#     
-#     
-#     for (iTest in test.times)
-#     {
+      
+      # get the decision values for the correct label      
+      get.decision.vals.one.row <- function(decision.vals.aug.row) {
+        decision.vals.aug.row[which(as.character(as.matrix(decision.vals.aug.row[1])) == names(decision.vals.aug.row[2:length(decision.vals.aug.row)])) + 1]
+      }
+      
+      correct.class.decision.val <- as.numeric(apply(decision.vals.aug, 1, get.decision.vals.one.row))
+      
+      
+      
+#  # much slower code (though potentially easier to read)
+#       normalized.rank.results <- rep(NA, num.test.points)
+#       correct.class.decision.val <- rep(NA, num.test.points)
 #       
-#       neural.data.test <- filter(all.neural.data, time == unique.times[iTest])
-#       test.data <- filter(neural.data.test, CV.num == iCV) %>% select(starts_with("X"), labels)
-#       
-#       curr.result <- sum(predict(svm.fit, newdata = test.data) == test.data$labels)/dim(test.data)[1]
-#       
-#       if (test.only.at.training.times){
-#         all.results[iTrain, iCV] <- curr.result
-#       }else{
-#         all.results[iTrain, iTest, iCV] <- curr.result
+#       for (iTestPoint in 1:num.test.points){
+#         
+#         curr.sorted.decision.vals <- sort(decision.vals[iTestPoint, ], decreasing = TRUE) 
+#         
+#         curr.rank.result <- which(names(curr.sorted.decision.vals) == results$actual.labels[iTestPoint])
+#         
+#         normalized.rank.results[iTestPoint] <- 1 - ((curr.rank.result - 1)/(num.classes - 1))
+#         
+#         correct.class.decision.val[iTestPoint] <- decision.vals[iTestPoint, which(results$actual.labels[iTestPoint] == the.names)]
 #       }
-#       
-#       
-#       #lda.fit <- lda(labels ~., data = train.data)
-#       #sclass.accuracy[iCV] <- sum(predict(lda.fit, newdata = test.data)$class == test.data$labels)/dim(test.data)[1]
-#       
-#     }
-#     
-#     
-#     #all.results <- rbind(all.results, class.accuracy)
-#     #print(all.results)   # print results up to current time
-#     
-#     
-#   }
-#   
-#   toc()
-#   
-# }
-# 
-# 
-# 
-# if (test.only.at.training.times) {
-#   all.mean.results <- rowMeans(all.results)
-# }else{
-#   all.mean.results <- apply(all.results, c(1,2), mean)
-# }
-# 
-# 
-# # not sure this is working...
-# 
-# 
-# plot(rowMeans(all.results), type = 'o', ylab = "Classification Accuracy")
-# abline(h = 1/7, col = 'red')
-# 
-# 
-# if (!test.only.at.training.times)
-# {
-#   library('fields')
-#   image.plot(all.mean.results)
-# }
 
+      
+      rank.and.decision.val.results <- data.frame(normalized.rank.results, correct.class.decision.val)
 
+      
+     }
+  
+  
+  )  # end private properties/methods
+  
+  
 
-
-
-
-
-
-
-
-
-
-
-# very old junk
-
-
-#all.mean.results <- matrix(NA, 18, 18)
-#for (iTrain in 1:18)
-#{
-#  for (iTest in 1:18)
-#  {
-#    all.mean.results[iTrain, iTest] <- mean(all.results[iTrain, iTest, ])
-#  }
-#}
-
-#image(all.mean.results)
-
-
-# banding on the off diagonal because all CVs don't come from the same trials :(
-
-#plot(seq(75, 925, by = 50) - 500, all.mean.results, xlab = "Time (ms)", ylab = "Classification Accuracy", type = "o")
-#abline(h = 1/7)
-#abline(v = 0)
-
-
-
-# 
-# 
-# 
-# 
-# # get code to see if it worked...
-# 
-# all.mean.results <- NULL
-# all.results <- NULL
-# for (iTime in 1:18)
-# {
-#   
-#   print(iTime)
-#   
-#   tic()
-#   neural.data <- filter(all.neural.data, time == unique.times[iTime])
-#   #neural.data <- getDataForDecoding(iTime)
-#   
-#   class.accuracy <- NULL
-#   for (iCV in 1:20)
-#   {
-#     test.data <- filter(neural.data, CV.num == iCV)[, 1:133]
-#     train.data <- filter(neural.data, CV.num != iCV)[, 1:133]
-#     
-#     svm.fit <- svm(labels ~., data = train.data, kernel = "linear", scale = TRUE)
-#     class.accuracy[iCV] <- sum(predict(svm.fit, newdata = test.data) == test.data$labels)/dim(test.data)[1]
-#     
-#     #lda.fit <- lda(labels ~., data = train.data)
-#     #sclass.accuracy[iCV] <- sum(predict(lda.fit, newdata = test.data)$class == test.data$labels)/dim(test.data)[1]
-#     
-#     
-#   }
-#   
-#   all.mean.results[iTime] <- mean(class.accuracy)
-#   all.results <- rbind(all.results, class.accuracy)
-#   
-#   #print(all.results)   # print results up to current time
-#   
-#   toc()
-#   
-# }
-# 
-# plot(seq(75, 925, by = 50) - 500, all.mean.results, xlab = "Time (ms)", ylab = "Classification Accuracy", type = "o")
-# abline(h = 1/7)
-# abline(v = 0)
-# 
-
-
-
-
-
-
-
-
-
-
-
+) # end the class 
 
 
 
