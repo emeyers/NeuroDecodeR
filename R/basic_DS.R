@@ -7,7 +7,7 @@ library('dplyr')
 library('reshape2')
 library('stringr')
 
-
+source('helper_functions.R')
 
 
 basic_DS <- R6Class("basic_DS", 
@@ -18,16 +18,22 @@ basic_DS <- R6Class("basic_DS",
     binned.data = NA,
     specific.binned.label.name = NA, 
     num.cv.splits = NA,
+    use.count.data = FALSE,
   
     
     # constructor
-    initialize = function(binned.file.name, specific.binned.label.name, num.cv.splits) {
+    initialize = function(binned.file.name, specific.binned.label.name, num.cv.splits, use.count.data = FALSE) {
       
       self$specific.binned.label.name <- specific.binned.label.name
       self$num.cv.splits <- num.cv.splits
       
       # load the binned data  
       load(binned.file.name)
+  
+      if (use.count.data) {
+        binned.data <- convert.rates.to.counts(binned.data) 
+      }
+    
       self$binned.data <- binned.data
       
     },
