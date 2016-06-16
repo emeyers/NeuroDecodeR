@@ -5,12 +5,14 @@
 
 
 
-source('basic_DS.R')   # uses Winston's R6 system
+source('basic_DS.R')   
 source('max_correlation_CL.R')
 source('standard_CV.R')
 source('zscore_FP.R')
 #source('svm_CL.R')
-
+#source('svm_kernlab_CL.R')
+source('poisson_naive_bayes_CL.R')
+source('select_k_features_FP.R')
 
 library('tictoc')
 
@@ -32,13 +34,19 @@ ds <- basic_DS$new(binned.file.name, specific.binned.label.name, num.cv.splits)
 
 
 cl <- max_correlation_CL$new()
+fps <- list(zscore_FP$new(), select_k_features_FP$new(30))  # using only the top 30 features...
+#fps <- list(zscore_FP$new())
+
+
 #cl <- svm_CL$new()
 #cl <- probsvm_CL$new()
+#cl <- svm_kernlab_CL$new()
+
+#cl <- poisson_naive_bayes_CL$new()
+#fps <- NULL
+#ds <- basic_DS$new(binned.file.name, specific.binned.label.name, num.cv.splits, TRUE)
 
 
-fp1 <- zscore_FP$new()
-
-fps <- list(fp1)
 
 cv <- standard_CV$new(ds, cl, fps)
 
@@ -86,7 +94,7 @@ plot(time.bin.names, diag(mean.results), type = "o", xlab = "Time (ms)", ylab = 
 abline(v = 0)
 
 
-
+max(diag(mean.results))
 
 
 
