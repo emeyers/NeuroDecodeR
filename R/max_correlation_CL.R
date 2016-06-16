@@ -30,7 +30,9 @@ max_correlation_CL <- R6Class("max_correlation_CL",
       
       ### Test the classifier
       
-      train.test.cor <- cor(t(prototypes[, 2:133]), t(select(all.times.test.data, -labels, -time)))
+      
+      train.test.cor <- cor(t(prototypes[, 2:dim(prototypes)[2]]), t(select(all.times.test.data, -labels, -time)))
+      #train.test.cor <- cor(t(prototypes[, 2:133]), t(select(all.times.test.data, -labels, -time)))
       
 
       # get the predicted labels
