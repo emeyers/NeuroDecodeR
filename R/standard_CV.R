@@ -75,17 +75,23 @@ standard_CV <- R6Class("standard_CV",
             test.data <- filter(cv.data, all.cv.train.test.inds[iCV] == "test") %>% select(starts_with("site"), labels, time)
             
             
-            # do feature processing...
-            for (iFP in 1:length(feature.preprocessors)) {
-              
-              # get the preprocessed data...
-              processed.data <- fps[[iFP]]$preprocess_data(train.data, test.data)
-              
-              # update the training and test data with this preprocessed data...
-              train.data <- processed.data$train.data
-              test.data <- processed.data$test.data
             
-            }
+            # if feature-processors have been specified, do feature processing...
+            if (length(feature.preprocessors) > 1) {
+            
+              for (iFP in 1:length(feature.preprocessors)) {
+                
+                # get the preprocessed data...
+                processed.data <- fps[[iFP]]$preprocess_data(train.data, test.data)
+                
+                # update the training and test data with this preprocessed data...
+                train.data <- processed.data$train.data
+                test.data <- processed.data$test.data
+                
+              }
+            
+            }  # end the if statement for doing preprocessing
+            
             
             
             results <- cl$get_predictions(train.data, test.data)
@@ -95,7 +101,7 @@ standard_CV <- R6Class("standard_CV",
             rank.and.decision.val.results <- private$get.rank.results(results)
             
             results <- cbind(results, rank.and.decision.val.results)
-            
+
             
             # get the results averaged over all classes for each time period
             mean.decoding.results <- results %>% group_by(time) %>% 
@@ -106,8 +112,8 @@ standard_CV <- R6Class("standard_CV",
             
             
             zero.one.loss.results[iCV, iTrain, ] <- mean.decoding.results$mean.accuracy
-            decision.value.results[iCV, iTrain, ] <- mean.decoding.results$mean.rank
-            rank.results[iCV, iTrain, ] <- mean.decoding.results$mean.decision.vals 
+            decision.value.results[iCV, iTrain, ] <- mean.decoding.results$mean.decision.vals 
+            rank.results[iCV, iTrain, ] <- mean.decoding.results$mean.rank
             
             
           }   # end the for loop over time bins
@@ -156,15 +162,25 @@ standard_CV <- R6Class("standard_CV",
 
       decision.vals.aug <- cbind(results$actual.labels, decision.vals)
       #i <- 1; decision.vals.aug.row <- decision.vals.aug [i, ]
-      
+    
 
-      # get the normalized rank results      
+      ####  Bad code - doesn't work with negative numbers because apply converts values to strings before sorting
+      ### (and then the negative sign becomes a dash so it sorts the values in the wrong order)
+      ##  # get the normalized rank results (the lines below are not working correcly with negative values...)      
+      ##  get.rank.one.row <- function(decision.vals.aug.row) {
+      ##    which(names(sort(decision.vals.aug.row[2:length(decision.vals.aug.row)], decreasing = TRUE)) == as.character(as.matrix(decision.vals.aug.row[1]))) 
+      ##  }
+       
+  
+      # This code is written less compactly but it works correctly with negative decision values
       get.rank.one.row <- function(decision.vals.aug.row) {
-        which(names(sort(decision.vals.aug.row[2:length(decision.vals.aug.row)], decreasing = TRUE)) == as.character(as.matrix(decision.vals.aug.row[1]))) 
+        actual.label <- decision.vals.aug.row[1]
+        decision.vals.row <- decision.vals.aug.row[2:length(decision.vals.aug.row)]
+        the.names <- names(decision.vals.row)  
+        the.order <- order(as.numeric(decision.vals.row), decreasing = TRUE)
+        which(the.names[the.order] == actual.label) 
       }
-        
       normalized.rank.results <- 1 - ((apply(decision.vals.aug, 1, get.rank.one.row) - 1)/(num.classes - 1))
-      
 
       
       # get the decision values for the correct label      
@@ -174,22 +190,17 @@ standard_CV <- R6Class("standard_CV",
       
       correct.class.decision.val <- as.numeric(apply(decision.vals.aug, 1, get.decision.vals.one.row))
       
+
       
-      
-#  # much slower code (though potentially easier to read)
-#       normalized.rank.results <- rep(NA, num.test.points)
-#       correct.class.decision.val <- rep(NA, num.test.points)
-#       
-#       for (iTestPoint in 1:num.test.points){
-#         
-#         curr.sorted.decision.vals <- sort(decision.vals[iTestPoint, ], decreasing = TRUE) 
-#         
-#         curr.rank.result <- which(names(curr.sorted.decision.vals) == results$actual.labels[iTestPoint])
-#         
-#         normalized.rank.results[iTestPoint] <- 1 - ((curr.rank.result - 1)/(num.classes - 1))
-#         
-#         correct.class.decision.val[iTestPoint] <- decision.vals[iTestPoint, which(results$actual.labels[iTestPoint] == the.names)]
-#       }
+    ##  # much slower code (though potentially easier to read)
+    ##  normalized.rank.results <- rep(NA, num.test.points)
+    ##  correct.class.decision.val <- rep(NA, num.test.points)
+    ##  for (iTestPoint in 1:num.test.points){
+    ##    curr.sorted.decision.vals <- sort(decision.vals[iTestPoint, ], decreasing = TRUE) 
+    ##    curr.rank.result <- which(names(curr.sorted.decision.vals) == results$actual.labels[iTestPoint])
+    ##    normalized.rank.results[iTestPoint] <- 1 - ((curr.rank.result - 1)/(num.classes - 1))
+    ##    correct.class.decision.val[iTestPoint] <- decision.vals[iTestPoint, which(results$actual.labels[iTestPoint] == the.names)]
+    ##  }
 
       
       rank.and.decision.val.results <- data.frame(normalized.rank.results, correct.class.decision.val)
