@@ -36,7 +36,12 @@ max_correlation_CL <- R6Class("max_correlation_CL",
       
 
       # get the predicted labels
-      predicted.inds <- apply(train.test.cor, 2, which.max)   # need to create rand.which.max() function...
+      
+      # predicted.inds <- apply(train.test.cor, 2, which.max)   # need to create rand.which.max() function...
+      #predicted.inds <- apply(train.test.cor, 2, which.is.max)   # only slightly slower but breaks ties
+      predicted.inds <- apply(train.test.cor, 2, rand.which.max)   # only slightly slower but breaks ties
+      
+      
       predicted.labels <- prototypes$labels[predicted.inds]
       
       
@@ -61,7 +66,7 @@ max_correlation_CL <- R6Class("max_correlation_CL",
       }   # end the get_predictions method
     
     
-   )  # end the public properites/methods
+   )
    
    
 )  # end the class

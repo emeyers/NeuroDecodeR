@@ -74,7 +74,15 @@ get.bin.widths <- function(time.vector)
 
 
 
-
+# if there are ties int he maximum value, then this function returns an index of one of the maxes randomly
+# this function was copied from the nnet package (which was slightly faster than my implementation)
+rand.which.max <- function (x) 
+{
+  y <- seq_along(x)[x == max(x)]
+  if (length(y) > 1L) 
+    sample(y, 1L)
+  else y
+}
 
 
 
