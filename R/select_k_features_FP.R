@@ -59,10 +59,14 @@ select_k_features_FP <- R6Class("select_k_features_FP",
      num.sites <- dim(train.data)[2] - 1
      num.groups <- dim(num.points.in.each.group)[1]    # the number of classes
      
-     group.means <- aggregate(train.data[, 1:num.sites], list(train.data$labels), mean)  # slowest part of the code...
+     # group.means <- select(aggregate(train.data[, 1:num.sites], list(train.data$labels), mean), starts_with("site))  # slowest part of the code...
+
+     # marginally faster way to compute the group means (might have more of a speed up if more sites are used)
+     split.data <- split(train.data[, 1:num.sites], train.data$labels)
+     group.means <- t(sapply(split.data, function(one.group.data) apply(one.group.data, 2, mean)))
 
      
-     MSS <- apply(sweep(scale(select(group.means, starts_with("site")), scale = FALSE)^2, 1, num.points.in.each.group$n, FUN = "*"), 2, sum)
+     MSS <- apply(sweep(scale(group.means, scale = FALSE)^2, 1, num.points.in.each.group$n, FUN = "*"), 2, sum)
      TSS <- apply(scale(select(train.data, -labels), scale = FALSE)^2, 2, sum)
      SSE <- TSS - MSS   # residual SS = total SS + model SS
      
