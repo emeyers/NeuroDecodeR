@@ -1,25 +1,40 @@
 library(shiny)
 
-shinyUI(navbarPage(title = "NDT",
+shinyUI(navbarPage(id = "NDT_UI", title = "NDT",
 
   tabPanel(title = "Run decoding",
-            "Run decoding stuff"     
+            actionButton("runDecoding", "Run Decoding"),
+            br(),
+            tableOutput("display_results")
   ),
                                       
   tabPanel(title = "Data Source",
-      "blah"     
+      selectInput("DS.name", "Data source name", c("basic_DS")),     
+      uiOutput("list_of_binned_files"),
+      uiOutput("list_of_binned_label_names"),
+      #textInput("DS.specific_binned_label_names", "Binned label names"),
+      numericInput("DS.num_cv_splits", "Number of CV splits", value = 5, min = 2)    
   ),
 
   tabPanel(title = "Feature Preprocessors",
-           "blah"     
+           numericInput("FP.number", "Number of Feature Preprocessors", 1, min = 0),
+           uiOutput("feature_preprocessor_panel")
   ),  
   
   tabPanel(title = "Classifiers",
-           "blah"     
+           #selectInput("CL.name", "Classifier Type", c("Maximum Correlation", "Poisson Naive Bayes", "Support Vector Machine")),
+           selectInput("CL.name", "Classifier Type", c("Maximum Correlation", "Poisson Naive Bayes")),
+           uiOutput("additional_classifier_parameters")
+           
   ),    
   
   tabPanel(title = "Cross-Validators",
-           "blah"     
+      numericInput("CV.num_resample_runs", "Number of resample runs", value = 2, min = 1)    
   )       
                    
 ))
+
+
+
+
+

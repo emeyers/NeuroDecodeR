@@ -83,7 +83,7 @@ svm_CL <- R6Class("svm_CL",
              
       
       # since a voting scheme is used, the class with the highest average decision value will not necessarily
-      # be the class that the classifier returns, which is bad :(. A few options are to implement my won
+      # be the class that the classifier returns, which is bad :(. A few options are to implement my
       # one vs. all svm (as I did with the MATLAB NDT) or I could try another R svm implementation. 
       
       warning("The decision values calculated here have some issues. Should really implement my own one-vs-all svm multi-class scheme")         
