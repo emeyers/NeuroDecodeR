@@ -60,7 +60,10 @@ select_k_features_FP <- R6Class("select_k_features_FP",
      num.groups <- dim(num.points.in.each.group)[1]    # the number of classes
      
      # group.means <- select(aggregate(train.data[, 1:num.sites], list(train.data$labels), mean), starts_with("site))  # slowest part of the code...
-
+     # another option that is just as fast...
+     # group.means <- train.data %>% group_by(labels) %>% summarise_each(funs(mean)) %>% select(starts_with("site"))
+     
+     
      # marginally faster way to compute the group means (might have more of a speed up if more sites are used)
      split.data <- split(train.data[, 1:num.sites], train.data$labels)
      group.means <- t(sapply(split.data, function(one.group.data) apply(one.group.data, 2, mean)))

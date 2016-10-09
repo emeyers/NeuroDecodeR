@@ -24,7 +24,7 @@ library('tictoc')
 
 binned.file.name <- "../data/ZD_binned_data_150ms_bins_10ms_sampled.Rda"     
 specific.binned.label.name <- "stimulus.ID"    # which labels to decode
-num.cv.splits <- 20   # the number of cross-validation splits
+num.cv.splits <- 5   # the number of cross-validation splits
 
 
 
@@ -44,9 +44,10 @@ fps <- list(zscore_FP$new(), select_k_features_FP$new(30))  # using only the top
 
 #cl <- poisson_naive_bayes_CL$new()
 #fps <- NULL
-#ds <- basic_DS$new(binned.file.name, specific.binned.label.name, num.cv.splits, TRUE)
 
+ds <- basic_DS$new(binned.file.name, specific.binned.label.name, num.cv.splits, TRUE)
 
+ds$num.times.to.repeat.labels.per.cv.block <- 4
 
 cv <- standard_CV$new(ds, cl, fps)
 
@@ -54,7 +55,7 @@ cv <- standard_CV$new(ds, cl, fps)
 Rprof(tmp <- tempfile(), line.profiling=TRUE)
 DECODING_RESULTS <- cv$run_decoding()
 Rprof()
-summaryRprof(tmp, lines = "show")
+print(summaryRprof(tmp, lines = "show"))
 
 
 
@@ -94,7 +95,7 @@ plot(time.bin.names, diag(mean.results), type = "o", xlab = "Time (ms)", ylab = 
 abline(v = 0)
 
 
-max(diag(mean.results))
+print(max(diag(mean.results)))
 
 
 
