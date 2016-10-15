@@ -3,6 +3,7 @@ library(shiny)
 shinyUI(navbarPage(id = "NDT_UI", title = "NDT",
 
   tabPanel(title = "Run decoding",
+            fileInput("upload_data", "Upload data"),
             uiOutput("list_of_binned_files"),
             actionButton("runDecoding", "Run Decoding"),
             br(),
@@ -37,8 +38,10 @@ shinyUI(navbarPage(id = "NDT_UI", title = "NDT",
   
   
   tabPanel(title = "Plot Results",
-           "Add code to plot the results here..."
-  )
+           fluidPage(selectInput("Plot.TCT_result_file", "File to plot results", c("A", "B")),
+           selectInput("Plot.TCT_result_type_to_plot", "Type of result to plot", c("Zero-one loss", "Rank results", "Decision Values")),
+           imageOutput("tct_plot", width = 500, height = 500)
+  ))
   
                    
 ))

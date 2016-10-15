@@ -5,7 +5,7 @@ source("run_decoding.R")
 
 
 require('dplyr')
-
+require('fields')
 
 
 # helper function to create multiple FP inputs
@@ -144,8 +144,6 @@ shinyServer(function(input, output) {
     numericInput(paste0("FP.num_features_to_use", 1), 
                  "Number of features to use", value = -1) 
     
-    
-  
   })
   
   
@@ -166,6 +164,44 @@ shinyServer(function(input, output) {
   
   
   
+  # outputs to plot the results
+  
+  
+  output$tct_plot = renderPlot({
+    
+    load('results/curr_temp_results.Rda')
+    
+    
+    if (input$Plot.TCT_result_type_to_plot == "Zero-one loss"){
+      all.results <- DECODING_RESULTS$zero.one.loss.results
+      labels_names <- "Classification Accuracy"
+    }
+    
+    if (input$Plot.TCT_result_type_to_plot == "Rank results"){
+      all.results <- DECODING_RESULTS$decision.value.results
+      labels_names <- "Normalized rank"
+    }
+    
+    if (input$Plot.TCT_result_type_to_plot == "Decision Values"){
+      all.results <- DECODING_RESULTS$rank.results
+      labels_names <- "Decision values"
+    }
+    
+    
+    
+    # get the mean over CV splits
+    mean.results <- colMeans(all.results)
+    time.bin.names <- get.center.bin.time(dimnames(all.results)[[3]])
+    
+    
+    # plot full TCT plot
+    image.plot(time.bin.names, time.bin.names, mean.results, 
+               legend.lab = labels_names, xlab = "Test time (ms)", 
+               ylab = "Train time (ms)")
+    abline(v = 0)
+    
+    
+  })
   
   
   
