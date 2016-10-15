@@ -1,6 +1,6 @@
 
 
-source('max_correlation_CL.R')   # need to make an OO version of this...
+# source('max_correlation_CL.R')   # need to make an OO version of this...
 
 
 standard_CV <- R6Class("standard_CV", 
@@ -28,7 +28,7 @@ standard_CV <- R6Class("standard_CV",
       # methods
       run_decoding = function(){
 
-        
+
         data.source <- self$data.source
         classifier = self$classifier
         feature.preprocessors = self$feature.preprocessors
@@ -94,7 +94,7 @@ standard_CV <- R6Class("standard_CV",
             
             
             
-            results <- cl$get_predictions(train.data, test.data)
+            results <- classifier$get_predictions(train.data, test.data)
             
             
             # add more measures of decoding accuracy (rank results, etc)
