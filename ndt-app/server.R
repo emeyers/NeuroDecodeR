@@ -1,6 +1,7 @@
 # server.R
 
-# source("helpers.R")
+
+source("run_decoding.R")
 
 
 require('dplyr')
@@ -43,6 +44,11 @@ shinyServer(function(input, output) {
   # run the decoding
   
   get_decoding_params <- eventReactive(input$runDecoding, {
+    
+    
+    # do the decoding analysis...
+    run_decoding(input) 
+    
     
     decoding.parameters <- data.frame(input$DS.name, input$DS.num_cv_splits)
     

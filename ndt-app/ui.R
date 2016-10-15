@@ -3,19 +3,22 @@ library(shiny)
 shinyUI(navbarPage(id = "NDT_UI", title = "NDT",
 
   tabPanel(title = "Run decoding",
+            uiOutput("list_of_binned_files"),
             actionButton("runDecoding", "Run Decoding"),
             br(),
             tableOutput("display_results")
   ),
+  
                                       
   tabPanel(title = "Data Source",
       selectInput("DS.name", "Data source name", c("basic_DS")),     
-      uiOutput("list_of_binned_files"),
       uiOutput("list_of_binned_label_names"),
       #textInput("DS.specific_binned_label_names", "Binned label names"),
-      numericInput("DS.num_cv_splits", "Number of CV splits", value = 5, min = 2)    
+      numericInput("DS.num_cv_splits", "Number of CV splits", value = 5, min = 2),
+      numericInput("DS.num_repeats_per_cv_split", "Number of repeated labels per split", value = 1, min = 1)
   ),
 
+  
   tabPanel(title = "Feature Preprocessors",
            numericInput("FP.number", "Number of Feature Preprocessors", 1, min = 0),
            uiOutput("feature_preprocessor_panel")
@@ -30,7 +33,13 @@ shinyUI(navbarPage(id = "NDT_UI", title = "NDT",
   
   tabPanel(title = "Cross-Validators",
       numericInput("CV.num_resample_runs", "Number of resample runs", value = 2, min = 1)    
-  )       
+  ), 
+  
+  
+  tabPanel(title = "Plot Results",
+           "Add code to plot the results here..."
+  )
+  
                    
 ))
 
