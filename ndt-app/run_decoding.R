@@ -97,11 +97,12 @@ run_decoding <- function(decoding_params) {
   
   cv <- standard_CV$new(ds, cl, fps)
   
+  # this actually doesn't do anything because currently the cross-validator only does 1 resample run
+  #cv$num.resample.runs <- decoding_params$CV.num_resample_runs
   
-  # Rprof(tmp <- tempfile(), line.profiling=TRUE)
+  
+  # only currently does 1 resample run
   DECODING_RESULTS <- cv$run_decoding()
-  # Rprof()
-  # print(summaryRprof(tmp, lines = "show"))
   
   
   # save the results...
