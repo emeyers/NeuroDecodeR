@@ -37,11 +37,23 @@ shinyUI(navbarPage(id = "NDT_UI", title = "NDT",
   ), 
   
   
-  tabPanel(title = "Plot Results",
-           fluidPage(selectInput("Plot.TCT_result_file", "File to plot results", c("A", "B")),
+ navbarMenu("Plot Results",
+   
+   tabPanel(title = "TCT plots",
+           selectInput("Plot.TCT_result_file", "File to plot results", c("A", "B")),
            selectInput("Plot.TCT_result_type_to_plot", "Type of result to plot", c("Zero-one loss", "Rank results", "Decision Values")),
            imageOutput("tct_plot", width = 500, height = 500)
-  ))
+  ), 
+ 
+  tabPanel(title = "Plots as function of time",
+           selectInput("Plot.basic_result_file", "File to plot results", c("A", "B")),
+           selectInput("Plot.basic_result_type_to_plot", "Type of result to plot", c("Zero-one loss", "Rank results", "Decision Values")),
+           imageOutput("function_of_time_plot", width = 500, height = 500)
+                   
+  )
+  
+  
+ )
   
                    
 ))

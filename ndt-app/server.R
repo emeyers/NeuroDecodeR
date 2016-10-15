@@ -6,6 +6,7 @@ source("run_decoding.R")
 
 require('dplyr')
 require('fields')
+require('ggplot2')
 
 
 # helper function to create multiple FP inputs
@@ -204,6 +205,52 @@ shinyServer(function(input, output) {
   })
   
   
+  
+  
+  output$function_of_time_plot = renderPlot({
+    
+    load('results/curr_temp_results.Rda')
+    
+    
+    if (input$Plot.basic_result_type_to_plot == "Zero-one loss"){
+      all.results <- DECODING_RESULTS$zero.one.loss.results
+      labels_names <- "Classification Accuracy"
+    }
+    
+    if (input$Plot.basic_result_type_to_plot == "Rank results"){
+      all.results <- DECODING_RESULTS$decision.value.results
+      labels_names <- "Normalized rank"
+    }
+    
+    if (input$Plot.basic_result_type_to_plot == "Decision Values"){
+      all.results <- DECODING_RESULTS$rank.results
+      labels_names <- "Decision values"
+    }
+    
+    
+    
+    # get the mean over CV splits
+    mean.results <- colMeans(all.results)
+    time.bin.names <- get.center.bin.time(dimnames(all.results)[[3]])
+    
+    
+    # plot results as a function of time
+    plot(time.bin.names, diag(mean.results), type = "l", xlab = "Time (ms)", ylab = labels_names)
+    abline(v = 0)
+    
+    
+    # darn, for some reason I am getting a memory error when I run this (works fine outside of shiny)
+    
+    # results_df <- data.frame(time = time.bin.names, results = diag(mean.results))
+    
+    # ggplot(results_df, aes(x = time, y = results)) + 
+    #   geom_line()  + 
+    #   xlab("Time (ms)") + 
+    #   ylab(labels_names)
+    
+    
+  })
+
   
   
   
