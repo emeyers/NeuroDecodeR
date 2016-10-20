@@ -2,10 +2,12 @@
 
 # Going to use Winston's R6 package for my OOP rather than the default RC
 #  https://cran.r-project.org/web/packages/R6/vignettes/Introduction.html
+
 library('R6')    
 library('dplyr')
 library('reshape2')
 library('stringr')
+
 
 #source('helper_functions.R')
 
