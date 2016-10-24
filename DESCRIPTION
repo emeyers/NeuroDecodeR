@@ -1,0 +1,17 @@
+Package: NDTr
+Title: The Neural Decoding Toolbox in R
+Version: 0.0.0.0001
+Authors@R: c(
+    person("Meyers", "Ethan", , "emeyers@hampshire.edu", role = c("aut", "cre"))
+    )
+Description: Fill in Later
+Depends: R (>= 3.1.0)
+License: List the license later
+LazyData: true
+
+
+
+
+
+
+
