@@ -7,6 +7,9 @@
 create_markdown_file <- function(decoding_params) {
 
   
+  print(decoding_params)
+  
+  
   markdown_basedir_name <- "markdown_files/"
   
   markdown_file_name <- "decoding_markdown.Rmd"
@@ -33,7 +36,7 @@ knitr::opts_chunk$set(echo = TRUE)
 ```\n\n", file = full_file_name, append = TRUE)
     
     
-    
+
     
 # load the necessary files and libraries
 write("#Load the necessary packages and files
@@ -54,7 +57,21 @@ source(paste0(base_ndtr_dir_name, 'zscore_FP.R'))
 source(paste0(base_ndtr_dir_name, 'standard_CV.R')) 
 ```\n\n\n", file = full_file_name, append = TRUE)
   
-  
+
+
+
+
+
+# list all the input decoding parameters
+write(paste0("#List all decoding parameters
+```{r input_parameters}
+
+\n\n print(decoding_params)", 
+             
+"\n\n```\n\n\n"), file = full_file_name, append = TRUE)
+
+
+
 
 
 # 1. write code to create the feature preprocessors 
@@ -82,7 +99,6 @@ use.count.data <- TRUE"
 }
 
 
-print(classifier_constructor_text)
 
 
 write(paste0("#Create the classifier
@@ -107,7 +123,7 @@ file_name_text <- paste0("binned.file.name <- paste0(base_data_dir_name, ", "'",
 ds_text <- paste0("\n\nds <- basic_DS$new(binned.file.name, ", "'", decoding_params$DS.specific_binned_label_names, "'", ", ", decoding_params$DS.num_cv_splits, ", use.count.data)\n\n")
 ds_text2 <- paste0("ds$num.times.to.repeat.labels.per.cv.block <- ", decoding_params$DS.num_repeats_per_cv_split)
 
-print(file_name_text)
+
 
 
 write(paste0("#Create the data source
