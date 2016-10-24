@@ -2,6 +2,7 @@
 
 
 source("run_decoding.R")
+source('create_decoding_markdown_file.R')
 
 
 require('dplyr')
@@ -54,7 +55,10 @@ shinyServer(function(input, output) {
     
     
     # do the decoding analysis...
-    run_decoding(input) 
+    #run_decoding(input) 
+    
+    create_markdown_file(input)
+    rmarkdown::render("markdown_files/decoding_markdown.Rmd")
     
     
     decoding.parameters <- data.frame(input$DS.name, input$DS.num_cv_splits)
@@ -67,13 +71,20 @@ shinyServer(function(input, output) {
   })
   
   
-  output$display_results = renderTable({
+  output$display_results = renderText({
     
     get_decoding_params()
     
+    return(paste('<iframe style="height:600px; width:100%" src="', "http://asterius.hampshire.edu:3838/research/NDTr_pdfs/decoding_markdown.pdf", '"></iframe>', sep = ""))
     
   })
   
+  
+  # output$display_results = renderTable({
+  #  
+  #  get_decoding_params()
+  #  
+  #})
   
   
   

@@ -6,8 +6,9 @@ shinyUI(navbarPage(id = "NDT_UI", title = "NDT",
             fileInput("upload_data", "Upload data"),
             uiOutput("list_of_binned_files"),
             actionButton("runDecoding", "Run Decoding"),
-            br(),
-            tableOutput("display_results")
+            br(), br(),
+            htmlOutput("display_results")
+            #tableOutput("display_results")
   ),
   
                                       
