@@ -63,12 +63,12 @@ source(paste0(base_ndtr_dir_name, 'standard_CV.R'))
 
 
 # list all the input decoding parameters
-write(paste0("#List all decoding parameters
-```{r input_parameters}
+#write(paste0("#List all decoding parameters
+#```{r input_parameters}
 
-\n\n print(decoding_params)", 
+#\n\n print(decoding_params)", 
              
-"\n\n```\n\n\n"), file = full_file_name, append = TRUE)
+#"\n\n```\n\n\n"), file = full_file_name, append = TRUE)
 
 
 
