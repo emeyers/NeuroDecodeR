@@ -41,7 +41,7 @@ shinyUI(navbarPage(id = "NDT_UI", title = "NDT",
  navbarMenu("Plot Results",
    
    tabPanel(title = "TCT plots",
-           selectInput("Plot.TCT_result_file", "File to plot results", c("A", "B")),
+           #selectInput("Plot.TCT_result_file", "File to plot results", c("A", "B")),
            selectInput("Plot.TCT_result_type_to_plot", "Type of result to plot", c("Zero-one loss", "Rank results", "Decision Values")),
            imageOutput("tct_plot", width = 500, height = 500)
   ), 
