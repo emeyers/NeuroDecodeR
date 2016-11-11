@@ -226,8 +226,8 @@ shinyServer(function(input, output) {
   
   output$function_of_time_plot = renderPlot({
     
-    load('results/curr_temp_results.Rda')
-    
+    #load('results/curr_temp_results.Rda')
+    load('markdown_files/markdown_results/curr_temp_results.Rda')
     
     if (input$Plot.basic_result_type_to_plot == "Zero-one loss"){
       all.results <- DECODING_RESULTS$zero.one.loss.results
