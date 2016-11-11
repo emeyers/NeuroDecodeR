@@ -187,7 +187,9 @@ shinyServer(function(input, output) {
   
   output$tct_plot = renderPlot({
     
-    load('results/curr_temp_results.Rda')
+    #load('results/curr_temp_results.Rda')
+    load('markdown_files/markdown_results/curr_temp_results.Rda')
+    
     
     
     if (input$Plot.TCT_result_type_to_plot == "Zero-one loss"){
