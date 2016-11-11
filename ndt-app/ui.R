@@ -47,7 +47,7 @@ shinyUI(navbarPage(id = "NDT_UI", title = "NDT",
   ), 
  
   tabPanel(title = "Plots as function of time",
-           selectInput("Plot.basic_result_file", "File to plot results", c("A", "B")),
+           # selectInput("Plot.basic_result_file", "File to plot results", c("A", "B")),
            selectInput("Plot.basic_result_type_to_plot", "Type of result to plot", c("Zero-one loss", "Rank results", "Decision Values")),
            imageOutput("function_of_time_plot", width = 500, height = 500)
                    
