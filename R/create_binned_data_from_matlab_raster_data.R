@@ -147,19 +147,15 @@ create_binned_data_from_matlab_raster_data <- function(raster.directory.name, sa
 
 # Examples of how to run the above code to create binned data ...
 
-raster.directory.name <- "../data/Zhang_Desimone_7objects_raster_data/"
-bin.width <- 150
-sampling.interval <- 10
-save_prefix_name = "../data/ZD"
+# raster.directory.name <- "../data/Zhang_Desimone_7objects_raster_data/"
+# bin.width <- 150
+# sampling.interval <- 10
+# save_prefix_name = "../data/ZD"
 
-
-# createBinnedDataFromMatlabRasterData(raster.directory.name, save_prefix_name, bin.width, sampling.interval)
-
-
-Rprof(tmp <- tempfile(), line.profiling=TRUE)
-createBinnedDataFromMatlabRasterData(raster.directory.name, save_prefix_name, bin.width, sampling.interval)
-Rprof()
-summaryRprof(tmp, lines = "show")
+# Rprof(tmp <- tempfile(), line.profiling=TRUE)
+# create_binned_data_from_matlab_raster_data(raster.directory.name, save_prefix_name, bin.width, sampling.interval)
+# Rprof()
+# summaryRprof(tmp, lines = "show")
 
 
 
