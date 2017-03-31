@@ -1,15 +1,30 @@
+#' A basic datasource object
+#'
+#' A datasource object takes data in binned format and returns training 
+#' and testing splits of the data that can be passed to a classifier. 
+#' This object uses \href{https://cran.r-project.org/web/packages/R6/vignettes/Introduction.html}{R6 package} 
+#'
+#'
+#' @section basic_DS constructor:
+#' 
+#' \describe{
+#' \item{\code{basic_DS$new(binned.data, specific.binned.label.name, num.cv.splits, use.count.data, num.times.to.repeat.labels.per.cv.block )}}{
+#' if successful, will return a new \code{basic_DS} object.
+#' }}
+#' 
+#' @section Methods
+#' \describe{
+#' \item{\code{get_data}}{
+#' This method returns a data frame that has the training and test splits of the data.
+#' }}
+#' 
+#' 
+#' 
+#' @import R6
+#' @export
 
 
-# Going to use Winston's R6 package for my OOP rather than the default RC
-#  https://cran.r-project.org/web/packages/R6/vignettes/Introduction.html
 
-library('R6')    
-library('dplyr')
-library('reshape2')
-library('stringr')
-
-
-#source('helper_functions.R')
 
 
 basic_DS <- R6Class("basic_DS", 
@@ -80,16 +95,16 @@ basic_DS <- R6Class("basic_DS",
       all.k.fold.data$CV.slice.ID <- CV.slice.ID
       
       # paste the site.000 in front of the siteID so that is is listed as site.0001, site.0002, etc
-      all.k.fold.data$siteID <- paste0("site.", str_pad(all.k.fold.data$siteID, 4, pad = "0"))
+      all.k.fold.data$siteID <- paste0("site.", stringr::str_pad(all.k.fold.data$siteID, 4, pad = "0"))
 
       
       # reshape the data so that it's [label*time*cv x site]  data frame 
       # can do this quickly using the reshape2 package!
       
-      melted.data <- melt(all.k.fold.data, id.vars = c("siteID", "labels", "CV.slice.ID"), 
+      melted.data <- reshape2::melt(all.k.fold.data, id.vars = c("siteID", "labels", "CV.slice.ID"), 
                           variable.name = "time", value.name = "activity")
       
-      all.cv.data <- dcast(melted.data, labels + time + CV.slice.ID ~ siteID, value.var = "activity")
+      all.cv.data <- reshape2::dcast(melted.data, labels + time + CV.slice.ID ~ siteID, value.var = "activity")
       
 
 
