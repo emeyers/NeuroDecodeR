@@ -1,5 +1,29 @@
+#' A maximum correlation coefficient classifier (CL) object
+#'
+#' An implementation of a maximum correlation coefficeint classifier. Like all classifiers, this classifier
+#' learning a model based on training data and then makes predictions on new test data.  
+#' This object uses \href{https://cran.r-project.org/web/packages/R6/vignettes/Introduction.html}{R6 package} 
+#'
+#'
+#' @section max_correlation_CL constructor:
+#' 
+#' \describe{
+#' \item{\code{max_correlation_CL$new()}}{
+#' if successful, will return a new \code{max_correlation_CL} object.
+#' }}
+#' 
+#' @section Methods
+#' \describe{
+#' \item{\code{get_predictions(train.data, all.times.test.data)}}{
+#' Learns a model from the train.data and then makes predictions on the
+#' all.times.test.data data set. 
+#' }}
+#' 
+#' 
+#' 
+#' @import R6
+#' @export
 
-#source('helper_functions.R')
 
 
 max_correlation_CL <- R6Class("max_correlation_CL", 
