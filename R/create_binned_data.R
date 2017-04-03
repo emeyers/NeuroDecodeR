@@ -4,6 +4,7 @@
 
 
 
+
 # 
 # # examples of how the code is used
 # 
@@ -17,6 +18,7 @@
 # 
 # # all options...
 # # create_binned_data(raster_directory_name, save_prefix_name, bin_width, sampling_interval, start_ind, end_ind, files_contain)
+
 
 
 
