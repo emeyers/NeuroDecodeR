@@ -4,6 +4,7 @@
 
 
 
+<<<<<<< HEAD
 # 
 # # examples of how the code is used
 # 
@@ -17,6 +18,21 @@
 # 
 # # all options...
 # # create_binned_data(raster_directory_name, save_prefix_name, bin_width, sampling_interval, start_ind, end_ind, files_contain)
+=======
+
+# examples of how the code is used 
+
+raster_directory_name <- '../data/Zhang_Desimone_7objects_R_raster_data/'
+save_prefix_name <- '../data/ZD_binned_data'
+bin_width <- 100   #150
+sampling_interval <- 10   #50
+
+create_binned_data(raster_directory_name, save_prefix_name, bin_width, sampling_interval)
+
+
+# all options...
+# create_binned_data(raster_directory_name, save_prefix_name, bin_width, sampling_interval, start_ind, end_ind, files_contain)
+>>>>>>> 7ffe88bac0e2490afd570dbe253f86750830ded2
 
 
 
