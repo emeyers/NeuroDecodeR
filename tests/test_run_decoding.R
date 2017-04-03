@@ -13,7 +13,7 @@ rm(list = ls())
 
 # define the decoding parameters...
 
-binned.file.name <- "/home/faculty/emmCS/research/NDT/NDTr/data/ZD_binned_data_150ms_bins_50ms_sampled.Rda"
+binned.file.name <- "../data/ZD_binned_data_150ms_bins_50ms_sampled.Rda"
 specific.binned.label.name <- "stimulus.ID"    # which labels to decode
 num.cv.splits <- 5   # the number of cross-validation splits
 
