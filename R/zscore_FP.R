@@ -1,4 +1,30 @@
-
+#' A feature preprocessor (FP) that zscore normalizes the data
+#'
+#' This feature prerpocessor object find the mean and standard deviation using the training data. 
+#' The proprocessor then z-score transforms the training and test data using this mean and standard deviation
+#' by subtracting the mean and dividing by the standard deviation. 
+#' This object uses \href{https://cran.r-project.org/web/packages/R6/vignettes/Introduction.html}{R6 package} 
+#'
+#'
+#' @section zscore_FP constructor:
+#' 
+#' \describe{
+#' \item{\code{zscore_FP$new()}}{
+#' if successful, will return a new \code{zscore_FP} object.
+#' }}
+#' 
+#' @section Methods
+#' \describe{
+#' \item{\code{preprocess_data}}{
+#' Like all FP objects, this method finds parameters on the training set and then applies them 
+#' to the training and test sets. For zscore_FP, the parameters found are the mean and the standard deviation,
+#' and the transformation is a z-score transformation. 
+#' }}
+#' 
+#' 
+#' 
+#' @import R6
+#' @export
 
 
 

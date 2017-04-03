@@ -4,18 +4,23 @@
 # should read up about doing real unit testing...
 
 
+# install("NDTr")
+# document()    # sometimes can't find the NDTr code until document has been run
+
+
 rm(list = ls())
 
 
 # define the decoding parameters...
 
-binned.file.name <- "../data/ZD_binned_data_150ms_bins_10ms_sampled.Rda"
+binned.file.name <- "/home/faculty/emmCS/research/NDT/NDTr/data/ZD_binned_data_150ms_bins_50ms_sampled.Rda"
 specific.binned.label.name <- "stimulus.ID"    # which labels to decode
 num.cv.splits <- 5   # the number of cross-validation splits
 
 
+
 # test creating a basic DS
-ds <- basic_DS$new(binned.file.name, specific.binned.label.name, num.cv.splits)
+ds <- NDTr::basic_DS$new(binned.file.name, specific.binned.label.name, num.cv.splits)
 
 
 # test create a classifier
