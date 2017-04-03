@@ -47,6 +47,11 @@ basic_DS <- R6Class("basic_DS",
       
       # load the binned data  
       load(binned.file.name)
+      
+      # now called binned.data binned_data, should really refactor my code to my this change throughout 
+      if (!exists("binned.data"))
+        binned.data <- binned_data
+      
   
       if (use.count.data) {
         binned.data <- convert.rates.to.counts(binned.data) 
