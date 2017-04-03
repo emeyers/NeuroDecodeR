@@ -1,3 +1,35 @@
+#' A feature preprocessor (FP) that reduces the data to the best k features
+#'
+#' This feature prerpocessor object find the k most selective features using an ANOVA on the training data. 
+#' The proprocessor then eleminates all other features in both the training and test sets. This preprocessor
+#' can also eliminate the best k features. 
+#' This object uses \href{https://cran.r-project.org/web/packages/R6/vignettes/Introduction.html}{R6 package} 
+#'
+#'
+#' @section select_k_features_FP:
+#' 
+#' \describe{
+#' \item{\code{select_k_features_FP$new(num.site.to.use, num.sites.to.exclude)}}{
+#' This constructor uses num.site.to.use of the best sites as found via an ANOVA. 
+#' Additionally, it can eliminate the best num.sites.to.exclude to use sites again
+#' using an ANOVA. If both num.site.to.use and num.sites.to.exclude are set, then 
+#' num.sites.to.exclude will first be eliminated and then the next num.site.to.use will 
+#' be kept. If successful, will return a new \code{select_k_features_FP} object.
+#' }}
+#' 
+#' @section Methods
+#' \describe{
+#' \item{\code{preprocess_data}}{
+#' Like all FP objects, this method finds parameters on the training set and then applies them 
+#' to the training and test sets. For select_k_features_FP, the parameters found on the training set are 
+#' the sites that are the most selective, and these sites are then kept and/or eliminated on training and 
+#' test sets.
+#' }}
+#' 
+#' 
+#' 
+#' @import R6
+#' @export
 
 
 

@@ -1,10 +1,6 @@
 
-#source('helper_functions.R')
 
-
-
-# the decision values in this function are not really correct so perhaps shouldn't add it to the repository 
-# but going to anyway...
+# the decision values in this function are not really correct so I am not going to add it to the package yet...
 
 
 library('e1071')  # svm package...
