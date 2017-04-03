@@ -1,7 +1,29 @@
-
-
-# source('max_correlation_CL.R')   # need to make an OO version of this...
-
+#' The standard cross-validator (CV)  object
+#'
+#' A cross-validator object takes a datasource, feature preprocessors and a classifier
+#' and runs multiple cross-validation cycles by getting new training and test data splits, 
+#' running the preprocessor to do preprocessing of the data, trains and tests the classifier, and 
+#' the creates metric to evaluation the classification performance on the test set.  
+#' This object uses \href{https://cran.r-project.org/web/packages/R6/vignettes/Introduction.html}{R6 package} 
+#'
+#'
+#' @section standard_CV:
+#' 
+#' \describe{
+#' \item{\code{standard_CV$new(data.source, classifier, feature.preprocessors)  )}}{
+#' If successful, will return a new \code{basic_DS} object.
+#' }}
+#' 
+#' @section Methods
+#' \describe{
+#' \item{\code{run_decoding}}{
+#' The main method that runs the cross-validation analysis. 
+#' }}
+#' 
+#' 
+#' 
+#' @import R6
+#' @export
 
 standard_CV <- R6Class("standard_CV", 
                     

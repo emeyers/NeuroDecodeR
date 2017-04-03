@@ -2,4 +2,8 @@
 
 export(basic_DS)
 export(max_correlation_CL)
+export(poisson_naive_bayes_CL)
+export(select_k_features_FP)
+export(standard_CV)
+export(zscore_FP)
 import(R6)
