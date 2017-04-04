@@ -77,7 +77,7 @@ standard_CV <- R6Class("standard_CV",
         
         
         # add names for the different dimensions of the results
-        time.names <- grep("time", names(data.source$binned.data), value = TRUE)
+        time.names <- grep("^time", names(data.source$binned.data), value = TRUE)
         dim.names <- list(1:num.CV, time.names, time.names)
         
         zero.one.loss.results <- array(NA, c(num.CV, num.time.bins, num.time.bins), dimnames = dim.names)
