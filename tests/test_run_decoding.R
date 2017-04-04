@@ -8,6 +8,15 @@
 # document()    # sometimes can't find the NDTr code until document has been run
 
 
+
+
+raster_directory_name <- "../data/Zhang_Desimone_7objects_R_raster_data/"
+create_binned_data(raster_directory_name, 'ZD', 150, 50)
+
+
+
+
+
 rm(list = ls())
 
 
