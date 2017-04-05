@@ -109,7 +109,7 @@ create_binned_data <- function(raster_directory_name, save_prefix_name, bin_widt
   
   print(saved_binned_data_file_name)
   
-  save("binned_data", file = saved_binned_data_file_name)
+  save("binned_data", file = saved_binned_data_file_name, compress = TRUE)
   
   
 }   # end function
