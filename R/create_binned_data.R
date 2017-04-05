@@ -68,11 +68,10 @@ create_binned_data <- function(raster_directory_name, save_prefix_name, bin_widt
     
     load(paste0(raster_directory_name, file.names[i]))
     
-    
-    # checking for some backward compatibility, but make sure all data is raster_data in the future
-    # if (!exists('raster_data'))
-    #  raster.data <- raster.data
-    
+        
+    # checking for some backward compatibility, but make sure all data is a varaible called raster_data in the future
+    if (!exists('raster_data'))
+      raster_data <- raster.data
     
     
     one_binned_site <- bin_data_one_site(raster_data, bin_width, sampling_interval, start_ind, end_ind)
