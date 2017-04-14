@@ -142,7 +142,14 @@ bin_data_one_site <- function(raster.data, bin_width, sampling_interval, start_i
   
   binned_data_one_site <- as.data.frame(matrix(nrow = dim(raster.data)[1], ncol = length(all_start_inds)))
   for (i in 1:length(all_start_inds)){
-    binned_data_one_site[, i] <- rowMeans(spike_df[, all_start_inds[i]:all_end_inds[i]])
+    
+    if (all_start_inds[i] == all_end_inds[i]){  # if binning at the same resolution as the original file, return original data
+      binned_data_one_site[, i] <- spike_df[, all_start_inds[i]]
+    } else{                                     # otherwise, actually bin the data
+      binned_data_one_site[, i] <- rowMeans(spike_df[, all_start_inds[i]:all_end_inds[i]])   
+    }
+    
+    
   }
   
   
