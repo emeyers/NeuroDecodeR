@@ -5,3 +5,5 @@ data/
 tests/create_R_package.R
 tests/test_results
 tests/Rprof.out
+*.swo
+*.swp
