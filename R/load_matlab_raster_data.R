@@ -52,66 +52,66 @@ load_matlab_raster_data <- function(matlab_file_name) {
   
   
   # parse the raster site info (perhaps there is a better way to do this, but works)
-  temp.site.info <- data.frame(data$raster.site.info)
-  temp.site.info.names <- row.names(temp.site.info)
+  temp_site_info <- data.frame(data$raster.site.info)
+  temp_site_info_names <- row.names(temp_site_info)
   
   n_trials <- dim(data$raster.data)[1]
   
-  site.info <- NULL
+  site_info <- NULL
   # parse the raster_site_info names if they exist...
-  if (length(temp.site.info.names) > 0){  
+  if (length(temp_site_info_names) > 0){  
     
-     for (iSiteInfo in 1:length(temp.site.info.names)) {
-       curr.info.data <- unlist(temp.site.info[iSiteInfo, ])
-       curr.info.data <- rep(curr.info.data, n_trials)
-       eval(parse(text = (paste0("site.info$site.info.", eval(temp.site.info.names[iSiteInfo]), " <- curr.info.data"))))
+     for (iSiteInfo in 1:length(temp_site_info_names)) {
+       curr_info_data <- unlist(temp_site_info[iSiteInfo, ])
+       curr_info_data <- rep(curr_info_data, n_trials)
+       eval(parse(text = (paste0("site_info$site_info_", eval(temp_site_info_names[iSiteInfo]), " <- curr_info_data"))))
      }
   }
   
   
   
-  site.info <- data.frame(site.info)
+  site_info <- data.frame(site_info)
   
   # Get the raster data
-  raster.data <- data.frame(data$raster.data)
+  raster_data <- data.frame(data$raster.data)
   
   
   # Add column names to the raster data in the form of: time.1, time.2 etc.
-  data.times <- 1:dim(raster.data)[2]
+  data_times <- 1:dim(raster_data)[2]
   
   # (if there is an alignment time, subtract it from the raster times...) 
-  if (sum(names(site.info) == "alignment.event.time")) {
-    data.times <- (data.times - site.info$alignment.event.time)
+  if (sum(names(site_info) == "alignment.event.time")) {
+    data_times <- (data_times - site_info$alignment.event.time)
   }
   
-  names(raster.data) <- paste0("time.", data.times)
+  names(raster_data) <- paste0("time_", data_times)
   
   
   
   
   # Get the labels for what happened on each trial and add them to the raster.data data frame
-  raster.labels <- data$raster.labels
+  raster_labels <- data$raster.labels
   
   # loop over label names
-  label.names <- row.names(raster.labels)
-  for (iLabel in 1:length(label.names)){
+  label_names <- row.names(raster_labels)
+  for (iLabel in 1:length(label_names)){
     
     # get the name for the current raster_labels
-    curr.label.name <- eval(label.names[iLabel])
+    curr_label_name <- eval(label_names[iLabel])
     
     # add the prefix labels. to the curr label name...
-    curr.label.name <- paste('labels.', curr.label.name, sep = "")
+    curr_label_name <- paste('labels_', curr_label_name, sep = "")
     
     # extract the labels themselves...
-    curr.labels <- raster.labels[iLabel, ,][[1]]
-    curr.labels <- sapply(curr.labels, function(x) x[[1]])    # data is contained in an extra list - remove this extra list to get the vector of names
+    curr_labels <- raster_labels[iLabel, ,][[1]]
+    curr_labels <- sapply(curr_labels, function(x) x[[1]])    # data is contained in an extra list - remove this extra list to get the vector of names
     
     # put into a data frame with the appropriate column name
-    curr.label.column <- eval(parse(text = paste('curr.label.column <- data.frame(', curr.label.name, ' = curr.labels)', sep ="")))
+    curr_label_column <- eval(parse(text = paste('curr_label_column <- data.frame(', curr_label_name, ' = curr_labels)', sep ="")))
     
     # add to the raster.data
-    # raster.data <- cbind(raster.data, curr.label.column)
-    raster.data <- cbind(curr.label.column, raster.data)
+    # raster_data <- cbind(raster_data, curr_label_column)
+    raster_data <- cbind(curr_label.column, raster_data)
     
   }
   
@@ -119,11 +119,13 @@ load_matlab_raster_data <- function(matlab_file_name) {
 
   
   # add the raster site info as attributes to the data frame...
-  if (dim(site.info)[1] != 0)   # if the site.info is empty, don't do anything
-    raster.data <- cbind(site.info, raster.data)
+  if (dim(site_info)[1] != 0)   # if the site.info is empty, don't do anything
+    raster_data <- cbind(site_info, raster_data)
   
+  # Replace all dots in variable names to underscore
+  names(raster_data) <- gsub(x = names(raster_data), pattern = "\\.", replacement = "_")
 
-  return(raster.data)
+  return(raster_data)
   
 }
 
