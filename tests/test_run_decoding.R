@@ -9,9 +9,9 @@
 
 
 
-
-raster_directory_name <- "../data/Zhang_Desimone_7objects_R_raster_data/"
-create_binned_data(raster_directory_name, 'ZD', 150, 50)
+# Test loading from MATLAB
+raster_directory_name <- "tests/Zhang_Desimone_7objects_raster_data/"
+create_binned_data_from_matlab_raster_data(raster_directory_name, 'ZD', 150, 50)
 
 
 

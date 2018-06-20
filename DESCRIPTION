@@ -17,3 +17,4 @@ Imports: R6,
     stringr,
     dplyr,
     reshape2
+Suggests: testthat
