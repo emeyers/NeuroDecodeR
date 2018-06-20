@@ -1,5 +1,5 @@
 
-
+NDTr_name = "/c/Users/14868/Documents/GitHub/NDTr"
 
 # should read up about doing real unit testing...
 
@@ -10,7 +10,7 @@
 
 
 
-raster_directory_name <- "../data/Zhang_Desimone_7objects_R_raster_data/"
+raster_directory_name <- file.path(NDTr_name,"data", "Zhang_Desimone_7objects_R_raster_data")
 create_binned_data(raster_directory_name, 'ZD', 150, 50)
 
 
@@ -22,14 +22,14 @@ rm(list = ls())
 
 # define the decoding parameters...
 
-binned.file.name <- "../data/ZD_binned_data_150ms_bins_50ms_sampled.Rda"
+binned.file.name <- file.path(NDTr_name, 'data', 'ZD_binned_data_150ms_bins_50ms_sampled.Rda')
 specific.binned.label.name <- "stimulus.ID"    # which labels to decode
 num.cv.splits <- 5   # the number of cross-validation splits
 
 
 
 # test creating a basic DS
-ds <- NDTr::basic_DS$new(binned.file.name, specific.binned.label.name, num.cv.splits)
+ds <- basic_DS$new(binned.file.name, specific.binned.label.name, num.cv.splits)
 
 
 # test create a classifier
@@ -68,7 +68,7 @@ print(summaryRprof(tmp, lines = "show"))
 
 
 # save the results...
-save("DECODING_RESULTS", file = "test_results/MCC_zscore.Rda")
+save("DECODING_RESULTS", file = "results/ZD_MCC_zscore.Rda")
 
 
 
@@ -89,19 +89,20 @@ all.results <- DECODING_RESULTS$rank.results
 
 # get the mean over CV splits
 mean.results <- colMeans(all.results)
-time.bin.names <- get.center.bin.time(dimnames(all.results)[[3]])
+# time.bin.names <- get.center.bin.time(dimnames(all.results)[[3]])
+# 
+# 
+# 
+# # plot full TCT plot
+# image.plot(time.bin.names, time.bin.names, mean.results,
+#            legend.lab = "Classification Accuracy", xlab = "Test time (ms)",
+#            ylab = "Train time (ms)")
+# abline(v = 0)
+# 
+# 
+# 
+# # plot results as a function of time
+# plot(time.bin.names, diag(mean.results), type = "o", xlab = "Time (ms)", ylab = "Decoding Accuracy")
+# abline(v = 0)
 
-
-
-# plot full TCT plot
-image.plot(time.bin.names, time.bin.names, mean.results,
-           legend.lab = "Classification Accuracy", xlab = "Test time (ms)",
-           ylab = "Train time (ms)")
-abline(v = 0)
-
-
-
-# plot results as a function of time
-plot(time.bin.names, diag(mean.results), type = "o", xlab = "Time (ms)", ylab = "Decoding Accuracy")
-abline(v = 0)
 

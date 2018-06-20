@@ -50,8 +50,14 @@ create_binned_data <- function(raster_directory_name, save_prefix_name, bin_widt
   
   
   # if the directory name does not end with a slash, add a slash to the directory name
-  if (raster_directory_name[length(raster_directory_name)] != '/')
+  
+  # if (raster_directory_name[length(raster_directory_name)] != '/')
+  #  the above "matlab" expression acutally survives in linux, where two trailing slashed are recognized as one
+  
+  desired_pattern = '.*/$'
+  if (grepl(desired_pattern, raster_directory_name) == FALSE){
     raster_directory_name <- paste0(raster_directory_name, '/')
+  }  
   
   
   file.names <- list.files(raster_directory_name, pattern = files_contain)
