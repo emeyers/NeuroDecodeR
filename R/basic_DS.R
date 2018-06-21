@@ -8,7 +8,7 @@
 #' @section basic_DS constructor:
 #' 
 #' \describe{
-#' \item{\code{basic_DS$new(binned.data, specific.binned.label.name, num.cv.splits, use.count.data, num.times.to.repeat.labels.per.cv.block )}}{
+#' \item{\code{basic_DS$new(binned_data, specific_binned_label_name, num_cv_splits, use_count_data, num_times_to_repeat_labels_per_cv_block )}}{
 #' if successful, will return a new \code{basic_DS} object.
 #' }}
 #' 
@@ -23,126 +23,92 @@
 #' @import R6
 #' @export
 
-
-
-
-
 basic_DS <- R6Class("basic_DS", 
-  
   public = list(
-  
     # properties
-    binned.data = NA,
-    specific.binned.label.name = NA, 
-    num.cv.splits = NA,
-    use.count.data = FALSE,
-    num.times.to.repeat.labels.per.cv.block = 1,
-  
+    binned_data = NA,
+    specific_binned_label_name = NA, 
+    num_cv_splits = NA,
+    use_count_data = FALSE,
+    num_times_to_repeat_labels_per_cv_block = 1,
     
     # constructor
-    initialize = function(binned.file.name, specific.binned.label.name, num.cv.splits, use.count.data = FALSE) {
-      
-      self$specific.binned.label.name <- specific.binned.label.name
-      self$num.cv.splits <- num.cv.splits
+    initialize = function(binned_file_name, specific_binned_label_name, num_cv_splits, use_count_data = FALSE) {
+      self$specific_binned_label_name <- specific_binned_label_name
+      self$num_cv_splits <- num_cv_splits
       
       # load the binned data  
-      load(binned.file.name)
+      load(binned_file_name)
       
-      # now called binned.data binned_data, should really refactor my code to my this change throughout 
-      if (!exists("binned.data"))
-        binned.data <- binned_data
-      
-  
-      if (use.count.data) {
-        binned.data <- convert.rates.to.counts(binned.data) 
+      # now called binned_data binned_data, should really refactor my code to my this change throughout 
+      if (!exists("binned_data")) {
+        binned_data <- binned.data
       }
-    
-      self$binned.data <- binned.data
-      
+      if (use_count_data) {
+        binned_data <- convert_rates_to_counts(binned_data) 
+      }
+      self$binned_data <- binned_data
     },
-  
     
-
     # methods
     get_data = function(){
-      
-      
       # defining these here to make it potentially easy to transfer my code to other R OO systems 
       # (at the cost of a little memory)
-      binned.data <- self$binned.data 
-      specific.binned.label.name <- self$specific.binned.label.name
-      num.trials.used.per.label <- self$num.cv.splits * self$num.times.to.repeat.labels.per.cv.block 
-    
-  
-      # remove all labels that aren't being used, and rename the labels that are being used "labels"
-      label.col.ind <- match(paste0("labels.", specific.binned.label.name), names(binned.data))
+      binned_data <- self$binned_data 
+      specific_binned_label_name <- self$specific_binned_label_name
+      num_trials_used_per_label <- self$num_cv_splits * self$num_times_to_repeat_labels_per_cv_block 
 
-      binned.data <- binned.data %>% select(siteID, starts_with("time"), labels = label.col.ind)  
-      
+      # remove all labels that aren't being used, and rename the labels that are being used "labels"
+      label_col_ind <- match(paste0("labels_", specific_binned_label_name), names(binned_data))
+      binned_data <- binned_data %>% select(siteID, starts_with("time"), labels = label_col_ind)  
       
       # order data by: repetitions, sites, labels
-      all.k.fold.data <- binned.data  %>% group_by(labels, siteID) %>% sample_n(size = num.trials.used.per.label)
-      
-      
-      unique.labels <- unique(all.k.fold.data$labels)
-      num.sites <- length(unique(binned.data$siteID))  
-      num.time.bins <- sum(grepl("time.*", names(binned.data)))
-      num.labels <- length(unique.labels)
-      
+      all_k_fold_data <- binned_data  %>% group_by(labels, siteID) %>% sample_n(size = num_trials_used_per_label)
+      unique_labels <- unique(all_k_fold_data$labels)
+      num_sites <- length(unique(binned_data$siteID))  
+      num_time_bins <- sum(grepl("time_*", names(binned_data)))
+      num_labels <- length(unique_labels)
       
       # add a few names in the data frame
       
-      # CV.slice.ID is a groups of data that have one example for each label
-      #  - these groups are mapped into CV blocks where blocks contain num.times.to.repeat.labels.per.cv.block of each label  
-      CV.slice.ID <- rep(1:num.trials.used.per.label, num.labels * num.sites)
+      # CV_slice_ID is a groups of data that have one example for each label
+      #  - these groups are mapped into CV blocks where blocks contain num_times_to_repeat_labels_per_cv_block of each label  
+      CV_slice_ID <- rep(1:num_trials_used_per_label, num_labels * num_sites)
       
       # add the number of the cross-validitation split to the data ...
-      all.k.fold.data$CV.slice.ID <- CV.slice.ID
+      all_k_fold_data$CV_slice_ID <- CV_slice_ID
       
-      # paste the site.000 in front of the siteID so that is is listed as site.0001, site.0002, etc
-      all.k.fold.data$siteID <- paste0("site.", stringr::str_pad(all.k.fold.data$siteID, 4, pad = "0"))
+      # paste the site.000 in front of the siteID so that is is listed as site_0001, site_0002, etc
+      all_k_fold_data$siteID <- paste0("site_", stringr::str_pad(all_k_fold_data$siteID, 4, pad = "0"))
 
-      
       # reshape the data so that it's [label*time*cv x site]  data frame 
       # can do this quickly using the reshape2 package!
       
-      melted.data <- reshape2::melt(all.k.fold.data, id.vars = c("siteID", "labels", "CV.slice.ID"), 
+      melted_data <- reshape2::melt(all_k_fold_data, id.vars = c("siteID", "labels", "CV_slice_ID"), 
                           variable.name = "time", value.name = "activity")
       
-      all.cv.data <- reshape2::dcast(melted.data, labels + time + CV.slice.ID ~ siteID, value.var = "activity")
+      all_cv_data <- reshape2::dcast(melted_data, labels + time + CV_slice_ID ~ siteID, value.var = "activity")
       
-
-
       # below I changed this so can put repeats of labels in a CV split...
-      # # create different CV.1, CV.2 which list which points are training points and which points are test points
-      # for (iCV in 1:num.cv.splits) {
-      #   eval(parse(text=paste0("all.cv.data$CV.", iCV, "= ifelse(all.cv.data$CV.slice.ID == iCV, 'test', 'train')")))
+      # # create different CV_1, CV_2 which list which points are training points and which points are test points
+      # for (iCV in 1:num_cv_splits) {
+      #   eval(parse(text=paste0("all_cv_data$CV_", iCV, "= ifelse(all_cv_data$CV_slice_ID == iCV, 'test', 'train')")))
       # }
-      # all.cv.data <- select(all.cv.data, -CV.slice.ID)  # remove the original CV.slice.ID field     
+      # all_cv_data <- select(all_cv_data, -CV_slice_ID)  # remove the original CV_slice_ID field     
 
-      
-      
-      # create different CV.1, CV.2 which list which points are training points and which points are test points
-      for (iCV in 1:self$num.cv.splits) {
-        start.ind <- (((iCV - 1) * self$num.times.to.repeat.labels.per.cv.block) + 1)
-        end.ind <- (iCV * self$num.times.to.repeat.labels.per.cv.block)
-        curr.cv.block.inds <- start.ind:end.ind
-        eval(parse(text=paste0("all.cv.data$CV.", iCV, "= ifelse(all.cv.data$CV.slice.ID %in% curr.cv.block.inds, 'test', 'train')")))
+      # create different CV_1, CV_2 which list which points are training points and which points are test points
+      for (iCV in 1:self$num_cv_splits) {
+        start_ind <- (((iCV - 1) * self$num_times_to_repeat_labels_per_cv_block) + 1)
+        end_ind <- (iCV * self$num_times_to_repeat_labels_per_cv_block)
+        curr_cv_block_inds <- start_ind:end_ind
+        eval(parse(text=paste0("all_cv_data$CV_", iCV, "= ifelse(all_cv_data$CV_slice_ID %in% curr_cv_block_inds, 'test', 'train')")))
       }
-      all.cv.data <- select(all.cv.data, -CV.slice.ID)  # remove the original CV.slice.ID field     
       
+      all_cv_data <- select(all_cv_data, -CV_slice_ID)  # remove the original CV_slice_ID field     
       
-      return(all.cv.data)
-      
-      
-      
+      return(all_cv_data)
     }  # end get_data() 
-    
-    
   )  # end public data/methods
-  
-  
-  
 )  # end for the class
 
 
