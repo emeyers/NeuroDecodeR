@@ -30,108 +30,73 @@
 #' @export
 
 poisson_naive_bayes_CL <- R6Class("poisson_naive_bayes_CL", 
-                   
-                                      
    public = list(
-                         
      # no properties for this classifier
      
-
     # the constructor does not take any arguments
     initialize = function() {},
                          
-    
     # methods
-    
-    
     # could break this up into two methods: train() and test()
-    get_predictions = function(train.data, all.times.test.data) {    
-  
-
-
+    get_predictions = function(train_data, all_times_test_data) {
       ### Train the classifier
+      lambdas_and_labels <- train_data %>% group_by(labels) %>% summarise_each(funs(mean))
+      #class_labels <- lambdas[, 1]
+      lambda_data <- as.matrix(lambdas_and_labels[, 2:ncol(lambdas_and_labels)])
       
-      lambdas.and.labels <- train.data %>% group_by(labels) %>% summarise_each(funs(mean))
-      #class.labels <- lambdas[, 1]
-      lambda.data <- as.matrix(lambdas.and.labels[, 2:ncol(lambdas.and.labels)])
-      
-     
       # If there are lambda values equal to zero this can cause problems  if some of the test data 
       # for a given lamda is not 0 (because there will be 0 probability of getting the data with lambda == 0).
       # To deal with this we are going to assume that for all lambda == 0, there is one additional training point
       # that had a value of 1, which will solve this problem. 
-      
-      num.train.examples.in.each.class <- table(train.data$labels)
+      num_train_examples_in_each_class <- table(train_data$labels)
       
       # if there are the same number of training examples in each class  (as there should be)
-      if (sum(abs(diff(num.train.examples.in.each.class))) == 0) {
-        lambda.data[lambda.data == 0] <- 1/(table(train.data$labels)[1] + 1)
+      if (sum(abs(diff(num_train_examples_in_each_class))) == 0) {
+        lambda_data[lambda_data == 0] <- 1/(table(train_data$labels)[1] + 1)
       } else {
         # if there are the different numbers of training examples in different class (this really shouldn't happen)
-        for (iClass in 1:length(num.train.examples.in.each.class)) {
-          lambda.data[iClass, lambda.data[iClass, ] == 0] <- 1/(num.train.examples.in.each.class[iClass] + 1) 
+        for (iClass in 1:length(num_train_examples_in_each_class)) {
+          lambda_data[iClass, lambda_data[iClass, ] == 0] <- 1/(num_train_examples_in_each_class[iClass] + 1) 
         }
       }
-        
-      
-      
       
       ### Test the classifier
+      test_labels <- select(all_times_test_data, -starts_with("site"))
+      test_data <- as.matrix(select(all_times_test_data, starts_with("site")))
       
-      
-      test.labels <- select(all.times.test.data, -starts_with("site"))
-      test.data <- as.matrix(select(all.times.test.data, starts_with("site")))
-      
-      num.classes <- length(unique(test.labels$labels))
-      num.sites <- dim(test.data)[2]
-      num.test.points <- dim(test.data)[1]
-      
+      num_classes <- length(unique(test_labels$labels))
+      num_sites <- dim(test_data)[2]
+      num_test_points <- dim(test_data)[1]
       
       # works, but relatively slow...
-      # all.pois.values <- array(NA, dim = c(num.classes, num.sites, num.test.points))
-      # for (iSite in 1:num.sites) {
-      #   for (iClass in 1:num.classes) {
-      #     all.pois.values[iClass, iSite, ] <- dpois(test.data[, iSite], lambda.data[iClass, iSite])
+      # all_pois_values <- array(NA, dim = c(num_classes, num_sites, num_test_points))
+      # for (iSite in 1:num_sites) {
+      #   for (iClass in 1:num_classes) {
+      #     all_pois_values[iClass, iSite, ] <- dpois(test_data[, iSite], lambda_data[iClass, iSite])
       #  }
       # }
-      # log.likelihoods <- apply(log(all.pois.values), MARGIN = c(1, 3), sum)
-      
+      # log_likelihoods <- apply(log(all_pois_values), MARGIN = c(1, 3), sum)
       
       # much faster way to get the log.likelihood values using linear algebra operations on matrices
-      log.likelihoods <- test.data %*% t(log(lambda.data)) 
-      log.likelihoods <- sweep(log.likelihoods, 2, rowSums(lambda.data))
-      log.likelihoods <- t(sweep(log.likelihoods, 1, rowSums(lgamma(test.data + 1))))
-      
-
+      log_likelihoods <- test_data %*% t(log(lambda_data)) 
+      log_likelihoods <- sweep(log_likelihoods, 2, rowSums(lambda_data))
+      log_likelihoods <- t(sweep(log_likelihoods, 1, rowSums(lgamma(test_data + 1))))
       # get the predicted labels
-      predicted.inds <- apply(log.likelihoods, 2, which.max)   # need to create rand.which.max() function...
-      predicted.labels <- lambdas.and.labels$labels[predicted.inds]
-      
-      
+      predicted_inds <- apply(log_likelihoods, 2, which.max)   # need to create rand.which.max() function...
+      predicted_labels <- lambdas_and_labels$labels[predicted_inds]
       # create a data frame that has all the results
-      results <- data.frame(time = all.times.test.data$time, actual.labels = all.times.test.data$labels, 
-                            predicted.labels = predicted.labels) %>%
-        mutate(correct = actual.labels == predicted.labels)
-      
- 
+      results <- data.frame(time = all_times_test_data$time, actual_labels = all_times_test_data$labels, 
+                            predicted_labels = predicted_labels) %>%
+        mutate(correct = actual_labels == predicted_labels)
       # get the decision values
-      decision.values <- data.frame(t(log.likelihoods))
-      names(decision.values) <- paste0('decision.val.', lambdas.and.labels$labels)  
-      
-      
+      decision_values <- data.frame(t(log_likelihoods))
+      names(decision_values) <- paste0('decision_val_', lambdas_and_labels$labels)  
       # return the results
-      results <- cbind(results, decision.values)
+      results <- cbind(results, decision_values)
+      
       return(results)
-      
-    
-      
-      
-      }   # end the get_predictions method
-    
-    
+    } # end the get_predictions method
    )  # end the public properites/methods
-   
-   
 )  # end the class
 
 

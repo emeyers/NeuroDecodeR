@@ -1,6 +1,9 @@
 .Rproj.user
 .Rhistory
 .RData
+
+.Rprof.out
+.DS_Store
 data/
 tests/create_R_package.R
 tests/test_results
