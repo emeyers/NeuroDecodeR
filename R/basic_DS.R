@@ -28,67 +28,46 @@
 
 
 basic_DS <- R6Class("basic_DS", 
-  
   public = list(
-  
     # properties
     binned_data = NA,
     specific_binned_label_name = NA, 
     num_cv_splits = NA,
     use_count_data = FALSE,
     num_times_to_repeat_labels_per_cv_block = 1,
-  
-    
     # constructor
     initialize = function(binned_file_name, specific_binned_label_name, num_cv_splits, use_count_data = FALSE) {
-      
       self$specific_binned_label_name <- specific_binned_label_name
       self$num_cv_splits <- num_cv_splits
-      
       # load the binned data  
       load(binned_file_name)
-      
       # now called binned_data binned_data, should really refactor my code to my this change throughout 
-      if (!exists("binned_data"))
+      if (!exists("binned_data")) {
         binned_data <- binned.data
-      
-  
+      }
       if (use_count_data) {
         binned_data <- convert_rates_to_counts(binned_data) 
       }
-    
       self$binned_data <- binned_data
-      
     },
-  
-    
-
     # methods
     get_data = function(){
-      
-      
       # defining these here to make it potentially easy to transfer my code to other R OO systems 
       # (at the cost of a little memory)
       binned_data <- self$binned_data 
       specific_binned_label_name <- self$specific_binned_label_name
       num_trials_used_per_label <- self$num_cv_splits * self$num_times_to_repeat_labels_per_cv_block 
-    
-  
+
       # remove all labels that aren't being used, and rename the labels that are being used "labels"
       label_col_ind <- match(paste0("labels_", specific_binned_label_name), names(binned_data))
-
       binned_data <- binned_data %>% select(siteID, starts_with("time"), labels = label_col_ind)  
-      
       
       # order data by: repetitions, sites, labels
       all_k_fold_data <- binned_data  %>% group_by(labels, siteID) %>% sample_n(size = num_trials_used_per_label)
-      
-      
       unique_labels <- unique(all_k_fold_data$labels)
       num_sites <- length(unique(binned_data$siteID))  
       num_time_bins <- sum(grepl("time_*", names(binned_data)))
       num_labels <- length(unique_labels)
-      
       
       # add a few names in the data frame
       
@@ -102,7 +81,6 @@ basic_DS <- R6Class("basic_DS",
       # paste the site.000 in front of the siteID so that is is listed as site_0001, site_0002, etc
       all_k_fold_data$siteID <- paste0("site_", stringr::str_pad(all_k_fold_data$siteID, 4, pad = "0"))
 
-      
       # reshape the data so that it's [label*time*cv x site]  data frame 
       # can do this quickly using the reshape2 package!
       
@@ -111,8 +89,6 @@ basic_DS <- R6Class("basic_DS",
       
       all_cv_data <- reshape2::dcast(melted_data, labels + time + CV_slice_ID ~ siteID, value.var = "activity")
       
-
-
       # below I changed this so can put repeats of labels in a CV split...
       # # create different CV_1, CV_2 which list which points are training points and which points are test points
       # for (iCV in 1:num_cv_splits) {
@@ -120,8 +96,6 @@ basic_DS <- R6Class("basic_DS",
       # }
       # all_cv_data <- select(all_cv_data, -CV_slice_ID)  # remove the original CV_slice_ID field     
 
-      
-      
       # create different CV_1, CV_2 which list which points are training points and which points are test points
       for (iCV in 1:self$num_cv_splits) {
         start_ind <- (((iCV - 1) * self$num_times_to_repeat_labels_per_cv_block) + 1)
@@ -131,18 +105,9 @@ basic_DS <- R6Class("basic_DS",
       }
       all_cv_data <- select(all_cv_data, -CV_slice_ID)  # remove the original CV_slice_ID field     
       
-      
       return(all_cv_data)
-      
-      
-      
     }  # end get_data() 
-    
-    
   )  # end public data/methods
-  
-  
-  
 )  # end for the class
 
 
