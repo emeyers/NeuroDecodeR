@@ -10,3 +10,4 @@ tests/test_results
 tests/Rprof.out
 *.swo
 *.swp
+RProf.out
