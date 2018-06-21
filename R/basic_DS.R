@@ -31,12 +31,15 @@ basic_DS <- R6Class("basic_DS",
     num_cv_splits = NA,
     use_count_data = FALSE,
     num_times_to_repeat_labels_per_cv_block = 1,
+    
     # constructor
     initialize = function(binned_file_name, specific_binned_label_name, num_cv_splits, use_count_data = FALSE) {
       self$specific_binned_label_name <- specific_binned_label_name
       self$num_cv_splits <- num_cv_splits
+      
       # load the binned data  
       load(binned_file_name)
+      
       # now called binned_data binned_data, should really refactor my code to my this change throughout 
       if (!exists("binned_data")) {
         binned_data <- binned.data
@@ -46,6 +49,7 @@ basic_DS <- R6Class("basic_DS",
       }
       self$binned_data <- binned_data
     },
+    
     # methods
     get_data = function(){
       # defining these here to make it potentially easy to transfer my code to other R OO systems 
@@ -99,6 +103,7 @@ basic_DS <- R6Class("basic_DS",
         curr_cv_block_inds <- start_ind:end_ind
         eval(parse(text=paste0("all_cv_data$CV_", iCV, "= ifelse(all_cv_data$CV_slice_ID %in% curr_cv_block_inds, 'test', 'train')")))
       }
+      
       all_cv_data <- select(all_cv_data, -CV_slice_ID)  # remove the original CV_slice_ID field     
       
       return(all_cv_data)
