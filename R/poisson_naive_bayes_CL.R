@@ -30,37 +30,24 @@
 #' @export
 
 poisson_naive_bayes_CL <- R6Class("poisson_naive_bayes_CL", 
-                   
-                                      
    public = list(
-                         
      # no properties for this classifier
      
-
     # the constructor does not take any arguments
     initialize = function() {},
                          
-    
     # methods
-    
-    
     # could break this up into two methods: train() and test()
-    get_predictions = function(train_data, all_times_test_data) {    
-  
-
-
+    get_predictions = function(train_data, all_times_test_data) {
       ### Train the classifier
-      
       lambdas_and_labels <- train_data %>% group_by(labels) %>% summarise_each(funs(mean))
       #class_labels <- lambdas[, 1]
       lambda_data <- as.matrix(lambdas_and_labels[, 2:ncol(lambdas_and_labels)])
       
-     
       # If there are lambda values equal to zero this can cause problems  if some of the test data 
       # for a given lamda is not 0 (because there will be 0 probability of getting the data with lambda == 0).
       # To deal with this we are going to assume that for all lambda == 0, there is one additional training point
       # that had a value of 1, which will solve this problem. 
-      
       num_train_examples_in_each_class <- table(train_data$labels)
       
       # if there are the same number of training examples in each class  (as there should be)
@@ -72,20 +59,14 @@ poisson_naive_bayes_CL <- R6Class("poisson_naive_bayes_CL",
           lambda_data[iClass, lambda_data[iClass, ] == 0] <- 1/(num_train_examples_in_each_class[iClass] + 1) 
         }
       }
-        
-      
-      
       
       ### Test the classifier
-      
-      
       test_labels <- select(all_times_test_data, -starts_with("site"))
       test_data <- as.matrix(select(all_times_test_data, starts_with("site")))
       
       num_classes <- length(unique(test_labels$labels))
       num_sites <- dim(test_data)[2]
       num_test_points <- dim(test_data)[1]
-      
       
       # works, but relatively slow...
       # all_pois_values <- array(NA, dim = c(num_classes, num_sites, num_test_points))
@@ -96,42 +77,26 @@ poisson_naive_bayes_CL <- R6Class("poisson_naive_bayes_CL",
       # }
       # log_likelihoods <- apply(log(all_pois_values), MARGIN = c(1, 3), sum)
       
-      
       # much faster way to get the log.likelihood values using linear algebra operations on matrices
       log_likelihoods <- test_data %*% t(log(lambda_data)) 
       log_likelihoods <- sweep(log_likelihoods, 2, rowSums(lambda_data))
       log_likelihoods <- t(sweep(log_likelihoods, 1, rowSums(lgamma(test_data + 1))))
-      
-
       # get the predicted labels
       predicted_inds <- apply(log_likelihoods, 2, which.max)   # need to create rand.which.max() function...
       predicted_labels <- lambdas_and_labels$labels[predicted_inds]
-      
-      
       # create a data frame that has all the results
       results <- data.frame(time = all_times_test_data$time, actual_labels = all_times_test_data$labels, 
                             predicted_labels = predicted_labels) %>%
         mutate(correct = actual_labels == predicted_labels)
-      
- 
       # get the decision values
       decision_values <- data.frame(t(log_likelihoods))
       names(decision_values) <- paste0('decision_val_', lambdas_and_labels$labels)  
-      
-      
       # return the results
       results <- cbind(results, decision_values)
+      
       return(results)
-      
-    
-      
-      
-      }   # end the get_predictions method
-    
-    
+    } # end the get_predictions method
    )  # end the public properites/methods
-   
-   
 )  # end the class
 
 

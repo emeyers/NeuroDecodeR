@@ -24,8 +24,6 @@
 #' @import R6
 #' @export
 
-
-
 max_correlation_CL <- R6Class("max_correlation_CL", 
   public = list(
     # no properties for this classifier
@@ -58,8 +56,8 @@ max_correlation_CL <- R6Class("max_correlation_CL",
       results <- cbind(results, decision_values)
       
       return(results)
-      }   # end the get_predictions method
-   )
+    } # end the get_predictions method
+  )
 )  # end the class
 
 

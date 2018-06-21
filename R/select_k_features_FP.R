@@ -31,20 +31,12 @@
 #' @import R6
 #' @export
 
-
-
-
-
 select_k_features_FP <- R6Class("select_k_features_FP", 
-                    
   public = list(
-                      
-    
      # properties
      num_site_to_use = NA,
      num_sites_to_exclude = NA,
      
-                      
      # constructor
      initialize = function(num_site_to_use, num_sites_to_exclude) {
        
@@ -58,17 +50,12 @@ select_k_features_FP <- R6Class("select_k_features_FP",
        
      },
                       
-                      
-                      
      # methods
      preprocess_data = function(train_data, test_data){
-             
-
        if (is.na(self$num_site_to_use) && is.na(self$num_sites_to_exclude)) {
          stop('Either num_site_to_use or num_sites_to_exclude must be set prior to calling the preprocess_data method')
        }
-       
-       
+
       # test the the ANOVA function that I will write works
       #  all_pvals <- NULL
       #   for (iSite in 1:(ncol(train_data) - 1)){
@@ -82,8 +69,6 @@ select_k_features_FP <- R6Class("select_k_features_FP",
       # }
       # all_pvals <- sapply(grep("site", names(train_data)), get_anova_pvals)
        
-       
-
      # writing the ANOVA function myself to speed it up (as I did in MATLAB)
 
      # get the ANOVA p-values for all sites...   
@@ -95,30 +80,20 @@ select_k_features_FP <- R6Class("select_k_features_FP",
      # another option that is just as fast...
      # group_means <- train_data %>% group_by(labels) %>% summarise_each(funs(mean)) %>% select(starts_with("site"))
      
-     
      # marginally faster way to compute the group means (might have more of a speed up if more sites are used)
      split_data <- split(train_data[, 1:num_sites], train_data$labels)
      group_means <- t(sapply(split_data, function(one_group_data) apply(one_group_data, 2, mean)))
-
-     
      MSS <- apply(sweep(scale(group_means, scale = FALSE)^2, 1, num_points_in_each_group$n, FUN = "*"), 2, sum)
      TSS <- apply(scale(select(train_data, -labels), scale = FALSE)^2, 2, sum)
      SSE <- TSS - MSS   # residual SS = total SS + model SS
-     
      between_deg_free <- num_groups - 1
      within_deg_free <- dim(train_data)[1] - num_groups
-     
      f_stats <- (MSS/between_deg_free)/(SSE/within_deg_free)
      all_pvals <- pf(f_stats, df1 = between_deg_free, df2 = within_deg_free, lower.tail = FALSE)
-     
-     
-
      # find the sites with the k smallest p-values
      sorted_data <- sort(all_pvals, index.return = TRUE)
-       
      sites_to_use <- sorted_data$ix
-      
-
+     
      # if excluding selective sites, first remove these num_sites_to_exclude sites 
      # (before using only the self$num_sites_to_exclude)
       if (!is.na(self$num_sites_to_exclude)) {
@@ -129,30 +104,12 @@ select_k_features_FP <- R6Class("select_k_features_FP",
       if (!is.na(self$num_site_to_use)) {
         sites_to_use <- sites_to_use[1:self$num_site_to_use]
       }
-      
-       
+     
        # return a list with the results
        processed_data <- list(train_data = cbind(train_data[sites_to_use], labels = train_data$labels), 
                               test_data = cbind(test_data[sites_to_use], labels = test_data$labels, time = test_data$time))
           
-       
        return(processed_data)
-       
-          
      }  # end preprocess_data
-
-
-     
   ) # end public properties/methods
-  
-  
 )  # end class
-
-
-
-
-
-
-
-
-
