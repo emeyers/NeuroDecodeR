@@ -23,10 +23,6 @@
 #' @import R6
 #' @export
 
-
-
-
-
 basic_DS <- R6Class("basic_DS", 
   public = list(
     # properties
