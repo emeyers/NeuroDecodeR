@@ -16,5 +16,8 @@ RoxygenNote: 6.0.1
 Imports: R6,
     stringr,
     dplyr,
-    reshape2
+    reshape2,
+    tictoc,
+    R.matlab,
+    e1071
 Suggests: testthat
