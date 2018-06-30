@@ -3,7 +3,7 @@ get_center_bin_time <- function(time_vector) {
   center_bin_time <- NULL
   
   for (i in 1:length(time_vector)) {
-    curr_parsed_names <- unlist(strsplit(as.character(time_vector[i]), ".", fixed = TRUE))
+    curr_parsed_names <- unlist(strsplit(as.character(time_vector[i]), "_", fixed = TRUE))
     center_bin_time[i] <- mean(as.numeric(curr_parsed_names[2:3]))  # length(curr.parsed_names[2]:curr.parsed_names[3])
   }
   
