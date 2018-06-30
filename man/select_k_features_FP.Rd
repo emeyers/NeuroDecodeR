@@ -18,11 +18,11 @@ This object uses \href{https://cran.r-project.org/web/packages/R6/vignettes/Intr
 
 
 \describe{
-\item{\code{select_k_features_FP$new(num.site.to.use, num.sites.to.exclude)}}{
-This constructor uses num.site.to.use of the best sites as found via an ANOVA. 
-Additionally, it can eliminate the best num.sites.to.exclude to use sites again
-using an ANOVA. If both num.site.to.use and num.sites.to.exclude are set, then 
-num.sites.to.exclude will first be eliminated and then the next num.site.to.use will 
+\item{\code{select_k_features_FP$new(num_site_to_use, num_sites_to_exclude)}}{
+This constructor uses num_site_to_use of the best sites as found via an ANOVA. 
+Additionally, it can eliminate the best num_sites_to_exclude to use sites again
+using an ANOVA. If both num_site_to_use and num_sites_to_exclude are set, then 
+num_sites_to_exclude will first be eliminated and then the next num_site_to_use will 
 be kept. If successful, will return a new \code{select_k_features_FP} object.
 }}
 }

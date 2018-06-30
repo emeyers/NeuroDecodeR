@@ -11,9 +11,9 @@ create_binned_data(raster_directory_name, save_prefix_name, bin_width,
 \item{raster_directory_name}{character.  This argument is the name of a
 directory that contains files that are in raster format.}
 
-\item{save_prefix_name}{integer. This argument contains a prefix 
-(e.g., directory name and additional characters) for how the resulting 
-binned file should be saved. The string _binned_data_Xms_bins_Yms_sampled 
+\item{save_prefix_name}{integer. This argument contains a prefix
+(e.g., directory name and additional characters) for how the resulting
+binned file should be saved. The string _binned_data_Xms_bins_Yms_sampled
 is appended on to the saved Rda file name, where X is the bin_width and
 Y is the sampling interval.}
 
@@ -21,28 +21,28 @@ Y is the sampling interval.}
 
 \item{sampling_interval}{integer. The frequency with which the data should be sampled.}
 
-\item{start_ind}{integer. An optional argument that specifies the time index where the 
+\item{start_ind}{integer. An optional argument that specifies the time index where the
 the first bin should start.}
 
-\item{end_ind}{logical. An optional argument that specifies the time index where the 
+\item{end_ind}{logical. An optional argument that specifies the time index where the
 the binning process should end.}
 
-\item{files_contain}{character. Only raster data files that contain the file_contains 
+\item{files_contain}{character. Only raster data files that contain the file_contains
 string will be included in the binned data.}
 }
 \description{
 This function takes takes a directory containing data in raster format
 and converts it into a file that contains 'binned' spike count rate data
-that is sampled at a particular frequency. 
+that is sampled at a particular frequency.
 
 \describe{
 \item{\code{create_binned_data(raster_directory_name, save_prefix_name, bin_width, sampling_interval, start_ind, end_ind, files_contain)}}{
-creates a binned data file. 
+creates a binned data file.
 }}
 }
 \examples{
 Bin the data using 150 ms bins sample at 50 ms intervals
-Assumes that raster files are in the directory '../data/Zhang_Desimone_7objects_R_raster_data/' 
+Assumes that raster files are in the directory '../data/Zhang_Desimone_7objects_R_raster_data/'
 and saves the output file with the prefix ZD
 \dontrun{
 create_binned_data('../data/Zhang_Desimone_7objects_R_raster_data/', '../data/ZD', 150, 10)

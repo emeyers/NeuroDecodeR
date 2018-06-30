@@ -19,7 +19,7 @@ This object uses \href{https://cran.r-project.org/web/packages/R6/vignettes/Intr
 
 
 \describe{
-\item{\code{standard_CV$new(data.source, classifier, feature.preprocessors)  )}}{
+\item{\code{standard_CV$new(data_source, classifier, feature_preprocessors)  )}}{
 If successful, will return a new \code{basic_DS} object.
 }}
 }
