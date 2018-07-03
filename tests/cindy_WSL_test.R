@@ -1,3 +1,4 @@
+library('NDTr')
 
 NDTr_name = "/mnt/c/Users/14868/Documents/GitHub/NDTr"
 

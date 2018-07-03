@@ -1,3 +1,4 @@
+library('NDTr')
 
 NDTr_name = "/om/user/xf15/NDTr"
 

@@ -1,3 +1,4 @@
+library('NDTr')
 
 NDTr_name = "~/NDTr"
 
