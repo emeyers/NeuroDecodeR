@@ -16,8 +16,7 @@ function(input, output, session) {
                 
   ))
   
-  # most recently chosen/uploaded bin/raster goes to bin_using_raster/DS_using_bin
-  
+
   output$list_of_DS_var = renderUI({
     load(paste0('../data/binned/', input$DS_chosen_bin))
     selectInput("DS_var",
