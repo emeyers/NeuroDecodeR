@@ -25,11 +25,12 @@ ui <- dashboardPage(
                              #                  fileInput("bin_uploaded_raster", "Upload data", multiple = TRUE)),
                              # conditionalPanel(condition = "input.bin_bUpload == 'Use existing data'",
                              #                  uiOutput("bin_list_of_raster_files")),
-                             fileInput("bin_uploaded_raster", "Upload data (optional)", multiple = TRUE),
+                             fileInput("bin_uploaded_raster", "Upload new raster data (optional)", multiple = TRUE),
                              uiOutput("bin_list_of_raster_files"),
                              numericInput("bin_width", "Bin width", value = 10, min = 1),
                              numericInput("step_size", "Step size", value = 1, min = 1)
-                         )
+                         ),
+                         actionButton("bin_bin_data", "Bin the data")
                          
                   ),
                   column(width = 8,
@@ -75,19 +76,26 @@ ui <- dashboardPage(
                                                                  #                  fileInput("DS_uploaded_bin", "Upload data", multiple = TRUE)),
                                                                  # conditionalPanel(condition = "input.DS_bUpload == 'Use existing data'",
                                                                  #                  uiOutput("DS_list_of_binned_files")),
-                                                                 fileInput("DS_uploaded_bin", "Upload data (optional)", multiple = TRUE),
+                                                                 fileInput("DS_uploaded_bin", "Upload new binned data (optional)", multiple = TRUE),
                                                                  uiOutput("DS_list_of_binned_files"),
                                                                  
                                                                  selectInput("DS_type", "Decoding type", c("basic_DS","generalization_DS")),
-                                                                 uiOutput("list_of_DS_var"),
+                                                                 uiOutput("DS_list_of_var"),
                                                                  
                                                                  conditionalPanel(condition = "input.DS_type == 'basic_DS'",
-                                                                                  selectInput("DS_label_to_use", "Labels to use", c("search raster labels"), multiple = TRUE)),
-                                                                 conditionalPanel(condition = "input.DS_type == 'generalization_DS'",
-                                                                                  selectInput("DS_training_label", "Training labels", c("search raster labels"), multiple = TRUE),
-                                                                                  selectInput("DS_training_label", "Testing labels", c("search raster labels"), multiple = TRUE)
+                                                                                  radioButtons("DS_bUse_all_labels", "Use all the labels?", c("Yes", "No"))),
+                                                                 conditionalPanel(condition = "input.DS_bUse_all_labels == 'No'",
+                                                                                  uiOutput("DS_list_of_labels")),
+                                                                 
                                                                                   
-                                                                 )
+                                                                 conditionalPanel(condition = "input.DS_type == 'generalization_DS'",
+                                                                                  uiOutput("DS_list_of_potential_training_var"),
+                                                                                  uiOutput("DS_list_of_training_labels"),
+                                                                                  selectInput("DS_testing_label",
+                                                                                              "Testing labels",
+                                                                                              c(""),
+                                                                                              # str_replace(reactive_all_levels_of_var_to_use(),input$DS_training_labels, ""),
+                                                                                              multiple = TRUE)                                                                 )
                                                                  
                                                              )
                                                              
