@@ -9,10 +9,10 @@ require('dplyr')
 require('fields')
 require('ggplot2')
 
-# library('R6')    
-# library('dplyr')
-# library('reshape2')
-# library('stringr')
+library('R6')
+library('dplyr')
+library('reshape2')
+library('stringr')
 
 
 

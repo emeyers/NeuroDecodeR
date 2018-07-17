@@ -1,5 +1,5 @@
 library(shinydashboard)
-library(shinyAce)
+# library(shinyAce)
 # library(semantic.dashboard)
 
 
@@ -80,7 +80,14 @@ ui <- dashboardPage(
                                                                  uiOutput("DS_list_of_binned_files"),
                                                                  
                                                                  selectInput("DS_type", "Decoding type", c("basic_DS","generalization_DS")),
-                                                                 uiOutput("DS_list_of_var"),
+                                                                 conditionalPanel((condition = "!is.null(input.DS_chosen_bin "),
+                                                                                  selectInput("DS_var",
+                                                                                              "Variable to decode",
+                                                                                              # reactive_all_var()
+                                                                                              c("")
+                                                                                              
+                                                                                  )),
+                                                                 
                                                                  
                                                                  conditionalPanel(condition = "input.DS_type == 'basic_DS'",
                                                                                   radioButtons("DS_bUse_all_labels", "Use all the labels?", c("Yes", "No"))),
