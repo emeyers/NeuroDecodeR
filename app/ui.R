@@ -104,13 +104,16 @@ ui <- dashboardPage(
                                                                  
                                                                  conditionalPanel(condition = "input.DS_type == 'generalization_DS'",
                                                                                   uiOutput("DS_gen_list_of_var_to_decode"),
-                                                                                  uiOutput("DS_list_of_potential_training_var"),
-                                                                                  uiOutput("DS_list_of_training_labels"),
+                                                                                  uiOutput("DS_list_of_gen_var_to_use"),
+                                                                                  numericInput("DS_num_training_level_groups",
+                                                                                               "How many training level groups you will use?"),
+                                                                                  uiOutput("DS_list_of_training_level_groups"),
                                                                                   selectInput("DS_testing_label",
                                                                                               "Testing labels",
                                                                                               c(""),
                                                                                               # str_replace(reactive_all_levels_of_var_to_use(),input$DS_training_labels, ""),
-                                                                                              multiple = TRUE)                                                                 )
+                                                                                              multiple = TRUE)                                                                 
+                                                                                  )
                                                                  
                                                              )
                                                              

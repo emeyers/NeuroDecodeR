@@ -147,20 +147,27 @@ function(input, output, session) {
 
   })
   # 
-  # output$DS_list_of_potential_training_var = renderUI({
-  #   selectInput("DS_var_to_use",
-  #               "Variable to train with",
-  #               reactive_all_var())
-  # })
-  # 
-  # output$DS_list_of_training_labels = renderUI({
-  #   selectInput("DS_training_label",
-  #               "Training labels",
-  #               reactive_all_levels_of_var_to_use(),
-  #               multiple = TRUE
-  #   )
-  # })
-  # 
+  output$DS_list_of_gen_var_to_use = renderUI({
+    selectInput("DS_gen_var_to_use",
+                "Variable to train with",
+                reactive_all_var())
+  })
+
+  output$DS_list_of_training_level_groups = renderUI({
+    num <- input$DS_num_training_level_groups
+    lapply(1:num, function(i){
+      selectInput(paste0("DS_training_level_group_", i),
+                  paste("Training level group", i)
+      )
+      
+    })
+    selectInput("DS_training_label",
+                "Training labels",
+                reactive_all_levels_of_var_to_use(),
+                multiple = TRUE
+    )
+  })
+
   # output$DS_list_of_testing_labels = renderUI({
   #   selectInput("DS_testing_label",
   #               "Testing labels",
