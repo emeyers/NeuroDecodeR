@@ -80,22 +80,30 @@ ui <- dashboardPage(
                                                                  uiOutput("DS_list_of_binned_files"),
                                                                  
                                                                  selectInput("DS_type", "Decoding type", c("basic_DS","generalization_DS")),
-                                                                 conditionalPanel((condition = "!is.null(input.DS_chosen_bin "),
-                                                                                  selectInput("DS_var",
-                                                                                              "Variable to decode",
-                                                                                              # reactive_all_var()
-                                                                                              c("")
-                                                                                              
-                                                                                  )),
+                                                                 # selectInput("DS_var_to_decode",
+                                                                 #             "Variable to decode",
+                                                                 #             # reactive_all_var()
+                                                                 #             character(0)
+                                                                 #             
+                                                                 #             
+                                                                 # ),
                                                                  
                                                                  
                                                                  conditionalPanel(condition = "input.DS_type == 'basic_DS'",
-                                                                                  radioButtons("DS_bUse_all_labels", "Use all the labels?", c("Yes", "No"))),
-                                                                 conditionalPanel(condition = "input.DS_bUse_all_labels == 'No'",
-                                                                                  uiOutput("DS_list_of_labels")),
-                                                                 
+                                                                                  uiOutput("DS_list_of_var_to_decode"),
                                                                                   
+                                                                                  radioButtons("DS_bUse_all_labels", "Use all the labels?", c("Yes", "No"))
+                                                                 ),
+                                                                 conditionalPanel(condition = "input.DS_bUse_all_labels == 'No' && input.DS_type == 'basic_DS'",
+                                                                                  uiOutput("DS_list_of_labels_to_use")),
+                                                                 # selectInput("DS_label_to_use",
+                                                                 #             "Labels to use",
+                                                                 #             character(0),
+                                                                 #             
+                                                                 #             multiple = TRUE)),
+                                                                 
                                                                  conditionalPanel(condition = "input.DS_type == 'generalization_DS'",
+                                                                                  uiOutput("DS_gen_list_of_var_to_decode"),
                                                                                   uiOutput("DS_list_of_potential_training_var"),
                                                                                   uiOutput("DS_list_of_training_labels"),
                                                                                   selectInput("DS_testing_label",
@@ -192,7 +200,6 @@ ui <- dashboardPage(
     
   )
 )
-  
-  
-  
-  
+
+
+

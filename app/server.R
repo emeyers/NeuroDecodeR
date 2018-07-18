@@ -1,61 +1,96 @@
+
 require('dplyr')
 require('fields')
 require('ggplot2')
 require('stringr')
 
+setwd("C:/Users/14868/Documents/GitHub/NDTr")
+
 
 function(input, output, session) {
   
-  observe({
-    setwd("C:/Users/14868/Documents/GitHub/NDTr")
-    load('data/binned/ZD_binned_data_150ms_bins_50ms_sampled.Rda')
-    print(head(binned_data))
-    tempA <- input$DS_training_labels
-    a <- getwd()
-    print(paste0("a", a))
-    # tempB <- reactive_all_levels_of_var_to_use()
-    if (is.null(tempA))
-      tempA <- character(0)
-    updateSelectInput(session,
-                      "DS_testing_label",
-                      label = "Testing labels",
-                      choices  = tempA
-                      # choices = tempB[!str_detect(tempB, tempA)]
-                      # str_remove(reactive_all_levels_of_var_to_use(),temp)
-    )
-  })
-  
-  observe({
-    tempA <- input$DS_chosen_bin
-    print(paste0('tempA', tempA))
-    if (!is.null(tempA)){
-      binned_data = reactive_binned_data()
-      updateSelectInput(session,
-                        "DS_var",
-                        label = "Variable to decode",
-                        choices = sub("labels.", "", names(select(binned_data, starts_with("labels"))))
-      )
-      print(sub("labels.", "", names(select(binned_data, starts_with("labels")))))
-    }
-    
-  })
-  
+  # observe({
+  #   setwd("C:/Users/14868/Documents/GitHub/NDTr")
+  #   # load('data/binned/ZD_binned_data_150ms_bins_50ms_sampled.Rda')
+  #   # print(head(binned_data))
+  #   tempA <- input$DS_training_labels
+  #   a <- getwd()
+  #   print(paste0("a", a))
+  #   # tempB <- reactive_all_levels_of_var_to_use()
+  #   if (is.null(tempA))
+  #     tempA <- character(0)
+  #   updateSelectInput(session,
+  #                     "DS_testing_label",
+  #                     label = "Testing labels",
+  #                     choices  = tempA
+  #                     # choices = tempB[!str_detect(tempB, tempA)]
+  #                     # str_remove(reactive_all_levels_of_var_to_use(),temp)
+  #   )
+  # })
   reactive_binned_data <- reactive({
-    if(!is.null(input$DS_chosen_bin)){
+    # if(!is.null(input$DS_chosen_bin)){
       get(load(paste0('data/binned/', input$DS_chosen_bin)))
       
-    }
+    # }
     
   })
   
   reactive_all_var <- reactive({
-    sub("labels.", "", names(select(binned_data, starts_with("labels"))))
+    if(!is.null(input$DS_chosen_bin)){
+      binned_data = reactive_binned_data()
+      
+      sub("labels.", "", names(select(binned_data, starts_with("labels"))))
+    }
+    
   })
   
   reactive_all_levels_of_var_to_use <- reactive({
-    levels(factor(binned_data[[paste0("labels.",input$DS_var_to_use)]]))
-    
+    if(!is.null(input$DS_chosen_bin)){
+      
+    binned_data = reactive_binned_data()
+    print(head(binned_data))
+    print(input$DS_var_to_decode)
+    levels(factor(binned_data[[paste0("labels.",input$DS_var_to_decode)]]))
+    }
   })
+  
+  # observeEvent(input$DS_chosen_bin,{
+  #   # tempA <- 
+  #   # print(paste0('tempA', tempA))
+  #   print(paste0("HERRE", input$DS_chosen_bin))
+  #   print(is.null(input$DS_chosen_bin))
+  #   
+  #   if (!is.null(input$DS_chosen_bin)){
+  #     # binned_data = reactive_binned_data()
+  #     # print( tempA)
+  #     # print(paste0("raster", input$DS_bin_chosen_raster))
+  #     # print(is.null(tempA))
+  #     # print(input$DS_testing_label)
+  #     # print(list.dirs('data/raster/'))
+  #     updateSelectInput(session,
+  #                       "DS_var_to_decode",
+  #                       choices = reactive_all_var()
+  #     )
+  # 
+  # 
+  # 
+  # }
+  # })
+  #
+  
+  # observeEvent(input$DS_var_to_decode,{
+  #   if (!is.null(input$DS_chosen_bin)){
+  #     
+  #   updateSelectInput(session,
+  #                     "DS_label_to_use",
+  #                     choices = reactive_all_levels_of_var_to_use())
+  # }
+  # )
+
+  
+
+  
+
   # # labels has to be renamed stimulus.postiiton -> position
   # reactive_potential_training_var <- reactive({
   #   temp = reactive_all_var()
@@ -66,8 +101,9 @@ function(input, output, session) {
   output$bin_list_of_raster_files = renderUI(
     selectInput("bin_chosen_raster",
                 "Choose your raster data",
-                list.dirs('data/raster/', full.names = FALSE)#,
-                # selected = "Zhang_Desimone_7objects_R_raster_data"
+                list.dirs('data/raster/', full.names = FALSE),
+                selected = "Zhang_Desimone_7objects_R_raster_data"
+                
                 
     ))
   
@@ -75,58 +111,61 @@ function(input, output, session) {
   output$DS_list_of_binned_files = renderUI(
     selectInput("DS_chosen_bin",
                 "Choose your binned data",
-                list.files('data/binned/', "*.Rda")#, 
+                list.files('data/binned/', "*.Rda")
                 # selected = "ZD_binned_data_150ms_bins_50ms_sampled.Rda"
                 
     ))
   
   
-  # output$DS_list_of_var = renderUI({
-  #   print(paste0("b", input$DS_chosen_bin))
-  #   # if(!is.null(input$DS_chosen_bin)){
-  #     # load(paste0('data/binned/', input$DS_chosen_bin))
-  #     selectInput("DS_var",
-  #                 "Variable to decode",
-  #                 # reactive_all_var()
-  #                 c("")
-  #     
-  #     )
-  #   
-  
-  
-  
-# })
+  output$DS_list_of_var_to_decode = renderUI({
+      selectInput("DS_var_to_decode",
+                  "Variable to decode/use",
+                  reactive_all_var()
+                  # c("")
 
-# output$DS_list_of_labels = renderUI({
-#   # load(paste0('data/binned/', input$DS_chosen_bin))
-#   
-#   selectInput("DS_label_to_use",
-#               "Labels to use",
-#               levels(factor(reactive_binned_data()[[paste0("labels.",input$DS_var)]])),
-#               multiple = TRUE)
-#   
-# })
+      )
 
-# output$DS_list_of_potential_training_var = renderUI({
-#   selectInput("DS_var_to_use",
-#               "Variable to train with",
-#               reactive_all_var())
-# })
-# 
-# output$DS_list_of_training_labels = renderUI({
-#   selectInput("DS_training_label",
-#               "Training labels",
-#               reactive_all_levels_of_var_to_use(),
-#               multiple = TRUE
-#   )
-# })
-# 
-# output$DS_list_of_testing_labels = renderUI({
-#   selectInput("DS_testing_label",
-#               "Testing labels",
-#               reactive_all_levels_of_var_to_use(),
-#               # str_replace(reactive_all_levels_of_var_to_use(),input$DS_training_labels, ""),
-#               multiple = TRUE)
-# })
+  })
+  
+  output$DS_gen_list_of_var_to_decode = renderUI({
+    selectInput("DS_gen_var_to_decode",
+                "Variable to decode",
+                reactive_all_var()
+                # c("")
+                
+    )
+    
+  })
+  
+  output$DS_list_of_labels_to_use = renderUI({
+    # load(paste0('data/binned/', input$DS_chosen_bin))
+
+    selectInput("DS_label_to_use",
+                "Labels to use",
+                reactive_all_levels_of_var_to_use(),
+                multiple = TRUE)
+
+  })
+  # 
+  # output$DS_list_of_potential_training_var = renderUI({
+  #   selectInput("DS_var_to_use",
+  #               "Variable to train with",
+  #               reactive_all_var())
+  # })
+  # 
+  # output$DS_list_of_training_labels = renderUI({
+  #   selectInput("DS_training_label",
+  #               "Training labels",
+  #               reactive_all_levels_of_var_to_use(),
+  #               multiple = TRUE
+  #   )
+  # })
+  # 
+  # output$DS_list_of_testing_labels = renderUI({
+  #   selectInput("DS_testing_label",
+  #               "Testing labels",
+  #               reactive_all_levels_of_var_to_use(),
+  #               # str_replace(reactive_all_levels_of_var_to_use(),input$DS_training_labels, ""),
+  #               multiple = TRUE)
+  # })
 }
-
