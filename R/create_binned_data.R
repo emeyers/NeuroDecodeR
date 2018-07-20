@@ -23,7 +23,7 @@
 #' the first bin should start.
 #' @param end_ind logical. An optional argument that specifies the time index where the
 #' the binning process should end.
-#' @param files_contain character. Only raster data files that contain the file_contains
+#' @param files_contain regular expression. Only raster data files that match the file_contains
 #' string will be included in the binned data.
 #'
 #' @examples
