@@ -50,84 +50,104 @@ create_binned_data <- function(raster_directory_name, save_prefix_name, bin_widt
   if (grepl(desired_pattern, raster_directory_name) == FALSE){
     raster_directory_name <- paste0(raster_directory_name, '/')
   }  
-
+  
   file_names <- list.files(raster_directory_name, pattern = files_contain)
   binned_data <- NULL
-
+  binned_site_info <- NULL
+  
   for (i in 1:length(file_names)) {
     cat(paste(i, " "))
     # print(i) tic()
     binned_data_object_name <- load(paste0(raster_directory_name, file_names[i]))
-
+    
     # checking for some backward compatibility, but make sure all data is a varaible called raster_data in the future
-    if (binned_data_object_name == "raster_data") {
-      # do nothing if the raster data is in a R object called raster_data
-    } else if (binned_data_object_name == "raster.data") {
-      raster_data <- raster.data  # rename raster.data to raster_data
+    if(length(binned_data_object_name) == 1){
+      if (binned_data_object_name == "raster_data") {
+        # do nothing if the raster data is in a R object called raster_data
+      } else if (binned_data_object_name == "raster.data") {
+        raster_data <- raster.data  # rename raster.data to raster_data
+      } else {
+        stop("Data stored in raster files must contain two R objets one called raster_data and another called site_info...
+as in the new version or an R object called raster_data including site_info as in the old version")
+      }
+    } else if ((length(binned_data_object_name) == 2) && (match("raster_data", binned_data_object_name) + match("raster_site_info", binned_data_object_name) == 3)){
+      
     } else {
-      stop("Data stored in raster files must contain an R object called raster_data")
+      stop("Data stored in raster files must contain two R objets one called raster_data and another called site_info...
+as in the new version or an R object called raster_data including site_info as in the old version")
     }
-
+    
+    
+    
+    
+    
     one_binned_site <- bin_data_one_site(raster_data, bin_width, sampling_interval, start_ind, end_ind)
     one_binned_site$siteID <- rep(i, dim(one_binned_site)[1])
     binned_data <- rbind(binned_data, one_binned_site)
+    
+    raster_site_info$siteID <- i
+    binned_site_info <- rbind(binned_site_info, raster_site_info)
     # toc()
   }
-
+  
   # make the siteID be in the first column
   binned_data <- binned_data %>% select(siteID, everything())
-
+  binned_site_info <- binned_site_info %>% select(siteID, everything())
+  
   # return(binned_data)
-
+  
   # save the results to a .Rda file
   saved_binned_data_file_name <- paste0(save_prefix_name, "_", "binned_data_", bin_width, "ms_bins_", sampling_interval,
                                         "ms_sampled")
   start_time_name <- ""
   end_time_name <- ""
-
+  
   if (!is.null(start_ind)) {
     start_time_name <- paste0("_start_", start_ind)
   }
-
+  
   if (!is.null(end_ind)) {
     end_time_name <- paste0("_end_", end_ind)
   }
-
+  
   saved_binned_data_file_name <- paste0(saved_binned_data_file_name, start_time_name, end_time_name, ".Rda")
   print(saved_binned_data_file_name)
-  save("binned_data", file = saved_binned_data_file_name, compress = TRUE)
+  save("binned_data", "binned_site_info", file = saved_binned_data_file_name, compress = TRUE)
 }  # end function
 
 # bin the data from one site
 bin_data_one_site <- function(raster_data, bin_width, sampling_interval, start_ind = NULL, end_ind = NULL) {
   labels_df <- dplyr::select(raster_data, -starts_with("time"))
   spike_df <- dplyr::select(raster_data, starts_with("time"))
-
+  
   if (is.null(start_ind)) {
-    start_ind <- 1
+    start_time <- names(spike_df)[1]
+    start_ind <-as.numeric(gsub("time.", "", start_time)) 
   }
-
+  
   if (is.null(end_ind)) {
-    end_ind <- dim(spike_df)[2]
+    end_time <- names(spike_df)[dim(spike_df)[2]]
+    end_ind <- as.numeric(gsub("time.", "", end_time))
   }
-
+  
   all_start_inds <- seq(start_ind, end_ind - bin_width + 1, by = sampling_interval)
   all_end_inds <- all_start_inds + bin_width - 1
   binned_data_one_site <- as.data.frame(matrix(nrow = dim(raster_data)[1], ncol = length(all_start_inds)))
-
+  
   for (i in 1:length(all_start_inds)) {
     if (all_start_inds[i] == all_end_inds[i]) {
       # if binning at the same resolution as the original file, return original data
-      binned_data_one_site[, i] <- spike_df[, all_start_inds[i]]
+      # add start_ind to offset the prestimlus time
+      binned_data_one_site[, i] <- spike_df[, all_start_inds[i] + start_ind]
     } else {
       # otherwise, actually bin the data
-      binned_data_one_site[, i] <- rowMeans(spike_df[, all_start_inds[i]:all_end_inds[i]])
+      binned_data_one_site[, i] <- rowMeans(spike_df[, (all_start_inds[i] + start_ind) :(all_end_inds[i] + start_ind)])
     }
   }
-
+  
   names(binned_data_one_site) <- paste0("time.", all_start_inds, "_", all_end_inds)
   binned_data_one_site <- cbind(labels_df, binned_data_one_site)
-
+  
   return(binned_data_one_site)
 }
 
@@ -135,15 +155,15 @@ bin_data_one_site <- function(raster_data, bin_width, sampling_interval, start_i
 bin_data_one_site2 <- function(raster_data, bin_width, sampling_interval, start_ind = NULL, end_ind = NULL) {
   labels_df <- dplyr::select(raster_data, -starts_with("time"))
   spike_df <- dplyr::select(raster_data, starts_with("time"))
-
+  
   if (is.null(start_ind)) {
     start_ind <- 1
   }
-
+  
   if (is.null(end_ind)) {
     end_ind <- dim(spike_df)[2]
   }
-
+  
   binned_data_one_site <- as.data.frame(matrix(nrow = dim(raster_data)[1], ncol = length(all_start_inds)))
   # start by smoothing the data to create the binned data with a boxcar filter
   the_filter <- rep(1, bin_width)/bin_width
@@ -155,6 +175,6 @@ bin_data_one_site2 <- function(raster_data, bin_width, sampling_interval, start_
   all_end_inds <- all_start_inds + bin_width - 1
   names(binned_data_one_site) <- paste0("time.", all_start_inds, "_", all_end_inds)
   binned_data_one_site <- cbind(labels_df, binned_data_one_site)
-
+  
   return(binned_data_one_site)
 }

@@ -8,7 +8,7 @@
 # stringr::str_replace(file_names[i], 'mat', 'rda')) save(raster_data, file = save_name, compress = TRUE) }
 
 # The current version of R.matlab on CRAN doesn't not work with R version 3.2.2 can install the package using the
-# following command:
+# following command: 
 
 # source('http://callr.org/install#HenrikBengtsson/R.matlab@develop')
 # library(R.matlab)
@@ -43,23 +43,25 @@ create_raster_data_from_matlab_raster_data <- function(matlab_raster_directory_n
     
     
     
-    # second, create the site_info df
+    # second, create the raster_site_info df
     # parse the raster site info (perhaps there is a better way to do this, but works)
-    temp_site_info <- data.frame(raster$raster.site.info)
-    temp_site_info_names <- convert_dot_back_to_underscore(row.names(temp_site_info))
+    temp_raster_site_info <- data.frame(raster$raster.site.info)
+    temp_raster_site_info_names <- convert_dot_back_to_underscore(row.names(temp_raster_site_info))
     
-    site_info <- NULL
+    raster_site_info <- NULL
 
-    # parse the raster_site_info names if they exist...
-    if (length(temp_site_info_names) > 0) {
-      for (iSiteInfo in 1:length(temp_site_info_names)) {
-        curr_info_data <- unlist(temp_site_info[iSiteInfo, ])
-        eval(parse(text = (paste0("site_info$site_info.", eval(temp_site_info_names[iSiteInfo]), " <- curr_info_data"))))
+    # parse the raster_raster_site_info names if they exist...
+    if (length(temp_raster_site_info_names) > 0) {
+      for (iSiteInfo in 1:length(temp_raster_site_info_names)) {
+        curr_info_data <- unlist(temp_raster_site_info[iSiteInfo, ])
+        eval(parse(text = (paste0("raster_site_info$site_info.", eval(temp_raster_site_info_names[iSiteInfo]), " <- curr_info_data"))))
       }
     }
     
-    site_info <- data.frame(site_info)
+    raster_site_info <- data.frame(raster_site_info)
     
+    # because list is crazy
+    rownames(raster_site_info) <- c()
     
     
     
@@ -71,8 +73,8 @@ create_raster_data_from_matlab_raster_data <- function(matlab_raster_directory_n
     data_times <- 1:dim(raster_data)[2]
     
     # (if there is an alignment time, subtract it from the raster times...)
-    if (sum(names(site_info) == "site_info.alignment_event_time")) {
-      data_times <- (data_times - site_info$site_info.alignment_event_time)
+    if (sum(names(raster_site_info) == "site_info.alignment_event_time")) {
+      data_times <- (data_times - raster_site_info$site_info.alignment_event_time)
     }
     
     names(raster_data) <- paste0("time.", data_times)
@@ -102,9 +104,9 @@ create_raster_data_from_matlab_raster_data <- function(matlab_raster_directory_n
     
     
     
-    # finally, save both site_info and raster data in the file
+    # finally, save both raster_site_info and raster data in the file
     
-    save(site_info, raster_data, file = paste0(r_raster_directory_name, curr_r_file_name), compress = TRUE)
+    save(raster_site_info, raster_data, file = paste0(r_raster_directory_name, curr_r_file_name), compress = TRUE)
     
     
     
