@@ -9,8 +9,12 @@ create_binned_data_from_matlab_raster_data <- function(raster_directory_name, sa
   
   # helper funciton: every list in raster_labels is contained in an extra list the function below removes this extra list
   # so that it will just return the items of interest
-  delist <- function(data_in_list) sapply(data_in_list, function(x) x[[1]])
-  file_names <- list.files(raster_directory_name)
+  
+  # # this is not used
+  # delist <- function(data_in_list) sapply(data_in_list, function(x) x[[1]])
+  
+  
+  file_names <- list.files(raster_directory_name, full.names = TRUE)
   binned_site_info <- NULL
   binned_data <- NULL
   
@@ -18,7 +22,7 @@ create_binned_data_from_matlab_raster_data <- function(raster_directory_name, sa
     print(siteID)
     # current file name
     curr_matlab_file_name <- file_names[siteID]
-    raster_data_list_imported_from_matlab <- readMat(paste(raster_directory_name, curr_matlab_file_name, sep = ""))
+    raster_data_list_imported_from_matlab <- readMat(curr_matlab_file_name)
     # parse the raster site info...
     raster_site_info <- data.frame(raster_data_list_imported_from_matlab$raster.site.info)
     raster_site_info_names <- row.names(raster_site_info)

@@ -46,9 +46,10 @@
 create_binned_data <- function(raster_directory_name, save_prefix_name, bin_width, sampling_interval, start_ind = NULL, end_ind = NULL,
                                files_contain = "") {
   # if the directory name does not end with a slash, add a slash to the directory name
-  if (raster_directory_name[length(raster_directory_name)] != "/") {
-    raster_directory_name <- paste0(raster_directory_name, "/")
-  }
+  desired_pattern = '.*/$'
+  if (grepl(desired_pattern, raster_directory_name) == FALSE){
+    raster_directory_name <- paste0(raster_directory_name, '/')
+  }  
 
   file_names <- list.files(raster_directory_name, pattern = files_contain)
   binned_data <- NULL
@@ -75,8 +76,7 @@ create_binned_data <- function(raster_directory_name, save_prefix_name, bin_widt
 
   # make the siteID be in the first column
   binned_data <- binned_data %>% select(siteID, everything())
-  # Subtitute all dots in variable names to underscores
-  names(binned_data) <- gsub(x = names(binned_data), pattern = "\\.", replacement = "_")
+
   # return(binned_data)
 
   # save the results to a .Rda file
@@ -125,7 +125,7 @@ bin_data_one_site <- function(raster_data, bin_width, sampling_interval, start_i
     }
   }
 
-  names(binned_data_one_site) <- paste0("time_", all_start_inds, "_", all_end_inds)
+  names(binned_data_one_site) <- paste0("time.", all_start_inds, "_", all_end_inds)
   binned_data_one_site <- cbind(labels_df, binned_data_one_site)
 
   return(binned_data_one_site)
@@ -153,7 +153,7 @@ bin_data_one_site2 <- function(raster_data, bin_width, sampling_interval, start_
   binned_data_one_site <- binned_data_one_site[, sampling_inds]
   all_start_inds <- seq(start_ind, end_ind - bin_width + 1, by = sampling_interval)
   all_end_inds <- all_start_inds + bin_width - 1
-  names(binned_data_one_site) <- paste0("time_", all_start_inds, "_", all_end_inds)
+  names(binned_data_one_site) <- paste0("time.", all_start_inds, "_", all_end_inds)
   binned_data_one_site <- cbind(labels_df, binned_data_one_site)
 
   return(binned_data_one_site)

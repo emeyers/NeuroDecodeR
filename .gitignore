@@ -40,7 +40,6 @@ vignettes/*.pdf
 # End of https://www.gitignore.io/api/r
 
 # added by Ethan
-data/
 tests/create_R_package.R
 tests/test_results
 tests/Rprof.out

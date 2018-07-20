@@ -11,8 +11,8 @@ NDTr_name = "~/NDTr"
 
 
 
-raster_directory_name <- file.path("data", "Zhang_Desimone_7objects_R_raster_data")
-create_binned_data(raster_directory_name, 'ZD', 150, 50)
+raster_directory_name <- file.path("data/raster", "Zhang_Desimone_7objects_R_raster_data")
+create_binned_data(raster_directory_name, 'data/binned/ZD', 150, 50)
 
 
 
