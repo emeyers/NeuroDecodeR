@@ -27,10 +27,19 @@ function(input, output, session) {
   #                     # str_remove(reactive_all_levels_of_var_to_use(),temp)
   #   )
   # })
+  
+  
+  reactive_maximum_num_of_levels_in_all_var <- reactive({
+    binned_data = reactive_binned_data()
+    temp_all = apply(select(binned_data, starts_with("labels"))[,],2, function(x) length(levels(as.factor(x))))
+    max(temp_all)
+    
+  })
   reactive_binned_data <- reactive({
     # if(!is.null(input$DS_chosen_bin)){
-      get(load(paste0('data/binned/', input$DS_chosen_bin)))
-      
+    # the above was commented out because every function calls this function has either done the above check if 
+    get(load(paste0('data/binned/', input$DS_chosen_bin)))
+    
     # }
     
   })
@@ -44,13 +53,25 @@ function(input, output, session) {
     
   })
   
-  reactive_all_levels_of_var_to_use <- reactive({
+  reactive_all_levels_of_basic_var_to_decode <- reactive({
     if(!is.null(input$DS_chosen_bin)){
       
-    binned_data = reactive_binned_data()
-    print(head(binned_data))
-    print(input$DS_var_to_decode)
-    levels(factor(binned_data[[paste0("labels.",input$DS_var_to_decode)]]))
+      binned_data = reactive_binned_data()
+      print(head(binned_data))
+      print(input$DS_var_to_decode)
+      levels(factor(binned_data[[paste0("labels.",input$DS_basic_var_to_decode)]]))
+      
+    }
+  })
+  
+  reactive_all_levels_of_gen_var_to_use <- reactive({
+    if(!is.null(input$DS_chosen_bin)){
+      
+      binned_data = reactive_binned_data()
+      print(head(binned_data))
+      print(input$DS_var_to_decode)
+      levels(factor(binned_data[[paste0("labels.",input$DS_gen_var_to_use)]]))
+      
     }
   })
   
@@ -86,11 +107,11 @@ function(input, output, session) {
   #                     choices = reactive_all_levels_of_var_to_use())
   # }
   # )
-
   
-
   
-
+  
+  
+  
   # # labels has to be renamed stimulus.postiiton -> position
   # reactive_potential_training_var <- reactive({
   #   temp = reactive_all_var()
@@ -117,14 +138,14 @@ function(input, output, session) {
     ))
   
   
-  output$DS_list_of_var_to_decode = renderUI({
-      selectInput("DS_var_to_decode",
-                  "Variable to decode/use",
-                  reactive_all_var()
-                  # c("")
-
-      )
-
+  output$DS_basic_list_of_var_to_decode = renderUI({
+    selectInput("DS_basic_var_to_decode",
+                "Variable to decode/use",
+                reactive_all_var()
+                # c("")
+                
+    )
+    
   })
   
   output$DS_gen_list_of_var_to_decode = renderUI({
@@ -137,42 +158,50 @@ function(input, output, session) {
     
   })
   
-  output$DS_list_of_labels_to_use = renderUI({
+  output$DS_basic_list_of_levels_to_use = renderUI({
     # load(paste0('data/binned/', input$DS_chosen_bin))
-
-    selectInput("DS_label_to_use",
+    
+    selectInput("DS_basic_level_to_use",
                 "Labels to use",
-                reactive_all_levels_of_var_to_use(),
+                reactive_all_levels_of_basic_var_to_decode(),
                 multiple = TRUE)
-
+    
   })
   # 
-  output$DS_list_of_gen_var_to_use = renderUI({
+  output$DS_gen_list_of_var_to_use = renderUI({
     selectInput("DS_gen_var_to_use",
                 "Variable to train with",
                 reactive_all_var())
   })
+  
+  output$DS_gen_select_num_training_level_groups = renderUI({
+    temp_max <- reactive_maximum_num_of_levels_in_all_var()
+    numericInput("DS_gen_num_training_level_groups",
+                 "How many training level groups you will use?",
+                 1,
+                 min = 1,
+                 max  = temp_max
+    )})
+  output$DS_gen_list_of_training_level_groups = renderUI({
+    temp_num <- input$DS_gen_num_training_level_groups
+    if(!is.null(temp_num)){
+      lapply(1:temp_num, function(i){
+        selectInput(paste0("DS_training_level_group_", i),
+                    paste("Training level group", i),
+                    reactive_all_levels_of_gen_var_to_use(),
+                    multiple = TRUE    
+        )
+        
+      })
+    }
+ 
 
-  output$DS_list_of_training_level_groups = renderUI({
-    num <- input$DS_num_training_level_groups
-    lapply(1:num, function(i){
-      selectInput(paste0("DS_training_level_group_", i),
-                  paste("Training level group", i)
-      )
-      
-    })
-    selectInput("DS_training_label",
-                "Training labels",
-                reactive_all_levels_of_var_to_use(),
-                multiple = TRUE
-    )
   })
-
-  # output$DS_list_of_testing_labels = renderUI({
-  #   selectInput("DS_testing_label",
-  #               "Testing labels",
-  #               reactive_all_levels_of_var_to_use(),
-  #               # str_replace(reactive_all_levels_of_var_to_use(),input$DS_training_labels, ""),
-  #               multiple = TRUE)
-  # })
+  
+  output$DS_gen_list_of_testing_level_groups = renderUI({
+    selectInput("DS_gen_testing_level_group",
+                "Testing level group",
+                reactive_all_levels_of_gen_var_to_use(),
+                multiple = TRUE)
+  })
 }

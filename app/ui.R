@@ -80,40 +80,25 @@ ui <- dashboardPage(
                                                                  uiOutput("DS_list_of_binned_files"),
                                                                  
                                                                  selectInput("DS_type", "Decoding type", c("basic_DS","generalization_DS")),
-                                                                 # selectInput("DS_var_to_decode",
-                                                                 #             "Variable to decode",
-                                                                 #             # reactive_all_var()
-                                                                 #             character(0)
-                                                                 #             
-                                                                 #             
-                                                                 # ),
+                                            
                                                                  
                                                                  
                                                                  conditionalPanel(condition = "input.DS_type == 'basic_DS'",
-                                                                                  uiOutput("DS_list_of_var_to_decode"),
+                                                                                  uiOutput("DS_basic_list_of_var_to_decode"),
                                                                                   
                                                                                   radioButtons("DS_bUse_all_labels", "Use all the labels?", c("Yes", "No"))
                                                                  ),
                                                                  conditionalPanel(condition = "input.DS_bUse_all_labels == 'No' && input.DS_type == 'basic_DS'",
-                                                                                  uiOutput("DS_list_of_labels_to_use")),
-                                                                 # selectInput("DS_label_to_use",
-                                                                 #             "Labels to use",
-                                                                 #             character(0),
-                                                                 #             
-                                                                 #             multiple = TRUE)),
+                                                                                  uiOutput("DS_basic_list_of_levels_to_use")),
+                             
                                                                  
                                                                  conditionalPanel(condition = "input.DS_type == 'generalization_DS'",
                                                                                   uiOutput("DS_gen_list_of_var_to_decode"),
-                                                                                  uiOutput("DS_list_of_gen_var_to_use"),
-                                                                                  numericInput("DS_num_training_level_groups",
-                                                                                               "How many training level groups you will use?"),
-                                                                                  uiOutput("DS_list_of_training_level_groups"),
-                                                                                  selectInput("DS_testing_label",
-                                                                                              "Testing labels",
-                                                                                              c(""),
-                                                                                              # str_replace(reactive_all_levels_of_var_to_use(),input$DS_training_labels, ""),
-                                                                                              multiple = TRUE)                                                                 
-                                                                                  )
+                                                                                  uiOutput("DS_gen_list_of_var_to_use"),
+                                                                                  uiOutput("DS_gen_select_num_training_level_groups"),
+                                                                                  uiOutput("DS_gen_list_of_training_level_groups"),
+                                                                                  uiOutput("DS_gen_list_of_testing_level_groups")
+                                                                 )
                                                                  
                                                              )
                                                              
