@@ -65,112 +65,116 @@ ui <- dashboardPage(
                                column(width = 6,
                                       tabBox(width = 12,
                                              height = 1000,
-                                             # title = "Specifing decoding papameters",
                                              tabPanel("Twitch it here",
-                                                      column(width = 6,
-                                                             box(title = "Data source",
-                                                                 width = NULL,
-                                                                 solidHeader = TRUE, status = "primary",
-                                                                 # radioButtons("DS_bUpload", "Choose binned data", c("Upload new data", "Use existing data")),
-                                                                 # conditionalPanel(condition = "input.DS_bUpload == 'Upload new data'",
-                                                                 #                  fileInput("DS_uploaded_bin", "Upload data", multiple = TRUE)),
-                                                                 # conditionalPanel(condition = "input.DS_bUpload == 'Use existing data'",
-                                                                 #                  uiOutput("DS_list_of_binned_files")),
-                                                                 fileInput("DS_uploaded_bin", "Upload new binned data (optional)", multiple = TRUE),
-                                                                 uiOutput("DS_list_of_binned_files"),
-                                                                 
-                                                                 selectInput("DS_type", "Decoding type", c("basic_DS","generalization_DS")),
-                                                                 
-                                                                 
-                                                                 
-                                                                 conditionalPanel(condition = "input.DS_type == 'basic_DS'",
-                                                                                  uiOutput("DS_basic_list_of_var_to_decode"),
-                                                                                  
-                                                                                  radioButtons("DS_bUse_all_labels", "Use all the labels?", c("Yes", "No"))
-                                                                 ),
-                                                                 conditionalPanel(condition = "input.DS_bUse_all_labels == 'No' && input.DS_type == 'basic_DS'",
-                                                                                  uiOutput("DS_basic_list_of_levels_to_use")),
-                                                                 
-                                                                 
-                                                                 conditionalPanel(condition = "input.DS_type == 'generalization_DS'",
-                                                                                  uiOutput("DS_gen_list_of_var_to_decode"),
-                                                                                  uiOutput("DS_gen_list_of_var_to_use"),
-                                                                                  uiOutput("DS_gen_select_num_training_level_groups"),
-                                                                                  uiOutput("DS_gen_list_of_training_level_groups"),
-                                                                                  uiOutput("DS_gen_list_of_testing_level_groups")
-                                                                 )
-                                                                 
+                                                      tabBox(width = 12,
+                                                             height = 1000,
+                                                             tabPanel(
+                                                               "Main",
+                                                               column(width = 6,
+                                                                      box(title = "Data source",
+                                                                          width = NULL,
+                                                                          solidHeader = TRUE, status = "primary",
+                                                                          # radioButtons("DS_bUpload", "Choose binned data", c("Upload new data", "Use existing data")),
+                                                                          # conditionalPanel(condition = "input.DS_bUpload == 'Upload new data'",
+                                                                          #                  fileInput("DS_uploaded_bin", "Upload data", multiple = TRUE)),
+                                                                          # conditionalPanel(condition = "input.DS_bUpload == 'Use existing data'",
+                                                                          #                  uiOutput("DS_list_of_binned_files")),
+                                                                          fileInput("DS_uploaded_bin", "Upload new binned data (optional)", multiple = TRUE),
+                                                                          uiOutput("DS_list_of_binned_files"),
+                                                                          
+                                                                          selectInput("DS_type", "Decoding type", c("basic_DS","generalization_DS")),
+                                                                          
+                                                                          
+                                                                          
+                                                                          conditionalPanel(condition = "input.DS_type == 'basic_DS'",
+                                                                                           uiOutput("DS_basic_list_of_var_to_decode"),
+                                                                                           
+                                                                                           radioButtons("DS_bUse_all_labels", "Use all the labels?", c("Yes", "No"))
+                                                                          ),
+                                                                          conditionalPanel(condition = "input.DS_bUse_all_labels == 'No' && input.DS_type == 'basic_DS'",
+                                                                                           uiOutput("DS_basic_list_of_levels_to_use")),
+                                                                          
+                                                                          
+                                                                          conditionalPanel(condition = "input.DS_type == 'generalization_DS'",
+                                                                                           uiOutput("DS_gen_list_of_var_to_decode"),
+                                                                                           uiOutput("DS_gen_list_of_var_to_use"),
+                                                                                           uiOutput("DS_gen_select_num_training_level_groups"),
+                                                                                           uiOutput("DS_gen_list_of_training_level_groups"),
+                                                                                           uiOutput("DS_gen_list_of_testing_level_groups")
+                                                                          )
+                                                                          
+                                                                      )
+                                                                      
+                                                                      
+                                                               ),
+                                                               column(width = 6,
+                                                                      box(title = "Classifier",
+                                                                          width = NULL,
+                                                                          solidHeader = TRUE, status = "primary",
+                                                                          selectInput("CL", "Classifier", c("maximum correlation", "support vecotor machine", "poisson naive bayes"))),
+                                                                      box(title = "Feature preprocessors",
+                                                                          width = NULL,
+                                                                          solidHeader = TRUE, status = "primary",
+                                                                          radioButtons("FP_bUse", "Preprocessing Features?", c("Yes", "No")),
+                                                                          conditionalPanel(condition = "input.FP_bUse == 'Yes'",
+                                                                                           
+                                                                                           conditionalPanel(condition  = "input.CL == 'poisson naive bayes'",
+                                                                                                            selectInput("FP", "Feature Preprocessor", c("select_pvalue_significant_features","select or exclude top k...
+                                                                                                                                                        features"), multiple = TRUE, selected = "select_pvalue_significant_features")),
+                                                                                           conditionalPanel(condition  = "input.CL == 'support vecotor machine'",
+                                                                                                            selectInput("FP", "Feature Preprocessor", c("select_pvalue_significant_features","select or exclude top k...
+                                                                                                                                                        features", "zscore_normalize"), multiple = TRUE, selected = "select_pvalue_significant_features")),
+                                                                                           conditionalPanel(condition  = "input.CL == 'maximum correlation'",
+                                                                                                            selectInput("FP", "Feature Preprocessor", c("select_pvalue_significant_features","select or exclude top k...
+                                                                                                                                                        features", "zscore_normalize"), multiple = TRUE, selected = "select_pvalue_significant_features"))
+                                                                          )
+                                                                          
+                                                                      ),
+                                                                      
+                                                                      box(title = "Cross validator",
+                                                                          width = NULL,
+                                                                          solidHeader = TRUE, status = "primary",
+                                                                          numericInput("CV_repeat", "# of repeats", value = 2, min = 1),
+                                                                          numericInput("CV_split", "# of cv splits", value = 5, min = 2),
+                                                                          numericInput("CV_resample", "# of resampling runs", value = 20, min = 1),
+                                                                          radioButtons("bCV_diag", "test only at training times?", c("Yes", "No"))
+                                                                      ),
+                                                                      actionButton("DC_gen_decoding_script", "Generate script")
+                                                               )
                                                              )
+                                                             ,
                                                              
-                                                             
-                                                      ),
-                                                      column(width = 6,
-                                                             box(title = "Classifier",
-                                                                 width = NULL,
-                                                                 solidHeader = TRUE, status = "primary",
-                                                                 selectInput("CL", "Classifier", c("maximum correlation", "support vecotor machine", "poisson naive bayes"))),
-                                                             box(title = "Feature preprocessors",
-                                                                 width = NULL,
-                                                                 solidHeader = TRUE, status = "primary",
-                                                                 radioButtons("FP_bUse", "Preprocessing Features?", c("Yes", "No")),
-                                                                 conditionalPanel(condition = "input.FP_bUse == 'Yes'",
-                                                                                  
-                                                                                  conditionalPanel(condition  = "input.CL == 'poisson naive bayes'",
-                                                                                                   selectInput("FP", "Feature Preprocessor", c("select_pvalue_significant_features","select or exclude top k...
-                                                                                                                                               features"), multiple = TRUE, selected = "select_pvalue_significant_features")),
-                                                                                  conditionalPanel(condition  = "input.CL == 'support vecotor machine'",
-                                                                                                   selectInput("FP", "Feature Preprocessor", c("select_pvalue_significant_features","select or exclude top k...
-                                                                                                                                               features", "zscore_normalize"), multiple = TRUE, selected = "select_pvalue_significant_features")),
-                                                                                  conditionalPanel(condition  = "input.CL == 'maximum correlation'",
-                                                                                                   selectInput("FP", "Feature Preprocessor", c("select_pvalue_significant_features","select or exclude top k...
-                                                                                                                                               features", "zscore_normalize"), multiple = TRUE, selected = "select_pvalue_significant_features"))
-                                                                 )
-                                                                 
-                                                             ),
-                                                             
-                                                             box(title = "Cross validator",
-                                                                 width = NULL,
-                                                                 solidHeader = TRUE, status = "primary",
-                                                                 numericInput("CV_repeat", "# of repeats", value = 2, min = 1),
-                                                                 numericInput("CV_split", "# of cv splits", value = 5, min = 2),
-                                                                 numericInput("CV_resample", "# of resampling runs", value = 20, min = 1),
-                                                                 radioButtons("bCV_diag", "test only at training times?", c("Yes", "No"))
-                                                             ),
-                                                             actionButton("DC_gen_decoding_script", "Generate script")
-                                                      )
-                                             ),
-                                             
-                                             tabPanel("Set advanced parameters (optional)",
-                                                      
-                                                      conditionalPanel(condition  = "input.CL == 'support vecotor machine'",
-                                                                       selectInput("CL_SVM_kernel",
-                                                                                   "Kernel",
-                                                                                   c("linear", "polynomial", "radial", "sigmoid"),
-                                                                                   selected = "radial"),
-                                                                       numericInput("input.CL_SVM_cost",
-                                                                                    "Cost", # of constraints violation / inverse of regularization constant",
-                                                                                    1,
-                                                                                    min = 0
-                                                                       )),
-                                                      conditionalPanel(condition ="(input.CL == 'support vecotor machine')&&(input.CL_SVM_kernel == 'polynomial')",
-                                                                       numericInput("input.CL_SVM_degree",
-                                                                                    "Degree of polynomial",
-                                                                                    3,
-                                                                                    min = 2,
-                                                                                    max  = 10)),
-                                                      # numericInput("input.CL_SVM_coef0",
-                                                      #              "Set Constant in the kernel",
-                                                      #              0)),
-                                                      
-                                                      conditionalPanel(condition = "(input.CL == 'support vecotor machine')&&((input.CL_SVM_kernel == 'radial')|(input.CL_SVM_kernel == 'polynomial'))",
-                                                                       numericInput("input.CL_SVM_coef0",
-                                                                                    "Coef0", # Constant in the kernel function",
-                                                                                    0)),
-                                                      conditionalPanel(condition = "(input.CL == 'support vecotor machine')&&((input.CL_SVM_kernel == 'radial')|(input.CL_SVM_kernel == 'polynomial')|(input.CL_SVM_kernel == 'sigmoid'))",
-                                                                       uiOutput("CL_choose_gamma")
-                                                      )
-                                                      
-                                             ),
+                                                             tabPanel("Set advanced parameters (optional)",
+                                                                      
+                                                                      conditionalPanel(condition  = "input.CL == 'support vecotor machine'",
+                                                                                       selectInput("CL_SVM_kernel",
+                                                                                                   "Kernel",
+                                                                                                   c("linear", "polynomial", "radial", "sigmoid"),
+                                                                                                   selected = "radial"),
+                                                                                       numericInput("input.CL_SVM_cost",
+                                                                                                    "Cost", # of constraints violation / inverse of regularization constant",
+                                                                                                    1,
+                                                                                                    min = 0
+                                                                                       )),
+                                                                      conditionalPanel(condition ="(input.CL == 'support vecotor machine')&&(input.CL_SVM_kernel == 'polynomial')",
+                                                                                       numericInput("input.CL_SVM_degree",
+                                                                                                    "Degree of polynomial",
+                                                                                                    3,
+                                                                                                    min = 2,
+                                                                                                    max  = 10)),
+                                                                      # numericInput("input.CL_SVM_coef0",
+                                                                      #              "Set Constant in the kernel",
+                                                                      #              0)),
+                                                                      
+                                                                      conditionalPanel(condition = "(input.CL == 'support vecotor machine')&&((input.CL_SVM_kernel == 'radial')|(input.CL_SVM_kernel == 'polynomial'))",
+                                                                                       numericInput("input.CL_SVM_coef0",
+                                                                                                    "Coef0", # Constant in the kernel function",
+                                                                                                    0)),
+                                                                      conditionalPanel(condition = "(input.CL == 'support vecotor machine')&&((input.CL_SVM_kernel == 'radial')|(input.CL_SVM_kernel == 'polynomial')|(input.CL_SVM_kernel == 'sigmoid'))",
+                                                                                       uiOutput("CL_choose_gamma")
+                                                                      )
+                                                                      
+                                                             ))),
                                              
                                              tabPanel("Use a script",
                                                       # radioButtons("DC_bUpload", "Choose decoding script", c("Upload new script", "Use existing script")),
