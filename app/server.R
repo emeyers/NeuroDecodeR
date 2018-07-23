@@ -27,7 +27,10 @@ function(input, output, session) {
   #                     # str_remove(reactive_all_levels_of_var_to_use(),temp)
   #   )
   # })
-  
+  reactive_data_dim <- reactive({
+    binned_data = reactive_binned_data()
+    nrow(binned_data)
+  })
   
   reactive_maximum_num_of_levels_in_all_var <- reactive({
     binned_data = reactive_binned_data()
@@ -37,7 +40,10 @@ function(input, output, session) {
   })
   reactive_binned_data <- reactive({
     # if(!is.null(input$DS_chosen_bin)){
-    # the above was commented out because every function calls this function has either done the above check if 
+    # the above was commented out because every function calls me has either done the above check if it's initilized...
+    # before the "select_input$DS_chosen_bin" funciton was called or it's not initialized until that thing is called...
+    # The reason input$DS_chosen_bin is initialized as null is that thing is not on the gui when the app starts and..
+    # not called until it shows on the gui
     get(load(paste0('data/binned/', input$DS_chosen_bin)))
     
     # }
@@ -181,9 +187,12 @@ function(input, output, session) {
                  1,
                  min = 1,
                  max  = temp_max
-    )})
+    )
+    # print(temp_max)
+    })
   output$DS_gen_list_of_training_level_groups = renderUI({
     temp_num <- input$DS_gen_num_training_level_groups
+    # print(temp_num)
     if(!is.null(temp_num)){
       lapply(1:temp_num, function(i){
         selectInput(paste0("DS_training_level_group_", i),
@@ -203,5 +212,24 @@ function(input, output, session) {
                 "Testing level group",
                 reactive_all_levels_of_gen_var_to_use(),
                 multiple = TRUE)
+  })
+  
+
+  
+  output$CL_choose_gamma = renderUI({
+    numericInput("CL_SVM_gamma",
+                 "Gamma",
+                 1/reactive_data_dim())
+    
+  })
+  
+  output$DS_list_of_scripts = renderUI({
+    selectInput("DC_script",
+                "Chosse your script",
+                list.files('tests', ".R")
+    )
+  })
+  output$DC_script_to_show = renderUI({
+    htmlOutput("input$DC_script")
   })
 }

@@ -66,7 +66,7 @@ ui <- dashboardPage(
                                       tabBox(width = 12,
                                              height = 1000,
                                              # title = "Specifing decoding papameters",
-                                             tabPanel("twitch it here",
+                                             tabPanel("Twitch it here",
                                                       column(width = 6,
                                                              box(title = "Data source",
                                                                  width = NULL,
@@ -80,7 +80,7 @@ ui <- dashboardPage(
                                                                  uiOutput("DS_list_of_binned_files"),
                                                                  
                                                                  selectInput("DS_type", "Decoding type", c("basic_DS","generalization_DS")),
-                                            
+                                                                 
                                                                  
                                                                  
                                                                  conditionalPanel(condition = "input.DS_type == 'basic_DS'",
@@ -90,7 +90,7 @@ ui <- dashboardPage(
                                                                  ),
                                                                  conditionalPanel(condition = "input.DS_bUse_all_labels == 'No' && input.DS_type == 'basic_DS'",
                                                                                   uiOutput("DS_basic_list_of_levels_to_use")),
-                             
+                                                                 
                                                                  
                                                                  conditionalPanel(condition = "input.DS_type == 'generalization_DS'",
                                                                                   uiOutput("DS_gen_list_of_var_to_decode"),
@@ -117,13 +117,13 @@ ui <- dashboardPage(
                                                                                   
                                                                                   conditionalPanel(condition  = "input.CL == 'poisson naive bayes'",
                                                                                                    selectInput("FP", "Feature Preprocessor", c("select_pvalue_significant_features","select or exclude top k...
-                                                                                                                              features"), multiple = TRUE, selected = "select_pvalue_significant_features")),
+                                                                                                                                               features"), multiple = TRUE, selected = "select_pvalue_significant_features")),
                                                                                   conditionalPanel(condition  = "input.CL == 'support vecotor machine'",
                                                                                                    selectInput("FP", "Feature Preprocessor", c("select_pvalue_significant_features","select or exclude top k...
-                                                                                                                              features", "zscore_normalize"), multiple = TRUE, selected = "select_pvalue_significant_features")),
+                                                                                                                                               features", "zscore_normalize"), multiple = TRUE, selected = "select_pvalue_significant_features")),
                                                                                   conditionalPanel(condition  = "input.CL == 'maximum correlation'",
                                                                                                    selectInput("FP", "Feature Preprocessor", c("select_pvalue_significant_features","select or exclude top k...
-                                                                                                                              features", "zscore_normalize"), multiple = TRUE, selected = "select_pvalue_significant_features"))
+                                                                                                                                               features", "zscore_normalize"), multiple = TRUE, selected = "select_pvalue_significant_features"))
                                                                  )
                                                                  
                                                              ),
@@ -137,19 +137,58 @@ ui <- dashboardPage(
                                                                  radioButtons("bCV_diag", "test only at training times?", c("Yes", "No"))
                                                              ),
                                                              actionButton("DC_gen_decoding_script", "Generate script")
-                                                      )),
+                                                      )
+                                             ),
+                                             
+                                             tabPanel("Set advanced parameters (optional)",
+                                                      
+                                                      conditionalPanel(condition  = "input.CL == 'support vecotor machine'",
+                                                                       selectInput("CL_SVM_kernel",
+                                                                                   "Kernel",
+                                                                                   c("linear", "polynomial", "radial", "sigmoid"),
+                                                                                   selected = "radial"),
+                                                                       numericInput("input.CL_SVM_cost",
+                                                                                    "Cost", # of constraints violation / inverse of regularization constant",
+                                                                                    1,
+                                                                                    min = 0
+                                                                       )),
+                                                      conditionalPanel(condition ="(input.CL == 'support vecotor machine')&&(input.CL_SVM_kernel == 'polynomial')",
+                                                                       numericInput("input.CL_SVM_degree",
+                                                                                    "Degree of polynomial",
+                                                                                    3,
+                                                                                    min = 2,
+                                                                                    max  = 10)),
+                                                      # numericInput("input.CL_SVM_coef0",
+                                                      #              "Set Constant in the kernel",
+                                                      #              0)),
+                                                      
+                                                      conditionalPanel(condition = "(input.CL == 'support vecotor machine')&&((input.CL_SVM_kernel == 'radial')|(input.CL_SVM_kernel == 'polynomial'))",
+                                                                       numericInput("input.CL_SVM_coef0",
+                                                                                    "Coef0", # Constant in the kernel function",
+                                                                                    0)),
+                                                      conditionalPanel(condition = "(input.CL == 'support vecotor machine')&&((input.CL_SVM_kernel == 'radial')|(input.CL_SVM_kernel == 'polynomial')|(input.CL_SVM_kernel == 'sigmoid'))",
+                                                                       uiOutput("CL_choose_gamma")
+                                                      )
+                                                      
+                                             ),
+                                             
                                              tabPanel("Use a script",
-                                                      radioButtons("DC_bUpload", "Choose decoding script", c("Upload new script", "Use existing script")),
-                                                      conditionalPanel(condition = "input.DC_bUpload == 'Upload new script'",
-                                                                       fileInput("DC_upload", "Upload script")),
-                                                      conditionalPanel(condition = "input.DC_bUpload == 'Use existing script'",
-                                                                       selectInput("DC_our", "script available",c("search script dir"))),
+                                                      # radioButtons("DC_bUpload", "Choose decoding script", c("Upload new script", "Use existing script")),
+                                                      # conditionalPanel(condition = "input.DC_bUpload == 'Upload new script'",
+                                                      #                  fileInput("DC_upload", "Upload new script (optional)")),
+                                                      # conditionalPanel(condition = "input.DC_bUpload == 'Use existing script'",
+                                                      #                  selectInput("DC_our", "script available",c("search script dir"))),
+                                                      fileInput("DC_upload", "Upload new script (optional)", multiple = TRUE),
+                                                      uiOutput("DS_list_of_scripts"),
                                                       actionButton("DC_show", "Show script")
                                              )
+                                             
+                                             
+                                             
                                       )),
                                column(width = 6,
-                                      "script"
-                                      # htmlOutput("cur_script")
+                                      # htmlOutput(input$DS_script)
+                                      uiOutput("DC_script_to_show")
                                       ,
                                       
                                       actionButton("DC_run_decoding", "Run Decoding")                                      
@@ -188,6 +227,3 @@ ui <- dashboardPage(
     
   )
 )
-
-
-
