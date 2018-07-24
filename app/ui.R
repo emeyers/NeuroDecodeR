@@ -1,5 +1,5 @@
 library(shinydashboard)
-# library(shinyAce)
+library(shinyAce)
 # library(semantic.dashboard)
 
 
@@ -153,24 +153,25 @@ ui <- dashboardPage(
                                                                                              c("select_pvalue_significant_features","select or exclude top k features", "zscore_normalize"),
                                                                                              multiple = TRUE,
                                                                                              selected = "select_pvalue_significant_features"))
+                                               )
+                                               # conditionalPanel(condition = "(input$CL).indexOf('select or exclude top k features') > -1",
+                                               #                  # conditionalPanel(condition = "grepl(input$FP, 'select or exclude top k features')",
+                                               #                  
+                                               #                  print('s'),
+                                               #                  checkboxInput("FP_select",
+                                               #                                "Select top k features",
+                                               #                                TRUE),
+                                               #                  conditionalPanel(condition = "FP_select",
+                                               #                                   uiOutput("FP_select_k")),
+                                               #                  checkboxInput("FP_exclude",
+                                               #                                "exclude top k features",
+                                               #                                TRUE),
+                                               #                  conditionalPanel(condition = "FP_exclude",
+                                               #                                   uiOutput("FP_exclude_k"))
+                                               #                  
+                                               #                  
+                                               # )
                                                ),
-                                               conditionalPanel(condition = "(input$CL).indexOf('select or exclude top k features') > -1",
-                                                                # conditionalPanel(condition = "grepl(input$FP, 'select or exclude top k features')",
-                                                                                 
-                                                                print('s'),
-                                                                checkboxInput("FP_select",
-                                                                              "Select top k features",
-                                                                              TRUE),
-                                                                conditionalPanel(condition = "FP_select",
-                                                                                 uiOutput("FP_select_k")),
-                                                                checkboxInput("FP_exclude",
-                                                                              "exclude top k features",
-                                                                              TRUE),
-                                                                conditionalPanel(condition = "FP_exclude",
-                                                                                 uiOutput("FP_exclude_k"))
-                                                                
-                                                                
-                                               )),
                                              tabPanel(
                                                title = "Cross validator",
                                                width = NULL,
@@ -180,24 +181,28 @@ ui <- dashboardPage(
                                                numericInput("CV_resample", "# of resampling runs", value = 20, min = 1),
                                                checkboxInput("bCV_diag", "test only at training times?",TRUE)
                                              )
+                                      )),
+                                      
+                                      
+                                      
+                                      
+                                      
+                                      
+                                      
+                                      
+                                      column(width = 6,
+                                             # htmlOutput(input$DS_script)
+                                             # uiOutput("DC_script_to_show")
+                                             aceEditor("script",
+                                                       "d"
+                                             ),
                                              
                                              
-                                             
-                                             
-                                             
-                                             
-                                             
-                                             
-                                             # column(width = 6,
-                                             #        # htmlOutput(input$DS_script)
-                                             #        uiOutput("DC_script_to_show")
-                                             #        ,
-                                             #        
-                                             #        actionButton("DC_run_decoding", "Run Decoding")                                      
-                                             # )
+                                             actionButton("DC_run_decoding", "Run Decoding")
                                       )
                                       
-                               )))),
+                                      
+                               ))),
                          tabPanel(
                            title = "Result plot",
                            

@@ -3,9 +3,10 @@ require('dplyr')
 require('fields')
 require('ggplot2')
 require('stringr')
+require("shinyAce")
 
 setwd("C:/Users/14868/Documents/GitHub/NDTr")
-
+setwd("/cbcl/cbcl01/xf15/NDTr")
 
 function(input, output, session) {
   
@@ -248,16 +249,18 @@ function(input, output, session) {
     
   })
   
-  # output$FP_select_of_exclude_k_features = renderUI({
-  #   
-  #   if (grepl(input$FP, 'select or exclude top k features')){
-  #     checkboxInput("FP_select",
-  #                   "Select top k features",
-  #                   TRUE)
-  #     if(input)
-  #     
-  #   }
-  # })
+  output$FP_select_of_exclude_k_features = renderUI({
+
+    if (grepl(input$FP, 'select or exclude top k features')){
+      checkboxInput("FP_select",
+                    "Select top k features",
+                    TRUE)
+    }
+    
+    
+
+    
+  })
   output$FP_select_k = renderUI({
     numericInput("FP_selected_k",
                  "",
