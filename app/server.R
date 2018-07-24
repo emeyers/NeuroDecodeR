@@ -27,9 +27,21 @@ function(input, output, session) {
   #                     # str_remove(reactive_all_levels_of_var_to_use(),temp)
   #   )
   # })
+  
+
+  observeEvent(input$FP,{
+    print(input$FP)
+    print(grepl(input$FP, 'select or exclude top k features'))
+  })
+  
+  observe({
+    print(input$FP)
+    print(grepl(input$FP, 'select or exclude top k features'))
+  })
+  
   reactive_data_dim <- reactive({
     validate(
-      need(input$DS_chosen_bin,"Please select data source first to set gamma!")
+      need(input$DS_chosen_bin,"Please select data source first to get total number of neurons!")
     )
     binned_data = reactive_binned_data()
     nrow(binned_data)
@@ -171,7 +183,7 @@ function(input, output, session) {
     # load(paste0('data/binned/', input$DS_chosen_bin))
     
     selectInput("DS_basic_level_to_use",
-                "Labels to use",
+                "Levels to use",
                 reactive_all_levels_of_basic_var_to_decode(),
                 multiple = TRUE)
     
@@ -183,7 +195,7 @@ function(input, output, session) {
                 reactive_all_var())
   })
   
-  output$DS_gen_select_num_training_level_groups = renderUI({
+  output$DS_gen_select_num_of_groups = renderUI({
     temp_max <- reactive_maximum_num_of_levels_in_all_var()
     numericInput("DS_gen_num_training_level_groups",
                  "How many training level groups you will use?",
@@ -211,10 +223,20 @@ function(input, output, session) {
   })
   
   output$DS_gen_list_of_testing_level_groups = renderUI({
-    selectInput("DS_gen_testing_level_group",
-                "Testing level group",
-                reactive_all_levels_of_gen_var_to_use(),
-                multiple = TRUE)
+    temp_num <- input$DS_gen_num_testing_level_groups
+    # print(temp_num)
+    if(!is.null(temp_num)){
+      lapply(1:temp_num, function(i){
+        selectInput(paste0("DS_testing_level_group_", i),
+                    paste("testing level group", i),
+                    reactive_all_levels_of_gen_var_to_use(),
+                    multiple = TRUE    
+        )
+        
+      })
+    }
+    
+    
   })
   
 
@@ -224,6 +246,32 @@ function(input, output, session) {
                  "Gamma",
                  1/reactive_data_dim())
     
+  })
+  
+  # output$FP_select_of_exclude_k_features = renderUI({
+  #   
+  #   if (grepl(input$FP, 'select or exclude top k features')){
+  #     checkboxInput("FP_select",
+  #                   "Select top k features",
+  #                   TRUE)
+  #     if(input)
+  #     
+  #   }
+  # })
+  output$FP_select_k = renderUI({
+    numericInput("FP_selected_k",
+                 "",
+                 10,
+                 min = 1,
+                 max = reactive_data_dim())
+  })
+  
+  output$FP_exclude_k = renderUI({
+    numericInput("FP_excludeed_k",
+                 "",
+                 10,
+                 min = 1,
+                 max = reactive_data_dim())
   })
   
   output$DS_list_of_scripts = renderUI({

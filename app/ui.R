@@ -80,16 +80,16 @@ ui <- dashboardPage(
                                                conditionalPanel(condition = "input.DS_type == 'basic_DS'",
                                                                 uiOutput("DS_basic_list_of_var_to_decode"),
                                                                 
-                                                                checkboxInput("DS_bUse_all_labels", "Use all the labels?", TRUE)
+                                                                checkboxInput("DS_bUse_all_levels", "Use all the levels of this variable?", TRUE)
                                                ),
-                                               conditionalPanel(condition = "!input.DS_bUse_all_labels && input.DS_type == 'basic_DS'",
+                                               conditionalPanel(condition = "!input.DS_bUse_all_levels && input.DS_type == 'basic_DS'",
                                                                 uiOutput("DS_basic_list_of_levels_to_use")),
                                                
                                                
                                                conditionalPanel(condition = "input.DS_type == 'generalization_DS'",
                                                                 uiOutput("DS_gen_list_of_var_to_decode"),
                                                                 uiOutput("DS_gen_list_of_var_to_use"),
-                                                                uiOutput("DS_gen_select_num_training_level_groups"),
+                                                                uiOutput("DS_gen_select_num_of_groups"),
                                                                 uiOutput("DS_gen_list_of_training_level_groups"),
                                                                 uiOutput("DS_gen_list_of_testing_level_groups")
                                                )
@@ -136,18 +136,41 @@ ui <- dashboardPage(
                                                conditionalPanel(condition = "input.FP_bUse",
                                                                 
                                                                 conditionalPanel(condition  = "input.CL == 'poisson naive bayes'",
-                                                                                 selectInput("FP", "Feature Preprocessor", c("select_pvalue_significant_features","select or exclude top k...
-                                                                                                                                 features"), multiple = TRUE, selected = "select_pvalue_significant_features")),
+                                                                                 selectInput("FP",
+                                                                                             "Feature Preprocessor",
+                                                                                             c("select_pvalue_significant_features","select or exclude top k features"),
+                                                                                             multiple = TRUE,
+                                                                                             selected = "select_pvalue_significant_features")),
                                                                 conditionalPanel(condition  = "input.CL == 'support vecotor machine'",
-                                                                                 selectInput("FP", "Feature Preprocessor", c("select_pvalue_significant_features","select or exclude top k...
-                                                                                                                                 features", "zscore_normalize"), multiple = TRUE, selected = "select_pvalue_significant_features")),
+                                                                                 selectInput("FP",
+                                                                                             "Feature Preprocessor",
+                                                                                             c("select_pvalue_significant_features","select or exclude top k features", "zscore_normalize"),
+                                                                                             multiple = TRUE,
+                                                                                             selected = "select_pvalue_significant_features")),
                                                                 conditionalPanel(condition  = "input.CL == 'maximum correlation'",
-                                                                                 selectInput("FP", "Feature Preprocessor", c("select_pvalue_significant_features","select or exclude top k...
-                                                                                                                                 features", "zscore_normalize"), multiple = TRUE, selected = "select_pvalue_significant_features"))
-                                               )
-                                               
-                                               
-                                             ),
+                                                                                 selectInput("FP",
+                                                                                             "Feature Preprocessor",
+                                                                                             c("select_pvalue_significant_features","select or exclude top k features", "zscore_normalize"),
+                                                                                             multiple = TRUE,
+                                                                                             selected = "select_pvalue_significant_features"))
+                                               ),
+                                               conditionalPanel(condition = "(input$CL).indexOf('select or exclude top k features') > -1",
+                                                                # conditionalPanel(condition = "grepl(input$FP, 'select or exclude top k features')",
+                                                                                 
+                                                                print('s'),
+                                                                checkboxInput("FP_select",
+                                                                              "Select top k features",
+                                                                              TRUE),
+                                                                conditionalPanel(condition = "FP_select",
+                                                                                 uiOutput("FP_select_k")),
+                                                                checkboxInput("FP_exclude",
+                                                                              "exclude top k features",
+                                                                              TRUE),
+                                                                conditionalPanel(condition = "FP_exclude",
+                                                                                 uiOutput("FP_exclude_k"))
+                                                                
+                                                                
+                                               )),
                                              tabPanel(
                                                title = "Cross validator",
                                                width = NULL,
