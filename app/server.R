@@ -28,6 +28,9 @@ function(input, output, session) {
   #   )
   # })
   reactive_data_dim <- reactive({
+    validate(
+      need(input$DS_chosen_bin,"Please select data source first to set gamma!")
+    )
     binned_data = reactive_binned_data()
     nrow(binned_data)
   })
