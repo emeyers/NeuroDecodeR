@@ -6,7 +6,10 @@ require('stringr')
 require("shinyAce")
 
 setwd("C:/Users/14868/Documents/GitHub/NDTr")
-setwd("/cbcl/cbcl01/xf15/NDTr")
+# setwd("/cbcl/cbcl01/xf15/NDTr")
+
+all_cl = c("maximum correlation", "support vecotor machine", "poisson naive bayes")
+all_fp = c("select_pvalue_significant_features","select or exclude top k features", "zscore_normalize")
 
 function(input, output, session) {
   
@@ -36,9 +39,11 @@ function(input, output, session) {
   })
   
   observe({
+    print(input$DS_basic_level_to_use)
     print(input$FP)
     print(grepl(input$FP, 'select or exclude top k features'))
   })
+  
   
   reactive_data_dim <- reactive({
     validate(
@@ -145,7 +150,7 @@ function(input, output, session) {
     selectInput("bin_chosen_raster",
                 "Choose your raster data",
                 list.dirs('data/raster/', full.names = FALSE),
-                selected = "Zhang_Desimone_7objects_R_raster_data"
+                selected = "Zhang_Desimone_7objects_raster_data_rda"
                 
                 
     ))
@@ -240,7 +245,10 @@ function(input, output, session) {
     
   })
   
-
+  output$list_of_CL = renderUI({
+    selectInput("CL", "Classifier", all_cl)
+    
+  })
   
   output$CL_choose_gamma = renderUI({
     numericInput("CL_SVM_gamma",
@@ -252,6 +260,7 @@ function(input, output, session) {
   output$FP_select_of_exclude_k_features = renderUI({
 
     if (grepl(input$FP, 'select or exclude top k features')){
+      print("checkbox")
       checkboxInput("FP_select",
                     "Select top k features",
                     TRUE)

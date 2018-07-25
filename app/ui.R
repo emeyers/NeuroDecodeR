@@ -100,7 +100,7 @@ ui <- dashboardPage(
                                                title = "Classifier",
                                                width = NULL,
                                                solidHeader = TRUE, status = "primary",
-                                               selectInput("CL", "Classifier", c("maximum correlation", "support vecotor machine", "poisson naive bayes")),
+                                               uiOutput("list_of_CL"),
                                                conditionalPanel(condition  = "input.CL == 'support vecotor machine'",
                                                                 selectInput("CL_SVM_kernel",
                                                                             "Kernel",
@@ -132,19 +132,20 @@ ui <- dashboardPage(
                                                title = "Feature preprocessors",
                                                width = NULL,
                                                solidHeader = TRUE, status = "primary",
-                                               checkboxInput("FP_bUse", "Preprocessing Features?", FALSE),
+                                               # checkboxInput("FP_bUse", "Preprocessing Features?", FALSE),
+                                               
                                                conditionalPanel(condition = "input.FP_bUse",
                                                                 
                                                                 conditionalPanel(condition  = "input.CL == 'poisson naive bayes'",
                                                                                  selectInput("FP",
                                                                                              "Feature Preprocessor",
-                                                                                             c("select_pvalue_significant_features","select or exclude top k features"),
+                                                                                             c(),
                                                                                              multiple = TRUE,
                                                                                              selected = "select_pvalue_significant_features")),
                                                                 conditionalPanel(condition  = "input.CL == 'support vecotor machine'",
                                                                                  selectInput("FP",
                                                                                              "Feature Preprocessor",
-                                                                                             c("select_pvalue_significant_features","select or exclude top k features", "zscore_normalize"),
+                                                                                             c("select_pvalue_significant_features","select or exclude top k features",),
                                                                                              multiple = TRUE,
                                                                                              selected = "select_pvalue_significant_features")),
                                                                 conditionalPanel(condition  = "input.CL == 'maximum correlation'",
@@ -171,7 +172,7 @@ ui <- dashboardPage(
                                                #                  
                                                #                  
                                                # )
-                                               ),
+                                             ),
                                              tabPanel(
                                                title = "Cross validator",
                                                width = NULL,
@@ -182,27 +183,27 @@ ui <- dashboardPage(
                                                checkboxInput("bCV_diag", "test only at training times?",TRUE)
                                              )
                                       )),
+                               
+                               
+                               
+                               
+                               
+                               
+                               
+                               
+                               column(width = 6,
+                                      # htmlOutput(input$DS_script)
+                                      # uiOutput("DC_script_to_show")
+                                      aceEditor("script",
+                                                "d"
+                                      ),
                                       
                                       
-                                      
-                                      
-                                      
-                                      
-                                      
-                                      
-                                      column(width = 6,
-                                             # htmlOutput(input$DS_script)
-                                             # uiOutput("DC_script_to_show")
-                                             aceEditor("script",
-                                                       "d"
-                                             ),
-                                             
-                                             
-                                             actionButton("DC_run_decoding", "Run Decoding")
-                                      )
-                                      
-                                      
-                               ))),
+                                      actionButton("DC_run_decoding", "Run Decoding")
+                               )
+                               
+                               
+                             ))),
                          tabPanel(
                            title = "Result plot",
                            
