@@ -12,6 +12,7 @@
 
 # source('http://callr.org/install#HenrikBengtsson/R.matlab@develop')
 # library(R.matlab)
+#' @ export
 
 create_raster_data_from_matlab_raster_data <- function(matlab_raster_directory_name){
   # if the directory name ends with a slash, remove this slash
@@ -42,26 +43,26 @@ create_raster_data_from_matlab_raster_data <- function(matlab_raster_directory_n
     
     
     
-    
-    # second, create the raster_site_info df
-    # parse the raster site info (perhaps there is a better way to do this, but works)
-    temp_raster_site_info <- data.frame(raster$raster.site.info)
-    temp_raster_site_info_names <- convert_dot_back_to_underscore(row.names(temp_raster_site_info))
-    
-    raster_site_info <- NULL
-
-    # parse the raster_raster_site_info names if they exist...
-    if (length(temp_raster_site_info_names) > 0) {
-      for (iSiteInfo in 1:length(temp_raster_site_info_names)) {
-        curr_info_data <- unlist(temp_raster_site_info[iSiteInfo, ])
-        eval(parse(text = (paste0("raster_site_info$site_info.", eval(temp_raster_site_info_names[iSiteInfo]), " <- curr_info_data"))))
-      }
-    }
-    
-    raster_site_info <- data.frame(raster_site_info)
-    
-    # because list is crazy
-    rownames(raster_site_info) <- c()
+    # keep raster_site_info as it is
+    # # second, create the raster_site_info df
+    # # parse the raster site info (perhaps there is a better way to do this, but works)
+    # temp_raster_site_info <- data.frame(raster$raster.site.info)
+    # temp_raster_site_info_names <- convert_dot_back_to_underscore(row.names(temp_raster_site_info))
+    # 
+    # raster_site_info <- NULL
+    # 
+    # # parse the raster_raster_site_info names if they exist...
+    # if (length(temp_raster_site_info_names) > 0) {
+    #   for (iSiteInfo in 1:length(temp_raster_site_info_names)) {
+    #     curr_info_data <- unlist(temp_raster_site_info[iSiteInfo, ])
+    #     eval(parse(text = (paste0("raster_site_info$site_info.", eval(temp_raster_site_info_names[iSiteInfo]), " <- curr_info_data"))))
+    #   }
+    # }
+    # 
+    # raster_site_info <- data.frame(raster_site_info)
+    # 
+    # # because list is crazy
+    # rownames(raster_site_info) <- c()
     
     
     

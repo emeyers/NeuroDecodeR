@@ -27,7 +27,7 @@ the first bin should start.}
 \item{end_ind}{logical. An optional argument that specifies the time index where the
 the binning process should end.}
 
-\item{files_contain}{character. Only raster data files that contain the file_contains
+\item{files_contain}{regular expression. Only raster data files that match the file_contains
 string will be included in the binned data.}
 }
 \description{
