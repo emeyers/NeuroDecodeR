@@ -7,6 +7,13 @@ require("shinyAce")
 setwd("C:/Users/14868/Documents/GitHub/NDTr")
 # setwd("/cbcl/cbcl01/xf15/NDTr")
 
+all_cl <- c("maximum correlation", "support vecotor machine", "poisson naive bayes")
+all_fp <- c("select_pvalue_significant_features","select or exclude top k features", "zscore_normalize")
+
+df_cl_fp <- data.frame(c(1, 1, 1), c(1, 1, 1), c(1, 1, 0))
+colnames(df_cl_fp) <- all_cl
+rownames(df_cl_fp) <- all_fp
+
 function(input, output, session) {
   
   # observe({
@@ -29,15 +36,15 @@ function(input, output, session) {
   # })
   
   
-  observeEvent(input$FP,{
-    print(input$FP)
-    print(grepl(input$FP, 'select or exclude top k features'))
-  })
-  
-  observe({
-    print(input$FP)
-    print(grepl(input$FP, 'select or exclude top k features'))
-  })
+  # observeEvent(input$FP,{
+  #   print(input$FP)
+  #   print(grepl(input$FP, 'select or exclude top k features'))
+  # })
+  # 
+  # observe({
+  #   print(input$FP)
+  #   print(grepl(input$FP, 'select or exclude top k features'))
+  # })
   
   reactive_data_dim <- reactive({
     validate(
@@ -97,6 +104,10 @@ function(input, output, session) {
     # }
   })
   
+  reactive_all_fp_avail <- reactive({
+    req(input$CL)
+    all_fp[df_cl_fp[,input$CL]>0]
+  })
   # observeEvent(input$DS_chosen_bin,{
   #   # tempA <- 
   #   # print(paste0('tempA', tempA))
@@ -251,6 +262,14 @@ function(input, output, session) {
                  1/reactive_data_dim())
     
   })
+  
+  output$FP_check_fp = renderUI({
+    checkboxGroupInput("FP",
+                       "Feature Preprocessors",
+                       reactive_all_fp_avail()
+                       )
+  }
+  )
   
   output$FP_select_of_exclude_k_features = renderUI({
     
