@@ -133,46 +133,9 @@ ui <- dashboardPage(
                                                width = NULL,
                                                solidHeader = TRUE, status = "primary",
                                                
-                                               uiOutput("FP_check_fp")
-                                               # checkboxInput("FP_bUse", "Preprocessing Features?", FALSE),
-                                               # conditionalPanel(condition = "input.FP_bUse",
-                                               #                  
-                                               #                  conditionalPanel(condition  = "input.CL == 'poisson naive bayes'",
-                                               #                                   selectInput("FP",
-                                               #                                               "Feature Preprocessor",
-                                               #                                               c("select_pvalue_significant_features","select or exclude top k features"),
-                                               #                                               multiple = TRUE,
-                                               #                                               selected = "select_pvalue_significant_features")),
-                                               #                  conditionalPanel(condition  = "input.CL == 'support vecotor machine'",
-                                               #                                   selectInput("FP",
-                                               #                                               "Feature Preprocessor",
-                                               #                                               c("select_pvalue_significant_features","select or exclude top k features", "zscore_normalize"),
-                                               #                                               multiple = TRUE,
-                                               #                                               selected = "select_pvalue_significant_features")),
-                                               #                  conditionalPanel(condition  = "input.CL == 'maximum correlation'",
-                                               #                                   selectInput("FP",
-                                               #                                               "Feature Preprocessor",
-                                               #                                               c("select_pvalue_significant_features","select or exclude top k features", "zscore_normalize"),
-                                               #                                               multiple = TRUE,
-                                               #                                               selected = "select_pvalue_significant_features"))
+                                               uiOutput("FP_check_fp"),
+                                               # uiOutput("FP_select_of_exclude_k_features")
                                                
-                                               # conditionalPanel(condition = "(input$CL).indexOf('select or exclude top k features') > -1",
-                                               #                  # conditionalPanel(condition = "grepl(input$FP, 'select or exclude top k features')",
-                                               #                  
-                                               #                  print('s'),
-                                               #                  checkboxInput("FP_select",
-                                               #                                "Select top k features",
-                                               #                                TRUE),
-                                               #                  conditionalPanel(condition = "FP_select",
-                                               #                                   uiOutput("FP_select_k")),
-                                               #                  checkboxInput("FP_exclude",
-                                               #                                "exclude top k features",
-                                               #                                TRUE),
-                                               #                  conditionalPanel(condition = "FP_exclude",
-                                               #                                   uiOutput("FP_exclude_k"))
-                                               #                  
-                                               #                  
-                                               # )
                                              ),
                                              tabPanel(
                                                title = "Cross validator",
@@ -196,8 +159,7 @@ ui <- dashboardPage(
                                       # htmlOutput(input$DS_script)
                                       # uiOutput("DC_script_to_show")
                                       aceEditor("script",
-                                                "d"
-                                      ),
+                                                "d"                                      ),
                                       
                                       
                                       actionButton("DC_run_decoding", "Run Decoding")

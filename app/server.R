@@ -75,32 +75,32 @@ function(input, output, session) {
   
   reactive_all_var <- reactive({
     # if(!is.null(input$DS_chosen_bin)){
-      binned_data = reactive_binned_data()
-      
-      sub("labels.", "", names(select(binned_data, starts_with("labels"))))
+    binned_data = reactive_binned_data()
+    
+    sub("labels.", "", names(select(binned_data, starts_with("labels"))))
     # }
     
   })
   
   reactive_all_levels_of_basic_var_to_decode <- reactive({
     # if(!is.null(input$DS_chosen_bin)){
-      
-      binned_data = reactive_binned_data()
-      print(head(binned_data))
-      print(input$DS_var_to_decode)
-      levels(factor(binned_data[[paste0("labels.",input$DS_basic_var_to_decode)]]))
-      
+    
+    binned_data = reactive_binned_data()
+    print(head(binned_data))
+    print(input$DS_var_to_decode)
+    levels(factor(binned_data[[paste0("labels.",input$DS_basic_var_to_decode)]]))
+    
     # }
   })
   
   reactive_all_levels_of_gen_var_to_use <- reactive({
     # if(!is.null(input$DS_chosen_bin)){
-      
-      binned_data = reactive_binned_data()
-      print(head(binned_data))
-      print(input$DS_var_to_decode)
-      levels(factor(binned_data[[paste0("labels.",input$DS_gen_var_to_use)]]))
-      
+    
+    binned_data = reactive_binned_data()
+    print(head(binned_data))
+    print(input$DS_var_to_decode)
+    levels(factor(binned_data[[paste0("labels.",input$DS_gen_var_to_use)]]))
+    
     # }
   })
   
@@ -222,14 +222,14 @@ function(input, output, session) {
     temp_num <- input$DS_gen_num_training_level_groups
     # print(temp_num)
     # if(!is.null(temp_num)){
-      lapply(1:temp_num, function(i){
-        selectInput(paste0("DS_training_level_group_", i),
-                    paste("Training level group", i),
-                    reactive_all_levels_of_gen_var_to_use(),
-                    multiple = TRUE    
-        )
-        
-      })
+    lapply(1:temp_num, function(i){
+      selectInput(paste0("DS_training_level_group_", i),
+                  paste("Training level group", i),
+                  reactive_all_levels_of_gen_var_to_use(),
+                  multiple = TRUE    
+      )
+      
+    })
     # }
     
     
@@ -241,14 +241,14 @@ function(input, output, session) {
     temp_num <- input$DS_gen_num_training_level_groups
     # print(temp_num)
     # if(!is.null(temp_num)){
-      lapply(1:temp_num, function(i){
-        selectInput(paste0("DS_testing_level_group_", i),
-                    paste("Testing level group", i),
-                    reactive_all_levels_of_gen_var_to_use(),
-                    multiple = TRUE    
-        )
-        
-      })
+    lapply(1:temp_num, function(i){
+      selectInput(paste0("DS_testing_level_group_", i),
+                  paste("Testing level group", i),
+                  reactive_all_levels_of_gen_var_to_use(),
+                  multiple = TRUE    
+      )
+      
+    })
     # }
     
     
@@ -267,37 +267,30 @@ function(input, output, session) {
     checkboxGroupInput("FP",
                        "Feature Preprocessors",
                        reactive_all_fp_avail()
-                       )
+    )
   }
   )
   
-  output$FP_select_of_exclude_k_features = renderUI({
-    
-    if (grepl(input$FP, 'select or exclude top k features')){
-      checkboxInput("FP_select",
-                    "Select top k features",
-                    TRUE)
-    }
-    
-    
-    
-    
-  })
-  output$FP_select_k = renderUI({
-    numericInput("FP_selected_k",
-                 "",
-                 10,
-                 min = 1,
-                 max = reactive_data_dim())
-  })
+  # output$FP_select_of_exclude_k_features = renderUI({
+  #   temp_out  = tagList()
+  #   if(sum(grepl('select or exclude top k features', input$FP))){
+  #     temp_out[[1]] = numericInput("FP_selected_k",
+  #                                  "select top ? features (this will be applied first)",
+  #                                  0,
+  #                                  min = 1,
+  #                                  max = reactive_data_dim())
+  #     temp_out[[2]] = numericInput("FP_excludeed_k",
+  #                                  "exclude top ? features (this will be applied second)",
+  #                                  0,
+  #                                  min = 1,
+  #                                  max = reactive_data_dim() - input$FP_selected_k)
+  #   }
+  #   
+  #   
+  #   temp_out
+  #   
+  # })
   
-  output$FP_exclude_k = renderUI({
-    numericInput("FP_excludeed_k",
-                 "",
-                 10,
-                 min = 1,
-                 max = reactive_data_dim())
-  })
   
   output$DS_list_of_scripts = renderUI({
     selectInput("DC_script",
@@ -309,3 +302,4 @@ function(input, output, session) {
     htmlOutput("input$DC_script")
   })
 }
+
