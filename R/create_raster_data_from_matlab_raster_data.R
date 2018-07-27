@@ -44,6 +44,8 @@ create_raster_data_from_matlab_raster_data <- function(matlab_raster_directory_n
     
     
     # keep raster_site_info as it is
+    
+    raster_site_info <- raster$raster.site.info
     # # second, create the raster_site_info df
     # # parse the raster site info (perhaps there is a better way to do this, but works)
     # temp_raster_site_info <- data.frame(raster$raster.site.info)
