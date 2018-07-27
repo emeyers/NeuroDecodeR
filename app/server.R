@@ -1,4 +1,3 @@
-
 require('dplyr')
 require('fields')
 require('ggplot2')
@@ -7,9 +6,6 @@ require("shinyAce")
 
 setwd("C:/Users/14868/Documents/GitHub/NDTr")
 # setwd("/cbcl/cbcl01/xf15/NDTr")
-
-all_cl = c("maximum correlation", "support vecotor machine", "poisson naive bayes")
-all_fp = c("select_pvalue_significant_features","select or exclude top k features", "zscore_normalize")
 
 function(input, output, session) {
   
@@ -32,18 +28,16 @@ function(input, output, session) {
   #   )
   # })
   
-
+  
   observeEvent(input$FP,{
     print(input$FP)
     print(grepl(input$FP, 'select or exclude top k features'))
   })
   
   observe({
-    print(input$DS_basic_level_to_use)
     print(input$FP)
     print(grepl(input$FP, 'select or exclude top k features'))
   })
-  
   
   reactive_data_dim <- reactive({
     validate(
@@ -60,6 +54,7 @@ function(input, output, session) {
     
   })
   reactive_binned_data <- reactive({
+    req(input$DS_chosen_bin)
     # if(!is.null(input$DS_chosen_bin)){
     # the above was commented out because every function calls me has either done the above check if it's initilized...
     # before the "select_input$DS_chosen_bin" funciton was called or it's not initialized until that thing is called...
@@ -72,34 +67,34 @@ function(input, output, session) {
   })
   
   reactive_all_var <- reactive({
-    if(!is.null(input$DS_chosen_bin)){
+    # if(!is.null(input$DS_chosen_bin)){
       binned_data = reactive_binned_data()
       
       sub("labels.", "", names(select(binned_data, starts_with("labels"))))
-    }
+    # }
     
   })
   
   reactive_all_levels_of_basic_var_to_decode <- reactive({
-    if(!is.null(input$DS_chosen_bin)){
+    # if(!is.null(input$DS_chosen_bin)){
       
       binned_data = reactive_binned_data()
       print(head(binned_data))
       print(input$DS_var_to_decode)
       levels(factor(binned_data[[paste0("labels.",input$DS_basic_var_to_decode)]]))
       
-    }
+    # }
   })
   
   reactive_all_levels_of_gen_var_to_use <- reactive({
-    if(!is.null(input$DS_chosen_bin)){
+    # if(!is.null(input$DS_chosen_bin)){
       
       binned_data = reactive_binned_data()
       print(head(binned_data))
       print(input$DS_var_to_decode)
       levels(factor(binned_data[[paste0("labels.",input$DS_gen_var_to_use)]]))
       
-    }
+    # }
   })
   
   # observeEvent(input$DS_chosen_bin,{
@@ -150,7 +145,7 @@ function(input, output, session) {
     selectInput("bin_chosen_raster",
                 "Choose your raster data",
                 list.dirs('data/raster/', full.names = FALSE),
-                selected = "Zhang_Desimone_7objects_raster_data_rda"
+                selected = "Zhang_Desimone_7objects_R_raster_data"
                 
                 
     ))
@@ -210,11 +205,12 @@ function(input, output, session) {
                  max  = temp_max
     )
     # print(temp_max)
-    })
+  })
   output$DS_gen_list_of_training_level_groups = renderUI({
+    req(input$DS_gen_num_training_level_groups)
     temp_num <- input$DS_gen_num_training_level_groups
     # print(temp_num)
-    if(!is.null(temp_num)){
+    # if(!is.null(temp_num)){
       lapply(1:temp_num, function(i){
         selectInput(paste0("DS_training_level_group_", i),
                     paste("Training level group", i),
@@ -223,32 +219,31 @@ function(input, output, session) {
         )
         
       })
-    }
- 
-
+    # }
+    
+    
   })
   
   output$DS_gen_list_of_testing_level_groups = renderUI({
-    temp_num <- input$DS_gen_num_testing_level_groups
+    req(input$DS_gen_num_training_level_groups)
+    
+    temp_num <- input$DS_gen_num_training_level_groups
     # print(temp_num)
-    if(!is.null(temp_num)){
+    # if(!is.null(temp_num)){
       lapply(1:temp_num, function(i){
         selectInput(paste0("DS_testing_level_group_", i),
-                    paste("testing level group", i),
+                    paste("Testing level group", i),
                     reactive_all_levels_of_gen_var_to_use(),
                     multiple = TRUE    
         )
         
       })
-    }
+    # }
     
     
   })
   
-  output$list_of_CL = renderUI({
-    selectInput("CL", "Classifier", all_cl)
-    
-  })
+  
   
   output$CL_choose_gamma = renderUI({
     numericInput("CL_SVM_gamma",
@@ -258,16 +253,15 @@ function(input, output, session) {
   })
   
   output$FP_select_of_exclude_k_features = renderUI({
-
+    
     if (grepl(input$FP, 'select or exclude top k features')){
-      print("checkbox")
       checkboxInput("FP_select",
                     "Select top k features",
                     TRUE)
     }
     
     
-
+    
     
   })
   output$FP_select_k = renderUI({
