@@ -8,7 +8,7 @@ NDTr_name = "~/NDTr"
 # install("NDTr")
 # document()    # sometimes can't find the NDTr code until document has been run
 matlab_raster_directory_name = "data/raster/Zhang_Desimone_7objects_raster_data/"
-matlab_raster_directory_name ="data/raster/boda_VISp_175_sg_501795235_raster_data/"
+matlab_raster_directory_name ="data/raster/sample_boda_sg/"
 create_raster_data_from_matlab_raster_data(matlab_raster_directory_name)
 
 
