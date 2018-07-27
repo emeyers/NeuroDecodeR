@@ -4,15 +4,7 @@ require('ggplot2')
 require('stringr')
 require("shinyAce")
 
-setwd("C:/Users/14868/Documents/GitHub/NDTr")
-# setwd("/cbcl/cbcl01/xf15/NDTr")
 
-all_cl <- c("maximum correlation", "support vecotor machine", "poisson naive bayes")
-all_fp <- c("select_pvalue_significant_features","select or exclude top k features", "zscore_normalize")
-
-df_cl_fp <- data.frame(c(1, 1, 1), c(1, 1, 1), c(1, 1, 0))
-colnames(df_cl_fp) <- all_cl
-rownames(df_cl_fp) <- all_fp
 
 function(input, output, session) {
   
@@ -46,13 +38,13 @@ function(input, output, session) {
   #   print(grepl(input$FP, 'select or exclude top k features'))
   # })
   
-  reactive_data_dim <- reactive({
+  reactive_num_neuron <- reactive({
     validate(
       need(input$DS_chosen_bin,"Please select data source first to get total number of neurons!")
     )
     binned_data = reactive_binned_data()
-    nrow(binned_data)
-  })
+    length(unique(factor(binned_data$siteID)))
+    })
   
   reactive_maximum_num_of_levels_in_all_var <- reactive({
     binned_data = reactive_binned_data()
@@ -256,12 +248,7 @@ function(input, output, session) {
   
   
   
-  output$CL_choose_gamma = renderUI({
-    numericInput("CL_SVM_gamma",
-                 "Gamma",
-                 1/reactive_data_dim())
-    
-  })
+
   
   output$FP_check_fp = renderUI({
     checkboxGroupInput("FP",
@@ -271,26 +258,30 @@ function(input, output, session) {
   }
   )
   
-  # output$FP_select_of_exclude_k_features = renderUI({
-  #   temp_out  = tagList()
-  #   if(sum(grepl('select or exclude top k features', input$FP))){
-  #     temp_out[[1]] = numericInput("FP_selected_k",
-  #                                  "select top ? features (this will be applied first)",
-  #                                  0,
-  #                                  min = 1,
-  #                                  max = reactive_data_dim())
-  #     temp_out[[2]] = numericInput("FP_excludeed_k",
-  #                                  "exclude top ? features (this will be applied second)",
-  #                                  0,
-  #                                  min = 1,
-  #                                  max = reactive_data_dim() - input$FP_selected_k)
-  #   }
-  #   
-  #   
-  #   temp_out
-  #   
-  # })
+  output$FP_select_k_features = renderUI({
+    if(sum(grepl('select or exclude top k features', input$FP))){
+      numericInput("FP_selected_k",
+                                   "select top ? features (this will be applied first)",
+                                   1,
+                                   min = 1,
+                                   max = reactive_num_neuron())
+      
+    }
+
+
+    
+
+  })
   
+  output$FP_exclude_k_features = renderUI({
+    
+    req(input$FP_selected_k)
+    numericInput("FP_excluded_k",
+                 "exclude top ? features (this will be applied second)",
+                 1,
+                 min = 1,
+                 max = reactive_num_neuron() - input$FP_selected_k)
+  })
   
   output$DS_list_of_scripts = renderUI({
     selectInput("DC_script",

@@ -124,8 +124,9 @@ ui <- dashboardPage(
                                                                                               "Coef0", # Constant in the kernel function",
                                                                                               0)),
                                                                 conditionalPanel(condition = "input.CL_SVM_kernel == 'radial'|input.CL_SVM_kernel == 'polynomial'|input.CL_SVM_kernel == 'sigmoid'",
-                                                                                 uiOutput("CL_choose_gamma")
-                                                                ))
+                                                                                 numericInput("CL_SVM_gamma",
+                                                                                              "Gamma",
+                                                                                              NULL)                                                                ))
                                                
                                              ),
                                              tabPanel(
@@ -134,7 +135,9 @@ ui <- dashboardPage(
                                                solidHeader = TRUE, status = "primary",
                                                
                                                uiOutput("FP_check_fp"),
-                                               # uiOutput("FP_select_of_exclude_k_features")
+                                               uiOutput("FP_select_k_features"),
+                                               uiOutput("FP_exclude_k_features")
+                                               
                                                
                                              ),
                                              tabPanel(
