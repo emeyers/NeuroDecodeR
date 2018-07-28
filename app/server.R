@@ -8,35 +8,17 @@ require("shinyAce")
 
 function(input, output, session) {
   
-  # observe({
-  #   setwd("C:/Users/14868/Documents/GitHub/NDTr")
-  #   # load('data/binned/ZD_binned_data_150ms_bins_50ms_sampled.Rda')
-  #   # print(head(binned_data))
-  #   tempA <- input$DS_training_labels
-  #   a <- getwd()
-  #   print(paste0("a", a))
-  #   # tempB <- reactive_all_levels_of_var_to_use()
-  #   if (is.null(tempA))
-  #     tempA <- character(0)
-  #   updateSelectInput(session,
-  #                     "DS_testing_label",
-  #                     label = "Testing labels",
-  #                     choices  = tempA
-  #                     # choices = tempB[!str_detect(tempB, tempA)]
-  #                     # str_remove(reactive_all_levels_of_var_to_use(),temp)
-  #   )
-  # })
+  rv <- reactiveValues()
   
+  observeEvent(input$DC_scriptize,{
+    rv$script <- create_script(input)
+    print(rv$script)
+  })
   
-  # observeEvent(input$FP,{
-  #   print(input$FP)
-  #   print(grepl(input$FP, 'select or exclude top k features'))
-  # })
-  # 
-  # observe({
-  #   print(input$FP)
-  #   print(grepl(input$FP, 'select or exclude top k features'))
-  # })
+  observeEvent(input$DC_script,{
+    
+  })
+  
   
   reactive_num_neuron <- reactive({
     validate(
@@ -100,38 +82,7 @@ function(input, output, session) {
     req(input$CL)
     all_fp[df_cl_fp[,input$CL]>0]
   })
-  # observeEvent(input$DS_chosen_bin,{
-  #   # tempA <- 
-  #   # print(paste0('tempA', tempA))
-  #   print(paste0("HERRE", input$DS_chosen_bin))
-  #   print(is.null(input$DS_chosen_bin))
-  #   
-  #   if (!is.null(input$DS_chosen_bin)){
-  #     # binned_data = reactive_binned_data()
-  #     # print( tempA)
-  #     # print(paste0("raster", input$DS_bin_chosen_raster))
-  #     # print(is.null(tempA))
-  #     # print(input$DS_testing_label)
-  #     # print(list.dirs('data/raster/'))
-  #     updateSelectInput(session,
-  #                       "DS_var_to_decode",
-  #                       choices = reactive_all_var()
-  #     )
-  # 
-  # 
-  # 
-  # }
-  # })
-  #
-  
-  # observeEvent(input$DS_var_to_decode,{
-  #   if (!is.null(input$DS_chosen_bin)){
-  #     
-  #   updateSelectInput(session,
-  #                     "DS_label_to_use",
-  #                     choices = reactive_all_levels_of_var_to_use())
-  # }
-  # )
+
   
   
   
@@ -148,7 +99,7 @@ function(input, output, session) {
     selectInput("bin_chosen_raster",
                 "Choose your raster data",
                 list.dirs('data/raster/', full.names = FALSE),
-                selected = "Zhang_Desimone_7objects_R_raster_data"
+                selected = "Zhang_Desimone_7objects_raster_data_rda"
                 
                 
     ))
@@ -157,8 +108,8 @@ function(input, output, session) {
   output$DS_list_of_binned_files = renderUI(
     selectInput("DS_chosen_bin",
                 "Choose your binned data",
-                list.files('data/binned/', "*.Rda")
-                # selected = "ZD_binned_data_150ms_bins_50ms_sampled.Rda"
+                list.files('data/binned/', "*.Rda"),
+                selected = "ZD_binned_data_150ms_bins_50ms_sampled.Rda"
                 
     ))
   
@@ -283,14 +234,29 @@ function(input, output, session) {
                  max = reactive_num_neuron() - input$FP_selected_k)
   })
   
-  output$DS_list_of_scripts = renderUI({
-    selectInput("DC_script",
-                "Chosse your script",
-                list.files('tests', ".R")
-    )
+  
+  output$DC_ace = renderUI({
+    aceEditor("script",
+              rv$script,
+              mode = "r")
+              # mode = "markdown")
+    
+    # check all inputs and poentially send error message !
+    
   })
-  output$DC_script_to_show = renderUI({
-    htmlOutput("input$DC_script")
-  })
+  # output$DC_list_of_scripts = renderUI({
+  #   # list( 
+  #     selectInput("DC_script",
+  #                        "Chosse an existing script to show",
+  #                        list.files('tests', "*.R")
+  #   )#,
+  #   # actionButton("DC_show", "Show script")
+  #   # )
+  # 
+  #   
+  # })
+  # output$DC_script_to_show = renderUI({
+  #   htmlOutput("input$DC_script")
+  # })
 }
 

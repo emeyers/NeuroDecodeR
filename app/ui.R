@@ -61,10 +61,11 @@ ui <- dashboardPage(
                                       tabBox(width = 12,
                                              height = 1000,
                                              
-                                             tabPanel("Use a script",
+                                             tabPanel("Script",
                                                       fileInput("DC_upload", "Upload new script (optional)", multiple = TRUE),
-                                                      uiOutput("DS_list_of_scripts"),
-                                                      actionButton("DC_show", "Show script")
+                                                      # script will show upon chosen
+                                                      uiOutput("DC_list_of_scripts"),
+                                                      actionButton("DC_scriptize", "generate script from gui configuration")
                                              ),
                                              tabPanel(
                                                title = "Data source",
@@ -160,16 +161,19 @@ ui <- dashboardPage(
                                
                                column(width = 6,
                                       # htmlOutput(input$DS_script)
-                                      # uiOutput("DC_script_to_show")
-                                      aceEditor("script",
-                                                "d"                                      ),
+                                      uiOutput("DC_ace"),
+
+                                      actionButton("DC_run_decoding", "Run Decoding"),
+                                      # textinput of filename to be saved if not existing and to be saved as if existing; 
+                                      actionButton("DC_save_script", "Save the script")
                                       
-                                      
-                                      actionButton("DC_run_decoding", "Run Decoding")
                                )
                                
                                
-                             ))),
+                             )
+                           )
+                           
+                         ),
                          tabPanel(
                            title = "Result plot",
                            
@@ -190,15 +194,14 @@ ui <- dashboardPage(
                                          
                                   )
                            )
-                           
-                           
                          )
-                         
-              )
-              
-              
+              ) 
       )
       
     )
+    
+    
   )
+  
 )
+
