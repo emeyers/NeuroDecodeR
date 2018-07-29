@@ -19,3 +19,7 @@ req_dc_para <- c("CL", "CV_bDiag", "CV_repeat", "CV_resample", "CV_split", "DS_c
 lapply(req_dc_para, function(i){
   paste0(i, "O")
 })
+
+
+
+

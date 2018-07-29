@@ -66,7 +66,8 @@ ui <- dashboardPage(
                                                       fileInput("DC_upload", "Upload new script (optional)", multiple = TRUE),
                                                       # script will show upon chosen
                                                       uiOutput("DC_list_of_scripts"),
-                                                      actionButton("DC_scriptize", "generate script from gui configuration")
+                                                      actionButton("DC_scriptize", "generate script from gui configuration"),
+                                                      uiOutput("DC_scriptize_error")
                                              ),
                                              tabPanel(
                                                title = "Data source",
