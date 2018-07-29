@@ -11,6 +11,14 @@ function(input, output, session) {
   rv <- reactiveValues()
   
   observeEvent(input$DC_scriptize,{
+    
+    validate(
+      lapply(req_dc_para, function(i){
+        print(eval(parse(text = paste0("!is.null(input$",i,")"))))
+        
+        need(parse(text = paste0("!is.null(input$",i,")")),"bang")
+      })
+    )
     rv$script <- create_script(input)
     print(rv$script)
   })
@@ -26,7 +34,7 @@ function(input, output, session) {
     )
     binned_data = reactive_binned_data()
     length(unique(factor(binned_data$siteID)))
-    })
+  })
   
   reactive_maximum_num_of_levels_in_all_var <- reactive({
     binned_data = reactive_binned_data()
@@ -42,7 +50,6 @@ function(input, output, session) {
     # The reason input$DS_chosen_bin is initialized as null is that thing is not on the gui when the app starts and..
     # not called until it shows on the gui
     get(load(paste0('data/binned/', input$DS_chosen_bin)))
-    
     # }
     
   })
@@ -82,7 +89,7 @@ function(input, output, session) {
     req(input$CL)
     all_fp[df_cl_fp[,input$CL]>0]
   })
-
+  
   
   
   
@@ -199,7 +206,7 @@ function(input, output, session) {
   
   
   
-
+  
   
   output$FP_check_fp = renderUI({
     checkboxGroupInput("FP",
@@ -212,16 +219,16 @@ function(input, output, session) {
   output$FP_select_k_features = renderUI({
     if(sum(grepl('select or exclude top k features', input$FP))){
       numericInput("FP_selected_k",
-                                   "select top ? features (this will be applied first)",
-                                   1,
-                                   min = 1,
-                                   max = reactive_num_neuron())
+                   "select top ? features (this will be applied first)",
+                   1,
+                   min = 1,
+                   max = reactive_num_neuron())
       
     }
-
-
     
-
+    
+    
+    
   })
   
   output$FP_exclude_k_features = renderUI({
@@ -239,7 +246,7 @@ function(input, output, session) {
     aceEditor("script",
               rv$script,
               mode = "r")
-              # mode = "markdown")
+    # mode = "markdown")
     
     # check all inputs and poentially send error message !
     
@@ -259,4 +266,6 @@ function(input, output, session) {
   #   htmlOutput("input$DC_script")
   # })
 }
+
+
 

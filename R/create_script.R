@@ -1,8 +1,8 @@
-
-create_script <- function(decoding_params) {
+#' @export
+create_script <- function(input) {
   
   
-  print(decoding_params)
+  print(names(input))
   
   
   script_dir_name <- "scripts"
@@ -29,15 +29,31 @@ create_script <- function(decoding_params) {
   write("```{r setup, include=FALSE}
         knitr::opts_chunk$set(echo = TRUE)
         ```\n\n", file = script_full_name, append = TRUE)
-  
+  if(input$DS_tpye == "basic_DS"){
+    print("YEAH")
+  }
   
   
 
   
+#   write("#Load the necessary packages and files
+# ```{r load_files}
+#         library('tictoc')
+#         library('fields')
+#         base_ndtr_dir_name <- '../R/'
+#         base_data_dir_name <- '../data/'
+#         # source all files in the R directory
+#         source(paste0(base_ndtr_dir_name, 'helper_functions.R'))
+#         source(paste0(base_ndtr_dir_name, 'basic_DS.R')) 
+#         source(paste0(base_ndtr_dir_name, 'max_correlation_CL.R')) 
+#         source(paste0(base_ndtr_dir_name, 'poisson_naive_bayes_CL.R'))
+#         source(paste0(base_ndtr_dir_name, 'select_k_features_FP.R')) 
+#         source(paste0(base_ndtr_dir_name, 'zscore_FP.R')) 
+#         source(paste0(base_ndtr_dir_name, 'standard_CV.R')) 
+#         ```\n\n\n", file = script_full_name, append = TRUE)
+#   
   
-  
-  
-  
+
   
   
   
