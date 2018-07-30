@@ -20,38 +20,10 @@ function(input, output, session) {
       # https://github.com/rstudio/shiny/blob/master/R/utils.R
       eval(parse(text = paste0("need(!is.null(input$",i,"),'bang')")))
     })
-    print(input)
-    
-    print(typeof(input))
-    
-    temp_val <- "validate("
-    
-    temp_val_ori_length <- nchar(temp_val)
-    
-    for (i in 1: length(temp_need)) {
-      # if we fetch NULL in the list, it returns empty string, therefore we just skip them
-      if(!is.null(temp_need[[i]])){
-        temp_val <- paste0(temp_val, "'", temp_need[[i]], "'", ",")
-        
-      }
-    }
-    
-  
-    # if messages else NUL
-    if(nchar(temp_val) > temp_val_ori_length){
-      temp_val <- substring(temp_val, 1, nchar(temp_val) - 1)
-      temp_val <- paste0(temp_val, ")")
-      
-    }else{
-      temp_val <- "validate(NULL)"
-    }
-    
-    
-    print(paste0("here", temp_val))
     
     output$DC_scriptize_error <- renderText({
-      eval(parse(text = temp_val))
-      isolate(input)
+      do.call(validate, temp_need)
+      # eval(parse(text = temp_val))
       rv$script <- create_script(input)
       print(rv$script)
     })
