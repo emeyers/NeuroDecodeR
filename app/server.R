@@ -11,18 +11,19 @@ function(input, output, session) {
   rv <- reactiveValues()
   
   observeEvent(input$DC_scriptize,{
-      temp = lapply(req_dc_para, function(i){
+      temp_need = lapply(req_dc_para, function(i){
         print(eval(parse(text = paste0("!is.null(input$",i,")"))))
 
         eval(parse(text = paste0("need(!is.null(input$",i,"),'bang')")))
       })
-    print(temp)
-    # validate(temp)
+    print(input)
+    typeof(input)
+
     temp_val <- "validate("
 
-    for (i in 1: length(temp)) {
-      if(!is.null(temp[[i]])){
-        temp_val <- paste0(temp_val, "'", temp[[i]], "'", ",")
+    for (i in 1: length(temp_need)) {
+      if(!is.null(temp_need[[i]])){
+        temp_val <- paste0(temp_val, "'", temp_need[[i]], "'", ",")
 
       }
     }
@@ -30,10 +31,7 @@ function(input, output, session) {
 
     temp_val <- paste0(temp_val, ")")
 
-    print(temp_val)
 
-    a = "print(temp_val)"
-    eval(parse(text = a))
     output$DC_scriptize_error <- renderText({
       eval(parse(text = temp_val))
       rv$script <- create_script(input)
