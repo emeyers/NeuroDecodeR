@@ -167,7 +167,6 @@ ui <- dashboardPage(
                                
                                
                                column(width = 6,
-                                      # htmlOutput(input$DS_script)
                                       uiOutput("DC_ace"),
                                       
                                       actionButton("DC_run_decoding", "Run Decoding"),

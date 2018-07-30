@@ -11,35 +11,53 @@ function(input, output, session) {
   rv <- reactiveValues()
   
   observeEvent(input$DC_scriptize,{
-      temp_need = lapply(req_dc_para, function(i){
-        print(eval(parse(text = paste0("!is.null(input$",i,")"))))
-
-        eval(parse(text = paste0("need(!is.null(input$",i,"),'bang')")))
-      })
+    
+    # all_input <<- names(input)
+    
+    temp_need = lapply(req_dc_para, function(i){
+      print(eval(parse(text = paste0("!is.null(input$",i,")"))))
+      # when needed thing exist, it returns NULL
+      # https://github.com/rstudio/shiny/blob/master/R/utils.R
+      eval(parse(text = paste0("need(!is.null(input$",i,"),'bang')")))
+    })
     print(input)
-    typeof(input)
-
+    
+    print(typeof(input))
+    
     temp_val <- "validate("
-
+    
+    temp_val_ori_length <- nchar(temp_val)
+    
     for (i in 1: length(temp_need)) {
+      # if we fetch NULL in the list, it returns empty string, therefore we just skip them
       if(!is.null(temp_need[[i]])){
         temp_val <- paste0(temp_val, "'", temp_need[[i]], "'", ",")
-
+        
       }
     }
-    temp_val <- substring(temp_val, 1, nchar(temp_val) - 1)
-
-    temp_val <- paste0(temp_val, ")")
-
-
+    
+  
+    # if messages else NUL
+    if(nchar(temp_val) > temp_val_ori_length){
+      temp_val <- substring(temp_val, 1, nchar(temp_val) - 1)
+      temp_val <- paste0(temp_val, ")")
+      
+    }else{
+      temp_val <- "validate(NULL)"
+    }
+    
+    
+    print(paste0("here", temp_val))
+    
     output$DC_scriptize_error <- renderText({
       eval(parse(text = temp_val))
+      isolate(input)
       rv$script <- create_script(input)
       print(rv$script)
     })
     
     # do.call(validate, temp)
-
+    
   })
   
   observeEvent(input$DC_script,{
@@ -50,11 +68,9 @@ function(input, output, session) {
     
   })
   reactive_num_neuron <- reactive({
-    print(      need(input$DS_chosen_bin,"Please select data source first to get total number of neurons!")
-    )
     
-    validate('af','aefa'
-             # need(input$DS_chosen_bin,"Please select data source first to get total number of neurons!")
+    validate(
+      need(input$DS_chosen_bin,"Please select data source first to get total number of neurons!")
     )
     binned_data = reactive_binned_data()
     length(unique(factor(binned_data$siteID)))
@@ -188,106 +204,106 @@ function(input, output, session) {
                  1,
                  min = 1,
                  max  = temp_max)
-                 # print(temp_max)
+    # print(temp_max)
   })
-    output$DS_gen_list_of_training_level_groups = renderUI({
-      req(input$DS_gen_num_training_level_groups)
-      temp_num <- input$DS_gen_num_training_level_groups
-      # print(temp_num)
-      # if(!is.null(temp_num)){
-      lapply(1:temp_num, function(i){
-        selectInput(paste0("DS_training_level_group_", i),
-                    paste("Training level group", i),
-                    reactive_all_levels_of_gen_var_to_use(),
-                    multiple = TRUE    
-        )
-        
-      })
-      # }
-      
-      
-    })
-    
-    output$DS_gen_list_of_testing_level_groups = renderUI({
-      req(input$DS_gen_num_training_level_groups)
-      
-      temp_num <- input$DS_gen_num_training_level_groups
-      # print(temp_num)
-      # if(!is.null(temp_num)){
-      lapply(1:temp_num, function(i){
-        selectInput(paste0("DS_testing_level_group_", i),
-                    paste("Testing level group", i),
-                    reactive_all_levels_of_gen_var_to_use(),
-                    multiple = TRUE    
-        )
-        
-      })
-      # }
-      
-      
-    })
-    
-    
-    
-    
-    
-    output$FP_check_fp = renderUI({
-      checkboxGroupInput("FP",
-                         "Feature Preprocessors",
-                         reactive_all_fp_avail()
+  output$DS_gen_list_of_training_level_groups = renderUI({
+    req(input$DS_gen_num_training_level_groups)
+    temp_num <- input$DS_gen_num_training_level_groups
+    # print(temp_num)
+    # if(!is.null(temp_num)){
+    lapply(1:temp_num, function(i){
+      selectInput(paste0("DS_training_level_group_", i),
+                  paste("Training level group", i),
+                  reactive_all_levels_of_gen_var_to_use(),
+                  multiple = TRUE    
       )
-    }
-    )
-    
-    output$FP_select_k_features = renderUI({
-      if(sum(grepl('select or exclude top k features', input$FP))){
-        numericInput("FP_selected_k",
-                     "select top ? features (this will be applied first)",
-                     1,
-                     min = 1,
-                     max = reactive_num_neuron())
-        
-      }
-      
-      
-      
       
     })
+    # }
     
-    output$FP_exclude_k_features = renderUI({
+    
+  })
+  
+  output$DS_gen_list_of_testing_level_groups = renderUI({
+    req(input$DS_gen_num_training_level_groups)
+    
+    temp_num <- input$DS_gen_num_training_level_groups
+    # print(temp_num)
+    # if(!is.null(temp_num)){
+    lapply(1:temp_num, function(i){
+      selectInput(paste0("DS_testing_level_group_", i),
+                  paste("Testing level group", i),
+                  reactive_all_levels_of_gen_var_to_use(),
+                  multiple = TRUE    
+      )
       
-      req(input$FP_selected_k)
-      numericInput("FP_excluded_k",
-                   "exclude top ? features (this will be applied second)",
+    })
+    # }
+    
+    
+  })
+  
+  
+  
+  
+  
+  output$FP_check_fp = renderUI({
+    checkboxGroupInput("FP",
+                       "Feature Preprocessors",
+                       reactive_all_fp_avail()
+    )
+  }
+  )
+  
+  output$FP_select_k_features = renderUI({
+    if(sum(grepl('select or exclude top k features', input$FP))){
+      numericInput("FP_selected_k",
+                   "select top ? features (this will be applied first)",
                    1,
                    min = 1,
-                   max = reactive_num_neuron() - input$FP_selected_k)
-    })
+                   max = reactive_num_neuron())
+      
+    }
     
     
-    output$DC_ace = renderUI({
-      aceEditor("script",
-                rv$script,
-                mode = "r")
-      # mode = "markdown")
-      
-      # check all inputs and poentially send error message !
-      
-    })
-    # output$DC_list_of_scripts = renderUI({
-    #   # list( 
-    #     selectInput("DC_script",
-    #                        "Chosse an existing script to show",
-    #                        list.files('tests', "*.R")
-    #   )#,
-    #   # actionButton("DC_show", "Show script")
-    #   # )
-    # 
-    #   
-    # })
-    # output$DC_script_to_show = renderUI({
-    #   htmlOutput("input$DC_script")
-    # })
+    
+    
+  })
+  
+  output$FP_exclude_k_features = renderUI({
+    
+    req(input$FP_selected_k)
+    numericInput("FP_excluded_k",
+                 "exclude top ? features (this will be applied second)",
+                 1,
+                 min = 1,
+                 max = reactive_num_neuron() - input$FP_selected_k)
+  })
+  
+  
+  output$DC_ace = renderUI({
+    aceEditor("script",
+              rv$script,
+              mode = "r")
+    # mode = "markdown")
+    
+    # check all inputs and poentially send error message !
+    
+  })
+  # output$DC_list_of_scripts = renderUI({
+  #   # list( 
+  #     selectInput("DC_script",
+  #                        "Chosse an existing script to show",
+  #                        list.files('tests', "*.R")
+  #   )#,
+  #   # actionButton("DC_show", "Show script")
+  #   # )
+  # 
+  #   
+  # })
+  # output$DC_script_to_show = renderUI({
+  #   htmlOutput("input$DC_script")
+  # })
 }
 
 
