@@ -20,10 +20,10 @@ ui <- dashboardPage(
                 fluidRow(
                   column(width = 4,
                          box(width = NULL,
-                             fileInput("bin_uploaded_raster", "Upload new raster data (optional)", multiple = TRUE),
+                             fileInput("bin_uploaded_raster", lLabel$bin_uploaded_raster, multiple = TRUE),
                              uiOutput("bin_list_of_raster_files"),
-                             numericInput("bin_bin_width", "Bin width", value = 10, min = 1),
-                             numericInput("bin_step_size", "Step size", value = 1, min = 1)
+                             numericInput("bin_bin_width", lLabel$bin_bin_width, value = 10, min = 1),
+                             numericInput("bin_step_size", lLabel$bin_step_size, value = 1, min = 1)
                          ),
                          actionButton("bin_bin_data", "Bin the data")
                          
@@ -63,7 +63,7 @@ ui <- dashboardPage(
                                              height = 1000,
                                              
                                              tabPanel("Script",
-                                                      fileInput("DC_upload", "Upload new script (optional)", multiple = TRUE),
+                                                      fileInput("DC_upload", lLabel$DC_upload, multiple = TRUE),
                                                       # script will show upon chosen
                                                       uiOutput("DC_list_of_scripts"),
                                                       actionButton("DC_scriptize", "generate script from gui configuration"),
@@ -73,10 +73,10 @@ ui <- dashboardPage(
                                                title = "Data source",
                                                width = NULL,
                                                solidHeader = TRUE, status = "primary",
-                                               fileInput("DS_uploaded_bin", "Upload new binned data (optional)", multiple = TRUE),
+                                               fileInput("DS_uploaded_bin", lLabel$DS_uploaded_bin, multiple = TRUE),
                                                uiOutput("DS_list_of_binned_files"),
                                                
-                                               selectInput("DS_type", "Decoding type", c("basic_DS","generalization_DS")),
+                                               selectInput("DS_type", lLabel$DS_type, c("basic_DS","generalization_DS")),
                                                
                                                
                                                
@@ -109,17 +109,17 @@ ui <- dashboardPage(
                                                  title = "Optional setting",
                                                  conditionalPanel(condition  = "input.CL == 'support vecotor machine'",
                                                                   selectInput("CL_SVM_kernel",
-                                                                              "Kernel",
+                                                                              lLabel$CL_SVM_kernel,
                                                                               c("linear", "polynomial", "radial", "sigmoid"),
                                                                               selected = "radial"),
                                                                   numericInput("CL_SVM_cost",
-                                                                               "Cost", # of constraints violation / inverse of regularization constant",
+                                                                               lLabel$CL_SVM_cost, # of constraints violation / inverse of regularization constant",
                                                                                1,
                                                                                min = 0
                                                                   ),
                                                                   conditionalPanel(condition ="input.CL_SVM_kernel == 'polynomial'",
                                                                                    numericInput("CL_SVM_degree",
-                                                                                                "Degree of polynomial",
+                                                                                                lLabel$CL_SVM_degree,
                                                                                                 3,
                                                                                                 min = 2,
                                                                                                 max  = 10)),
@@ -127,11 +127,11 @@ ui <- dashboardPage(
                                                                   
                                                                   conditionalPanel(condition = "input.CL_SVM_kernel == 'radial'|input.CL_SVM_kernel == 'polynomial'",
                                                                                    numericInput("CL_SVM_coef0",
-                                                                                                "Coef0", # Constant in the kernel function",
+                                                                                                lLabel$CL_SVM_coef0, # Constant in the kernel function",
                                                                                                 0)),
                                                                   conditionalPanel(condition = "input.CL_SVM_kernel == 'radial'|input.CL_SVM_kernel == 'polynomial'|input.CL_SVM_kernel == 'sigmoid'",
                                                                                    numericInput("CL_SVM_gamma",
-                                                                                                "Gamma",
+                                                                                                lLabel$CL_SVM_gamma,
                                                                                                 NULL) 
                                                                   )
                                                  ))
@@ -152,10 +152,10 @@ ui <- dashboardPage(
                                                title = "Cross validator",
                                                width = NULL,
                                                solidHeader = TRUE, status = "primary",
-                                               numericInput("CV_repeat", "# of repeats", value = 2, min = 1),
-                                               numericInput("CV_split", "# of cv splits", value = 5, min = 2),
-                                               numericInput("CV_resample", "# of resampling runs", value = 20, min = 1),
-                                               checkboxInput("CV_bDiag", "test only at training times?",TRUE)
+                                               numericInput("CV_repeat", lLabel$CV_repeat, value = 2, min = 1),
+                                               numericInput("CV_split", lLabel$CV_split, value = 5, min = 2),
+                                               numericInput("CV_resample", lLabel$CV_resample, value = 20, min = 1),
+                                               checkboxInput("CV_bDiag", lLabel$CV_bDiag,TRUE)
                                              )
                                       )),
                                
@@ -188,12 +188,12 @@ ui <- dashboardPage(
                                   tabBox(width = 12,
                                          # title = "Result plot",
                                          tabPanel("timeplot", 
-                                                  selectInput("Plot_TCT_result_type_to_plot", "Type of result to plot",
+                                                  selectInput("Plot_TCT_result_type_to_plot", lLabel$Plot_TCT_result_type_to_plot,
                                                               c("Zero-one loss", "Rank results", "Decision Values")),
                                                   plotOutput("timeplot")
                                          ),
                                          tabPanel("TCT heatmap",
-                                                  selectInput("Plot_basic_result_type_to_plot", "Type of result to plot",
+                                                  selectInput("Plot_basic_result_type_to_plot", lLabel$Plot_basic_result_type_to_plot,
                                                               c("Zero-one loss", "Rank results", "Decision Values")),
                                                   plotOutput("tct")
                                          )

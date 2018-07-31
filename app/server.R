@@ -22,7 +22,7 @@ function(input, output, session) {
     })
     
     output$DC_scriptize_error <- renderText({
-      do.call(validate, temp_need)
+      # do.call(validate, temp_need)
       # eval(parse(text = temp_val))
       rv$script <- create_script(input)
       print(rv$script)
@@ -116,7 +116,7 @@ function(input, output, session) {
   # 
   output$bin_list_of_raster_files = renderUI(
     selectInput("bin_chosen_raster",
-                "Choose your raster data",
+                lLabel$bin_chosen_raster,
                 list.dirs('data/raster/', full.names = FALSE),
                 selected = "Zhang_Desimone_7objects_raster_data_rda"
                 
@@ -126,7 +126,7 @@ function(input, output, session) {
   
   output$DS_list_of_binned_files = renderUI(
     selectInput("DS_chosen_bin",
-                "Choose your binned data",
+                lLabel$DS_chosen_bin,
                 list.files('data/binned/', "*.Rda"),
                 selected = "ZD_binned_data_150ms_bins_50ms_sampled.Rda"
                 
@@ -135,7 +135,7 @@ function(input, output, session) {
   
   output$DS_basic_list_of_var_to_decode = renderUI({
     selectInput("DS_basic_var_to_decode",
-                "Variable to decode/use",
+                lLabel$DS_basic_var_to_decode,
                 reactive_all_var()
                 # c("")
                 
@@ -145,7 +145,7 @@ function(input, output, session) {
   
   output$DS_gen_list_of_var_to_decode = renderUI({
     selectInput("DS_gen_var_to_decode",
-                "Variable to decode",
+                lLabel$DS_gen_var_to_decode,
                 reactive_all_var()
                 # c("")
                 
@@ -157,7 +157,7 @@ function(input, output, session) {
     # load(paste0('data/binned/', input$DS_chosen_bin))
     
     selectInput("DS_basic_level_to_use",
-                "Levels to use",
+                lLabel$DS_basic_level_to_use,
                 reactive_all_levels_of_basic_var_to_decode(),
                 multiple = TRUE)
     
@@ -165,14 +165,14 @@ function(input, output, session) {
   # 
   output$DS_gen_list_of_var_to_use = renderUI({
     selectInput("DS_gen_var_to_use",
-                "Variable to train with",
+                lLabel$DS_gen_var_to_use,
                 reactive_all_var())
   })
   
   output$DS_gen_select_num_of_groups = renderUI({
     temp_max <- reactive_maximum_num_of_levels_in_all_var()
     numericInput("DS_gen_num_training_level_groups",
-                 "How many training level groups you will use?",
+                 lLabel$DS_gen_num_training_level_groups,
                  1,
                  min = 1,
                  max  = temp_max)
@@ -221,7 +221,7 @@ function(input, output, session) {
   
   output$FP_check_fp = renderUI({
     checkboxGroupInput("FP",
-                       "Feature Preprocessors",
+                       lLabel$FP,
                        reactive_all_fp_avail()
     )
   }
@@ -230,7 +230,7 @@ function(input, output, session) {
   output$FP_select_k_features = renderUI({
     if(sum(grepl('select or exclude top k features', input$FP))){
       numericInput("FP_selected_k",
-                   "select top ? features (this will be applied first)",
+                   lLabel$FP_selected_k,
                    1,
                    min = 1,
                    max = reactive_num_neuron())
@@ -246,7 +246,7 @@ function(input, output, session) {
     
     req(input$FP_selected_k)
     numericInput("FP_excluded_k",
-                 "exclude top ? features (this will be applied second)",
+                 lLabel$FP_excluded_k,
                  1,
                  min = 1,
                  max = reactive_num_neuron() - input$FP_selected_k)

@@ -32,10 +32,10 @@ create_script <- function(my_input) {
   write("```{r setup, include=FALSE}
         knitr::opts_chunk$set(echo = TRUE)
         ```\n\n", file = script_full_name, append = TRUE)
-  if(my_input$DS_tpye == "basic_DS"){
-    print("YEAH")
-  }
-  
+  # if(my_input$DS_tpye == "basic_DS"){
+  #   print("YEAH")
+  # }
+  # 
   
 
   
