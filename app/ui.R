@@ -1,5 +1,6 @@
 library(shinydashboard)
 library(shinyAce)
+library(shinyFiles)
 # library(semantic.dashboard)
 
 
@@ -20,6 +21,8 @@ ui <- dashboardPage(
                 fluidRow(
                   column(width = 4,
                          box(width = NULL,
+                             shinyFilesButton('files', label='File select', title='Please select a file', multiple=FALSE),
+                             
                              fileInput("bin_uploaded_raster", lLabel$bin_uploaded_raster, multiple = TRUE),
                              uiOutput("bin_list_of_raster_files"),
                              numericInput("bin_bin_width", lLabel$bin_bin_width, value = 10, min = 1),

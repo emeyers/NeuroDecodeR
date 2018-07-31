@@ -8,6 +8,8 @@ require("shinyAce")
 
 function(input, output, session) {
   
+  shinyFileChoose(input, 'files', root=c(root='.'), filetypes=c('', 'txt'))
+  
   rv <- reactiveValues()
   
   observeEvent(input$DC_scriptize,{
