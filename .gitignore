@@ -49,3 +49,4 @@ tests/Rprof.out
 *.swp
 .Rproj.user
 Cindy*
+.DS_Store
