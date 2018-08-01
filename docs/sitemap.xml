@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url>
+    <loc>http://lbusett.github.io/MODIStsp/index.html</loc>
+  </url>
+  <url>
+    <loc>http://lbusett.github.io/MODIStsp/reference/basic_DS.html</loc>
+  </url>
+  <url>
+    <loc>http://lbusett.github.io/MODIStsp/reference/create_binned_data.html</loc>
+  </url>
+  <url>
+    <loc>http://lbusett.github.io/MODIStsp/reference/max_correlation_CL.html</loc>
+  </url>
+  <url>
+    <loc>http://lbusett.github.io/MODIStsp/reference/poisson_naive_bayes_CL.html</loc>
+  </url>
+  <url>
+    <loc>http://lbusett.github.io/MODIStsp/reference/select_k_features_FP.html</loc>
+  </url>
+  <url>
+    <loc>http://lbusett.github.io/MODIStsp/reference/standard_CV.html</loc>
+  </url>
+  <url>
+    <loc>http://lbusett.github.io/MODIStsp/reference/zscore_FP.html</loc>
+  </url>
+</urlset>

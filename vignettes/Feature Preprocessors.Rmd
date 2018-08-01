@@ -1,0 +1,27 @@
+---
+title: "Feature preprocessors (FP)"
+
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+<div style="line-height: 1.6em;">
+##Feature Preprocessors
+
+  Feature preprocessors (FP) learn a set of parameters from the training data and modify both the training and the test data based on these parameters (prior to the data being sent to the classifier). The features preprocessor objects must only use the training data to learn the preprocessing parameters in order to prevent contamination between the training and test data which could bias the results. Feature preprocessors must implement the following three methods:
+
+**1. [fp XTr_preprocessed] = fp.set_properties_with_training_data(XTr, YTr)**
+
+This method takes the training data (XTr) and the training labels(YTr) and learns parameters from them. It also applies preprocessing to the training data and returns the modified training data in the variable XTr_preprocessed.
+
+**2. X_preprocessed = fp.preprocess_test_data(X_data)**
+
+The method takes in test data X_data, and applies preprocessing to it based on parameters that have previously been learned using the training data. The resulting preprocessed test data is returned in X_preprocessed.
+
+**3. current_FP_info_to_save = fp.get_current_info_to_save**
+
+This method signals to the cross-validator object to save particular information from the feature-preprocessor. If this method returns an empty matrix, then no additional information about the preprocessing will be saved.
+
+</div> 

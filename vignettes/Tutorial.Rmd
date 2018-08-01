@@ -1,0 +1,46 @@
+---
+title: "Tutorial"
+
+
+output: html_document
+  
+   
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+
+```
+
+<div style="line-height: 1.6em;">
+
+Below are some tutorials that show you how to use the Neural Decoding Toolbox. The introduction tutorial is a simple tutorial that explains the basics of how to decoding simple variables using the Neural Decoding Toolbox and should be read first. Once one has gone through the basic tutorial one can either try the generalization analysis tutorial to see how one can use the Neural Decoding Toolbox to test whether neural activity is invariant to transformations of experimental conditions, or one can get started using your own data by following the getting started with your own data [tutorial](./index.html).
+
+###Overview of the NDT
+
+Neural decoding is a process in which a pattern classifier learns the relationship between neural activity and experimental conditions using a training set of data. The reliability of the relationship between the neural activity and experimental conditions is evaluated by having the classifier predict what experimental conditions were present on a second test set of data.
+
+The NDTr is built around 4 different object classes that allow users to apply neural decoding in a flexible and robust way. The four types of objects are:
+
+  1. [Datasources (DS)](Datasources.html) which generate training and test splits of the data.
+  
+  2. [Feature preprocessors (FP)](Feature Preprocessors.html) which apply preprocessing to the training and test splits.
+ 
+  3. [Classifiers (CL)](Classifiers.html) which learn the relationship between experimental conditions and data on the training set, and then predict experimental conditions on the test data.
+ 
+  4. [Cross-validators (CV)](Cross-validators.html) which take the DS, FP and CL objects and run a cross-validation decoding procedure.
+
+The NDTr comes with a few implementations of each of these objects, and defines interfaces that allow one to create new objects that extend the basic functionality of the four object classes. 
+The following tutorial explains the data formats used by the Neural Decoding Toolbox, and how to run a decoding experiment using the basic versions of the four object classes.
+ 
+####About the data used in this tutorial
+
+The data used in this tutorial was collected by [Ying Zhang in Bob Desimone’s lab at MIT](Zhang_Meyers_PNAS_2011.pdf) and was used in the supplemental figures in the paper Object decoding with attention in inferior temporal cortex, PNAS, 2011. The data consists of single unit recordings from the 132 neurons in inferior temporal cortex (IT). The recordings were made while a monkey viewed 7 different objects that were presented at three different locations (the monkey was also shown images that consisted of three objects shown simultaneously and had to perform an attention task, however for the purposes of this tutorial we are only going to analyze data from trials when single objects were shown). Each object was presented approximately 20 times at each of the three locations.
+
+
+
+###Data formats
+In order to use the NDTr, the neural data must be in a usable format. Typically this involves putting the data in [raster-format](Raster-format.html) and then converting it to [binned-format](Binned-format.html) using the create_binned_data_from_raster_data function that is found in the tools directory. 
+
+</div> 
