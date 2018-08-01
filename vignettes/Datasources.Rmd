@@ -1,0 +1,36 @@
+---
+title: "Datasources(DS)"
+
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+<div style="line-height: 1.6em;">
+
+
+
+Datasource objects (DS) take binned data and labels as inputs and generate population vectors (which are used by a cross-validator object to train and test a classifier).  Datasources must implement a get_data method that returns the training and test data splits.  The get_data method must have the following structure:
+
+**[all_XTr, all_YTr, all_XTe, all_YTe, ADDITIONAL_INFO] = ds.get_data**
+
+The outputs of this methods are:
+
+**1. all_XTr{iTime}{iCV} = [num_features x num_training_points]**
+
+  A cell array that has the training data for all times and cross-validation splits
+
+**2. all_YTr = [num_training_point x 1]**
+
+  The training labels
+
+**3. all_XTe{iTime}{iCV} = [num_features x num_test_points]**
+
+  A cell array that has the test data for all times and cross-validation splits
+
+**4. all_YTe = [num_test_point x 1]**
+
+  The test labels
+
+</div> 
