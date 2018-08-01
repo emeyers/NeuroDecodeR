@@ -14,22 +14,37 @@
 # library(R.matlab)
 #' @ export
 
-create_raster_data_from_matlab_raster_data <- function(matlab_raster_directory_name){
-  # if the directory name ends with a slash, remove this slash
-  non_desired_pattern = '.*/$'
-  if (grepl(non_desired_pattern, matlab_raster_directory_name) == TRUE){
-    matlab_raster_directory_name <- substr(matlab_raster_directory_name, 1, nchar(matlab_raster_directory_name)-1)
-  }  
+# matlab_raster_dir_name <- file.path(getwd(), "data/raster/Zhang_Desimone_7objects_raster_data_mat")
+create_raster_data_from_matlab_raster_data <- function(matlab_raster_dir_name, r_raster_dir_name){
   
-  r_raster_directory_name <- paste0(matlab_raster_directory_name, "_rda/")
-  
-  if(dir.exists(r_raster_directory_name) == FALSE){
-    dir.create(r_raster_directory_name)
+  # zero, create destination dir
+  if(missing(r_raster_dir_name)){
+    # if the directory name ends with a slash, remove this slash
+    regex = '.*/$'
+    if (grepl(regex, matlab_raster_dir_name) == TRUE){
+      matlab_raster_dir_name <- substr(matlab_raster_dir_name, 1, nchar(matlab_raster_dir_name) - 1)
+    }  
+    
+    # if the directory name ends with _mat, remove _mat
+    regex = '.*_mat$'
+    if (grepl(regex, matlab_raster_dir_name) == TRUE){
+      r_raster_dir_name <- substr(matlab_raster_dir_name, 1, nchar(matlab_raster_dir_name) - 4)
+    } 
+    
+    # append Rda
+    r_raster_dir_name <- paste0(r_raster_dir_name, "_rda/")
+    
     
   }
   
+  if(dir.exists(r_raster_dir_name) == FALSE){
+    dir.create(r_raster_dir_name)
+    
+  }
   
-  matlab_file_names <- list.files(matlab_raster_directory_name)
+
+  
+  matlab_file_names <- list.files(matlab_raster_dir_name)
   for (iSite in 1:length(matlab_file_names)) {
     print(iSite)
     
@@ -39,7 +54,7 @@ create_raster_data_from_matlab_raster_data <- function(matlab_raster_directory_n
     # replace .mat with .Rda for matlab_raster_directory_name
     curr_r_file_name <- paste0(substr(curr_matlab_file_name, 1, nchar(curr_matlab_file_name)-3), "Rda")
     
-    raster <- readMat(paste0(matlab_raster_directory_name, "/", curr_matlab_file_name))
+    raster <- readMat(paste0(matlab_raster_dir_name, "/", curr_matlab_file_name))
     
     
     
@@ -109,7 +124,7 @@ create_raster_data_from_matlab_raster_data <- function(matlab_raster_directory_n
     
     # finally, save both raster_site_info and raster data in the file
     
-    save(raster_site_info, raster_data, file = paste0(r_raster_directory_name, curr_r_file_name), compress = TRUE)
+    save(raster_site_info, raster_data, file = paste0(r_raster_dir_name, curr_r_file_name), compress = TRUE)
     
     
     
