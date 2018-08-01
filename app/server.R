@@ -12,6 +12,24 @@ function(input, output, session) {
   
   rv <- reactiveValues()
   
+  rv$cur_neuron <- 1
+  
+  # observe({
+  #   if(!is.null(input$upload)){
+  #     file.copy(input$upload$datapath, "tests")
+  #     print("copy")
+  #     
+  #   }
+  # })
+  # 
+  observe({
+    if(!is.null(input$upload))
+      print("copy")
+
+    
+  })
+
+  
   observeEvent(input$DC_scriptize,{
     
     # all_input <<- names(input)
@@ -38,10 +56,42 @@ function(input, output, session) {
     
   })
   
+  observeEvent(input$bin_pre_neuron,{
+    if(rv$cur_neuron > 2){
+      rv$cur_neuron <- rv$cur_neuron - 1
+    }
+  })
+  
+  observeEvent(input$bin_pre_neuron,{
+    if(rv$cur_neuron < reactive_raster_num_neuron()){
+      rv$cur_neuron <- rv$cur_neuron + 1
+    }
+  })
+  
+  reactive_raster_num_neuron <- reactive({
+    length(reactive_raster_dir_files())
+  })
+  
+  reactive_raster_dir_files <- reactive({
+    req(input$bin_chosen_raster)
+    
+    temp_dir <- paste0('data/raster/', input$bin_chosen_raster)
+    
+    list.files(temp_dir, pattern = "*.Rda")
+                     
+  })
+  
+  reactive_raster_cur_file <- reactive({
+    temp_cur_neuron = isolate(rv$cur_neuron)
+    temp_all_raster_files = reactive_raster_dir_files()
+    temp_all_raster_files[temp_cur_neuron]
+  })
+  
   reactive_validate_for_scriptizing <- reactive({
     
   })
-  reactive_num_neuron <- reactive({
+  
+  reactive_bin_num_neuron <- reactive({
     
     validate(
       need(input$DS_chosen_bin,"Please select data source first to get total number of neurons!")
@@ -106,33 +156,40 @@ function(input, output, session) {
   
   
   
+  output$where = renderDataTable(input$bin_uploaded_raster)
   
   
-  
-  # # labels has to be renamed stimulus.postiiton -> position
-  # reactive_potential_training_var <- reactive({
-  #   temp = reactive_all_var()
-  #   temp[grep(paste0(".",".",input$DS_var,"."), reactive_all_var())
-  #        ]
-  # })
-  # 
-  output$bin_list_of_raster_files = renderUI(
+ 
+  output$bin_list_of_raster_files = renderUI({
     selectInput("bin_chosen_raster",
                 lLabel$bin_chosen_raster,
                 list.dirs('data/raster/', full.names = FALSE),
                 selected = "Zhang_Desimone_7objects_raster_data_rda"
                 
                 
-    ))
+    )
+    })
+  output$bin_cur_neuron = renderText({
+    paste0("current data shown:", "\n", reactive_raster_cur_file())
+
+  })
   
+  output$bin_raster_plot = renderPlot({
+    load()
+  })
+
+  output$bin_PSTH = renderPlot({
+
+  })
   
-  output$DS_list_of_binned_files = renderUI(
+  output$DS_list_of_binned_files = renderUI({
     selectInput("DS_chosen_bin",
                 lLabel$DS_chosen_bin,
                 list.files('data/binned/', "*.Rda"),
                 selected = "ZD_binned_data_150ms_bins_50ms_sampled.Rda"
                 
-    ))
+    )
+    })
   
   
   output$DS_basic_list_of_var_to_decode = renderUI({
@@ -235,7 +292,7 @@ function(input, output, session) {
                    lLabel$FP_selected_k,
                    1,
                    min = 1,
-                   max = reactive_num_neuron())
+                   max = reactive_bin_num_neuron())
       
     }
     
@@ -251,7 +308,7 @@ function(input, output, session) {
                  lLabel$FP_excluded_k,
                  1,
                  min = 1,
-                 max = reactive_num_neuron() - input$FP_selected_k)
+                 max = reactive_bin_num_neuron() - input$FP_selected_k)
   })
   
   

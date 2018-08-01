@@ -26,25 +26,36 @@ ui <- dashboardPage(
                              fileInput("bin_uploaded_raster", lLabel$bin_uploaded_raster, multiple = TRUE),
                              uiOutput("bin_list_of_raster_files"),
                              numericInput("bin_bin_width", lLabel$bin_bin_width, value = 10, min = 1),
-                             numericInput("bin_step_size", lLabel$bin_step_size, value = 1, min = 1)
+                             numericInput("bin_step_size", lLabel$bin_step_size, value = 1, min = 1),
+                             numericInput("bin_start_ind", lLabel$bin_start_ind, value = NULL),
+                             numericInput("bin_end_ind", lLabel$bin_end_ind, value = NULL),
+                             actionButton("bin_bin_data", lLabel$bin_bin_data)
                          ),
-                         actionButton("bin_bin_data", "Bin the data")
+                         box(width = NULL,
+                             checkboxInput("bin_bPlot", lLabel$bin_bPlot),
+                             actionButton("bin_pre_neuron", lLabel$bin_pre_neuron),
+                             actionButton("bin_next_neuron", lLabel$bin_next_neuron),
+                             textOutput("bin_cur_neuron"),
+                             dataTableOutput('where')
+                         )
                          
                          
                   ),
                   column(width = 8,
+                         
+                         
                          box(width = NULL,
                              title = "raster plot",
                              color = "green", ribbon = TRUE, title_side = "top right",
                              
-                             plotOutput("plot1")
+                             plotOutput("bin_raster_plot")
                              
                          ),
                          box(width = NULL,
                              title = "PSTH",
                              color = "red", ribbon = TRUE, title_side = "top right",
                              
-                             plotOutput("plot2")
+                             plotOutput("bin_PSTH")
                              
                          )
                   )

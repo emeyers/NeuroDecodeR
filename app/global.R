@@ -24,7 +24,8 @@ req_dc_para <- c("CL", "CV_bDiag", "CV_repeat", "CV_resample", "CV_split", "DS_c
 
 all_input <- list()
 
-input_id <- c("bin_bin_data", "bin_bin_width", "bin_chosen_raster", "bin_step_size", 
+input_id <- c("bin_bin_data", "bin_bin_width", "bin_bPlot", "bin_chosen_raster",
+              "bin_end_ind", "bin_next_neuron",  "bin_pre_neuron", "bin_start_ind", "bin_step_size", 
   "bin_uploaded_raster", "CL", "CL_SVM_coef0", "CL_SVM_cost", "CL_SVM_degree", 
   "CL_SVM_gamma", "CL_SVM_kernel", "CV_bDiag", "CV_repeat", "CV_resample", 
   "CV_split", "DC_run_decoding", "DC_save_script", "DC_scriptize", 
@@ -35,7 +36,8 @@ input_id <- c("bin_bin_data", "bin_bin_width", "bin_chosen_raster", "bin_step_si
   "script", "sidebarCollapsed", "sidebarItemExpanded")
 
 
-input_label <- c("Bin the data", "Bin width", "Choose your raster data", "Step size",
+input_label <- c("Bin the data", "Bin width", "Plot the data? (only for spike trains)", "Choose your raster data",
+                 "Index of the time where the last bin ends (optional)", "next file", "previous file", "Index of the time where the first bin starts (optional)", "Step size",
                  "Upload new raster data (optional)", "Classifier", "Coef0", "Cost", "Degree of polynomial",
                  "Gamma", "Kernel", "Test only at training times?", "Number of repeats of each level in each CV split", "Number of resampling runs",
                  "Number of cross validation split", "Run decoding", "Save the script", "Generate script from gui configuration",
