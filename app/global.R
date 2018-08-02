@@ -61,9 +61,13 @@ lLabel <- as.list(input_label)
 names(lLabel) <- input_id
 
 binning_paras <- paste0("input$",c("bin_bin_width","bin_chosen_raster","bin_end_ind","bin_start_ind", "bin_step_size"))
-decoding_paras <- paste0("input$",c("CL", "CL_SVM_coef0", "CL_SVM_cost", "CL_SVM_degree",
-                    "CL_SVM_gamma", "CL_SVM_kernel", "CV_bDiag", "CV_repeat", "CV_resample",
-                    "CV_split", "CV_repeat", "CV_resample", "CV_split", "DS_basic_level_to_use", "DS_basic_var_to_decode", "DS_bUse_all_levels",
-                    "DS_chosen_bin", "DS_gen_num_training_level_groups", "DS_gen_var_to_decode",
-                    "DS_gen_var_to_use", "DS_type","FP", "FP_excluded_k",
-                    "FP_selected_k"))
+
+
+temp_decoding_paras_id <<- c("CL", "CL_SVM_coef0", "CL_SVM_cost", "CL_SVM_degree",
+                             "CL_SVM_gamma", "CL_SVM_kernel", "CV_bDiag", "CV_repeat", "CV_resample",
+                             "CV_split", "CV_repeat", "CV_resample", "CV_split", "DS_basic_level_to_use", "DS_basic_var_to_decode", "DS_bUse_all_levels",
+                             "DS_chosen_bin", "DS_gen_num_training_level_groups", "DS_gen_var_to_decode",
+                             "DS_gen_var_to_use", "DS_type","FP", "FP_excluded_k",
+                             "FP_selected_k")
+
+temp_decoding_paras_input_id <<- paste0("input$", temp_decoding_paras_id)

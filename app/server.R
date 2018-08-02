@@ -58,26 +58,53 @@ function(input, output, session) {
     create_raster_data_from_matlab_raster_data(reactive_raster_cur_dir(), input$bin_new_raster)
   })
   observeEvent(input$DC_scriptize,{
+    temp_decoding_paras_id <<- c("CL", "CL_SVM_coef0", "CL_SVM_cost", "CL_SVM_degree",
+                                "CL_SVM_gamma", "CL_SVM_kernel", "CV_bDiag", "CV_repeat", "CV_resample",
+                                "CV_split", "CV_repeat", "CV_resample", "CV_split", "DS_basic_level_to_use", "DS_basic_var_to_decode", "DS_bUse_all_levels",
+                                "DS_chosen_bin", "DS_gen_num_training_level_groups", "DS_gen_var_to_decode",
+                                "DS_gen_var_to_use", "DS_type","FP", "FP_excluded_k",
+                                "FP_selected_k")
+    if(!is.null(input$DS_gen_num_training_level_groups)){
+      temp_training_level_groups <<- paste0("input$DS_training_level_group_", c(1:input$DS_gen_num_training_level_groups))
+      temp_testing_level_groups <<- paste0("input$DS_testing_level_group_", c(1:input$DS_gen_num_testing_level_groups))
+      temp_decoding_paras_id <<- c(temp_decoding_paras_id, trainin_level_groups, testing_level_groups)
+    } 
     
+    
+    # my_decoding_paras <<- paste0("my_",decoding_paras)
     # all_input <<- names(input)
     
-    temp_need = lapply(req_dc_para, function(i){
-      print(eval(parse(text = paste0("!is.null(input$",i,")"))))
-      # when needed thing exist, it returns NULL
-      # https://github.com/rstudio/shiny/blob/master/R/utils.R
-      eval(parse(text = paste0("need(!is.null(input$",i,"),'bang')")))
+    #   temp_need = lapply(req_dc_para, function(i){
+    #     print(eval(parse(text = paste0("!is.null(input$",i,")"))))
+    #     # when needed thing exist, it returns NULL
+    #     # https://github.com/rstudio/shiny/blob/master/R/utils.R
+    #     eval(parse(text = paste0("need(!is.null(input$",i,"),'bang')")))
+    #   })
+    #   
+    #   output$DC_scriptize_error <- renderText({
+    #     # do.call(validate, temp_need)
+    #     # eval(parse(text = temp_val))
+    #     rv$script <- create_script(input)
+    #     print(rv$script)
+    #   })
+    #   
+    #   # do.call(validate, temp)
+    #   
+    temp_decoding_paras <- lapply(temp_decoding_paras_input_id, function(i){
+      eval(parse(text = i))
     })
     
-    output$DC_scriptize_error <- renderText({
-      # do.call(validate, temp_need)
-      # eval(parse(text = temp_val))
-      rv$script <- create_script(input)
-      print(rv$script)
-    })
+    print(temp_decoding_paras)
+    lDecoding_paras <- as.list(temp_decoding_paras)
+    lDecoding_paras <- setNames(lDecoding_paras, temp_decoding_paras_id)
     
-    # do.call(validate, temp)
+    print(lDecoding_paras)
+    print(lDecoding_paras$CL)
+    create_script(temp_input_decoding_paras)
     
   })
+  
+  
   
   observeEvent(input$DC_script,{
     

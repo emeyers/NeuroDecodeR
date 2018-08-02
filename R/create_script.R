@@ -1,11 +1,11 @@
 #' @export
-create_script <- function(my_inputs) {
+create_script <- function(my_decoding_paras) {
   
-  all_my_inputs <<- names(my_inputs)
+  all_my_inputs <<- names(my_decoding_paras)
   
-  my_inputs_global <<- my_inputs
+  my_inputs_global <<- my_decoding_parass
   
-  print(names(my_inputs))
+  print(names(my_decoding_paras))
   
   
   script_dir_name <- "scripts"
