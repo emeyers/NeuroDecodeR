@@ -1,11 +1,11 @@
 #' @export
-create_script <- function(my_input) {
+create_script <- function(my_inputs) {
   
-  all_my_input <<- names(my_input)
+  all_my_inputs <<- names(my_inputs)
   
-  my_input_global <<- my_input
+  my_inputs_global <<- my_inputs
   
-  print(names(my_input))
+  print(names(my_inputs))
   
   
   script_dir_name <- "scripts"
@@ -32,7 +32,7 @@ create_script <- function(my_input) {
   write("```{r setup, include=FALSE}
         knitr::opts_chunk$set(echo = TRUE)
         ```\n\n", file = script_full_name, append = TRUE)
-  # if(my_input$DS_tpye == "basic_DS"){
+  # if(my_inputs$DS_tpye == "basic_DS"){
   #   print("YEAH")
   # }
   # 

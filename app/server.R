@@ -3,7 +3,7 @@ require('fields')
 require('ggplot2')
 require('stringr')
 require("shinyAce")
-
+require("plotrix")
 
 
 function(input, output, session) {
@@ -25,11 +25,38 @@ function(input, output, session) {
   observe({
     if(!is.null(input$upload))
       print("copy")
-
+    
     
   })
-
   
+  
+  observeEvent(input$bin_bin_data,{
+    if(reactive_bRaster_in_rda()){
+      print(input$bin_start_ind)
+      temp_call = paste0("create_binned_data(reactive_raster_cur_dir(),",
+                         "input$bin_prefix_of_binned_file_name,",
+                         "input$bin_bin_width, input$bin_step_size")
+      if(!is.na(input$bin_start_ind)){
+        temp_call = paste0(temp_call, ",input$bin_start_ind")
+      }
+      if(!is.na(input$bin_end_ind)){
+        temp_call = paste0(temp_call, ",input$bin_end_ind")
+      }
+      temp_call = paste0(temp_call,")")
+      print(temp_call)
+      eval(parse(text = temp_call))
+    } else{
+      create_binned_data_from_matlab_raster_data(reactive_raster_cur_dir(),
+                                                 input$bin_prefix_of_binned_file_name,
+                                                 input$bin_bin_width, input$bin_step_size)
+      
+    }
+    
+  })
+  
+  observeEvent(input$bin_create_raster_data,{
+    create_raster_data_from_matlab_raster_data(reactive_raster_cur_dir(), input$bin_new_raster)
+  })
   observeEvent(input$DC_scriptize,{
     
     # all_input <<- names(input)
@@ -57,39 +84,72 @@ function(input, output, session) {
   })
   
   observeEvent(input$bin_pre_neuron,{
-    if(rv$cur_neuron > 2){
+    if(rv$cur_neuron > 1){
       rv$cur_neuron <- rv$cur_neuron - 1
+      # print("pre")
+      # print(rv$cur_neuron)
+      
+    }
+    
+  })
+  
+  observeEvent(input$bin_next_neuron,{
+    if(rv$cur_neuron < reactive_raster_num_neuron()){
+      rv$cur_neuron <- rv$cur_neuron + 1
+      # print(reactive_raster_num_neuron())
+      # print("next")
+      # print(rv$cur_neuron)
+      
     }
   })
   
-  observeEvent(input$bin_pre_neuron,{
-    if(rv$cur_neuron < reactive_raster_num_neuron()){
-      rv$cur_neuron <- rv$cur_neuron + 1
+  reactive_bRaster_in_rda <- reactive({
+    if(length(reactive_names_of_Rda_files_in_cur_raster_dir()) > 0){
+      TRUE
+    } else{
+      FALSE
     }
+    
   })
   
   reactive_raster_num_neuron <- reactive({
-    length(reactive_raster_dir_files())
+    length(reactive_names_of_Rda_files_in_cur_raster_dir())
   })
   
-  reactive_raster_dir_files <- reactive({
-    req(input$bin_chosen_raster)
-    
-    temp_dir <- paste0('data/raster/', input$bin_chosen_raster)
-    
-    list.files(temp_dir, pattern = "*.Rda")
-                     
+  
+  reactive_raster_cur_file_name <- reactive({
+    temp_all_raster_files = reactive_names_of_Rda_files_in_cur_raster_dir()
+    temp_all_raster_files[rv$cur_neuron]
   })
   
-  reactive_raster_cur_file <- reactive({
-    temp_cur_neuron = isolate(rv$cur_neuron)
-    temp_all_raster_files = reactive_raster_dir_files()
-    temp_all_raster_files[temp_cur_neuron]
+  reactive_raster_cur_data <- reactive({
+    
+    load(file.path(reactive_raster_cur_dir(), reactive_raster_cur_file_name()))
+    select(raster_data, starts_with("time."))
+  })
+  
+  reactive_names_of_Rda_files_in_cur_raster_dir <- reactive({
+    
+    list.files(reactive_raster_cur_dir(), pattern = "*.Rda")
+    
+  })
+  
+  reactive_raster_cur_dir <- reactive({
+    temp_base_dir <- input$bin_raster_base_dir
+    # remove the slash at the end
+    regex = '.*/$'
+    if (grepl(regex, temp_base_dir) == TRUE){
+      temp_base_dir <- substr(temp_base_dir, 1, nchar(temp_base_dir) - 1)
+    } 
+    
+    file.path(temp_base_dir, input$bin_chosen_raster)
+    
   })
   
   reactive_validate_for_scriptizing <- reactive({
     
   })
+  
   
   reactive_bin_num_neuron <- reactive({
     
@@ -158,28 +218,40 @@ function(input, output, session) {
   
   output$where = renderDataTable(input$bin_uploaded_raster)
   
+  output$bin_offer_create_raster = renderUI({
+    # print(reactive_bRaster_in_rda())
+    if(!reactive_bRaster_in_rda()){
+      checkboxInput("bin_bCreate_raster",lLabel$bin_bCreate_raster)
+    }
+  })
   
- 
-  output$bin_list_of_raster_files = renderUI({
+  output$bin_list_of_raster_dirs = renderUI({
     selectInput("bin_chosen_raster",
                 lLabel$bin_chosen_raster,
-                list.dirs('data/raster/', full.names = FALSE),
+                list.dirs(input$bin_raster_base_dir, full.names = FALSE),
                 selected = "Zhang_Desimone_7objects_raster_data_rda"
                 
                 
     )
-    })
+  })
+  
   output$bin_cur_neuron = renderText({
-    paste0("current data shown:", "\n", reactive_raster_cur_file())
-
+    paste0("current data shown:", "\n", reactive_raster_cur_file_name())
+    
   })
   
   output$bin_raster_plot = renderPlot({
-    load()
+    
+    temp_raster <- reactive_raster_cur_data() 
+    
+    color2D.matplot(1 - temp_raster, border = NA, xlab = "Time (ms)",
+                    ylab = "Trial")
   })
-
+  
   output$bin_PSTH = renderPlot({
-
+    temp_raster <- reactive_raster_cur_data()
+    plot(colSums(temp_raster, na.rm = FALSE, dims = 1)/nrow(temp_raster),
+         xlab = "Time(ms)", ylab = "average firing rate")
   })
   
   output$DS_list_of_binned_files = renderUI({
@@ -189,7 +261,7 @@ function(input, output, session) {
                 selected = "ZD_binned_data_150ms_bins_50ms_sampled.Rda"
                 
     )
-    })
+  })
   
   
   output$DS_basic_list_of_var_to_decode = renderUI({

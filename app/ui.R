@@ -16,51 +16,79 @@ ui <- dashboardPage(
   dashboardBody(
     tabItems(
       tabItem(tabName = "bin",
-              fluidPage(
-                
-                fluidRow(
-                  column(width = 4,
-                         box(width = NULL,
-                             shinyFilesButton('files', label='File select', title='Please select a file', multiple=FALSE),
-                             
-                             fileInput("bin_uploaded_raster", lLabel$bin_uploaded_raster, multiple = TRUE),
-                             uiOutput("bin_list_of_raster_files"),
-                             numericInput("bin_bin_width", lLabel$bin_bin_width, value = 10, min = 1),
-                             numericInput("bin_step_size", lLabel$bin_step_size, value = 1, min = 1),
-                             numericInput("bin_start_ind", lLabel$bin_start_ind, value = NULL),
-                             numericInput("bin_end_ind", lLabel$bin_end_ind, value = NULL),
-                             actionButton("bin_bin_data", lLabel$bin_bin_data)
+              navbarPage(title = "",
+                         tabPanel(
+                           title = "Choose raster data",
+                           fluidPage(
+                             fluidRow(
+                               column(width = 4,
+                                      box(width = NULL,
+                                          shinyFilesButton('files', label='File select', title='Please select a file', multiple=FALSE),
+                                          
+                                          fileInput("bin_uploaded_raster", lLabel$bin_uploaded_raster, multiple = TRUE),
+                                          textInput("bin_raster_base_dir", lLabel$bin_raster_base_dir, 'data/raster/'),
+                                          uiOutput("bin_list_of_raster_dirs"),
+                                          checkboxInput("bin_bPlot", lLabel$bin_bPlot),
+                                          conditionalPanel(condition = "input.bin_bPlot",
+                                                           actionButton("bin_pre_neuron", lLabel$bin_pre_neuron),
+                                                           actionButton("bin_next_neuron", lLabel$bin_next_neuron),
+                                                           textOutput("bin_cur_neuron")),
+                                          dataTableOutput('where')
+                                      )
+                               ),
+                               column(width = 8,
+                                      
+                                      
+                                      box(width = NULL,
+                                          title = "Raster plot",
+                                          color = "green", ribbon = TRUE, title_side = "top right",
+                                          conditionalPanel(condition = "input.bin_bPlot",
+                                                           
+                                                           plotOutput("bin_raster_plot"))
+                                          
+                                      ),
+                                      box(width = NULL,
+                                          title = "PSTH (Peristimulus time histogram)",
+                                          color = "red", ribbon = TRUE, title_side = "top right",
+                                          conditionalPanel(condition = "input.bin_bPlot",
+                                                           
+                                                           plotOutput("bin_PSTH"))
+                                          
+                                      )
+                               )
+                             )
+                           )
                          ),
-                         box(width = NULL,
-                             checkboxInput("bin_bPlot", lLabel$bin_bPlot),
-                             actionButton("bin_pre_neuron", lLabel$bin_pre_neuron),
-                             actionButton("bin_next_neuron", lLabel$bin_next_neuron),
-                             textOutput("bin_cur_neuron"),
-                             dataTableOutput('where')
+                         
+                         
+                         
+                         tabPanel(
+                           title = "Specifing binnnig parameters",
+                           fluidPage(
+                             
+                             fluidRow(
+                               column(width = 8,
+                                      box(width = NULL,
+                                          uiOutput("bin_offer_create_raster"),
+                                          conditionalPanel(condition = "input.bin_bCreate_raster",
+                                                           textInput("bin_new_raster", lLabel$bin_prefix_of_new_raster),
+                                                           actionButton("bin_create_raster", lLabel$bin_create_raster)),
+                                          numericInput("bin_bin_width", lLabel$bin_bin_width, value = 10, min = 1),
+                                          numericInput("bin_step_size", lLabel$bin_step_size, value = 1, min = 1),
+                                          numericInput("bin_start_ind", lLabel$bin_start_ind, value = NULL),
+                                          numericInput("bin_end_ind", lLabel$bin_end_ind, value = NULL),
+                                          actionButton("bin_bin_data", lLabel$bin_bin_data)
+                                      )
+                                      
+                                      
+                                      
+                               )
+                               
+                             )
+                           )
                          )
-                         
-                         
-                  ),
-                  column(width = 8,
-                         
-                         
-                         box(width = NULL,
-                             title = "raster plot",
-                             color = "green", ribbon = TRUE, title_side = "top right",
-                             
-                             plotOutput("bin_raster_plot")
-                             
-                         ),
-                         box(width = NULL,
-                             title = "PSTH",
-                             color = "red", ribbon = TRUE, title_side = "top right",
-                             
-                             plotOutput("bin_PSTH")
-                             
-                         )
-                  )
-                )
               )
+              
               
       ),
       tabItem(tabName = "decode",
@@ -76,13 +104,7 @@ ui <- dashboardPage(
                                       tabBox(width = 12,
                                              height = 1000,
                                              
-                                             tabPanel("Script",
-                                                      fileInput("DC_upload", lLabel$DC_upload, multiple = TRUE),
-                                                      # script will show upon chosen
-                                                      uiOutput("DC_list_of_scripts"),
-                                                      actionButton("DC_scriptize", "generate script from gui configuration"),
-                                                      uiOutput("DC_scriptize_error")
-                                             ),
+                                             
                                              tabPanel(
                                                title = "Data source",
                                                width = NULL,
@@ -110,9 +132,8 @@ ui <- dashboardPage(
                                                                 uiOutput("DS_gen_list_of_training_level_groups"),
                                                                 uiOutput("DS_gen_list_of_testing_level_groups")
                                                )
-                                               
-                                               
                                              ),
+                                             
                                              tabPanel(
                                                title = "Classifier",
                                                width = NULL,
@@ -170,7 +191,17 @@ ui <- dashboardPage(
                                                numericInput("CV_split", lLabel$CV_split, value = 5, min = 2),
                                                numericInput("CV_resample", lLabel$CV_resample, value = 20, min = 1),
                                                checkboxInput("CV_bDiag", lLabel$CV_bDiag,TRUE)
+                                             ),
+                                             tabPanel("Script",
+                                                      fileInput("DC_upload", lLabel$DC_upload, multiple = TRUE),
+                                                      # script will show upon chosen
+                                                      uiOutput("DC_list_of_scripts"),
+                                                      actionButton("DC_scriptize", "generate script from gui configuration"),
+                                                      uiOutput("DC_scriptize_error")
                                              )
+                                             
+                                             
+                                             
                                       )),
                                
                                
@@ -195,7 +226,7 @@ ui <- dashboardPage(
                            
                          ),
                          tabPanel(
-                           title = "Result plot",
+                           title = "Plot decoding results",
                            
                            column(width = 12,
                                   #issue cannot make use of the large blank on the right 
