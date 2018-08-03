@@ -129,8 +129,8 @@ ui <- dashboardPage(
                                                                 uiOutput("DS_gen_list_of_var_to_decode"),
                                                                 uiOutput("DS_gen_list_of_var_to_use"),
                                                                 uiOutput("DS_gen_select_num_of_groups"),
-                                                                uiOutput("DS_gen_list_of_training_level_groups"),
-                                                                uiOutput("DS_gen_list_of_testing_level_groups")
+                                                                uiOutput("DS_gen_list_of_training_level_groups")#,
+                                                                # uiOutput("DS_gen_list_of_testing_level_groups")
                                                )
                                              ),
                                              

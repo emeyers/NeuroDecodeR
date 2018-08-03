@@ -22,20 +22,41 @@ create_script <- function(my_decoding_paras) {
   
   
   # write the header
-  write("---\ntitle: 'Decoding Analysis'\noutput: pdf_document\n---\n", 
-        file = script_full_name)
-  
-  
-  
-  
-  # write options for displaying the chunks
-  write("```{r setup, include=FALSE}
+  # write("---\ntitle: 'Decoding Analysis'\noutput: pdf_document\n---\n", 
+        # file = script_full_name)
+  text = paste0("---\ntitle: 'Decoding Analysis'\noutput: pdf_document\n---\n",
+                "```{r setup, include=FALSE}
         knitr::opts_chunk$set(echo = TRUE)
-        ```\n\n", file = script_full_name, append = TRUE)
-  # if(my_inputs$DS_tpye == "basic_DS"){
-  #   print("YEAH")
-  # }
-  # 
+                ```\n\n") 
+  
+  if(my_decoding_paras$DS_type == "basic_DS"){
+
+    
+   text = paste0(text, "ds <- basic_DS$new(",
+                 my_decoding_paras$DS_chosen_bin,
+                 my_decoding_paras$DS_basic_var_to_decode,
+                 my_decoding_paras$CV_split) 
+  }
+  
+  text = paste0(text, "cl <- ", my_decoding_paras$CL, "$new()")
+  
+  text = paste0(text, "fps <-list (")
+                
+  if(grepl(my_decoding_paras$FP, all_fp[2]) == TRUE){
+    text = paste0(text, my_decoding_paras$FP[2])
+                  
+  }
+
+  if(grepl(my_decoding_paras$FP, all_fp[1]) == TRUE){
+    text = paste0(text, my_decoding_paras$FP[2])
+    
+  }
+  
+  # # write options for displaying the chunks
+  # write("```{r setup, include=FALSE}
+  #       knitr::opts_chunk$set(echo = TRUE)
+  #       ```\n\n", file = script_full_name, append = TRUE)
+
   
 
   

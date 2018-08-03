@@ -95,8 +95,8 @@ function(input, output, session) {
     })
     
     print(temp_decoding_paras)
-    lDecoding_paras <- as.list(temp_decoding_paras)
-    lDecoding_paras <- setNames(lDecoding_paras, temp_decoding_paras_id)
+    lDecoding_paras <<- as.list(temp_decoding_paras)
+    lDecoding_paras <<- setNames(lDecoding_paras, temp_decoding_paras_id)
     
     print(lDecoding_paras)
     print(lDecoding_paras$CL)
@@ -336,42 +336,74 @@ function(input, output, session) {
                  max  = temp_max)
     # print(temp_max)
   })
+  
   output$DS_gen_list_of_training_level_groups = renderUI({
     req(input$DS_gen_num_training_level_groups)
     temp_num <- input$DS_gen_num_training_level_groups
     # print(temp_num)
     # if(!is.null(temp_num)){
-    lapply(1:temp_num, function(i){
-      selectInput(paste0("DS_training_level_group_", i),
+    temp_output <- lapply(1:temp_num, function(i){
+      list(selectInput(paste0("DS_training_level_group_", i),
                   paste("Training level group", i),
                   reactive_all_levels_of_gen_var_to_use(),
-                  multiple = TRUE    
-      )
-      
+                  multiple = TRUE
+      ),
+      selectInput(paste0("DS_testing_level_group_", i),
+                    paste("Testing level group", i),
+                    reactive_all_levels_of_gen_var_to_use(),
+                    multiple = TRUE
+      ))
+
+
     })
+    print(temp_output)
+    output <- unlist(temp_output, recursive = FALSE)
+    # output <- do.call(c, unlist(temp_output, recursive=FALSE))
+    print(output)
+    output
     # }
-    
-    
+
+
   })
   
-  output$DS_gen_list_of_testing_level_groups = renderUI({
-    req(input$DS_gen_num_training_level_groups)
-    
-    temp_num <- input$DS_gen_num_training_level_groups
-    # print(temp_num)
-    # if(!is.null(temp_num)){
-    lapply(1:temp_num, function(i){
-      selectInput(paste0("DS_testing_level_group_", i),
-                  paste("Testing level group", i),
-                  reactive_all_levels_of_gen_var_to_use(),
-                  multiple = TRUE    
-      )
-      
-    })
-    # }
-    
-    
-  })
+  # output$DS_gen_list_of_training_level_groups = renderUI({
+  #   req(input$DS_gen_num_training_level_groups)
+  #   temp_num <- input$DS_gen_num_training_level_groups
+  #   # print(temp_num)
+  #   # if(!is.null(temp_num)){
+  #   temp_output <- lapply(1:temp_num, function(i){
+  #     selectInput(paste0("DS_training_level_group_", i),
+  #                           paste("Training level group", i),
+  #                           reactive_all_levels_of_gen_var_to_use(),
+  #                           multiple = TRUE    
+  #     )
+  #     
+  #   })
+  #   print(temp_output)
+  #   # unlist(temp_output)
+  #   # }
+  #   
+  #   
+  # })
+  
+  # output$DS_gen_list_of_testing_level_groups = renderUI({
+  #   req(input$DS_gen_num_training_level_groups)
+  #   
+  #   temp_num <- input$DS_gen_num_training_level_groups
+  #   # print(temp_num)
+  #   # if(!is.null(temp_num)){
+  #   lapply(1:temp_num, function(i){
+  #     selectInput(paste0("DS_testing_level_group_", i),
+  #                 paste("Testing level group", i),
+  #                 reactive_all_levels_of_gen_var_to_use(),
+  #                 multiple = TRUE    
+  #     )
+  #     
+  #   })
+  #   # }
+  #   
+  #   
+  # })
   
   
   
