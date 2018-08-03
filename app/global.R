@@ -10,8 +10,8 @@ setwd("..")
 
 # df_cl_fp <- data.frame(c(1, 1, 1), c(1, 1, 1), c(1, 1, 0))
 
-all_cl <- c("maximum correlation", "support vecotor machine", "poisson naive bayes")
-all_fp <- c("select or exclude top k features", "zscore_normalize")
+all_cl <- c("maximum_correlation_CL", "svm_CL", "poisson_naive_bayes_CL")
+all_fp <- c("select_k_features_FP", "zscore_FP")
 
 df_cl_fp <- data.frame(c(1, 1), c(1, 1), c(1, 0))
 
