@@ -1,15 +1,11 @@
-require('dplyr')
-require('fields')
-require('ggplot2')
-require('stringr')
-require("shinyAce")
-require("plotrix")
+
 
 
 function(input, output, session) {
   
-  shinyFileChoose(input, 'files', root=c(root='.'), filetypes=c('', 'txt'))
-  
+  # shinyFileChoose(input, 'files', root=c(root='.'), filetypes=c('', 'txt'))
+  shinyDirChoose(input, "bin_raster_dir", roots = c(wd='.'))
+  # , filetypes = c("mat", "Rda")
   rv <- reactiveValues()
   
   rv$cur_neuron <- 1
@@ -23,6 +19,10 @@ function(input, output, session) {
   # })
   # 
   observe({
+    wd = getwd()
+    a = parseFilePaths(wd,input$bin_raster_dir)
+    print(typeof(a))
+    print(a)
     if(!is.null(input$upload))
       print("copy")
     

@@ -1,8 +1,12 @@
 library(shinydashboard)
 library(shinyAce)
 library(shinyFiles)
-# library(semantic.dashboard)
-
+require('dplyr')
+require('fields')
+require('ggplot2')
+require('stringr')
+require("shinyAce")
+require("plotrix")
 
 ui <- dashboardPage(
   dashboardHeader(title = "NDTr"),
@@ -23,8 +27,8 @@ ui <- dashboardPage(
                              fluidRow(
                                column(width = 4,
                                       box(width = NULL,
-                                          shinyFilesButton('files', label='File select', title='Please select a file', multiple=FALSE),
-                                          
+                                          # shinyFilesButton('files', label='File select', title='Please select a file', multiple=FALSE),
+                                          shinyDirButton("bin_raster_dir", lLabel$bin_raster_dir, "", FALSE),
                                           fileInput("bin_uploaded_raster", lLabel$bin_uploaded_raster, multiple = TRUE),
                                           textInput("bin_raster_base_dir", lLabel$bin_raster_base_dir, 'data/raster/'),
                                           uiOutput("bin_list_of_raster_dirs"),
@@ -35,27 +39,27 @@ ui <- dashboardPage(
                                                            textOutput("bin_cur_neuron")),
                                           dataTableOutput('where')
                                       )
-                               ),
-                               column(width = 8,
-                                      
-                                      
-                                      box(width = NULL,
-                                          title = "Raster plot",
-                                          color = "green", ribbon = TRUE, title_side = "top right",
-                                          conditionalPanel(condition = "input.bin_bPlot",
-                                                           
-                                                           plotOutput("bin_raster_plot"))
-                                          
-                                      ),
-                                      box(width = NULL,
-                                          title = "PSTH (Peristimulus time histogram)",
-                                          color = "red", ribbon = TRUE, title_side = "top right",
-                                          conditionalPanel(condition = "input.bin_bPlot",
-                                                           
-                                                           plotOutput("bin_PSTH"))
-                                          
-                                      )
-                               )
+                                ) #,
+                               # column(width = 8,
+                               #        
+                               #        
+                               #        box(width = NULL,
+                               #            title = "Raster plot",
+                               #            color = "green", ribbon = TRUE, title_side = "top right",
+                               #            conditionalPanel(condition = "input.bin_bPlot",
+                               #                             
+                               #                             plotOutput("bin_raster_plot"))
+                               #            
+                               #        ),
+                               #        box(width = NULL,
+                               #            title = "PSTH (Peristimulus time histogram)",
+                               #            color = "red", ribbon = TRUE, title_side = "top right",
+                               #            conditionalPanel(condition = "input.bin_bPlot",
+                               #                             
+                               #                             plotOutput("bin_PSTH"))
+                               #            
+                               #        )
+                               # )
                              )
                            )
                          ),
