@@ -4,11 +4,17 @@
 function(input, output, session) {
   
   # shinyFileChoose(input, 'files', root=c(root='.'), filetypes=c('', 'txt'))
-  shinyDirChoose(input, "bin_raster_dir", roots = c(wd='.'))
+  shinyDirChoose(input, "bin_chosen_raster", roots = c(wd='.'))
   # , filetypes = c("mat", "Rda")
   rv <- reactiveValues()
   
-  rv$cur_neuron <- 1
+  rv$raster_cur_dir_name <- NULL
+  rv$raster_cur_neuron <- 1
+  rv$raster_num_neuron <- NA
+  rv$raster_cur_file_name <- NULL
+  rv$raster_cur_data <- NULL
+  rv$raster_bRda <- FALSE
+  rv$raster_bMat <-FALSE
   
   # observe({
   #   if(!is.null(input$upload)){
@@ -19,21 +25,40 @@ function(input, output, session) {
   # })
   # 
   observe({
-    wd = getwd()
-    a = parseFilePaths(wd,input$bin_raster_dir)
-    print(typeof(a))
-    print(a)
-    if(!is.null(input$upload))
-      print("copy")
+    req(input$bin_chosen_raster)
+    # if(input$bin_bPlot){
+    temp_names_of_all_mat_files_in_raster_dir <- 
+      list.files(rv$raster_cur_dir_name, pattern = "*.mat")
+    if(length(temp_names_of_all_mat_files_in_raster_dir) > 0){
+      rv$raster_bMat <- TRUE
+    } else {      
+      temp_names_of_all_rda_files_in_raster_dir <- 
+        list.files(rv$raster_cur_dir_name, pattern = "*.Rda")
+      rv$raster_num_neuron <- length(temp_names_of_all_rda_files_in_raster_dir)
+      if(rv$raster_num_neuron > 0){
+        rv$raster_bRda <- TRUE
+      } else{
+        validate("Only accept raster data in .mat or .Rda format")
+      }
+      rv$raster_cur_file_name <- temp_names_of_all_rda_files_in_raster_dir[rv$raster_cur_neuron]
+      load(file.path(rv$raster_cur_dir_name, rv$raster_cur_file_name))
+      rv$raster_cur_data <- select(raster_data, starts_with("time."))
+      
+    }
+    
+    
+    
+    
+    # }
     
     
   })
   
   
   observeEvent(input$bin_bin_data,{
-    if(reactive_bRaster_in_rda()){
+    if(rv$raster_bRda){
       print(input$bin_start_ind)
-      temp_call = paste0("create_binned_data(reactive_raster_cur_dir(),",
+      temp_call = paste0("create_binned_data(input$bin_chosen_raster(),",
                          "input$bin_prefix_of_binned_file_name,",
                          "input$bin_bin_width, input$bin_step_size")
       if(!is.na(input$bin_start_ind)){
@@ -46,7 +71,7 @@ function(input, output, session) {
       print(temp_call)
       eval(parse(text = temp_call))
     } else{
-      create_binned_data_from_matlab_raster_data(reactive_raster_cur_dir(),
+      create_binned_data_from_matlab_raster_data(input$bin_chosen_raster(),
                                                  input$bin_prefix_of_binned_file_name,
                                                  input$bin_bin_width, input$bin_step_size)
       
@@ -55,15 +80,15 @@ function(input, output, session) {
   })
   
   observeEvent(input$bin_create_raster_data,{
-    create_raster_data_from_matlab_raster_data(reactive_raster_cur_dir(), input$bin_new_raster)
+    create_raster_data_from_matlab_raster_data(input$bin_chosen_raster(), input$bin_new_raster)
   })
   observeEvent(input$DC_scriptize,{
     temp_decoding_paras_id <<- c("CL", "CL_SVM_coef0", "CL_SVM_cost", "CL_SVM_degree",
-                                "CL_SVM_gamma", "CL_SVM_kernel", "CV_bDiag", "CV_repeat", "CV_resample",
-                                "CV_split", "CV_repeat", "CV_resample", "CV_split", "DS_basic_level_to_use", "DS_basic_var_to_decode", "DS_bUse_all_levels",
-                                "DS_chosen_bin", "DS_gen_num_training_level_groups", "DS_gen_var_to_decode",
-                                "DS_gen_var_to_use", "DS_type","FP", "FP_excluded_k",
-                                "FP_selected_k")
+                                 "CL_SVM_gamma", "CL_SVM_kernel", "CV_bDiag", "CV_repeat", "CV_resample",
+                                 "CV_split", "CV_repeat", "CV_resample", "CV_split", "DS_basic_level_to_use", "DS_basic_var_to_decode", "DS_bUse_all_levels",
+                                 "DS_chosen_bin", "DS_gen_num_training_level_groups", "DS_gen_var_to_decode",
+                                 "DS_gen_var_to_use", "DS_type","FP", "FP_excluded_k",
+                                 "FP_selected_k")
     if(!is.null(input$DS_gen_num_training_level_groups)){
       temp_training_level_groups <<- paste0("input$DS_training_level_group_", c(1:input$DS_gen_num_training_level_groups))
       temp_testing_level_groups <<- paste0("input$DS_testing_level_group_", c(1:input$DS_gen_num_testing_level_groups))
@@ -111,67 +136,26 @@ function(input, output, session) {
   })
   
   observeEvent(input$bin_pre_neuron,{
-    if(rv$cur_neuron > 1){
-      rv$cur_neuron <- rv$cur_neuron - 1
+    if(rv$raster_cur_neuron > 1){
+      rv$raster_cur_neuron <- rv$raster_cur_neuron - 1
       # print("pre")
-      # print(rv$cur_neuron)
+      # print(rv$raster_cur_neuron)
       
     }
     
   })
   
   observeEvent(input$bin_next_neuron,{
-    if(rv$cur_neuron < reactive_raster_num_neuron()){
-      rv$cur_neuron <- rv$cur_neuron + 1
-      # print(reactive_raster_num_neuron())
+    if(rv$raster_cur_neuron < rv$raster_num_neuron){
+      rv$raster_cur_neuron <- rv$raster_cur_neuron + 1
+      # print(rv$raster_num_neuron)
       # print("next")
-      # print(rv$cur_neuron)
+      # print(rv$raster_cur_neuron)
       
     }
   })
   
-  reactive_bRaster_in_rda <- reactive({
-    if(length(reactive_names_of_Rda_files_in_cur_raster_dir()) > 0){
-      TRUE
-    } else{
-      FALSE
-    }
-    
-  })
   
-  reactive_raster_num_neuron <- reactive({
-    length(reactive_names_of_Rda_files_in_cur_raster_dir())
-  })
-  
-  
-  reactive_raster_cur_file_name <- reactive({
-    temp_all_raster_files = reactive_names_of_Rda_files_in_cur_raster_dir()
-    temp_all_raster_files[rv$cur_neuron]
-  })
-  
-  reactive_raster_cur_data <- reactive({
-    
-    load(file.path(reactive_raster_cur_dir(), reactive_raster_cur_file_name()))
-    select(raster_data, starts_with("time."))
-  })
-  
-  reactive_names_of_Rda_files_in_cur_raster_dir <- reactive({
-    
-    list.files(reactive_raster_cur_dir(), pattern = "*.Rda")
-    
-  })
-  
-  reactive_raster_cur_dir <- reactive({
-    temp_base_dir <- input$bin_raster_base_dir
-    # remove the slash at the end
-    regex = '.*/$'
-    if (grepl(regex, temp_base_dir) == TRUE){
-      temp_base_dir <- substr(temp_base_dir, 1, nchar(temp_base_dir) - 1)
-    } 
-    
-    file.path(temp_base_dir, input$bin_chosen_raster)
-    
-  })
   
   reactive_validate_for_scriptizing <- reactive({
     
@@ -246,37 +230,50 @@ function(input, output, session) {
   output$where = renderDataTable(input$bin_uploaded_raster)
   
   output$bin_offer_create_raster = renderUI({
-    # print(reactive_bRaster_in_rda())
-    if(!reactive_bRaster_in_rda()){
+    req(input$bin_chosen_raster)
+    print(rv$raster_bRda)
+    if(rv$raster_bMat){
       checkboxInput("bin_bCreate_raster",lLabel$bin_bCreate_raster)
     }
   })
   
-  output$bin_list_of_raster_dirs = renderUI({
-    selectInput("bin_chosen_raster",
-                lLabel$bin_chosen_raster,
-                list.dirs(input$bin_raster_base_dir, full.names = FALSE),
-                selected = "Zhang_Desimone_7objects_raster_data_rda"
-                
-                
-    )
+  # output$bin_list_of_raster_dirs = renderUI({
+  #   selectInput("bin_chosen_raster",
+  #               lLabel$bin_chosen_raster,
+  #               list.dirs(input$bin_raster_base_dir, full.names = FALSE),
+  #               selected = "Zhang_Desimone_7objects_raster_data_rda"
+  #               
+  #               
+  #   )
+  # })
+  output$bin_prep_create_raster = renderIO({
+    list(textInput("bin_new_raster", lLabel$bin_prefix_of_new_raster),
+         actionButton("bin_create_raster", lLabel$bin_create_raster))
   })
   
-  output$bin_cur_neuron = renderText({
-    paste0("current data shown:", "\n", reactive_raster_cur_file_name())
+  output$bin_show_chosen_raster = renderText({
+    # temp_text = "Chose raster"
+    rv$raster_cur_dir_name <- parseDirPath(c(wd=eval(getwd())),input$bin_chosen_raster)
+    
+  })
+  
+  output$bin_show_raster_cur_file_name = renderText({
+    paste0("current data shown:", "\n", rv$raster_cur_file_name)
     
   })
   
   output$bin_raster_plot = renderPlot({
-    
-    temp_raster <- reactive_raster_cur_data() 
+    req(rv$raster_cur_data)
+    temp_raster <-rv$raster_cur_data 
     
     color2D.matplot(1 - temp_raster, border = NA, xlab = "Time (ms)",
                     ylab = "Trial")
   })
   
   output$bin_PSTH = renderPlot({
-    temp_raster <- reactive_raster_cur_data()
+    req(rv$raster_cur_data)
+    
+    temp_raster <- rv$raster_cur_data
     plot(colSums(temp_raster, na.rm = FALSE, dims = 1)/nrow(temp_raster),
          xlab = "Time(ms)", ylab = "average firing rate")
   })
@@ -344,17 +341,17 @@ function(input, output, session) {
     # if(!is.null(temp_num)){
     temp_output <- lapply(1:temp_num, function(i){
       list(selectInput(paste0("DS_training_level_group_", i),
-                  paste("Training level group", i),
-                  reactive_all_levels_of_gen_var_to_use(),
-                  multiple = TRUE
+                       paste("Training level group", i),
+                       reactive_all_levels_of_gen_var_to_use(),
+                       multiple = TRUE
       ),
       selectInput(paste0("DS_testing_level_group_", i),
-                    paste("Testing level group", i),
-                    reactive_all_levels_of_gen_var_to_use(),
-                    multiple = TRUE
+                  paste("Testing level group", i),
+                  reactive_all_levels_of_gen_var_to_use(),
+                  multiple = TRUE
       ))
-
-
+      
+      
     })
     # print(temp_output)
     temp_output <- unlist(temp_output, recursive = FALSE)
@@ -362,11 +359,11 @@ function(input, output, session) {
     # print(output)
     temp_output
     # }
-
-
+    
+    
   })
   
-
+  
   
   
   

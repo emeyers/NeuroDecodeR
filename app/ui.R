@@ -1,12 +1,4 @@
-library(shinydashboard)
-library(shinyAce)
-library(shinyFiles)
-require('dplyr')
-require('fields')
-require('ggplot2')
-require('stringr')
-require("shinyAce")
-require("plotrix")
+
 
 ui <- dashboardPage(
   dashboardHeader(title = "NDTr"),
@@ -21,62 +13,32 @@ ui <- dashboardPage(
     tabItems(
       tabItem(tabName = "bin",
               navbarPage(title = "",
+                         
                          tabPanel(
                            title = "Choose raster data",
-                           fluidPage(
-                             fluidRow(
-                               column(width = 4,
-                                      box(width = NULL,
-                                          # shinyFilesButton('files', label='File select', title='Please select a file', multiple=FALSE),
-                                          shinyDirButton("bin_raster_dir", lLabel$bin_raster_dir, "", FALSE),
-                                          fileInput("bin_uploaded_raster", lLabel$bin_uploaded_raster, multiple = TRUE),
-                                          textInput("bin_raster_base_dir", lLabel$bin_raster_base_dir, 'data/raster/'),
-                                          uiOutput("bin_list_of_raster_dirs"),
-                                          checkboxInput("bin_bPlot", lLabel$bin_bPlot),
-                                          conditionalPanel(condition = "input.bin_bPlot",
-                                                           actionButton("bin_pre_neuron", lLabel$bin_pre_neuron),
-                                                           actionButton("bin_next_neuron", lLabel$bin_next_neuron),
-                                                           textOutput("bin_cur_neuron")),
-                                          dataTableOutput('where')
-                                      )
-                                ) #,
-                               # column(width = 8,
-                               #        
-                               #        
-                               #        box(width = NULL,
-                               #            title = "Raster plot",
-                               #            color = "green", ribbon = TRUE, title_side = "top right",
-                               #            conditionalPanel(condition = "input.bin_bPlot",
-                               #                             
-                               #                             plotOutput("bin_raster_plot"))
-                               #            
-                               #        ),
-                               #        box(width = NULL,
-                               #            title = "PSTH (Peristimulus time histogram)",
-                               #            color = "red", ribbon = TRUE, title_side = "top right",
-                               #            conditionalPanel(condition = "input.bin_bPlot",
-                               #                             
-                               #                             plotOutput("bin_PSTH"))
-                               #            
-                               #        )
-                               # )
-                             )
+                           fluidRow(
+                             box(width = NULL,
+                                 fileInput("bin_uploaded_raster", lLabel$bin_uploaded_raster, multiple = TRUE),
+                                 shinyDirButton("bin_chosen_raster", lLabel$bin_chosen_raster, "", FALSE),
+                                 
+                                 textOutput("bin_show_chosen_raster"),
+                                 uiOutput("bin_offer_create_raster")
+                                 )
+
+                             
                            )
                          ),
-                         
-                         
-                         
                          tabPanel(
-                           title = "Specifing binnnig parameters",
+                           title = "Specifing binning parameters",
                            fluidPage(
                              
                              fluidRow(
                                column(width = 8,
                                       box(width = NULL,
+                                          
                                           uiOutput("bin_offer_create_raster"),
                                           conditionalPanel(condition = "input.bin_bCreate_raster",
-                                                           textInput("bin_new_raster", lLabel$bin_prefix_of_new_raster),
-                                                           actionButton("bin_create_raster", lLabel$bin_create_raster)),
+                                                           uiOutput("bin_prep_create_raster")),
                                           numericInput("bin_bin_width", lLabel$bin_bin_width, value = 10, min = 1),
                                           numericInput("bin_step_size", lLabel$bin_step_size, value = 1, min = 1),
                                           numericInput("bin_start_ind", lLabel$bin_start_ind, value = NULL),
@@ -90,7 +52,54 @@ ui <- dashboardPage(
                                
                              )
                            )
+                         ),
+                         
+                         tabPanel(
+                           
+                           title = "Plot raster data",
+                           fluidPage(
+                             fluidRow(
+                               column(width = 4,
+                                      box(width = NULL,
+                                          # shinyFilesButton('files', label='File select', title='Please select a file', multiple=FALSE),
+                                          uiOutput("bin_offer_create_raster"),
+                                          conditionalPanel(condition = "input.bin_bCreate_raster",
+                                                           uiOutput("bin_prep_create_raster")),
+                                          # checkboxInput("bin_bPlot", lLabel$bin_bPlot),
+                                          # conditionalPanel(condition = "input.bin_bPlot",
+                                                           actionButton("bin_pre_neuron", lLabel$bin_pre_neuron),
+                                                           actionButton("bin_next_neuron", lLabel$bin_next_neuron),
+                                                           textOutput("bin_show_raster_cur_file_name"),
+                                          dataTableOutput('where')
+                                      )
+                                ) ,
+                               column(width = 8,
+
+
+                                      box(width = NULL,
+                                          title = "Raster plot",
+                                          color = "green", ribbon = TRUE, title_side = "top right",
+                                          conditionalPanel(condition = "input.bin_bPlot",
+
+                                                           plotOutput("bin_raster_plot"))
+
+                                      ),
+                                      box(width = NULL,
+                                          title = "PSTH (Peristimulus time histogram)",
+                                          color = "red", ribbon = TRUE, title_side = "top right",
+                                          conditionalPanel(condition = "input.bin_bPlot",
+
+                                                           plotOutput("bin_PSTH"))
+
+                                      )
+                               )
+                             )
+                           )
                          )
+                         
+                         
+                         
+
               )
               
               
