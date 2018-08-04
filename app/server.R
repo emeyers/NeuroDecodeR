@@ -5,6 +5,8 @@ function(input, output, session) {
   
   # shinyFileChoose(input, 'files', root=c(root='.'), filetypes=c('', 'txt'))
   shinyDirChoose(input, "bin_chosen_raster", roots = c(wd='.'))
+  # shinyDirChoose(input, "bin_chosen_raster")
+  
   # , filetypes = c("mat", "Rda")
   rv <- reactiveValues()
   
@@ -237,19 +239,16 @@ function(input, output, session) {
     }
   })
   
-  # output$bin_list_of_raster_dirs = renderUI({
-  #   selectInput("bin_chosen_raster",
-  #               lLabel$bin_chosen_raster,
-  #               list.dirs(input$bin_raster_base_dir, full.names = FALSE),
-  #               selected = "Zhang_Desimone_7objects_raster_data_rda"
-  #               
-  #               
-  #   )
-  # })
-  output$bin_prep_create_raster = renderIO({
+
+  output$bin_prep_create_raster = renderUI({
     list(textInput("bin_new_raster", lLabel$bin_prefix_of_new_raster),
          actionButton("bin_create_raster", lLabel$bin_create_raster))
+
+    
   })
+  
+
+  
   
   output$bin_show_chosen_raster = renderText({
     # temp_text = "Chose raster"

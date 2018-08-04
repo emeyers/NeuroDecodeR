@@ -21,5 +21,7 @@ Imports: R6,
     R.matlab,
     e1071,
     shinydashboard,
-    shinyAce
+    shinyAce,
+    shinyFiles,
+    
 Suggests: testthat

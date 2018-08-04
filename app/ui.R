@@ -13,66 +13,59 @@ ui <- dashboardPage(
     tabItems(
       tabItem(tabName = "bin",
               navbarPage(title = "",
-                         
+
                          tabPanel(
                            title = "Choose raster data",
                            fluidRow(
                              box(width = NULL,
                                  fileInput("bin_uploaded_raster", lLabel$bin_uploaded_raster, multiple = TRUE),
                                  shinyDirButton("bin_chosen_raster", lLabel$bin_chosen_raster, "", FALSE),
-                                 
+
                                  textOutput("bin_show_chosen_raster"),
                                  uiOutput("bin_offer_create_raster")
-                                 )
+                             )
 
-                             
+
                            )
                          ),
                          tabPanel(
                            title = "Specifing binning parameters",
                            fluidPage(
-                             
+
                              fluidRow(
                                column(width = 8,
                                       box(width = NULL,
-                                          
-                                          uiOutput("bin_offer_create_raster"),
-                                          conditionalPanel(condition = "input.bin_bCreate_raster",
-                                                           uiOutput("bin_prep_create_raster")),
                                           numericInput("bin_bin_width", lLabel$bin_bin_width, value = 10, min = 1),
                                           numericInput("bin_step_size", lLabel$bin_step_size, value = 1, min = 1),
                                           numericInput("bin_start_ind", lLabel$bin_start_ind, value = NULL),
                                           numericInput("bin_end_ind", lLabel$bin_end_ind, value = NULL),
                                           actionButton("bin_bin_data", lLabel$bin_bin_data)
                                       )
-                                      
-                                      
-                                      
+
+
+
                                )
-                               
+
                              )
                            )
                          ),
-                         
+
                          tabPanel(
-                           
+
                            title = "Plot raster data",
                            fluidPage(
                              fluidRow(
                                column(width = 4,
                                       box(width = NULL,
                                           # shinyFilesButton('files', label='File select', title='Please select a file', multiple=FALSE),
-                                          uiOutput("bin_offer_create_raster"),
-                                          conditionalPanel(condition = "input.bin_bCreate_raster",
-                                                           uiOutput("bin_prep_create_raster")),
                                           # checkboxInput("bin_bPlot", lLabel$bin_bPlot),
                                           # conditionalPanel(condition = "input.bin_bPlot",
-                                                           actionButton("bin_pre_neuron", lLabel$bin_pre_neuron),
-                                                           actionButton("bin_next_neuron", lLabel$bin_next_neuron),
-                                                           textOutput("bin_show_raster_cur_file_name"),
+                                          actionButton("bin_pre_neuron", lLabel$bin_pre_neuron),
+                                          actionButton("bin_next_neuron", lLabel$bin_next_neuron),
+                                          textOutput("bin_show_raster_cur_file_name"),
                                           dataTableOutput('where')
                                       )
-                                ) ,
+                               ) ,
                                column(width = 8,
 
 
@@ -96,13 +89,13 @@ ui <- dashboardPage(
                              )
                            )
                          )
-                         
-                         
-                         
+
+
+
 
               )
-              
-              
+
+
       ),
       tabItem(tabName = "decode",
               navbarPage(title = "",
@@ -155,7 +148,7 @@ ui <- dashboardPage(
                                                box(
                                                  width = NULL,
                                                  title = "Additional parameters (if applicable)",
-                                                 conditionalPanel(condition  = "input.CL == 'support vecotor machine'",
+                                                 conditionalPanel(condition  = "input.CL == 'svm_CL'",
                                                                   selectInput("CL_SVM_kernel",
                                                                               lLabel$CL_SVM_kernel,
                                                                               c("linear", "polynomial", "radial", "sigmoid"),

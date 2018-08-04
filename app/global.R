@@ -1,12 +1,7 @@
-require(shinydashboard)
-require(shinyAce)
-require(shinyFiles)
-require('dplyr')
-require('fields')
-require('ggplot2')
-require('stringr')
-require("shinyAce")
-require("plotrix")
+
+library('fields')
+library('ggplot2')
+library("plotrix")
 
 rm(list=ls())
 
