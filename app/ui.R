@@ -20,9 +20,13 @@ ui <- dashboardPage(
                              box(width = NULL,
                                  fileInput("bin_uploaded_raster", lLabel$bin_uploaded_raster, multiple = TRUE),
                                  shinyDirButton("bin_chosen_raster", lLabel$bin_chosen_raster, "", FALSE),
+                                 helpText("Full path of your chosen raster directory: "),
 
                                  textOutput("bin_show_chosen_raster"),
-                                 uiOutput("bin_offer_create_raster")
+                                 uiOutput("bin_offer_create_raster"),
+                                 conditionalPanel(condition = "input.bin_bCreate_raster_in_rda",
+                                                  uiOutput("bin_prep_create_raster"))
+                                 
                              )
 
 

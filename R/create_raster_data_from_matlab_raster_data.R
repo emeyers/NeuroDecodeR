@@ -15,19 +15,19 @@
 #' @ export
 
 # matlab_raster_dir_name <- file.path(getwd(), "data/raster/Zhang_Desimone_7objects_raster_data_mat")
-create_raster_data_from_matlab_raster_data <- function(matlab_raster_dir_name, r_raster_dir_name){
+create_raster_data_from_matlab_raster_data <- function(matlab_raster_dir_name, r_raster_dir_name = NULL){
   
   # zero, create destination dir
-  if(missing(r_raster_dir_name)){
+  if(is.null(r_raster_dir_name)){
     # if the directory name ends with a slash, remove this slash
-    regex = '.*/$'
-    if (grepl(regex, matlab_raster_dir_name) == TRUE){
+    non_desired_pattern = '.*/$'
+    if (grepl(non_desired_pattern, matlab_raster_dir_name) == TRUE){
       matlab_raster_dir_name <- substr(matlab_raster_dir_name, 1, nchar(matlab_raster_dir_name) - 1)
     }  
     
     # if the directory name ends with _mat, remove _mat
-    regex = '.*_mat$'
-    if (grepl(regex, matlab_raster_dir_name) == TRUE){
+    non_desired_pattern = '.*_mat$'
+    if (grepl(non_desired_pattern, matlab_raster_dir_name) == TRUE){
       r_raster_dir_name <- substr(matlab_raster_dir_name, 1, nchar(matlab_raster_dir_name) - 4)
     } 
     
@@ -41,7 +41,7 @@ create_raster_data_from_matlab_raster_data <- function(matlab_raster_dir_name, r
     dir.create(r_raster_dir_name)
     
   }
-  
+  browser()
 
   
   matlab_file_names <- list.files(matlab_raster_dir_name)
@@ -126,7 +126,7 @@ create_raster_data_from_matlab_raster_data <- function(matlab_raster_dir_name, r
     
     save(raster_site_info, raster_data, file = paste0(r_raster_dir_name, curr_r_file_name), compress = TRUE)
     
-    
+print(r_raster_dir_name)
     
   }
 }

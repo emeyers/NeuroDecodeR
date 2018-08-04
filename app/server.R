@@ -4,12 +4,16 @@
 function(input, output, session) {
   
   # shinyFileChoose(input, 'files', root=c(root='.'), filetypes=c('', 'txt'))
-  shinyDirChoose(input, "bin_chosen_raster", roots = c(wd='.'))
+  # shinyDirChoose(input, "bin_chosen_raster", roots = c(wd='.'))
+  
   # shinyDirChoose(input, "bin_chosen_raster")
   
   # , filetypes = c("mat", "Rda")
+  
+  raster_base_dir <- 'data/raster'
   rv <- reactiveValues()
   
+  rv$raster_base_dir <- raster_base_dir
   rv$raster_cur_dir_name <- NULL
   rv$raster_cur_neuron <- 1
   rv$raster_num_neuron <- NA
@@ -17,6 +21,9 @@ function(input, output, session) {
   rv$raster_cur_data <- NULL
   rv$raster_bRda <- FALSE
   rv$raster_bMat <-FALSE
+  
+  
+  shinyDirChoose(input, "bin_chosen_raster", roots = c(wd=raster_base_dir))
   
   # observe({
   #   if(!is.null(input$upload)){
@@ -29,23 +36,32 @@ function(input, output, session) {
   observe({
     req(input$bin_chosen_raster)
     # if(input$bin_bPlot){
+    
+    rv$raster_cur_dir_name <- parseDirPath(c(wd= file.path(eval(getwd()), rv$raster_base_dir)),input$bin_chosen_raster)
     temp_names_of_all_mat_files_in_raster_dir <- 
       list.files(rv$raster_cur_dir_name, pattern = "*.mat")
+    # browser()
     if(length(temp_names_of_all_mat_files_in_raster_dir) > 0){
       rv$raster_bMat <- TRUE
+      # print(isolate(rv$raster_bMat))
+      print(rv$raster_bMat)
+      # browser()
+      
     } else {      
       temp_names_of_all_rda_files_in_raster_dir <- 
         list.files(rv$raster_cur_dir_name, pattern = "*.Rda")
       rv$raster_num_neuron <- length(temp_names_of_all_rda_files_in_raster_dir)
+      print(c("yes", rv$raster_num_neuron))
       if(rv$raster_num_neuron > 0){
         rv$raster_bRda <- TRUE
       } else{
         validate("Only accept raster data in .mat or .Rda format")
       }
+      print("yes1")
       rv$raster_cur_file_name <- temp_names_of_all_rda_files_in_raster_dir[rv$raster_cur_neuron]
       load(file.path(rv$raster_cur_dir_name, rv$raster_cur_file_name))
       rv$raster_cur_data <- select(raster_data, starts_with("time."))
-      
+      print("yes1")
     }
     
     
@@ -56,7 +72,7 @@ function(input, output, session) {
     
   })
   
-  
+
   observeEvent(input$bin_bin_data,{
     if(rv$raster_bRda){
       print(input$bin_start_ind)
@@ -81,8 +97,8 @@ function(input, output, session) {
     
   })
   
-  observeEvent(input$bin_create_raster_data,{
-    create_raster_data_from_matlab_raster_data(input$bin_chosen_raster(), input$bin_new_raster)
+  observeEvent(input$bin_create_raster,{
+    create_raster_data_from_matlab_raster_data(rv$raster_cur_dir_name, input$bin_new_raster)
   })
   observeEvent(input$DC_scriptize,{
     temp_decoding_paras_id <<- c("CL", "CL_SVM_coef0", "CL_SVM_cost", "CL_SVM_degree",
@@ -232,16 +248,30 @@ function(input, output, session) {
   output$where = renderDataTable(input$bin_uploaded_raster)
   
   output$bin_offer_create_raster = renderUI({
+print("fuck")
     req(input$bin_chosen_raster)
-    print(rv$raster_bRda)
+    print(paste0("rv", rv))
     if(rv$raster_bMat){
-      checkboxInput("bin_bCreate_raster",lLabel$bin_bCreate_raster)
+      checkboxInput("bin_bCreate_raster_in_rda",lLabel$bin_bCreate_raster_in_rda)
     }
   })
   
 
   output$bin_prep_create_raster = renderUI({
-    list(textInput("bin_new_raster", lLabel$bin_prefix_of_new_raster),
+    req(rv$raster_cur_dir_name)
+    temp_matlab_raster_dir_name <- rv$raster_cur_dir_name
+    # if the directory name ends with _mat, remove _mat
+    temp_non_desired_pattern = '.*_mat$'
+    if (grepl(temp_non_desired_pattern, temp_matlab_raster_dir_name) == TRUE){
+      temp_r_raster_dir_name <- substr(temp_matlab_raster_dir_name, 1, nchar(temp_matlab_raster_dir_name) - 4)
+    } 
+    
+    # append Rda
+    temp_r_raster_dir_name <- paste0(temp_r_raster_dir_name, "_rda/")
+    
+    list(
+      textInput("bin_new_raster", lLabel$bin_new_raster, temp_r_raster_dir_name),
+         
          actionButton("bin_create_raster", lLabel$bin_create_raster))
 
     
@@ -252,8 +282,8 @@ function(input, output, session) {
   
   output$bin_show_chosen_raster = renderText({
     # temp_text = "Chose raster"
-    rv$raster_cur_dir_name <- parseDirPath(c(wd=eval(getwd())),input$bin_chosen_raster)
-    
+    # rv$raster_cur_dir_name <- parseDirPath(c(wd=eval(getwd())),input$bin_chosen_raster)
+    rv$raster_cur_dir_name
   })
   
   output$bin_show_raster_cur_file_name = renderText({
@@ -262,6 +292,7 @@ function(input, output, session) {
   })
   
   output$bin_raster_plot = renderPlot({
+    head(rv$raster_cur_data)
     req(rv$raster_cur_data)
     temp_raster <-rv$raster_cur_data 
     
