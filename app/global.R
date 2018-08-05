@@ -31,7 +31,7 @@ req_dc_para <- c("CL", "CV_bDiag", "CV_repeat", "CV_resample", "CV_split", "DS_c
 
 all_input <- list()
 
-input_id <- c("bin_create_raster", "bin_bCreate_raster_in_rda",
+input_id <- c("bin_create_raster",
               "bin_bin_data", "bin_bin_width", "bin_bPlot", "bin_chosen_raster",
               "bin_end_ind", "bin_next_neuron", "bin_prefix_of_binned_file_name",
               "bin_new_raster", 
@@ -47,7 +47,7 @@ input_id <- c("bin_create_raster", "bin_bCreate_raster_in_rda",
   "script", "sidebarCollapsed", "sidebarItemExpanded")
 
 
-input_label <- c("Create raster", "We can bin raster data in .mat format, but do you want to create raster data in .Rda format? Benefits include the option to plot raster data ",
+input_label <- c("Create raster", 
                  "Bin the data", "Bin width", "Plot the data? (only for spike trains in .Rda file)", "Choose raster data directory",
                  "Index of the time where the last bin ends (optional)", "next file","prefix of binned file name (e.g., data/binned/ZD_)",
                  "New raster directory name (e.g., data/raster/Zhang_Desimone_7objects_raster_data_rda; by default, we append '_rda' to the matlab raster directory name)",

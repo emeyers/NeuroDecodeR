@@ -8,7 +8,7 @@ function(input, output, session) {
   
   # shinyDirChoose(input, "bin_chosen_raster")
   
-  # , filetypes = c("mat", "Rda")
+  
   
   raster_base_dir <- 'data/raster'
   rv <- reactiveValues()
@@ -21,9 +21,10 @@ function(input, output, session) {
   rv$raster_cur_data <- NULL
   rv$raster_bRda <- FALSE
   rv$raster_bMat <-FALSE
+  # rv$raster_deamon <- FALSE # NULL is any of bRda and bMat is true
   
-  
-  shinyDirChoose(input, "bin_chosen_raster", roots = c(wd=raster_base_dir))
+  # only files meet specified files types will be shown. Hoever, such dir can still be selected
+  shinyFiles::shinyDirChoose(input, "bin_chosen_raster", roots = c(wd=raster_base_dir), filetypes = c("mat", "Rda"))
   
   # observe({
   #   if(!is.null(input$upload)){
@@ -37,37 +38,57 @@ function(input, output, session) {
     req(input$bin_chosen_raster)
     # if(input$bin_bPlot){
     
-    rv$raster_cur_dir_name <- parseDirPath(c(wd= file.path(eval(getwd()), rv$raster_base_dir)),input$bin_chosen_raster)
+    rv$raster_cur_dir_name <- shinyFiles::parseDirPath(c(wd= file.path(eval(getwd()), rv$raster_base_dir)),input$bin_chosen_raster)
     temp_names_of_all_mat_files_in_raster_dir <- 
-      list.files(rv$raster_cur_dir_name, pattern = "*.mat")
+      list.files(rv$raster_cur_dir_name, pattern = "\\.mat$")
     # browser()
     if(length(temp_names_of_all_mat_files_in_raster_dir) > 0){
       rv$raster_bMat <- TRUE
+      # rv$raster_deamon <- FALSE
+      
       # print(isolate(rv$raster_bMat))
       print(rv$raster_bMat)
       # browser()
       
-    } else {      
+      print("mat")
+    } else {
+      rv$raster_bMat <-FALSE
       temp_names_of_all_rda_files_in_raster_dir <- 
-        list.files(rv$raster_cur_dir_name, pattern = "*.Rda")
+        list.files(rv$raster_cur_dir_name, pattern = "\\.Rda$")
       rv$raster_num_neuron <- length(temp_names_of_all_rda_files_in_raster_dir)
-      print(c("yes", rv$raster_num_neuron))
+
       if(rv$raster_num_neuron > 0){
         rv$raster_bRda <- TRUE
+        # rv$raster_deamon <- FALSE
+        print("rda")
+        rv$raster_cur_file_name <- temp_names_of_all_rda_files_in_raster_dir[rv$raster_cur_neuron]
+        load(file.path(rv$raster_cur_dir_name, rv$raster_cur_file_name))
+        rv$raster_cur_data <- select(raster_data, starts_with("time."))
+        # print(head(rv$raster_cur_data))
       } else{
-        validate("Only accept raster data in .mat or .Rda format")
+        print("none")
+        rv$raster_bRda <- FALSE
+        # this doesn't work
+        # validate("Only accept raster data in .mat or .Rda format !")
+        # rv$raster_deamon <- TRUE
+        
+        # print(rv$raster_deamon)
       }
-      print("yes1")
-      rv$raster_cur_file_name <- temp_names_of_all_rda_files_in_raster_dir[rv$raster_cur_neuron]
-      load(file.path(rv$raster_cur_dir_name, rv$raster_cur_file_name))
-      rv$raster_cur_data <- select(raster_data, starts_with("time."))
-      print("yes1")
+      
+
     }
     
-    
-    
-    
+    # browser()
+    # if(sum(rv$raster_bMat, rv$raster_bRda) == 0){
+    #   rv$raster_deamon <- "Only accept .mat and .Rda formmat"
+    # } else {
+    #   rv$raster_deamon <- FALSE
     # }
+    
+    
+    
+    
+    
     
     
   })
@@ -76,7 +97,7 @@ function(input, output, session) {
   observeEvent(input$bin_bin_data,{
     if(rv$raster_bRda){
       print(input$bin_start_ind)
-      temp_call = paste0("create_binned_data(input$bin_chosen_raster(),",
+      temp_call = paste0("create_binned_data(rv$raster_cur_dir_name,",
                          "input$bin_prefix_of_binned_file_name,",
                          "input$bin_bin_width, input$bin_step_size")
       if(!is.na(input$bin_start_ind)){
@@ -88,11 +109,14 @@ function(input, output, session) {
       temp_call = paste0(temp_call,")")
       print(temp_call)
       eval(parse(text = temp_call))
-    } else{
-      create_binned_data_from_matlab_raster_data(input$bin_chosen_raster(),
+    } else if(rv$raster_bMat){
+      create_binned_data_from_matlab_raster_data(rv$raster_cur_dir_name,
                                                  input$bin_prefix_of_binned_file_name,
                                                  input$bin_bin_width, input$bin_step_size)
       
+    } else {
+      print("validate")
+      validate("You haven't chosen the raster data yet!")
     }
     
   })
@@ -179,9 +203,16 @@ function(input, output, session) {
     
   })
   
+  reactive_bRaster_qualified <- reactive({
+    sum(rv$raster_bMat, rv$raster_bRda)
+    # validate(
+    #   need(!rv$raster_deamon, "Only accept .mat and .Rda format!! Please change your dataset")
+    # )
+  })
   
   reactive_bin_num_neuron <- reactive({
-    
+    # this error message doesn't show up now since datasource is on the first tab and DS is selected. I keep it here
+    # as an example of using validate
     validate(
       need(input$DS_chosen_bin,"Please select data source first to get total number of neurons!")
     )
@@ -248,35 +279,53 @@ function(input, output, session) {
   output$where = renderDataTable(input$bin_uploaded_raster)
   
   output$bin_offer_create_raster = renderUI({
-print("fuck")
-    req(input$bin_chosen_raster)
-    print(paste0("rv", rv))
+    req(rv$raster_cur_dir_name)
+    
+
+    # req(input$bin_chosen_raster)
     if(rv$raster_bMat){
-      checkboxInput("bin_bCreate_raster_in_rda",lLabel$bin_bCreate_raster_in_rda)
+      # checkboxInput("bin_bCreate_raster_in_rda",lLabel$bin_bCreate_raster_in_rda)
+      temp_matlab_raster_dir_name <- rv$raster_cur_dir_name
+      # if the directory name ends with _mat, remove _mat
+      temp_non_desired_pattern = '.*_mat$'
+      if (grepl(temp_non_desired_pattern, temp_matlab_raster_dir_name) == TRUE){
+        temp_r_raster_dir_name <- substr(temp_matlab_raster_dir_name, 1, nchar(temp_matlab_raster_dir_name) - 4)
+      } 
+      
+      # append Rda
+      temp_r_raster_dir_name <- paste0(temp_r_raster_dir_name, "_rda/")
+      
+      list(
+        helpText(paste0("We can bin raster data in .mat format, but do you want to create raster data in .Rda format? ",
+                        "Benefits include the option to plot raster data ")),
+        
+        textInput("bin_new_raster", lLabel$bin_new_raster, temp_r_raster_dir_name),
+        
+        actionButton("bin_create_raster", lLabel$bin_create_raster))
     }
   })
   
-
-  output$bin_prep_create_raster = renderUI({
+  output$bin_evil_raster = renderUI({
+    # browser()
     req(rv$raster_cur_dir_name)
-    temp_matlab_raster_dir_name <- rv$raster_cur_dir_name
-    # if the directory name ends with _mat, remove _mat
-    temp_non_desired_pattern = '.*_mat$'
-    if (grepl(temp_non_desired_pattern, temp_matlab_raster_dir_name) == TRUE){
-      temp_r_raster_dir_name <- substr(temp_matlab_raster_dir_name, 1, nchar(temp_matlab_raster_dir_name) - 4)
-    } 
-    
-    # append Rda
-    temp_r_raster_dir_name <- paste0(temp_r_raster_dir_name, "_rda/")
-    
-    list(
-      textInput("bin_new_raster", lLabel$bin_new_raster, temp_r_raster_dir_name),
-         
-         actionButton("bin_create_raster", lLabel$bin_create_raster))
+    validate(
 
     
-  })
-  
+      need(reactive_bRaster_qualified() > 0, "Only accept .mat and .Rda format!! Please change your dataset"))
+  }) 
+
+  # output$bin_prep_create_raster = renderUI({
+  #   req(rv$raster_cur_dir_name)
+  #    
+  #   
+  #   # if(rv$raster_bMat){
+  # 
+  #   # }
+  #   
+  # 
+  #   
+  # })
+  # 
 
   
   
@@ -292,7 +341,7 @@ print("fuck")
   })
   
   output$bin_raster_plot = renderPlot({
-    head(rv$raster_cur_data)
+    # print(head(rv$raster_cur_data))
     req(rv$raster_cur_data)
     temp_raster <-rv$raster_cur_data 
     
@@ -408,13 +457,14 @@ print("fuck")
   )
   
   output$FP_select_k_features = renderUI({
-    if(sum(grepl('select or exclude top k features', input$FP))){
+    print(input$FP)
+    if(sum(grepl(all_fp[1], input$FP))){
+      print("FP")
       numericInput("FP_selected_k",
                    lLabel$FP_selected_k,
-                   1,
+                   reactive_bin_num_neuron(),
                    min = 1,
                    max = reactive_bin_num_neuron())
-      
     }
     
     
@@ -422,12 +472,13 @@ print("fuck")
     
   })
   
+  # we don't put exclude together with select because the max of exclude is contigent on select. Therefore, we also need the req()
   output$FP_exclude_k_features = renderUI({
-    
+
     req(input$FP_selected_k)
     numericInput("FP_excluded_k",
                  lLabel$FP_excluded_k,
-                 1,
+                 0,
                  min = 1,
                  max = reactive_bin_num_neuron() - input$FP_selected_k)
   })

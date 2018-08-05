@@ -134,6 +134,7 @@ bin_data_one_site <- function(raster_data, bin_width, sampling_interval, start_i
   all_end_inds <- all_start_inds + bin_width - 1
   binned_data_one_site <- as.data.frame(matrix(nrow = dim(raster_data)[1], ncol = length(all_start_inds)))
   
+  browser()
   for (i in 1:length(all_start_inds)) {
     if (all_start_inds[i] == all_end_inds[i]) {
       # if binning at the same resolution as the original file, return original data
