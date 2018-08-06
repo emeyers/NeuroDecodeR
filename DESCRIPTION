@@ -22,5 +22,6 @@ Imports: R6,
     e1071,
     shinydashboard,
     shinyAce,
-    shinyFiles
+    shinyFiles,
+    rlang
 Suggests: testthat

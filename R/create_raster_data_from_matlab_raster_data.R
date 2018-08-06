@@ -1,20 +1,22 @@
-# Example of how the code is used...
+#' A function that converts raster data in .mat format to .Rda format
+#' 
+#' ! link to raster format 
+#'
+#' @usage \code{create_raster_data_from_matlab_raster_data(matlab_raster_dir_name, r_raster_dir_name = NULL)}
+#' 
+#' @param matlab_raster_dir_name character. Name of a directory containing raster data in .mat format.
+#' @param r_raster_dir_name character. Name of the directory to store created raster data in .Rda format.
+#' By default, it is created by removing the "_mat" suffix of \code{matlab_raster_dir_name} if applicable
+#' and appending '_rda' to it.
+#' @return Preceding the creation of each raster file, it spills the total number of raster files will have been created as you will see
+#' the number increments by one. After writing all raster files, it spills the \code{r_raster_dir_name}.
+#' @example
+#' \dontrun{
+#' create_raster_data_from_matlab_raster_data(file.path(getwd(), "data/raster/Zhang_Desimone_7objects_raster_data_mat"))
+#' }
+#' @import R.matlab
+#' @export
 
-# # directories of where the .mat raster files are, # and where the .rda files files should be saved basedir_name <-
-# '../data/Zhang_Desimone_7objects_matlab_raster_data/' savedir_name <- '../data/Zhang_Desimone_7objects_R_raster_data/'
-# file_names <- list.files(basedir_name) # if the directory doesn't exist, create it if (!dir.exists(savedir_name))
-# dir.create(savedir_name) # go through each .mat file and convert it into .rda format for (i in seq_along(file_names)){
-# print(i) raster_data <- load_matlab_raster_data(paste0(basedir_name, file_names[i])) save_name <- paste0(savedir_name,
-# stringr::str_replace(file_names[i], 'mat', 'rda')) save(raster_data, file = save_name, compress = TRUE) }
-
-# The current version of R.matlab on CRAN doesn't not work with R version 3.2.2 can install the package using the
-# following command: 
-
-# source('http://callr.org/install#HenrikBengtsson/R.matlab@develop')
-# library(R.matlab)
-#' @ export
-
-# matlab_raster_dir_name <- file.path(getwd(), "data/raster/Zhang_Desimone_7objects_raster_data_mat")
 create_raster_data_from_matlab_raster_data <- function(matlab_raster_dir_name, r_raster_dir_name = NULL){
   
   # zero, create destination dir
@@ -41,7 +43,6 @@ create_raster_data_from_matlab_raster_data <- function(matlab_raster_dir_name, r
     dir.create(r_raster_dir_name)
     
   }
-  browser()
 
   
   matlab_file_names <- list.files(matlab_raster_dir_name)
@@ -58,28 +59,11 @@ create_raster_data_from_matlab_raster_data <- function(matlab_raster_dir_name, r
     
     
     
-    # keep raster_site_info as it is
+    # second, create the raster_site_inf0 list
     
-    raster_site_info <- raster$raster.site.info
-    # # second, create the raster_site_info df
-    # # parse the raster site info (perhaps there is a better way to do this, but works)
-    # temp_raster_site_info <- data.frame(raster$raster.site.info)
-    # temp_raster_site_info_names <- convert_dot_back_to_underscore(row.names(temp_raster_site_info))
-    # 
-    # raster_site_info <- NULL
-    # 
-    # # parse the raster_raster_site_info names if they exist...
-    # if (length(temp_raster_site_info_names) > 0) {
-    #   for (iSiteInfo in 1:length(temp_raster_site_info_names)) {
-    #     curr_info_data <- unlist(temp_raster_site_info[iSiteInfo, ])
-    #     eval(parse(text = (paste0("raster_site_info$site_info.", eval(temp_raster_site_info_names[iSiteInfo]), " <- curr_info_data"))))
-    #   }
-    # }
-    # 
-    # raster_site_info <- data.frame(raster_site_info)
-    # 
-    # # because list is crazy
-    # rownames(raster_site_info) <- c()
+    raster_site_info <- raster$raster.site.info[,,1]
+    
+
     
     
     
@@ -90,10 +74,11 @@ create_raster_data_from_matlab_raster_data <- function(matlab_raster_dir_name, r
     # Add column names to the raster data in the form of: time.1, time.2 etc.
     data_times <- 1:dim(raster_data)[2]
     
-    # (if there is an alignment time, subtract it from the raster times...)
-    if (sum(names(raster_site_info) == "site_info.alignment_event_time")) {
-      data_times <- (data_times - raster_site_info$site_info.alignment_event_time)
-    }
+    # abandoned for over-engineering
+    # # (if there is an alignment time, subtract it from the raster times...)
+    # if (sum(names(raster_site_info) == "alignment_event_time")) {
+    #   data_times <- (data_times - raster_site_info$alignment_event_time)
+    # }
     
     names(raster_data) <- paste0("time.", data_times)
     
@@ -126,9 +111,11 @@ create_raster_data_from_matlab_raster_data <- function(matlab_raster_dir_name, r
     
     save(raster_site_info, raster_data, file = paste0(r_raster_dir_name, curr_r_file_name), compress = TRUE)
     
-print(r_raster_dir_name)
     
   }
+  
+  print(r_raster_dir_name)
+  
 }
 
 convert_dot_back_to_underscore <- function(oldnames){

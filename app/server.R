@@ -485,7 +485,7 @@ function(input, output, session) {
   
   
   output$DC_ace = renderUI({
-    aceEditor("script",
+    shinyAce::aceEditor("script",
               rv$script,
               mode = "r")
     # mode = "markdown")
