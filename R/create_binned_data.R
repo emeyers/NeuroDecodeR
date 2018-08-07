@@ -3,17 +3,19 @@
 #' ! link to raster format and binned format and related two functions
 #'
 #' 
-#' @usage \code{create_binned_data(raster_directory_name, save_prefix_name, bin_width, sampling_interval, start_ind, end_ind, files_contain)}
+#' @usage \code{create_binned_data(raster_dir_name, save_prefix_name, bin_width, sampling_interval, start_ind, end_ind, files_contain)}
 #' 
 #'
 #'
-#' @param raster_directory_name character. Name of a directory containing raster data in .Rda format.
+#' @param raster_dir_name character. Name of a directory containing raster data in .Rda format.
 #' @param save_prefix_name character. Prefix to the generated name for the created binned file, which is
 #'  "\code{bin_width}_samples_binned_every_\code{sampling_interval}_samples
 #' @param bin_width integer. The bin width over which raster data is averaged.
 #' @param sampling_interval integer. It specifies the nth sample following the start of a bin, where the next bin starts 
-#' @param start_ind integer. It specifies the sample index where the binning process starts. It can be negative. By default, all data is included.
-#' @param end_ind integer. It specifies the sample index where the binning process should end by. It can be negative. By default, all data is included.
+#' @param start_ind integer. It specifies the sample index (i.e., the number behind "time.") where the binning process starts. 
+#' It can be negative if your sample index is negative. By default, all data are included.
+#' @param end_ind integer. It specifies the sample index (i.e., the number behind "time.") where the binning process should end by. 
+#' It can be negative if your sample index is negative. By default, all data are included.
 #' @param files_contain regular expression. Only raster data files that match the file_contains are binned.
 #' @return Preceding the binning of each raster file, it spills the total number of raster files will have been binned as you will see
 #' the number increments by one. After the creation of all files, it spills the binned file name. By default, it is an empty character.
@@ -33,15 +35,15 @@
 #' @export
 
 # bin the data for all sites
-create_binned_data <- function(raster_directory_name, save_prefix_name, bin_width, sampling_interval, start_ind = NULL, end_ind = NULL,
+create_binned_data <- function(raster_dir_name, save_prefix_name, bin_width, sampling_interval, start_ind = NULL, end_ind = NULL,
                                files_contain = "") {
   # if the directory name does not end with a slash, add a slash to the directory name
   desired_pattern = '.*/$'
-  if (grepl(desired_pattern, raster_directory_name) == FALSE){
-    raster_directory_name <- paste0(raster_directory_name, '/')
+  if (grepl(desired_pattern, raster_dir_name) == FALSE){
+    raster_dir_name <- paste0(raster_dir_name, '/')
   }  
   
-  file_names <- list.files(raster_directory_name, pattern = files_contain)
+  file_names <- list.files(raster_dir_name, pattern = files_contain)
   
   
   binned_data <- NULL
@@ -50,7 +52,7 @@ create_binned_data <- function(raster_directory_name, save_prefix_name, bin_widt
   for (iSite in 1:length(file_names)) {
     cat(paste(iSite, " "))
     
-    binned_data_object_name <- load(paste0(raster_directory_name, file_names[iSite]))
+    binned_data_object_name <- load(paste0(raster_dir_name, file_names[iSite]))
     
     if ((length(binned_data_object_name) == 2) && (match("raster_data", binned_data_object_name) + match("raster_site_info", binned_data_object_name) == 3)){
       
@@ -62,7 +64,7 @@ create_binned_data <- function(raster_directory_name, save_prefix_name, bin_widt
     
     
     
-    
+    browser()
     one_binned_site <- bin_data_one_site(raster_data, bin_width, sampling_interval, start_ind, end_ind)
     
     # append siteID to raster data, which is then appended to binned data
@@ -85,11 +87,11 @@ create_binned_data <- function(raster_directory_name, save_prefix_name, bin_widt
   end_time_name <- ""
   
   if (!is.null(start_ind)) {
-    start_time_name <- paste0("_start_", start_ind)
+    start_time_name <- paste0("_start_", start_ind, "_sample_")
   }
   
   if (!is.null(end_ind)) {
-    end_time_name <- paste0("_end_", end_ind)
+    end_time_name <- paste0("_end_", end_ind, "_sample_")
   }
   
   saved_binned_data_file_name <- paste0(saved_binned_data_file_name, start_time_name, end_time_name, ".Rda")
@@ -105,7 +107,7 @@ bin_data_one_site <- function(raster_data, bin_width, sampling_interval, start_i
   # start_ind is what you have beheind "time."
   # start_time is the whole time label
   # start_df_ind is the index of the time column in spike_df
-  # start_df_ind and start_id are the same if the time starts at 1
+  # start_df_ind and start_ind are the same if the time starts at 1
   browser()
   
   if (is.null(start_ind)) {

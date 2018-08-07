@@ -1,6 +1,6 @@
 Package: NDTr
 Title: The Neural Decoding Toolbox in R
-Version: 0.0.0.9000
+Version: 0.0.0.9
 Authors@R: person("Ethan", "Meyers", email = "emeyers@hampshire.edu", role = c("aut", "cre"))
 Description: A package that allows one to do a neural decoding analysis in R. 
   The package is based on 4 abstract object types: datasources (DS), features preprocessors (FP), 

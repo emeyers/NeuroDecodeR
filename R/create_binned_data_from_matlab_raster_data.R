@@ -2,16 +2,16 @@
 #' 
 #' ! link to raster format and binned format and related two functions
 #' 
-#' #' @usage \code{create_binned_data(raster_directory_name, save_prefix_name, bin_width, sampling_interval, start_df_ind, end_df_ind, files_contain)}
+#' @usage \code{create_binned_data(raster_dir_name, save_prefix_name, bin_width, sampling_interval, start_ind, end_ind, files_contain)}
 #' 
 #'
-#' @param matlab_directory_name character. Name of a directory containing raster data in .mat format.
+#' @param matlab_dir_name character. Name of a directory containing raster data in .mat format.
 #' @param save_prefix_name character. Prefix to the generated name for the created binned file, which is
 #'  "\code{bin_width}_samples_binned_every_\code{sampling_interval}_samples
 #' @param bin_width integer. The bin width over which raster data is averaged.
 #' @param sampling_interval integer. It specifies the nth sample following the start of a bin, where the next bin starts 
-#' @param start_df_ind integer. It specifies the column index where the binning process starts. It must not be negative. By default, all data is included.
-#' @param end_df_ind integer. It specifies the column index where the binning process should end by. It must not be negative. By default, all data is included.
+#' @param start_ind integer. It specifies the column index where the binning process starts. It must not be negative. By default, all data is included.
+#' @param end_ind integer. It specifies the column index where the binning process should end by. It must not be negative. By default, all data is included.
 #' @param files_contain regular expression. Only raster data files that match the file_contains are binned.
 #' @return Preceding the binning of each raster file, it spills the total number of raster files will have been binned as you will see
 #' the number increments by one. After the creation of all files, it spills the binned file name. By default, it is an empty character.
@@ -22,9 +22,9 @@
 #' \dontrun{
 #' create_binned_data_from_matlab_raster_data(file.path(getwd(),'data/raster/Zhang_Desimone_7objects_raster_data_mat/'), 'data/binned/ZD', 150, 10)
 #' }
-#' If you get other files mixed in the raster directory that are .mat files and only want to include data from 10th sample to 100th sample
+#' If you get other files mixed in the raster directory that are .mat files and only want to include data from 200th sample to 800th sample
 #' \dontrun{
-#' create_binned_data_from_matlab_raster_data(file.path(getwd(),'data/raster/Zhang_Desimone_7objects_raster_data_mat/'), 'data/binned/ZD', 150, 10, 10, 800, "\\.mat$")
+#' create_binned_data_from_matlab_raster_data(file.path(getwd(),'data/raster/Zhang_Desimone_7objects_raster_data_mat/'), 'data/binned/ZD', 150, 10, 200, 800, "\\.mat$")
 #' }
 #' @import R.matlab
 #' @import tidyr
@@ -34,7 +34,7 @@
 
 
 
-create_binned_data_from_matlab_raster_data <- function(matlab_raster_directory_name, save_prefix_name, bin_width, sampling_interval, start_df_ind = NULL, end_df_ind = NULL,
+create_binned_data_from_matlab_raster_data <- function(matlab_raster_dir_name, save_prefix_name, bin_width, sampling_interval, start_ind = NULL, end_ind = NULL,
                                                        files_contain = "") {
   start_ind_name <- ""
   end_ind_name <- ""
@@ -42,7 +42,7 @@ create_binned_data_from_matlab_raster_data <- function(matlab_raster_directory_n
 
   
   
-  matlab_file_names <- list.files(matlab_raster_directory_name, pattern = files_contain, full.names = TRUE)
+  matlab_file_names <- list.files(matlab_raster_dir_name, pattern = files_contain, full.names = TRUE)
   binned_site_info <- NULL
   binned_data <- NULL
   
@@ -75,21 +75,21 @@ create_binned_data_from_matlab_raster_data <- function(matlab_raster_directory_n
     start_ind_name <- ""
     end_ind_name <- ""
     
-    if (is.null(start_df_ind)) {
-      start_df_ind <- 1
+    if (is.null(start_ind)) {
+      start_ind <- 1
     } else{
-      start_ind_name <- paste0("_start_", start_df_ind)
+      start_ind_name <- paste0("_start_", start_ind)
     }
     
-    if (is.null(end_df_ind)) {
-      end_df_ind <- dim(raster_data)[2]
+    if (is.null(end_ind)) {
+      end_ind <- dim(raster_data)[2]
     } else{
       
-      end_ind_name <- paste0("_end_", end_df_ind)
+      end_ind_name <- paste0("_end_", end_ind)
     }
     
     
-    raster_data <- raster_data[,start_df_ind:end_df_ind]
+    raster_data <- raster_data[,start_ind:end_ind]
     
     # Add column names to the raster data in the form of: time.1, time.2 etc.
     data_times <- 1:dim(raster_data)[2]
@@ -148,22 +148,22 @@ bin_data_one_site <- function(spike_df, bin_width, sampling_interval) {
   
   
 
-  all_start_df_inds <- seq(1, dim(spike_df)[2] - (bin_width - 1), by = sampling_interval)
-  all_end_df_inds <- all_start_df_inds + (bin_width - 1)
-  dfCurr_site_binned_data <- as.data.frame(matrix(nrow = dim(spike_df)[1], ncol = length(all_start_df_inds)))
+  all_start_inds <- seq(1, dim(spike_df)[2] - (bin_width - 1), by = sampling_interval)
+  all_end_inds <- all_start_inds + (bin_width - 1)
+  dfCurr_site_binned_data <- as.data.frame(matrix(nrow = dim(spike_df)[1], ncol = length(all_start_inds)))
   
-  for (iBin in 1:length(all_start_df_inds)) {
-    if (all_start_df_inds[iBin] == all_end_df_inds[iBin]) {
+  for (iBin in 1:length(all_start_inds)) {
+    if (all_start_inds[iBin] == all_end_inds[iBin]) {
       # if binning at the same resolution as the original file, return original data
-      # add start_df_ind to offset the prestimlus time
-      dfCurr_site_binned_data[, iBin] <- spike_df[, all_start_df_inds[iBin]]
+      # add start_ind to offset the prestimlus time
+      dfCurr_site_binned_data[, iBin] <- spike_df[, all_start_inds[iBin]]
     } else {
       # otherwise, actually bin the data
-      dfCurr_site_binned_data[, iBin] <- rowMeans(spike_df[, all_start_df_inds[iBin] :all_end_df_inds[iBin] ])
+      dfCurr_site_binned_data[, iBin] <- rowMeans(spike_df[, all_start_inds[iBin] :all_end_inds[iBin] ])
     }
   }
   
-  names(dfCurr_site_binned_data) <- paste0("time.", all_start_df_inds, "_", all_end_df_inds)
+  names(dfCurr_site_binned_data) <- paste0("time.", all_start_inds, "_", all_end_inds)
   
   return(dfCurr_site_binned_data)
 }
