@@ -1,6 +1,6 @@
 #' A function that converts data from raster format to binned format
 #'
-#' ! link to raster format and binned format
+#' ! link to raster format and binned format and related two functions
 #'
 #' 
 #' @usage \code{create_binned_data(raster_directory_name, save_prefix_name, bin_width, sampling_interval, start_ind, end_ind, files_contain)}
