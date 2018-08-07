@@ -59,7 +59,7 @@ create_raster_data_from_matlab_raster_data <- function(matlab_raster_dir_name, r
     
     
     
-    # second, create the raster_site_inf0 list
+    # second, create the raster_site_info list
     
     raster_site_info <- raster$raster.site.info[,,1]
     
