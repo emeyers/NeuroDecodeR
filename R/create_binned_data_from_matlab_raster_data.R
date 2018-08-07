@@ -103,7 +103,7 @@ create_binned_data_from_matlab_raster_data <- function(matlab_raster_dir_name, s
     }
     
     names(raster_data) <- paste0("time.", data_times)
-    dfCurr_site_binned_data <- bin_data_one_site(raster_data, bin_width, sampling_interval, raster_site_info, start_ind)
+    dfCurr_site_binned_data <- bin_temp_data_one_site(raster_data, bin_width, sampling_interval, raster_site_info, start_ind)
     
     
     # forth, add the labels to dfCurr_site_binned_data and add it to binned_data
@@ -146,7 +146,7 @@ create_binned_data_from_matlab_raster_data <- function(matlab_raster_dir_name, s
   
 }  # end function
 
-bin_data_one_site <- function(spike_df, bin_width, sampling_interval, raster_site_info, start_ind) {
+bin_temp_data_one_site <- function(spike_df, bin_width, sampling_interval, raster_site_info, start_ind) {
   
   
   
