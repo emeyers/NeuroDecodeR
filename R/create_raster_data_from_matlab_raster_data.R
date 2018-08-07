@@ -1,6 +1,6 @@
 #' A function that converts raster data in .mat format to .Rda format
 #' 
-#' ! link to raster format 
+#' ! link to raster format and related two functions
 #'
 #' @usage \code{create_raster_data_from_matlab_raster_data(matlab_raster_dir_name, r_raster_dir_name = NULL)}
 #' 
