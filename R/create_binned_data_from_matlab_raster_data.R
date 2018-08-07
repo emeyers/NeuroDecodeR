@@ -20,11 +20,11 @@
 #' Assumes that raster files are in the directory 'data/Zhang_Desimone_7objects_raster_data_mat/'
 #' and saves the output file with the prefix ZD
 #' \dontrun{
-#' create_binned_data(file.path(getwd(),'data/raster/Zhang_Desimone_7objects_raster_data_mat/'), 'data/binned/ZD', 150, 10)
+#' create_binned_data_from_matlab_raster_data(file.path(getwd(),'data/raster/Zhang_Desimone_7objects_raster_data_mat/'), 'data/binned/ZD', 150, 10)
 #' }
 #' If you get other files mixed in the raster directory that are .mat files and only want to include data from 10th sample to 100th sample
 #' \dontrun{
-#' create_binned_data(file.path(getwd(),'data/raster/Zhang_Desimone_7objects_raster_data_mat/'), 'data/binned/ZD', 150, 10, 10, 100, "\\.mat$")
+#' create_binned_data_from_matlab_raster_data(file.path(getwd(),'data/raster/Zhang_Desimone_7objects_raster_data_mat/'), 'data/binned/ZD', 150, 10, 10, 100, "\\.mat$")
 #' }
 #' @import R.matlab
 #' @import tidyr
