@@ -88,23 +88,23 @@ create_raster_data_from_matlab_raster_data <- function(matlab_raster_dir_name, r
     # Get the labels for what happened on each trial and add them to the raster.data data frame
     raster_labels <- raster$raster.labels
     # loop over label names
-    label_names <- convert_dot_back_to_underscore(row.names(raster_labels))
+    all_var <- convert_dot_back_to_underscore(row.names(raster_labels))
     
-    for (iLabel in 1:length(label_names)) {
+
+    
+        for (iVar in 1:length(all_var)) {
       # get the name for the current raster_labels
-      curr_label_name <- label_names[iLabel]
+      curr_var_name <- all_var[iVar]
       # add the prefix labels. to the curr label name...
-      curr_label_name <- paste0("labels.", curr_label_name)
-      # extract the labels themselves...
-      curr_labels <- raster_labels[iLabel, , ][[1]]
-      curr_labels <- sapply(curr_labels, function(x) x[[1]])  # data is contained in an extra list - remove this extra list to get the vector of names
+      curr_var_name <- paste0("labels.", curr_var_name)
+      # levels are contained in an extra list - remove this extra list to get the vector of names
+      curr_levels <- raster_labels[iVar, , ][[1]]
+      curr_levels <- sapply(curr_levels, function(x) x[[1]])
       # put into a data frame with the appropriate column name
-      curr_label_column <- eval(parse(text = paste0("curr_label_column <- data.frame(", curr_label_name, " = curr_labels)")))
-      # add to the raster.data raster_data <- cbind(raster_data, curr_label_column)
+      curr_var_column <- eval(parse(text = paste0("curr_var_column <- data.frame(", curr_var_name, " = curr_levels)")))
+      # add to the raster.data raster_data <- cbind(raster_data, curr_var_column)
       raster_data <- cbind(curr_label_column, raster_data)
     }
-    
-    
     
     
     # finally, save both raster_site_info and raster data in the file
