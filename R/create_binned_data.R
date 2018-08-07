@@ -12,8 +12,8 @@
 #'  "\code{bin_width}_samples_binned_every_\code{sampling_interval}_samples
 #' @param bin_width integer. The bin width over which raster data is averaged.
 #' @param sampling_interval integer. It specifies the nth sample following the start of a bin, where the next bin starts 
-#' @param start_ind integer. It specifies the sample index where the binning process starts. By default, it is 1.
-#' @param end_ind integer. It specifies the sample index where the binning process should end by. By default, it is the last smaple index.
+#' @param start_ind integer. It specifies the sample index where the binning process starts. It can be negative. By default, all data is included.
+#' @param end_ind integer. It specifies the sample index where the binning process should end by. It can be negative. By default, all data is included.
 #' @param files_contain regular expression. Only raster data files that match the file_contains are binned.
 #' @return Preceding the binning of each raster file, it spills the total number of raster files will have been binned as you will see
 #' the number increments by one. After the creation of all files, it spills the binned file name. By default, it is an empty character.
@@ -26,9 +26,10 @@
 #' }
 #' If you get other files mixed in the raster directory that are not .Rda files and only want to include data from 10th sample to 100th sample
 #' \dontrun{
-#' create_binned_data(file.path(getwd(),'data/raster/Zhang_Desimone_7objects_raster_data_rda/'), 'data/binned/ZD', 150, 10, 10, 100, "\\.Rda$")
+#' create_binned_data(file.path(getwd(),'data/raster/Zhang_Desimone_7objects_raster_data_rda/'), 'data/binned/ZD', 150, 10, 100, 800, "\\.Rda$")
 #' }
 #' @import dplyr
+#' @import rlang
 #' @export
 
 # bin the data for all sites
@@ -46,12 +47,12 @@ create_binned_data <- function(raster_directory_name, save_prefix_name, bin_widt
   binned_data <- NULL
   binned_site_info <- NULL
   
-  for (i in 1:length(file_names)) {
-    cat(paste(i, " "))
+  for (iSite in 1:length(file_names)) {
+    cat(paste(iSite, " "))
     
-    binned_data_object_name <- load(paste0(raster_directory_name, file_names[i]))
+    binned_data_object_name <- load(paste0(raster_directory_name, file_names[iSite]))
     
-  if ((length(binned_data_object_name) == 2) && (match("raster_data", binned_data_object_name) + match("raster_site_info", binned_data_object_name) == 3)){
+    if ((length(binned_data_object_name) == 2) && (match("raster_data", binned_data_object_name) + match("raster_site_info", binned_data_object_name) == 3)){
       
     } else {
       stop("Data stored in raster files must contain two R objets one called raster_data and another called raster_site_info...
@@ -65,12 +66,12 @@ create_binned_data <- function(raster_directory_name, save_prefix_name, bin_widt
     one_binned_site <- bin_data_one_site(raster_data, bin_width, sampling_interval, start_ind, end_ind)
     
     # append siteID to raster data, which is then appended to binned data
-    one_binned_site$siteID <- rep(i, dim(one_binned_site)[1])
+    one_binned_site$siteID <- rep(iSite, dim(one_binned_site)[1])
     binned_data <- rbind(binned_data, one_binned_site)
     
     # prepend siteID ro raster site info, which is then added to binned site info
-    raster_site_info <- rlang::prepend(raster_site_info, setNames(as.list(i), "siteID"))
-    binned_site_info[[i]]<- raster_site_info
+    raster_site_info <- rlang::prepend(raster_site_info, setNames(as.list(iSite), "siteID"))
+    binned_site_info[[iSite]]<- raster_site_info
   }
   
   # make the siteID be in the first column of binned dataa
@@ -105,68 +106,47 @@ bin_data_one_site <- function(raster_data, bin_width, sampling_interval, start_i
   # start_time is the whole time label
   # start_df_ind is the index of the time column in spike_df
   # start_df_ind and start_id are the same if the time starts at 1
-  
+  browser()
   
   if (is.null(start_ind)) {
-    start_ind <- 1
+    start_df_ind <- 1
+  } else {
+    start_time <- paste0("time.", start_ind)
+    start_df_ind <- match(start_time, colnames(spike_df))
+    
   }
+  
   
   if (is.null(end_ind)) {
-    end_ind <- dim(spike_df)[2]
+    end_df_ind <- dim(spike_df)[2]
+  } else{
+    end_time <- paste0("time.", end_ind)
+    end_df_ind <- match(end_time, colnames(spike_df))
+    
   }
   
-  start_time <- paste0("time.", start_ind)
-  end_time <- paste0("time.", end_ind)
   
-  start_df_ind <- match(start_time, colnames(spike_df))
-  end_df_ind <- match(end_time, colnames(spike_df))
   
   
   all_start_df_inds <- seq(start_df_ind, end_df_ind - (bin_width - 1), by = sampling_interval)
   all_end_df_inds <- all_start_df_inds + (bin_width - 1)
-  binned_data_one_site <- as.data.frame(matrix(nrow = dim(raster_data)[1], ncol = length(all_start_df_inds)))
+  dfCurr_site_binned_data <- as.data.frame(matrix(nrow = dim(raster_data)[1], ncol = length(all_start_df_inds)))
   
   for (i in 1:length(all_start_df_inds)) {
-    if (all_start_df_inds[i] == all_end_df_inds[i]) {
+    if (all_start_df_inds[iBin] == all_end_df_inds[iBin]) {
       # if binning at the same resolution as the original file, return original data
       # add start_df_ind to offset the prestimlus time
-      binned_data_one_site[, i] <- spike_df[, all_start_df_inds[i]]
+      dfCurr_site_binned_data[, iBin] <- spike_df[, all_start_df_inds[iBin]]
     } else {
       # otherwise, actually bin the data
-      binned_data_one_site[, i] <- rowMeans(spike_df[, all_start_df_inds[i] :all_end_df_inds[i] ])
+      dfCurr_site_binned_data[, iBin] <- rowMeans(spike_df[, all_start_df_inds[iBin] :all_end_df_inds[iBin] ])
     }
   }
   
-  names(binned_data_one_site) <- paste0("time.", all_start_df_inds, "_", all_end_df_inds)
-  binned_data_one_site <- cbind(labels_df, binned_data_one_site)
+  names(dfCurr_site_binned_data) <- paste0("time.", all_start_df_inds + (start_ind - start_df_ind), "_", all_end_df_inds + (end_ind - end_df_ind))
+  dfCurr_site_binned_data <- cbind(labels_df, dfCurr_site_binned_data)
   
-  return(binned_data_one_site)
+  return(dfCurr_site_binned_data)
 }
 
-# attempt at a faster version...
-bin_data_one_site2 <- function(raster_data, bin_width, sampling_interval, start_ind = NULL, end_ind = NULL) {
-  labels_df <- dplyr::select(raster_data, -starts_with("time"))
-  spike_df <- dplyr::select(raster_data, starts_with("time"))
-  
-  if (is.null(start_ind)) {
-    start_ind <- 1
-  }
-  
-  if (is.null(end_ind)) {
-    end_ind <- dim(spike_df)[2]
-  }
-  
-  binned_data_one_site <- as.data.frame(matrix(nrow = dim(raster_data)[1], ncol = length(all_start_inds)))
-  # start by smoothing the data to create the binned data with a boxcar filter
-  the_filter <- rep(1, bin_width)/bin_width
-  # use apply to get out smoothed data
-  binned_data_one_site <- data.frame(t(apply(raster_data, 1, stats::filter, the_filter)))
-  sampling_inds <- seq(start_ind, end_ind, by = sampling_interval)
-  binned_data_one_site <- binned_data_one_site[, sampling_inds]
-  all_start_inds <- seq(start_ind, end_ind - bin_width + 1, by = sampling_interval)
-  all_end_inds <- all_start_inds + bin_width - 1
-  names(binned_data_one_site) <- paste0("time.", all_start_inds, "_", all_end_inds)
-  binned_data_one_site <- cbind(labels_df, binned_data_one_site)
-  
-  return(binned_data_one_site)
-}
+
