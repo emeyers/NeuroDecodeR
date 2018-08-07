@@ -16,7 +16,7 @@
 #' @param end_ind integer. It specifies the sample index where the binning process should end by. By default, it is the last smaple index.
 #' @param files_contain regular expression. Only raster data files that match the file_contains are binned.
 #' @return Preceding the binning of each raster file, it spills the total number of raster files will have been binned as you will see
-#' the number increments by one. After the creation of all files, it spills the \code{r_raster_dir_name}.
+#' the number increments by one. After the creation of all files, it spills the binned file name. By default, it is an empty character.
 #' @examples
 #' Bin the data using 150 sample bins sample at 50 sample intervals
 #' Assumes that raster files are in the directory 'data/Zhang_Desimone_7objects_raster_data_rda/'
@@ -24,7 +24,7 @@
 #' \dontrun{
 #' create_binned_data(file.path(getwd(),'data/raster/Zhang_Desimone_7objects_raster_data_rda/'), 'data/binned/ZD', 150, 10)
 #' }
-#' If you get other files mixed in the raster directory and only want to include data from 10th sample to 100th sample
+#' If you get other files mixed in the raster directory that are not .Rda files and only want to include data from 10th sample to 100th sample
 #' \dontrun{
 #' create_binned_data(file.path(getwd(),'data/raster/Zhang_Desimone_7objects_raster_data_rda/'), 'data/binned/ZD', 150, 10, 10, 100, "\\.Rda$")
 #' }
@@ -108,14 +108,10 @@ bin_data_one_site <- function(raster_data, bin_width, sampling_interval, start_i
   
   
   if (is.null(start_ind)) {
-    # start_time <- names(spike_df)[1]
-    # start_ind <-as.numeric(gsub("time.", "", start_time))
     start_ind <- 1
   }
   
   if (is.null(end_ind)) {
-    # end_time <- names(spike_df)[dim(spike_df)[2]]
-    # end_ind <- as.numeric(gsub("time.", "", end_time))
     end_ind <- dim(spike_df)[2]
   }
   

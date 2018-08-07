@@ -8,16 +8,25 @@
 #' @param r_raster_dir_name character. Name of the directory to store created raster data in .Rda format.
 #' By default, it is created by removing the "_mat" suffix of \code{matlab_raster_dir_name} if applicable
 #' and appending '_rda' to it.
+#' @param start_ind integer. It specifies the sample index where the data starts being taken in. By default, it is 1.
+#' @param end_ind integer. It specifies the sample index from where on the data will be ignored. By default, it is the last smaple index.
+#' @param files_contain regular expression. Only raster data files that match the file_contains are binned. By default, it is an empty character.
 #' @return Preceding the creation of each raster file, it spills the total number of raster files will have been created as you will see
 #' the number increments by one. After writing all raster files, it spills the \code{r_raster_dir_name}.
 #' @example
 #' \dontrun{
 #' create_raster_data_from_matlab_raster_data(file.path(getwd(), "data/raster/Zhang_Desimone_7objects_raster_data_mat"))
 #' }
+#' If you get other files mixed in the raster directory that are not .mat files and only want to include data from 10th sample to 100th sample
+#' \dontrun{
+#' create_raster_data_from_matlab_raster_data(file.path(getwd(),'data/raster/Zhang_Desimone_7objects_raster_data_mat/'), start_id=10, end_ind=100,
+#' files_contatin="\\.mat$")
+#' }
 #' @import R.matlab
 #' @export
 
-create_raster_data_from_matlab_raster_data <- function(matlab_raster_dir_name, r_raster_dir_name = NULL){
+create_raster_data_from_matlab_raster_data <- function(matlab_raster_dir_name, r_raster_dir_name = NULL, start_ind = NULL, end_ind = NULL,
+                                                       files_contain = ""){
   
   # zero, create destination dir
   if(is.null(r_raster_dir_name)){
@@ -43,9 +52,9 @@ create_raster_data_from_matlab_raster_data <- function(matlab_raster_dir_name, r
     dir.create(r_raster_dir_name)
     
   }
-
   
-  matlab_file_names <- list.files(matlab_raster_dir_name)
+  
+  matlab_file_names <- list.files(matlab_raster_dir_name, pattern = files_contain)
   for (iSite in 1:length(matlab_file_names)) {
     print(iSite)
     
@@ -63,7 +72,7 @@ create_raster_data_from_matlab_raster_data <- function(matlab_raster_dir_name, r
     
     raster_site_info <- raster$raster.site.info[,,1]
     
-
+    
     
     
     
@@ -71,9 +80,11 @@ create_raster_data_from_matlab_raster_data <- function(matlab_raster_dir_name, r
     # third, create the raster_data df
     # Get the raster data
     raster_data <- data.frame(raster$raster.data)
+    raster_data <- raster_data[,start_ind:end_ind]
+    
     # Add column names to the raster data in the form of: time.1, time.2 etc.
     data_times <- 1:dim(raster_data)[2]
-    
+
     # abandoned for over-engineering
     # # (if there is an alignment time, subtract it from the raster times...)
     # if (sum(names(raster_site_info) == "alignment_event_time")) {
@@ -90,9 +101,9 @@ create_raster_data_from_matlab_raster_data <- function(matlab_raster_dir_name, r
     # loop over label names
     all_var <- convert_dot_back_to_underscore(row.names(raster_labels))
     
-
     
-        for (iVar in 1:length(all_var)) {
+    
+    for (iVar in 1:length(all_var)) {
       # get the name for the current raster_labels
       curr_var_name <- all_var[iVar]
       # add the prefix labels. to the curr label name...
