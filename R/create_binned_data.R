@@ -134,7 +134,8 @@ bin_data_one_site <- function(raster_data, bin_width, sampling_interval, start_i
   all_end_df_inds <- all_start_df_inds + (bin_width - 1)
   dfCurr_site_binned_data <- as.data.frame(matrix(nrow = dim(raster_data)[1], ncol = length(all_start_df_inds)))
   
-  for (i in 1:length(all_start_df_inds)) {
+  browser()
+  for (iBin in 1:length(all_start_df_inds)) {
     if (all_start_df_inds[iBin] == all_end_df_inds[iBin]) {
       # if binning at the same resolution as the original file, return original data
       # add start_df_ind to offset the prestimlus time

@@ -12,7 +12,7 @@
 #'  By default, all data are included.
 #' @param end_ind integer. It specifies the sample index where the binning process should end by. Due to the structure of raster data in matlab, all sample indices should be positive.
 #'  By default, all data are included.
-#' @param files_contain regular expression. Only raster data files that match the file_contains are binned. By default, it is an empty character.
+#' @param files_contain regular expression. Only raster data files that match the file_contains are inlcluded. By default, it is an empty character.
 #' @return Preceding the creation of each raster file, it spills the total number of raster files will have been created as you will see
 #' the number increments by one. After writing all raster files, it spills the \code{r_raster_dir_name}.
 #' @example
@@ -21,8 +21,7 @@
 #' }
 #' If you get other files mixed in the raster directory that are not .mat files and only want to include data from 200th sample to 800th sample
 #' \dontrun{
-#' create_raster_data_from_matlab_raster_data(file.path(getwd(),'data/raster/Zhang_Desimone_7objects_raster_data_mat/'), 200, 800,
-#' files_contain="\\.mat$")
+#' create_raster_data_from_matlab_raster_data(file.path(getwd(),'data/raster/Zhang_Desimone_7objects_raster_data_mat/'), start_ind=200, end_ind=800, files_contain="\\.mat$")
 #' }
 #' @import R.matlab
 #' @export
@@ -72,14 +71,14 @@ create_raster_data_from_matlab_raster_data <- function(matlab_raster_dir_name, r
     if (is.null(start_ind)) {
       start_ind <- 1
     } else{
-      start_ind_name <- paste0("_start_", start_ind, "_col_")
+      start_ind_name <- paste0("_start_", start_ind)
     }
     
     if (is.null(end_ind)) {
       end_ind <- dim(raster_data)[2]
     } else{
       
-      end_ind_name <- paste0("_end_", end_ind, "_col_")
+      end_ind_name <- paste0("_end_", end_ind)
     }
     
     
@@ -91,9 +90,9 @@ create_raster_data_from_matlab_raster_data <- function(matlab_raster_dir_name, r
     data_times <- 1:dim(raster_data)[2]
 
 
-    # if there is an alignment time, subtract it from the raster times
+    # if there is an alignment time, subtract it from the raster times; also, subtract the start_ind offset from the alignment time
     if (sum(names(raster_site_info) == "alignment.event.time")) {
-      data_times <- (data_times - rep.int(raster_site_info$alignment.event.time, length(data_times)))
+      data_times <- (data_times - rep.int(raster_site_info$alignment.event.time - (start_ind - 1), length(data_times)))
     }
     
     names(raster_data) <- paste0("time.", data_times)

@@ -10,9 +10,11 @@
 #'  "\code{bin_width}_samples_binned_every_\code{sampling_interval}_samples
 #' @param bin_width integer. The bin width over which raster data is averaged.
 #' @param sampling_interval integer. It specifies the nth sample following the start of a bin, where the next bin starts 
-#' @param start_ind integer. It specifies the column index where the binning process starts. It must not be negative. By default, all data is included.
-#' @param end_ind integer. It specifies the column index where the binning process should end by. It must not be negative. By default, all data is included.
-#' @param files_contain regular expression. Only raster data files that match the file_contains are binned.
+#' @param start_ind integer. It specifies the sample index where the binning process starts. Due to the structure of raster data in matlab, all sample indices should be positive. 
+#'  By default, all data are included.
+#' @param end_ind integer. It specifies the sample index where the binning process should end by. Due to the structure of raster data in matlab, all sample indices should be positive.
+#'  By default, all data are included.
+#' @param files_contain regular expression. Only raster data files that match the file_contains are inlcluded. By default, it is an empty character.
 #' @return Preceding the binning of each raster file, it spills the total number of raster files will have been binned as you will see
 #' the number increments by one. After the creation of all files, it spills the binned file name. By default, it is an empty character.
 #' @examples
@@ -20,11 +22,11 @@
 #' Assumes that raster files are in the directory 'data/Zhang_Desimone_7objects_raster_data_mat/'
 #' and saves the output file with the prefix ZD
 #' \dontrun{
-#' create_binned_data_from_matlab_raster_data(file.path(getwd(),'data/raster/Zhang_Desimone_7objects_raster_data_mat/'), 'data/binned/ZD', 150, 10)
+#' create_binned_data_from_matlab_raster_data(file.path(getwd(),'data/raster/Zhang_Desimone_7objects_raster_data_mat/'), 'data/binned/ZD', 150, 20)
 #' }
 #' If you get other files mixed in the raster directory that are .mat files and only want to include data from 200th sample to 800th sample
 #' \dontrun{
-#' create_binned_data_from_matlab_raster_data(file.path(getwd(),'data/raster/Zhang_Desimone_7objects_raster_data_mat/'), 'data/binned/ZD', 150, 10, 200, 800, "\\.mat$")
+#' create_binned_data_from_matlab_raster_data(file.path(getwd(),'data/raster/Zhang_Desimone_7objects_raster_data_mat/'), 'data/binned/ZD', 150, 20, 200, 800, "\\.mat$")
 #' }
 #' @import R.matlab
 #' @import tidyr
@@ -36,10 +38,17 @@
 
 create_binned_data_from_matlab_raster_data <- function(matlab_raster_dir_name, save_prefix_name, bin_width, sampling_interval, start_ind = NULL, end_ind = NULL,
                                                        files_contain = "") {
+  
   start_ind_name <- ""
   end_ind_name <- ""
   
-
+  if (!is.null(start_ind)) {
+    start_ind_name <- paste0("_start_", start_ind)
+  } 
+  if (!is.null(end_ind)) {
+    end_ind_name <- paste0("_end_", end_ind)
+  } 
+  
   
   
   matlab_file_names <- list.files(matlab_raster_dir_name, pattern = files_contain, full.names = TRUE)
@@ -72,35 +81,29 @@ create_binned_data_from_matlab_raster_data <- function(matlab_raster_dir_name, s
     # Get the raster data
     raster_data <- data.frame(raster$raster.data)
     
-    start_ind_name <- ""
-    end_ind_name <- ""
-    
-    if (is.null(start_ind)) {
-      start_ind <- 1
-    } else{
-      start_ind_name <- paste0("_start_", start_ind)
+    # only need to do this once
+    if(iSite == 1){
+      if(is.null(start_ind)){
+        start_ind <- 1
+        
+      }
+      if(is.null(end_ind)){
+        end_ind <- dim(raster_data)[2]
+      }
     }
-    
-    if (is.null(end_ind)) {
-      end_ind <- dim(raster_data)[2]
-    } else{
-      
-      end_ind_name <- paste0("_end_", end_ind)
-    }
-    
     
     raster_data <- raster_data[,start_ind:end_ind]
     
     # Add column names to the raster data in the form of: time.1, time.2 etc.
     data_times <- 1:dim(raster_data)[2]
     
-    # if there is an alignment time, subtract it from the raster times
+    # if there is an alignment time, subtract it from the raster times; also, subtract the start_ind offset from the alignment time
     if (sum(names(raster_site_info) == "alignment.event.time")) {
-      data_times <- (data_times - raster_site_info$alignment.event.time)
+      data_times <- (data_times - rep.int(raster_site_info$alignment.event.time - (start_ind - 1), length(data_times)))
     }
     
     names(raster_data) <- paste0("time.", data_times)
-    dfCurr_site_binned_data <- bin_data_one_site(raster_data, bin_width, sampling_interval)
+    dfCurr_site_binned_data <- bin_data_one_site(raster_data, bin_width, sampling_interval, raster_site_info, start_ind)
     
     
     # forth, add the labels to dfCurr_site_binned_data and add it to binned_data
@@ -135,7 +138,7 @@ create_binned_data_from_matlab_raster_data <- function(matlab_raster_dir_name, s
   # save the results to a .Rda file
   saved_binned_data_file_name <- paste0(save_prefix_name, "_", bin_width, "_samples_binned_every_", sampling_interval,
                                         "_samples")
-
+  
   
   saved_binned_data_file_name <- paste0(saved_binned_data_file_name, start_ind_name, end_ind_name, ".Rda")
   print(saved_binned_data_file_name)
@@ -143,11 +146,11 @@ create_binned_data_from_matlab_raster_data <- function(matlab_raster_dir_name, s
   
 }  # end function
 
-bin_data_one_site <- function(spike_df, bin_width, sampling_interval) {
+bin_data_one_site <- function(spike_df, bin_width, sampling_interval, raster_site_info, start_ind) {
   
   
   
-
+  
   all_start_inds <- seq(1, dim(spike_df)[2] - (bin_width - 1), by = sampling_interval)
   all_end_inds <- all_start_inds + (bin_width - 1)
   dfCurr_site_binned_data <- as.data.frame(matrix(nrow = dim(spike_df)[1], ncol = length(all_start_inds)))
@@ -161,6 +164,13 @@ bin_data_one_site <- function(spike_df, bin_width, sampling_interval) {
       # otherwise, actually bin the data
       dfCurr_site_binned_data[, iBin] <- rowMeans(spike_df[, all_start_inds[iBin] :all_end_inds[iBin] ])
     }
+  }
+  
+  # if there is an alignment time, subtract it from the raster times; also, subtract the start_ind offset from the alignment time
+  if (sum(names(raster_site_info) == "alignment.event.time")) {
+    all_start_inds <- (all_start_inds - rep.int(raster_site_info$alignment.event.time - (start_ind - 1), length(all_start_inds)))
+    all_end_inds <- (all_end_inds - rep.int(raster_site_info$alignment.event.time - (start_ind - 1), length(all_end_inds)))
+    
   }
   
   names(dfCurr_site_binned_data) <- paste0("time.", all_start_inds, "_", all_end_inds)
