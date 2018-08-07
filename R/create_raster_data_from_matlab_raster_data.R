@@ -27,13 +27,13 @@ create_raster_data_from_matlab_raster_data <- function(matlab_raster_dir_name, r
       matlab_raster_dir_name <- substr(matlab_raster_dir_name, 1, nchar(matlab_raster_dir_name) - 1)
     }  
     
-    # if the directory name ends with _mat, remove _mat
+    # if the directory name ends with "_mat", remove "_mat"
     non_desired_pattern = '.*_mat$'
     if (grepl(non_desired_pattern, matlab_raster_dir_name) == TRUE){
       r_raster_dir_name <- substr(matlab_raster_dir_name, 1, nchar(matlab_raster_dir_name) - 4)
     } 
     
-    # append Rda
+    # append "_rda/"
     r_raster_dir_name <- paste0(r_raster_dir_name, "_rda/")
     
     
