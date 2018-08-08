@@ -20,7 +20,7 @@ create_binned_data(raster_directory_name, 'data/binned/ZD', 10, 3)
 
 
 
-we rm(list = ls())
+rm(list = ls())
 
 
 # define the decoding parameters...

@@ -1,52 +1,46 @@
-# Example of how the code is used...
+#' A function that converts raster data in .mat format to .Rda format
+#' 
+#' ! link to raster format and related two functions
+#'
+#' @usage \code{create_raster_data_from_matlab_raster_data(matlab_raster_dir_name, r_raster_dir_name = NULL)}
+#' 
+#' @param matlab_raster_dir_name character. Name of a directory containing raster data in .mat format.
+#' @param r_raster_dir_name character. Name of the directory to store created raster data in .Rda format.
+#' By default, it is created by removing the "_mat" suffix of \code{matlab_raster_dir_name} if applicable
+#' and appending '_rda' to it.
+#' @param start_ind integer. It specifies the sample index where the binning process starts. Due to the structure of raster data in matlab, all sample indices should be positive. 
+#'  By default, all data are included.
+#' @param end_ind integer. It specifies the sample index where the binning process should end by. Due to the structure of raster data in matlab, all sample indices should be positive.
+#'  By default, all data are included.
+#' @param files_contain regular expression. Only raster data files that match the file_contains are inlcluded. By default, it is an empty character.
+#' @return Preceding the creation of each raster file, it spills the total number of raster files will have been created as you will see
+#' the number increments by one. After writing all raster files, it spills the \code{r_raster_dir_name}.
+#' @example
+#' \dontrun{
+#' create_raster_data_from_matlab_raster_data(file.path(getwd(), "data/raster/Zhang_Desimone_7objects_raster_data_mat"))
+#' }
+#' If you get other files mixed in the raster directory that are not .mat files and only want to include data from 200th sample to 800th sample
+#' \dontrun{
+#' create_raster_data_from_matlab_raster_data(file.path(getwd(),'data/raster/Zhang_Desimone_7objects_raster_data_mat/'), start_ind=200, end_ind=800, files_contain="\\.mat$")
+#' }
+#' @import R.matlab
+#' @export
 
-# # directories of where the .mat raster files are, # and where the .rda files files should be saved basedir_name <-
-# '../data/Zhang_Desimone_7objects_matlab_raster_data/' savedir_name <- '../data/Zhang_Desimone_7objects_R_raster_data/'
-# file_names <- list.files(basedir_name) # if the directory doesn't exist, create it if (!dir.exists(savedir_name))
-# dir.create(savedir_name) # go through each .mat file and convert it into .rda format for (i in seq_along(file_names)){
-# print(i) raster_data <- load_matlab_raster_data(paste0(basedir_name, file_names[i])) save_name <- paste0(savedir_name,
-# stringr::str_replace(file_names[i], 'mat', 'rda')) save(raster_data, file = save_name, compress = TRUE) }
-
-# The current version of R.matlab on CRAN doesn't not work with R version 3.2.2 can install the package using the
-# following command: 
-
-# source('http://callr.org/install#HenrikBengtsson/R.matlab@develop')
-# library(R.matlab)
-#' @ export
-
-# matlab_raster_dir_name <- file.path(getwd(), "data/raster/Zhang_Desimone_7objects_raster_data_mat")
-create_raster_data_from_matlab_raster_data <- function(matlab_raster_dir_name, r_raster_dir_name){
+create_raster_data_from_matlab_raster_data <- function(matlab_raster_dir_name, r_raster_dir_name = NULL, start_ind = NULL, end_ind = NULL,
+                                                       files_contain = ""){
+  # if matlab directory name ends with a slash, remove this slash
   
-  # zero, create destination dir
-  if(missing(r_raster_dir_name)){
-    # if the directory name ends with a slash, remove this slash
-    regex = '.*/$'
-    if (grepl(regex, matlab_raster_dir_name) == TRUE){
-      matlab_raster_dir_name <- substr(matlab_raster_dir_name, 1, nchar(matlab_raster_dir_name) - 1)
-    }  
-    
-    # if the directory name ends with _mat, remove _mat
-    regex = '.*_mat$'
-    if (grepl(regex, matlab_raster_dir_name) == TRUE){
-      r_raster_dir_name <- substr(matlab_raster_dir_name, 1, nchar(matlab_raster_dir_name) - 4)
-    } 
-    
-    # append Rda
-    r_raster_dir_name <- paste0(r_raster_dir_name, "_rda/")
-    
-    
-  }
-  
-  if(dir.exists(r_raster_dir_name) == FALSE){
-    dir.create(r_raster_dir_name)
-    
-  }
+  non_desired_pattern = '.*/$'
+  if (grepl(non_desired_pattern, matlab_raster_dir_name) == TRUE){
+    matlab_raster_dir_name <- substr(matlab_raster_dir_name, 1, nchar(matlab_raster_dir_name) - 1)
+  }  
   
 
   
-  matlab_file_names <- list.files(matlab_raster_dir_name)
+  
+  matlab_file_names <- list.files(matlab_raster_dir_name, pattern = files_contain)
   for (iSite in 1:length(matlab_file_names)) {
-    print(iSite)
+    cat(paste(iSite, " "))
     
     # first, load in raster as a list
     curr_matlab_file_name <- matlab_file_names[iSite]
@@ -54,32 +48,15 @@ create_raster_data_from_matlab_raster_data <- function(matlab_raster_dir_name, r
     # replace .mat with .Rda for matlab_raster_directory_name
     curr_r_file_name <- paste0(substr(curr_matlab_file_name, 1, nchar(curr_matlab_file_name)-3), "Rda")
     
-    raster <- readMat(paste0(matlab_raster_dir_name, "/", curr_matlab_file_name))
+    raster <- R.matlab::readMat(paste0(matlab_raster_dir_name, "/", curr_matlab_file_name))
     
     
     
-    # keep raster_site_info as it is
+    # second, create the raster_site_info list
     
-    raster_site_info <- raster$raster.site.info
-    # # second, create the raster_site_info df
-    # # parse the raster site info (perhaps there is a better way to do this, but works)
-    # temp_raster_site_info <- data.frame(raster$raster.site.info)
-    # temp_raster_site_info_names <- convert_dot_back_to_underscore(row.names(temp_raster_site_info))
-    # 
-    # raster_site_info <- NULL
-    # 
-    # # parse the raster_raster_site_info names if they exist...
-    # if (length(temp_raster_site_info_names) > 0) {
-    #   for (iSiteInfo in 1:length(temp_raster_site_info_names)) {
-    #     curr_info_data <- unlist(temp_raster_site_info[iSiteInfo, ])
-    #     eval(parse(text = (paste0("raster_site_info$site_info.", eval(temp_raster_site_info_names[iSiteInfo]), " <- curr_info_data"))))
-    #   }
-    # }
-    # 
-    # raster_site_info <- data.frame(raster_site_info)
-    # 
-    # # because list is crazy
-    # rownames(raster_site_info) <- c()
+    raster_site_info <- raster$raster.site.info[,,1]
+    
+    
     
     
     
@@ -87,12 +64,35 @@ create_raster_data_from_matlab_raster_data <- function(matlab_raster_dir_name, r
     # third, create the raster_data df
     # Get the raster data
     raster_data <- data.frame(raster$raster.data)
+    
+    start_ind_name <- ""
+    end_ind_name <- ""
+    
+    if (is.null(start_ind)) {
+      start_ind <- 1
+    } else{
+      start_ind_name <- paste0("_start_", start_ind)
+    }
+    
+    if (is.null(end_ind)) {
+      end_ind <- dim(raster_data)[2]
+    } else{
+      
+      end_ind_name <- paste0("_end_", end_ind)
+    }
+    
+    
+    
+    
+    raster_data <- raster_data[,start_ind:end_ind]
+    
     # Add column names to the raster data in the form of: time.1, time.2 etc.
     data_times <- 1:dim(raster_data)[2]
-    
-    # (if there is an alignment time, subtract it from the raster times...)
-    if (sum(names(raster_site_info) == "site_info.alignment_event_time")) {
-      data_times <- (data_times - raster_site_info$site_info.alignment_event_time)
+
+
+    # if there is an alignment time, subtract it from the raster times; also, subtract the start_ind offset from the alignment time
+    if (sum(names(raster_site_info) == "alignment.event.time")) {
+      data_times <- (data_times - rep.int(raster_site_info$alignment.event.time - (start_ind - 1), length(data_times)))
     }
     
     names(raster_data) <- paste0("time.", data_times)
@@ -103,32 +103,56 @@ create_raster_data_from_matlab_raster_data <- function(matlab_raster_dir_name, r
     # Get the labels for what happened on each trial and add them to the raster.data data frame
     raster_labels <- raster$raster.labels
     # loop over label names
-    label_names <- convert_dot_back_to_underscore(row.names(raster_labels))
+    all_var <- convert_dot_back_to_underscore(row.names(raster_labels))
     
-    for (iLabel in 1:length(label_names)) {
+    
+    
+    for (iVar in 1:length(all_var)) {
       # get the name for the current raster_labels
-      curr_label_name <- label_names[iLabel]
+      curr_var_name <- all_var[iVar]
       # add the prefix labels. to the curr label name...
-      curr_label_name <- paste0("labels.", curr_label_name)
-      # extract the labels themselves...
-      curr_labels <- raster_labels[iLabel, , ][[1]]
-      curr_labels <- sapply(curr_labels, function(x) x[[1]])  # data is contained in an extra list - remove this extra list to get the vector of names
+      curr_var_name <- paste0("labels.", curr_var_name)
+      # levels are contained in an extra list - remove this extra list to get the vector of names
+      curr_levels <- raster_labels[iVar, , ][[1]]
+      curr_levels <- sapply(curr_levels, function(x) x[[1]])
       # put into a data frame with the appropriate column name
-      curr_label_column <- eval(parse(text = paste0("curr_label_column <- data.frame(", curr_label_name, " = curr_labels)")))
-      # add to the raster.data raster_data <- cbind(raster_data, curr_label_column)
-      raster_data <- cbind(curr_label_column, raster_data)
+      curr_var_column <- eval(parse(text = paste0("curr_var_column <- data.frame(", curr_var_name, " = curr_levels)")))
+      # add to the raster.data raster_data <- cbind(raster_data, curr_var_column)
+      raster_data <- cbind(curr_var_column, raster_data)
     }
     
     
-    
-    
     # finally, save both raster_site_info and raster data in the file
+    if(is.null(r_raster_dir_name)){
+      
+      # if the directory name ends with "_mat", remove "_mat"
+      non_desired_pattern = '.*_mat$'
+      if (grepl(non_desired_pattern, matlab_raster_dir_name) == TRUE){
+        r_raster_dir_name <- substr(matlab_raster_dir_name, 1, nchar(matlab_raster_dir_name) - 4)
+      } 
+      
+      # append start and end index if applicable and append "_rda/"
+      
+      
+      
+      r_raster_dir_name <- paste0(r_raster_dir_name, start_ind_name, end_ind_name, "_rda/")
+      
+      
+    }
+    
+    if(dir.exists(r_raster_dir_name) == FALSE){
+      dir.create(r_raster_dir_name)
+      
+    }
+    
     
     save(raster_site_info, raster_data, file = paste0(r_raster_dir_name, curr_r_file_name), compress = TRUE)
     
     
-    
   }
+  
+  print(r_raster_dir_name)
+  
 }
 
 convert_dot_back_to_underscore <- function(oldnames){

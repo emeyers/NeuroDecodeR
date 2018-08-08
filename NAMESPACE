@@ -3,6 +3,7 @@
 export(basic_DS)
 export(convert_rates_to_counts)
 export(create_binned_data)
+export(create_script)
 export(get_bin_widths)
 export(get_center_bin_time)
 export(max_correlation_CL)
