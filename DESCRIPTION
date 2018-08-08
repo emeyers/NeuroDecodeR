@@ -20,8 +20,5 @@ Imports: R6,
     tictoc,
     R.matlab,
     e1071,
-    shinydashboard,
-    shinyAce,
-    shinyFiles,
     rlang
 Suggests: testthat
