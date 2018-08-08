@@ -31,7 +31,6 @@
 #' create_binned_data(file.path(getwd(),'data/raster/Zhang_Desimone_7objects_raster_data_rda/'), 'data/binned/ZD', 150, 10, -300, 300, "\\.Rda$")
 #' }
 #' @import dplyr
-#' @import rlang
 #' @export
 
 # bin the data for all sites

@@ -2,11 +2,38 @@
 % Please edit documentation in R/create_raster_data_from_matlab_raster_data.R
 \name{create_raster_data_from_matlab_raster_data}
 \alias{create_raster_data_from_matlab_raster_data}
-\title{export}
+\title{A function that converts raster data in .mat format to .Rda format}
 \usage{
-create_raster_data_from_matlab_raster_data(matlab_raster_dir_name,
-  r_raster_dir_name = NULL)
+\code{create_raster_data_from_matlab_raster_data(matlab_raster_dir_name, r_raster_dir_name = NULL)}
+}
+\arguments{
+\item{matlab_raster_dir_name}{character. Name of a directory containing raster data in .mat format.}
+
+\item{r_raster_dir_name}{character. Name of the directory to store created raster data in .Rda format.
+By default, it is created by removing the "_mat" suffix of \code{matlab_raster_dir_name} if applicable
+and appending '_rda' to it.}
+
+\item{start_ind}{integer. It specifies the sample index where the binning process starts. Due to the structure of raster data in matlab, all sample indices should be positive. 
+By default, all data are included.}
+
+\item{end_ind}{integer. It specifies the sample index where the binning process should end by. Due to the structure of raster data in matlab, all sample indices should be positive.
+By default, all data are included.}
+
+\item{files_contain}{regular expression. Only raster data files that match the file_contains are inlcluded. By default, it is an empty character.}
+}
+\value{
+Preceding the creation of each raster file, it spills the total number of raster files will have been created as you will see
+the number increments by one. After writing all raster files, it spills the \code{r_raster_dir_name}.
 }
 \description{
-export
+! link to raster format and related two functions
+}
+\examples{
+\dontrun{
+create_raster_data_from_matlab_raster_data(file.path(getwd(), "data/raster/Zhang_Desimone_7objects_raster_data_mat"))
+}
+If you get other files mixed in the raster directory that are not .mat files and only want to include data from 200th sample to 800th sample
+\dontrun{
+create_raster_data_from_matlab_raster_data(file.path(getwd(),'data/raster/Zhang_Desimone_7objects_raster_data_mat/'), start_ind=200, end_ind=800, files_contain="\\\\.mat$")
+}
 }

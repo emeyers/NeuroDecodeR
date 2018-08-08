@@ -15,7 +15,7 @@
 #' @param files_contain regular expression. Only raster data files that match the file_contains are inlcluded. By default, it is an empty character.
 #' @return Preceding the creation of each raster file, it spills the total number of raster files will have been created as you will see
 #' the number increments by one. After writing all raster files, it spills the \code{r_raster_dir_name}.
-#' @example
+#' @examples
 #' \dontrun{
 #' create_raster_data_from_matlab_raster_data(file.path(getwd(), "data/raster/Zhang_Desimone_7objects_raster_data_mat"))
 #' }
@@ -23,7 +23,6 @@
 #' \dontrun{
 #' create_raster_data_from_matlab_raster_data(file.path(getwd(),'data/raster/Zhang_Desimone_7objects_raster_data_mat/'), start_ind=200, end_ind=800, files_contain="\\.mat$")
 #' }
-#' @import R.matlab
 #' @export
 
 create_raster_data_from_matlab_raster_data <- function(matlab_raster_dir_name, r_raster_dir_name = NULL, start_ind = NULL, end_ind = NULL,

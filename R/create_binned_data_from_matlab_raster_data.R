@@ -28,10 +28,7 @@
 #' \dontrun{
 #' create_binned_data_from_matlab_raster_data(file.path(getwd(),'data/raster/Zhang_Desimone_7objects_raster_data_mat/'), 'data/binned/ZD', 150, 20, 200, 800, "\\.mat$")
 #' }
-#' @import R.matlab
-#' @import tidyr
 #' @import dplyr
-#' @import rlang
 #' @export
 
 

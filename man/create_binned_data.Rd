@@ -4,52 +4,42 @@
 \alias{create_binned_data}
 \title{A function that converts data from raster format to binned format}
 \usage{
-create_binned_data(raster_directory_name, save_prefix_name, bin_width,
-  sampling_interval, start_ind = NULL, end_ind = NULL, files_contain = "")
+\code{create_binned_data(raster_dir_name, save_prefix_name, bin_width, sampling_interval, start_ind, end_ind, files_contain)}
 }
 \arguments{
-\item{raster_directory_name}{character.  This argument is the name of a
-directory that contains files that are in raster format.}
+\item{raster_dir_name}{character. Name of a directory containing raster data in .Rda format.}
 
-\item{save_prefix_name}{integer. This argument contains a prefix
-(e.g., directory name and additional characters) for how the resulting
-binned file should be saved. The string _binned_data_Xms_bins_Yms_sampled
-is appended on to the saved Rda file name, where X is the bin_width and
-Y is the sampling interval.}
+\item{save_prefix_name}{character. Prefix to the generated name for the created binned file, which is
+"\code{bin_width}_samples_binned_every_\code{sampling_interval}_samples}
 
-\item{bin_width}{integer. The bin width over which spike count rates should be computed.}
+\item{bin_width}{integer. The bin width over which raster data is averaged.}
 
-\item{sampling_interval}{integer. The frequency with which the data should be sampled.}
+\item{sampling_interval}{integer. It specifies the nth sample following the start of a bin, where the next bin starts}
 
-\item{start_ind}{integer. An optional argument that specifies the time index where the
-the first bin should start.}
+\item{start_ind}{integer. It specifies the sample index (i.e., the number behind "time.") where the binning process starts. 
+It can be negative if your sample index is negative. By default, all data are included.}
 
-\item{end_ind}{logical. An optional argument that specifies the time index where the
-the binning process should end.}
+\item{end_ind}{integer. It specifies the sample index (i.e., the number behind "time.") where the binning process should end by. 
+It can be negative if your sample index is negative. By default, all data are included.}
 
-\item{files_contain}{regular expression. Only raster data files that match the file_contains
-string will be included in the binned data.}
+\item{files_contain}{regular expression. Only raster data files that match the file_contains are binned.}
+}
+\value{
+Preceding the binning of each raster file, it spills the total number of raster files will have been binned as you will see
+the number increments by one. After the creation of all files, it spills the binned file name. By default, it is an empty character.
 }
 \description{
-This function takes takes a directory containing data in raster format
-and converts it into a file that contains 'binned' spike count rate data
-that is sampled at a particular frequency.
-
-\describe{
-\item{\code{create_binned_data(raster_directory_name, save_prefix_name, bin_width, sampling_interval, start_ind, end_ind, files_contain)}}{
-creates a binned data file.
-}}
+! link to raster format and binned format and related two functions
 }
 \examples{
-Bin the data using 150 ms bins sample at 50 ms intervals
-Assumes that raster files are in the directory '../data/Zhang_Desimone_7objects_R_raster_data/'
+Bin the data using 150 sample bins sample at 50 sample intervals
+Assumes that raster files are in the directory 'data/Zhang_Desimone_7objects_raster_data_rda/'
 and saves the output file with the prefix ZD
 \dontrun{
-create_binned_data('../data/Zhang_Desimone_7objects_R_raster_data/', '../data/ZD', 150, 10)
-
-
-# all options
-create_binned_data(raster_directory_name, save_prefix_name, bin_width, sampling_interval, start_ind, end_ind, files_contain)
-
+create_binned_data(file.path(getwd(),'data/raster/Zhang_Desimone_7objects_raster_data_rda/'), 'data/binned/ZD', 150, 10)
+}
+If you get other files mixed in the raster directory that are not .Rda files and only want to include data from 10th sample to 100th sample
+\dontrun{
+create_binned_data(file.path(getwd(),'data/raster/Zhang_Desimone_7objects_raster_data_rda/'), 'data/binned/ZD', 150, 10, -300, 300, "\\\\.Rda$")
 }
 }
