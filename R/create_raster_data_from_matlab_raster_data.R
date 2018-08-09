@@ -67,13 +67,17 @@ create_raster_data_from_matlab_raster_data <- function(matlab_raster_dir_name, r
     if (is.null(start_ind)) {
       start_ind <- 1
       bStart_ind <- FALSE
-}
+    }else {
+      bStart_ind <- TRUE
+    } 
     
     if (is.null(end_ind)) {
       end_ind <- dim(raster_data)[2]
       bEnd_ind <- FALSE
       
-    } 
+    } else {
+      bEnd_ind <- TRUE
+    }
     
     
     raster_data <- raster_data[,start_ind:end_ind]
