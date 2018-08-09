@@ -54,7 +54,7 @@ create_binned_data <- function(raster_directory_name, save_prefix_name, bin_widt
   file_names <- list.files(raster_directory_name, pattern = files_contain)
   binned_data <- NULL
   binned_site_info <- NULL
-  
+
   for (i in 1:length(file_names)) {
     cat(paste(i, " "))
     # print(i) tic()

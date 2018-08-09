@@ -4,7 +4,8 @@
 \alias{create_raster_data_from_matlab_raster_data}
 \title{export}
 \usage{
-create_raster_data_from_matlab_raster_data(matlab_raster_directory_name)
+create_raster_data_from_matlab_raster_data(matlab_raster_dir_name,
+  r_raster_dir_name)
 }
 \description{
 export

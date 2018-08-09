@@ -9,7 +9,9 @@ reference:
   desc: ~
   contents:
   - "`basic_DS`"
+  - "`calc_num_level_repetitions`"
   - "`create_binned_data`"
+  - "`create_raster_data_from_matlab_raster_data`"
   - "`max_correlation_CL`"
   - "`poisson_naive_bayes_CL`"
   - "`select_k_features_FP`"

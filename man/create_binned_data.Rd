@@ -5,7 +5,8 @@
 \title{A function that converts data from raster format to binned format}
 \usage{
 create_binned_data(raster_directory_name, save_prefix_name, bin_width,
-  sampling_interval, start_ind = NULL, end_ind = NULL, files_contain = "")
+  sampling_interval, start_ind = NULL, end_ind = NULL,
+  files_contain = "")
 }
 \arguments{
 \item{raster_directory_name}{character.  This argument is the name of a

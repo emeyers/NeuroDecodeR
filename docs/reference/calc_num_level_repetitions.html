@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>The standard cross-validator (CV)  object — standard_CV • The Neural Decoding Toolbox in R</title>
+<title>calc_num_level_repetitions — calc_num_level_repetitions • The Neural Decoding Toolbox in R</title>
 
 <!-- jquery -->
 <script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script>
@@ -30,13 +30,11 @@
 
 
 
-<meta property="og:title" content="The standard cross-validator (CV)  object — standard_CV" />
+<meta property="og:title" content="calc_num_level_repetitions — calc_num_level_repetitions" />
 
-<meta property="og:description" content="A cross-validator object takes a datasource, feature preprocessors and a classifier
-and runs multiple cross-validation cycles by getting new training and test data splits, 
-running the preprocessor to do preprocessing of the data, trains and tests the classifier, and 
-the creates metric to evaluation the classification performance on the test set.  
-This object uses R6 package" />
+<meta property="og:description" content="This function takes in labels in binned label format, and an integer k, 
+and returns the indices for all sites (e.g. neurons) that have at least
+k presentations of each condition." />
 <meta name="twitter:card" content="summary" />
 
 
@@ -119,43 +117,68 @@ This object uses R6 package" />
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>The standard cross-validator (CV)  object</h1>
+    <h1>calc_num_level_repetitions</h1>
     
-    <div class="hidden name"><code>standard_CV.Rd</code></div>
+    <div class="hidden name"><code>calc_num_level_repetitions.Rd</code></div>
     </div>
 
     <div class="ref-description">
     
-    <p>A cross-validator object takes a datasource, feature preprocessors and a classifier
-and runs multiple cross-validation cycles by getting new training and test data splits, 
-running the preprocessor to do preprocessing of the data, trains and tests the classifier, and 
-the creates metric to evaluation the classification performance on the test set.  
-This object uses <a href='https://cran.r-project.org/web/packages/R6/vignettes/Introduction.html'>R6 package</a></p>
+    <p>This function takes in labels in binned label format, and an integer k, 
+and returns the indices for all sites (e.g. neurons) that have at least
+k presentations of each condition.</p>
     
     </div>
 
-    <pre class="usage"><span class='no'>standard_CV</span></pre>
-        
-    <h2 class="hasAnchor" id="format"><a class="anchor" href="#format"></a>Format</h2>
-
-    <p>An object of class <code>R6ClassGenerator</code> of length 24.</p>
+    <pre class="usage"><span class='fu'>calc_num_level_repetitions</span>(<span class='no'>binned_data</span>, <span class='no'>variable_to_use</span>,
+  <span class='kw'>levels_to_use</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>k</span> <span class='kw'>=</span> <span class='fl'>0</span>)</pre>
     
-    <h2 class="hasAnchor" id="standard-cv"><a class="anchor" href="#standard-cv"></a>standard_CV</h2>
+    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
+    <table class="ref-arguments">
+    <colgroup><col class="name" /><col class="desc" /></colgroup>
+    <tr>
+      <th>binned_data</th>
+      <td><p>Should be a dataframe in binned format.</p></td>
+    </tr>
+    <tr>
+      <th>variable_to_use</th>
+      <td><p>A string that indicates what variable to analyze.</p></td>
+    </tr>
+    <tr>
+      <th>levels_to_use</th>
+      <td><p>A single string or a vector of strings.</p></td>
+    </tr>
+    <tr>
+      <th>k_value</th>
+      <td><p>Returns indices for all sites (e.g. neurons) that have at least
+k presentations of each condition.</p></td>
+    </tr>
+    </table>
+    
+    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
     
-    <dl class='dl-horizontal'>
-<dt><code>standard_CV$new(data_source, classifier, feature_preprocessors)  )</code></dt><dd><p>If successful, will return a new <code>basic_DS</code> object.</p></dd></dl>
+
+<dt>inds_of_sites_with_at_least_k_repeats</dt><dd><p>The indices of sites that have at least 
+      k repetitions of each condition.</p></dd>
+<dt>min_num_repeats_all_sites</dt><dd><p>This parameter lists for all sites the number of 
+     repetitions present for the label thathas the minium number of repetitions.</p></dd>
+
     
 
+    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
+    <pre class="examples"><div class='input'>
+</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
+      <li><a href="#arguments">Arguments</a></li>
       
-      <li><a href="#format">Format</a></li>
-
-      <li><a href="#standard-cv">standard_CV</a></li>
-          </ul>
+      <li><a href="#value">Value</a></li>
+      
+      <li><a href="#examples">Examples</a></li>
+    </ul>
 
   </div>
 </div>
