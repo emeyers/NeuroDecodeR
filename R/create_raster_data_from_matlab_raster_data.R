@@ -8,8 +8,8 @@
 #' @param r_raster_dir_name character. Name of the directory to store created raster data in .Rda format.
 #' By default, it is created by removing the "_mat" suffix of \code{matlab_raster_dir_name} if applicable
 #' and appending '_rda' to it.
-#' @param start_ind integer. It specifies the sample index where the binning process starts. Due to the structure of raster data in matlab, all sample indices should be positive. By default, all data are included.
-#' @param end_ind integer. It specifies the sample index where the binning process should end by. Due to the structure of raster data in matlab, all sample indices should be positive. By default, all data are included.
+#' @param start_ind integer. It specifies the sample index where the new raster data begin. Due to the structure of raster data in matlab, all sample indices should be positive. By default, all data are included.
+#' @param end_ind integer. It specifies the sample index where the new raster data end. Due to the structure of raster data in matlab, all sample indices should be positive. By default, all data are included.
 #' @param files_contain regular expression. Only raster data files that match the file_contains are inlcluded. By default, it is an empty character.
 #' @return Directory for new raster data will be created, and new raster data files will be written under it. During execution, preceding the creation of each raster file, console spills the total number of raster files will have been created (as you will see
 #' the number increments by one). After writing all raster files, console spills the \code{r_raster_dir_name}.
@@ -162,4 +162,8 @@ create_raster_data_from_matlab_raster_data <- function(matlab_raster_dir_name, r
 convert_dot_back_to_underscore <- function(oldnames){
   newnames = gsub(oldnames, pattern = "\\.", replacement = "_")
   return(newnames)
+  
 }
+
+
+  
