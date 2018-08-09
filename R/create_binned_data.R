@@ -17,8 +17,7 @@
 #' @param end_ind integer. It specifies the sample index (i.e., the number behind "time.") where the binning process should end by. 
 #' It can be negative if your sample index is negative. By default, all data are included.
 #' @param files_contain regular expression. Only raster data files that match the file_contains are binned.
-#' @return Preceding the binning of each raster file, it spills the total number of raster files will have been binned as you will see
-#' the number increments by one. After the creation of all files, it spills the binned file name. By default, it is an empty character.
+#' @return Created binned data file will be written to disk. During execution, preceding the binning of each raster file, console spills the total number of raster files will have been binned (as you will see the number increments by one). After the creation of all files, console spills the binned file name. 
 #' @examples
 #' Bin the data using 150 sample bins sample at 50 sample intervals
 #' Assumes that raster files are in the directory 'data/Zhang_Desimone_7objects_raster_data_rda/'

@@ -10,13 +10,10 @@
 #'  "\code{bin_width}_samples_binned_every_\code{sampling_interval}_samples
 #' @param bin_width integer. The bin width over which raster data is averaged.
 #' @param sampling_interval integer. It specifies the nth sample following the start of a bin, where the next bin starts 
-#' @param start_ind integer. It specifies the sample index where the binning process starts. Due to the structure of raster data in matlab, all sample indices should be positive. 
-#'  By default, all data are included.
-#' @param end_ind integer. It specifies the sample index where the binning process should end by. Due to the structure of raster data in matlab, all sample indices should be positive.
-#'  By default, all data are included.
+#' @param start_ind integer. It specifies the sample index where the binning process starts. Due to the structure of raster data in matlab, all sample indices should be positive. By default, all data are included.
+#' @param end_ind integer. It specifies the sample index where the binning process should end by. Due to the structure of raster data in matlab, all sample indices should be positive. By default, all data are included.
 #' @param files_contain regular expression. Only raster data files that match the file_contains are inlcluded. By default, it is an empty character.
-#' @return Preceding the binning of each raster file, it spills the total number of raster files will have been binned as you will see
-#' the number increments by one. After the creation of all files, it spills the binned file name. By default, it is an empty character.
+#' @return Created binned data file will be written to disk. During execution, preceding the binning of each raster file, console spills the total number of raster files will have been binned (as you will see the number increments by one). After the creation of all files, console spills the binned file name. 
 #' @examples
 #' Bin the data using 150 sample bins sample at 50 sample intervals
 #' Assumes that raster files are in the directory 'data/Zhang_Desimone_7objects_raster_data_mat/'
@@ -36,14 +33,13 @@
 create_binned_data_from_matlab_raster_data <- function(matlab_raster_dir_name, save_prefix_name, bin_width, sampling_interval, start_ind = NULL, end_ind = NULL,
                                                        files_contain = "") {
   
-  start_ind_name <- ""
-  end_ind_name <- ""
-  
-  if (!is.null(start_ind)) {
-    start_ind_name <- paste0("_start_", start_ind)
+
+  # this is to determine whether to include the start_ind term in the file name. We have to do it here looking stupid because soon start_ind wil be asssigned value no matter what
+  if (is.null(start_ind)) {
+    bStart_ind <- FALSE
   } 
-  if (!is.null(end_ind)) {
-    end_ind_name <- paste0("_end_", end_ind)
+  if (is.null(end_ind)) {
+    bEnd_ind <- FALSE
   } 
   
   
@@ -94,10 +90,16 @@ create_binned_data_from_matlab_raster_data <- function(matlab_raster_dir_name, s
     # Add column names to the raster data in the form of: time.1, time.2 etc.
     data_times <- 1:dim(raster_data)[2]
     
-    # if there is an alignment time, subtract it from the raster times; also, subtract the start_ind offset from the alignment time
+    # if there is an alignment time, subtract the start_ind offset from the alignment and subtract alignment from the raster times; also, subtract alignment fron start_ind ot get new start_ind
     if (sum(names(raster_site_info) == "alignment.event.time")) {
       data_times <- (data_times - rep.int(raster_site_info$alignment.event.time - (start_ind - 1), length(data_times)))
+      start_ind_new <- start_ind - raster_site_info$alignment.event.time
+        
+      end_ind_new <- end_ind - raster_site_info$alignment.event.time
+      
     }
+    
+    # 
     
     names(raster_data) <- paste0("time.", data_times)
     dfCurr_site_binned_data <- bin_temp_data_one_site(raster_data, bin_width, sampling_interval, raster_site_info, start_ind)
@@ -135,7 +137,15 @@ create_binned_data_from_matlab_raster_data <- function(matlab_raster_dir_name, s
   # save the results to a .Rda file
   saved_binned_data_file_name <- paste0(save_prefix_name, "_", bin_width, "_samples_binned_every_", sampling_interval,
                                         "_samples")
-  
+  start_ind_name <- ""
+  end_ind_name <- ""
+
+  if (bStart_ind) {
+    start_ind_name <- paste0("_start_", start_ind_new)
+  } 
+  if (bEnd_ind) {
+    end_ind_name <- paste0("_end_", end_ind_new)
+  } 
   
   saved_binned_data_file_name <- paste0(saved_binned_data_file_name, start_ind_name, end_ind_name, ".Rda")
   print(saved_binned_data_file_name)

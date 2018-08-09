@@ -8,13 +8,11 @@
 #' @param r_raster_dir_name character. Name of the directory to store created raster data in .Rda format.
 #' By default, it is created by removing the "_mat" suffix of \code{matlab_raster_dir_name} if applicable
 #' and appending '_rda' to it.
-#' @param start_ind integer. It specifies the sample index where the binning process starts. Due to the structure of raster data in matlab, all sample indices should be positive. 
-#'  By default, all data are included.
-#' @param end_ind integer. It specifies the sample index where the binning process should end by. Due to the structure of raster data in matlab, all sample indices should be positive.
-#'  By default, all data are included.
+#' @param start_ind integer. It specifies the sample index where the binning process starts. Due to the structure of raster data in matlab, all sample indices should be positive. By default, all data are included.
+#' @param end_ind integer. It specifies the sample index where the binning process should end by. Due to the structure of raster data in matlab, all sample indices should be positive. By default, all data are included.
 #' @param files_contain regular expression. Only raster data files that match the file_contains are inlcluded. By default, it is an empty character.
-#' @return Preceding the creation of each raster file, it spills the total number of raster files will have been created as you will see
-#' the number increments by one. After writing all raster files, it spills the \code{r_raster_dir_name}.
+#' @return Directory for new raster data will be created, and new raster data files will be written under it. During execution, preceding the creation of each raster file, console spills the total number of raster files will have been created (as you will see
+#' the number increments by one). After writing all raster files, console spills the \code{r_raster_dir_name}.
 #' @examples
 #' \dontrun{
 #' create_raster_data_from_matlab_raster_data(file.path(getwd(), "data/raster/Zhang_Desimone_7objects_raster_data_mat"))
@@ -64,23 +62,18 @@ create_raster_data_from_matlab_raster_data <- function(matlab_raster_dir_name, r
     # Get the raster data
     raster_data <- data.frame(raster$raster.data)
     
-    start_ind_name <- ""
-    end_ind_name <- ""
+
     
     if (is.null(start_ind)) {
       start_ind <- 1
-    } else{
-      start_ind_name <- paste0("_start_", start_ind)
-    }
+      bStart_ind <- FALSE
+}
     
     if (is.null(end_ind)) {
       end_ind <- dim(raster_data)[2]
-    } else{
+      bEnd_ind <- FALSE
       
-      end_ind_name <- paste0("_end_", end_ind)
-    }
-    
-    
+    } 
     
     
     raster_data <- raster_data[,start_ind:end_ind]
@@ -89,9 +82,13 @@ create_raster_data_from_matlab_raster_data <- function(matlab_raster_dir_name, r
     data_times <- 1:dim(raster_data)[2]
 
 
-    # if there is an alignment time, subtract it from the raster times; also, subtract the start_ind offset from the alignment time
+    # if there is an alignment time, subtract the start_ind offset from the alignment and subtract alignment from the raster times; also, subtract alignment fron start_ind ot get new start_ind
     if (sum(names(raster_site_info) == "alignment.event.time")) {
       data_times <- (data_times - rep.int(raster_site_info$alignment.event.time - (start_ind - 1), length(data_times)))
+      start_ind_new <- start_ind - raster_site_info$alignment.event.time
+      
+      end_ind_new <- end_ind - raster_site_info$alignment.event.time
+      
     }
     
     names(raster_data) <- paste0("time.", data_times)
@@ -133,7 +130,15 @@ create_raster_data_from_matlab_raster_data <- function(matlab_raster_dir_name, r
       # append start and end index if applicable and append "_rda/"
       
       
+      start_ind_name <- ""
+      end_ind_name <- ""
       
+      if (bStart_ind) {
+        start_ind_name <- paste0("_start_", start_ind_new)
+      } 
+      if (bEnd_ind) {
+        end_ind_name <- paste0("_end_", end_ind_new)
+      }
       r_raster_dir_name <- paste0(r_raster_dir_name, start_ind_name, end_ind_name, "_rda/")
       
       
