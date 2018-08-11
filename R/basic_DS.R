@@ -8,7 +8,7 @@
 #' @section basic_DS constructor:
 #' 
 #' \describe{
-#' \item{\code{basic_DS$new(binned_data, specific_binned_label_name, num_cv_splits, use_count_data, num_times_to_repeat_labels_per_cv_block )}}{
+#' \item{\code{basic_DS$new(binned_data, specific_binned_label_name, num_cv_splits, use_count_data, num_repeats_per_level_per_cv_split )}}{
 #' if successful, will return a new \code{basic_DS} object.
 #' }}
 #' 
@@ -30,7 +30,7 @@ basic_DS <- R6Class("basic_DS",
     specific_binned_label_name = NA, 
     num_cv_splits = NA,
     use_count_data = FALSE,
-    num_times_to_repeat_labels_per_cv_block = 1,
+    num_repeats_per_level_per_cv_split = 1,
     
     # constructor
     initialize = function(binned_file_name, specific_binned_label_name, num_cv_splits, use_count_data = FALSE) {
@@ -56,7 +56,7 @@ basic_DS <- R6Class("basic_DS",
       # (at the cost of a little memory)
       binned_data <- self$binned_data 
       specific_binned_label_name <- self$specific_binned_label_name
-      num_trials_used_per_label <- self$num_cv_splits * self$num_times_to_repeat_labels_per_cv_block 
+      num_trials_used_per_label <- self$num_cv_splits * self$num_repeats_per_level_per_cv_split 
 
       # remove all labels that aren't being used, and rename the labels that are being used "labels"
       label_col_ind <- match(paste0("labels_", specific_binned_label_name), names(binned_data))
@@ -72,7 +72,7 @@ basic_DS <- R6Class("basic_DS",
       # add a few names in the data frame
       
       # CV_slice_ID is a groups of data that have one example for each label
-      #  - these groups are mapped into CV blocks where blocks contain num_times_to_repeat_labels_per_cv_block of each label  
+      #  - these groups are mapped into CV blocks where blocks contain num_repeats_per_level_per_cv_split of each label  
       CV_slice_ID <- rep(1:num_trials_used_per_label, num_labels * num_sites)
       
       # add the number of the cross-validitation split to the data ...
@@ -98,8 +98,8 @@ basic_DS <- R6Class("basic_DS",
 
       # create different CV_1, CV_2 which list which points are training points and which points are test points
       for (iCV in 1:self$num_cv_splits) {
-        start_ind <- (((iCV - 1) * self$num_times_to_repeat_labels_per_cv_block) + 1)
-        end_ind <- (iCV * self$num_times_to_repeat_labels_per_cv_block)
+        start_ind <- (((iCV - 1) * self$num_repeats_per_level_per_cv_split) + 1)
+        end_ind <- (iCV * self$num_repeats_per_level_per_cv_split)
         curr_cv_block_inds <- start_ind:end_ind
         eval(parse(text=paste0("all_cv_data$CV_", iCV, "= ifelse(all_cv_data$CV_slice_ID %in% curr_cv_block_inds, 'test', 'train')")))
       }
