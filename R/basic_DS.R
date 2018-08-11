@@ -40,7 +40,7 @@ basic_DS <- R6Class("basic_DS",
                       num_resample_sites = NULL,
                       site_IDs_to_use = NULL,
                       site_IDs_to_exclude = NULL,
-                      time_period_to_get_data_from = NULL,
+                      # time_period_to_get_data_from = NULL,
                       randomly_shuffled_labels_before_running = FALSE,
                       # A boolean variable to keep track if user has initialized all settings above before running the get_data() function
                       initialized = FALSE,
@@ -72,13 +72,14 @@ basic_DS <- R6Class("basic_DS",
                         var_to_decode <- self$var_to_decode
                         num_trials_used_per_label <- self$num_cv_splits * self$num_times_to_repeat_labels_per_cv_block 
                         initialized <- self$initialized
+                        # As of now, users only have two options: 0 or 1.
                         create_simultaneously_recorded_populations = self$create_simultaneously_recorded_populations
                         sample_sites_with_replacement = self$sample_sites_with_replacement
                         level_to_use = self$level_to_use
                         num_resample_sites = self$num_resample_sites
                         site_IDs_to_use = self$site_IDs_to_use
                         site_IDs_to_exclude = self$site_IDs_to_exclude
-                        time_period_to_get_data_from = self$time_period_to_get_data_from
+                        # time_period_to_get_data_from = self$time_period_to_get_data_from -- to be implemented later. There is no use for this feature as of now.
                         randomly_shuffled_labels_before_running = self$randomly_shuffled_labels_before_running
                         
                         
@@ -94,16 +95,9 @@ basic_DS <- R6Class("basic_DS",
                             level_to_use <- as.list(levels(binned_data$labels))
                           }
                           
-                          # space left to implement the create_simultaneously_recorded_populations
-                          
                           if(randomly_shuffled_labels_before_running == TRUE) {
                             binned_data$labels <- sample(binned_data$labels)
                           }
-                          
-                          # To be implemented later
-                          #if(!is.na(time_period_to_get_data_from)) {
-                          
-                          #}
                           
                           # set the state of initialization to TRUE.
                           initialized <- TRUE
@@ -126,7 +120,7 @@ basic_DS <- R6Class("basic_DS",
                           warning("Some labels were listed twice. Duplication will be ignored.")
                         
                         if(create_simultaneously_recorded_populations > 2 || create_simultaneously_recorded_populations < 0)
-                          stop("create_simultaneously_recorded_populations must be set to 0, 1, or 2.")
+                          stop("create_simultaneously_recorded_populations must be set to 0 or 1.")
                         
                         if(is.null(num_resample_sites)) {
                           num_resample_sites <- site_IDs_to_use
