@@ -37,10 +37,14 @@ create_binned_data_from_matlab_raster_data <- function(matlab_raster_dir_name, s
   # this is to determine whether to include the start_ind term in the file name. We have to do it here looking stupid because soon start_ind wil be asssigned value no matter what
   if (is.null(start_ind)) {
     bStart_ind <- FALSE
+  } else {
+    bStart_ind <- TRUE
   } 
   if (is.null(end_ind)) {
     bEnd_ind <- FALSE
-  } 
+  } else {
+    bEnd_ind <- TRUE
+  }
   
   
   
@@ -98,7 +102,6 @@ create_binned_data_from_matlab_raster_data <- function(matlab_raster_dir_name, s
       end_ind_new <- end_ind - raster_site_info$alignment.event.time
       
     }
-    
     # 
     
     names(raster_data) <- paste0("time.", data_times)
@@ -130,7 +133,6 @@ create_binned_data_from_matlab_raster_data <- function(matlab_raster_dir_name, s
     binned_data <- rbind(binned_data, dfCurr_site_binned_data)
     
   }
-  
   # make the siteID be in the first column of binned dataa
   binned_data <- binned_data %>% select(siteID, everything())
   
