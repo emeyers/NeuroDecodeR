@@ -1,0 +1,26 @@
+---
+title: "Binned-format"
+
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+<div style="line-height: 1.6em;">
+
+Binned-format data contains data from multiple sites (e.g., data from many neurons, LFP channels, etc.). Data that is in binned-format is very similar to data that is in raster-format except that it contains information from multiple sites and often contains the information at a coarser resolution; for example, binned data would typically contain firing rates over some time interval sampled at a lower rate, as opposed to raster-format data that would typically contain individual spikes sampled at a higher rate. Binned-format data is typically created from raster-format data using the function `create_time_averaged_binned_data_from_raster_data` which converts a directory of raster-format files into a binned-format file that is useful for decoding. Like rater-format data, binned-format data also contains three variables which are: `binned_data`, `binned_labels` and `binned_site_info` . More details about these variables are described below and also see the documentation on [raster-format](Raster-format.html) for more information.
+
+####binned_data
+
+The variable binned_data is a cell array, where each element of the array contains a [num_trials x num_time_bins] matrix, that has data from one site. In each of these matrices, the rows contain data from one trial, and each column is data from one bin. For example, if spiking data is used, then each row corresponds to a trial, and each column would correspond to the firing rate in a particular time period. If continuous data was used (e.g., LFP/MEG data, etc.), then each row would again correspond to a trial, and each column might correspond to some average of value over a particular time period, or perhaps some transform of the continuous data at a particular time period (e.g., a Fourier component, etc.). The number of elements in the binned_data cell array is equal to the number of recorded sites.
+
+####binned_labels
+
+The variable binned_labels is structure that contain cell arrays that have the labels for which conditions were present on each trial, i.e., binned_labels.variable_name1, is a num_sites length cell array with the labels for variable_name1 for each site, and binned_labels.variable_name1{iSite} is a [num_trials x 1] cell array of strings (or vector of numbers) that has all the labels for site ‘iSite’ for variable_name1 (number of elements for each site will vary depending on how many trials were recorded from that site).
+
+####binned_site_info
+
+The variable binned_site_info is structure that contains any additional information about the sites that should be saved. The structure contains cell arrays, where each entry in the array has data for one site.
+
+</div> 

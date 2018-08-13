@@ -1,0 +1,60 @@
+title: The Neural Decoding Toolbox in R
+template:
+  params:
+    bootswatch: sandstone
+
+
+reference:
+- title: "All functions"
+  desc: ~
+  contents:
+  - "`basic_DS`"
+  - "`create_binned_data`"
+  - "`max_correlation_CL`"
+  - "`poisson_naive_bayes_CL`"
+  - "`select_k_features_FP`"
+  - "`standard_CV`"
+  - "`zscore_FP`"
+  
+articles:
+  - title: "Four abstract classes/(objects)"
+    desc: ~
+    contents:
+    - text: "Datasources"
+      href: "Datasources.html"
+   
+    - text: "Feature Preprocessors"
+      href: "Feature Preprocessors.html"
+   
+    - text: "Classifier"
+      href: "Classifier.html"
+    
+    - text: "Cross-validators"
+      href: "Cross-validators.html"
+
+    
+navbar:
+  title: "sparklyr"
+  type: inverse
+  left:
+    - text: "Home"
+      href: "index.html"
+    
+    - text: "Reference"
+      href: "reference/index.html"
+    
+    - text: "Tutorial"
+      href: "articles/Tutorial.html"
+      
+    - text: "Download Datasets"
+      menu:
+      - text: "Zhang-Desimone 7 object dataset"
+        href: "articles/Zhang-Desimone 7 object dataset.html"
+      - text: "Isik 26 letter MEG dataset"
+        href: "articles/Isik 26 letter MEG dataset.html"
+      - text: "Qi-Constantinidis pre and post training dataset"
+        href: "articles/Qi-Constantinidis pre and post training dataset.html"
+  
+  right:
+    - icon: fa-github
+      href: https://github.com/rstudio/sparklyr

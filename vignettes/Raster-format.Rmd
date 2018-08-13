@@ -1,0 +1,25 @@
+---
+title: "Raster-format"
+
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+<div style="line-height: 1.6em;">
+Raster-format data files contain information from a single site (e.g., data from one neuron, one LFP channel, etc.). Data that is in raster-format contains three variables: raster_data, raster_labels and raster_site_info, which are described below.
+
+####raster_data
+
+The variable raster_data is a *[num_trials x num_times]* matrix, where each row is data from one trial, and each column is data from one time point (relative to some event that the data was aligned to). The trials should be in the order that they were shown to a subject, i.e., the first row of the matrix should come from the first trial, the second row from the second trial, etc.. For spiking data, this matrix will contain a 1 at every time there is a spike and a zero at every time there was not a spike. For continuous data, such as LFPs, MEG data, etc., each point in a row should be the continuous LFP/MEG value that is recorded on each trial.
+
+####raster_labels
+
+The variable raster_labels is structure that contains cell arrays of strings (or vectors of numbers) that indicate the labels for what conditions were present on each trial, i.e., raster_labels.variable_name1, raster_labels.variable_name2, etc., would all be cell arrays (or vectors) of length [num_trials x 1], which each entry indicates what experimental condition occurred on a given trial. Having a structure with cell arrays that contain different labels is useful because it allows one to decoding different information from the data. For example, suppose we had an experiment in which images of ten different people and images of ten different cars were shown. Then we could have the variable raster_labels.stimulus_ID that had 20 unique string names corresponding to each exact person or car image that was shown on each trial. Additionally, we could have a second raster_labels.face_or_car that contained only the strings ‘face’, or ‘car’ that indicated whether a face or a car was shown on each trial. It would then be possible to run two decoding analyses, one in which we try to decode each image regardless of whether it is a face or a car (where chance would be 1/20), and a second analysis in which we try to decode whether an image is a face or a car (where chance would be 1/2).
+
+####raster_site_info
+
+The variable raster_site_info is structure that contains any additional information about the site that should be saved. For example, this structure could contain information about the date that data was recorded on (e.g., raster_site_info.date_recorded = 2011_9_28), or number to identify the session that the data was recorded from (e.g., raster_site_info.sessionID = 200), or information about the spike sorting quality (e.g., raster_site_info.isMUA = 1), etc.. At the moment any variable is allowed in this structure (and it is not strictly necessary to have this structure for the decoding algorithms to run).
+
+</div> 
