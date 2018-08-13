@@ -67,7 +67,7 @@ standard_CV <- R6Class("standard_CV",
         rank_results <- array(NA, c(num_CV, num_time_bins, num_time_bins), dimnames = dim_names)
         
         for (iCV in 1:num_CV) {
-          tic()
+          tictoc::tic()
           print(iCV) 
           for (iTrain in 1:num_time_bins) {
             train_data <- filter(cv_data, time == unique_times[iTrain], all_cv_train_test_inds[iCV] == "train") %>% select(starts_with("site"), labels)
@@ -100,7 +100,7 @@ standard_CV <- R6Class("standard_CV",
             decision_value_results[iCV, iTrain, ] <- mean_decoding_results$mean_decision_vals 
             rank_results[iCV, iTrain, ] <- mean_decoding_results$mean_rank
           }   # end the for loop over time bins
-          toc()
+          tictoc::toc()
         }  # end the for loop over CV splits
         # combine all the results in one list to be returned
         DECODING_RESULTS$zero_one_loss_results <- zero_one_loss_results
