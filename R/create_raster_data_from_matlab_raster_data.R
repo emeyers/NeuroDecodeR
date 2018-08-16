@@ -97,24 +97,20 @@ create_raster_data_from_matlab_raster_data <- function(matlab_raster_dir_name, r
       # 
     }
     
-    if (sum(names(timing_info) == "sampling.frequency.in.hz")){
-      if (timing_info$sampling.frequency.in.hz == 1000){
-        data_start_times <- data_samples
-        data_end_times <- data_samples
-        
-        names(raster_data) <- paste0("time.", data_times)
-        
-      } else {
-        data_start_times <- round(data_samples * as.vector(1000 / timing_info$sampling.frequency.in.hz))
-        data_end_times <- round((data_samples + as.vector(1)) * as.vector(1000 / timing_info$sampling.frequency.in.hz))
-        names(raster_data) <- paste0("time.", data_start_times, "_", data_end_times)
-        
-      }
-    } else {
-      stop("To create raster data in .Rda format, you must have a field called sampling_frequency_in_hz in the struct raster_site_info")
-    }
     
-
+    
+    if (timing_info$sampling.period.in.ms == 1){
+      data_start_times <- data_samples
+      data_end_times <- data_samples
+      
+      names(raster_data) <- paste0("time.", data_times)
+      
+    } else{
+      data_start_times <- round(data_samples * as.vector(1000 / timing_info$sampling.frequency.in.hz))
+      data_end_times <- round((data_samples + as.vector(1)) * as.vector(1000 / timing_info$sampling.frequency.in.hz))
+      names(raster_data) <- paste0("time.", data_start_times, "_", data_end_times)
+ 
+    }
     
     
     if(bStart_time){
