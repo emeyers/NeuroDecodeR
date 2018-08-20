@@ -2,7 +2,8 @@
 % Please edit documentation in R/calc_num_level_repetitions.R
 \name{calc_num_level_repetitions}
 \alias{calc_num_level_repetitions}
-\title{calc_num_level_repetitions}
+\title{calc_num_level_repetitions
+s}
 \usage{
 calc_num_level_repetitions(binned_data, variable_to_use,
   levels_to_use = NULL, k = 0)
@@ -18,16 +19,17 @@ calc_num_level_repetitions(binned_data, variable_to_use,
 k presentations of each condition.}
 }
 \value{
-\item{inds_of_sites_with_at_least_k_repeats}{The indices of sites that have at least 
-      k repetitions of each condition.}
-\item{min_num_repeats_all_sites}{This parameter lists for all sites the number of 
-     repetitions present for the label thathas the minium number of repetitions.}
+\item{num_repeats_each_level}{This parameter list for all sites the number of
+     repetitions present for each.}
+\item{matrix_num_repeats_each_level}{A [site-ID x level_repeats] matrix that
+     specifies for each the number of repetitions of each level for each site
+     (this variable could be useful for determining if particular conditions
+     should be excluded based on whether they were presented only a few times to many sites)}
+\item{min_num_repeats_all_sites}{This parameter lists the minimum number of
+     repetitions for each site.}
 }
 \description{
-This function takes in labels in binned label format, and an integer k, 
+This function takes in labels in binned label format, and an integer k,
 and returns the indices for all sites (e.g. neurons) that have at least
 k presentations of each condition.
-}
-\examples{
-
 }
