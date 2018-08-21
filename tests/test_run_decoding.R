@@ -104,5 +104,3 @@ abline(v = 0)
 # plot results as a function of time
 plot(time.bin.names, diag(mean.results), type = "o", xlab = "Time (ms)", ylab = "Decoding Accuracy")
 abline(v = 0)
-
-

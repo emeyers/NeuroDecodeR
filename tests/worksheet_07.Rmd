@@ -1,0 +1,284 @@
+---
+title: "Worksheet 7"
+output:
+  pdf_document: default
+  html_notebook: default
+---
+
+
+## Name: Cindy
+
+## Discussants: None
+
+
+$\\$
+
+
+**Introduction:** The goal of this worksheet is to learn how to apply a decoding analyses to neural data. To do this we will use a package I wrote called the Neural Decoding Toolbox in R (NDTr). This package is in its early development phase (alpha version) so there is still a lot that needs to be added to the package, including better documentation, however the basic functions are in place which should allow you to do a decoding analyses. The NDTr package is based on a Matlab Neural Decoding Toolbox (NDT) which is much more mature, so I recommend that everyone look at the documentation for the Matlab toolbox which is at [readout.info](www.readout.info). In particular, looking at the [tutorials](http://www.readout.info/tutorials/introduction-tutorial/) on readout.info will be useful. The worksheet below walks you through using the basics of the NDTr package. You might also find it useful to look at a Shiny app I made that uses an even older version of the NDTr which can be accessed at [http://asterius.hampshire.edu:3838/research/NDTr/NDTr/ndt-app/](http://asterius.hampshire.edu:3838/research/NDTr/NDTr/ndt-app/)
+
+
+
+
+$\\$
+
+
+
+<!-- This R chunk sets some parameters that will be used in the rest of the document. You can ignore it. -->
+```{r message=FALSE, warning=FALSE, tidy=TRUE, echo = FALSE}
+    library(knitr)
+    library(dplyr)
+    knitr::opts_chunk$set(tidy.opts=list(width.cutoff=60)) # makes sure the code is wrapped when making a pdf
+    set.seed(1)  # set the random number generator to always give the same sequence of random numbers
+    
+    library(tictoc)
+    
+    
+    
+    
+  # A helper function gets the center of bins from a decoding results file
+  # This will be used when you plot the results in exercise 5 and 6
+    get.center.bin.time <- function(time.vector) {
+      
+      center_bin_time <- NULL
+      
+      for (i in 1:length(time.vector)) {
+      curr.parsed_names <-
+      unlist(strsplit(as.character(time.vector[i]), ".", fixed = TRUE))
+      center_bin_time[i] <-
+      mean(as.numeric(curr.parsed_names[2:3]))    # length(curr.parsed_names[2]:curr.parsed_names[3])
+      }
+      
+      
+      return(center_bin_time)
+      
+    }
+    
+    
+    
+    
+    
+    
+```
+
+
+
+
+
+
+
+**Exercise 1:** Let's start by downloading and installing the NDTr from GitHub. This can be down using the install_github() function from the devtools package. Below is the code to install the package. You only need to run the install_github() function once the first time you use the package, and then you should comment it out. After the package is installed, load it using the library("NDTr") function. Then from the console type NDTr:: and to see what functions are in the NDTr package. Report how many functions are in the package and how many of these functions are classifiers.
+
+
+```{r message=FALSE, warning=FALSE, tidy=TRUE}
+
+devtools::install_github("emeyers/NDTr")
+
+ library("NDTr")
+
+```
+
+
+**Answers:** 
+Out of 7 objects, 2 are classifiers, 1 is function
+
+
+
+
+
+$\\$
+
+
+
+
+
+
+
+**Exercise 2:** In class we have analyzed data that is in 'raster format' (i.e., in objects called raster.data or raster_data). The NDTr uses data that is in 'binned_format' which is similar to raster format except that it contains 'binned' spike count firing rates rather than having a sequence of spikes at 1 ms resolution. We can use the function *create_binned_data(raster_directory_name, save_prefix_name, bin_width, sampling_interval)* to create a single data file that is in binned format from a directory that contains multiple files in raster format. 
+
+Create a file with binned data using 150 ms bins sampled at 50 ms by running the function below. Then load the binned data you created and report how many variables start with "time" in the bined_data data frame. 
+
+
+```{r message=FALSE, warning=FALSE, tidy=TRUE}
+
+raster_directory_name <- "data/Zhang_Desimone_7objects_R_raster_data/"
+NDTr::create_binned_data(raster_directory_name, 'ZD', 150, 50)
+load("ZD_binned_data_150ms_bins_50ms_sampled.Rda")
+
+```
+
+
+**Answers:**  
+18
+
+
+
+$\\$
+
+
+
+
+
+
+**Exercise 3:** As discussed in class, the NDTr package revolves around 4 abstract classes called classifiers (CL), datasources (DS), feature preprocessors (FP) and cross-validators (CV). Let's start a decoding analysis by creating a datasouce object using *ds <- basic_DS(binned_file_name, binned_label_name, num_cv_splits)* where the *binned_file_name* is the name of the binned data file you created, *binned_label_name* is "stimulus.ID" and the *num_cv_splits* is 5. Also, make it so that the datasource returns 4 examples of each label in each cross-validation split by setting the num.times.to.repeat.labels.per.cv.block property in the ds object using the code *ds$num.times.to.repeat.labels.per.cv.block <- 4*. 
+
+Once you have created this datasouce object use the method *CV_data <- ds\$get_data()* to get a data frame that has training and test data. Describe below what you think the variables that start with site. refer to? What about the variables that start with CV. and the other variables in this data frame? Finally, describe what you think each row in this data frame contains. Note: when doing a decoding analysis using the NDTr you don't ever need to explicitly call the *ds\$get_data()* method but this method is called inside of the cross-validator object. We are just calling it explicitely here to see how the datasource works. 
+
+
+```{r message=FALSE, warning=FALSE, tidy=TRUE}
+ds<-NDTr::basic_DS$new("ZD_binned_data_150ms_bins_50ms_sampled.Rda","stimulus.ID", 5)
+ds$num.times.to.repeat.labels.per.cv.block <- 4
+CV_data<-ds$get_data()
+```
+
+
+
+**Answers:** 
+there are 132 variables starting with site., which correspond to the 132 conditions of variable SiteID in binned_data, which refer to 132 neurons recorded.  
+there are 5 variables starting with CV., which refer to the 5 splits that binned firing rates are aasinnged to.  
+there are 7 conditions in variable lable, which correspond to 7 conditions in variable labels.stimulus.ID in binned_data, which refer to 7 stimuli.  
+there are 18 conditions in variable time, wchich correspond to 18 variables on binned_data starting with time., which refer to 18 bins.
+
+
+
+
+
+$\\$
+
+
+
+
+
+
+**Exercise 4:** Now let's create a maximum_correlation_CL classifier, and a feature preprocessor object using the code below. Note that the feature preprocesses is in a list which enables you to apply multiple feature preprocessors to the data. Then create a cross validator using *cv <- standard_CV\$new(ds, cl, fps)*. Finally run the decoding analyses using the *cv\$run_decoding()* method and save the results in an R object called DECODING_RESULTS. This DECODING_RESULTS object is a list that contains three elements. Use the names() function to get the name of these fields and report the names of the different results, and report what you think these different list elements correspond to. Then assign the results in the list item zero.one.loss.results to a R object called the_results and report the dimensions of these results and describe what you think these dimensions correspond to. 
+
+ 
+```{r message=FALSE, warning=FALSE, tidy=TRUE}
+
+
+
+# create a classifier
+cl <- NDTr::max_correlation_CL$new()
+
+
+# create a zscore feature preprocessor
+fps <- list(NDTr::zscore_FP$new())
+
+
+
+
+# create a cross-validator
+cv<-NDTr::standard_CV$new(ds,cl,fps)
+
+# run the decoding analysis...
+DECODING_RESULTS<-cv$run_decoding()
+
+# get the_results
+
+#names(DECODING_RESULTS)
+
+the_result<-DECODING_RESULTS$zero.one.loss.results
+```
+
+
+
+**Answers:** 
+the_result has three dimensions. I think they each correspond to taking which out of 5 splits as testing dataset, using which out of 132 bins in training dataset for training, using wchich out of 132 bins in testing dataset fro testing.  
+
+
+DECODING_RESULTS has three dimensions. I think decision.value.results is MCCL's decision on correlation between the testeded pattern and the prototype pattern of tested pattern's stimulus type, zero.one.loss.results is the freuquency that the correlation between tested pattern and the prototype pattern of tested pattern's stimulus type is highest, rank.results is the frequency that correlation between tested pattern and the prototype pattern of tested pattern's stimulus type is ranked in the first half from high to low.
+
+
+$\\$
+
+
+
+
+
+
+
+
+**Exercise 5:** The decoding results you created above that are stored in the R object the_results contain a tensor of decoding accurracies over different cross-validation blocks when training the classifier at one time and testing the classifier at another time, i.e., it is tensor of dimension num_cv_splits x num_training_times x num_test_times. We generally are not interested how the decoding accuracy differs across different cross-validation splits so let's take the mean of the results over cross-validation splits to get a temporal-cross-training matrix by applying the colMeans() function to the_results, and store the results in an R object called TCT_results. Then take the diagonal elements of the TCT_results matrix using the diag() function in order to get the results from training and testing the classifier at the same point in time and store the results in an R object called diag_results. Finally, use the get.center.bin.time() function applied to the names of the diag_results to get the times bins that these results correspond to, and then plot these decoding results with the correct times. Do the decoding results increase after stimulus onset? Also do the decoding results appear to be above chance in the baseline period?
+
+and plot these results. Does the decoding accuracy appear to increase after the stimulus onset? 
+```{r message=FALSE, warning=FALSE, tidy=TRUE}
+
+
+# take the the mean over CV splits to get the TCT_results
+TCT_results<-colMeans(the_result)
+
+# take the diag() elements of TCT_results
+diag_results<-diag(TCT_results)
+
+# get the bin centers and plot the results
+result_times<-get.center.bin.time(names(diag_results))
+plot(result_times,diag_results)
+
+
+```
+
+
+**Answers:**  
+The result increases after stimulus onset. It appears to oscillate around chance during baseline period.
+
+
+
+
+
+$\\$
+
+
+
+
+
+
+
+
+
+**Exercise 6:** Apart from plotting the results from training and testing the classifier at the same point in time, we can also display the full TCT matrix using a heatmap. To do this we can use image.plot() function in the fields package. Uncomment the code below to display the TCT matrix as a heatmap. Does the neural activity appear to be contained in a dynamic population code? 
+
+```{r message=FALSE, warning=FALSE, tidy=TRUE}
+
+
+
+
+library('fields')
+
+
+
+#plot full TCT plot
+ image.plot(result_times, result_times, TCT_results,
+           legend.lab = "Classification Accuracy", xlab = "Test time (ms)",
+           ylab = "Train time (ms)")
+ abline(v = 0)
+
+
+
+
+
+
+
+```
+
+
+**Answers:**
+Yes
+
+
+
+
+$\\$
+
+
+
+
+
+**Bonus question:** Complete the [DataCamp machine learning exercises with Kaggle](https://campus.datacamp.com/courses/kaggle-r-tutorial-on-machine-learning/)
+
+
+
+
+
+
+
+
+

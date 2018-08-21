@@ -17,7 +17,7 @@ This object uses \href{https://cran.r-project.org/web/packages/R6/vignettes/Intr
 
 
 \describe{
-\item{\code{basic_DS$new(binned.data, specific.binned.label.name, num.cv.splits, use.count.data, num.times.to.repeat.labels.per.cv.block )}}{
+\item{\code{basic_DS$new(binned_data, specific_binned_label_name, num_cv_splits, use_count_data, num_times_to_repeat_labels_per_cv_block )}}{
 if successful, will return a new \code{basic_DS} object.
 }}
 }

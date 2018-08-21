@@ -1,0 +1,23 @@
+---
+title: "Classifiers"
+
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+<div style="line-height: 1.6em;">
+##Classifiers 
+
+Classifiers (CL) take a set of training data and training labels, and learn a model of the relationship between the training data and the labels from the different classes. Once this model has been learned (i.e., once the classifier has been trained), the classifier is then used to make predictions about what labels were present in a new set of ‘test data’. Objects that are classifiers must implement the following two methods:
+
+**1. cl = cl.train(XTr, YTr)**
+
+This method takes the training data (XTr) and the training labels(YTr) and learns a model of the relationship between XTr and YTr. XTr is a *[num_features x num_training_points]* sized matrix, and YTr is a *[num_training_points x 1]* dimensional vector. Different classifiers model the relationship between XTr and YTr in different ways, and thus yield different predictions on the test set.
+
+**2. [predicted_labels decision_values] = cl.test(XTe)**
+
+This method takes in test data (XTe), and uses the model learned from the training set to make predictions about which label corresponds to each test data point (where XTe is a *[num_features x num_test_points]* sized matrix).The predictions are returned in the variable ‘predicted_labels’. The classifier also returns a *[num_test_point x num_classes]* matrix of ‘decision_values’ that contains values that indicate how confident the classifier is that a given test point came from each classes. The decision_values matrix is useful for computing other measure of classification performance (apart from the 0-1 loss measure is most commonly used). This method can return an empty matrix of decision values in which case any additional classification measure will not be computed.
+
+</div> 
