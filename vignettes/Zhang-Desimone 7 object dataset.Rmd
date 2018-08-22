@@ -15,6 +15,7 @@ The data consists of single unit recordings from the 132 neurons in inferior tem
 
 [Download the Zhang-Desimone 7 object dataset](../../data/raster/Zip_Zhang_Desimone_7objects_raster_data_rda/)
 
+
 decoding procedure multiple times by generating different data splits from the datasource in order to get more robust measures of the decoding accuracy.
 
 </div> 

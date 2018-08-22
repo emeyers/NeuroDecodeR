@@ -4,8 +4,9 @@ get_center_bin_time <- function(time_vector) {
   center_bin_time <- NULL
   
   for (i in 1:length(time_vector)) {
-    curr_parsed_names <- unlist(strsplit(as.character(time_vector[i]), "_", fixed = TRUE))
-    center_bin_time[i] <- mean(as.numeric(curr_parsed_names[2:3]))  # length(curr.parsed_names[2]:curr.parsed_names[3])
+    curr_parsed_names <- unlist(strsplit(as.character(time_vector[i]), ".", fixed = TRUE))
+    curr_parsed_names <- unlist(strsplit(as.character(curr_parsed_names[2]), "_", fixed = TRUE))
+    center_bin_time[i] <- mean(as.numeric(curr_parsed_names[1:2]))  # length(curr.parsed_names[2]:curr.parsed_names[3])
   }
   
   return(center_bin_time)

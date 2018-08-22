@@ -52,5 +52,3 @@ create_binned_data('../data/Zhang_Desimone_7objects_R_raster_data/', '../data/ZD
 # all options
 create_binned_data(raster_directory_name, save_prefix_name, bin_width, sampling_interval, start_ind, end_ind, files_contain)
 
-}
-}

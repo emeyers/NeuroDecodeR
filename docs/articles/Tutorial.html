@@ -112,6 +112,7 @@
 <p>The NDTr decoding objects operate on data that is in binned-format. To convert data in raster-format to binned-format, we can use the tool <a href="../../docs/reference/create_binned_data.html">create_binned_data</a>, which calculates the average firing rate of neurons over specified intervals and sampled with a specified frequency (i.e., a boxcar filter is used). create_binned_data takes in four arguments: 1) the name of the directory where the raster-format data is stored, 2) the name (potentially including a directory) that the binned data should be saved as, 3) a bin size that specifies how much time the firing rates should be calculated over, and 4) a sampling interval that specifies how frequently to calculate these firing rates. To calculate the average firing rates in 150 ms bins sampled every 50 ms, the following commands can be used:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">raster_directory_name &lt;-<span class="st"> "data/raster/Zhang_Desimone_7objects_raster_data_rda/"</span>
 <span class="kw"><a href="../reference/create_binned_data.html">create_binned_data</a></span>(raster_directory_name, <span class="st">"ZD"</span>, <span class="dv">150</span>, <span class="dv">50</span>)</code></pre></div>
+
 </div>
   </div>
 
