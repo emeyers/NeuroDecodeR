@@ -26,17 +26,22 @@
 #'      Line will not be plotted if all sites have the same number of repetition.)
 #' @examples
 #' \dontrun{
+#' calc_num_level_repetitions(binned_data, "labels.stimulus_ID")
+#' }
+#' \dontrun{
 #' calc_num_level_repetitions(binned_data, "labels.stimulus_ID", c("kiwi", "flower"), 60)
 #' }      
 #'
 #' @import R6
 #' @import dplyr
 #' @import ggplot2
+#' @import magrittr
 #' @export
 
 
 
-
+# binned_data = binned_data[ceiling(runif(10000, 0, 15833)), ] 
+#
 # variable_to_use = "labels.stimulus_ID"
 # 
 # levels_to_use =c("kiwi", "flower")
@@ -107,19 +112,20 @@ calc_num_level_repetitions <- function(binned_data, variable_to_use, levels_to_u
   
   
   # cumsum() nicely sums by factor
-  num_sites_with_all_repeats_per_level <- num_sites_with_certain_repeats_per_level %>%
+  num_sites_with_certain_repeats_per_level %<>%
     group_by(level) %>%
     mutate(n = as.numeric(n), nn = as.numeric(nn)) %>%
     arrange(desc(n)) %>% 
     mutate(cumulative_sum = cumsum(nn)) 
   
-  plot_all_sites <- num_sites_with_all_repeats_per_level %>%
+  plot_all_sites <- num_sites_with_certain_repeats_per_level %>%
         ggplot(aes(n, cumulative_sum, col = level)) +
     geom_line(alpha = 0.7) + 
-    scale_x_continuous(breaks =  min(num_sites_with_all_repeats_per_level$n): max(num_sites_with_all_repeats_per_level$n)) +
-    scale_y_continuous(breaks = min(num_sites_with_all_repeats_per_level$cumulative_sum) : max(num_sites_with_all_repeats_per_level$cumulative_sum)) +
-         labs(x = "Number of repeats", y = "Number of sites", title = "Number of sites with at least certain number of repeats for all levels")
-  browser()
+    scale_x_continuous(breaks =  min(num_sites_with_certain_repeats_per_level$n): max(num_sites_with_certain_repeats_per_level$n)) +
+    scale_y_continuous(breaks = min(num_sites_with_certain_repeats_per_level$cumulative_sum) : max(num_sites_with_certain_repeats_per_level$cumulative_sum)) +
+         labs(x = "Number of repeats", y = "Number of sites")
+  # title = "Number of sites with at least certain number of repeats for all levels"
+  # browser()
   
   #check if all sites have the same number of repetitions
 
