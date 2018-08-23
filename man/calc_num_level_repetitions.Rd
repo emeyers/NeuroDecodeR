@@ -2,8 +2,7 @@
 % Please edit documentation in R/calc_num_level_repetitions.R
 \name{calc_num_level_repetitions}
 \alias{calc_num_level_repetitions}
-\title{calc_num_level_repetitions
-s}
+\title{calc_num_level_repetitions}
 \usage{
 calc_num_level_repetitions(binned_data, variable_to_use,
   levels_to_use = NULL, k = 0)
@@ -19,17 +18,28 @@ calc_num_level_repetitions(binned_data, variable_to_use,
 k presentations of each condition.}
 }
 \value{
-\item{num_repeats_each_level}{This parameter list for all sites the number of
-     repetitions present for each.}
 \item{matrix_num_repeats_each_level}{A [site-ID x level_repeats] matrix that
      specifies for each the number of repetitions of each level for each site
      (this variable could be useful for determining if particular conditions
      should be excluded based on whether they were presented only a few times to many sites)}
 \item{min_num_repeats_all_sites}{This parameter lists the minimum number of
      repetitions for each site.}
+\item{sites_with_at_least_k_repeats}(The indices of sites that have 
+     at least k repetitions of each condition.
+\item{levels_used}(The names of the of the levels that were used (this is equivalent to 
+     levels_to_use if this was passed as an input argument.)
+\item{plot_all_sites}(A line plot showing number of sites available as a function of 
+     the number of repetition used for each level. 
+     Line will not be plotted if all sites have the same number of repetition.)
 }
 \description{
 This function takes in labels in binned label format, and an integer k,
 and returns the indices for all sites (e.g. neurons) that have at least
 k presentations of each condition.
+}
+\examples{
+\dontrun{
+calc_num_level_repetitions(binned_data, "labels.stimulus_ID", c("kiwi", "flower"), 60)
+}      
+
 }

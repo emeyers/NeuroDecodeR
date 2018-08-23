@@ -19,5 +19,6 @@ Imports: R6,
     reshape2,
     tictoc,
     R.matlab,
-    e1071
+    e1071,
+    tidyr
 Suggests: testthat
