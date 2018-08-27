@@ -48,8 +48,9 @@
 
 calc_num_level_repetitions <- function(binned_data, variable_to_use, levels_to_use = NULL, k = 0) {
 
+  # browser()
   # dealing with dplyr nonstandard evaluation...
-  binned_data <- select(binned_data, siteID, level = variable_to_use)
+  binned_data <- select(binned_data, siteID, level = paste0("labels.", variable_to_use))
 
 
   if (is.null(levels_to_use)) {
@@ -118,7 +119,7 @@ calc_num_level_repetitions <- function(binned_data, variable_to_use, levels_to_u
     arrange(desc(n)) %>% 
     mutate(cumulative_sum = cumsum(nn)) 
   
-  plot_all_sites <- num_sites_with_certain_repeats_per_level %>%
+  plot_num_sites_against_num_level_repetitions <- num_sites_with_certain_repeats_per_level %>%
         ggplot(aes(n, cumulative_sum, col = level)) +
     geom_line(alpha = 0.7) + 
     scale_x_continuous(breaks =  min(num_sites_with_certain_repeats_per_level$n): max(num_sites_with_certain_repeats_per_level$n)) +
@@ -129,16 +130,16 @@ calc_num_level_repetitions <- function(binned_data, variable_to_use, levels_to_u
   
   #check if all sites have the same number of repetitions
 
-  result_plot_all_site <- plotly::ggplotly(plot_all_sites)
+  plotly_num_sites_against_num_level_repetitions <- plotly::ggplotly(plot_num_sites_against_num_level_repetitions)
 
   level_repetition_info <- NULL
-  level_repetition_info$melted_num_repeats_per_level_per_site <- melted_num_repeats_per_level_per_site
-  level_repetition_info$num_repeats_per_level_per_site <- num_repeats_per_level_per_site
+  # level_repetition_info$melted_num_repeats_per_level_per_site <- melted_num_repeats_per_level_per_site
+  # level_repetition_info$num_repeats_per_level_per_site <- num_repeats_per_level_per_site
   level_repetition_info$num_repeats_across_levels_per_site <- num_repeats_across_levels_per_site
   level_repetition_info$sites_with_at_least_k_repeats <- sites_with_at_least_k_repeats
-  level_repetition_info$levels_used <- levels_to_use
-  level_repetition_info$plot <- result_plot_all_site
-
+  # level_repetition_info$levels_used <- levels_to_use
+  level_repetition_info$plotly <- plotly_num_sites_against_num_level_repetitions
+  level_repetition_info$max_repetition_avail_with_any_site <- max(num_repeats_across_levels_per_site$min_repeats)
   return(level_repetition_info)
 
 } #end calc_num_level_repetitions

@@ -18,7 +18,7 @@ calc_num_level_repetitions(binned_data, variable_to_use,
 k presentations of each condition.}
 }
 \value{
-\item{matrix_num_repeats_each_level}{A [site-ID x level_repeats] matrix that
+\item{matrix_melted_num_repeats_per_level_per_site}{A [site-ID x level_repeats] matrix that
      specifies for each the number of repetitions of each level for each site
      (this variable could be useful for determining if particular conditions
      should be excluded based on whether they were presented only a few times to many sites)}
@@ -38,6 +38,9 @@ and returns the indices for all sites (e.g. neurons) that have at least
 k presentations of each condition.
 }
 \examples{
+\dontrun{
+calc_num_level_repetitions(binned_data, "labels.stimulus_ID")
+}
 \dontrun{
 calc_num_level_repetitions(binned_data, "labels.stimulus_ID", c("kiwi", "flower"), 60)
 }      
