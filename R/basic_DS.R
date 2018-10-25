@@ -106,7 +106,7 @@ basic_DS <- R6Class("basic_DS",
                         
                         if(is.null(site_IDs_to_use)) {
                           site_IDs_to_use <- unique(binned_data$siteID)
-                          print(site_IDs_to_use)
+                          # print(site_IDs_to_use)
                         }
                         
                         if(!is.null(site_IDs_to_exclude)) {
@@ -114,7 +114,7 @@ basic_DS <- R6Class("basic_DS",
                         }
                         
                         binned_data <- dplyr::filter(binned_data, siteID %in% site_IDs_to_use)
-                        print(binned_data$siteID)
+                        # print(binned_data$siteID)
                         
                         # Sanity check
                         if(length(level_to_use) != length(unique(level_to_use)))
