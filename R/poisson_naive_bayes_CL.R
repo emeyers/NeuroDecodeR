@@ -40,7 +40,7 @@ poisson_naive_bayes_CL <- R6Class("poisson_naive_bayes_CL",
     # could break this up into two methods: train() and test()
     get_predictions = function(train_data, all_times_test_data) {
       ### Train the classifier
-      lambdas_and_labels <- train_data %>% group_by(labels) %>% summarise_each(funs(mean))
+      lambdas_and_labels <- train_data %>% group_by(labels) %>% summarise_all(funs(mean))
       #class_labels <- lambdas[, 1]
       lambda_data <- as.matrix(lambdas_and_labels[, 2:ncol(lambdas_and_labels)])
       

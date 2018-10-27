@@ -35,7 +35,7 @@ max_correlation_CL <- R6Class("max_correlation_CL",
     # could break this up into two methods: train() and test()
     get_predictions = function(train_data, all_times_test_data) {    
       ### Train the classifier
-      prototypes <- train_data %>% group_by(labels) %>% summarise_each(funs(mean))
+      prototypes <- train_data %>% group_by(labels) %>% summarise_all(funs(mean))
       ### Test the classifier
       train_test_cor <- cor(t(prototypes[, 2:dim(prototypes)[2]]), t(select(all_times_test_data, -labels, -time)))
       #train_test_cor <- cor(t(prototypes[, 2:133]), t(select(all_times_test_data, -labels, -time)))
