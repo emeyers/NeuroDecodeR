@@ -40,6 +40,17 @@ standard_CV <- R6Class("standard_CV",
         self$feature_preprocessors <- feature_preprocessors
       },
         
+      
+      # Resample runs
+      resample_run = function(num_resample_runs){
+        cores <- detectCores() / 2
+        cl <- makeCluster(cores)
+        registerDoParallel(cl)
+        
+        result <- foreach(i = 1: num_resample_runs) %dopar% run_decoding()
+        return(result)
+      }
+      
       # methods
       run_decoding = function(){
         data_source <- self$data_source
