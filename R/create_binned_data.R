@@ -71,7 +71,7 @@ create_binned_data <- function(raster_dir_name, save_prefix_name, bin_width, sam
     # prepend siteID ro raster site info, which is then added to binned site info
     raster_site_info <- rlang::prepend(raster_site_info, setNames(as.list(iSite), "siteID"))
     binned_site_info[[iSite]]<- raster_site_info
-  }
+    }
   
   # make the siteID be in the first column of binned dataa
   binned_data <- binned_data %>% select(siteID, everything())
@@ -147,5 +147,3 @@ bin_saved_data_one_site <- function(raster_data, bin_width, sampling_interval, s
   
   return(dfCurr_site_binned_data)
 }
-
-

@@ -14,19 +14,16 @@
 
 \item{sampling_interval}{integer. It specifies the nth sample following the start of a bin, where the next bin starts}
 
-\item{start_ind}{integer. It specifies the sample index where the binning process starts. Due to the structure of raster data in matlab, all sample indices should be positive. 
-By default, all data are included.}
+\item{start_ind}{integer. It specifies the sample index where the binning process starts. Due to the structure of raster data in matlab, all sample indices should be positive. By default, all data are included.}
 
-\item{end_ind}{integer. It specifies the sample index where the binning process should end by. Due to the structure of raster data in matlab, all sample indices should be positive.
-By default, all data are included.}
+\item{end_ind}{integer. It specifies the sample index where the binning process should end by. Due to the structure of raster data in matlab, all sample indices should be positive. By default, all data are included.}
 
 \item{files_contain}{regular expression. Only raster data files that match the file_contains are inlcluded. By default, it is an empty character.}
 
 \item{matlab_dir_name}{character. Name of a directory containing raster data in .mat format.}
 }
 \value{
-Preceding the binning of each raster file, it spills the total number of raster files will have been binned as you will see
-the number increments by one. After the creation of all files, it spills the binned file name. By default, it is an empty character.
+Created binned data file will be written to disk. During execution, preceding the binning of each raster file, console spills the total number of raster files will have been binned (as you will see the number increments by one). After the creation of all files, console spills the binned file name.
 }
 \description{
 ! link to raster format and binned format and related two functions

@@ -135,7 +135,9 @@ that is sampled at a particular frequency.</p>
     </div>
 
     <pre class="usage"><span class='fu'>create_binned_data</span>(<span class='no'>raster_directory_name</span>, <span class='no'>save_prefix_name</span>, <span class='no'>bin_width</span>,
-  <span class='no'>sampling_interval</span>, <span class='kw'>start_ind</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>end_ind</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>files_contain</span> <span class='kw'>=</span> <span class='st'>""</span>)</pre>
+  <span class='no'>sampling_interval</span>, <span class='kw'>start_ind</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>end_ind</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>files_contain</span> <span class='kw'>=</span> <span class='st'>""</span>)</pre>
+
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -147,9 +149,10 @@ directory that contains files that are in raster format.</p></td>
     </tr>
     <tr>
       <th>save_prefix_name</th>
-      <td><p>integer. This argument contains a prefix 
-(e.g., directory name and additional characters) for how the resulting 
-binned file should be saved. The string _binned_data_Xms_bins_Yms_sampled 
+      <td><p>integer. This argument contains a prefix
+(e.g., directory name and additional characters) for how the resulting
+binned file should be saved. The string _binned_data_Xms_bins_Yms_sampled
+
 is appended on to the saved Rda file name, where X is the bin_width and
 Y is the sampling interval.</p></td>
     </tr>
@@ -163,17 +166,20 @@ Y is the sampling interval.</p></td>
     </tr>
     <tr>
       <th>start_ind</th>
-      <td><p>integer. An optional argument that specifies the time index where the 
+      <td><p>integer. An optional argument that specifies the time index where the
+
 the first bin should start.</p></td>
     </tr>
     <tr>
       <th>end_ind</th>
-      <td><p>logical. An optional argument that specifies the time index where the 
+      <td><p>logical. An optional argument that specifies the time index where the
+
 the binning process should end.</p></td>
     </tr>
     <tr>
       <th>files_contain</th>
-      <td><p>character. Only raster data files that contain the file_contains 
+      <td><p>regular expression. Only raster data files that match the file_contains
+
 string will be included in the binned data.</p></td>
     </tr>
     </table>
@@ -181,7 +187,8 @@ string will be included in the binned data.</p></td>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'>Bin the data using 150 ms bins sample at 50 ms intervals
-Assumes that raster files are in the directory '../data/Zhang_Desimone_7objects_R_raster_data/' 
+Assumes that raster files are in the directory '../data/Zhang_Desimone_7objects_R_raster_data/'
+
 and saves the output file with the prefix ZD
 </div><div class='output co'>#&gt; <span class='error'>Error: &lt;text&gt;:1:5: unexpected symbol</span>
 #&gt; <span class='error'>1: Bin the</span>

@@ -13,17 +13,15 @@
 By default, it is created by removing the "_mat" suffix of \code{matlab_raster_dir_name} if applicable
 and appending '_rda' to it.}
 
-\item{start_ind}{integer. It specifies the sample index where the binning process starts. Due to the structure of raster data in matlab, all sample indices should be positive. 
-By default, all data are included.}
+\item{start_ind}{integer. It specifies the sample index where the new raster data begin. Due to the structure of raster data in matlab, all sample indices should be positive. By default, all data are included.}
 
-\item{end_ind}{integer. It specifies the sample index where the binning process should end by. Due to the structure of raster data in matlab, all sample indices should be positive.
-By default, all data are included.}
+\item{end_ind}{integer. It specifies the sample index where the new raster data end. Due to the structure of raster data in matlab, all sample indices should be positive. By default, all data are included.}
 
 \item{files_contain}{regular expression. Only raster data files that match the file_contains are inlcluded. By default, it is an empty character.}
 }
 \value{
-Preceding the creation of each raster file, it spills the total number of raster files will have been created as you will see
-the number increments by one. After writing all raster files, it spills the \code{r_raster_dir_name}.
+Directory for new raster data will be created, and new raster data files will be written under it. During execution, preceding the creation of each raster file, console spills the total number of raster files will have been created (as you will see
+the number increments by one). After writing all raster files, console spills the \code{r_raster_dir_name}.
 }
 \description{
 ! link to raster format and related two functions
