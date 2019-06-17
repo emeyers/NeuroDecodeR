@@ -12,7 +12,7 @@ BugReports: https://github.com/emeyers/NDTr/issues
 Depends: R (>= 3.3.3)
 License: GPL-3
 LazyData: true
-RoxygenNote: 6.1.0
+RoxygenNote: 6.1.1.9000
 Imports: R6,
     stringr,
     dplyr,
@@ -22,3 +22,4 @@ Imports: R6,
     e1071,
     tidyr
 Suggests: testthat
+Encoding: UTF-8
