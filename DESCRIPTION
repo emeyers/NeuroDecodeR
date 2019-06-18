@@ -16,7 +16,6 @@ RoxygenNote: 6.1.1.9000
 Imports: R6,
     stringr,
     dplyr,
-    reshape2,
     tictoc,
     R.matlab,
     e1071,
