@@ -30,7 +30,8 @@
 
 basic_DS <- R6Class("basic_DS", 
                     
-                    public = list(
+                  
+                    private = list( 
                       
                       # make all the properties private ---------------------------
                       binned_data = NULL,
@@ -43,16 +44,16 @@ basic_DS <- R6Class("basic_DS",
                       num_resample_sites = NULL,
                       site_IDs_to_use = NULL,
                       site_IDs_to_exclude = NULL,
-                      # time_period_to_get_data_from = NULL,
                       randomly_shuffled_labels_before_running = FALSE,
+                      create_simultaneously_recorded_populations = 0
                       
-                      # A boolean variable to keep track if user has initialized all settings above before running the get_data() function
-                      initialized = FALSE,  # should be private...                  
-                      
-                      # still needs to be implemented to have all MATLAB functionality...
-                      create_simultaneously_recorded_populations = 0,
-                      # sample_sites_with_replacement = 0,   # not going to implement this for now
-
+                      # not going to implement these for now
+                      # sample_sites_with_replacement = 0,   
+                      # time_period_to_get_data_from = NULL,
+                    ),
+                    
+                    
+                    public = list(
                       
                       # constructor  ---------------------------
                       initialize = function(binned_file_name, 
@@ -68,77 +69,41 @@ basic_DS <- R6Class("basic_DS",
                                             create_simultaneously_recorded_populations = 0) {
                         
                         
-                        # load the binned data  
+                        # load the binned data and convert it to spike counts if specified
                         load(binned_file_name)
                         
                         if (use_count_data) {
                           binned_data <- convert_rates_to_counts(binned_data) 
                         }
-
-                          
-                        self$binned_data <- binned_data
-                        self$var_to_decode <- var_to_decode
-                        self$num_cv_splits <- num_cv_splits
-                        self$num_label_repeats_per_cv_split <- num_label_repeats_per_cv_split
-                        self$label_levels_to_use = label_levels_to_use
-                        self$num_resample_sites = num_resample_sites
-                        self$site_IDs_to_use = site_IDs_to_use
-                        self$site_IDs_to_exclude = site_IDs_to_exclude
-                        self$randomly_shuffled_labels_before_running = randomly_shuffled_labels_before_running
-                        self$create_simultaneously_recorded_populations = create_simultaneously_recorded_populations
-                        
-                      },
-                      
-                      
-                      
-                      # methods   ---------------------------
-                      get_data = function(){
-                        
-                        
-                        # defining variables here to make it potentially easy to transfer my code to other R OO paradigms
-                        
-                        binned_data <- self$binned_data 
-                        var_to_decode <- self$var_to_decode
-                        num_trials_used_per_label <- self$num_cv_splits * self$num_label_repeats_per_cv_split
-                        label_levels_to_use <- self$label_levels_to_use
-                        
-                        create_simultaneously_recorded_populations <- self$create_simultaneously_recorded_populations
-                        sample_sites_with_replacement <- self$sample_sites_with_replacement
-                        num_resample_sites <- self$num_resample_sites
-                        site_IDs_to_use <- self$site_IDs_to_use
-                        site_IDs_to_exclude <- self$site_IDs_to_exclude
-
-                        
-                        # remove this...
-                        initialized <- self$initialized
-                        
-                                                
-                        
-                        # time_period_to_get_data_from = self$time_period_to_get_data_from -- to be implemented later. There is no use for this feature as of now.
-                        randomly_shuffled_labels_before_running <- self$randomly_shuffled_labels_before_running
                         
                         
                         # remove all labels that aren't being used, and rename the labels that are being used "labels"
                         label_col_ind <- match(paste0("labels.", var_to_decode), names(binned_data))
-                        binned_data <- binned_data %>% select(siteID, starts_with("time"), labels = label_col_ind)  
                         
-                        
-                        # initialize the object the first time get_data() is called, and set initalized to TRUE
-                        if(initialized == FALSE) {
-                          
-                          if(!is.null(label_levels_to_use)) {
-                            binned_data <- dplyr::filter(binned_data, labels %in% label_levels_to_use)
-                          } else {
-                            label_levels_to_use <- as.list(levels(binned_data$labels))
-                          }
-                          
-                          if(randomly_shuffled_labels_before_running == TRUE) {
-                            binned_data$labels <- sample(binned_data$labels)
-                          }
-                          
-                          initialized <- TRUE   
+                        # also keep the variable trial_number if it exists
+                        if (("trial_number" %in% colnames(binned_data))) {
+                          binned_data <- binned_data %>% 
+                            dplyr::select(siteID, starts_with("time"), trial_number, labels = label_col_ind)
+                        } else {
+                          binned_data <- binned_data %>% 
+                            dplyr::select(siteID, starts_with("time"), labels = label_col_ind)
                         }
                         
+                        
+                        # only use specified label_levels 
+                        if(!is.null(label_levels_to_use)) {
+                          print(label_levels_to_use)
+                          binned_data <- dplyr::filter(binned_data, labels %in% label_levels_to_use)
+                        } else {
+                          label_levels_to_use <- as.list(levels(binned_data$labels))
+                        }
+                        
+                        
+                        # shuffle the labels if specified
+                        if(randomly_shuffled_labels_before_running == TRUE) {
+                          binned_data$labels <- sample(binned_data$labels)
+                        }
+                          
                         
                         if(is.null(site_IDs_to_use)) {
                           site_IDs_to_use <- unique(binned_data$siteID)
@@ -151,25 +116,129 @@ basic_DS <- R6Class("basic_DS",
                         if(length(label_levels_to_use) != length(unique(label_levels_to_use)))
                           warning("Some labels were listed twice. Duplication will be ignored.")
                         
-                        if(create_simultaneously_recorded_populations > 2 || create_simultaneously_recorded_populations < 0)
-                          stop("create_simultaneously_recorded_populations must be set to 0 or 1.")
                         
                         if(is.null(num_resample_sites)) {
                           num_resample_sites <- length(site_IDs_to_use)
                         }
                         
                         
+                        if(create_simultaneously_recorded_populations > 2 || create_simultaneously_recorded_populations < 0)
+                          stop("create_simultaneously_recorded_populations must be set to 0 or 1.")
                         
-                        # actually entering the code here that needs to be run each time in the get_data() method
+                        
+                        # check if data is valid to get simultaneously recorded data
+                        if(create_simultaneously_recorded_populations == 1) {
+
+                          # for simultaneously recorded data there should be the same number of labels for each site
+                          num_trials_for_each_label_for_each_site <- binned_data %>%
+                            dplyr::group_by(siteID, labels) %>%
+                            dplyr::summarize(n = n()) 
+                          
+                          if (length(unique(num_trials_for_each_label_for_each_site$n)) != 1) {
+                            stop(paste('There are not the same number of repeated labels/trials for each site which',
+                                       'which there should be for simultaneously recorded data.'))
+                          }
+                          
+                          
+                          # add a variable called 'trial_number' if it doesn't exist and the data was recorded simultaneously
+                          if (!("trial_number" %in% colnames(binned_data))) {
+                            
+                            warning(paste('No variable named trial_number in the binned_data.\n',
+                                          'Attempting to add this variable to decode simultaneously recorded data',
+                                          'by assuming all trials for each site are in the sequential same order.'))
+ 
+                            num_trials_each_site <- binned_data %>%
+                              dplyr::group_by(siteID) %>%
+                              dplyr::summarize(n = n()) %>%
+                              .$n
+                            
+                            # assuming the trials are in order for each site, otherwise there is no way to align them
+                            binned_data$trial_number <- rep(1:num_trials_each_site[1], length(num_trials_each_site)) 
+                            
+                            binned_data <- dplyr::select(binned_data, siteID, trial_number, everything())
+                            
+                          }
+                          
+                          
+                          # add variable label_trial_combo
+                          binned_data <- binned_data  %>% 
+                            mutate(label_trial_combo = paste0(binned_data$labels, binned_data$trial_number))
+                          
+                        }  # end pre-processing for simultaneously recorded data...
+                        
+                        
+                        # save all the arguments
+                        private$binned_data <- binned_data
+                        private$var_to_decode <- var_to_decode
+                        private$num_cv_splits <- num_cv_splits
+                        private$num_label_repeats_per_cv_split <- num_label_repeats_per_cv_split
+                        private$label_levels_to_use = label_levels_to_use
+                        private$num_resample_sites = num_resample_sites
+                        private$site_IDs_to_use = site_IDs_to_use
+                        private$site_IDs_to_exclude = site_IDs_to_exclude
+                        private$randomly_shuffled_labels_before_running = randomly_shuffled_labels_before_running
+                        private$create_simultaneously_recorded_populations = create_simultaneously_recorded_populations
+                        
+                      },
+                      
+                      
+                      
+                      # methods   ---------------------------
+                      get_data = function(){
+                        
+                        # defining variables here to make it potentially easy to transfer my code to other R OO paradigms
+                        
+                        binned_data <- private$binned_data 
+                        var_to_decode <- private$var_to_decode
+                        num_cv_splits <- private$num_cv_splits
+                        num_trials_used_per_label <- private$num_cv_splits * private$num_label_repeats_per_cv_split
+                        label_levels_to_use <- private$label_levels_to_use
+                        
+                        create_simultaneously_recorded_populations <- private$create_simultaneously_recorded_populations
+                        sample_sites_with_replacement <- private$sample_sites_with_replacement
+                        num_resample_sites <- private$num_resample_sites
+                        site_IDs_to_use <- private$site_IDs_to_use
+                        site_IDs_to_exclude <- private$site_IDs_to_exclude
+                        
+                        create_simultaneously_recorded_populations <- private$create_simultaneously_recorded_populations
+
+
+
+                        # the code that actually gets the data used to train and test the classifier  -----------
                         
                         curr_sites_to_use <- sample(site_IDs_to_use, num_resample_sites)
-                        
                         binned_data <- dplyr::filter(binned_data, siteID %in% curr_sites_to_use)
                         
-                        # order data by: repetitions, sites, labels
-                        all_k_fold_data <- binned_data  %>% 
-                          group_by(labels, siteID) %>% 
-                          sample_n(size = num_trials_used_per_label)
+                        
+                        if (create_simultaneously_recorded_populations == 1) {
+                        
+                          # use one site to select the trials to use and then apply to all sites
+                          curr_label_trials_to_use <- binned_data %>%
+                            filter(siteID == binned_data$siteID[1]) %>%
+                            select(labels, label_trial_combo) %>%
+                            group_by(labels) %>%
+                            sample_n(size = num_trials_used_per_label) %>%
+                            .$label_trial_combo
+                            
+                          # apply specific simultaneous trials selected to all sites
+                          all_k_fold_data <- binned_data  %>% 
+                            filter(label_trial_combo %in% curr_label_trials_to_use) %>%
+                            select(-label_trial_combo)
+                          
+                        } else {    
+
+                          # for data not recorded simultaneously 
+                          all_k_fold_data <- binned_data  %>% 
+                            group_by(labels, siteID) %>% 
+                            sample_n(size = num_trials_used_per_label)                          
+                        }
+                        
+
+                        # remove the variable trial_number if it exists in all_k_fold_data 
+                        if ("trial_number" %in% names(all_k_fold_data)) {
+                          all_k_fold_data <- select(all_k_fold_data, -trial_number) 
+                        }
+
                         
                         unique_labels <- unique(all_k_fold_data$labels)
                         num_sites <- length(unique(binned_data$siteID))  
@@ -177,47 +246,42 @@ basic_DS <- R6Class("basic_DS",
                         num_labels <- length(unique_labels)
                         
                         
-                        # add a few names in the data frame
-                        
+
                         # CV_slice_ID is a groups of data that have one example for each label
                         #  - these groups are mapped into CV blocks where blocks contain num_label_repeats_per_cv_split of each label  
                         CV_slice_ID <- rep(1:num_trials_used_per_label, num_labels * num_sites)
                         
-                        # add the number of the cross-validitation split to the data ...
+                        # add the number of the cross-validitation split to the data 
                         all_k_fold_data$CV_slice_ID <- CV_slice_ID
                         
                         # paste the site.000 in front of the siteID so that is is listed as site_0001, site_0002, etc
                         all_k_fold_data$siteID <- paste0("site_", stringr::str_pad(all_k_fold_data$siteID, 4, pad = "0"))
                         
-                        # reshape the data so that it's [label*time*cv x site]  data frame 
-                        # can do this quickly using the reshape2 package!
-                        
-                        melted_data <- reshape2::melt(all_k_fold_data, id.vars = c("siteID", "labels", "CV_slice_ID"), 
-                                                      variable.name = "time", value.name = "activity")
-                        
-                        all_cv_data <- reshape2::dcast(melted_data, labels + time + CV_slice_ID ~ siteID, value.var = "activity")
-                        
-                        # below I changed this so can put repeats of labels in a CV split...
-                        # # create different CV_1, CV_2 which list which points are training points and which points are test points
-                        # for (iCV in 1:num_cv_splits) {
-                        #   eval(parse(text=paste0("all_cv_data$CV_", iCV, "= ifelse(all_cv_data$CV_slice_ID == iCV, 'test', 'train')")))
-                        # }
-                        # all_cv_data <- select(all_cv_data, -CV_slice_ID)  # remove the original CV_slice_ID field     
+                        # convert so that there are one column for each site
+                        melted_data <- tidyr::gather(all_k_fold_data, time, activity, -siteID, -labels, -CV_slice_ID) 
+                        all_cv_data <- tidyr::spread(melted_data, siteID, activity) %>%
+                          select(labels, time, CV_slice_ID, everything()) %>%
+                          mutate(time = as.factor(time))    #  %>%  arrange(labels, time) 
                         
                         # create different CV_1, CV_2 which list which points are training points and which points are test points
-                        for (iCV in 1:self$num_cv_splits) {
-                          start_ind <- (((iCV - 1) * self$num_label_repeats_per_cv_split) + 1)
-                          end_ind <- (iCV * self$num_label_repeats_per_cv_split)
+                        for (iCV in 1:num_cv_splits) {
+                          start_ind <- (((iCV - 1) * private$num_label_repeats_per_cv_split) + 1)
+                          end_ind <- (iCV * private$num_label_repeats_per_cv_split)
                           curr_cv_block_inds <- start_ind:end_ind
                           eval(parse(text=paste0("all_cv_data$CV_", iCV, "= ifelse(all_cv_data$CV_slice_ID %in% curr_cv_block_inds, 'test', 'train')")))
                         }
                         
-                        all_cv_data <- select(all_cv_data, -CV_slice_ID)  # remove the original CV_slice_ID field     
                         
+                        all_cv_data <- select(all_cv_data, -CV_slice_ID) %>% ungroup()  # fails tests if I don't ungroup. Also remove the original CV_slice_ID field     
+                        
+
                         return(all_cv_data)
+                        
+                        
                       }  # end get_data() 
                     )  # end public data/methods
                     
+              
                     
 )  # end for the class
 
