@@ -10,15 +10,6 @@
 
 
 
-
-# register the generic function get_predictions 
-#  probably should be put in another file (register_generics.R) elsewhere with all generic functions???
-#' @export
-get_predictions <- function(obj, train_data, all_times_test_data) {
-  UseMethod("get_predictions")
-}
-
-
 # the constructor 
 #' @export
 max_correlation_CL <- function(){

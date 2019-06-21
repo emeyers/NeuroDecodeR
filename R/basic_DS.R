@@ -28,13 +28,6 @@
 
 
 
-# register the generic function get_data  
-#  probably should be put in another file (register_generics.R) elsewhere with all generic functions???
-get_data <- function(x) {
-  UseMethod("get_data")
-}
-
-
 
 basic_DS <- function(binned_file_name = NULL, 
                             var_to_decode = NULL, 
