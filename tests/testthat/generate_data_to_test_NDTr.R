@@ -33,7 +33,7 @@
 
 
 # data useful for testing classifiers and feature proprocessors
-# 
+
 # real_data_binned_file_name <- file.path("..", "..", "data", "binned", "ZD_150_samples_binned_every_50_samples.Rda")
 # 
 #  # just use data at 200-349 post stimulus onset for testing
@@ -53,7 +53,6 @@
 # cv_data <- get_data(ds)
 # count_train_set <- filter(cv_data, time == "time.200_349", CV_1 == "train") %>% select(starts_with("site"), labels)
 # count_test_set <- filter(cv_data, time == "time.200_349", CV_1 == "test") %>% select(starts_with("site"), labels, time)
-# 
 # 
 # # get data z-score normalized
 # fp <- zscore_FP()
