@@ -20,14 +20,14 @@ zscore_FP <- function(){
 
 
 #' @export
-preprocess_data.zscore_FP = function(fp, train_data, test_data){
-  
+preprocess_data.zscore_FP = function(fp, train_set, test_set){
   
   # separate the data from the labels
-  train_data <- select(train_data, starts_with('site'))
-  train_labels <- select(train_data, -starts_with('site'))
-  test_data <- select(test_data, starts_with('site'))
-  test_labels <- select(test_data, -starts_with('site'))
+  train_labels <- select(train_set, -starts_with('site'))
+  train_data <- select(train_set, starts_with('site'))
+  
+  test_labels <- select(train_set, -starts_with('site'))
+  test_data <- select(train_set, starts_with('site'))
   
 
   # get the parameters and cale the rianing data (all in one line!)
@@ -44,10 +44,9 @@ preprocess_data.zscore_FP = function(fp, train_data, test_data){
   train_zscored[is.infinite(train_zscored)] <- 0     # perhaps should deal with the Infs differently...
   test_zscored[is.infinite(as.matrix(test_zscored))] <- 0
   
-  
   # return a list with the results (after adding the labels back to the data)
-  processed_data <- list(train_data = cbind(train_zscored, train_labels), 
-                         test_data = cbind(test_zscored, test_labels))
+  processed_data <- list(train_set = cbind(train_zscored, train_labels), 
+                         test_set = cbind(test_zscored, test_labels))
   
   return(processed_data)
   
