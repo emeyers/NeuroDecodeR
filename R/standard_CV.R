@@ -7,128 +7,174 @@
 #' This object uses \href{https://cran.r-project.org/web/packages/R6/vignettes/Introduction.html}{R6 package} 
 #'
 #'
-#' @section standard_CV:
-#' 
-#' \describe{
-#' \item{\code{standard_CV$new(data_source, classifier, feature_preprocessors)  )}}{
-#' If successful, will return a new \code{basic_DS} object.
-#' }}
-#' 
-#' @section Methods
-#' \describe{
-#' \item{\code{run_decoding}}{
-#' The main method that runs the cross-validation analysis. 
-#' }}
-#' 
-#' 
-#' 
-#' @import R6
+#' @import R6 parallel doParallel foreach
 #' @export
 
+
+
+
 standard_CV <- R6Class("standard_CV", 
+    
+                       
     public = list(
+      
       # properties
       data_source = NA,
       classifier = NA,
       feature_preprocessors = NA,
       num_resample_runs = 50,
+      
                       
       # constructor
-      initialize = function(data_source, classifier, feature_preprocessors) {
+      initialize = function(data_source, classifier, feature_preprocessors, num_resample_runs = 50) {
         self$data_source <- data_source
         self$classifier <- classifier
         self$feature_preprocessors <- feature_preprocessors
+        self$num_resample_runs <- num_resample_runs
       },
         
       
-      # Resample runs
-      resample_run = function(num_resample_runs){
-        cores <- detectCores() / 2
-        cl <- makeCluster(cores)
-        registerDoParallel(cl)
-        
-        result <- foreach(i = 1: num_resample_runs) %dopar% run_decoding()
-        return(result)
-      }
+      
+      # # Resample runs
+      # resample_run = function() {
+      #   
+      #   cores <- parallel::detectCores() 
+      #   the_cluster <- parallel::makeCluster(cores)
+      #   doParallel::registerDoParallel(the_cluster)
+      #   
+      #   result <- foreach(i = 1:num_resample_runs) %dopar% {
+      #     self$run_decoding()
+      #   }
+      #   
+      #   
+      #   return(result)
+      # 
+      #   
+      # },
+      
+      
+      
       
       # methods
-      run_decoding = function(){
+      run_decoding = function() {
+        
         data_source <- self$data_source
         classifier = self$classifier
         feature_preprocessors = self$feature_preprocessors
         num_resample_runs = self$num_resample_runs
         DECODING_RESULTS <- NULL
         
-        # Add a loop over resample runs...
+        
+        # set up parallel resources
+        #cores <- parallel::detectCores()
+        #the_cluster <- parallel::makeCluster(cores)
+        #doParallel::registerDoParallel(the_cluster)
 
-        # get the data from the current cross-validation run        
-        cv_data <- data_source$get_data()
+ 
         
-        unique_times <- unique(cv_data$time)
-        num_time_bins <- length(unique_times)
-        all_cv_train_test_inds <- select(cv_data, starts_with("CV"))
-        num_CV <- ncol(all_cv_train_test_inds)
-
-        # add names for the different dimensions of the results
-        time_names <- grep("^time", names(data_source$binned_data), value = TRUE)
-        dim_names <- list(1:num_CV, time_names, time_names)
-        
-        zero_one_loss_results <- array(NA, c(num_CV, num_time_bins, num_time_bins), dimnames = dim_names)
-        decision_value_results <- array(NA, c(num_CV, num_time_bins, num_time_bins), dimnames = dim_names)
-        rank_results <- array(NA, c(num_CV, num_time_bins, num_time_bins), dimnames = dim_names)
-        
-        for (iCV in 1:num_CV) {
-          tictoc::tic()
-          print(iCV) 
-          for (iTrain in 1:num_time_bins) {
-            train_data <- filter(cv_data, time == unique_times[iTrain], all_cv_train_test_inds[iCV] == "train") %>% select(starts_with("site"), labels)
-            test_data <- filter(cv_data, all_cv_train_test_inds[iCV] == "test") %>% select(starts_with("site"), labels, time)
+        # Do a parallel loop over resample runs
+        #ALL_DECODING_RESULTS <- NULL
+        #for(iResample in 1:num_resample_runs) {
+          
+        #ALL_DECODING_RESULTS <- foreach(iResample = 1:num_resample_runs) %dopar% {
             
-            # if feature-processors have been specified, do feature processing...
-            if (length(feature_preprocessors) > 1) {
-              for (iFP in 1:length(feature_preprocessors)) {
-                # get the preprocessed data...
-                processed_data <- fps[[iFP]]$preprocess_data(train_data, test_data)
-                # update the training and test data with this preprocessed data...
-                train_data <- processed_data$train_data
-                test_data <- processed_data$test_data
-              }
-            }  # end the if statement for doing preprocessing
-            
-            results <- classifier$get_predictions(train_data, test_data)
-            # add more measures of decoding accuracy (rank results, etc)
-            rank_and_decision_val_results <- private$get_rank_results(results)
-            results <- cbind(results, rank_and_decision_val_results)
-
-            # get the results averaged over all classes for each time period
-            mean_decoding_results <- results %>% group_by(time) %>% 
-              summarize(mean_accuracy = mean(correct), 
-                        mean_rank = mean(normalized_rank_results),
-                        mean_decision_vals = mean(correct_class_decision_val)
-                        )
+          # get the data from the current cross-validation run        
+          #cv_data <- data_source$get_data()
+          cv_data <- get_data(data_source)  # using S3 version of basic_DS
+          
+          
+          unique_times <- unique(cv_data$time)
+          num_time_bins <- length(unique_times)
+          all_cv_train_test_inds <- select(cv_data, starts_with("CV"))
+          num_CV <- ncol(all_cv_train_test_inds)
   
-            zero_one_loss_results[iCV, iTrain, ] <- mean_decoding_results$mean_accuracy
-            decision_value_results[iCV, iTrain, ] <- mean_decoding_results$mean_decision_vals 
-            rank_results[iCV, iTrain, ] <- mean_decoding_results$mean_rank
-          }   # end the for loop over time bins
-          tictoc::toc()
-        }  # end the for loop over CV splits
-        # combine all the results in one list to be returned
-        DECODING_RESULTS$zero_one_loss_results <- zero_one_loss_results
-        DECODING_RESULTS$decision_value_results <- decision_value_results
-        DECODING_RESULTS$rank_results <- rank_results
+          # add names for the different dimensions of the results
+          time_names <- grep("^time", names(data_source$binned_data), value = TRUE)
+          dim_names <- list(1:num_CV, time_names, time_names)
+          
+          zero_one_loss_results <- array(NA, c(num_CV, num_time_bins, num_time_bins), dimnames = dim_names)
+          decision_value_results <- array(NA, c(num_CV, num_time_bins, num_time_bins), dimnames = dim_names)
+          rank_results <- array(NA, c(num_CV, num_time_bins, num_time_bins), dimnames = dim_names)
+          
+          for (iCV in 1:num_CV) {
+            
+            tictoc::tic()
+            print(iCV) 
+            
+            for (iTrain in 1:num_time_bins) {
+              
+              train_data <- filter(cv_data, time == unique_times[iTrain], all_cv_train_test_inds[iCV] == "train") %>% select(starts_with("site"), labels)
+              test_data <- filter(cv_data, all_cv_train_test_inds[iCV] == "test") %>% select(starts_with("site"), labels, time)
+              
+              
+              # if feature-processors have been specified, do feature processing...
+              if (length(feature_preprocessors) > 1) {
+                for (iFP in 1:length(feature_preprocessors)) {
+                  # get the preprocessed data...
+                  #processed_data <- fps[[iFP]]$preprocess_data(train_data, test_data)
+                  processed_data <- preprocess_data(fps[[iFP]], train_data, test_data)
+                  # update the training and test data with this preprocessed data...
+                  train_data <- processed_data$train_set #processed_data$train_data
+                  test_data <- processed_data$test_set #processed_data$test_data
+                }
+              }  # end the if statement for doing preprocessing
+              
+              
+              #results <- classifier$get_predictions(train_data, test_data)
+              results <- get_predictions(classifier, train_data, test_data)
+              
+              # add more measures of decoding accuracy (rank results, etc)
+              rank_and_decision_val_results <- private$get_rank_results(results)
+              results <- cbind(results, rank_and_decision_val_results)
+  
+              
+              # get the results averaged over all classes for each time period
+              mean_decoding_results <- results %>% group_by(time) %>% 
+                summarize(mean_accuracy = mean(correct), 
+                          mean_rank = mean(normalized_rank_results),
+                          mean_decision_vals = mean(correct_class_decision_val)
+                          )
+    
+              zero_one_loss_results[iCV, iTrain, ] <- mean_decoding_results$mean_accuracy
+              decision_value_results[iCV, iTrain, ] <- mean_decoding_results$mean_decision_vals 
+              rank_results[iCV, iTrain, ] <- mean_decoding_results$mean_rank
+            }   # end the for loop over time bins
+            tictoc::toc()
+            
+          }  # end the for loop over CV splits
+          
+          
+          # combine all the results in one list to be returned
+          DECODING_RESULTS$zero_one_loss_results <- zero_one_loss_results
+          DECODING_RESULTS$decision_value_results <- decision_value_results
+          DECODING_RESULTS$rank_results <- rank_results
+          
+          # only need this if not running in parallel
+          #ALL_DECODING_RESULTS[[iResample]] <- DECODING_RESULTS
+          
+        #}  # end loop over resample runs
+
         
+                  
+        #doParallel::stopImplicitCluster()
+
+        #return(ALL_DECODING_RESULTS)
         return(DECODING_RESULTS)
+        
       }  # end the run_decoding method
   ),  # end the public methods
 
+  
+  
   # private methods
   private = list(
+  
     # get the rank results and the decision value for predicted class...
     get_rank_results = function(results) {
       decision_vals <- select(results, starts_with("decision"))
       num_classes <- ncol(decision_vals)
       num_test_points <- nrow(decision_vals)
+      
       # remove the prefix 'decision.vals' from the column names...
       the_names <- names(decision_vals)
       the_names <- unlist(strsplit(the_names, "decision_val_", fixed = TRUE))  
