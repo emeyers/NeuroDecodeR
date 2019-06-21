@@ -44,15 +44,19 @@
 #                num_cv_splits = 3, num_label_repeats_per_cv_split = 6, use_count_data = TRUE)
 # cv_data <- get_data(ds)
 # train_set <- filter(cv_data, time == "time.200_349", CV_1 == "train") %>% select(starts_with("site"), labels)
-# test_set <- filter(cv_data, time == "time.200_349", CV_1 == "test") %>% select(starts_with("site"), labels, time)
-# 
+# test_set <- filter(cv_data, time %in% c("time.-350_-201", "time.200_349"), CV_1 == "test") %>% select(starts_with("site"), labels, time)
+# levels(test_set$time)[levels(test_set$time)=="time.-350_-201"] <- "baseline"
+# levels(test_set$time)[levels(test_set$time)=="time.200_349"] <- "stimulus"
 # 
 # # get data a spike counts
 # ds <- basic_DS(real_data_binned_file_name, "stimulus_ID",
 #                num_cv_splits = 3, num_label_repeats_per_cv_split = 6, use_count_data = TRUE)
 # cv_data <- get_data(ds)
 # count_train_set <- filter(cv_data, time == "time.200_349", CV_1 == "train") %>% select(starts_with("site"), labels)
-# count_test_set <- filter(cv_data, time == "time.200_349", CV_1 == "test") %>% select(starts_with("site"), labels, time)
+# count_test_set <- filter(cv_data, time %in% c("time.-350_-201", "time.200_349"), CV_1 == "test") %>% select(starts_with("site"), labels, time)
+# levels(count_test_set$time)[levels(count_test_set$time)=="time.-350_-201"] <- "baseline"
+# levels(count_test_set$time)[levels(count_test_set$time)=="time.200_349"] <- "stimulus"
+# 
 # 
 # # get data z-score normalized
 # fp <- zscore_FP()

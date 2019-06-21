@@ -17,9 +17,16 @@ run_test_full_decoding <- function(cv, plot_results = FALSE) {
 
 
 basedir_file_name <- '../../data/binned/ZD_150_samples_binned_every_50_samples.Rda'
-ds <- NDTr::basic_DS$new(basedir_file_name, 'stimulus_ID', 18, 0)
-fps <- list(NDTr::zscore_FP$new())
-cl <- NDTr::max_correlation_CL$new()
+
+# R6 versions
+#ds <- NDTr::basic_DS$new(basedir_file_name, 'stimulus_ID', 18, 0)
+#cl <- NDTr::max_correlation_CL$new()
+#fps <- list(NDTr::zscore_FP$new())
+
+
+ds <- basic_DS(basedir_file_name, 'stimulus_ID', 18, 0)
+fps <- list(zscore_FP())
+cl <- max_correlation_CL()
 cv <- NDTr::standard_CV$new(ds, cl, fps) 
 
 DECODING_RESULTS <- run_test_full_decoding(cv, TRUE)

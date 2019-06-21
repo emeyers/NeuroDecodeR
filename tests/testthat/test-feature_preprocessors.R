@@ -15,7 +15,7 @@ test_that("zscore_FP normalized the training data so that it has a mean of 0 and
   
   zscore_normalized_train_data <- dplyr::select(zscore_normalized_train_set, starts_with("site"))
   expect_equal(max(colSums(zscore_normalized_train_data)), 0)  # all means are 0
-  expect_equal(max(abs(sapply(zscore_normalized_train_data, sd) - 1)) - 1, 0)  # all sd are 1
+  expect_equal(max(abs(sapply(zscore_normalized_train_data, sd) - 1)), 0)  # all sd are 1
   
 })
 
