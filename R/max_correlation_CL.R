@@ -1,8 +1,9 @@
 #' A maximum correlation coefficient classifier (CL) object
 #'
-#' An implementation of a maximum correlation coefficeint classifier. Like all classifiers, this classifier
-#' learning a model based on training data and then makes predictions on new test data.  
-#' This object uses \href{https://cran.r-project.org/web/packages/R6/vignettes/Introduction.html}{R6 package} 
+#' An implementation of a maximum correlation coefficeint classifier. 
+#' Like all classifiers (CL) objects, this classifier has a get_predictions()
+#' method which learns a model based on training data and then makes 
+#' predictions on the test data.  
 #'
 #'
 #' 
@@ -21,11 +22,14 @@ max_correlation_CL <- function(){
 
 # the get_predictions method
 #' @export
-get_predictions.max_correlation_CL <- function(max_correlation_CL_obj, train_data, all_times_test_data) {  
-  
+get_predictions.max_correlation_CL <- function(max_correlation_CL_obj, 
+                                               train_data, 
+                                               all_times_test_data) {  
   
   ### Train the classifier  ---------------------------------------------------
-  prototypes <- train_data %>% group_by(labels) %>% summarise_all(funs(mean))
+  prototypes <- train_data %>% 
+    dplyr::group_by(labels) %>% 
+    dplyr::summarise_all(mean)
   
   
   ### Test the classifier  ---------------------------------------------------
