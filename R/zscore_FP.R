@@ -26,8 +26,8 @@ preprocess_data.zscore_FP = function(fp, train_set, test_set){
   train_labels <- select(train_set, -starts_with('site'))
   train_data <- select(train_set, starts_with('site'))
   
-  test_labels <- select(train_set, -starts_with('site'))
-  test_data <- select(train_set, starts_with('site'))
+  test_labels <- select(test_set, -starts_with('site'))
+  test_data <- select(test_set, starts_with('site'))
   
 
   # get the parameters and cale the rianing data (all in one line!)
