@@ -2,10 +2,12 @@
 
 run_test_full_decoding <- function(cv, plot_results = FALSE) {
   
-  DECODING_RESULTS <- cv$run_decoding()
+  # DECODING_RESULTS <- cv$run_decoding()
+  ALL_DECODING_RESULTS <- run_decoding(cv)
+  DECODING_RESULTS <- ALL_DECODING_RESULTS[[1]]
   
   if (plot_results) {
-    plot(DECODING_RESULTS$zero_one_loss_results)
+    #plot(DECODING_RESULTS$zero_one_loss_results)
     temp_mean_results <- colMeans(DECODING_RESULTS$zero_one_loss_results)
     plot(diag(temp_mean_results), type = 'o')
   }
@@ -27,7 +29,7 @@ basedir_file_name <- '../../data/binned/ZD_150_samples_binned_every_50_samples.R
 ds <- basic_DS(basedir_file_name, 'stimulus_ID', 18, 0)
 fps <- list(zscore_FP())
 cl <- max_correlation_CL()
-cv <- NDTr::standard_CV$new(ds, cl, fps) 
+cv <- standard_CV(ds, cl, fps, 1) 
 
 DECODING_RESULTS <- run_test_full_decoding(cv, TRUE)
 
@@ -40,12 +42,48 @@ DECODING_RESULTS <- run_test_full_decoding(cv, TRUE)
 
 
 
-
-
-
-
-
-
-
+# 
+# 
+# 
+# basedir_file_name <- '../../data/binned/ZD_150_samples_binned_every_50_samples.Rda'
+# 
+# 
+# ds <- basic_DS(basedir_file_name, 'stimulus_ID', 18, 0)
+# fps <- list(zscore_FP())
+# cl <- max_correlation_CL()
+# cv <- standard_CV(ds, cl, fps, 5) 
+# 
+# ALL_RESULTS <- run_decoding(cv)
+# 
+# #set up parallel resources
+# cores <- parallel::detectCores()
+# the_cluster <- parallel::makeCluster(cores)
+# doParallel::registerDoParallel(the_cluster)
+# 
+# ALL_DECODING_RESULTS <- foreach(iResample = 1:10) %dopar% {
+#   #run_decoding(cv)
+#   
+# }
+# 
+# for (i in 1:10){
+#   run_decoding(cv)
+# }
+# 
+# 
+# 
+# # results <- foreach(i=1:n, .export=c('function1', 'function2'), .packages='package1') %dopar% {
+# #   # do something cool
+# # }
+# 
+# 
+# 
+# #library(doParallel)
+# cores <- parallel::detectCores()
+# the_cluster <- parallel::makeCluster(cores)
+# doParallel::registerDoParallel(the_cluster)
+# foreach(i=1:3) %dopar% sqrt(i)
+# 
+# stopCluster(the_cluster)
+# 
 
 

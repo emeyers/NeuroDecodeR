@@ -4,229 +4,259 @@
 #' and runs multiple cross-validation cycles by getting new training and test data splits, 
 #' running the preprocessor to do preprocessing of the data, trains and tests the classifier, and 
 #' the creates metric to evaluation the classification performance on the test set.  
-#' This object uses \href{https://cran.r-project.org/web/packages/R6/vignettes/Introduction.html}{R6 package} 
 #'
 #'
-#' @import R6 parallel doParallel foreach
+#' @import parallel doParallel foreach
+
+
+
+
+
+# the constructor 
 #' @export
+standard_CV <- function(datasource, 
+                        classifier, 
+                        feature_preprocessors, 
+                        num_resample_runs = 50) {
+        
+  the_cv <- list(datasource = datasource, 
+                 classifier = classifier,
+                 feature_preprocessors = feature_preprocessors,
+                 num_resample_runs = num_resample_runs)
+      
+  attr(the_cv, "class") <- "standard_CV"
+  the_cv 
+
+}
+  
+
+
+      
+
+#'
+#'
+#'
+#'
+#'       # # Resample runs
+#'       # resample_run = function() {
+#'       #
+#'       #   cores <- parallel::detectCores()
+#'       #   the_cluster <- parallel::makeCluster(cores)
+#'       #   doParallel::registerDoParallel(the_cluster)
+#'       #
+#'       #   result <- foreach(i = 1:num_resample_runs) %dopar% {
+#'       #     self$run_decoding()
+#'       #   }
+#'       #
+#'       #
+#'       #   return(result)
+#'       #
+#'       #
+#'       # },
+#'
+#'
+#'
+#'
+
+
+
+# methods
+#' @export
+run_decoding.standard_CV = function(cv_obj) {
+
+  
+  #set up parallel resources
+  # cores <- parallel::detectCores()
+  # the_cluster <- parallel::makeCluster(cores)
+  # doParallel::registerDoParallel(the_cluster)
+
+  # ALL_DECODING_RESULTS <- foreach(iResample = 1:cv_obj$num_resample_runs) %dopar% {
+  #   print(sqrt(iResample))
+  #   #run_decoding_one_resample_run(cv_obj)
+  # }
+  
+  DECODING_RESULTS <- run_decoding_one_resample_run(cv_obj) 
+  # ALL_DECODING_RESULTS <- list()
+  # for (iResample in 1:cv_obj$num_resample_runs) {
+  #   ALL_DECODING_RESULTS[[iResample]] <- run_decoding_one_resample_run(cv_obj)
+  # }
+  # 
+  # doParallel::stopImplicitCluster()
+  # 
+  # ALL_DECODING_RESULTS
+  
+}
 
 
 
 
-standard_CV <- R6Class("standard_CV", 
+run_decoding_one_resample_run <- function(cv_obj) {
+
+  datasource <- cv_obj$datasource
+  classifier = cv_obj$classifier
+  feature_preprocessors = cv_obj$feature_preprocessors
+  num_resample_runs = cv_obj$num_resample_runs
+  DECODING_RESULTS <- NULL
+  
+
+  # Do a parallel loop over resample runs
+  ALL_DECODING_RESULTS <- NULL
+  # # for(iResample in 1:num_resample_runs) {
+
+  #ALL_DECODING_RESULTS <- foreach(iResample = 1:num_resample_runs) %dopar% {
+  ALL_DECODING_RESULTS <- foreach(iResample = 1:num_resample_runs, 
+                                  .export=c('get_rank_results')) %dopar% {
+      
+   # results <- foreach(i=1:n, .export=c('function1', 'function2'), .packages='package1') %dopar% {
+      
+
+    # get the data from the current cross-validation run
+    #cv_data <- datasource$get_data()
+    cv_data <- get_data(datasource)  # using S3 version of basic_DS
+  
+  
+    unique_times <- unique(cv_data$time)
+    num_time_bins <- length(unique_times)
+    all_cv_train_test_inds <- select(cv_data, starts_with("CV"))
+    num_CV <- ncol(all_cv_train_test_inds)
+  
+    # add names for the different dimensions of the results
+    time_names <- grep("^time", names(datasource$binned_data), value = TRUE)
+    dim_names <- list(1:num_CV, time_names, time_names)
+  
+    zero_one_loss_results <- array(NA, c(num_CV, num_time_bins, num_time_bins), dimnames = dim_names)
+    decision_value_results <- array(NA, c(num_CV, num_time_bins, num_time_bins), dimnames = dim_names)
+    rank_results <- array(NA, c(num_CV, num_time_bins, num_time_bins), dimnames = dim_names)
+  
+    for (iCV in 1:num_CV) {
+  
+      tictoc::tic()
+      print(iCV)
+  
+      for (iTrain in 1:num_time_bins) {
+  
+        train_data <- filter(cv_data, time == unique_times[iTrain], all_cv_train_test_inds[iCV] == "train") %>% select(starts_with("site"), labels)
+        test_data <- filter(cv_data, all_cv_train_test_inds[iCV] == "test") %>% select(starts_with("site"), labels, time)
+  
+  
+        # if feature-processors have been specified, do feature processing...
+        if (length(feature_preprocessors) > 1) {
+          for (iFP in 1:length(feature_preprocessors)) {
+            # get the preprocessed data...
+            #processed_data <- fps[[iFP]]$preprocess_data(train_data, test_data)
+            processed_data <- preprocess_data(fps[[iFP]], train_data, test_data)
+            # update the training and test data with this preprocessed data...
+            train_data <- processed_data$train_set #processed_data$train_data
+            test_data <- processed_data$test_set #processed_data$test_data
+          }
+        }  # end the if statement for doing preprocessing
+  
+  
+        #results <- classifier$get_predictions(train_data, test_data)
+        results <- get_predictions(classifier, train_data, test_data)
+  
+        # add more measures of decoding accuracy (rank results, etc)
+        rank_and_decision_val_results <- get_rank_results(results)
+        results <- cbind(results, rank_and_decision_val_results)
+  
+  
+        # get the results averaged over all classes for each time period
+        mean_decoding_results <- results %>% group_by(time) %>%
+          summarize(mean_accuracy = mean(correct),
+                    mean_rank = mean(normalized_rank_results),
+                    mean_decision_vals = mean(correct_class_decision_val)
+          )
+  
+        zero_one_loss_results[iCV, iTrain, ] <- mean_decoding_results$mean_accuracy
+        decision_value_results[iCV, iTrain, ] <- mean_decoding_results$mean_decision_vals
     
-                       
-    public = list(
-      
-      # properties
-      data_source = NA,
-      classifier = NA,
-      feature_preprocessors = NA,
-      num_resample_runs = 50,
-      
-                      
-      # constructor
-      initialize = function(data_source, classifier, feature_preprocessors, num_resample_runs = 50) {
-        self$data_source <- data_source
-        self$classifier <- classifier
-        self$feature_preprocessors <- feature_preprocessors
-        self$num_resample_runs <- num_resample_runs
-      },
-        
-      
-      
-      # # Resample runs
-      # resample_run = function() {
-      #   
-      #   cores <- parallel::detectCores() 
-      #   the_cluster <- parallel::makeCluster(cores)
-      #   doParallel::registerDoParallel(the_cluster)
-      #   
-      #   result <- foreach(i = 1:num_resample_runs) %dopar% {
-      #     self$run_decoding()
-      #   }
-      #   
-      #   
-      #   return(result)
-      # 
-      #   
-      # },
-      
-      
-      
-      
-      # methods
-      run_decoding = function() {
-        
-        data_source <- self$data_source
-        classifier = self$classifier
-        feature_preprocessors = self$feature_preprocessors
-        num_resample_runs = self$num_resample_runs
-        DECODING_RESULTS <- NULL
-        
-        
-        # set up parallel resources
-        #cores <- parallel::detectCores()
-        #the_cluster <- parallel::makeCluster(cores)
-        #doParallel::registerDoParallel(the_cluster)
-
- 
-        
-        # Do a parallel loop over resample runs
-        #ALL_DECODING_RESULTS <- NULL
-        #for(iResample in 1:num_resample_runs) {
-          
-        #ALL_DECODING_RESULTS <- foreach(iResample = 1:num_resample_runs) %dopar% {
-            
-          # get the data from the current cross-validation run        
-          #cv_data <- data_source$get_data()
-          cv_data <- get_data(data_source)  # using S3 version of basic_DS
-          
-          
-          unique_times <- unique(cv_data$time)
-          num_time_bins <- length(unique_times)
-          all_cv_train_test_inds <- select(cv_data, starts_with("CV"))
-          num_CV <- ncol(all_cv_train_test_inds)
+        rank_results[iCV, iTrain, ] <- mean_decoding_results$mean_rank
+      }   # end the for loop over time bins
+      tictoc::toc()
   
-          # add names for the different dimensions of the results
-          time_names <- grep("^time", names(data_source$binned_data), value = TRUE)
-          dim_names <- list(1:num_CV, time_names, time_names)
-          
-          zero_one_loss_results <- array(NA, c(num_CV, num_time_bins, num_time_bins), dimnames = dim_names)
-          decision_value_results <- array(NA, c(num_CV, num_time_bins, num_time_bins), dimnames = dim_names)
-          rank_results <- array(NA, c(num_CV, num_time_bins, num_time_bins), dimnames = dim_names)
-          
-          for (iCV in 1:num_CV) {
-            
-            tictoc::tic()
-            print(iCV) 
-            
-            for (iTrain in 1:num_time_bins) {
-              
-              train_data <- filter(cv_data, time == unique_times[iTrain], all_cv_train_test_inds[iCV] == "train") %>% select(starts_with("site"), labels)
-              test_data <- filter(cv_data, all_cv_train_test_inds[iCV] == "test") %>% select(starts_with("site"), labels, time)
-              
-              
-              # if feature-processors have been specified, do feature processing...
-              if (length(feature_preprocessors) > 1) {
-                for (iFP in 1:length(feature_preprocessors)) {
-                  # get the preprocessed data...
-                  #processed_data <- fps[[iFP]]$preprocess_data(train_data, test_data)
-                  processed_data <- preprocess_data(fps[[iFP]], train_data, test_data)
-                  # update the training and test data with this preprocessed data...
-                  train_data <- processed_data$train_set #processed_data$train_data
-                  test_data <- processed_data$test_set #processed_data$test_data
-                }
-              }  # end the if statement for doing preprocessing
-              
-              
-              #results <- classifier$get_predictions(train_data, test_data)
-              results <- get_predictions(classifier, train_data, test_data)
-              
-              # add more measures of decoding accuracy (rank results, etc)
-              rank_and_decision_val_results <- private$get_rank_results(results)
-              results <- cbind(results, rank_and_decision_val_results)
-  
-              
-              # get the results averaged over all classes for each time period
-              mean_decoding_results <- results %>% group_by(time) %>% 
-                summarize(mean_accuracy = mean(correct), 
-                          mean_rank = mean(normalized_rank_results),
-                          mean_decision_vals = mean(correct_class_decision_val)
-                          )
-    
-              zero_one_loss_results[iCV, iTrain, ] <- mean_decoding_results$mean_accuracy
-              decision_value_results[iCV, iTrain, ] <- mean_decoding_results$mean_decision_vals 
-              rank_results[iCV, iTrain, ] <- mean_decoding_results$mean_rank
-            }   # end the for loop over time bins
-            tictoc::toc()
-            
-          }  # end the for loop over CV splits
-          
-          
-          # combine all the results in one list to be returned
-          DECODING_RESULTS$zero_one_loss_results <- zero_one_loss_results
-          DECODING_RESULTS$decision_value_results <- decision_value_results
-          DECODING_RESULTS$rank_results <- rank_results
-          
-          # only need this if not running in parallel
-          #ALL_DECODING_RESULTS[[iResample]] <- DECODING_RESULTS
-          
-        #}  # end loop over resample runs
-
-        
-                  
-        #doParallel::stopImplicitCluster()
-
-        #return(ALL_DECODING_RESULTS)
-        return(DECODING_RESULTS)
-        
-      }  # end the run_decoding method
-  ),  # end the public methods
-
+    }  # end the for loop over CV splits
   
   
-  # private methods
-  private = list(
-  
-    # get the rank results and the decision value for predicted class...
-    get_rank_results = function(results) {
-      decision_vals <- select(results, starts_with("decision"))
-      num_classes <- ncol(decision_vals)
-      num_test_points <- nrow(decision_vals)
-      
-      # remove the prefix 'decision.vals' from the column names...
-      the_names <- names(decision_vals)
-      the_names <- unlist(strsplit(the_names, "decision_val_", fixed = TRUE))  
-      the_names <- the_names[the_names != ""]
-      names(decision_vals) <- the_names
-      decision_vals_aug <- cbind(results$actual_labels, decision_vals)
-      #i <- 1; decision_vals_aug_row <- decision_vals_aug [i, ]
-    
+    # combine all the results in one list to be returned
+    DECODING_RESULTS$zero_one_loss_results <- zero_one_loss_results
+    DECODING_RESULTS$decision_value_results <- decision_value_results
+    DECODING_RESULTS$rank_results <- rank_results
 
-      ####  Bad code - doesn't work with negative numbers because apply converts values to strings before sorting
-      ### (and then the negative sign becomes a dash so it sorts the values in the wrong order)
-      ##  # get the normalized rank results (the lines below are not working correcly with negative values...)      
-      ##  get_rank_one_row <- function(decision_vals_aug_row) {
-      ##    which(names(sort(decision_vals_aug_row[2:length(decision_vals_aug_row)], decreasing = TRUE)) == as.character(as.matrix(decision_vals_aug_row[1]))) 
-      ##  }
-       
-  
-      # This code is written less compactly but it works correctly with negative decision values
-      get_rank_one_row <- function(decision_vals_aug_row) {
-        actual_label <- decision_vals_aug_row[1]
-        decision_vals_row <- decision_vals_aug_row[2:length(decision_vals_aug_row)]
-        the_names <- names(decision_vals_row)  
-        the_order <- order(as.numeric(decision_vals_row), decreasing = TRUE)
-        which(the_names[the_order] == actual_label) 
-      }
-      
-      normalized_rank_results <- 1 - ((apply(decision_vals_aug, 1, get_rank_one_row) - 1)/(num_classes - 1))
+  # only need this if not running in parallel
+  #ALL_DECODING_RESULTS[[iResample]] <- DECODING_RESULTS
 
-      # get the decision values for the correct label      
-      get_decision_vals_one_row <- function(decision_vals_aug_row) {
-        decision_vals_aug_row[which(as.character(as.matrix(decision_vals_aug_row[1])) == names(decision_vals_aug_row[2:length(decision_vals_aug_row)])) + 1]
-      }
-      
-      correct_class_decision_val <- as.numeric(apply(decision_vals_aug, 1, get_decision_vals_one_row))
-      
+    return(DECODING_RESULTS)
 
-      
-    ##  # much slower code (though potentially easier to read)
-    ##  normalized_rank_results <- rep(NA, num_test_points)
-    ##  correct_class_decision_val <- rep(NA, num_test_points)
-    ##  for (iTestPoint in 1:num_test_points){
-    ##    curr_sorted_decision_vals <- sort(decision_vals[iTestPoint, ], decreasing = TRUE) 
-    ##    curr_rank_result <- which(names(curr_sorted_decision_vals) == results$actual_labels[iTestPoint])
-    ##    normalized_rank_results[iTestPoint] <- 1 - ((curr_rank_result - 1)/(num_classes - 1))
-    ##    correct_class_decision_val[iTestPoint] <- decision_vals[iTestPoint, which(results$actual_labels[iTestPoint] == the_names)]
+  }  # end loop over resample runs
+
+
+  #return(ALL_DECODING_RESULTS)
+  #return(DECODING_RESULTS)
+
+}  # end the run_decoding method
+
+
+
+
+
+# get the rank results and the decision value for predicted class...
+get_rank_results = function(results) {
+  decision_vals <- select(results, starts_with("decision"))
+  num_classes <- ncol(decision_vals)
+  num_test_points <- nrow(decision_vals)
+
+  # remove the prefix 'decision.vals' from the column names...
+  the_names <- names(decision_vals)
+  the_names <- unlist(strsplit(the_names, "decision_val_", fixed = TRUE))
+  the_names <- the_names[the_names != ""]
+  names(decision_vals) <- the_names
+  decision_vals_aug <- cbind(results$actual_labels, decision_vals)
+  #i <- 1; decision_vals_aug_row <- decision_vals_aug [i, ]
+
+
+    ####  Bad code - doesn't work with negative numbers because apply converts values to strings before sorting
+    ### (and then the negative sign becomes a dash so it sorts the values in the wrong order)
+    ##  # get the normalized rank results (the lines below are not working correcly with negative values...)
+    ##  get_rank_one_row <- function(decision_vals_aug_row) {
+    ##    which(names(sort(decision_vals_aug_row[2:length(decision_vals_aug_row)], decreasing = TRUE)) == as.character(as.matrix(decision_vals_aug_row[1])))
     ##  }
 
-      
-      rank_and_decision_val_results <- data.frame(normalized_rank_results, correct_class_decision_val)
-     }
-  )  # end private properties/methods
-) # end the class 
+
+
+# This code is written less compactly but it works correctly with negative decision values
+get_rank_one_row <- function(decision_vals_aug_row) {
+    actual_label <- decision_vals_aug_row[1]
+    decision_vals_row <- decision_vals_aug_row[2:length(decision_vals_aug_row)]
+    the_names <- names(decision_vals_row)
+    the_order <- order(as.numeric(decision_vals_row), decreasing = TRUE)
+    which(the_names[the_order] == actual_label)
+  }
+
+  normalized_rank_results <- 1 - ((apply(decision_vals_aug, 1, get_rank_one_row) - 1)/(num_classes - 1))
+
+  # get the decision values for the correct label
+  get_decision_vals_one_row <- function(decision_vals_aug_row) {
+    decision_vals_aug_row[which(as.character(as.matrix(decision_vals_aug_row[1])) == names(decision_vals_aug_row[2:length(decision_vals_aug_row)])) + 1]
+  }
+
+  correct_class_decision_val <- as.numeric(apply(decision_vals_aug, 1, get_decision_vals_one_row))
+
+
+
+##  # much slower code (though potentially easier to read)
+##  normalized_rank_results <- rep(NA, num_test_points)
+##  correct_class_decision_val <- rep(NA, num_test_points)
+##  for (iTestPoint in 1:num_test_points){
+##    curr_sorted_decision_vals <- sort(decision_vals[iTestPoint, ], decreasing = TRUE)
+##    curr_rank_result <- which(names(curr_sorted_decision_vals) == results$actual_labels[iTestPoint])
+##    normalized_rank_results[iTestPoint] <- 1 - ((curr_rank_result - 1)/(num_classes - 1))
+##    correct_class_decision_val[iTestPoint] <- decision_vals[iTestPoint, which(results$actual_labels[iTestPoint] == the_names)]
+##  }
+
+
+  rank_and_decision_val_results <- data.frame(normalized_rank_results, correct_class_decision_val)
+
+}
 
 
 
