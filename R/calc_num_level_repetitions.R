@@ -4,21 +4,6 @@
 #' and returns the indices for all sites (e.g. neurons) that have at least
 #' k presentations of each condition.
 #'
-#' @param binned_data Should be a dataframe in binned format.
-#' @param variable_to_use A string that indicates what variable to analyze.
-#' @param levels_to_use A single string or a vector of strings.
-#' @param k_value  Returns indices for all sites (e.g. neurons) that have at least
-#'   k presentations of each condition.
-#'
-#' @return 
-#' \item{level_repetition_info}{A list of tables and plots containing the level repetition info}
-#' @examples
-#' \dontrun{
-#' calc_num_level_repetitions(binned_data, "labels.stimulus_ID")
-#' }
-#' \dontrun{
-#' calc_num_level_repetitions(binned_data, "labels.stimulus_ID", c("kiwi", "flower"), 60)
-#' }      
 #'
 #' @import R6
 #' @import dplyr

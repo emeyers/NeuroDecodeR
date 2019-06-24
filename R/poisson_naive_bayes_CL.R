@@ -10,21 +10,6 @@
 #'
 #'
 #'
-#' @section poisson_naive_bayes_CL constructor:
-#' 
-#' \describe{
-#' \item{\code{poisson_naive_bayes_CL$new()}}{
-#' if successful, will return a new \code{poisson_naive_bayes_CL} object.
-#' }}
-#' 
-#' @section Methods
-#' \describe{
-#' \item{\code{get_predictions(train.data, all.times.test.data)}}{
-#' Learns a model from the train.data and then makes predictions on the
-#' all.times.test.data data set. 
-#' }}
-#' 
-#' 
 #' 
 #' @import R6
 #' @export
