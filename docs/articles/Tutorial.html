@@ -8,8 +8,8 @@
 <title>Tutorial • The Neural Decoding Toolbox in R</title>
 <!-- jquery --><script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script><!-- Bootstrap --><link href="https://maxcdn.bootstrapcdn.com/bootswatch/3.3.7/sandstone/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script><!-- Font Awesome icons --><link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-T8Gy5hrqNKT+hzMclPo118YTQO6cYprQmhrYwIiQ/3axmI1hQomh7Ud2hPOy8SP1" crossorigin="anonymous">
-<!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/1.7.1/clipboard.min.js" integrity="sha384-cV+rhyOuRHc9Ub/91rihWcGmMmCXDeksTtCihMupQHSsi8GIIRDG0ThDc3HGQFJ3" crossorigin="anonymous"></script><!-- sticky kit --><script src="https://cdnjs.cloudflare.com/ajax/libs/sticky-kit/1.1.3/sticky-kit.min.js" integrity="sha256-c4Rlo1ZozqTPE2RLuvbusY3+SU1pQaJC0TjuhygMipw=" crossorigin="anonymous"></script><!-- pkgdown --><link href="../pkgdown.css" rel="stylesheet">
-<script src="../pkgdown.js"></script><meta property="og:title" content="Tutorial">
+<!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/1.7.1/clipboard.min.js" integrity="sha384-cV+rhyOuRHc9Ub/91rihWcGmMmCXDeksTtCihMupQHSsi8GIIRDG0ThDc3HGQFJ3" crossorigin="anonymous"></script><!-- pkgdown --><link href="../pkgdown.css" rel="stylesheet">
+<script src="../jquery.sticky-kit.min.js"></script><script src="../pkgdown.js"></script><meta property="og:title" content="Tutorial">
 <meta property="og:description" content="">
 <meta name="twitter:card" content="summary">
 <!-- mathjax --><script src="https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><!--[if lt IE 9]>
@@ -18,7 +18,7 @@
 <![endif]-->
 </head>
 <body>
-    <div class="container template-article">
+    <div class="container template-vignette">
       <header><div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
   <div class="container">
     <div class="navbar-header">
@@ -27,12 +27,8 @@
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
-      <span class="navbar-brand">
-        <a class="navbar-link" href="../index.html">The Neural Decoding Toolbox in R</a>
-        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">0.0.0.9000</span>
-      </span>
+      <a class="navbar-brand" href="../index.html">The Neural Decoding Toolbox in R</a>
     </div>
-
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
 <li>
@@ -80,18 +76,15 @@
 
       
       </header><div class="row">
-  <div class="col-md-9 contents">
+  <div class="col-md-9">
     <div class="page-header toc-ignore">
       <h1>Tutorial</h1>
             
-      
-      
-      <div class="hidden name"><code>Tutorial.Rmd</code></div>
-
-    </div>
+          </div>
 
     
     
+<div class="contents">
 <div style="line-height: 1.6em;">
 <p>Below are some tutorials that show you how to use the Neural Decoding Toolbox. The introduction tutorial is a simple tutorial that explains the basics of how to decoding simple variables using the Neural Decoding Toolbox and should be read first. Once one has gone through the basic tutorial one can either try the generalization analysis tutorial to see how one can use the Neural Decoding Toolbox to test whether neural activity is invariant to transformations of experimental conditions, or one can get started using your own data by following the getting started with your own data <a href="./index.html">tutorial</a>.</p>
 <h3 id="overview-of-the-ndt">Overview of the NDT</h3>
@@ -110,9 +103,9 @@
 <p>In order to use the NDTr, the neural data must be in a usable format. Typically this involves putting the data in <a href="Raster-format.html">raster-format</a> and then converting it to <a href="Binned-format.html">binned-format</a> using the create_binned_data_from_raster_data function that is found in the tools directory.</p>
 <h4 id="binning-the-data">Binning the data</h4>
 <p>The NDTr decoding objects operate on data that is in binned-format. To convert data in raster-format to binned-format, we can use the tool <a href="../../docs/reference/create_binned_data.html">create_binned_data</a>, which calculates the average firing rate of neurons over specified intervals and sampled with a specified frequency (i.e., a boxcar filter is used). create_binned_data takes in four arguments: 1) the name of the directory where the raster-format data is stored, 2) the name (potentially including a directory) that the binned data should be saved as, 3) a bin size that specifies how much time the firing rates should be calculated over, and 4) a sampling interval that specifies how frequently to calculate these firing rates. To calculate the average firing rates in 150 ms bins sampled every 50 ms, the following commands can be used:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">raster_directory_name &lt;-<span class="st"> "data/raster/Zhang_Desimone_7objects_raster_data_rda/"</span>
-<span class="kw"><a href="../reference/create_binned_data.html">create_binned_data</a></span>(raster_directory_name, <span class="st">"ZD"</span>, <span class="dv">150</span>, <span class="dv">50</span>)</code></pre></div>
-
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co">#raster_directory_name &lt;- "data/raster/Zhang_Desimone_7objects_raster_data_rda/"</span>
+<span class="co">#create_binned_data(raster_directory_name, "ZD", 150, 50)</span></code></pre></div>
+</div>
 </div>
   </div>
 
@@ -132,8 +125,6 @@
 
       </footer>
 </div>
-
-  
 
   </body>
 </html>

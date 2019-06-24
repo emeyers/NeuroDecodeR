@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>A function that converts raster data in .mat format to .Rda format — create_raster_data_from_matlab_raster_data • The Neural Decoding Toolbox in R</title>
+<title>A function that create binned data in .Rda format from raster data in .mat format — create_binned_data_from_matlab_raster_data • The Neural Decoding Toolbox in R</title>
 
 <!-- jquery -->
 <script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script>
@@ -27,9 +27,9 @@
 <script src="../pkgdown.js"></script>
   
   
-<meta property="og:title" content="A function that converts raster data in .mat format to .Rda format — create_raster_data_from_matlab_raster_data" />
+<meta property="og:title" content="A function that create binned data in .Rda format from raster data in .mat format — create_binned_data_from_matlab_raster_data" />
 
-<meta property="og:description" content="! link to raster format and related two functions" />
+<meta property="og:description" content="! link to raster format and binned format and related two functions" />
 <meta name="twitter:card" content="summary" />
 <!-- mathjax -->
 <script src='https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML'></script>
@@ -104,56 +104,67 @@
       <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>A function that converts raster data in .mat format to .Rda format</h1>
+    <h1>A function that create binned data in .Rda format from raster data in .mat format</h1>
     </div>
 
     
-    <p>! link to raster format and related two functions</p>
+    <p>! link to raster format and binned format and related two functions</p>
     
 
-    <pre class="usage"><code>create_raster_data_from_matlab_raster_data(matlab_raster_dir_name, r_raster_dir_name = NULL)</code></pre>
+    <pre class="usage"><code><a href='create_binned_data.html'>create_binned_data(raster_dir_name, save_prefix_name, bin_width, sampling_interval, start_ind, end_ind, files_contain)</a></code></pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a> Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>matlab_raster_dir_name</th>
-      <td><p>character. Name of a directory containing raster data in .mat format.</p></td>
+      <th>save_prefix_name</th>
+      <td><p>character. Prefix to the generated name for the created binned file, which is
+"<code>bin_width</code>_samples_binned_every_<code>sampling_interval</code>_samples</p></td>
     </tr>
     <tr>
-      <th>r_raster_dir_name</th>
-      <td><p>character. Name of the directory to store created raster data in .Rda format.
-By default, it is created by removing the "_mat" suffix of <code>matlab_raster_dir_name</code> if applicable
-and appending '_rda' to it.</p></td>
+      <th>bin_width</th>
+      <td><p>integer. The bin width over which raster data is averaged.</p></td>
+    </tr>
+    <tr>
+      <th>sampling_interval</th>
+      <td><p>integer. It specifies the nth sample following the start of a bin, where the next bin starts</p></td>
     </tr>
     <tr>
       <th>start_ind</th>
-      <td><p>integer. It specifies the sample index where the new raster data begin. Due to the structure of raster data in matlab, all sample indices should be positive. By default, all data are included.</p></td>
+      <td><p>integer. It specifies the sample index where the binning process starts. Due to the structure of raster data in matlab, all sample indices should be positive. By default, all data are included.</p></td>
     </tr>
     <tr>
       <th>end_ind</th>
-      <td><p>integer. It specifies the sample index where the new raster data end. Due to the structure of raster data in matlab, all sample indices should be positive. By default, all data are included.</p></td>
+      <td><p>integer. It specifies the sample index where the binning process should end by. Due to the structure of raster data in matlab, all sample indices should be positive. By default, all data are included.</p></td>
     </tr>
     <tr>
       <th>files_contain</th>
       <td><p>regular expression. Only raster data files that match the file_contains are inlcluded. By default, it is an empty character.</p></td>
     </tr>
+    <tr>
+      <th>matlab_dir_name</th>
+      <td><p>character. Name of a directory containing raster data in .mat format.</p></td>
+    </tr>
     </table>
     
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>Directory for new raster data will be created, and new raster data files will be written under it. During execution, preceding the creation of each raster file, console spills the total number of raster files will have been created (as you will see
-the number increments by one). After writing all raster files, console spills the <code>r_raster_dir_name</code>.</p>
+    <p>Created binned data file will be written to disk. During execution, preceding the binning of each raster file, console spills the total number of raster files will have been binned (as you will see the number increments by one). After the creation of all files, console spills the binned file name.</p>
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><span class='co'># NOT RUN {</span>
-<span class='fu'>create_raster_data_from_matlab_raster_data</span>(<span class='fu'>file.path</span>(<span class='fu'>getwd</span>(), <span class='st'>"data/raster/Zhang_Desimone_7objects_raster_data_mat"</span>))
-<span class='co'># }</span><div class='input'>If you get other files mixed in the raster directory that are not .mat files and only want to include data from 200th sample to 800th sample
+    <pre class="examples"><div class='input'>Bin the data using 150 sample bins sample at 50 sample intervals
+Assumes that raster files are in the directory 'data/Zhang_Desimone_7objects_raster_data_mat/'
+and saves the output file with the prefix ZD
+</div><div class='output co'>#&gt; <span class='error'>Error: &lt;text&gt;:1:5: unexpected symbol</span>
+#&gt; <span class='error'>1: Bin the</span>
+#&gt; <span class='error'>        ^</span></div><span class='co'># NOT RUN {</span>
+<span class='fu'>create_binned_data_from_matlab_raster_data</span>(<span class='fu'>file.path</span>(<span class='fu'>getwd</span>(),<span class='st'>'data/raster/Zhang_Desimone_7objects_raster_data_mat/'</span>), <span class='st'>'data/binned/ZD'</span>, <span class='fl'>150</span>, <span class='fl'>20</span>)
+<span class='co'># }</span><div class='input'>If you get other files mixed in the raster directory that are .mat files and only want to include data from 200th sample to 800th sample
 </div><div class='output co'>#&gt; <span class='error'>Error: &lt;text&gt;:1:4: unexpected symbol</span>
 #&gt; <span class='error'>1: If you</span>
 #&gt; <span class='error'>       ^</span></div><span class='co'># NOT RUN {</span>
-<span class='fu'>create_raster_data_from_matlab_raster_data</span>(<span class='fu'>file.path</span>(<span class='fu'>getwd</span>(),<span class='st'>'data/raster/Zhang_Desimone_7objects_raster_data_mat/'</span>), <span class='kw'>start_ind</span><span class='kw'>=</span><span class='fl'>200</span>, <span class='kw'>end_ind</span><span class='kw'>=</span><span class='fl'>800</span>, <span class='kw'>files_contain</span><span class='kw'>=</span><span class='st'>"\\.mat$"</span>)
+<span class='fu'>create_binned_data_from_matlab_raster_data</span>(<span class='fu'>file.path</span>(<span class='fu'>getwd</span>(),<span class='st'>'data/raster/Zhang_Desimone_7objects_raster_data_mat/'</span>), <span class='st'>'data/binned/ZD'</span>, <span class='fl'>150</span>, <span class='fl'>20</span>, <span class='fl'>200</span>, <span class='fl'>800</span>, <span class='st'>"\\.mat$"</span>)
 <span class='co'># }</span></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">

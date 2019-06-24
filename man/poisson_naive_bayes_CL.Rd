@@ -17,13 +17,4 @@ for exmaple, if you are using the basic_DS data source, then use.count.data = TR
 contructor. Also, preprocessors that convert the data into values that are not integers should not be used, 
 for example, the zscore_FP should not be used with this classifier.
 }
-\section{poisson_naive_bayes_CL constructor}{
-
-
-\describe{
-\item{\code{poisson_naive_bayes_CL$new()}}{
-if successful, will return a new \code{poisson_naive_bayes_CL} object.
-}}
-}
-
 \keyword{datasets}

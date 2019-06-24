@@ -21,19 +21,13 @@
 <!-- clipboard.js -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/1.7.1/clipboard.min.js" integrity="sha384-cV+rhyOuRHc9Ub/91rihWcGmMmCXDeksTtCihMupQHSsi8GIIRDG0ThDc3HGQFJ3" crossorigin="anonymous"></script>
 
-<!-- sticky kit -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/sticky-kit/1.1.3/sticky-kit.min.js" integrity="sha256-c4Rlo1ZozqTPE2RLuvbusY3+SU1pQaJC0TjuhygMipw=" crossorigin="anonymous"></script>
-
 <!-- pkgdown -->
 <link href="../pkgdown.css" rel="stylesheet">
+<script src="../jquery.sticky-kit.min.js"></script>
 <script src="../pkgdown.js"></script>
-
-
-
+  
+  
 <meta property="og:title" content="Function reference" />
-
-
-
 <!-- mathjax -->
 <script src='https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML'></script>
 
@@ -56,12 +50,8 @@
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
-      <span class="navbar-brand">
-        <a class="navbar-link" href="../index.html">The Neural Decoding Toolbox in R</a>
-        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">0.0.0.9000</span>
-      </span>
+      <a class="navbar-brand" href="../index.html">The Neural Decoding Toolbox in R</a>
     </div>
-
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
         <li>
@@ -101,7 +91,6 @@
   </a>
 </li>
       </ul>
-      
     </div><!--/.nav-collapse -->
   </div><!--/.container -->
 </div><!--/.navbar -->
@@ -109,86 +98,88 @@
       
       </header>
 
-<div class="row">
-  <div class="contents col-md-9">
+      <div class="row">
+  <div class="col-md-9">
     <div class="page-header">
-      <h1>Reference</h1>
+      <h1>
+        Reference
+        <small>version&nbsp;0.0.0.9000</small>
+      </h1>
     </div>
 
-    <table class="ref-index">
+    <div class="contents">
+      <table class="ref-index">
 
-    <colgroup>
-      
-      <col class="alias" />
-      <col class="title" />
-    </colgroup>
+      <colgroup>
+        <col class="alias" />
+        <col class="title" />
+      </colgroup>
 
-    <tbody>
-      <tr>
-        <th colspan="2">
-          <h2 id="section-all-functions" class="hasAnchor"><a href="#section-all-functions" class="anchor"></a>All functions</h2>
-          <p class="section-desc"></p>
-        </th>
-      </tr>
-      <tr>
-        
-        <td>
-          <p><code><a href="basic_DS.html">basic_DS</a></code> </p>
-        </td>
-        <td><p>A basic datasource object</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="calc_num_level_repetitions.html">calc_num_level_repetitions()</a></code> </p>
-        </td>
-        <td><p>calc_num_level_repetitions</p></td>
-      </tr><tr>
-        
-        <td>
-
-          <p><code><a href="create_binned_data.html">create_binned_data()</a></code> </p>
-        </td>
-        <td><p>A function that converts data from raster format to binned format</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="create_raster_data_from_matlab_raster_data.html">create_raster_data_from_matlab_raster_data()</a></code> </p>
-        </td>
-        <td><p>export</p></td>
-      </tr><tr>
-        
-        <td>
-
-          <p><code><a href="max_correlation_CL.html">max_correlation_CL</a></code> </p>
-        </td>
-        <td><p>A maximum correlation coefficient classifier (CL) object</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="poisson_naive_bayes_CL.html">poisson_naive_bayes_CL</a></code> </p>
-        </td>
-        <td><p>A Poisson Naive Bayes classifier (CL) object</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="select_k_features_FP.html">select_k_features_FP</a></code> </p>
-        </td>
-        <td><p>A feature preprocessor (FP) that reduces the data to the best k features</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="standard_CV.html">standard_CV</a></code> </p>
-        </td>
-        <td><p>The standard cross-validator (CV)  object</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="zscore_FP.html">zscore_FP</a></code> </p>
-        </td>
-        <td><p>A feature preprocessor (FP) that zscore normalizes the data</p></td>
-      </tr>
-    </tbody>
-    </table>
+      <tbody>
+        <tr>
+          <th colspan="2">
+            <h2 id="section-all-functions" class="hasAnchor"><a href="#section-all-functions" class="anchor"></a>All functions</h2>
+            <p class="section-desc"></p>
+          </th>
+        </tr>
+        <tr>
+          <!--  -->
+          <td>
+            <p><code><a href="basic_DS.html">basic_DS</a></code> </p>
+          </td>
+          <td><p>A basic datasource object</p></td>
+        </tr><tr>
+          <!--  -->
+          <td>
+            <p><code><a href="calc_num_level_repetitions.html">calc_num_level_repetitions</a></code> </p>
+          </td>
+          <td><p>calc_num_level_repetitions</p></td>
+        </tr><tr>
+          <!--  -->
+          <td>
+            <p><code><a href="create_binned_data.html">create_binned_data</a></code> </p>
+          </td>
+          <td><p>A function that converts data from raster format to binned format</p></td>
+        </tr><tr>
+          <!--  -->
+          <td>
+            <p><code><a href="create_raster_data_from_matlab_raster_data.html">create_raster_data_from_matlab_raster_data</a></code> </p>
+          </td>
+          <td><p>A function that converts raster data in .mat format to .Rda format</p></td>
+        </tr><tr>
+          <!--  -->
+          <td>
+            <p><code><a href="max_correlation_CL.html">max_correlation_CL</a></code> </p>
+          </td>
+          <td><p>A maximum correlation coefficient classifier (CL) object</p></td>
+        </tr><tr>
+          <!--  -->
+          <td>
+            <p><code><a href="poisson_naive_bayes_CL.html">poisson_naive_bayes_CL</a></code> </p>
+          </td>
+          <td><p>A Poisson Naive Bayes classifier (CL) object</p></td>
+        </tr><tr>
+          <!--  -->
+          <td>
+            <p><code><a href="select_k_features_FP.html">select_k_features_FP</a></code> </p>
+          </td>
+          <td><p>A feature preprocessor (FP) that reduces the data to the best k features</p></td>
+        </tr><tr>
+          <!--  -->
+          <td>
+            <p><code><a href="standard_CV.html">standard_CV</a></code> </p>
+          </td>
+          <td><p>The standard cross-validator (CV)  object</p></td>
+        </tr><tr>
+          <!--  -->
+          <td>
+            <p><code><a href="zscore_FP.html">zscore_FP</a></code> </p>
+          </td>
+          <td><p>A feature preprocessor (FP) that zscore normalizes the data</p></td>
+        </tr>
+      </tbody>
+      </table>
+    </div>
   </div>
 
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
@@ -211,8 +202,5 @@
       </footer>
    </div>
 
-  
-
   </body>
 </html>
-

@@ -21,24 +21,18 @@
 <!-- clipboard.js -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/1.7.1/clipboard.min.js" integrity="sha384-cV+rhyOuRHc9Ub/91rihWcGmMmCXDeksTtCihMupQHSsi8GIIRDG0ThDc3HGQFJ3" crossorigin="anonymous"></script>
 
-<!-- sticky kit -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/sticky-kit/1.1.3/sticky-kit.min.js" integrity="sha256-c4Rlo1ZozqTPE2RLuvbusY3+SU1pQaJC0TjuhygMipw=" crossorigin="anonymous"></script>
-
 <!-- pkgdown -->
 <link href="../pkgdown.css" rel="stylesheet">
+<script src="../jquery.sticky-kit.min.js"></script>
 <script src="../pkgdown.js"></script>
-
-
-
+  
+  
 <meta property="og:title" content="A basic datasource object — basic_DS" />
 
 <meta property="og:description" content="A datasource object takes data in binned format and returns training 
-and testing splits of the data that can be passed to a classifier. 
-This object uses R6 package" />
+  and testing splits of the data that can be passed to a classifier. 
+  This object uses R6 package" />
 <meta name="twitter:card" content="summary" />
-
-
-
 <!-- mathjax -->
 <script src='https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML'></script>
 
@@ -61,12 +55,8 @@ This object uses R6 package" />
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
-      <span class="navbar-brand">
-        <a class="navbar-link" href="../index.html">The Neural Decoding Toolbox in R</a>
-        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">0.0.0.9000</span>
-      </span>
+      <a class="navbar-brand" href="../index.html">The Neural Decoding Toolbox in R</a>
     </div>
-
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
         <li>
@@ -106,7 +96,6 @@ This object uses R6 package" />
   </a>
 </li>
       </ul>
-      
     </div><!--/.nav-collapse -->
   </div><!--/.container -->
 </div><!--/.navbar -->
@@ -114,21 +103,17 @@ This object uses R6 package" />
       
       </header>
 
-<div class="row">
+      <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>A basic datasource object</h1>
-    
-    <div class="hidden name"><code>basic_DS.Rd</code></div>
     </div>
 
-    <div class="ref-description">
     
     <p>A datasource object takes data in binned format and returns training 
-and testing splits of the data that can be passed to a classifier. 
-This object uses <a href='https://cran.r-project.org/web/packages/R6/vignettes/Introduction.html'>R6 package</a></p>
+  and testing splits of the data that can be passed to a classifier. 
+  This object uses <a href='https://cran.r-project.org/web/packages/R6/vignettes/Introduction.html'>R6 package</a></p>
     
-    </div>
 
     <pre class="usage"><span class='no'>basic_DS</span></pre>
         
@@ -139,9 +124,7 @@ This object uses <a href='https://cran.r-project.org/web/packages/R6/vignettes/I
     <h2 class="hasAnchor" id="basic-ds-constructor"><a class="anchor" href="#basic-ds-constructor"></a>basic_DS constructor</h2>
 
     
-    <dl class='dl-horizontal'>
-<dt><code>basic_DS$new(binned_data, specific_binned_label_name, num_cv_splits, use_count_data, num_times_to_repeat_labels_per_cv_block )</code></dt><dd><p>if successful, will return a new <code>basic_DS</code> object.</p></dd></dl>
-
+    
 
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
@@ -168,8 +151,5 @@ This object uses <a href='https://cran.r-project.org/web/packages/R6/vignettes/I
       </footer>
    </div>
 
-  
-
   </body>
 </html>
-

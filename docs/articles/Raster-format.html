@@ -8,8 +8,8 @@
 <title>Raster-format • The Neural Decoding Toolbox in R</title>
 <!-- jquery --><script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script><!-- Bootstrap --><link href="https://maxcdn.bootstrapcdn.com/bootswatch/3.3.7/sandstone/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script><!-- Font Awesome icons --><link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-T8Gy5hrqNKT+hzMclPo118YTQO6cYprQmhrYwIiQ/3axmI1hQomh7Ud2hPOy8SP1" crossorigin="anonymous">
-<!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/1.7.1/clipboard.min.js" integrity="sha384-cV+rhyOuRHc9Ub/91rihWcGmMmCXDeksTtCihMupQHSsi8GIIRDG0ThDc3HGQFJ3" crossorigin="anonymous"></script><!-- sticky kit --><script src="https://cdnjs.cloudflare.com/ajax/libs/sticky-kit/1.1.3/sticky-kit.min.js" integrity="sha256-c4Rlo1ZozqTPE2RLuvbusY3+SU1pQaJC0TjuhygMipw=" crossorigin="anonymous"></script><!-- pkgdown --><link href="../pkgdown.css" rel="stylesheet">
-<script src="../pkgdown.js"></script><meta property="og:title" content="Raster-format">
+<!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/1.7.1/clipboard.min.js" integrity="sha384-cV+rhyOuRHc9Ub/91rihWcGmMmCXDeksTtCihMupQHSsi8GIIRDG0ThDc3HGQFJ3" crossorigin="anonymous"></script><!-- pkgdown --><link href="../pkgdown.css" rel="stylesheet">
+<script src="../jquery.sticky-kit.min.js"></script><script src="../pkgdown.js"></script><meta property="og:title" content="Raster-format">
 <meta property="og:description" content="">
 <meta name="twitter:card" content="summary">
 <!-- mathjax --><script src="https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><!--[if lt IE 9]>
@@ -18,7 +18,7 @@
 <![endif]-->
 </head>
 <body>
-    <div class="container template-article">
+    <div class="container template-vignette">
       <header><div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
   <div class="container">
     <div class="navbar-header">
@@ -27,12 +27,8 @@
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
-      <span class="navbar-brand">
-        <a class="navbar-link" href="../index.html">The Neural Decoding Toolbox in R</a>
-        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">0.0.0.9000</span>
-      </span>
+      <a class="navbar-brand" href="../index.html">The Neural Decoding Toolbox in R</a>
     </div>
-
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
 <li>
@@ -80,26 +76,23 @@
 
       
       </header><div class="row">
-  <div class="col-md-9 contents">
+  <div class="col-md-9">
     <div class="page-header toc-ignore">
       <h1>Raster-format</h1>
             
-      
-      
-      <div class="hidden name"><code>Raster-format.Rmd</code></div>
-
-    </div>
+          </div>
 
     
     
+<div class="contents">
 <div style="line-height: 1.6em;">
 <p>Raster-format data files contain information from a single site (e.g., data from one neuron, one LFP channel, etc.). Data that is in raster-format contains two variables: raster_data, and raster_site_info, which are described below.</p>
 <h4 id="raster_data">raster_data</h4>
 <p>The variable raster_data actually contains two things: labels and the result data. The result data is a <em>[num_trials x num_times]</em> matrix, where each row is data from one trial, and each column is data from one time point (relative to some event that the data was aligned to). The trials should be in the order that they were shown to a subject, i.e., the first row of the matrix should come from the first trial, the second row from the second trial, etc.. For spiking data, this matrix will contain a 1 at every time there is a spike and a zero at every time there was not a spike. For continuous data, such as LFPs, MEG data, etc., each point in a row should be the continuous LFP/MEG value that is recorded on each trial.</p>
 <p>In addition to these data, the label columns on the sides contain cell arrays of strings (or vectors of numbers) that indicate the labels for what experimental conditions were present on each trial (e.g., labels.stimulus_position = upper, labels.stimulus_ID = car). Having a structure with cell arrays that contain different labels is useful because it allows one to decoding different information from the data. For example, suppose we had an experiment in which images of ten different people and images of ten different cars were shown. Then we could have the variable raster_labels.stimulus_ID that had 20 unique string names corresponding to each exact person or car image that was shown on each trial. Additionally, we could have a second raster_labels.face_or_car that contained only the strings ‘face’, or ‘car’ that indicated whether a face or a car was shown on each trial. It would then be possible to run two decoding analyses, one in which we try to decode each image regardless of whether it is a face or a car (where chance would be 1/20), and a second analysis in which we try to decode whether an image is a face or a car (where chance would be 1/2).</p>
-
 <h4 id="raster_site_info">raster_site_info</h4>
 <p>The variable raster_site_info is structure that contains any additional information about the site that should be saved. For example, this structure could contain information about the date that data was recorded on (e.g., raster_site_info.date_recorded = 2011_9_28), or number to identify the session that the data was recorded from (e.g., raster_site_info.sessionID = 200), or information about the spike sorting quality (e.g., raster_site_info.isMUA = 1), etc.. At the moment any variable is allowed in this structure (and it is not strictly necessary to have this structure for the decoding algorithms to run).</p>
+</div>
 </div>
   </div>
 
@@ -119,8 +112,6 @@
 
       </footer>
 </div>
-
-  
 
   </body>
 </html>

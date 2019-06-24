@@ -7,30 +7,8 @@
 calc_num_level_repetitions(binned_data, variable_to_use,
   levels_to_use = NULL, k = 0)
 }
-\arguments{
-\item{binned_data}{Should be a dataframe in binned format.}
-
-\item{variable_to_use}{A string that indicates what variable to analyze.}
-
-\item{levels_to_use}{A single string or a vector of strings.}
-
-\item{k_value}{Returns indices for all sites (e.g. neurons) that have at least
-k presentations of each condition.}
-}
-\value{
-\item{level_repetition_info}{A list of tables and plots containing the level repetition info}
-}
 \description{
 This function takes in labels in binned label format, and an integer k,
 and returns the indices for all sites (e.g. neurons) that have at least
 k presentations of each condition.
-}
-\examples{
-\dontrun{
-calc_num_level_repetitions(binned_data, "labels.stimulus_ID")
-}
-\dontrun{
-calc_num_level_repetitions(binned_data, "labels.stimulus_ID", c("kiwi", "flower"), 60)
-}      
-
 }

@@ -8,8 +8,8 @@
 <title>Binned-format • The Neural Decoding Toolbox in R</title>
 <!-- jquery --><script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script><!-- Bootstrap --><link href="https://maxcdn.bootstrapcdn.com/bootswatch/3.3.7/sandstone/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script><!-- Font Awesome icons --><link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-T8Gy5hrqNKT+hzMclPo118YTQO6cYprQmhrYwIiQ/3axmI1hQomh7Ud2hPOy8SP1" crossorigin="anonymous">
-<!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/1.7.1/clipboard.min.js" integrity="sha384-cV+rhyOuRHc9Ub/91rihWcGmMmCXDeksTtCihMupQHSsi8GIIRDG0ThDc3HGQFJ3" crossorigin="anonymous"></script><!-- sticky kit --><script src="https://cdnjs.cloudflare.com/ajax/libs/sticky-kit/1.1.3/sticky-kit.min.js" integrity="sha256-c4Rlo1ZozqTPE2RLuvbusY3+SU1pQaJC0TjuhygMipw=" crossorigin="anonymous"></script><!-- pkgdown --><link href="../pkgdown.css" rel="stylesheet">
-<script src="../pkgdown.js"></script><meta property="og:title" content="Binned-format">
+<!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/1.7.1/clipboard.min.js" integrity="sha384-cV+rhyOuRHc9Ub/91rihWcGmMmCXDeksTtCihMupQHSsi8GIIRDG0ThDc3HGQFJ3" crossorigin="anonymous"></script><!-- pkgdown --><link href="../pkgdown.css" rel="stylesheet">
+<script src="../jquery.sticky-kit.min.js"></script><script src="../pkgdown.js"></script><meta property="og:title" content="Binned-format">
 <meta property="og:description" content="">
 <meta name="twitter:card" content="summary">
 <!-- mathjax --><script src="https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><!--[if lt IE 9]>
@@ -18,7 +18,7 @@
 <![endif]-->
 </head>
 <body>
-    <div class="container template-article">
+    <div class="container template-vignette">
       <header><div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
   <div class="container">
     <div class="navbar-header">
@@ -27,12 +27,8 @@
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
-      <span class="navbar-brand">
-        <a class="navbar-link" href="../index.html">The Neural Decoding Toolbox in R</a>
-        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">0.0.0.9000</span>
-      </span>
+      <a class="navbar-brand" href="../index.html">The Neural Decoding Toolbox in R</a>
     </div>
-
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
 <li>
@@ -80,18 +76,15 @@
 
       
       </header><div class="row">
-  <div class="col-md-9 contents">
+  <div class="col-md-9">
     <div class="page-header toc-ignore">
       <h1>Binned-format</h1>
             
-      
-      
-      <div class="hidden name"><code>Binned-format.Rmd</code></div>
-
-    </div>
+          </div>
 
     
     
+<div class="contents">
 <div style="line-height: 1.6em;">
 <p>Binned-format data contains data from multiple sites (e.g., data from many neurons, LFP channels, etc.). Data that is in binned-format is very similar to data that is in raster-format except that it contains information from multiple sites and often contains the information at a coarser resolution; for example, binned data would typically contain firing rates over some time interval sampled at a lower rate, as opposed to raster-format data that would typically contain individual spikes sampled at a higher rate. Binned-format data is typically created from raster-format data using the function <code>create_time_averaged_binned_data_from_raster_data</code> which converts a directory of raster-format files into a binned-format file that is useful for decoding. Like rater-format data, binned-format data also contains three variables which are: <code>binned_data</code>, <code>binned_labels</code> and <code>binned_site_info</code> . More details about these variables are described below and also see the documentation on <a href="Raster-format.html">raster-format</a> for more information.</p>
 <h4 id="binned_data">binned_data</h4>
@@ -100,6 +93,7 @@
 <p>The variable binned_labels is structure that contain cell arrays that have the labels for which conditions were present on each trial, i.e., binned_labels.variable_name1, is a num_sites length cell array with the labels for variable_name1 for each site, and binned_labels.variable_name1{iSite} is a [num_trials x 1] cell array of strings (or vector of numbers) that has all the labels for site ‘iSite’ for variable_name1 (number of elements for each site will vary depending on how many trials were recorded from that site).</p>
 <h4 id="binned_site_info">binned_site_info</h4>
 <p>The variable binned_site_info is structure that contains any additional information about the sites that should be saved. The structure contains cell arrays, where each entry in the array has data for one site.</p>
+</div>
 </div>
   </div>
 
@@ -119,8 +113,6 @@
 
       </footer>
 </div>
-
-  
 
   </body>
 </html>
