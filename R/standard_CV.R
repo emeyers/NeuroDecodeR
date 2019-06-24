@@ -59,44 +59,55 @@ standard_CV <- function(datasource,
 #'
 
 
+#' 
+#' # methods
+#' #' @export
+#' run_decoding.standard_CV = function(cv_obj) {
+#' 
+#'   
+#'   #set up parallel resources
+#'   # cores <- parallel::detectCores()
+#'   # the_cluster <- parallel::makeCluster(cores)
+#'   # doParallel::registerDoParallel(the_cluster)
+#' 
+#'   # ALL_DECODING_RESULTS <- foreach(iResample = 1:cv_obj$num_resample_runs) %dopar% {
+#'   #   print(sqrt(iResample))
+#'   #   #run_decoding_one_resample_run(cv_obj)
+#'   # }
+#'   
+#'   DECODING_RESULTS <- run_decoding_one_resample_run(cv_obj) 
+#'   # ALL_DECODING_RESULTS <- list()
+#'   # for (iResample in 1:cv_obj$num_resample_runs) {
+#'   #   ALL_DECODING_RESULTS[[iResample]] <- run_decoding_one_resample_run(cv_obj)
+#'   # }
+#'   # 
+#'   # doParallel::stopImplicitCluster()
+#'   # 
+#'   # ALL_DECODING_RESULTS
+#'   
+#' }
 
-# methods
+
+
+
+#run_decoding_one_resample_run <- function(cv_obj) {
 #' @export
 run_decoding.standard_CV = function(cv_obj) {
-
   
-  #set up parallel resources
-  # cores <- parallel::detectCores()
-  # the_cluster <- parallel::makeCluster(cores)
-  # doParallel::registerDoParallel(the_cluster)
-
-  # ALL_DECODING_RESULTS <- foreach(iResample = 1:cv_obj$num_resample_runs) %dopar% {
-  #   print(sqrt(iResample))
-  #   #run_decoding_one_resample_run(cv_obj)
-  # }
   
-  DECODING_RESULTS <- run_decoding_one_resample_run(cv_obj) 
-  # ALL_DECODING_RESULTS <- list()
-  # for (iResample in 1:cv_obj$num_resample_runs) {
-  #   ALL_DECODING_RESULTS[[iResample]] <- run_decoding_one_resample_run(cv_obj)
-  # }
-  # 
-  # doParallel::stopImplicitCluster()
-  # 
-  # ALL_DECODING_RESULTS
-  
-}
-
-
-
-
-run_decoding_one_resample_run <- function(cv_obj) {
-
   datasource <- cv_obj$datasource
   classifier = cv_obj$classifier
   feature_preprocessors = cv_obj$feature_preprocessors
   num_resample_runs = cv_obj$num_resample_runs
   DECODING_RESULTS <- NULL
+  
+  
+  # register parallel resources
+  cores <- parallel::detectCores()
+  the_cluster <- parallel::makeCluster(cores)
+  doParallel::registerDoParallel(the_cluster)
+  
+  
   
 
   # Do a parallel loop over resample runs
@@ -185,6 +196,9 @@ run_decoding_one_resample_run <- function(cv_obj) {
   # only need this if not running in parallel
   #ALL_DECODING_RESULTS[[iResample]] <- DECODING_RESULTS
 
+    # close parallel resources
+    doParallel::stopImplicitCluster()
+    
     return(DECODING_RESULTS)
 
   }  # end loop over resample runs
