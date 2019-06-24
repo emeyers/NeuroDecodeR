@@ -19,25 +19,9 @@ reference:
   - "`standard_CV`"
   - "`zscore_FP`"
   
-articles:
-  - title: "Four abstract classes/(objects)"
-    desc: ~
-    contents:
-    - text: "Datasources"
-      href: "Datasources.html"
-   
-    - text: "Feature Preprocessors"
-      href: "Feature Preprocessors.html"
-   
-    - text: "Classifier"
-      href: "Classifier.html"
-    
-    - text: "Cross-validators"
-      href: "Cross-validators.html"
 
-    
 navbar:
-  title: "sparklyr"
+  title: "The Neural Decoding Toolbox in R"
   type: inverse
   left:
     - text: "Home"

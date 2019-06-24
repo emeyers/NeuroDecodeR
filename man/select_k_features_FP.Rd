@@ -14,17 +14,4 @@ The proprocessor then eleminates all other features in both the training and tes
 can also eliminate the best k features. 
 This object uses \href{https://cran.r-project.org/web/packages/R6/vignettes/Introduction.html}{R6 package}
 }
-\section{select_k_features_FP}{
-
-
-\describe{
-\item{\code{select_k_features_FP$new(num_site_to_use, num_sites_to_exclude)}}{
-This constructor uses num_site_to_use of the best sites as found via an ANOVA. 
-Additionally, it can eliminate the best num_sites_to_exclude to use sites again
-using an ANOVA. If both num_site_to_use and num_sites_to_exclude are set, then 
-num_sites_to_exclude will first be eliminated and then the next num_site_to_use will 
-be kept. If successful, will return a new \code{select_k_features_FP} object.
-}}
-}
-
 \keyword{datasets}
