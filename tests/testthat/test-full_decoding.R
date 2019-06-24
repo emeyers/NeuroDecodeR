@@ -29,9 +29,12 @@ basedir_file_name <- '../../data/binned/ZD_150_samples_binned_every_50_samples.R
 ds <- basic_DS(basedir_file_name, 'stimulus_ID', 18, 0)
 fps <- list(zscore_FP())
 cl <- max_correlation_CL()
-cv <- standard_CV(ds, cl, fps, 1) 
+cv <- standard_CV(ds, cl, fps, 3) 
 
 DECODING_RESULTS <- run_test_full_decoding(cv, TRUE)
+
+
+#DECODING_RESULTS <- run_decoding(cv)
 
 
 
