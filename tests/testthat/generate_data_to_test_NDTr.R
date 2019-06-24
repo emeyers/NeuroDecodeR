@@ -31,9 +31,9 @@
 
 
 
-
-# data useful for testing classifiers and feature proprocessors
-
+# 
+# # data useful for testing classifiers and feature proprocessors
+# 
 # real_data_binned_file_name <- file.path("..", "..", "data", "binned", "ZD_150_samples_binned_every_50_samples.Rda")
 # 
 #  # just use data at 200-349 post stimulus onset for testing
@@ -43,7 +43,7 @@
 # ds <- basic_DS(real_data_binned_file_name, "stimulus_ID",
 #                num_cv_splits = 3, num_label_repeats_per_cv_split = 6, use_count_data = TRUE)
 # cv_data <- get_data(ds)
-# train_set <- filter(cv_data, time == "time.200_349", CV_1 == "train") %>% select(starts_with("site"), labels)
+# training_set <- filter(cv_data, time == "time.200_349", CV_1 == "train") %>% select(starts_with("site"), labels)
 # test_set <- filter(cv_data, time %in% c("time.-350_-201", "time.200_349"), CV_1 == "test") %>% select(starts_with("site"), labels, time)
 # levels(test_set$time)[levels(test_set$time)=="time.-350_-201"] <- "baseline"
 # levels(test_set$time)[levels(test_set$time)=="time.200_349"] <- "stimulus"
@@ -52,7 +52,7 @@
 # ds <- basic_DS(real_data_binned_file_name, "stimulus_ID",
 #                num_cv_splits = 3, num_label_repeats_per_cv_split = 6, use_count_data = TRUE)
 # cv_data <- get_data(ds)
-# count_train_set <- filter(cv_data, time == "time.200_349", CV_1 == "train") %>% select(starts_with("site"), labels)
+# count_training_set <- filter(cv_data, time == "time.200_349", CV_1 == "train") %>% select(starts_with("site"), labels)
 # count_test_set <- filter(cv_data, time %in% c("time.-350_-201", "time.200_349"), CV_1 == "test") %>% select(starts_with("site"), labels, time)
 # levels(count_test_set$time)[levels(count_test_set$time)=="time.-350_-201"] <- "baseline"
 # levels(count_test_set$time)[levels(count_test_set$time)=="time.200_349"] <- "stimulus"
@@ -60,14 +60,14 @@
 # 
 # # get data z-score normalized
 # fp <- zscore_FP()
-# processed_data <- preprocess_data(fp, train_set, test_set)
-# normalized_train_set <- processed_data$train_set
+# processed_data <- preprocess_data(fp, training_set, test_set)
+# normalized_training_set <- processed_data$training_set
 # normalized_test_set <- processed_data$test_set
 # 
 # 
-# save(train_set, test_set,
-#      normalized_train_set, normalized_test_set,
-#      count_train_set, count_test_set,
+# save(training_set, test_set,
+#      normalized_training_set, normalized_test_set,
+#      count_training_set, count_test_set,
 #      file = "example_ZD_train_and_test_set.Rda")
-
+# 
 

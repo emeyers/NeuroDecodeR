@@ -1,7 +1,7 @@
 
 
 load("example_ZD_train_and_test_set.Rda")
-rm(train_set, test_set, count_train_set, count_test_set)
+rm(training_set, test_set, count_training_set, count_test_set)
 
 
 
@@ -9,7 +9,7 @@ test_that("classification results seem reasonable", {
   
   cl <- max_correlation_CL()
   
-  prediction_results <- get_predictions(cl, normalized_train_set, normalized_test_set)
+  prediction_results <- get_predictions(cl, normalized_training_set, normalized_test_set)
   
   accuracies <- prediction_results %>%
     dplyr::group_by(time) %>%

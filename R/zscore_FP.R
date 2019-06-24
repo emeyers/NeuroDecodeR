@@ -20,11 +20,11 @@ zscore_FP <- function(){
 
 
 #' @export
-preprocess_data.zscore_FP = function(fp, train_set, test_set){
+preprocess_data.zscore_FP = function(fp, training_set, test_set){
   
   # separate the data from the labels
-  train_labels <- select(train_set, -starts_with('site'))
-  train_data <- select(train_set, starts_with('site'))
+  train_labels <- select(training_set, -starts_with('site'))
+  train_data <- select(training_set, starts_with('site'))
   
   test_labels <- select(test_set, -starts_with('site'))
   test_data <- select(test_set, starts_with('site'))
@@ -45,7 +45,7 @@ preprocess_data.zscore_FP = function(fp, train_set, test_set){
   test_zscored[is.infinite(as.matrix(test_zscored))] <- 0
   
   # return a list with the results (after adding the labels back to the data)
-  processed_data <- list(train_set = cbind(train_zscored, train_labels), 
+  processed_data <- list(training_set = cbind(train_zscored, train_labels), 
                          test_set = cbind(test_zscored, test_labels))
   
   return(processed_data)
