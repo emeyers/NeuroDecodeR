@@ -14,24 +14,25 @@ get_predictions <- function(obj, train_data, all_times_test_data) {
 }
 
 
-#' @export
 # register the generic function get_data() for datasource (DS) objects
-get_data <- function(x) {
+#' @export
+get_data <- function(ds_obj) {
   UseMethod("get_data")
 }
 
 
-#' @export
 # register the generic function preprocess_data() for feature preprocessor (FP) objects
-preprocess_data <- function(obj, train_data, all_times_test_data) {
+#' @export
+preprocess_data <- function(fp_obj, train_data, all_times_test_data) {
   UseMethod("preprocess_data")
 }
 
 
-
-
-
-
+# register the generic function preprocess_data() for feature preprocessor (FP) objects
+#' @export
+run_decoding <- function(cv_obj) {
+  UseMethod("run_decoding")
+}
 
 
 
