@@ -160,8 +160,7 @@ get_rank_results = function(results) {
   decision_vals_aug <- cbind(results$actual_labels, decision_vals)
 
   
-
-get_rank_one_row <- function(decision_vals_aug_row) {
+  get_rank_one_row <- function(decision_vals_aug_row) {
     actual_label <- decision_vals_aug_row[1]
     decision_vals_row <- decision_vals_aug_row[2:length(decision_vals_aug_row)]
     the_names <- names(decision_vals_row)
@@ -171,24 +170,14 @@ get_rank_one_row <- function(decision_vals_aug_row) {
 
   normalized_rank_results <- 1 - ((apply(decision_vals_aug, 1, get_rank_one_row) - 1)/(num_classes - 1))
 
+  
+  
   # get the decision values for the correct label
   get_decision_vals_one_row <- function(decision_vals_aug_row) {
     decision_vals_aug_row[which(as.character(as.matrix(decision_vals_aug_row[1])) == names(decision_vals_aug_row[2:length(decision_vals_aug_row)])) + 1]
   }
 
   correct_class_decision_val <- as.numeric(apply(decision_vals_aug, 1, get_decision_vals_one_row))
-
-
-
-##  # much slower code (though potentially easier to read)
-##  normalized_rank_results <- rep(NA, num_test_points)
-##  correct_class_decision_val <- rep(NA, num_test_points)
-##  for (iTestPoint in 1:num_test_points){
-##    curr_sorted_decision_vals <- sort(decision_vals[iTestPoint, ], decreasing = TRUE)
-##    curr_rank_result <- which(names(curr_sorted_decision_vals) == results$actual_labels[iTestPoint])
-##    normalized_rank_results[iTestPoint] <- 1 - ((curr_rank_result - 1)/(num_classes - 1))
-##    correct_class_decision_val[iTestPoint] <- decision_vals[iTestPoint, which(results$actual_labels[iTestPoint] == the_names)]
-##  }
 
 
   rank_and_decision_val_results <- data.frame(normalized_rank_results, correct_class_decision_val)
