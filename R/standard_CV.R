@@ -52,7 +52,7 @@ run_decoding.standard_CV = function(cv_obj) {
   
   # Do a parallel loop over resample runs
   ALL_DECODING_RESULTS <- foreach(iResample = 1:num_resample_runs, 
-                                  .export=c('get_rank_results')) %dopar% {
+                                  .export=c('get_rank_results')) %do% {  # %dopar% {  
       
   # Non-parallel version - useful for debugging
   #ALL_DECODING_RESULTS <- foreach(iResample = 1:num_resample_runs, 
@@ -99,18 +99,28 @@ run_decoding.standard_CV = function(cv_obj) {
         }  # end the if statement for doing preprocessing
   
   
-        results <- get_predictions(classifier, training_set, test_set)
+        # get predictions from the classifier (along with the correct labels)
+        curr_cv_prediction_results <- get_predictions(classifier, training_set, test_set)
   
+        
+        
         # add more measures of decoding accuracy (rank results, etc)
-        rank_and_decision_val_results <- get_rank_results(results)
-        results <- cbind(results, rank_and_decision_val_results)
+        rank_and_decision_val_results <- get_rank_results(curr_cv_prediction_results)
+        results <- cbind(curr_cv_prediction_results, rank_and_decision_val_results)
   
-        # get the results averaged over all classes for each time period
+        
+        get_mutual_information(curr_cv_prediction_results)
+        
+        
+        
+        # average the results over all predictions in this CV run (for each time bin)
         mean_decoding_results <- results %>% group_by(time) %>%
-          summarize(mean_accuracy = mean(correct),
-                    mean_rank = mean(normalized_rank_results),
-                    mean_decision_vals = mean(correct_class_decision_val))
+          summarize(zero_one_loss = mean(correct),
+                    normalized_rank = mean(normalized_rank_results),
+                    decision_vals = mean(correct_class_decision_val))
 
+        
+        # add the current CV run number, train and test times to the results data frame
         curr_results <- data.frame(CV = iCV, 
                                    train_time = time_names[iTrain],
                                    mean_decoding_results) %>%
@@ -140,59 +150,6 @@ run_decoding.standard_CV = function(cv_obj) {
   
 
 }  # end the run_decoding method
-
-
-
-
-
-# get the rank results and the decision value for predicted class...
-get_rank_results = function(results) {
-  
-  decision_vals <- select(results, starts_with("decision"))
-  num_classes <- ncol(decision_vals)
-  num_test_points <- nrow(decision_vals)
-
-  # remove the prefix 'decision.vals' from the column names...
-  the_names <- names(decision_vals)
-  the_names <- unlist(strsplit(the_names, "decision_val_", fixed = TRUE))
-  the_names <- the_names[the_names != ""]
-  names(decision_vals) <- the_names
-  decision_vals_aug <- cbind(results$actual_labels, decision_vals)
-
-  
-  get_rank_one_row <- function(decision_vals_aug_row) {
-    actual_label <- decision_vals_aug_row[1]
-    decision_vals_row <- decision_vals_aug_row[2:length(decision_vals_aug_row)]
-    the_names <- names(decision_vals_row)
-    the_order <- order(as.numeric(decision_vals_row), decreasing = TRUE)
-    which(the_names[the_order] == actual_label)
-  }
-
-  normalized_rank_results <- 1 - ((apply(decision_vals_aug, 1, get_rank_one_row) - 1)/(num_classes - 1))
-
-  
-  
-  # get the decision values for the correct label
-  get_decision_vals_one_row <- function(decision_vals_aug_row) {
-    decision_vals_aug_row[which(as.character(as.matrix(decision_vals_aug_row[1])) == names(decision_vals_aug_row[2:length(decision_vals_aug_row)])) + 1]
-  }
-
-  correct_class_decision_val <- as.numeric(apply(decision_vals_aug, 1, get_decision_vals_one_row))
-
-
-  rank_and_decision_val_results <- data.frame(normalized_rank_results, correct_class_decision_val)
-
-}
-
-
-
-
-
-
-
-
-
-
 
 
 

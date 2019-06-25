@@ -1,29 +1,9 @@
 
 
-# run_test_full_decoding <- function(cv, plot_results = FALSE) {
-#   
-#   # DECODING_RESULTS <- cv$run_decoding()
-#   ALL_DECODING_RESULTS <- run_decoding(cv)
-#   DECODING_RESULTS <- ALL_DECODING_RESULTS[[1]]
-#   
-#   if (plot_results) {
-#     #plot(DECODING_RESULTS$zero_one_loss_results)
-#     temp_mean_results <- colMeans(DECODING_RESULTS$zero_one_loss_results)
-#     plot(diag(temp_mean_results), type = 'o')
-#   }
-# 
-#   return(DECODING_RESULTS)
-#   
-# }
-
-
-
 basedir_file_name <- '../../data/binned/ZD_150_samples_binned_every_50_samples.Rda'
 
-# R6 versions
-#ds <- NDTr::basic_DS$new(basedir_file_name, 'stimulus_ID', 18, 0)
-#cl <- NDTr::max_correlation_CL$new()
-#fps <- list(NDTr::zscore_FP$new())
+#basedir_file_name <- '~/research/NDT/NDTr/data/binned/ZD_150_samples_binned_every_50_samples.Rda'
+
 
 
 ds <- basic_DS(basedir_file_name, 'stimulus_ID', 18, 0)
@@ -39,13 +19,25 @@ mean_results <- DECODING_RESULTS %>%
   summarize_all(mean) %>%
   select(-resample_run, -CV)
 
-ggplot2::ggplot(mean_results, aes(test_time, train_time, fill = mean_accuracy)) + 
+# print out the results
+print(Sys.time())
+mean_results %>% filter(train_time == test_time) %>%
+  .$zero_one_loss %>% print()
+
+
+ggplot2::ggplot(mean_results, aes(test_time, train_time, fill = zero_one_loss)) + 
   geom_tile()
 
-
 mean_results %>% filter(train_time == test_time) %>%
-  ggplot2::ggplot(aes(x = train_time, y = mean_accuracy)) + 
-  geom_point() 
+  ggplot2::ggplot(aes(x = train_time, y = zero_one_loss)) + 
+  geom_point() +
+  ggtitle(Sys.time())
+
+
+
+
+
+
 
 # collapsed_results <- dplyr::bind_rows(DECODING_RESULTS, .id = "resample_run")
 
