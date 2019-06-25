@@ -1,20 +1,20 @@
 
 
-run_test_full_decoding <- function(cv, plot_results = FALSE) {
-  
-  # DECODING_RESULTS <- cv$run_decoding()
-  ALL_DECODING_RESULTS <- run_decoding(cv)
-  DECODING_RESULTS <- ALL_DECODING_RESULTS[[1]]
-  
-  if (plot_results) {
-    #plot(DECODING_RESULTS$zero_one_loss_results)
-    temp_mean_results <- colMeans(DECODING_RESULTS$zero_one_loss_results)
-    plot(diag(temp_mean_results), type = 'o')
-  }
-
-  return(DECODING_RESULTS)
-  
-}
+# run_test_full_decoding <- function(cv, plot_results = FALSE) {
+#   
+#   # DECODING_RESULTS <- cv$run_decoding()
+#   ALL_DECODING_RESULTS <- run_decoding(cv)
+#   DECODING_RESULTS <- ALL_DECODING_RESULTS[[1]]
+#   
+#   if (plot_results) {
+#     #plot(DECODING_RESULTS$zero_one_loss_results)
+#     temp_mean_results <- colMeans(DECODING_RESULTS$zero_one_loss_results)
+#     plot(diag(temp_mean_results), type = 'o')
+#   }
+# 
+#   return(DECODING_RESULTS)
+#   
+# }
 
 
 
@@ -31,7 +31,24 @@ fps <- list(zscore_FP())
 cl <- max_correlation_CL()
 cv <- standard_CV(ds, cl, fps, 3) 
 
-DECODING_RESULTS <- run_test_full_decoding(cv, TRUE)
+DECODING_RESULTS <- run_decoding(cv)
+
+mean_results <- DECODING_RESULTS %>% 
+  dplyr::group_by(train_time, test_time) %>%
+  mutate(resample_run = as.numeric(resample_run)) %>%
+  summarize_all(funs(mean)) %>%
+  select(-resample_run, -CV)
+
+ggplot2::ggplot(mean_results, aes(test_time, train_time, fill = mean_accuracy)) + 
+  geom_tile()
+
+
+mean_results %>% filter(train_time == test_time) %>%
+  ggplot2::ggplot(aes(x = train_time, y = mean_accuracy)) + 
+  geom_point() 
+
+# collapsed_results <- dplyr::bind_rows(DECODING_RESULTS, .id = "resample_run")
+
 
 
 #DECODING_RESULTS <- run_decoding(cv)
