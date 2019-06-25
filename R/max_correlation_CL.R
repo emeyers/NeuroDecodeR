@@ -41,7 +41,7 @@ get_predictions.max_correlation_CL <- function(max_correlation_CL_obj,
   predicted_labels <- prototypes$labels[predicted_inds]
   
   # create a data frame that has all the results
-  results <- data.frame(time = all_times_test_data$time, 
+  results <- data.frame(test_time = all_times_test_data$time, 
                         actual_labels = all_times_test_data$labels, 
                         predicted_labels = predicted_labels) %>%
     dplyr::mutate(correct = actual_labels == predicted_labels)

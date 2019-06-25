@@ -84,8 +84,8 @@ run_decoding.standard_CV = function(cv_obj) {
           select(starts_with("site"), labels)
         
         test_set <- filter(cv_data, all_cv_train_test_inds[iCV] == "test") %>% 
-          select(starts_with("site"), labels, time)
-  
+          select(starts_with("site"), labels, time) 
+        
   
         # if feature-processors have been specified, do feature processing...
         if (length(feature_preprocessors) > 1) {
@@ -99,22 +99,21 @@ run_decoding.standard_CV = function(cv_obj) {
         }  # end the if statement for doing preprocessing
   
   
+
+        
         # get predictions from the classifier (along with the correct labels)
         curr_cv_prediction_results <- get_predictions(classifier, training_set, test_set)
   
-        
         
         # add more measures of decoding accuracy (rank results, etc)
         rank_and_decision_val_results <- get_rank_results(curr_cv_prediction_results)
         results <- cbind(curr_cv_prediction_results, rank_and_decision_val_results)
   
         
-        get_mutual_information(curr_cv_prediction_results)
-        
-        
         
         # average the results over all predictions in this CV run (for each time bin)
-        mean_decoding_results <- results %>% group_by(time) %>%
+        mean_decoding_results <- results %>% 
+          group_by(test_time) %>%
           summarize(zero_one_loss = mean(correct),
                     normalized_rank = mean(normalized_rank_results),
                     decision_vals = mean(correct_class_decision_val))
@@ -123,9 +122,9 @@ run_decoding.standard_CV = function(cv_obj) {
         # add the current CV run number, train and test times to the results data frame
         curr_results <- data.frame(CV = iCV, 
                                    train_time = time_names[iTrain],
-                                   mean_decoding_results) %>%
-          dplyr::rename(test_time = time)
+                                   mean_decoding_results) 
         
+      
         
         DECODING_RESULTS <- rbind(DECODING_RESULTS, curr_results)
         
