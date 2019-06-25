@@ -36,7 +36,7 @@ DECODING_RESULTS <- run_decoding(cv)
 mean_results <- DECODING_RESULTS %>% 
   dplyr::group_by(train_time, test_time) %>%
   mutate(resample_run = as.numeric(resample_run)) %>%
-  summarize_all(funs(mean)) %>%
+  summarize_all(mean) %>%
   select(-resample_run, -CV)
 
 ggplot2::ggplot(mean_results, aes(test_time, train_time, fill = mean_accuracy)) + 

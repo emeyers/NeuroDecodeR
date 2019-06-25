@@ -71,11 +71,6 @@ run_decoding.standard_CV = function(cv_obj) {
     time_names <- grep("^time", names(datasource$binned_data), value = TRUE)
     dim_names <- list(1:num_CV, time_names, time_names)
   
-    # allocate space to save the different types of results (refactor this)
-    zero_one_loss_results <- array(NA, c(num_CV, num_time_bins, num_time_bins), dimnames = dim_names)
-    decision_value_results <- array(NA, c(num_CV, num_time_bins, num_time_bins), dimnames = dim_names)
-    rank_results <- array(NA, c(num_CV, num_time_bins, num_time_bins), dimnames = dim_names)
-  
     
     for (iCV in 1:num_CV) {
   
@@ -84,8 +79,12 @@ run_decoding.standard_CV = function(cv_obj) {
   
       for (iTrain in 1:num_time_bins) {
   
-        training_set <- filter(cv_data, time == unique_times[iTrain], all_cv_train_test_inds[iCV] == "train") %>% select(starts_with("site"), labels)
-        test_set <- filter(cv_data, all_cv_train_test_inds[iCV] == "test") %>% select(starts_with("site"), labels, time)
+        
+        training_set <- filter(cv_data, time == unique_times[iTrain], all_cv_train_test_inds[iCV] == "train") %>% 
+          select(starts_with("site"), labels)
+        
+        test_set <- filter(cv_data, all_cv_train_test_inds[iCV] == "test") %>% 
+          select(starts_with("site"), labels, time)
   
   
         # if feature-processors have been specified, do feature processing...
@@ -110,23 +109,15 @@ run_decoding.standard_CV = function(cv_obj) {
         mean_decoding_results <- results %>% group_by(time) %>%
           summarize(mean_accuracy = mean(correct),
                     mean_rank = mean(normalized_rank_results),
-                    mean_decision_vals = mean(correct_class_decision_val)
-          )
-  
-        zero_one_loss_results[iCV, iTrain, ] <- mean_decoding_results$mean_accuracy
-        decision_value_results[iCV, iTrain, ] <- mean_decoding_results$mean_decision_vals
-    
-        rank_results[iCV, iTrain, ] <- mean_decoding_results$mean_rank
-        
+                    mean_decision_vals = mean(correct_class_decision_val))
+
         curr_results <- data.frame(CV = iCV, 
                                    train_time = time_names[iTrain],
-                                   mean_decoding_results
-                                   ) %>%
+                                   mean_decoding_results) %>%
           dplyr::rename(test_time = time)
         
         
         DECODING_RESULTS <- rbind(DECODING_RESULTS, curr_results)
-        
         
         
       }   # end the for loop over time bins
@@ -135,11 +126,6 @@ run_decoding.standard_CV = function(cv_obj) {
     }  # end the for loop over CV splits
   
   
-    # combine all the results in one list to be returned
-    #DECODING_RESULTS$zero_one_loss_results <- zero_one_loss_results
-    #DECODING_RESULTS$decision_value_results <- decision_value_results
-    #DECODING_RESULTS$rank_results <- rank_results
-
     # close parallel resources
     doParallel::stopImplicitCluster()
     
@@ -172,19 +158,9 @@ get_rank_results = function(results) {
   the_names <- the_names[the_names != ""]
   names(decision_vals) <- the_names
   decision_vals_aug <- cbind(results$actual_labels, decision_vals)
-  #i <- 1; decision_vals_aug_row <- decision_vals_aug [i, ]
 
+  
 
-    ####  Bad code - doesn't work with negative numbers because apply converts values to strings before sorting
-    ### (and then the negative sign becomes a dash so it sorts the values in the wrong order)
-    ##  # get the normalized rank results (the lines below are not working correcly with negative values...)
-    ##  get_rank_one_row <- function(decision_vals_aug_row) {
-    ##    which(names(sort(decision_vals_aug_row[2:length(decision_vals_aug_row)], decreasing = TRUE)) == as.character(as.matrix(decision_vals_aug_row[1])))
-    ##  }
-
-
-
-# This code is written less compactly but it works correctly with negative decision values
 get_rank_one_row <- function(decision_vals_aug_row) {
     actual_label <- decision_vals_aug_row[1]
     decision_vals_row <- decision_vals_aug_row[2:length(decision_vals_aug_row)]
