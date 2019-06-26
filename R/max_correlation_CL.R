@@ -25,23 +25,25 @@ max_correlation_CL <- function(){
 get_predictions.max_correlation_CL <- function(max_correlation_CL_obj, 
                                                train_data, 
                                                all_times_test_data) {  
-  
+
+    
   ### Train the classifier  ---------------------------------------------------
   prototypes <- train_data %>% 
     dplyr::group_by(labels) %>% 
     dplyr::summarise_all(mean)
   
+
   
   ### Test the classifier  ---------------------------------------------------
   train_test_cor <- cor(t(prototypes[, 2:dim(prototypes)[2]]), 
-                        t(dplyr::select(all_times_test_data, -labels, -time)))
-
+                        t(dplyr::select(all_times_test_data, -labels, -time_bin)))
+  
   # get the predicted labels
   predicted_inds <- apply(train_test_cor, 2, rand_which_max)
   predicted_labels <- prototypes$labels[predicted_inds]
   
   # create a data frame that has all the results
-  results <- data.frame(test_time = all_times_test_data$time, 
+  results <- data.frame(time_bin = all_times_test_data$time_bin, 
                         actual_labels = all_times_test_data$labels, 
                         predicted_labels = predicted_labels) %>%
     dplyr::mutate(correct = actual_labels == predicted_labels)

@@ -240,10 +240,10 @@ get_data.basic_DS = function(basic_ds_obj){
     all_k_fold_data$siteID <- paste0("site_", stringr::str_pad(all_k_fold_data$siteID, 4, pad = "0"))
 
     # convert so that there are one column for each site
-    melted_data <- tidyr::gather(all_k_fold_data, time, activity, -siteID, -labels, -CV_slice_ID)
+    melted_data <- tidyr::gather(all_k_fold_data, time_bin, activity, -siteID, -labels, -CV_slice_ID)
     all_cv_data <- tidyr::spread(melted_data, siteID, activity) %>%
-      select(labels, time, CV_slice_ID, everything()) %>%
-      mutate(time = as.factor(time))    #  %>%  arrange(labels, time)
+      select(labels, time_bin, CV_slice_ID, everything()) %>%
+      mutate(time_bin = as.factor(time_bin))    #  %>%  arrange(labels, time_bin)
 
     # create different CV_1, CV_2 which list which points are training points and which points are test points
     for (iCV in 1:num_cv_splits) {
@@ -254,13 +254,12 @@ get_data.basic_DS = function(basic_ds_obj){
     }
 
 
-    all_cv_data <- select(all_cv_data, -CV_slice_ID) %>% ungroup()  # fails tests if I don't ungroup. Also remove the original CV_slice_ID field
+    all_cv_data <- dplyr::select(all_cv_data, -CV_slice_ID) %>% dplyr::ungroup()  # fails tests if I don't ungroup. Also remove the original CV_slice_ID field
 
 
     return(all_cv_data)
 
 
-  
 }  # end get_data()
 
 

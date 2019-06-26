@@ -1,8 +1,12 @@
 
+# ultimately will use this as the file name in the final version but for now easiest to have absolute path
+#basedir_file_name <- '../../data/binned/ZD_150_samples_binned_every_50_samples.Rda'
 
-basedir_file_name <- '../../data/binned/ZD_150_samples_binned_every_50_samples.Rda'
 
-#basedir_file_name <- '~/research/NDT/NDTr/data/binned/ZD_150_samples_binned_every_50_samples.Rda'
+devtools::load_all()
+rm(list = ls())
+
+basedir_file_name <- '~/research/NDT/NDTr/data/binned/ZD_150_samples_binned_every_50_samples.Rda'
 
 
 
@@ -13,7 +17,12 @@ cv <- standard_CV(ds, cl, fps, 3)
 
 DECODING_RESULTS <- run_decoding(cv)
 
-mean_results <- DECODING_RESULTS %>% 
+
+
+
+
+
+mean_results <- DECODING_RESULTS %>%
   dplyr::group_by(train_time, test_time) %>%
   mutate(resample_run = as.numeric(resample_run)) %>%
   summarize_all(mean) %>%
@@ -25,11 +34,12 @@ mean_results %>% filter(train_time == test_time) %>%
   .$zero_one_loss %>% print()
 
 
-ggplot2::ggplot(mean_results, aes(test_time, train_time, fill = zero_one_loss)) + 
+
+ggplot2::ggplot(mean_results, aes(test_time, train_time, fill = zero_one_loss)) +
   geom_tile()
 
 mean_results %>% filter(train_time == test_time) %>%
-  ggplot2::ggplot(aes(x = train_time, y = zero_one_loss)) + 
+  ggplot2::ggplot(aes(x = train_time, y = zero_one_loss)) +
   geom_point() +
   ggtitle(Sys.time())
 

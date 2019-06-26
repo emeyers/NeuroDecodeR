@@ -2,6 +2,7 @@
 library(testthat)
 
 
+
 real_data_binned_file_name <- file.path("..", "..", "data", "binned", "ZD_150_samples_binned_every_50_samples.Rda")
 
 
@@ -122,10 +123,10 @@ test_that("the correct number of repeats per CV block are returned", {
   the_data <- get_data(ds)
   
   total_num_labels <- the_data %>%
-    group_by(time, labels) %>%
+    group_by(time_bin, labels) %>%
     summarize(n = n()) 
   
-  expect_equal(total_num_labels$n, rep(num_CV * num_reps, 7 * length(unique(the_data$time))))
+  expect_equal(total_num_labels$n, rep(num_CV * num_reps, 7 * length(unique(the_data$time_bin))))
   
 })
 
