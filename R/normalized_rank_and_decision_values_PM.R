@@ -28,7 +28,6 @@ get_rank_results = function(prediction_results) {
   normalized_rank_results <- 1 - ((apply(decision_vals_aug, 1, get_rank_one_row) - 1)/(num_classes - 1))
   
   
-  
   # get the decision values for the correct label
   get_decision_vals_one_row <- function(decision_vals_aug_row) {
     decision_vals_aug_row[which(as.character(as.matrix(decision_vals_aug_row[1])) == names(decision_vals_aug_row[2:length(decision_vals_aug_row)])) + 1]
@@ -39,6 +38,30 @@ get_rank_results = function(prediction_results) {
   
   rank_and_decision_val_results <- data.frame(normalized_rank_results, correct_class_decision_val)
   
+}
+
+
+
+
+get_confusion_matrix = function(prediction_results) {
+  
+
+  # could only get confusion matrix where train and test times are the same to save memory
+  # (off diagonal element confusion matrices don't seem that much of interest anyway)
+  # however MI off diagonal could be of interest so going to get all trian test times confusion matrices
+  
+  confusion_matrix <- prediction_results %>%
+    #dplyr::filter(train_time == test_time)  %>%  
+    dplyr::group_by(train_time, test_time, actual_labels, predicted_labels) %>%
+    summarize(n = n())
+
+  # cool, can plot the confusion matrix...
+  # confusion_matrix %>%
+  #   ggplot(aes(actual_labels, predicted_labels, fill = n)) +
+  #   geom_tile() +
+  #   facet_grid(train_time ~ test_time)
+
+
 }
 
 
