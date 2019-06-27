@@ -128,37 +128,39 @@ run_decoding.standard_CV = function(cv_obj) {
   
 
     
-    # aggregate results from the current resample run  ------------------------
-    
-
     # convert results from all CV splits from a list into a data frame
     all_results <- dplyr::bind_rows(all_cv_results)
     
     
-    # add the decision values and rank results to the cumulative results
-    rank_and_decision_val_results <- get_rank_results(all_results)
-    results <- cbind(all_results, rank_and_decision_val_results)
+    # will aggregate all the results at the end instead 
+    # (hoepfully this will not take too much memory...)
     
-    confusion_matrix <- get_confusion_matrix(all_results)
-    
-    # take the mean of the results over the cross-validation runs
-    mean_decoding_results <- results %>%
-      group_by(train_time, test_time, CV) %>%
-      summarize(zero_one_loss = mean(correct),
-                normalized_rank = mean(normalized_rank_results),
-                decision_vals = mean(correct_class_decision_val))
-    
-    
-    # calculate the confusion matrix from the current resample run
-    confusion_matrix <- get_confusion_matrix(all_results)
-    
-    
-    # return the mean results and the confusion matrix
-    DECODING_RESULTS$mean_decoding_results <- mean_decoding_results
-    DECODING_RESULTS$confusion_matrix <- confusion_matrix
-    
-
-    return(DECODING_RESULTS)
+    # aggregate results from the current resample run  ------------------------
+    #
+    # # add the decision values and rank results to the cumulative results
+    # rank_and_decision_val_results <- get_rank_results(all_results)
+    # results <- cbind(all_results, rank_and_decision_val_results)
+    # 
+    # confusion_matrix <- get_confusion_matrix(all_results)
+    # 
+    # # take the mean of the results over the cross-validation runs
+    # mean_decoding_results <- results %>%
+    #   group_by(train_time, test_time, CV) %>%
+    #   summarize(zero_one_loss = mean(correct),
+    #             normalized_rank = mean(normalized_rank_results),
+    #             decision_vals = mean(correct_class_decision_val))
+    # 
+    # 
+    # # calculate the confusion matrix from the current resample run
+    # confusion_matrix <- get_confusion_matrix(all_results)
+    # 
+    # 
+    # # return the mean results and the confusion matrix
+    # DECODING_RESULTS$mean_decoding_results <- mean_decoding_results
+    # DECODING_RESULTS$confusion_matrix <- confusion_matrix
+    # 
+    #
+    #return(DECODING_RESULTS)
     
   }  # end loop over resample runs
 
@@ -169,6 +171,31 @@ run_decoding.standard_CV = function(cv_obj) {
 
   # close parallel resources
   doParallel::stopImplicitCluster()
+  
+  
+  ####
+  
+  # Experimenting with code if I don't collapse across CV runs but save all results until the end...
+  
+  all_decoding_results <- dplyr::bind_rows(ALL_DECODING_RESULTS, .id = "resample_run")
+  
+  confusion_matrix <- get_confusion_matrix(all_decoding_results)
+  
+  
+  # add in the normalized rank and decision value results
+  results <- cbind(all_decoding_results, get_rank_results(all_decoding_results))
+  
+  mean_decoding_results <- results %>%
+     group_by(train_time, test_time, CV, resample_run) %>%
+     summarize(zero_one_loss = mean(correct),
+               normalized_rank = mean(normalized_rank_results),
+               decision_vals = mean(correct_class_decision_val))
+  
+  
+  
+  
+  
+  ####
   
   
   browser()
