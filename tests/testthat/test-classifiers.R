@@ -15,12 +15,12 @@ test_that("classification results seem reasonable", {
   prediction_results <- get_predictions(cl, normalized_training_set, normalized_test_set)
   
   accuracies <- prediction_results %>%
-    dplyr::group_by(time_bin) %>%
+    dplyr::group_by(test_time) %>%
     dplyr::summarize(mean_accuracy = mean(actual_labels == predicted_labels))
 
   
-  expect_gt(filter(accuracies, time_bin == "stimulus")$mean_accuracy, .6)
-  expect_lt(filter(accuracies, time_bin == "baseline")$mean_accuracy, .3)
+  expect_gt(filter(accuracies, test_time == "stimulus")$mean_accuracy, .6)
+  expect_lt(filter(accuracies, test_time == "baseline")$mean_accuracy, .3)
   
 
 })
