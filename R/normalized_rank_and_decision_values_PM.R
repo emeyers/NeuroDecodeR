@@ -44,6 +44,30 @@ get_rank_results = function(prediction_results) {
 
 
 
+get_confusion_matrix = function(prediction_results) {
+  
+
+  # could only get confusion matrix where train and test times are the same to save memory
+  # (off diagonal element confusion matrices don't seem that much of interest anyway)
+  # however MI off diagonal could be of interest so going to get all trian test times confusion matrices
+  
+  confusion_matrix <- prediction_results %>%
+    #dplyr::filter(train_time == test_time)  %>%  
+    dplyr::group_by(train_time, test_time, actual_labels, predicted_labels) %>%
+    summarize(n = n())
+
+  # cool, can plot the confusion matrix...
+  # confusion_matrix %>%
+  #   ggplot(aes(actual_labels, predicted_labels, fill = n)) +
+  #   geom_tile() +
+  #   facet_grid(train_time ~ test_time)
+
+
+}
+
+
+
+
 
 get_mutual_information = function(prediction_results) {
   

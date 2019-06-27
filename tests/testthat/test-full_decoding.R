@@ -3,6 +3,9 @@
 #basedir_file_name <- '../../data/binned/ZD_150_samples_binned_every_50_samples.Rda'
 
 
+# devtools::install()
+
+
 devtools::load_all()
 rm(list = ls())
 
@@ -46,8 +49,13 @@ mean_results %>% filter(train_time == test_time) %>%
 
 
 
-
-
+# ggplot2::ggplot(all_mean_decoding_results, aes(test_time, train_time, fill = zero_one_loss)) +
+#   geom_tile()
+# 
+# all_mean_decoding_results %>% filter(train_time == test_time) %>%
+#   ggplot2::ggplot(aes(x = train_time, y = zero_one_loss)) +
+#   geom_point() +
+#   ggtitle(Sys.time())
 
 # collapsed_results <- dplyr::bind_rows(DECODING_RESULTS, .id = "resample_run")
 

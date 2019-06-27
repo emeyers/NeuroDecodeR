@@ -47,17 +47,16 @@ run_decoding.standard_CV = function(cv_obj) {
   classifier = cv_obj$classifier
   feature_preprocessors = cv_obj$feature_preprocessors
   num_resample_runs = cv_obj$num_resample_runs
+  
+  
   DECODING_RESULTS <- NULL
   
   
   # Do a parallel loop over resample runs
   ALL_DECODING_RESULTS <- foreach(iResample = 1:num_resample_runs, 
-                                  .export=c('get_rank_results')) %dopar% {  # %dopar% {  
+                                  .export=c('get_rank_results')) %do% {  # %dopar% {  
       
-  # Non-parallel version - useful for debugging
-  #ALL_DECODING_RESULTS <- foreach(iResample = 1:num_resample_runs, 
-  #                                .export=c('get_rank_results')) %do% {
-                                                                      
+                                    
     # get the data from the current cross-validation run
     cv_data <- get_data(datasource)  
     
@@ -74,7 +73,9 @@ run_decoding.standard_CV = function(cv_obj) {
     all_cv_results <- NULL
     
     for (iCV in 1:num_CV) {
-  
+
+      all_time_results <- NULL
+      
       tictoc::tic()
       print(iCV)
       
@@ -103,28 +104,6 @@ run_decoding.standard_CV = function(cv_obj) {
         # get predictions from the classifier (along with the correct labels)
         curr_cv_prediction_results <- get_predictions(classifier, training_set, test_set)
         
-        
-        # moving this outside the CV loop
-        
-        # # add more measures of decoding accuracy (rank results, etc)
-        # rank_and_decision_val_results <- get_rank_results(curr_cv_prediction_results)
-        # results <- cbind(curr_cv_prediction_results, rank_and_decision_val_results)
-        # 
-        # 
-        # 
-        # # average the results over all predictions in this CV run (for each time bin)
-        # mean_decoding_results <- results %>% 
-        #   group_by(test_time) %>%
-        #   summarize(zero_one_loss = mean(correct),
-        #             normalized_rank = mean(normalized_rank_results),
-        #             decision_vals = mean(correct_class_decision_val))
-        # 
-        # 
-        # # add the current CV run number, train time to the results data frame
-        # curr_results <- data.frame(CV = iCV, 
-        #                            train_time = time_names[iTrain],
-        #                            mean_decoding_results) 
-        
 
         # add the current CV run number, train time to the results data frame
         curr_cv_prediction_results <- curr_cv_prediction_results %>%
@@ -132,7 +111,7 @@ run_decoding.standard_CV = function(cv_obj) {
           select(CV, train_time, everything())
         
         #all_cv_results <- rbind(all_cv_results, curr_cv_prediction_results)
-        all_cv_results[[iTrain]] <- curr_cv_prediction_results   # should be faster b/c don't need to reallocate memory
+        all_time_results[[iTrain]] <- curr_cv_prediction_results   # should be faster b/c don't need to reallocate memory
         
         
         #DECODING_RESULTS <- rbind(DECODING_RESULTS, curr_results)
@@ -141,6 +120,11 @@ run_decoding.standard_CV = function(cv_obj) {
       }   # end the for loop over time bins
       tictoc::toc()
   
+      
+      # oops, need to aggregate over CV splits too...
+      all_cv_results[[iCV]] <- dplyr::bind_rows(all_time_results)
+      
+      
     }  # end the for loop over CV splits
   
   
@@ -150,13 +134,14 @@ run_decoding.standard_CV = function(cv_obj) {
     # return the decodings results from this iteration of the foreach loop
     #DECODING_RESULTS
     
-    all_cv_results <- dplyr::bind_rows(all_cv_results)
+    all_results <- dplyr::bind_rows(all_cv_results)
     
-    rank_and_decision_val_results <- get_rank_results(all_cv_results)
+    rank_and_decision_val_results <- get_rank_results(all_results)
     
-    results <- cbind(all_cv_results, rank_and_decision_val_results)
+    results <- cbind(all_results, rank_and_decision_val_results)
     
     
+    confusion_matrix <- get_confusion_matrix(all_results)
     
 
     # mean_decoding_results <- results %>%
@@ -167,20 +152,53 @@ run_decoding.standard_CV = function(cv_obj) {
 
 
     mean_decoding_results <- results %>%
-      dplyr::rename(test_time = time_bin) %>%
       group_by(train_time, test_time, CV) %>%
       summarize(zero_one_loss = mean(correct),
                 normalized_rank = mean(normalized_rank_results),
                 decision_vals = mean(correct_class_decision_val))
     
     
+    DECODING_RESULTS$mean_decoding_results <- mean_decoding_results
+    DECODING_RESULTS$confusion_matrix <- confusion_matrix
     
-    
-    
+    return(DECODING_RESULTS)
     
   }  # end loop over resample runs
 
 
+
+  
+  browser()
+  
+  mean_decoding_results <- purrr::map(ALL_DECODING_RESULTS, 'mean_decoding_results') 
+  all_mean_decoding_results <- dplyr::bind_rows(mean_decoding_results, .id = "resample_run")
+
+  
+  confusion_matrices <- purrr::map(ALL_DECODING_RESULTS, 'confusion_matrix') 
+  
+  
+  empty_cm <-  expand.grid(resample_run = "0",
+                           train_time = unique(confusion_matrices[[1]]$train_time),
+                           test_time = unique(confusion_matrices[[1]]$test_time),
+                           actual_labels = unique(confusion_matrices[[1]]$actual_labels),
+                           predicted_labels= unique(confusion_matrices[[1]]$predicted_labels),
+                           n = 0, stringsAsFactors = FALSE)
+  
+  all_confusion_matrices <- dplyr::bind_rows(confusion_matrices, .id = "resample_run")
+  
+  all_confusion_matrices <- all_confusion_matrices
+    dplyr::group_by(train_time,  test_time,   actual_labels,    predicted_labels) %>%
+    summarize(n = sum(n))
+
+  all_confusion_matrices %>%
+    ggplot(aes(actual_labels, predicted_labels, fill = n)) +
+    geom_tile() +
+    facet_grid(train_time ~ test_time)
+  
+  
+  #combined_confusion_matrix <- dplyr::bind_rows(ALL_DECODING_RESULTS, .id = "resample_run")
+  
+  
   
   # return all the decoding results collapsed into one data frame
   dplyr::bind_rows(ALL_DECODING_RESULTS, .id = "resample_run")
