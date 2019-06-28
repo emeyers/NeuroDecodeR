@@ -20,8 +20,8 @@ standard_CV <- function(datasource,
                         result_metrics = NULL) {
   
   if (is.null(result_metrics)) {
-    result_metrics <- list(normalized_rank_and_decision_values_PM(), 
-                                confusion_matrix_PM())
+    result_metrics <- list(main_results_RM(), 
+                                confusion_matrix_RM())
   }
         
   

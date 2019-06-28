@@ -4,11 +4,11 @@
 
 # the constructor 
 #' @export
-confusion_matrix_PM <- function(the_data = data.frame(), state = 'initial') {
+confusion_matrix_RM <- function(the_data = data.frame(), state = 'initial') {
   
   confusion_matrix_obj <- the_data
   
-  attr(confusion_matrix_obj, "class") <- c("confusion_matrix_PM", 'data.frame')
+  attr(confusion_matrix_obj, "class") <- c("confusion_matrix_RM", 'data.frame')
   
   attr(confusion_matrix_obj, "state") <- state
   
@@ -22,13 +22,13 @@ confusion_matrix_PM <- function(the_data = data.frame(), state = 'initial') {
 
 # aggregate the results from all the cross-validation splits
 #' @export
-aggregate_CV_split_results.confusion_matrix_PM = function(confusion_matrix_obj, prediction_results) {
+aggregate_CV_split_results.confusion_matrix_RM = function(confusion_matrix_obj, prediction_results) {
   
 
   # include a warning if the state is not intial
   if (attr(confusion_matrix_obj, "state") != "initial") {    
     warning(paste0("The method aggregate_CV_split_results() should only be called on",
-                   "normalized_rank_and_decision_values_PM that are in the intial state.",
+                   "normalized_rank_and_decision_values_RM that are in the intial state.",
                    "Any data that was already stored in this object will be overwritten"))
   }
   
@@ -63,7 +63,7 @@ aggregate_CV_split_results.confusion_matrix_PM = function(confusion_matrix_obj, 
     summarize(n = sum(n))
   
   
-  confusion_matrix_PM(confusion_matrix, 'results combined over one cross-validation split')
+  confusion_matrix_RM(confusion_matrix, 'results combined over one cross-validation split')
   
   
 }
@@ -73,7 +73,7 @@ aggregate_CV_split_results.confusion_matrix_PM = function(confusion_matrix_obj, 
 
 # aggregate the results from all the resample runs
 #' @export
-aggregate_resample_run_results.confusion_matrix_PM = function(resample_run_results) {
+aggregate_resample_run_results.confusion_matrix_RM = function(resample_run_results) {
 
 
   confusion_matrix <- resample_run_results # dplyr::bind_rows(resample_run_results, .id = "resample_run")
@@ -96,7 +96,7 @@ aggregate_resample_run_results.confusion_matrix_PM = function(resample_run_resul
     mutate(predicted_frequency = n / sum(n)) 
   
 
-  confusion_matrix_PM(confusion_matrix, 'final results')
+  confusion_matrix_RM(confusion_matrix, 'final results')
   
 }
 
@@ -104,7 +104,7 @@ aggregate_resample_run_results.confusion_matrix_PM = function(resample_run_resul
 
 # aggregate the results from all the resample runs
 #' @export
-plot.confusion_matrix_PM = function(confusion_matrix_obj) {
+plot.confusion_matrix_RM = function(confusion_matrix_obj) {
   
   confusion_matrix_obj %>%
     ggplot(aes(actual_labels, predicted_labels, fill = n)) +

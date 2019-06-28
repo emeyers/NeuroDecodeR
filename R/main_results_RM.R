@@ -6,11 +6,11 @@
 
 # the constructor 
 #' @export
-normalized_rank_and_decision_values_PM <- function(the_data = data.frame(), state = 'initial'){
+main_results_RM <- function(the_data = data.frame(), state = 'initial'){
   
   rank_decision_val_obj <- the_data
   
-  attr(rank_decision_val_obj, "class") <- c("normalized_rank_and_decision_values_PM", 'data.frame')
+  attr(rank_decision_val_obj, "class") <- c("main_results_RM", 'data.frame')
   
   attr(rank_decision_val_obj, "state") <- state
 
@@ -22,13 +22,13 @@ normalized_rank_and_decision_values_PM <- function(the_data = data.frame(), stat
 
 # aggregate the results from all the cross-validation splits
 #' @export
-aggregate_CV_split_results.normalized_rank_and_decision_values_PM = function(rank_decision_val_obj, prediction_results) {
+aggregate_CV_split_results.main_results_RM = function(rank_decision_val_obj, prediction_results) {
   
   
   # perhaps include a warning if the state is not intial
   if (attr(rank_decision_val_obj, "state") != "initial") {    
     warning(paste0("The method aggregate_CV_split_results() should only be called on",
-                   "normalized_rank_and_decision_values_PM that are in the intial state.",
+                   "main_results_RM that are in the intial state.",
                    "Any data that was already stored in this object will be overwritten"))
   }
 
@@ -77,7 +77,7 @@ aggregate_CV_split_results.normalized_rank_and_decision_values_PM = function(ran
               decision_vals = mean(decision_values))
 
 
-  normalized_rank_and_decision_values_PM(the_results, 'results combined over one cross-validation split')
+  main_results_RM(the_results, 'results combined over one cross-validation split')
   
 }
 
@@ -86,7 +86,7 @@ aggregate_CV_split_results.normalized_rank_and_decision_values_PM = function(ran
 
 # aggregate the results from all the resample runs
 #' @export
-aggregate_resample_run_results.normalized_rank_and_decision_values_PM = function(resample_run_results) {
+aggregate_resample_run_results.main_results_RM = function(resample_run_results) {
   
   
   central_results <- resample_run_results %>%                 
@@ -96,7 +96,7 @@ aggregate_resample_run_results.normalized_rank_and_decision_values_PM = function
               decision_vals = mean(decision_vals))
   
   
-  normalized_rank_and_decision_values_PM(central_results, 'final results')
+  main_results_RM(central_results, 'final results')
   
   
 }
@@ -105,7 +105,7 @@ aggregate_resample_run_results.normalized_rank_and_decision_values_PM = function
 
 # plot results (TCT plot for now)
 #' @export
-plot.normalized_rank_and_decision_values_PM = function(central_results) {
+plot.main_results_RM = function(central_results) {
   
   # will need to come up with something better so that the fill colors can be on different scales
   central_results %>%
