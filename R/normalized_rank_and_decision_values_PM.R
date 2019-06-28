@@ -2,14 +2,43 @@
 
 
 
-# get the rank results and the decision value for predicted class...
-get_rank_results = function(prediction_results) {
+
+
+# the constructor 
+#' @export
+normalized_rank_and_decision_values_PM <- function(the_data = data.frame(), state = 'initial'){
+  
+  rank_decision_val_obj <- the_data
+  
+  attr(rank_decision_val_obj, "class") <- c("normalized_rank_and_decision_values_PM", 'data.frame')
+  
+  attr(rank_decision_val_obj, "state") <- state
+
+  rank_decision_val_obj
+  
+}
+
+
+
+# aggregate the results from all the cross-validation splits
+#' @export
+aggregate_CV_split_results.normalized_rank_and_decision_values_PM = function(rank_decision_val_obj, prediction_results) {
+  
+  
+  # perhaps include a warning if the state is not intial
+  if (attr(rank_decision_val_obj, "state") != "initial") {    
+    warning(paste0("The method aggregate_CV_split_results() should only be called on",
+                   "normalized_rank_and_decision_values_PM that are in the intial state.",
+                   "Any data that was already stored in this object will be overwritten"))
+  }
+
   
   decision_vals <- select(prediction_results, starts_with("decision"))
   num_classes <- ncol(decision_vals)
   num_test_points <- nrow(decision_vals)
   
-  # remove the prefix 'decision.vals' from the column names...
+  
+  # remove the prefix 'decision_vals' from the column names...
   the_names <- names(decision_vals)
   the_names <- unlist(strsplit(the_names, "decision_val_", fixed = TRUE))
   the_names <- the_names[the_names != ""]
@@ -36,50 +65,25 @@ get_rank_results = function(prediction_results) {
   correct_class_decision_val <- as.numeric(apply(decision_vals_aug, 1, get_decision_vals_one_row))
   
   
-  rank_and_decision_val_results <- data.frame(normalized_rank_results, correct_class_decision_val)
+
+  the_results <- cbind(dplyr::select(prediction_results, -starts_with("decision_val")),
+                       data.frame(decision_values = correct_class_decision_val,
+                            normalized_rank_results = normalized_rank_results))
+
+  the_results <- the_results %>%                 # used to be called mean_decoding_results
+    group_by(CV, train_time, test_time) %>%
+    summarize(zero_one_loss = mean(correct),
+              normalized_rank = mean(normalized_rank_results),
+              decision_vals = mean(correct_class_decision_val))
+
+
+  
+  normalized_rank_and_decision_values_PM(the_results, 'aggregated_CV_data')
   
 }
 
 
 
-
-get_confusion_matrix = function(prediction_results) {
-  
-
-  # could only get confusion matrix where train and test times are the same to save memory
-  # (off diagonal element confusion matrices don't seem that much of interest anyway)
-  # however MI off diagonal could be of interest so going to get all trian test times confusion matrices
-  
-  confusion_matrix <- prediction_results %>%
-    #dplyr::filter(train_time == test_time)  %>%  
-    dplyr::group_by(train_time, test_time, actual_labels, predicted_labels) %>%
-    summarize(n = n())
-
-  # cool, can plot the confusion matrix...
-  # confusion_matrix %>%
-  #   ggplot(aes(actual_labels, predicted_labels, fill = n)) +
-  #   geom_tile() +
-  #   facet_grid(train_time ~ test_time)
-
-
-}
-
-
-
-
-
-get_mutual_information = function(prediction_results) {
-  
-  
-  browser()
-  
-  
-  blah <- prediction_results %>%
-    dplyr::group_by(time, actual_labels, predicted_labels) %>%
-    summarize(n = n())
-  
-  
-}
 
 
 

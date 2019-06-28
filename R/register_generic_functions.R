@@ -36,6 +36,14 @@ run_decoding <- function(cv_obj) {
 
 
 
+# register the generic function get_predictions for the classifier (CL) objects
+#' @export
+aggregate_CV_split_results <- function(obj, prediction_results) {
+  UseMethod("aggregate_CV_split_results")
+}
+
+
+
 
 
 

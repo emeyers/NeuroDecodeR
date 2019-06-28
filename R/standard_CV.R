@@ -49,13 +49,15 @@ run_decoding.standard_CV = function(cv_obj) {
   num_resample_runs = cv_obj$num_resample_runs
   
   
-  DECODING_RESULTS <- NULL
   
   
   # Do a parallel loop over resample runs
-  ALL_DECODING_RESULTS <- foreach(iResample = 1:num_resample_runs, 
-                                  .export=c('get_rank_results')) %dopar% {  # %dopar% {  
-      
+  #ALL_DECODING_RESULTS <- foreach(iResample = 1:num_resample_runs, 
+  #                                .export=c('get_rank_results')) %dopar% {  # %dopar% {  
+  
+  ALL_DECODING_RESULTS <- foreach(iResample = 1:num_resample_runs) %dopar% {  # %dopar% {  
+                                                                      
+                                    
                                     
     # get the data from the current cross-validation run
     cv_data <- get_data(datasource)  
@@ -70,6 +72,10 @@ run_decoding.standard_CV = function(cv_obj) {
     time_names <- grep("^time", names(datasource$binned_data), value = TRUE)
     #dim_names <- list(1:num_CV, time_names, time_names)
   
+    
+    DECODING_RESULTS <- NULL
+    
+    
     all_cv_results <- NULL
     
     for (iCV in 1:num_CV) {
@@ -127,11 +133,46 @@ run_decoding.standard_CV = function(cv_obj) {
   
   
 
+    # convert the results from each CV split from a list into a data frame
+    all_cv_results <- dplyr::bind_rows(all_cv_results)
+    
+    
+    # these constructors should happen elsehwere
+    #rank_decision_obj <- normalized_rank_and_decision_values_PM()
+    #confusion_matrix_obj <- confusion_matrix_PM()
+    #all_resample_run_results <- aggregate_CV_split_results(rank_decision_obj, all_cv_results)
+    #confusion_matrix_results <- aggregate_CV_split_results(confusion_matrix_obj, all_cv_results)
+    
+    
+    performance_matrics <- list(normalized_rank_and_decision_values_PM(), 
+                                confusion_matrix_PM())
+    
+    for (iMetric in 1:length(performance_matrics)) {
+      curr_metric_results <- aggregate_CV_split_results(performance_matrics[[iMetric]], all_cv_results)
+      DECODING_RESULTS[[iMetric]] <- curr_metric_results
+    }
+    
+    
+    return(DECODING_RESULTS)
+    
+    # should change these to generic names and this can happen in a for loop...
+    # this would allow any arbitrary new metrics to be added...
+
+    
+    # get confustion matrix results as well...
+    #confusion_matrix <- get_confusion_matrix(all_cv_results)
+    
+    # can use eval statements to create this...
+    # DECODING_RESULTS$mean_decoding_results <- mean_decoding_results
+    # DECODING_RESULTS$confusion_matrix <- confusion_matrix
+    
+    
+    
     
     # convert results from all CV splits from a list into a data frame
-    all_results <- dplyr::bind_rows(all_cv_results)
-    
-    
+    #all_results <- dplyr::bind_rows(all_cv_results)
+    #
+    #
     # will aggregate all the results at the end instead 
     # (hoepfully this will not take too much memory...)
     
@@ -173,29 +214,42 @@ run_decoding.standard_CV = function(cv_obj) {
   doParallel::stopImplicitCluster()
   
   
-  ####
-  
-  # Experimenting with code if I don't collapse across CV runs but save all results until the end...
-  
-  all_decoding_results <- dplyr::bind_rows(ALL_DECODING_RESULTS, .id = "resample_run")
-  
-  confusion_matrix <- get_confusion_matrix(all_decoding_results)
-  
-  
-  # add in the normalized rank and decision value results
-  results <- cbind(all_decoding_results, get_rank_results(all_decoding_results))
-  
-  mean_decoding_results <- results %>%
-     group_by(train_time, test_time, CV, resample_run) %>%
-     summarize(zero_one_loss = mean(correct),
-               normalized_rank = mean(normalized_rank_results),
-               decision_vals = mean(correct_class_decision_val))
   
   
   
   
   
-  ####
+  browser()
+  
+ 
+  blah <- unlist(ALL_DECODING_RESULTS, recursive = FALSE)
+
+  
+  # works when there is only one metric...
+  #blarg <- dplyr::bind_rows(ALL_DECODING_RESULTS, .id = "resample_run")
+  
+  
+  # ####
+  # 
+  # # Experimenting with code if I don't collapse across CV runs but save all results until the end...
+  # # This will almost certainly have too large of a memory footprint so can't do this...
+  # 
+  # all_decoding_results <- dplyr::bind_rows(ALL_DECODING_RESULTS, .id = "resample_run")
+  # 
+  # confusion_matrix <- get_confusion_matrix(all_decoding_results)
+  # 
+  # 
+  # # add in the normalized rank and decision value results
+  # results <- cbind(all_decoding_results, get_rank_results(all_decoding_results))
+  # 
+  # mean_decoding_results <- results %>%
+  #    group_by(train_time, test_time, CV, resample_run) %>%
+  #    summarize(zero_one_loss = mean(correct),
+  #              normalized_rank = mean(normalized_rank_results),
+  #              decision_vals = mean(correct_class_decision_val))
+  # 
+  # 
+  # ####
   
   
   browser()
