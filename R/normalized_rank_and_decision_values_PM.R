@@ -70,24 +70,60 @@ aggregate_CV_split_results.normalized_rank_and_decision_values_PM = function(ran
                        data.frame(decision_values = correct_class_decision_val,
                             normalized_rank_results = normalized_rank_results))
 
-  the_results <- the_results %>%                 # used to be called mean_decoding_results
+  the_results <- the_results %>%                 
     group_by(CV, train_time, test_time) %>%
     summarize(zero_one_loss = mean(correct),
               normalized_rank = mean(normalized_rank_results),
-              decision_vals = mean(correct_class_decision_val))
+              decision_vals = mean(decision_values))
 
 
-  
-  normalized_rank_and_decision_values_PM(the_results, 'aggregated_CV_data')
+  normalized_rank_and_decision_values_PM(the_results, 'results combined over one cross-validation split')
   
 }
 
 
 
 
+# aggregate the results from all the resample runs
+#' @export
+aggregate_resample_run_results.normalized_rank_and_decision_values_PM = function(resample_run_results) {
+  
+  
+  central_results <- resample_run_results %>%                 
+    group_by(train_time, test_time) %>%
+    summarize(zero_one_loss = mean(zero_one_loss),
+              normalized_rank = mean(normalized_rank),
+              decision_vals = mean(decision_vals))
+  
+  
+  normalized_rank_and_decision_values_PM(central_results, 'final results')
+  
+  
+}
 
 
 
-
+# plot results (TCT plot for now)
+#' @export
+plot.normalized_rank_and_decision_values_PM = function(central_results) {
+  
+  # will need to come up with something better so that the fill colors can be on different scales
+  central_results %>%
+    tidyr::gather(result_type, accuracy, -train_time, -test_time) %>%
+    ggplot(aes(test_time, train_time, fill = accuracy)) + 
+    geom_tile() +
+    facet_wrap(~result_type)
+  
+  
+  # line plots of the results
+  # central_results %>%
+  #   filter(train_time == test_time) %>%
+  #   tidyr::gather(result_type, accuracy, -train_time, -test_time) %>%
+  #   ggplot(aes(test_time, accuracy)) + 
+  #   geom_point() + 
+  #   facet_wrap(~result_type, scales = "free")
+  
+  
+}
 
 

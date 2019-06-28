@@ -145,7 +145,6 @@ run_decoding.standard_CV = function(cv_obj) {
     all_cv_results <- dplyr::bind_rows(all_cv_results)
     
     
-    
     # go through each Result Metric and aggregate the results from all CV splits using each metric
     for (iMetric in 1:length(result_metrics)) {
       curr_metric_results <- aggregate_CV_split_results(result_metrics[[iMetric]], all_cv_results)
@@ -169,96 +168,32 @@ run_decoding.standard_CV = function(cv_obj) {
   
   
 
+  # go through each Result Metric and aggregate the final results from all resample runs using each metric
+  FINAL_DECODING_RESULTS <- NULL
   grouped_results <- purrr::transpose(ALL_DECODING_RESULTS)
-
-  
-  
-  # should have loop that goes through all PMs and gets their final results...
-  
-  resample_run_results <- dplyr::bind_rows(grouped_results[[2]], .id = "resample_run")
-
-  confusion_matrix <- aggregate_resample_run_results(resample_run_results)
-  
-  
-  browser()
-  
-  
-  plot(confusion_matrix)
-  
-  
-  other_results <- dplyr::bind_rows(grouped_results[[1]], .id = "resample_run")
-  
-  
-  #####
+  for (iMetric in 1:length(result_metrics)) {
+    curr_resample_run_results <- dplyr::bind_rows(grouped_results[[iMetric]], .id = "resample_run")
+    FINAL_DECODING_RESULTS[[iMetric]] <- aggregate_resample_run_results(curr_resample_run_results)
+  }
   
   
   
+  return(FINAL_DECODING_RESULTS)
   
   
+  #plot(FINAL_DECODING_RESULTS[[1]])
+  #plot(FINAL_DECODING_RESULTS[[2]])
   
-  # Have a for loop here where each PM object's aggregrate_resample_run functions are called...
-  #group_results[[iMetric]]
-  
-  
-  # what to do about MI which is calculated on the confusion matrices? 
   
   # Also need to add:
-  #  1) normalized rank confusion matrices (computed from rank results)
-  #  2) ROC AUC metric  (why not)
+  #  1) ROC AUC metric
+  #  2) MI from confusion matrices, normalized rank confusion matrix
   #  3) Other things 
   #      - Plot functions for these S3 objects
   #      - Saving parameters from the ds, cl, cv objects (or should this be done at a higher level?)
   
   
   
-  
-  ### everything below is basically junk
-  
-  mean_decoding_results <- purrr::map(ALL_DECODING_RESULTS, 'mean_decoding_results') 
-  
-  
- 
-  blah <- unlist(ALL_DECODING_RESULTS, recursive = FALSE)
-
-  
-  # works when there is only one metric...
-  #blarg <- dplyr::bind_rows(ALL_DECODING_RESULTS, .id = "resample_run")
-  
-  
-  # ####
-  # 
-  # # Experimenting with code if I don't collapse across CV runs but save all results until the end...
-  # # This will almost certainly have too large of a memory footprint so can't do this...
-  # 
-  # all_decoding_results <- dplyr::bind_rows(ALL_DECODING_RESULTS, .id = "resample_run")
-  # 
-  # confusion_matrix <- get_confusion_matrix(all_decoding_results)
-  # 
-  # 
-  # # add in the normalized rank and decision value results
-  # results <- cbind(all_decoding_results, get_rank_results(all_decoding_results))
-  # 
-  # mean_decoding_results <- results %>%
-  #    group_by(train_time, test_time, CV, resample_run) %>%
-  #    summarize(zero_one_loss = mean(correct),
-  #              normalized_rank = mean(normalized_rank_results),
-  #              decision_vals = mean(correct_class_decision_val))
-  # 
-  # 
-  # ####
-  
-  
-  browser()
-  
-  mean_decoding_results <- purrr::map(ALL_DECODING_RESULTS, 'mean_decoding_results') 
-  all_mean_decoding_results <- dplyr::bind_rows(mean_decoding_results, .id = "resample_run")
-
-  
-  
-  
-  
-  # return all the decoding results collapsed into one data frame
-  dplyr::bind_rows(ALL_DECODING_RESULTS, .id = "resample_run")
   
 
 }  # end the run_decoding method

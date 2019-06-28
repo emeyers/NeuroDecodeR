@@ -25,6 +25,14 @@ confusion_matrix_PM <- function(the_data = data.frame(), state = 'initial') {
 aggregate_CV_split_results.confusion_matrix_PM = function(confusion_matrix_obj, prediction_results) {
   
 
+  # include a warning if the state is not intial
+  if (attr(confusion_matrix_obj, "state") != "initial") {    
+    warning(paste0("The method aggregate_CV_split_results() should only be called on",
+                   "normalized_rank_and_decision_values_PM that are in the intial state.",
+                   "Any data that was already stored in this object will be overwritten"))
+  }
+  
+  
   # could only get confusion matrix where train and test times are the same to save memory
   # (off diagonal element confusion matrices don't seem that much of interest anyway)
   # however MI off diagonal could be of interest so going to get all trian test times confusion matrices
@@ -55,7 +63,7 @@ aggregate_CV_split_results.confusion_matrix_PM = function(confusion_matrix_obj, 
     summarize(n = sum(n))
   
   
-  confusion_matrix_PM(confusion_matrix, 'aggregated cross-validation results')
+  confusion_matrix_PM(confusion_matrix, 'results combined over one cross-validation split')
   
   
 }
