@@ -5,7 +5,7 @@
 \title{The standard cross-validator (CV)  object}
 \usage{
 standard_CV(datasource, classifier, feature_preprocessors,
-  num_resample_runs = 50)
+  num_resample_runs = 50, result_metrics = NULL)
 }
 \description{
 A cross-validator object takes a datasource, feature preprocessors and a classifier

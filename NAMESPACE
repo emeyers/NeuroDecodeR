@@ -2,10 +2,13 @@
 
 S3method(aggregate_CV_split_results,confusion_matrix_PM)
 S3method(aggregate_CV_split_results,normalized_rank_and_decision_values_PM)
+S3method(aggregate_resample_run_results,confusion_matrix_PM)
 S3method(get_predictions,max_correlation_CL)
+S3method(plot,confusion_matrix_PM)
 S3method(preprocess_data,zscore_FP)
 S3method(run_decoding,standard_CV)
 export(aggregate_CV_split_results)
+export(aggregate_resample_run_results)
 export(basic_DS)
 export(calc_num_level_repetitions)
 export(confusion_matrix_PM)
