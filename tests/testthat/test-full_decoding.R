@@ -17,13 +17,20 @@ ds <- basic_DS(basedir_file_name, 'stimulus_ID', 18, 0)
 fps <- list(zscore_FP())
 cl <- max_correlation_CL()
 
-rms <- list(main_results_RM(options = "hi"), confusion_matrix_RM(options = "hi"))
+#rms <- list(main_results_RM(), 
+#            confusion_matrix_RM(save_only_same_train_test_time = TRUE))
+
+rms <- list(main_results_RM(), 
+            confusion_matrix_RM(save_only_same_train_test_time = FALSE))
+
 
 cv <- standard_CV(ds, cl, fps, 3, rms) 
 
 
-
 DECODING_RESULTS <- run_decoding(cv)
+
+
+attributes(DECODING_RESULTS$confusion_matrix_RM)$options
 
 
 zero_one_loss_results <- DECODING_RESULTS[[1]] %>%
