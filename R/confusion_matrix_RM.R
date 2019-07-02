@@ -4,16 +4,10 @@
 
 # the constructor 
 #' @export
-confusion_matrix_RM <- function(the_data = data.frame(), state = 'initial') {
+confusion_matrix_RM <- function(options = NULL) {
   
-  confusion_matrix_obj <- the_data
-  
-  attr(confusion_matrix_obj, "class") <- c("confusion_matrix_RM", 'data.frame')
-  
-  attr(confusion_matrix_obj, "state") <- state
-  
-  confusion_matrix_obj
-  
+  new_confusion_matrix_RM(data.frame(), 'initial', options)
+
 }
 
 
@@ -63,8 +57,9 @@ aggregate_CV_split_results.confusion_matrix_RM = function(confusion_matrix_obj, 
     summarize(n = sum(n))
   
   
-  confusion_matrix_RM(confusion_matrix, 'results combined over one cross-validation split')
-  
+  new_confusion_matrix_RM(confusion_matrix, 
+                          'results combined over one cross-validation split', 
+                          attr(confusion_matrix_obj, 'options'))
   
 }
 
@@ -95,10 +90,29 @@ aggregate_resample_run_results.confusion_matrix_RM = function(resample_run_resul
     dplyr::group_by(train_time,  test_time) %>%
     mutate(predicted_frequency = n / sum(n)) 
   
-
-  confusion_matrix_RM(confusion_matrix, 'final results')
+  new_confusion_matrix_RM(confusion_matrix, 
+                          'final results', 
+                          attr(resample_run_results, 'options'))
   
 }
+
+
+
+
+# the internal constructor
+new_confusion_matrix_RM <- function(the_data = data.frame(), 
+                                    the_state = NULL,
+                                    options = NULL) {
+  
+    confusion_matrix_obj <- the_data
+    attr(confusion_matrix_obj, "state") <- the_state
+    attr(confusion_matrix_obj, "options") <- options
+    attr(confusion_matrix_obj, "class") <- c("confusion_matrix_RM", 'data.frame')
+    
+    confusion_matrix_obj
+  
+}
+
 
 
 
@@ -110,11 +124,7 @@ plot.confusion_matrix_RM = function(confusion_matrix_obj) {
     ggplot(aes(actual_labels, predicted_labels, fill = n)) +
     geom_tile() +
     facet_grid(train_time ~ test_time)
-
 }
-
-
-
 
 
 

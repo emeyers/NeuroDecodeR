@@ -17,7 +17,7 @@ ds <- basic_DS(basedir_file_name, 'stimulus_ID', 18, 0)
 fps <- list(zscore_FP())
 cl <- max_correlation_CL()
 
-rms <- list(main_results_RM(options = "hi"), confusion_matrix_RM())
+rms <- list(main_results_RM(options = "hi"), confusion_matrix_RM(options = "hi"))
 
 cv <- standard_CV(ds, cl, fps, 3, rms) 
 
