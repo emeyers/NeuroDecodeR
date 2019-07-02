@@ -29,8 +29,8 @@ print(Sys.time())
 print(as.vector(t(zero_one_loss_results)))
 
 
-plot(DECODING_RESULTS[[1]])
-plot(DECODING_RESULTS[[2]])
+plot(DECODING_RESULTS$main_results_RM)
+plot(DECODING_RESULTS$confusion_matrix_RM)
 
 
 

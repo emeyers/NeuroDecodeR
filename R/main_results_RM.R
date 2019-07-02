@@ -2,8 +2,6 @@
 
 
 
-
-
 # the constructor 
 #' @export
 main_results_RM <- function(the_data = data.frame(), state = 'initial'){
@@ -17,6 +15,8 @@ main_results_RM <- function(the_data = data.frame(), state = 'initial'){
   rank_decision_val_obj
   
 }
+
+
 
 
 

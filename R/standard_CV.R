@@ -60,10 +60,10 @@ run_decoding.standard_CV = function(cv_obj) {
   
   
   # Do a parallel loop over resample runs
-  #ALL_DECODING_RESULTS <- foreach(iResample = 1:num_resample_runs, 
+  #all_resample_run_decoding_results <- foreach(iResample = 1:num_resample_runs, 
   #                                .export=c('get_rank_results')) %dopar% {  # %dopar% {  
   
-  ALL_DECODING_RESULTS <- foreach(iResample = 1:num_resample_runs) %dopar% {  # %dopar% {  
+  all_resample_run_decoding_results <- foreach(iResample = 1:num_resample_runs) %dopar% {  # %dopar% {  
                                                                       
                                     
                                     
@@ -81,8 +81,10 @@ run_decoding.standard_CV = function(cv_obj) {
     #dim_names <- list(1:num_CV, time_names, time_names)
   
     
-    DECODING_RESULTS <- NULL
-    
+    # resample_run_decoding_results is the name of the decoding results inside the dopar loop
+    # outside the loop, when all the results have really been combined into a list, 
+    # this is called all_resample_run_decoding_results
+    resample_run_decoding_results <- NULL   
     
     all_cv_results <- NULL
     
@@ -148,11 +150,11 @@ run_decoding.standard_CV = function(cv_obj) {
     # go through each Result Metric and aggregate the results from all CV splits using each metric
     for (iMetric in 1:length(result_metrics)) {
       curr_metric_results <- aggregate_CV_split_results(result_metrics[[iMetric]], all_cv_results)
-      DECODING_RESULTS[[iMetric]] <- curr_metric_results
+      resample_run_decoding_results[[iMetric]] <- curr_metric_results   ###  DECODING_RESULTS
     }
     
     
-    return(DECODING_RESULTS)
+    return(resample_run_decoding_results) 
     
     
     
@@ -169,20 +171,30 @@ run_decoding.standard_CV = function(cv_obj) {
   
 
   # go through each Result Metric and aggregate the final results from all resample runs using each metric
-  FINAL_DECODING_RESULTS <- NULL
-  grouped_results <- purrr::transpose(ALL_DECODING_RESULTS)
+  DECODING_RESULTS <- NULL
+  result_metric_names <- NULL
+  grouped_results <- purrr::transpose(all_resample_run_decoding_results)
   for (iMetric in 1:length(result_metrics)) {
     curr_resample_run_results <- dplyr::bind_rows(grouped_results[[iMetric]], .id = "resample_run")
-    FINAL_DECODING_RESULTS[[iMetric]] <- aggregate_resample_run_results(curr_resample_run_results)
+    DECODING_RESULTS[[iMetric]] <- aggregate_resample_run_results(curr_resample_run_results)
+    result_metric_names[iMetric] <- class(DECODING_RESULTS[[iMetric]])[1]
   }
   
   
+  # add names to the final results list so easy to extract elements
+  names(DECODING_RESULTS) <- result_metric_names
+    
   
-  return(FINAL_DECODING_RESULTS)
+  # add datasource parameters and cross-validation parameters to the results that are returned
+  #...
   
   
-  #plot(FINAL_DECODING_RESULTS[[1]])
-  #plot(FINAL_DECODING_RESULTS[[2]])
+  
+  return(DECODING_RESULTS)
+  
+  
+  # plot(DECODING_RESULTS$main_results_RM)
+  # plot(DECODING_RESULTS$confusion_matrix_RM)
   
   
   # Also need to add:
