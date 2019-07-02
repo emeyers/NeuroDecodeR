@@ -63,7 +63,7 @@ run_decoding.standard_CV = function(cv_obj) {
   #all_resample_run_decoding_results <- foreach(iResample = 1:num_resample_runs, 
   #                                .export=c('get_rank_results')) %dopar% {  # %dopar% {  
   
-  all_resample_run_decoding_results <- foreach(iResample = 1:num_resample_runs) %dopar% {  # %dopar% {  
+  all_resample_run_decoding_results <- foreach(iResample = 1:num_resample_runs) %do% {  # %dopar% {  
                                                                       
                                     
                                     
@@ -147,6 +147,7 @@ run_decoding.standard_CV = function(cv_obj) {
     all_cv_results <- dplyr::bind_rows(all_cv_results)
     
     
+    
     # go through each Result Metric and aggregate the results from all CV splits using each metric
     for (iMetric in 1:length(result_metrics)) {
       curr_metric_results <- aggregate_CV_split_results(result_metrics[[iMetric]], all_cv_results)
@@ -169,15 +170,20 @@ run_decoding.standard_CV = function(cv_obj) {
   doParallel::stopImplicitCluster()
   
   
-
   # go through each Result Metric and aggregate the final results from all resample runs using each metric
   DECODING_RESULTS <- NULL
   result_metric_names <- NULL
   grouped_results <- purrr::transpose(all_resample_run_decoding_results)
   for (iMetric in 1:length(result_metrics)) {
+    
+    # bind the list of all the resample result RM objects together and preserve the RM's options attribute
+    curr_options = attributes(grouped_results[[iMetric]][[1]])$options 
     curr_resample_run_results <- dplyr::bind_rows(grouped_results[[iMetric]], .id = "resample_run")
+    attr(curr_resample_run_results, "options") <- curr_options
+    
     DECODING_RESULTS[[iMetric]] <- aggregate_resample_run_results(curr_resample_run_results)
     result_metric_names[iMetric] <- class(DECODING_RESULTS[[iMetric]])[1]
+  
   }
   
   

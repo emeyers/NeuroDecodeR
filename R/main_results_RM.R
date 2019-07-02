@@ -4,15 +4,17 @@
 
 # the constructor 
 #' @export
-main_results_RM <- function(the_data = data.frame(), state = 'initial'){
+main_results_RM <- function(the_data = data.frame(), state = 'initial', options = NULL){
   
-  rank_decision_val_obj <- the_data
+  main_results_obj <- the_data
   
-  attr(rank_decision_val_obj, "class") <- c("main_results_RM", 'data.frame')
+  attr(main_results_obj, "class") <- c("main_results_RM", 'data.frame')
   
-  attr(rank_decision_val_obj, "state") <- state
+  attr(main_results_obj, "state") <- state
 
-  rank_decision_val_obj
+  attr(main_results_obj, "options") <- options
+  
+  main_results_obj
   
 }
 
@@ -22,11 +24,11 @@ main_results_RM <- function(the_data = data.frame(), state = 'initial'){
 
 # aggregate the results from all the cross-validation splits
 #' @export
-aggregate_CV_split_results.main_results_RM = function(rank_decision_val_obj, prediction_results) {
+aggregate_CV_split_results.main_results_RM = function(main_results_obj, prediction_results) {
   
   
   # perhaps include a warning if the state is not intial
-  if (attr(rank_decision_val_obj, "state") != "initial") {    
+  if (attr(main_results_obj, "state") != "initial") {    
     warning(paste0("The method aggregate_CV_split_results() should only be called on",
                    "main_results_RM that are in the intial state.",
                    "Any data that was already stored in this object will be overwritten"))
@@ -76,8 +78,8 @@ aggregate_CV_split_results.main_results_RM = function(rank_decision_val_obj, pre
               normalized_rank = mean(normalized_rank_results),
               decision_vals = mean(decision_values))
 
-
-  main_results_RM(the_results, 'results combined over one cross-validation split')
+  
+  main_results_RM(the_results, 'results combined over one cross-validation split', attributes(main_results_obj)$options)
   
 }
 
@@ -96,7 +98,7 @@ aggregate_resample_run_results.main_results_RM = function(resample_run_results) 
               decision_vals = mean(decision_vals))
   
   
-  main_results_RM(central_results, 'final results')
+  main_results_RM(central_results, 'final results', attributes(resample_run_results)$options)
   
   
 }
