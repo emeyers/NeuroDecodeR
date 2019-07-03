@@ -107,23 +107,75 @@ aggregate_resample_run_results.main_results_RM = function(resample_run_results) 
 
 # plot results (TCT plot for now)
 #' @export
-plot.main_results_RM = function(central_results) {
+plot.main_results_RM = function(main_results, result_type = 'all', plot_type = 'TCD') {
   
-  # will need to come up with something better so that the fill colors can be on different scales
-  central_results %>%
+  
+  if (result_type == 'all'){ 
+    # do nothing
+  } else if (result_type == 'zero_one_loss'){
+    main_results <- select(main_results, train_time, test_time, zero_one_loss)
+  } else if (result_type == 'normalized_rank'){
+    main_results <- select(main_results, train_time, test_time, normalized_rank)
+  } else if (result_type == 'decision_vals'){
+    main_results <- select(main_results, train_time, test_time, decision_vals)
+  } else {
+    warning(paste0("result_type must be set to either 'all', 'zero_one_loss', 'normalized_rank', or 'decision_vals'.",
+                   "Using the default value of all"))
+  }
+  
+  
+  if (!(plot_type == 'TCD' || plot_type == 'line'))
+      warning("plot_type must be set to TCD or line. Using the default value of TCD")
+  
+  
+  main_results$train_time <- round(get_center_bin_time(main_results$train_time))
+  main_results$test_time <- round(get_center_bin_time(main_results$test_time))
+  
+  #main_results$train_time <- get_time_range_strings(main_results$train_time)
+  #main_results$test_time <- get_time_range_strings(main_results$test_time)
+  
+  
+  main_results <-  main_results %>%
     tidyr::gather(result_type, accuracy, -train_time, -test_time) %>%
-    ggplot(aes(test_time, train_time, fill = accuracy)) + 
-    geom_tile() +
-    facet_wrap(~result_type)
+    dplyr::mutate(result_type = replace(result_type, result_type == 'zero_one_loss', 'Zero-one loss'),
+                 result_type = replace(result_type, result_type == 'normalized_rank', 'Normalized rank'),
+                 result_type = replace(result_type, result_type == 'decision_vals', 'Decision values'))
+    
+
+  if ((sum(main_results$train_time == main_results$test_time) == dim(main_results)[1]) || plot_type == 'line') {
+    
+    # if only trained and tested at the same time, create line plot
+    main_results %>%
+      dplyr::filter(train_time == test_time) %>%
+      ggplot(aes(test_time, accuracy)) +
+      geom_line() +
+      facet_wrap(~result_type, scales = "free") + 
+      xlab('Time') + 
+      ylab('Accuracy')
+
+    
+  } else {
+    
+    
+    # should come up with something better so that the fill colors can be on different scales
+    
+    # if trained and testing at all times, create a TCD plot
+    main_results %>%
+      ggplot(aes(test_time, train_time, fill = accuracy)) + 
+      geom_tile() +
+      facet_wrap(~result_type) +
+      scale_fill_continuous(type = "viridis", name = "Prediction \n accuracy") +
+      ylab('Train time') + 
+      xlab('Test time') 
+    
+  }
   
   
-  # line plots of the results
-  # central_results %>%
-  #   filter(train_time == test_time) %>%
-  #   tidyr::gather(result_type, accuracy, -train_time, -test_time) %>%
-  #   ggplot(aes(test_time, accuracy)) + 
-  #   geom_point() + 
-  #   facet_wrap(~result_type, scales = "free")
+  
+
+  
+  
+
   
   
 }
