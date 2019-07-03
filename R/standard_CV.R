@@ -60,7 +60,7 @@ run_decoding.standard_CV = function(cv_obj) {
   
   
   # Do a parallel loop over resample runs
-  all_resample_run_decoding_results <- foreach(iResample = 1:num_resample_runs) %dopar% {  # %dopar% {  
+  all_resample_run_decoding_results <- foreach(iResample = 1:num_resample_runs) %do% {  # %dopar% {  
                                                                       
                                     
     # get the data from the current cross-validation run
