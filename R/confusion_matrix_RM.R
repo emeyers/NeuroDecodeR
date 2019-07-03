@@ -83,10 +83,15 @@ aggregate_resample_run_results.confusion_matrix_RM = function(resample_run_resul
   confusion_matrix <- resample_run_results 
 
   
-  # add on 0's for all entries in the confusion matrix that are missing
+  # add on 0's for all entries in the confusion matrix that are missing  -----------------------------------------
 
+  # check if only specified that one should only save the results at the same training and test time
+  #  or if the results only were recorded for the same train and test times (since this was specied in the CV obj)
   options <- attr(resample_run_results, 'options')
-  if (options$save_only_same_train_test_time) {
+  only_has_same_train_test_time_results <- 
+    (sum(resample_run_results$train_time == resample_run_results$test_time) == dim(resample_run_results)[1])
+  
+  if (options$save_only_same_train_test_time || only_has_same_train_test_time_results) {
 
     # create smaller matrix of 0's if only saving results of training and testing at the same time
     cm_label_matrix <- expand.grid(actual_labels = unique(confusion_matrix$actual_labels),
@@ -116,6 +121,8 @@ aggregate_resample_run_results.confusion_matrix_RM = function(resample_run_resul
   
   confusion_matrix <- dplyr::bind_rows(confusion_matrix, empty_cm)
 
+  
+  # calculate the final confusion matrix
   confusion_matrix <-  confusion_matrix %>%
     dplyr::group_by(train_time,  test_time, actual_labels,  predicted_labels) %>%
     summarize(n = sum(n)) %>%
@@ -162,12 +169,14 @@ plot.confusion_matrix_RM = function(confusion_matrix_obj) {
   # level of the cross-validator
   only_has_same_train_test_time_results <- 
     (sum(confusion_matrix_obj$train_time == confusion_matrix_obj$test_time) == dim(confusion_matrix_obj)[1])
-  
 
-  confusion_matrix_obj$train_time <- round(get_center_bin_time(confusion_matrix_obj$train_time))
-  confusion_matrix_obj$test_time <- round(get_center_bin_time(confusion_matrix_obj$test_time))
-  
+  #confusion_matrix_obj$train_time <- round(get_center_bin_time(confusion_matrix_obj$train_time))
+  #confusion_matrix_obj$test_time <- round(get_center_bin_time(confusion_matrix_obj$test_time))
 
+  confusion_matrix_obj$train_time <- get_time_range_strings(confusion_matrix_obj$train_time)
+  confusion_matrix_obj$test_time <- get_time_range_strings(confusion_matrix_obj$test_time)
+  
+  
   if (only_has_same_train_test_time_results) {
     
     # Add the word 'Time' to the title since there is enough space to plot it 

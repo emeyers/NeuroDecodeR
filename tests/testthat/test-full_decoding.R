@@ -26,7 +26,7 @@ rms <- list(main_results_RM(),
             confusion_matrix_RM(save_only_same_train_test_time = FALSE))
 
 
-cv <- standard_CV(ds, cl, fps, 3, rms, test_only_at_training_time = TRUE) 
+cv <- standard_CV(ds, cl, fps, 3, rms, test_only_at_training_time = FALSE) 
 
 
 DECODING_RESULTS <- run_decoding(cv)

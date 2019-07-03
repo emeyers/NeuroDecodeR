@@ -15,6 +15,22 @@ get_center_bin_time <- function(time_vector) {
 }
 
 
+#' @export
+get_time_range_strings <- function(time_vector) {
+  
+  time_range_strings <- NULL
+  
+  for (i in 1:length(time_vector)) {
+    curr_parsed_names <- unlist(strsplit(as.character(time_vector[i]), ".", fixed = TRUE))
+    curr_parsed_names <- unlist(strsplit(as.character(curr_parsed_names[2]), "_", fixed = TRUE))
+    time_range_strings[i] <- paste(curr_parsed_names[1], 'to', curr_parsed_names[2])  
+  }
+  
+  return(time_range_strings)
+}
+
+
+
 
 #' @export
 # converts rate data into count data (e.g., firing rates into spike counts)
