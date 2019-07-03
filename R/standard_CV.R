@@ -17,7 +17,8 @@ standard_CV <- function(datasource,
                         classifier, 
                         feature_preprocessors, 
                         num_resample_runs = 50, 
-                        result_metrics = NULL) {
+                        result_metrics = NULL,
+                        test_only_at_training_time = FALSE) {
   
   if (is.null(result_metrics)) {
     result_metrics <- list(main_results_RM(), 
@@ -29,7 +30,8 @@ standard_CV <- function(datasource,
                  classifier = classifier,
                  feature_preprocessors = feature_preprocessors,
                  num_resample_runs = num_resample_runs,
-                 result_metrics = result_metrics)
+                 result_metrics = result_metrics,
+                 test_only_at_training_time = test_only_at_training_time)
       
   attr(the_cv, "class") <- "standard_CV"
   the_cv 
@@ -56,6 +58,7 @@ run_decoding.standard_CV = function(cv_obj) {
   feature_preprocessors = cv_obj$feature_preprocessors
   num_resample_runs = cv_obj$num_resample_runs
   result_metrics = cv_obj$result_metrics
+  test_only_at_training_time = cv_obj$test_only_at_training_time
   
   
   
@@ -66,17 +69,12 @@ run_decoding.standard_CV = function(cv_obj) {
     # get the data from the current cross-validation run
     cv_data <- get_data(datasource)  
     
-
     unique_times <- unique(cv_data$time_bin)
     num_time_bins <- length(unique_times)
     all_cv_train_test_inds <- select(cv_data, starts_with("CV"))
     num_CV <- ncol(all_cv_train_test_inds)
   
-    # add names for the different dimensions of the results
-    time_names <- grep("^time", names(datasource$binned_data), value = TRUE)
-    #dim_names <- list(1:num_CV, time_names, time_names)
-  
-    
+
     # resample_run_decoding_results is the name of the decoding results inside the dopar loop
     # outside the loop, when all the results have really been combined into a list, 
     # this is called all_resample_run_decoding_results
@@ -96,10 +94,13 @@ run_decoding.standard_CV = function(cv_obj) {
         training_set <- dplyr::filter(cv_data, time_bin == unique_times[iTrain], all_cv_train_test_inds[iCV] == "train") %>% 
           dplyr::select(starts_with("site"), labels)
         
-        test_set <- filter(cv_data, all_cv_train_test_inds[iCV] == "test") %>% 
-          select(starts_with("site"), labels, time_bin) 
-        
-        
+        test_set <- dplyr::filter(cv_data, all_cv_train_test_inds[iCV] == "test") %>% 
+          dplyr::select(starts_with("site"), labels, time_bin) 
+
+        if (test_only_at_training_time) {
+          test_set <- dplyr::filter(test_set, time_bin == unique_times[iTrain])
+        }
+     
         # if feature-processors have been specified, do feature processing...
         if (length(feature_preprocessors) > 1) {
           for (iFP in 1:length(feature_preprocessors)) {
@@ -115,12 +116,12 @@ run_decoding.standard_CV = function(cv_obj) {
         
         # get predictions from the classifier (along with the correct labels)
         curr_cv_prediction_results <- get_predictions(classifier, training_set, test_set)
-        
 
         # add the current CV run number, train time to the results data frame
         curr_cv_prediction_results <- curr_cv_prediction_results %>%
-          dplyr::mutate(CV = iCV, train_time = time_names[iTrain]) %>%
+          dplyr::mutate(CV = iCV, train_time = unique_times[iTrain]) %>%
           select(CV, train_time, everything())
+        
         
         #all_cv_results <- rbind(all_cv_results, curr_cv_prediction_results)
         all_time_results[[iTrain]] <- curr_cv_prediction_results   # should be faster b/c don't need to reallocate memory

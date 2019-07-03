@@ -9,9 +9,9 @@
 devtools::load_all()
 rm(list = ls())
 
-#basedir_file_name <- '~/research/NDT/NDTr/data/binned/ZD_150_samples_binned_every_50_samples.Rda'
+basedir_file_name <- '~/research/NDT/NDTr/data/binned/ZD_150_samples_binned_every_50_samples.Rda'
 
-basedir_file_name <- "/home/faculty/emmCS/research/NDT/other_binned_data/ZD_100_samples_binned_every_30_samples.Rda"
+#basedir_file_name <- "/home/faculty/emmCS/research/NDT/other_binned_data/ZD_100_samples_binned_every_30_samples.Rda"
 
 
 
@@ -26,7 +26,7 @@ rms <- list(main_results_RM(),
             confusion_matrix_RM(save_only_same_train_test_time = FALSE))
 
 
-cv <- standard_CV(ds, cl, fps, 3, rms) 
+cv <- standard_CV(ds, cl, fps, 3, rms, test_only_at_training_time = TRUE) 
 
 
 DECODING_RESULTS <- run_decoding(cv)
