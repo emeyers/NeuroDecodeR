@@ -158,7 +158,7 @@ new_confusion_matrix_RM <- function(the_data = data.frame(),
 
 
 
-# aggregate the results from all the resample runs
+# plot the confusion matrix results
 #' @export
 plot.confusion_matrix_RM = function(confusion_matrix_obj) {
 
@@ -218,12 +218,63 @@ plot.confusion_matrix_RM = function(confusion_matrix_obj) {
 
 
 
+# plot the mutual information computed from a confusion matrix
+#' @export
+plot_MI.confusion_matrix_RM = function(confusion_matrix_obj, plot_type = 'TCD') {
+  
+  
+  if (!(plot_type == 'TCD' || plot_type == 'line'))
+    warning("plot_type must be set to 'TCD' or 'line'. Using the default value of 'TCD'")
+  
+  # calculate the mutual information ------------------------------------------
+  
+  MI_obj <-  confusion_matrix_obj %>%
+    group_by(train_time,  test_time) %>%
+    mutate(joint_probability = n/sum(n))   %>%
+    group_by(train_time,  test_time, actual_labels) %>%
+    mutate(log_marginal_actual = log2(sum(joint_probability))) %>%
+    group_by(train_time,  test_time, predicted_labels) %>%
+    mutate(log_marginal_predicted = log2(sum(joint_probability))) %>%
+    ungroup() %>%
+    mutate(log_joint_probability = log2(joint_probability))   %>%
+    mutate(log_joint_probability = replace(log_joint_probability, log_joint_probability == -Inf, 0)) %>%
+    mutate(MI_piece = joint_probability * (log_joint_probability - log_marginal_actual - log_marginal_predicted)) %>%
+    group_by(train_time, test_time) %>%
+    summarize(MI = sum(MI_piece))
 
-
-
-
-
-
+  
+  # plot the mutual information  ----------------------------------------------
+  
+  MI_obj$train_time <- round(get_center_bin_time(MI_obj$train_time))
+  MI_obj$test_time <- round(get_center_bin_time(MI_obj$test_time))
+  
+  
+  if ((sum(MI_obj$train_time == MI_obj$test_time) == dim(MI_obj)[1]) || plot_type == 'line') {
+    
+    # if only trained and tested at the same time, create line plot
+    MI_obj %>%
+      dplyr::filter(train_time == test_time) %>%
+      ggplot(aes(test_time, MI)) +
+      geom_line() +
+      xlab('Time') + 
+      ylab('Mutual information (bits)') # + 
+      # geom_hline(yintercept = 0, color = "red")  # how much MI there should be if there is no bias
+    
+  } else {
+    
+    MI_obj %>%
+      ggplot(aes(test_time, train_time, fill = MI)) + 
+      geom_tile() + 
+      ylab('Test time') + 
+      xlab('Train time') +    
+      scale_fill_continuous(type = "viridis", name = "Bits") + 
+      ggtitle("Mutual information") + 
+      theme(plot.title = element_text(hjust = 0.5)) 
+  }
+  
+  
+  
+}
 
 
 

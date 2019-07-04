@@ -53,6 +53,13 @@ aggregate_resample_run_results <- function(obj) {
 
 
 
+# plot the mutual information computed from a confusion matrix
+#' @export
+plot_MI <- function(obj, plot_type) {
+  UseMethod("plot_MI")
+}
+
+  
 
 
 

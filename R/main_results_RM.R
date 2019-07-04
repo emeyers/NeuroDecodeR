@@ -125,7 +125,7 @@ plot.main_results_RM = function(main_results, result_type = 'all', plot_type = '
   
   
   if (!(plot_type == 'TCD' || plot_type == 'line'))
-      warning("plot_type must be set to TCD or line. Using the default value of TCD")
+      warning("plot_type must be set to 'TCD' or 'line'. Using the default value of 'TCD'")
   
   
   main_results$train_time <- round(get_center_bin_time(main_results$train_time))
