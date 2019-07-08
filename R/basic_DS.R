@@ -151,7 +151,7 @@ basic_DS <- function(binned_file_name,
     num_resample_sites = num_resample_sites,
     site_IDs_to_use = site_IDs_to_use,
     site_IDs_to_exclude = site_IDs_to_exclude,
-    prandomly_shuffled_labels_before_running = randomly_shuffled_labels_before_running,
+    randomly_shuffled_labels_before_running = randomly_shuffled_labels_before_running,
     create_simultaneously_recorded_populations = create_simultaneously_recorded_populations
   )
   

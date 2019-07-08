@@ -65,9 +65,26 @@ normalized_training_set <- processed_data$training_set
 normalized_test_set <- processed_data$test_set
 
 
+# generate shuffled data...
+ds <- basic_DS(real_data_binned_file_name, "stimulus_ID",
+               num_cv_splits = 3, num_label_repeats_per_cv_split = 6, randomly_shuffled_labels_before_running = TRUE)
+cv_data <- get_data(ds)
+training_set <- filter(cv_data, time_bin == "time.200_349", CV_1 == "train") %>% select(starts_with("site"), labels)
+test_set <- filter(cv_data, time_bin %in% c("time.-350_-201", "time.200_349"), CV_1 == "test") %>% 
+  select(starts_with("site"), labels, time_bin)
+levels(test_set$time_bin)[levels(test_set$time_bin)=="time.-350_-201"] <- "baseline"
+levels(test_set$time_bin)[levels(test_set$time_bin)=="time.200_349"] <- "stimulus"
+fp <- zscore_FP()
+processed_data <- preprocess_data(fp, training_set, test_set)
+shuffled_normalized_training_set <- processed_data$training_set
+shuffled_normalized_test_set <- processed_data$test_set
+
+
+
 save(training_set, test_set,
      normalized_training_set, normalized_test_set,
      count_training_set, count_test_set,
+     shuffled_normalized_training_set, shuffled_normalized_test_set,
      file = "example_ZD_train_and_test_set.Rda")
 
 
