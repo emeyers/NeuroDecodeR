@@ -29,9 +29,9 @@
 
 
 
-basic_DS <- function(binned_file_name = NULL, 
-                            var_to_decode = NULL, 
-                            num_cv_splits = NULL, 
+basic_DS <- function(binned_file_name, 
+                            var_to_decode, 
+                            num_cv_splits, 
                             use_count_data = FALSE,
                             num_label_repeats_per_cv_split = 1, 
                             label_levels_to_use = NULL,
@@ -142,6 +142,7 @@ basic_DS <- function(binned_file_name = NULL,
   
   # create the main data structure
   the_ds <- list(
+    binned_file_name = binned_file_name,
     binned_data = binned_data,
     var_to_decode = var_to_decode,
     num_cv_splits = num_cv_splits,
