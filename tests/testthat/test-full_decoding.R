@@ -43,6 +43,9 @@ print(Sys.time())
 print(as.vector(t(zero_one_loss_results)))
 
 
+print(object.size(DECODING_RESULTS), units = "Mb")
+
+
 plot(DECODING_RESULTS$main_results_RM)
 plot(DECODING_RESULTS$confusion_matrix_RM)
 

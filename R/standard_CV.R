@@ -63,7 +63,7 @@ run_decoding.standard_CV = function(cv_obj) {
   
   
   # Do a parallel loop over resample runs
-  all_resample_run_decoding_results <- foreach(iResample = 1:num_resample_runs) %do% {  # %dopar% {  
+  all_resample_run_decoding_results <- foreach(iResample = 1:num_resample_runs) %dopar% {  # %dopar% {  
                                                                       
                                     
     # get the data from the current cross-validation run
@@ -150,8 +150,12 @@ run_decoding.standard_CV = function(cv_obj) {
       curr_metric_results <- aggregate_CV_split_results(result_metrics[[iMetric]], all_cv_results)
       resample_run_decoding_results[[iMetric]] <- curr_metric_results   ###  DECODING_RESULTS
     }
+
+        
     
-    
+    # save decoding parameters...
+
+
     return(resample_run_decoding_results) 
     
     
@@ -188,26 +192,18 @@ run_decoding.standard_CV = function(cv_obj) {
   names(DECODING_RESULTS) <- result_metric_names
     
   
-  # add datasource parameters and cross-validation parameters to the results that are returned
-  #...
   
+  # save the decoding parameters to make results reproducible -----------------
   
+  # set to null to save memory, can recreate the datasource by reloading the 
+  #  data in the binned_file_name field
+  cv_obj$datasource$binned_data <- NULL
+  
+  # saves all the CV parameters (datasource, classifier feature preprocessros etc)
+  DECODING_RESULTS$cross_validation_paramaters <- cv_obj
+
   
   return(DECODING_RESULTS)
-  
-  
-  # plot(DECODING_RESULTS$main_results_RM)
-  # plot(DECODING_RESULTS$confusion_matrix_RM)
-  
-  
-  # Also need to add:
-  #  1) ROC AUC metric
-  #  2) MI from confusion matrices, normalized rank confusion matrix
-  #  3) Other things 
-  #      - Plot functions for these S3 objects
-  #      - Saving parameters from the ds, cl, cv objects (or should this be done at a higher level?)
-  
-  
   
   
 
