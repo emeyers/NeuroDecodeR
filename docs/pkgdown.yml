@@ -1,5 +1,17 @@
 pandoc: 1.19.2.1
-pkgdown: 0.1.0.9000
-pkgdown_sha: 491a8fa339dcdd1aa466e8df2f0693f679fba4cc
-articles: []
+pkgdown: 1.3.0.9100
+pkgdown_sha: eba908cf407fba41b5fbee57a0d0863c521eee3c
+articles:
+  Binned-format: Binned-format.html
+  Classifiers: Classifiers.html
+  Cross-validators: Cross-validators.html
+  Datasources: Datasources.html
+  Feature Preprocessors: Feature Preprocessors.html
+  Isik 26 letter MEG dataset: Isik 26 letter MEG dataset.html
+  Qi-Constantinidis pre and post training dataset: Qi-Constantinidis pre and post
+    training dataset.html
+  Raster-format: Raster-format.html
+  Tutorial: Tutorial.html
+  Zhang-Desimone 7 object dataset: Zhang-Desimone 7 object dataset.html
+  test1: test1.html
 

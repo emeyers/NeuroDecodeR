@@ -12,11 +12,5 @@ You can install NDTr from github with:
 
 ``` r
 # install.packages("devtools")
-devtools::install_github("emeyers/NDTr")
+devtools::install_github("Xinzhu-Fang/NDTr")
 ```
-
-Documentation
-------------
-
-https://emeyers.github.io/NDTr/articles/Tutorial.html
-
