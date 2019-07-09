@@ -35,6 +35,11 @@ aggregate_CV_split_results.main_results_RM = function(main_results_obj, predicti
   }
 
   
+  # calculate which predictions were correct for the zero-one loss metric
+  prediction_results <- prediction_results %>%
+     dplyr::mutate(correct = actual_labels == predicted_labels)
+  
+  
   decision_vals <- select(prediction_results, starts_with("decision"))
   num_classes <- ncol(decision_vals)
   num_test_points <- nrow(decision_vals)
@@ -42,7 +47,7 @@ aggregate_CV_split_results.main_results_RM = function(main_results_obj, predicti
   
   # remove the prefix 'decision_vals' from the column names...
   the_names <- names(decision_vals)
-  the_names <- unlist(strsplit(the_names, "decision_val_", fixed = TRUE))
+  the_names <- unlist(strsplit(the_names, "decision_vals.", fixed = TRUE))
   the_names <- the_names[the_names != ""]
   names(decision_vals) <- the_names
   decision_vals_aug <- cbind(prediction_results$actual_labels, decision_vals)
