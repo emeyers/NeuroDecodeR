@@ -60,7 +60,11 @@ get_predictions.max_correlation_CL <- function(max_correlation_CL_obj,
 } 
 
 
-
+# since there are no parameters for the max_correlation_CL just return a data frame with
+# max_correlation_CL.max_correlation_CL and a value of "no parameters"
+get_parameters.max_correlation_CL = function(max_correlation_CL_obj){
+  data.frame(max_correlation_CL.max_correlation_CL = "no parameters")
+}
 
 
 

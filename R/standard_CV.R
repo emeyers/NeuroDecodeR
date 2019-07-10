@@ -225,8 +225,8 @@ get_parameters.standard_CV = function(cv_obj){
   parameter_df <- get_parameters(cv_obj$datasource)
   
   
-  # next get the parameters from the classifier
-  
+  # add the parameters from the classifier
+  parameter_df <- cbind(parameter_df, get_parameters(cv_obj$classifier))
   
   
   # if feature-processors have been specified, add their parameters to the data frame
