@@ -102,10 +102,10 @@ run_decoding.standard_CV = function(cv_obj) {
         }
      
         # if feature-processors have been specified, do feature processing...
-        if (length(feature_preprocessors) > 1) {
+        if (length(feature_preprocessors) >= 1) {
           for (iFP in 1:length(feature_preprocessors)) {
             
-            processed_data <- preprocess_data(fps[[iFP]], training_set, test_set)
+            processed_data <- preprocess_data(feature_preprocessors[[iFP]], training_set, test_set)
             training_set <- processed_data$training_set 
             test_set <- processed_data$test_set 
             
@@ -198,6 +198,26 @@ run_decoding.standard_CV = function(cv_obj) {
   # set to null to save memory, can recreate the datasource by reloading the 
   #  data in the binned_file_name field
   cv_obj$datasource$binned_data <- NULL
+  
+  
+  # get parameters from all objects and save the in a data frame so that
+  # which will be useful to tell if an analysis has already been run
+  
+  # ADD a loop here to get the parameters from all objects that were used.....
+  parameter_df <- get_parameters(datasource)
+  
+  # if feature-processors have been specified, add their parameters to the data frame
+  if (length(feature_preprocessors) >= 1) {
+    for (iFP in 1:length(feature_preprocessors)) {
+      curr_FP_parameters <- get_parameters(feature_preprocessors[[iFP]])
+      parameter_df <- cbind(parameter_df, curr_FP_parameters)
+    }
+  }  # end the if statement for doing preprocessing
+  
+  
+
+  cv_obj$parameter_df <- parameter_df
+  
   
   # saves all the CV parameters (datasource, classifier feature preprocessros etc)
   DECODING_RESULTS$cross_validation_paramaters <- cv_obj
