@@ -7,6 +7,13 @@
 
 
 
+# return all parameters that an object uses to enable reproducible analyses
+#' @export
+get_parameters <- function(obj) {
+  UseMethod("get_parameters")
+}
+
+
 # register the generic function get_predictions for the classifier (CL) objects
 #' @export
 get_predictions <- function(obj, train_data, all_times_test_data) {
@@ -60,8 +67,6 @@ plot_MI <- function(obj, plot_type) {
 }
 
   
-
-
 
 
 

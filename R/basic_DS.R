@@ -317,6 +317,30 @@ get_data.basic_DS = function(basic_ds_obj){
 
 
 
+get_parameters.basic_DS = function(basic_ds_obj){
 
+  basic_ds_obj$binned_data <- NULL
+  
+  variable_lengths <- sapply(basic_ds_obj, length)
+  length_one_variables <- variable_lengths[variable_lengths < 2]
+  length_one_variables <- basic_ds_obj[names(length_one_variables)]
+  
+  # convert null values to NAs so that the variables are retained
+  length_one_variables <- sapply(length_one_variables, function(x) ifelse(is.null(x), NA, x))
+  
+  parameter_df <- data.frame(val = unlist(length_one_variables)) %>%
+    mutate(key = rownames(.)) %>% 
+    tidyr::spread(key, val) %>%
+    mutate_all(type.convert) %>%
+    mutate_if(is.factor, as.character)
+  
+  parameter_df$label_levels_to_use <- list(sort(unlist(basic_ds_obj$label_levels_to_use)))
+  parameter_df$site_IDs_to_use <- list(basic_ds_obj$site_IDs_to_use)
+  
+  names(parameter_df) <- paste(class(basic_ds_obj), names(parameter_df), sep = ".")
+  
+  parameter_df
+
+}
 
 
