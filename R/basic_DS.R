@@ -1,34 +1,85 @@
-
 #' A basic datasource object
 #'
-#' A datasource object takes data in binned format and returns training 
-#'   and testing splits of the data that can be passed to a classifier. 
-#'   This object uses \href{https://cran.r-project.org/web/packages/R6/vignettes/Introduction.html}{R6 package}
+#' The standard datasource used to get training and test splits of data.
+#' 
+#' This 'basic' datasource is the datasource that will most commonly be used for
+#' most analyses. Like all datasources, this datasource takes binned format data
+#' and has a get_data() method that is called by a cross-validation object to 
+#' get training and testing splits of data that can be passed to a classifier. 
 #'
 #'
-#' @section basic_DS constructor:
+#' @param binned_file_name A string with the name of a file that has 
+#'  data in binned format.
 #' 
-#' \describe{
-#' \item{\code{basic_DS$new(binned_data, var_to_decode, num_cv_splits, use_count_data, num_label_repeats_per_cv_split)}}{
-#' if successful, will return a new \code{basic_DS} object.
-#' }}
+#' @param var_to_decode A string specifying the name of the labels that
+#'  should be decoded. This label must be one of the columns in the binned
+#'  data that starts with 'label.' 
+#'  
+#' @param num_cv_splits A number specifying how many cross-validation splits
+#'  should be used. 
 #' 
-#' @section Methods
+#' @param use_count_data If the binned data is neural spike counts, then setting
+#'   use_count_data = TRUE will convert the data into spike counts. This is
+#'   useful for classifiers that work on spike count data, e.g., the
+#'   poisson_naive_bayes_CL.
 #' 
-#' \describe{
-#' \item{\code{get_data}}{
-#' This method returns a data frame that has the training and test splits of the data.
-#' }}
+#' @param num_label_repeats_per_cv_split A number specifying how many times each
+#'   label should be repeated in each cross-validation split.
+#' 
+#' @param label_levels_to_use A vector of strings specifying specific label
+#'   levels that should be used. If this is set to NULL then all label levels
+#'   available will be used.
+#' 
+#' @param num_resample_sites The number of sites that should be randomly
+#'   selected when constructing training and test vectors. This number needs to
+#'   be less than or equal to the number of sites available that have
+#'   num_cv_splits * num_label_repeats_per_cv_split repeats.
+#'   
+#' @param site_IDs_to_use A vector of integers specifying which sites should be
+#'   used.
+#'
+#' @param site_IDs_to_exclude A vector of integers specfying which sites should
+#'   be excluded.
+#' 
+#' @param randomly_shuffled_labels_before_running A boolean specifying whether
+#'   the labels should be shuffled prior to the get_data() function being
+#'   called. This is used when one wants to create a null distribution for
+#'   comparing when decoding results are above chance.
+#' 
+#' @param create_simultaneously_recorded_populations If the data from all sites
+#'   was recorded simultaneously, then setting this variable to 1 will cause the
+#'   get_data() function to return simultaneous populations rather than
+#'   pseudo-populations.
 #' 
 #' 
+#' @examples
+#'  # A typical example of creating a datasource to be passed cross-validation object   
+#'  binned_file_name <- file.path('data', 'binned', 'ZD_150_samples_binned_every_50_samples.Rda')
+#'  ds <- basic_DS(binned_file_name, 'stimulus_ID', 18)
+#'  
+#'  # If one has many repeats of each label, decoding can be faster if one
+#'  # uses fewer CV splits and repeats each label multiple times in each split.
+#'  ds <- basic_DS(binned_file_name, 'stimulus_ID', 6,
+#'                 num_label_repeats_per_cv_split = 3)
+#'  
+#'  # One can specify a subset of labels levels to be used in decoding. Here
+#'  #  we just do a three-way decoding analysis between "car", "hand" and "kiwi".
+#'  ds <- basic_DS(binned_file_name, 'stimulus_ID', 18,
+#'                 label_levels_to_use = c("car", "hand", "kiwi")) 
+#'  
+#'  # One never explicitely calls the get_data() function, but rather this is
+#'  # done by the cross-validator. However, to illustrate what this function
+#'  # does, we can call it explicitly here to get training and test data:
+#'  cv_data <- get_data(ds)  
+#'  names(cv_data)
 #' 
+#'  
+#' 
+#' @family datasource
+
+
+
 #' @export
-#' 
-
-
-
-
-
 basic_DS <- function(binned_file_name, 
                             var_to_decode, 
                             num_cv_splits, 
