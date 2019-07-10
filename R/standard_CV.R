@@ -239,10 +239,11 @@ get_parameters.standard_CV = function(cv_obj){
   
   
   
-  # get the parameters from the result metrics
-  
-  
-  
+  # go through each Result Metric and get their parameters
+  for (iMetric in 1:length(cv_obj$result_metrics)) {
+    curr_metric_parameters <- get_parameters(cv_obj$result_metrics[[iMetric]])
+    parameter_df <- cbind(parameter_df, curr_metric_parameters)
+  }
   
   
   

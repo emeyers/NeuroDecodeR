@@ -272,8 +272,16 @@ plot_MI.confusion_matrix_RM = function(confusion_matrix_obj, plot_type = 'TCD') 
       theme(plot.title = element_text(hjust = 0.5)) 
   }
   
-  
-  
+}
+
+
+
+
+get_parameters.confusion_matrix_RM = function(confusion_matrix_obj){
+
+  # there is only one parameter option that can be set here so return it  
+  data.frame(confusion_matrix_RM.save_only_same_train_test_time = 
+               attributes(confusion_matrix_obj)$options$save_only_same_train_test_time)
 }
 
 
