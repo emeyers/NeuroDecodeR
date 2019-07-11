@@ -182,7 +182,7 @@ plot.main_results_RM = function(main_results, result_type = 'all', plot_type = '
 
 get_parameters.main_results_RM = function(confusion_matrix_obj){
   
-  data.frame(main_results_RM.main_results_RM = "no parameters")
+  data.frame(main_results_RM.main_results_RM = "does not have settable parameters")
 
 }
 

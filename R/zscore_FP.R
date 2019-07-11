@@ -56,7 +56,7 @@ preprocess_data.zscore_FP = function(fp, training_set, test_set){
 # since there are no parameters for the zscore_FP just return a data frame with
 # zscore_FP.zscore_FP and a value of "No parameters"
 get_parameters.zscore_FP = function(zscore_FP){
-  data.frame(zscore_FP.zscore_FP = "no parameters")
+  data.frame(zscore_FP.zscore_FP = "does not have settable parameters")
 }
 
 
