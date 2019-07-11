@@ -248,9 +248,14 @@ get_parameters.standard_CV = function(cv_obj){
   
   
   # finally add the parameters from this standard_CV object as well
+
+  cv_parameters <- data.frame(standard_CV.num_resample_runs = cv_obj$num_resample_runs, 
+                              standard_CV.test_only_at_training_time = cv_obj$test_only_at_training_time)
+  
+  
+  parameter_df <- cbind(parameter_df, cv_parameters)
   
   parameter_df
-  
   
   
 }
