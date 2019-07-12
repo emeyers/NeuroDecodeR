@@ -26,7 +26,10 @@ standard_CV <- function(datasource,
   }
         
   
-  the_cv <- list(datasource = datasource, 
+  analysis_ID <- generate_analysis_ID()
+  
+  the_cv <- list(analysis_ID = analysis_ID, 
+                 datasource = datasource, 
                  classifier = classifier,
                  feature_preprocessors = feature_preprocessors,
                  num_resample_runs = num_resample_runs,
@@ -249,11 +252,12 @@ get_parameters.standard_CV = function(cv_obj){
   
   # finally add the parameters from this standard_CV object as well
 
-  cv_parameters <- data.frame(standard_CV.num_resample_runs = cv_obj$num_resample_runs, 
+  cv_parameters <- data.frame(#analysis_ID = cv_obj$analysis_ID, 
+                              standard_CV.num_resample_runs = cv_obj$num_resample_runs, 
                               standard_CV.test_only_at_training_time = cv_obj$test_only_at_training_time)
   
   
-  parameter_df <- cbind(parameter_df, cv_parameters)
+  parameter_df <- cbind(cv_parameters, parameter_df)
   
   parameter_df
   

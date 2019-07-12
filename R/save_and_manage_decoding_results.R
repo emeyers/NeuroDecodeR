@@ -24,20 +24,27 @@ save_and_log_results <- function(DECODING_RESULTS, save_directory_name){
   }
   
   
-  # create a name for the file that will hold the results
-  curr_time <- as.character(Sys.time())
-  curr_time <- gsub("-", "", curr_time)
-  curr_time <- gsub(":", "", curr_time)
-  curr_time <- gsub(" ", "_", curr_time)
-  rand_suffix <- paste0(round(runif(5, 0, 9)), collapse = "")
-  save_file_name <- paste(curr_time, rand_suffix, sep = "_")  
-  
-  
+  # # create a name for the file that will hold the results
+  # curr_time <- as.character(Sys.time())
+  # curr_time <- gsub("-", "", curr_time)
+  # curr_time <- gsub(":", "", curr_time)
+  # curr_time <- gsub(" ", "_", curr_time)
+  # rand_suffix <- paste0(round(runif(5, 0, 9)), collapse = "")
+  # save_file_name <- paste(curr_time, rand_suffix, sep = "_")  
+
   # get the decoding parameters and add the saved file name to them
   decoding_params <- get_parameters(DECODING_RESULTS$cross_validation_paramaters)
-  decoding_params$saved_file_name <- save_file_name
-  decoding_params <- dplyr::select(decoding_params, saved_file_name, everything())
+  #decoding_params$saved_file_name <- save_file_name
+  #decoding_params <- dplyr::select(decoding_params, saved_file_name, everything())
+    
   
+  if (!("analysis_ID" %in% decoding_params)) {
+    
+    decoding_params$analysis_ID <- paste0(generate_analysis_ID(), "_gensave")
+    decoding_params <- dplyr::select(decoding_params, analysis_ID, everything())
+  }
+  
+
   
   # if results already exist give a warning (maybe not needed but doesn't hurt)
   if (check_results_already_exist(decoding_params, manifest_df)){
@@ -50,7 +57,7 @@ save_and_log_results <- function(DECODING_RESULTS, save_directory_name){
   
   
   # save the results and the updated manifest file...
-  save(DECODING_RESULTS, file = file.path(save_directory_name, paste0(save_file_name, ".rda")))
+  save(DECODING_RESULTS, file = file.path(save_directory_name, paste0(decoding_params$analysis_ID, ".rda")))
   
   save(manifest_df, file = manifest_file_name)
   
@@ -78,7 +85,7 @@ check_results_already_exist <- function(decoding_params, manifest_df){
     
     manifest_decoding_params_added <- add_current_parameters_to_manifest(decoding_params, manifest_df)
     
-    manifest_decoding_params_added <- dplyr::select(manifest_decoding_params_added, -saved_file_name)
+    manifest_decoding_params_added <- dplyr::select(manifest_decoding_params_added, -analysis_ID)
     duplicated_results <- duplicated(manifest_decoding_params_added)
     
     
@@ -178,7 +185,7 @@ load_decoding_results <- function(decoding_params, results_directory_name){
   
   
   manifest_with_results_added <- add_current_parameters_to_manifest(decoding_params, manifest_df) %>%
-    select(-saved_file_name)
+    select(-analysis_ID)
   
   # find all rows that match the last row...
   num_manifest_rows <- dim(manifest_df)[1]
@@ -187,7 +194,7 @@ load_decoding_results <- function(decoding_params, results_directory_name){
   for (i in 1:num_manifest_rows){
 
     if (duplicated(manifest_with_results_added[c(i,  num_manifest_rows + 1), ])[2]){
-      load(paste0(results_directory_name, manifest_df[i, ]$saved_file_name, '.rda'))
+      load(paste0(results_directory_name, manifest_df[i, ]$analysis_ID, '.rda'))
       all_decoding_results[[c]] <- DECODING_RESULTS
       c <- c + 1
     }

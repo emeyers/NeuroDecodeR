@@ -78,7 +78,12 @@ test_that("Can correctly assess which results have been saved", {
   
 test_that("Can load saved results", {
   
-
+  
+  test_params_1 <- get_parameters(DECODING_RESULTS_1$cross_validation_paramaters)
+  test_params_2 <- get_parameters(DECODING_RESULTS_2$cross_validation_paramaters)
+  test_params_5 <- get_parameters(DECODING_RESULTS_5$cross_validation_paramaters)
+  
+    
   # should return a single DECODING_RESULTS 
   decoding_results_1 <- load_decoding_results(test_params_1, results_dir_name)
 
@@ -92,7 +97,8 @@ test_that("Can load saved results", {
   expect_null(names(decoding_results_2))
   
   # result 5 is the same as result 3 even though it was run at a different time
-  # should still load result 3 using result 5 parameters
+  # should still load result 3 using result 5 parameters (even though result 5
+  # has not been added, if it had then a list of results would be returned)
   decoding_results_3_and_5 <- load_decoding_results(test_params_5, results_dir_name)
   
 })
