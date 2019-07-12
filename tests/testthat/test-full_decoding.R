@@ -16,7 +16,9 @@ basedir_file_name <- '~/research/NDT/NDTr/data/binned/ZD_150_samples_binned_ever
 
 
 ds <- basic_DS(basedir_file_name, 'stimulus_ID', 18, 0)
+
 fps <- list(zscore_FP())
+
 cl <- max_correlation_CL()
 
 #rms <- list(main_results_RM(), 
