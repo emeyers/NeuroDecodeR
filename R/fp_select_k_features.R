@@ -10,7 +10,7 @@
 #' @import R6
 #' @export
 
-select_k_features_FP <- R6Class("select_k_features_FP", 
+fp_select_k_features <- R6Class("fp_select_k_features", 
   public = list(
      # properties
      num_site_to_use = NA,
