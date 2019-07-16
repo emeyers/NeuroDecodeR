@@ -9,14 +9,14 @@ real_data_binned_file_name <- file.path("..", "..", "data", "binned", "ZD_150_sa
 
 # test that the datasource contains all the necessary methods
 #source("test_valid_NDTr_objects.R")
-ds <- basic_DS(real_data_binned_file_name, 'stimulus_ID', 18, 0)
+ds <- ds_basic(real_data_binned_file_name, 'stimulus_ID', 18, 0)
 test_valid_datasource(ds)
 
 
 
-test_that("get_data(basic_ds_obj) returns unique points in training and test sets (no data leakage)", {
+test_that("get_data(ds_basic_obj) returns unique points in training and test sets (no data leakage)", {
   
-  ds <- basic_DS("fake_binned_data.Rda", "stim_names", 10)
+  ds <- ds_basic("fake_binned_data.Rda", "stim_names", 10)
   the_data <- get_data(ds)
   
   long_data <- the_data %>%
@@ -37,7 +37,7 @@ test_that("if labels_levels_to_use is set, only those label levels are returned"
 
   labels_levels_to_use <- c("flower", "guitar", "kiwi")
   
-  ds <- basic_DS("fake_binned_data.Rda", "stim_names", 10, label_levels_to_use = labels_levels_to_use)
+  ds <- ds_basic("fake_binned_data.Rda", "stim_names", 10, label_levels_to_use = labels_levels_to_use)
   the_data <- get_data(ds)
   
   expect_equal(as.character(unique(the_data$labels)), labels_levels_to_use)
@@ -54,7 +54,7 @@ test_that("if only specific sites to be used, only those sites are returned", {
   # use only a subset of sites
   sites_to_use <- sites_to_use <- seq(1, 100, 3)
  
-  ds <- basic_DS("fake_binned_data.Rda", "stim_names", 10, site_IDs_to_use = sites_to_use)
+  ds <- ds_basic("fake_binned_data.Rda", "stim_names", 10, site_IDs_to_use = sites_to_use)
   the_data <- get_data(ds)
   
   site_names <- the_data %>% 
@@ -67,7 +67,7 @@ test_that("if only specific sites to be used, only those sites are returned", {
   
   # exclude a subset of sites
   sites_to_exclude <- seq(2, 100, 5)
-  ds <- basic_DS("fake_binned_data.Rda", "stim_names", 10,  site_IDs_to_exclude = sites_to_exclude)
+  ds <- ds_basic("fake_binned_data.Rda", "stim_names", 10,  site_IDs_to_exclude = sites_to_exclude)
   remaining_sites <- setdiff(1:100, sites_to_exclude)
   
   
@@ -81,7 +81,7 @@ test_that("if only specific sites to be used, only those sites are returned", {
   
   
   # use and exclude a subset of sites
-  ds <- basic_DS("fake_binned_data.Rda", "stim_names", 10,   
+  ds <- ds_basic("fake_binned_data.Rda", "stim_names", 10,   
                      site_IDs_to_use = sites_to_use, site_IDs_to_exclude = sites_to_exclude)
 
   remaining_sites_used <- setdiff(sites_to_use, sites_to_exclude)
@@ -103,7 +103,7 @@ test_that("if only specific sites to be used, only those sites are returned", {
 test_that("the correct number of resampled sites is returned", {
 
   num_resample_sites <- 50
-  ds <- basic_DS("fake_binned_data.Rda", "stim_names", 10,  
+  ds <- ds_basic("fake_binned_data.Rda", "stim_names", 10,  
                      num_resample_sites = num_resample_sites)
 
   the_data <- get_data(ds)
@@ -124,7 +124,7 @@ test_that("the correct number of repeats per CV block are returned", {
   num_CV <- 5
   num_reps <- 2
   
-  ds <- basic_DS("fake_binned_data.Rda", "stim_names", num_CV,
+  ds <- ds_basic("fake_binned_data.Rda", "stim_names", num_CV,
                      num_label_repeats_per_cv_split = num_reps)
                      
   the_data <- get_data(ds)
@@ -145,7 +145,7 @@ test_that("simultaneously recorded data is returned correctly", {
  
   
   # all whole numbers on each row should be the same this data when gotten simultaneously 
-  ds <- basic_DS("fake_simultaneous_binned_data.Rda", "stim_names", 10,
+  ds <- ds_basic("fake_simultaneous_binned_data.Rda", "stim_names", 10,
                      create_simultaneously_recorded_populations = TRUE)
 
   the_data <- get_data(ds)
@@ -173,7 +173,7 @@ test_that("simultaneously recorded data is returned correctly", {
   
    
   # all whole numbers on each row should NOT be the same this data when NOT gotten simultaneously 
-  ds <- basic_DS("fake_simultaneous_binned_data.Rda", "stim_names", 10,
+  ds <- ds_basic("fake_simultaneous_binned_data.Rda", "stim_names", 10,
                      create_simultaneously_recorded_populations = FALSE)
   the_data <- get_data(ds)
   

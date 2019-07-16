@@ -40,7 +40,7 @@ real_data_binned_file_name <- file.path("..", "..", "data", "binned", "ZD_150_sa
 
 
 # get firing rate data
-ds <- basic_DS(real_data_binned_file_name, "stimulus_ID",
+ds <- ds_basic(real_data_binned_file_name, "stimulus_ID",
                num_cv_splits = 3, num_label_repeats_per_cv_split = 6, use_count_data = TRUE)
 cv_data <- get_data(ds)
 training_set <- filter(cv_data, time_bin == "time.200_349", CV_1 == "train") %>% select(starts_with("site"), labels)
@@ -49,7 +49,7 @@ levels(test_set$time_bin)[levels(test_set$time_bin)=="time.-350_-201"] <- "basel
 levels(test_set$time_bin)[levels(test_set$time_bin)=="time.200_349"] <- "stimulus"
 
 # get data a spike counts
-ds <- basic_DS(real_data_binned_file_name, "stimulus_ID",
+ds <- ds_basic(real_data_binned_file_name, "stimulus_ID",
                num_cv_splits = 3, num_label_repeats_per_cv_split = 6, use_count_data = TRUE)
 cv_data <- get_data(ds)
 count_training_set <- filter(cv_data, time_bin == "time.200_349", CV_1 == "train") %>% select(starts_with("site"), labels)
@@ -66,7 +66,7 @@ normalized_test_set <- processed_data$test_set
 
 
 # generate shuffled data...
-ds <- basic_DS(real_data_binned_file_name, "stimulus_ID",
+ds <- ds_basic(real_data_binned_file_name, "stimulus_ID",
                num_cv_splits = 3, num_label_repeats_per_cv_split = 6, randomly_shuffled_labels_before_running = TRUE)
 cv_data <- get_data(ds)
 training_set <- filter(cv_data, time_bin == "time.200_349", CV_1 == "train") %>% select(starts_with("site"), labels)
@@ -95,7 +95,7 @@ real_data_binned_file_name <- file.path("..", "..", "data", "binned", "ZD_150_sa
 
 
 # no z-score preprocessor
-ds <- basic_DS(real_data_binned_file_name, 'stimulus_ID', 18, 0)
+ds <- ds_basic(real_data_binned_file_name, 'stimulus_ID', 18, 0)
 fps <- list()
 cl <- cl_max_correlation()
 rms <- list(main_results_RM(),
@@ -105,7 +105,7 @@ DECODING_RESULTS_1 <- run_decoding(cv)
 
 
 # no confusion_matrix_RM
-ds <- basic_DS(real_data_binned_file_name, 'stimulus_ID', 18, 0)
+ds <- ds_basic(real_data_binned_file_name, 'stimulus_ID', 18, 0)
 fps <- list(fp_zscore())
 cl <- cl_max_correlation()
 rms <- list(main_results_RM())
@@ -114,7 +114,7 @@ DECODING_RESULTS_2 <- run_decoding(cv)
 
 
 # standard results
-ds <- basic_DS(real_data_binned_file_name, 'stimulus_ID', 18, 0)
+ds <- ds_basic(real_data_binned_file_name, 'stimulus_ID', 18, 0)
 fps <- list(fp_zscore())
 cl <- cl_max_correlation()
 rms <- list(main_results_RM(),
@@ -124,7 +124,7 @@ DECODING_RESULTS_3 <- run_decoding(cv)
 
 
 # use only neurons 1 to 100
-ds <- basic_DS(real_data_binned_file_name, 'stimulus_ID', 18, 0, site_IDs_to_use = 1:100)
+ds <- ds_basic(real_data_binned_file_name, 'stimulus_ID', 18, 0, site_IDs_to_use = 1:100)
 fps <- list(fp_zscore())
 cl <- cl_max_correlation()
 rms <- list(main_results_RM(),
@@ -134,7 +134,7 @@ DECODING_RESULTS_4 <- run_decoding(cv)
 
 
 # standard results again
-ds <- basic_DS(real_data_binned_file_name, 'stimulus_ID', 18, 0)
+ds <- ds_basic(real_data_binned_file_name, 'stimulus_ID', 18, 0)
 fps <- list(fp_zscore())
 cl <- cl_max_correlation()
 rms <- list(main_results_RM(),

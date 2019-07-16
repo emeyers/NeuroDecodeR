@@ -55,16 +55,16 @@
 #' @examples
 #'  # A typical example of creating a datasource to be passed cross-validation object   
 #'  binned_file_name <- file.path('data', 'binned', 'ZD_150_samples_binned_every_50_samples.Rda')
-#'  ds <- basic_DS(binned_file_name, 'stimulus_ID', 18)
+#'  ds <- ds_basic(binned_file_name, 'stimulus_ID', 18)
 #'  
 #'  # If one has many repeats of each label, decoding can be faster if one
 #'  # uses fewer CV splits and repeats each label multiple times in each split.
-#'  ds <- basic_DS(binned_file_name, 'stimulus_ID', 6,
+#'  ds <- ds_basic(binned_file_name, 'stimulus_ID', 6,
 #'                 num_label_repeats_per_cv_split = 3)
 #'  
 #'  # One can specify a subset of labels levels to be used in decoding. Here
 #'  #  we just do a three-way decoding analysis between "car", "hand" and "kiwi".
-#'  ds <- basic_DS(binned_file_name, 'stimulus_ID', 18,
+#'  ds <- ds_basic(binned_file_name, 'stimulus_ID', 18,
 #'                 label_levels_to_use = c("car", "hand", "kiwi")) 
 #'  
 #'  # One never explicitely calls the get_data() function, but rather this is
@@ -80,7 +80,7 @@
 
 
 #' @export
-basic_DS <- function(binned_file_name, 
+ds_basic <- function(binned_file_name, 
                             var_to_decode, 
                             num_cv_splits, 
                             use_count_data = FALSE,
@@ -207,7 +207,7 @@ basic_DS <- function(binned_file_name,
   )
   
   
-  attr(the_ds, "class") <- "basic_DS"
+  attr(the_ds, "class") <- "ds_basic"
   the_ds
   
   
@@ -216,24 +216,24 @@ basic_DS <- function(binned_file_name,
 
 
       
-get_data.basic_DS = function(basic_ds_obj){
+get_data.ds_basic = function(ds_basic_obj){
         
 
-    binned_data <- basic_ds_obj$binned_data
-    var_to_decode <- basic_ds_obj$var_to_decode
-    num_cv_splits <- basic_ds_obj$num_cv_splits
-    num_trials_used_per_label <- basic_ds_obj$num_cv_splits * basic_ds_obj$num_label_repeats_per_cv_split
-    label_levels_to_use <- basic_ds_obj$label_levels_to_use
+    binned_data <- ds_basic_obj$binned_data
+    var_to_decode <- ds_basic_obj$var_to_decode
+    num_cv_splits <- ds_basic_obj$num_cv_splits
+    num_trials_used_per_label <- ds_basic_obj$num_cv_splits * ds_basic_obj$num_label_repeats_per_cv_split
+    label_levels_to_use <- ds_basic_obj$label_levels_to_use
 
-    create_simultaneously_recorded_populations <- basic_ds_obj$create_simultaneously_recorded_populations
-    sample_sites_with_replacement <- basic_ds_obj$sample_sites_with_replacement
-    num_resample_sites <- basic_ds_obj$num_resample_sites
-    site_IDs_to_use <- basic_ds_obj$site_IDs_to_use
-    site_IDs_to_exclude <- basic_ds_obj$site_IDs_to_exclude
+    create_simultaneously_recorded_populations <- ds_basic_obj$create_simultaneously_recorded_populations
+    sample_sites_with_replacement <- ds_basic_obj$sample_sites_with_replacement
+    num_resample_sites <- ds_basic_obj$num_resample_sites
+    site_IDs_to_use <- ds_basic_obj$site_IDs_to_use
+    site_IDs_to_exclude <- ds_basic_obj$site_IDs_to_exclude
 
-    create_simultaneously_recorded_populations <- basic_ds_obj$create_simultaneously_recorded_populations
+    create_simultaneously_recorded_populations <- ds_basic_obj$create_simultaneously_recorded_populations
 
-    num_label_repeats_per_cv_split <- basic_ds_obj$num_label_repeats_per_cv_split
+    num_label_repeats_per_cv_split <- ds_basic_obj$num_label_repeats_per_cv_split
 
 
     
@@ -317,13 +317,13 @@ get_data.basic_DS = function(basic_ds_obj){
 
 
 
-get_parameters.basic_DS = function(basic_ds_obj){
+get_parameters.ds_basic = function(ds_basic_obj){
 
-  basic_ds_obj$binned_data <- NULL
+  ds_basic_obj$binned_data <- NULL
   
-  variable_lengths <- sapply(basic_ds_obj, length)
+  variable_lengths <- sapply(ds_basic_obj, length)
   length_one_variables <- variable_lengths[variable_lengths < 2]
-  length_one_variables <- basic_ds_obj[names(length_one_variables)]
+  length_one_variables <- ds_basic_obj[names(length_one_variables)]
   
   # convert null values to NAs so that the variables are retained
   length_one_variables <- sapply(length_one_variables, function(x) ifelse(is.null(x), NA, x))
@@ -334,10 +334,10 @@ get_parameters.basic_DS = function(basic_ds_obj){
     mutate_all(type.convert) %>%
     mutate_if(is.factor, as.character)
   
-  parameter_df$label_levels_to_use <- list(sort(unlist(basic_ds_obj$label_levels_to_use)))
-  parameter_df$site_IDs_to_use <- list(basic_ds_obj$site_IDs_to_use)
+  parameter_df$label_levels_to_use <- list(sort(unlist(ds_basic_obj$label_levels_to_use)))
+  parameter_df$site_IDs_to_use <- list(ds_basic_obj$site_IDs_to_use)
   
-  names(parameter_df) <- paste(class(basic_ds_obj), names(parameter_df), sep = ".")
+  names(parameter_df) <- paste(class(ds_basic_obj), names(parameter_df), sep = ".")
   
   parameter_df
 
