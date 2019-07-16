@@ -21,11 +21,11 @@ fps <- list(fp_zscore())
 
 cl <- cl_max_correlation()
 
-#rms <- list(main_results_RM(), 
-#            confusion_matrix_RM(save_only_same_train_test_time = TRUE))
+#rms <- list(rm_main_results(), 
+#            rm_confusion_matrix(save_only_same_train_test_time = TRUE))
 
-rms <- list(main_results_RM(), 
-            confusion_matrix_RM(save_only_same_train_test_time = FALSE))
+rms <- list(rm_main_results(), 
+            rm_confusion_matrix(save_only_same_train_test_time = FALSE))
 
 
 cv <- cv_standard(ds, cl, fps, 3, rms, test_only_at_training_time = FALSE) 
@@ -37,7 +37,7 @@ test_valid_cross_validator(cv)
 DECODING_RESULTS <- run_decoding(cv)
 
 
-attributes(DECODING_RESULTS$confusion_matrix_RM)$options
+attributes(DECODING_RESULTS$rm_confusion_matrix)$options
 
 
 zero_one_loss_results <- DECODING_RESULTS[[1]] %>%
@@ -51,8 +51,8 @@ print(as.vector(t(zero_one_loss_results)))
 print(object.size(DECODING_RESULTS), units = "Mb")
 
 
-plot(DECODING_RESULTS$main_results_RM)
-plot(DECODING_RESULTS$confusion_matrix_RM)
+plot(DECODING_RESULTS$rm_main_results)
+plot(DECODING_RESULTS$rm_confusion_matrix)
 
 
 

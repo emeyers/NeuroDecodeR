@@ -37,9 +37,9 @@ test_aggregate_functions_work <- function(result_metric_obj){
 
 
 
-test_that("confusion_matrix_RM the aggregate functions don't give an error", {
+test_that("rm_confusion_matrix the aggregate functions don't give an error", {
   
-  cm_rm <- confusion_matrix_RM()    #, save_only_same_train_test_time = TRUE)
+  cm_rm <- rm_confusion_matrix()    #, save_only_same_train_test_time = TRUE)
   
   test_valid_result_metric(cm_rm)
   
@@ -50,9 +50,9 @@ test_that("confusion_matrix_RM the aggregate functions don't give an error", {
 
 
 
-test_that("main_results_RM the aggregate functions don't give an error", {
+test_that("rm_main_results the aggregate functions don't give an error", {
   
-  main_rm <- main_results_RM ()    #, save_only_same_train_test_time = TRUE)
+  main_rm <- rm_main_results()    #, save_only_same_train_test_time = TRUE)
   
   test_valid_result_metric(main_rm)
   

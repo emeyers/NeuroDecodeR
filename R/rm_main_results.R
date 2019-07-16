@@ -4,11 +4,11 @@
 
 # the constructor 
 #' @export
-main_results_RM <- function(the_data = data.frame(), state = 'initial', options = NULL){
+rm_main_results <- function(the_data = data.frame(), state = 'initial', options = NULL){
   
   main_results_obj <- the_data
   
-  attr(main_results_obj, "class") <- c("main_results_RM", 'data.frame')
+  attr(main_results_obj, "class") <- c("rm_main_results", 'data.frame')
   
   attr(main_results_obj, "state") <- state
 
@@ -24,13 +24,13 @@ main_results_RM <- function(the_data = data.frame(), state = 'initial', options 
 
 # aggregate the results from all the cross-validation splits
 #' @export
-aggregate_CV_split_results.main_results_RM = function(main_results_obj, prediction_results) {
+aggregate_CV_split_results.rm_main_results = function(main_results_obj, prediction_results) {
   
   
   # perhaps include a warning if the state is not intial
   if (attr(main_results_obj, "state") != "initial") {    
     warning(paste0("The method aggregate_CV_split_results() should only be called on",
-                   "main_results_RM that are in the intial state.",
+                   "rm_main_results that are in the intial state.",
                    "Any data that was already stored in this object will be overwritten"))
   }
 
@@ -84,7 +84,7 @@ aggregate_CV_split_results.main_results_RM = function(main_results_obj, predicti
               decision_vals = mean(decision_values))
 
   
-  main_results_RM(the_results, 'results combined over one cross-validation split', attributes(main_results_obj)$options)
+  rm_main_results(the_results, 'results combined over one cross-validation split', attributes(main_results_obj)$options)
   
 }
 
@@ -93,7 +93,7 @@ aggregate_CV_split_results.main_results_RM = function(main_results_obj, predicti
 
 # aggregate the results from all the resample runs
 #' @export
-aggregate_resample_run_results.main_results_RM = function(resample_run_results) {
+aggregate_resample_run_results.rm_main_results = function(resample_run_results) {
   
   
   central_results <- resample_run_results %>%                 
@@ -103,7 +103,7 @@ aggregate_resample_run_results.main_results_RM = function(resample_run_results) 
               decision_vals = mean(decision_vals))
   
   
-  main_results_RM(central_results, 'final results', attributes(resample_run_results)$options)
+  rm_main_results(central_results, 'final results', attributes(resample_run_results)$options)
   
   
 }
@@ -112,7 +112,7 @@ aggregate_resample_run_results.main_results_RM = function(resample_run_results) 
 
 # plot results (TCT plot for now)
 #' @export
-plot.main_results_RM = function(main_results, result_type = 'all', plot_type = 'TCD') {
+plot.rm_main_results = function(main_results, result_type = 'all', plot_type = 'TCD') {
   
   
   if (result_type == 'all'){ 
@@ -180,9 +180,9 @@ plot.main_results_RM = function(main_results, result_type = 'all', plot_type = '
 
 
 
-get_parameters.main_results_RM = function(confusion_matrix_obj){
+get_parameters.rm_main_results = function(confusion_matrix_obj){
   
-  data.frame(main_results_RM.main_results_RM = "does not have settable parameters")
+  data.frame(rm_main_results.rm_main_results = "does not have settable parameters")
 
 }
 

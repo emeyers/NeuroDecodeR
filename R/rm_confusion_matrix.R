@@ -3,11 +3,11 @@
 
 # the constructor 
 #' @export
-confusion_matrix_RM <- function(save_only_same_train_test_time = TRUE) {
+rm_confusion_matrix <- function(save_only_same_train_test_time = TRUE) {
   
   options <- list(save_only_same_train_test_time = save_only_same_train_test_time)
   
-  new_confusion_matrix_RM(data.frame(), 'initial', options)
+  new_rm_confusion_matrix(data.frame(), 'initial', options)
 
 }
 
@@ -16,7 +16,7 @@ confusion_matrix_RM <- function(save_only_same_train_test_time = TRUE) {
 
 # aggregate the results from all the cross-validation splits
 #' @export
-aggregate_CV_split_results.confusion_matrix_RM = function(confusion_matrix_obj, prediction_results) {
+aggregate_CV_split_results.rm_confusion_matrix = function(confusion_matrix_obj, prediction_results) {
   
 
   # include a warning if the state is not intial
@@ -66,7 +66,7 @@ aggregate_CV_split_results.confusion_matrix_RM = function(confusion_matrix_obj, 
   #   summarize(n = sum(n))
   
   
-  new_confusion_matrix_RM(confusion_matrix, 
+  new_rm_confusion_matrix(confusion_matrix, 
                           'results combined over one cross-validation split', 
                           attr(confusion_matrix_obj, 'options'))
   
@@ -77,7 +77,7 @@ aggregate_CV_split_results.confusion_matrix_RM = function(confusion_matrix_obj, 
 
 # aggregate the results from all the resample runs
 #' @export
-aggregate_resample_run_results.confusion_matrix_RM = function(resample_run_results) {
+aggregate_resample_run_results.rm_confusion_matrix = function(resample_run_results) {
 
 
   confusion_matrix <- resample_run_results 
@@ -132,7 +132,7 @@ aggregate_resample_run_results.confusion_matrix_RM = function(resample_run_resul
   #dplyr::group_by(train_time,  test_time) %>%
   #mutate(predicted_frequency = n / sum(n))   # Pr(predicted = y, actual = k)
   
-  new_confusion_matrix_RM(confusion_matrix, 
+  new_rm_confusion_matrix(confusion_matrix, 
                           'final results', 
                           attr(resample_run_results, 'options'))
   
@@ -142,14 +142,14 @@ aggregate_resample_run_results.confusion_matrix_RM = function(resample_run_resul
 
 
 # the internal constructor
-new_confusion_matrix_RM <- function(the_data = data.frame(), 
+new_rm_confusion_matrix <- function(the_data = data.frame(), 
                                     the_state = NULL,
                                     options = NULL) {
   
     confusion_matrix_obj <- the_data
     attr(confusion_matrix_obj, "state") <- the_state
     attr(confusion_matrix_obj, "options") <- options
-    attr(confusion_matrix_obj, "class") <- c("confusion_matrix_RM", 'data.frame')
+    attr(confusion_matrix_obj, "class") <- c("rm_confusion_matrix", 'data.frame')
     
     confusion_matrix_obj
   
@@ -160,7 +160,7 @@ new_confusion_matrix_RM <- function(the_data = data.frame(),
 
 # plot the confusion matrix results
 #' @export
-plot.confusion_matrix_RM = function(confusion_matrix_obj) {
+plot.rm_confusion_matrix = function(confusion_matrix_obj) {
 
   # should perhaps give an option to choose a different color scale, and maybe other options? 
   
@@ -220,7 +220,7 @@ plot.confusion_matrix_RM = function(confusion_matrix_obj) {
 
 # plot the mutual information computed from a confusion matrix
 #' @export
-plot_MI.confusion_matrix_RM = function(confusion_matrix_obj, plot_type = 'TCD') {
+plot_MI.rm_confusion_matrix = function(confusion_matrix_obj, plot_type = 'TCD') {
   
   
   if (!(plot_type == 'TCD' || plot_type == 'line'))
@@ -277,10 +277,10 @@ plot_MI.confusion_matrix_RM = function(confusion_matrix_obj, plot_type = 'TCD') 
 
 
 
-get_parameters.confusion_matrix_RM = function(confusion_matrix_obj){
+get_parameters.rm_confusion_matrix = function(confusion_matrix_obj){
 
   # there is only one parameter option that can be set here so return it  
-  data.frame(confusion_matrix_RM.save_only_same_train_test_time = 
+  data.frame(rm_confusion_matrix.save_only_same_train_test_time = 
                attributes(confusion_matrix_obj)$options$save_only_same_train_test_time)
 }
 
