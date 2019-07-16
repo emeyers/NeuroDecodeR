@@ -78,13 +78,14 @@ test_valid_classifier <- function(the_classifier){
   
   
   load("example_ZD_train_and_test_set.Rda")
-  rm(training_set, test_set, count_training_set, count_test_set)
+  rm(training_set, test_set)
   
   test_that("classification results are in the correct format", {
     
-    predictions_df <- get_predictions(the_classifier, normalized_training_set, normalized_test_set)
+    #predictions_df <- get_predictions(the_classifier, normalized_training_set, normalized_test_set)
+    predictions_df <- get_predictions(the_classifier, count_training_set, count_test_set)
     
-    non_decision_val_df <- select(predictions_df, -starts_with("decision_vals."))
+        non_decision_val_df <- select(predictions_df, -starts_with("decision_vals."))
     prediction_col_names <- sort(names(non_decision_val_df))
     expected_col_names <- sort(c("test_time", "actual_labels", "predicted_labels"))
     expect_equal(prediction_col_names, expected_col_names)
@@ -137,11 +138,8 @@ test_valid_feature_preprocessor <- function(the_feature_preprocessor){
 
   })
   
-
-  
   test_get_parameters_method(the_feature_preprocessor)
-  
-  
+
 }
 
 
@@ -149,7 +147,6 @@ test_valid_feature_preprocessor <- function(the_feature_preprocessor){
 
 
 test_valid_cross_validator <- function(the_cross_validator){
-  
   
   
   test_that("the cross-validator has a run_decoding() method", {
@@ -173,10 +170,8 @@ test_valid_cross_validator <- function(the_cross_validator){
   }
   
   
-  
   test_get_parameters_method(the_cross_validator)
   
-   
 }
 
 
