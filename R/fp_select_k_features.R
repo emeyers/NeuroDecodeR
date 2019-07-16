@@ -1,12 +1,34 @@
 #' A feature preprocessor (FP) that reduces the data to the best k features
 #'
-#' This feature prerpocessor object find the k most selective features using an ANOVA on the training data. 
-#' The proprocessor then eleminates all other features in both the training and test sets. This preprocessor
-#' can also eliminate the best k features. 
+#' This feature preprocessor object applies an ANOVA to the training data to
+#' find the p-value of all features. It then either uses the top k features with
+#' the smallest p-values, or it removes the features with the smallest k
+#' p-values. Additionally, this function can be used to remove the top k
+#' p-values and then use only the following j next smallest p-values (for
+#' example, this can be useful if one is interesting in comparing the
+#' performance using the most selective 10 neurons to using the next 10 most
+#' selective neurons, etc.).
 #'
+#' @param num_site_to_use The number of features with the smallest p-values to use. 
+#'
+#' @param num_sites_to_exclude The number of features with the smallest p-values
+#'   that should be excluded.
+#' 
+#' @examples
+#' # This will cause the cross-validator use only the 50 most selective sites
+#' fp <- fp_select_k_features(num_site_to_use = 50)
+#' 
+#' This will cause the cross-validator to remove the 20 most selective sites
+#' fp <- fp_select_k_features(num_sites_to_exclude = 20)
+#'
+#' # This will cause the cross-validator to remove the 20 most selective sites 
+#' # and then use only the 50 most selective sites that remain after the 20 are 
+#' # eliminated 
+#' fp <- fp_select_k_features(50, 20)
+#' 
 #'
 #' @family feature_preprocessor
-#' 
+
 
 
 # the constructor 
