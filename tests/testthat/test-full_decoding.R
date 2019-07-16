@@ -31,6 +31,9 @@ rms <- list(main_results_RM(),
 cv <- standard_CV(ds, cl, fps, 3, rms, test_only_at_training_time = FALSE) 
 
 
+test_valid_cross_validator(cv)
+
+
 DECODING_RESULTS <- run_decoding(cv)
 
 

@@ -7,6 +7,13 @@ real_data_binned_file_name <- file.path("..", "..", "data", "binned", "ZD_150_sa
 
 
 
+# test that the datasource contains all the necessary methods
+#source("test_valid_NDTr_objects.R")
+ds <- basic_DS(real_data_binned_file_name, 'stimulus_ID', 18, 0)
+test_valid_datasource(ds)
+
+
+
 test_that("get_data(basic_ds_obj) returns unique points in training and test sets (no data leakage)", {
   
   ds <- basic_DS("fake_binned_data.Rda", "stim_names", 10)

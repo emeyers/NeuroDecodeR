@@ -5,6 +5,10 @@ load("example_ZD_train_and_test_set.Rda")
 rm(count_training_set, count_test_set, normalized_training_set, normalized_test_set)
 
 
+# test that the feature processor conforms to the interface
+fp <- zscore_FP()
+test_valid_feature_preprocessor(fp)
+
 
 test_that("zscore_FP normalized the training data so that it has a mean of 0 and a sd of 1", {
   
