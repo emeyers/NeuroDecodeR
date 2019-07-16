@@ -14,7 +14,7 @@
 #' @import R6
 #' @export
 
-poisson_naive_bayes_CL <- R6Class("poisson_naive_bayes_CL", 
+cl_poisson_naive_bayes <- R6Class("cl_poisson_naive_bayes", 
    public = list(
      # no properties for this classifier
      
