@@ -7,8 +7,29 @@
 cl_max_correlation()
 }
 \description{
-An implementation of a maximum correlation coefficeint classifier. 
-Like all classifiers (CL) objects, this classifier has a get_predictions()
-method which learns a model based on training data and then makes 
-predictions on the test data.
+An implementation of a maximum correlation coefficeint classifier. Like all
+classifiers (CL) objects, this classifier has a get_predictions() method which
+learns a model based on training data and then makes predictions on the test
+data.
 }
+\details{
+This CL object learns a mean population vector (template) for each
+class from the training set (by averaging together the all training points
+within each class). The classifier is tested by calculated Pearson’s
+correlation coefficient between a test point and the templates learned from
+the training set, and the class with the highest correlation value is returned
+as the predicted label. The decision values returned by the classifier are the
+correlation coefficients between all test points and all templates.
+}
+\examples{
+# running a basic decoding analysis using the cl_max_correlation
+ds <- ds_basic(basedir_file_name, 'stimulus_ID', 18) fps <- list(fp_zscore())
+cl <- cl_max_correlation() rms <- rms <- list(rm_main_results(),
+rm_confusion_matrix()) cv <- cv_standard(ds, cl, fps, 3, rms)
+
+
+}
+\seealso{
+Other classifier: \code{\link{cl_poisson_naive_bayes}}
+}
+\concept{classifier}

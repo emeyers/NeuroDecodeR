@@ -15,13 +15,13 @@ basedir_file_name <- '~/research/NDT/NDTr/data/binned/ZD_150_samples_binned_ever
 
 
 
-#ds <- ds_basic(basedir_file_name, 'stimulus_ID', 18)
-#fps <- list(fp_zscore(), fp_select_k_features(100))
-#cl <- cl_max_correlation()
+ds <- ds_basic(basedir_file_name, 'stimulus_ID', 18)
+fps <- list(fp_zscore(), fp_select_k_features(100))
+cl <- cl_max_correlation()
 
-ds <- ds_basic(basedir_file_name, 'stimulus_ID', 18, use_count_data = TRUE)
-fps <- list()
-cl <- cl_poisson_naive_bayes()
+#ds <- ds_basic(basedir_file_name, 'stimulus_ID', 18, use_count_data = TRUE)
+#fps <- list()
+#cl <- cl_poisson_naive_bayes()
 
 
 #rms <- list(rm_main_results(), 
