@@ -27,7 +27,14 @@
 #'@docType package
 #'@name NDTr
 #'
-#'
+#'@import R6
+#'@import parallel  
+#'@import doParallel
+#'@import foreach
+#'@import dplyr
+#'@import e1071 
+#' @import ggplot2
+#' @import magrittr
 
 
 NULL

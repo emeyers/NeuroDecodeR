@@ -3,7 +3,6 @@
 #' ! link to raster format and binned format and related two functions
 #'
 #' 
-#' @import dplyr
 #' @export
 
 # bin the data for all sites

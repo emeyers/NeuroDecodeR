@@ -6,7 +6,6 @@
 #' the creates metric to evaluation the classification performance on the test set.  
 #'
 #'
-#' @import parallel doParallel foreach
 
 
 

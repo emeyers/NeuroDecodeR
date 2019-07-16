@@ -5,11 +5,8 @@
 #' k presentations of each condition.
 #'
 #'
-#' @import R6
-#' @import dplyr
-#' @import ggplot2
-#' @import magrittr
 #' @export
+
 
 
 

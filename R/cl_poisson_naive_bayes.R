@@ -11,7 +11,6 @@
 #'
 #'
 #' 
-#' @import R6
 #' @export
 
 cl_poisson_naive_bayes <- R6Class("cl_poisson_naive_bayes", 

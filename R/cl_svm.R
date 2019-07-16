@@ -1,5 +1,6 @@
 # the decision values in this function are not really correct so I am not going to add it to the package yet...
-library('e1071')  # svm package...
+# uses the e1071 package for the svm
+
 
 cl_svm <- R6Class("cl_svm", 
    public = list(

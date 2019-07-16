@@ -6,8 +6,8 @@
 #' This object uses \href{https://cran.r-project.org/web/packages/R6/vignettes/Introduction.html}{R6 package} 
 #'
 #'
+#' @family feature_preprocessor
 #' 
-#' @import R6
 #' @export
 
 fp_select_k_features <- R6Class("fp_select_k_features", 

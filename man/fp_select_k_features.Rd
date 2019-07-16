@@ -14,4 +14,5 @@ The proprocessor then eleminates all other features in both the training and tes
 can also eliminate the best k features. 
 This object uses \href{https://cran.r-project.org/web/packages/R6/vignettes/Introduction.html}{R6 package}
 }
+\concept{feature_preprocessor}
 \keyword{datasets}
