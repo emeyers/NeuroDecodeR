@@ -7,7 +7,28 @@
 fp_zscore()
 }
 \description{
-This feature preprocessor object find the mean and standard deviation using the training data. 
-The proprocessor then z-score transforms the training and test data using this mean and standard deviation
-by subtracting the mean and dividing by the standard deviation.
+This feature preprocessor object finds the mean and standard deviation using
+the training data. The proprocessor then z-score transforms the training and
+test data using this mean and standard deviation by subtracting the mean and
+dividing by the standard deviation.
 }
+\details{
+This feature preprocessor object applies z-score normalization to
+each feature by calculating the mean and the standard deviation for each
+feature using the training data, and then subtracting the mean and dividing
+by the standard deviation for each feature in the training and test sets.
+This function is useful for preventing some classifiers from relying too
+heavily on particular features when different features can have very
+different ranges of values (for example, it is useful when decoding neural
+data because different neurons can have different ranges of firing rates).
+}
+\examples{
+# The fp_zscore() constructor does not take any parameters. This
+# object just needs to added to a list and passed to the cross-validator 
+applied fp <- fp_zscore()
+
+}
+\seealso{
+Other feature_preprocessor: \code{\link{fp_select_k_features}}
+}
+\concept{feature_preprocessor}
