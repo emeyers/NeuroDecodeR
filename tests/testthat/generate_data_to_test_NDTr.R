@@ -59,7 +59,7 @@ levels(count_test_set$time_bin)[levels(count_test_set$time_bin)=="time.200_349"]
 
 
 # get data z-score normalized
-fp <- zscore_FP()
+fp <- fp_zscore()
 processed_data <- preprocess_data(fp, training_set, test_set)
 normalized_training_set <- processed_data$training_set
 normalized_test_set <- processed_data$test_set
@@ -74,7 +74,7 @@ test_set <- filter(cv_data, time_bin %in% c("time.-350_-201", "time.200_349"), C
   select(starts_with("site"), labels, time_bin)
 levels(test_set$time_bin)[levels(test_set$time_bin)=="time.-350_-201"] <- "baseline"
 levels(test_set$time_bin)[levels(test_set$time_bin)=="time.200_349"] <- "stimulus"
-fp <- zscore_FP()
+fp <- fp_zscore()
 processed_data <- preprocess_data(fp, training_set, test_set)
 shuffled_normalized_training_set <- processed_data$training_set
 shuffled_normalized_test_set <- processed_data$test_set
@@ -106,7 +106,7 @@ DECODING_RESULTS_1 <- run_decoding(cv)
 
 # no confusion_matrix_RM
 ds <- basic_DS(real_data_binned_file_name, 'stimulus_ID', 18, 0)
-fps <- list(zscore_FP())
+fps <- list(fp_zscore())
 cl <- max_correlation_CL()
 rms <- list(main_results_RM())
 cv <- standard_CV(ds, cl, fps, 3, rms)
@@ -115,7 +115,7 @@ DECODING_RESULTS_2 <- run_decoding(cv)
 
 # standard results
 ds <- basic_DS(real_data_binned_file_name, 'stimulus_ID', 18, 0)
-fps <- list(zscore_FP())
+fps <- list(fp_zscore())
 cl <- max_correlation_CL()
 rms <- list(main_results_RM(),
             confusion_matrix_RM())
@@ -125,7 +125,7 @@ DECODING_RESULTS_3 <- run_decoding(cv)
 
 # use only neurons 1 to 100
 ds <- basic_DS(real_data_binned_file_name, 'stimulus_ID', 18, 0, site_IDs_to_use = 1:100)
-fps <- list(zscore_FP())
+fps <- list(fp_zscore())
 cl <- max_correlation_CL()
 rms <- list(main_results_RM(),
             confusion_matrix_RM())
@@ -135,7 +135,7 @@ DECODING_RESULTS_4 <- run_decoding(cv)
 
 # standard results again
 ds <- basic_DS(real_data_binned_file_name, 'stimulus_ID', 18, 0)
-fps <- list(zscore_FP())
+fps <- list(fp_zscore())
 cl <- max_correlation_CL()
 rms <- list(main_results_RM(),
             confusion_matrix_RM())
@@ -149,10 +149,6 @@ save(DECODING_RESULTS_1,
      DECODING_RESULTS_4, 
      DECODING_RESULTS_5, 
      file = "example_DECODING_RESULTS.Rda")
-
-
-
-
 
 
 

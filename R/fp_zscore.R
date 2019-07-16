@@ -11,16 +11,16 @@
 
 # the constructor 
 #' @export
-zscore_FP <- function(){
+fp_zscore <- function(){
   the_fp <- list()
-  attr(the_fp, "class") <- "zscore_FP"
+  attr(the_fp, "class") <- "fp_zscore"
   the_fp
 }
 
 
 
 #' @export
-preprocess_data.zscore_FP = function(fp, training_set, test_set){
+preprocess_data.fp_zscore = function(fp, training_set, test_set){
   
   # separate the data from the labels
   train_labels <- select(training_set, -starts_with('site'))
@@ -53,10 +53,10 @@ preprocess_data.zscore_FP = function(fp, training_set, test_set){
 } 
 
 
-# since there are no parameters for the zscore_FP just return a data frame with
-# zscore_FP.zscore_FP and a value of "No parameters"
-get_parameters.zscore_FP = function(zscore_FP){
-  data.frame(zscore_FP.zscore_FP = "does not have settable parameters")
+# since there are no parameters for the fp_zscore just return a data frame with
+# fp_zscore.fp_zscore and a value of "No parameters"
+get_parameters.fp_zscore = function(fp_zscore){
+  data.frame(fp_zscore.fp_zscore = "does not have settable parameters")
 }
 
 

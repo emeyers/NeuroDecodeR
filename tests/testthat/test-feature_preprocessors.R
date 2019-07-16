@@ -6,13 +6,13 @@ rm(count_training_set, count_test_set, normalized_training_set, normalized_test_
 
 
 # test that the feature processor conforms to the interface
-fp <- zscore_FP()
+fp <- fp_zscore()
 test_valid_feature_preprocessor(fp)
 
 
-test_that("zscore_FP normalized the training data so that it has a mean of 0 and a sd of 1", {
+test_that("fp_zscore normalized the training data so that it has a mean of 0 and a sd of 1", {
   
-  fp <- zscore_FP()
+  fp <- fp_zscore()
   processed_data <- preprocess_data(fp, training_set, test_set)
   zscore_normalized_training_set <- processed_data$training_set
   zscore_normalized_test_set <- processed_data$test_set
