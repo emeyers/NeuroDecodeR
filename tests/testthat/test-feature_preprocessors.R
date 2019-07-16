@@ -5,6 +5,8 @@ load("example_ZD_train_and_test_set.Rda")
 rm(count_training_set, count_test_set, normalized_training_set, normalized_test_set)
 
 
+# tests for the fp_zscore -----------------------------------------------------
+
 # test that the feature processor conforms to the interface
 fp <- fp_zscore()
 test_valid_feature_preprocessor(fp)
@@ -23,7 +25,62 @@ test_that("fp_zscore normalized the training data so that it has a mean of 0 and
   
 })
 
-# can't really check the test data because it won't be exactly equal to 0 or have an sd of 1...
+
+
+
+# fp_select_k_features --------------------------------------------------------
+
+fp <- fp_select_k_features(num_site_to_use = 100)
+test_valid_feature_preprocessor(fp)
+
+
+test_that("fp_select_k_features p-values are correct", {
+  
+  fp <- fp_select_k_features(num_site_to_use = 100)
+  processed_data <- preprocess_data(fp, training_set, test_set)
+  fp_pvals <- processed_data$fp_info$pvals
+
+  
+  # test the the ANOVA function that I will write works
+  all_pvals <- NULL
+  for (iSite in 1:(ncol(training_set) - 1)){
+       curr_data <- training_set[, iSite][[1]]
+       all_pvals[iSite] <- anova(lm(curr_data ~ training_set$labels))$Pr[1]
+    }
+  
+  expect_equal(fp_pvals, all_pvals)  
+
+})
+
+
+
+test_that("fp_select_k_features returns the correct number of features", {
+  
+  fp <- fp_select_k_features(num_site_to_use = 100)
+  processed_data <- preprocess_data(fp, training_set, test_set)
+  expect_equal(dim(select(processed_data$training_set, starts_with("site")))[2], 100)  
+  expect_equal(dim(select(processed_data$test_set, starts_with("site")))[2], 100)  
+  
+  fp <- fp_select_k_features(num_sites_to_exclude = 100)
+  processed_data <- preprocess_data(fp, training_set, test_set)
+  expect_equal(dim(select(processed_data$training_set, starts_with("site")))[2], 32)  
+  expect_equal(dim(select(processed_data$test_set, starts_with("site")))[2], 32)  
+  
+
+  num_site_to_use <- 50
+  num_sites_to_exclude <- 10
+  fp <- fp_select_k_features(num_site_to_use, num_sites_to_exclude)
+  processed_data <- preprocess_data(fp, training_set, test_set)
+  expect_equal(dim(select(processed_data$training_set, starts_with("site")))[2], 50)  
+  expect_equal(dim(select(processed_data$test_set, starts_with("site")))[2], 50)  
+  
+  ordered_sites <- arrange(processed_data$fp_info, pvals)
+  expect_equal(sum(ordered_sites$selected_site[1:num_sites_to_exclude]), 0)
+  expect_equal(sum(ordered_sites$selected_site), num_site_to_use)
+  
+})
+
+
 
 
 
