@@ -13,7 +13,7 @@
 
 # the constructor 
 #' @export
-standard_CV <- function(datasource, 
+cv_standard <- function(datasource, 
                         classifier, 
                         feature_preprocessors, 
                         num_resample_runs = 50, 
@@ -36,7 +36,7 @@ standard_CV <- function(datasource,
                  result_metrics = result_metrics,
                  test_only_at_training_time = test_only_at_training_time)
       
-  attr(the_cv, "class") <- "standard_CV"
+  attr(the_cv, "class") <- "cv_standard"
   the_cv 
 
 }
@@ -46,7 +46,7 @@ standard_CV <- function(datasource,
 
 #run_decoding_one_resample_run <- function(cv_obj) {
 #' @export
-run_decoding.standard_CV = function(cv_obj) {
+run_decoding.cv_standard = function(cv_obj) {
   
 
   # register parallel resources
@@ -219,7 +219,7 @@ run_decoding.standard_CV = function(cv_obj) {
 
 
 
-get_parameters.standard_CV = function(cv_obj){
+get_parameters.cv_standard = function(cv_obj){
   
   # get parameters from all objects and save the in a data frame so that
   # which will be useful to tell if an analysis has already been run
@@ -250,11 +250,11 @@ get_parameters.standard_CV = function(cv_obj){
   
   
   
-  # finally add the parameters from this standard_CV object as well
+  # finally add the parameters from this cv_standard object as well
 
   cv_parameters <- data.frame(#analysis_ID = cv_obj$analysis_ID, 
-                              standard_CV.num_resample_runs = cv_obj$num_resample_runs, 
-                              standard_CV.test_only_at_training_time = cv_obj$test_only_at_training_time)
+                              cv_standard.num_resample_runs = cv_obj$num_resample_runs, 
+                              cv_standard.test_only_at_training_time = cv_obj$test_only_at_training_time)
   
   
   parameter_df <- cbind(cv_parameters, parameter_df)
