@@ -19,7 +19,7 @@ ds <- basic_DS(basedir_file_name, 'stimulus_ID', 18, 0)
 
 fps <- list(fp_zscore())
 
-cl <- max_correlation_CL()
+cl <- cl_max_correlation()
 
 #rms <- list(main_results_RM(), 
 #            confusion_matrix_RM(save_only_same_train_test_time = TRUE))

@@ -97,7 +97,7 @@ real_data_binned_file_name <- file.path("..", "..", "data", "binned", "ZD_150_sa
 # no z-score preprocessor
 ds <- basic_DS(real_data_binned_file_name, 'stimulus_ID', 18, 0)
 fps <- list()
-cl <- max_correlation_CL()
+cl <- cl_max_correlation()
 rms <- list(main_results_RM(),
             confusion_matrix_RM())
 cv <- standard_CV(ds, cl, fps, 3, rms)
@@ -107,7 +107,7 @@ DECODING_RESULTS_1 <- run_decoding(cv)
 # no confusion_matrix_RM
 ds <- basic_DS(real_data_binned_file_name, 'stimulus_ID', 18, 0)
 fps <- list(fp_zscore())
-cl <- max_correlation_CL()
+cl <- cl_max_correlation()
 rms <- list(main_results_RM())
 cv <- standard_CV(ds, cl, fps, 3, rms)
 DECODING_RESULTS_2 <- run_decoding(cv)
@@ -116,7 +116,7 @@ DECODING_RESULTS_2 <- run_decoding(cv)
 # standard results
 ds <- basic_DS(real_data_binned_file_name, 'stimulus_ID', 18, 0)
 fps <- list(fp_zscore())
-cl <- max_correlation_CL()
+cl <- cl_max_correlation()
 rms <- list(main_results_RM(),
             confusion_matrix_RM())
 cv <- standard_CV(ds, cl, fps, 3, rms)
@@ -126,7 +126,7 @@ DECODING_RESULTS_3 <- run_decoding(cv)
 # use only neurons 1 to 100
 ds <- basic_DS(real_data_binned_file_name, 'stimulus_ID', 18, 0, site_IDs_to_use = 1:100)
 fps <- list(fp_zscore())
-cl <- max_correlation_CL()
+cl <- cl_max_correlation()
 rms <- list(main_results_RM(),
             confusion_matrix_RM())
 cv <- standard_CV(ds, cl, fps, 3, rms)
@@ -136,7 +136,7 @@ DECODING_RESULTS_4 <- run_decoding(cv)
 # standard results again
 ds <- basic_DS(real_data_binned_file_name, 'stimulus_ID', 18, 0)
 fps <- list(fp_zscore())
-cl <- max_correlation_CL()
+cl <- cl_max_correlation()
 rms <- list(main_results_RM(),
             confusion_matrix_RM())
 cv <- standard_CV(ds, cl, fps, 3, rms)

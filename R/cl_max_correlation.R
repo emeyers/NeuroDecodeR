@@ -13,16 +13,16 @@
 
 # the constructor 
 #' @export
-max_correlation_CL <- function(){
+cl_max_correlation <- function(){
   the_classifier <- list()
-  attr(the_classifier, "class") <- "max_correlation_CL"
+  attr(the_classifier, "class") <- "cl_max_correlation"
   the_classifier
 }
 
 
 # the get_predictions method
 #' @export
-get_predictions.max_correlation_CL <- function(max_correlation_CL_obj, 
+get_predictions.cl_max_correlation <- function(cl_max_correlation_obj, 
                                                train_data, 
                                                all_times_test_data) {  
 
@@ -60,10 +60,10 @@ get_predictions.max_correlation_CL <- function(max_correlation_CL_obj,
 } 
 
 
-# since there are no parameters for the max_correlation_CL just return a data frame with
-# max_correlation_CL.max_correlation_CL and a value of "no parameters"
-get_parameters.max_correlation_CL = function(max_correlation_CL_obj){
-  data.frame(max_correlation_CL.max_correlation_CL = "does not have settable parameters")
+# since there are no parameters for the cl_max_correlation just return a data frame with
+# cl_max_correlation.cl_max_correlation and a value of "no parameters"
+get_parameters.cl_max_correlation = function(cl_max_correlation_obj){
+  data.frame(cl_max_correlation.cl_max_correlation = "does not have settable parameters")
 }
 
 

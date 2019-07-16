@@ -10,7 +10,7 @@ rm(training_set, test_set, count_training_set, count_test_set)
 
 # test that the classifier is contains required methods and returns correctly 
 #  formatted results results
-cl <- max_correlation_CL()
+cl <- cl_max_correlation()
 test_valid_classifier(cl) 
 
 
@@ -18,7 +18,7 @@ test_valid_classifier(cl)
 
 test_that("classification results seem reasonable", {
   
-  cl <- max_correlation_CL()
+  cl <- cl_max_correlation()
   
   prediction_results <- get_predictions(cl, normalized_training_set, normalized_test_set)
   
@@ -37,7 +37,7 @@ test_that("classification results seem reasonable", {
 
 test_that("classification results on shuffled data are around chance", {
   
-  cl <- max_correlation_CL()
+  cl <- cl_max_correlation()
   
   prediction_results <- get_predictions(cl, shuffled_normalized_training_set, shuffled_normalized_test_set)
   
