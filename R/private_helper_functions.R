@@ -1,7 +1,15 @@
-# some utility functions that are useful
+
+# This file contains helper functions that will not be publicly visible, but
+#  instead are used interally by other functions in the NDTr
 
 
-#' @export
+
+
+
+# Takes a vector of strings where each string is in the format of time.X_Y and
+# calculates the mean of X and Y. This is primarily used by the result metric
+# plot() functions to label the time axes on plots.
+
 get_center_bin_time <- function(time_vector) {
   center_bin_time <- NULL
   
@@ -15,7 +23,12 @@ get_center_bin_time <- function(time_vector) {
 }
 
 
-#' @export
+
+
+# Takes a vector of strings where each string is in the format of time.X_Y and
+# calculates returns strings in the format "X to Y". This is primarily used by
+# the result metric plot() functions to label the time axes on plots.
+
 get_time_range_strings <- function(time_vector) {
   
   time_range_strings <- NULL
@@ -32,8 +45,11 @@ get_time_range_strings <- function(time_vector) {
 
 
 
-#' @export
-# converts rate data into count data (e.g., firing rates into spike counts)
+
+# Converts rate data into count data (e.g., firing rates into spike counts).
+#  This is primarily used by the ds_basic object to convert firing rates to
+#  counts so that the poisson_naive_bayes classifier will work.
+
 convert_rates_to_counts <- function(binned_data) {
   
   the_data <- select(binned_data, starts_with("time"))
@@ -49,7 +65,7 @@ convert_rates_to_counts <- function(binned_data) {
   
   data_counts <- cbind(data_counts, the_labels) # add back the labels
   data_counts <- data_counts[, all_dim_names]   # put data back to the original order
-
+  
   return(data_counts)
 }
 
@@ -57,8 +73,11 @@ convert_rates_to_counts <- function(binned_data) {
 
 
 
-#' @export
-# gets how long a bin width is from data that is in binned.data format
+
+# Gets how long a bin width is from data that is in binned_data format. This is
+# used by the convert_rates_to_counts() function above to convert firing rates
+# to spike counts.
+
 get_bin_widths <- function(time_vector) {
   
   bin_widths <- NULL
@@ -75,9 +94,11 @@ get_bin_widths <- function(time_vector) {
 
 
 
-#' @export
-# if there are ties int he maximum value, then this function returns an index of one of the maxes randomly this function
-# was copied from the nnet package (which was slightly faster than my implementation)
+
+# If there are ties in the maximum value, then this function returns an index of
+# one of these maximum values randomly (this function was copied from the nnet
+# package which had a fast implementation)
+
 rand_which_max <- function(x) {
   y <- seq_along(x)[x == max(x)]
   if (length(y) > 1L) {
@@ -86,3 +107,36 @@ rand_which_max <- function(x) {
     y
   } 
 }
+
+
+
+
+
+# creates an ID based on the date, time, and a random number so 
+# that different analyses can be uniquely identified by this number.
+# This is primarily used by the cross-validation object to uniquely identify each
+# analysis and by the functions in the save_and_manage_decoding_results to 
+# save each result with an unique ID.
+
+generate_analysis_ID <- function(){
+  
+  
+  # create a name for the file that will hold the results
+  curr_time <- as.character(Sys.time())
+  curr_time <- gsub("-", "", curr_time)
+  curr_time <- gsub(":", "", curr_time)
+  curr_time <- gsub(" ", "_", curr_time)
+  rand_suffix <- paste0(round(runif(5, 0, 9)), collapse = "")
+  
+  analysis_ID <- paste(curr_time, rand_suffix, sep = "_")  
+  
+  analysis_ID
+  
+}
+
+
+
+
+
+
+
