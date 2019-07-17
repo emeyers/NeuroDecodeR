@@ -30,6 +30,7 @@ rm_confusion_matrix()) cv <- cv_standard(ds, cl, fps, 3, rms)
 
 }
 \seealso{
-Other classifier: \code{\link{cl_poisson_naive_bayes}}
+Other classifier: \code{\link{cl_poisson_naive_bayes}},
+  \code{\link{cl_svm}}
 }
 \concept{classifier}

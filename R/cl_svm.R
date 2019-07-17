@@ -1,6 +1,32 @@
+#' An support vector machine (CL) object
+#'
+#' This classifier uses the e1071 package to implement a support vector machine. 
+#' 
+#' @details 
+#' The multi-class classification is based on the number of "wins" each class
+#' has using all-pairs classification scheme (the default for the e1071
+#' package). The predicted label is the class with the most wins. The decision
+#' values are the number of all-pairs "wins" each each class has. Thus, the
+#' maximum number for a decision value is thus number of classes - 1, which is
+#' the maximum number of "wins" a given class could have vs. all other classes.
+#'
+#'
+#' @param ... all parameters that are available in the e1071 package should work
+#'  with this CL object 
+#' 
+#' 
+#' 
+#' @examples
+#' # using the default e1071 parameters
+#' cl <- cl_svm()
+#' 
+#' # using a linear kernel
+#' cl <- cl_svm(kernel = "linear")
+#'  
+#' @seealso e1071
+#' @family classifier
 
 
-# uses the e1071 package for the svm
 
 
 
