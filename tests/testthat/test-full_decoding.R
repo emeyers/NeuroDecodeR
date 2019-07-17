@@ -35,7 +35,7 @@ rms <- list(rm_main_results(),
             rm_confusion_matrix(save_only_same_train_test_time = FALSE))
 
 
-cv <- cv_standard(ds, cl, fps, 3, rms, test_only_at_training_time = FALSE) 
+cv <- cv_standard(ds, cl, fps, rms, 3, test_only_at_training_time = FALSE) 
 
 
 test_valid_cross_validator(cv)

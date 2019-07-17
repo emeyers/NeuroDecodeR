@@ -1,11 +1,49 @@
-#' The standard cross-validator (CV)  object
+#' The standard cross-validator (CV) object
 #'
-#' A cross-validator object takes a datasource, feature preprocessors and a classifier
-#' and runs multiple cross-validation cycles by getting new training and test data splits, 
-#' running the preprocessor to do preprocessing of the data, trains and tests the classifier, and 
-#' the creates metric to evaluation the classification performance on the test set.  
+#' This uses cross-validation to run a decoding analysis
+#'
+#' @details A cross-validator object takes a datasource (DS), a classifier (CL),
+#' feature preprocessors (FP) and result metric (RM) objects, and runs multiple
+#' cross-validation cycles by getting new training and test data splits, running
+#' the preprocessor to do preprocessing of the data, trains and tests the
+#' classifier, and uses the result metric objects to evaluate the classification
+#' performance on the test set.
+#'
+#' @param datasource a datasource (DS) object that will generate the training
+#'   and test data
+#'
+#' @param classifier a classifier (CS) object that will learn parameters based
+#'   on the training data and will generate predictions based on the test data.
+#'
+#' @param feature_preprocessors a list of feature preprocessor (FP) objects that
+#'   learn preprocessing parameters from the training data and apply
+#'   preprocessing of both the training and test data based on these parameters
+#'
+#' @param result_metrics a list of result metric (RM) objects that are used to
+#'   evaluate the classification performance. If this is set to null then the 
+#'   rm_main_results(), rm_confusion_matrix() results metrics will be used. 
+#'   
+#' @param num_resample_runs The number of times the cross-validation should be
+#'   run (i.e., "resample runs"), where on each run, new training and test sets
+#'   are generated. If pseudo-populations are used (say with the ds_basic) then
+#'   new pseduo-populations will be generated on each resample run as well.
+#'
+#' @param test_only_at_training_time Whether the analysis should only be run
+#'   where the classifier is trained and tested at the same time point (i.e.,
+#'   now temporal cross-decoding analysis will be run). Setting this to true can
+#'   potentially speed up the analysis and save memory at the cost of not
+#'   calculated the temporal cross-decoding results.
+#'
+#' @examples
+#' binned_file <- file.path("..", "..", "data", "binned", 
+#'                          "ZD_150_samples_binned_every_50_samples.Rda")
+#' ds <- ds_basic(basedir_file, 'stimulus_ID', 18)
+#' fps <- list(fp_zscore())
+#' cl <- cl_max_correlation()
+#' cv <- cv_standard(ds, cl, fps) 
 #'
 #'
+#' @family cross-validator
 
 
 
@@ -15,8 +53,8 @@
 cv_standard <- function(datasource, 
                         classifier, 
                         feature_preprocessors, 
-                        num_resample_runs = 50, 
                         result_metrics = NULL,
+                        num_resample_runs = 50, 
                         test_only_at_training_time = FALSE) {
   
   if (is.null(result_metrics)) {
