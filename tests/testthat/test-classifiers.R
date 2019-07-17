@@ -1,5 +1,7 @@
 
 
+# source("tests/testthat/test_valid_NDTr_objects.R")
+
 # source('generate_data_to_test_NDTr.R')
 
 
@@ -51,7 +53,6 @@ test_shuffle_results_at_chance <- function(cl){
 
 # test cl_max_correlation -----------------------------------------------------
 
-
 # test classifier has required methods and returns correctly formatted results
 cl <- cl_max_correlation()
 test_valid_classifier(cl) 
@@ -64,12 +65,26 @@ test_shuffle_results_at_chance(cl)
 
 # test cl_poison_naive_bayes --------------------------------------------------
 
-
 cl <- cl_poisson_naive_bayes()
 test_valid_classifier(cl) 
 
 test_reasonable_classification_accuracy(cl)
 test_shuffle_results_at_chance(cl)
+
+
+
+# test cl_svm -----------------------------------------------------------------
+
+cl <- cl_svm()
+test_valid_classifier(cl) 
+
+test_reasonable_classification_accuracy(cl)
+test_shuffle_results_at_chance(cl)
+
+
+
+
+
 
 
 

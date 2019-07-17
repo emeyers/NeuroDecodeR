@@ -1,71 +1,77 @@
-# the decision values in this function are not really correct so I am not going to add it to the package yet...
+
+
 # uses the e1071 package for the svm
 
 
-cl_svm <- R6Class("cl_svm", 
-   public = list(
-    # properties
-                    
-    # the constructor 
-    initialize = function() {},
-                    
-    # methods
-    # could break this up into two methods: train() and test()
-    get_predictions = function(train_data, all_times_test_data) {
-      # train the classifier
-      trained_svm <- svm(labels ~ ., data = train_data)
-      # test the classifier
-      predicted_labels <- predict(trained_svm, all_times_test_data, decision.values = TRUE)  
-      results <- data.frame(time = all_times_test_data$time, 
-                  actual_labels = all_times_test_data$labels,
-                  predicted_labels = predicted_labels) %>%
-                  mutate(correct = actual_labels == predicted_labels)
-              
-      # getting an estimate of the decision values...
-      all_pairs_results <- attr(predicted_labels, "decision.values")
-      all_pairs_results <- data.frame(attr(predicted_labels, "decision.values"))
-      aall_pairs_results_names <- names(all_pairs_results)
-      
-      # loop through the labels and get the average decision value for each class
-      unique_labels <- as.character(unique(results$actual_labels))
-      decision_values <- NULL
-      
-      for (iLabel in 1:length(unique_labels)) {
-        eval_str <- paste0("select(all_pairs_results, starts_with(\"", unique_labels[iLabel],".\"))")                                   
-        pos_results <- eval(parse(text=eval_str))
-        eval_str <- paste0("select(all_pairs_results, starts_with(\".", unique_labels[iLabel],"\"))")                                   
-        neg_results <- eval(parse(text=eval_str))
-        decision_values <- cbind(decision_values, rowSums(pos_results) - rowSums(neg_results))
-      }
-      
-      decision_values <- data.frame(decision_values)
-      names(decision_values) <- paste0('decision_val_', unique_labels) 
-      results <- cbind(results, decision_values)
-      names(results) <- gsub(x = names(results), pattern = "\\.", replacement = "_")
-      
-      # since a voting scheme is used, the class with the highest average decision value will not necessarily
-      # be the class that the classifier returns, which is bad :(. A few options are to implement my
-      # one vs. all svm (as I did with the MATLAB NDT) or I could try another R svm implementation. 
-      warning("The decision values calculated here have some issues. Should really implement my own one-vs-all svm multi-class scheme")         
-      
-      return(results)
-    }   # end the get_predictions method
-  )  # end the public properites/methods
-)  # end the class
+
+# the constructor 
+#' @export
+cl_svm <- function(){
+  the_classifier <- list()
+  attr(the_classifier, "class") <- "cl_svm"
+  the_classifier
+}
+
+
+
+#' @export
+get_predictions.cl_svm <- function(cl_svm_obj, training_set, test_set) {
+  
+
+  
+  ### Train the classifier  ---------------------------------------------------
+  trained_svm <- svm(labels ~ ., data = training_set)
+  
+  
+  ### Test the classifier  ---------------------------------------------------
+  predicted_labels <- predict(trained_svm, test_set, decision.values = TRUE)  
+  results <- data.frame(test_time = test_set$time_bin, 
+              actual_labels = test_set$labels,
+              predicted_labels = predicted_labels)
+          
+  
+  
+  # Parse the all-pairs decision values ---------------------------------------
+  all_pairs_results <- data.frame(attr(predicted_labels, "decision.values"))
+
+  all_pairs_results <- cbind(test_point_num = 1:dim(results)[1], all_pairs_results) %>%
+    tidyr::gather(class_pair, val, -test_point_num) %>%
+    mutate(sign_prediction = sign(val)) %>%
+    tidyr::separate(class_pair, c("pos_class", "neg_class")) #, sep = "/")
+  
+  pos_wins <- all_pairs_results %>%
+    group_by(pos_class, test_point_num) %>%
+    summarize(pos_wins = sum(sign_prediction))
+  
+  neg_wins <- all_pairs_results %>%
+    group_by(neg_class, test_point_num) %>%
+    summarize(neg_wins = sum(-1 * sign_prediction))
+  
+  decision_val_df <- full_join(pos_wins, neg_wins, 
+                               by = c("pos_class" = "neg_class", 
+                                      "test_point_num" = "test_point_num")) %>%
+    tidyr::replace_na(list(pos_wins = 0, neg_wins = 0)) %>%
+    mutate(tot_wins = pos_wins + neg_wins) %>%
+    select(pos_class, tot_wins, test_point_num) %>%
+    tidyr::spread(pos_class, tot_wins) %>%
+    arrange(test_point_num) %>%
+    select(-test_point_num)
+  
+  names(decision_val_df) <- paste0("decision_vals.", names(decision_val_df))
+  
+  results <- cbind(results, decision_val_df)
+  
+  results
+
+}   
 
 
 
 
-
-
-
-
-
-
-
-
-
-
+# Need to fill this out once I change the code to accept parameters...
+get_parameters.cl_svm = function(cl_svm_obj){
+  data.frame(cl_svm.cl_svm = "need to fill this out")
+}
 
 
 

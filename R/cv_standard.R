@@ -49,9 +49,9 @@ run_decoding.cv_standard = function(cv_obj) {
   
 
   # register parallel resources
-  cores <- parallel::detectCores()
-  the_cluster <- parallel::makeCluster(cores)
-  doParallel::registerDoParallel(the_cluster)
+  #cores <- parallel::detectCores()
+  #the_cluster <- parallel::makeCluster(cores)
+  #doParallel::registerDoParallel(the_cluster)
   
   
   # copy over the main objects
@@ -65,7 +65,7 @@ run_decoding.cv_standard = function(cv_obj) {
   
   
   # Do a parallel loop over resample runs
-  all_resample_run_decoding_results <- foreach(iResample = 1:num_resample_runs) %dopar% {  # %dopar% {  
+  all_resample_run_decoding_results <- foreach(iResample = 1:num_resample_runs) %do% {  # %dopar% {  
                                                                       
                                     
     # get the data from the current cross-validation run
