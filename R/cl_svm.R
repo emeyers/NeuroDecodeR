@@ -6,8 +6,9 @@
 
 # the constructor 
 #' @export
-cl_svm <- function(){
-  the_classifier <- list()
+cl_svm <- function(...){
+  options <- list(...)
+  the_classifier <- list(svm_options = options)
   attr(the_classifier, "class") <- "cl_svm"
   the_classifier
 }
@@ -18,18 +19,31 @@ cl_svm <- function(){
 get_predictions.cl_svm <- function(cl_svm_obj, training_set, test_set) {
   
 
-  
   ### Train the classifier  ---------------------------------------------------
-  trained_svm <- svm(labels ~ ., data = training_set)
+  #trained_svm <- svm(labels ~ ., data = training_set)
+  #trained_svm <- svm(x = select(training_set, -labels), y = training_set$labels)
+  
+  # if arguments to the svm have been supplied, use them
+  if (length(cl_svm_obj$svm_options) == 0){
+    all_arguments <- list(x = select(training_set, -labels), y = training_set$labels)
+  } else{
+    all_arguments <- list(x = select(training_set, -labels), 
+                          y = training_set$labels, 
+                          unlist(cl_svm_obj$svm_options))
+    names(all_arguments) <- c("x", "y", names(cl_svm_obj$svm_options))
+  }
+
+  
+  trained_svm <- do.call(svm, all_arguments)
   
   
   ### Test the classifier  ---------------------------------------------------
-  predicted_labels <- predict(trained_svm, test_set, decision.values = TRUE)  
+  #predicted_labels <- predict(trained_svm, test_set, decision.values = TRUE)  
+  predicted_labels <- predict(trained_svm, select(test_set, starts_with("site")), decision.values = TRUE) 
   results <- data.frame(test_time = test_set$time_bin, 
               actual_labels = test_set$labels,
               predicted_labels = predicted_labels)
           
-  
   
   # Parse the all-pairs decision values ---------------------------------------
   all_pairs_results <- data.frame(attr(predicted_labels, "decision.values"))
@@ -66,11 +80,27 @@ get_predictions.cl_svm <- function(cl_svm_obj, training_set, test_set) {
 }   
 
 
-
-
-# Need to fill this out once I change the code to accept parameters...
+# Get the parameters that were used in the svm
 get_parameters.cl_svm = function(cl_svm_obj){
-  data.frame(cl_svm.cl_svm = "need to fill this out")
+
+  if (length(cl_svm_obj$svm_options) == 0){
+    
+    parameter_df <- data.frame(cl_svm.cl_svm = "default svm parameters")
+  
+    } else{
+
+      parameter_df <- data.frame(val = unlist(cl_svm_obj$svm_options)) %>%
+      mutate(key = rownames(.)) %>% 
+      tidyr::spread(key, val) %>%
+      mutate_all(type.convert) %>%
+      mutate_if(is.factor, as.character)
+      
+      names(parameter_df) <- paste0("cl_svm.", names(parameter_df))
+  }
+
+  
+  parameter_df 
+  
 }
 
 

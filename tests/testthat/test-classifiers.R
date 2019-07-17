@@ -74,13 +74,16 @@ test_shuffle_results_at_chance(cl)
 
 
 # test cl_svm -----------------------------------------------------------------
-
 cl <- cl_svm()
 test_valid_classifier(cl) 
-
 test_reasonable_classification_accuracy(cl)
 test_shuffle_results_at_chance(cl)
 
+
+cl <- cl_svm(kernel = "linear")
+test_valid_classifier(cl) 
+test_reasonable_classification_accuracy(cl)
+test_shuffle_results_at_chance(cl)
 
 
 
