@@ -85,7 +85,7 @@ test_valid_classifier <- function(the_classifier){
     #predictions_df <- get_predictions(the_classifier, normalized_training_set, normalized_test_set)
     predictions_df <- get_predictions(the_classifier, count_training_set, count_test_set)
     
-        non_decision_val_df <- select(predictions_df, -starts_with("decision_vals."))
+    non_decision_val_df <- select(predictions_df, -starts_with("decision_vals."))
     prediction_col_names <- sort(names(non_decision_val_df))
     expected_col_names <- sort(c("test_time", "actual_labels", "predicted_labels"))
     expect_equal(prediction_col_names, expected_col_names)

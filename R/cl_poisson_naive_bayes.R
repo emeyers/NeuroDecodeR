@@ -51,7 +51,8 @@ get_predictions.cl_poisson_naive_bayes <- function(cl_pnb_obj, training_set, tes
   # Train the classifier --------------------------------------------------
   lambdas_and_labels <- training_set %>% 
     group_by(labels) %>% 
-    summarise_all(funs(mean))
+    #summarise_all(funs(mean))
+    summarise_all(mean)
 
   # class_labels <- lambdas[, 1]
   lambda_data <- as.matrix(lambdas_and_labels[, 2:ncol(lambdas_and_labels)])
