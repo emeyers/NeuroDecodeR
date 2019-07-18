@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Function reference • The Neural Decoding Toolbox in R</title>
+<title>A Poisson Naive Bayes classifier (CL) object — cl_poisson_naive_bayes • The Neural Decoding Toolbox in R</title>
 
 <!-- jquery -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
@@ -32,7 +32,12 @@
 
 
 
-<meta property="og:title" content="Function reference" />
+<meta property="og:title" content="A Poisson Naive Bayes classifier (CL) object — cl_poisson_naive_bayes" />
+
+<meta property="og:description" content="An implementation of a Poisson Naive Bayes classifier. Like all classifiers,
+this classifier learning a model based on training data and then makes
+predictions on new test data." />
+<meta name="twitter:card" content="summary" />
 
 
 
@@ -50,7 +55,7 @@
   </head>
 
   <body>
-    <div class="container template-reference-index">
+    <div class="container template-reference-topic">
       <header>
       <div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
   <div class="container">
@@ -116,108 +121,57 @@
       </header>
 
 <div class="row">
-  <div class="contents col-md-9">
+  <div class="col-md-9 contents">
     <div class="page-header">
-      <h1>Reference</h1>
+    <h1>A Poisson Naive Bayes classifier (CL) object</h1>
+    
+    <div class="hidden name"><code>cl_poisson_naive_bayes.Rd</code></div>
     </div>
 
-    <table class="ref-index">
+    <div class="ref-description">
+    
+    <p>An implementation of a Poisson Naive Bayes classifier. Like all classifiers,
+this classifier learning a model based on training data and then makes
+predictions on new test data.</p>
+    
+    </div>
 
-    <colgroup>
-      
-      <col class="alias" />
-      <col class="title" />
-    </colgroup>
+    <pre class="usage"><span class='fu'>cl_poisson_naive_bayes</span>()</pre>
+        
+    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-    <tbody>
-      <tr>
-        <th colspan="2">
-          <h2 id="section-all-functions" class="hasAnchor"><a href="#section-all-functions" class="anchor"></a>All functions</h2>
-          <p class="section-desc"></p>
-        </th>
-      </tr>
-      <tr>
-        
-        <td>
-          <p><code><a href="NDTr.html">NDTr</a></code> </p>
-        </td>
-        <td><p>NDTr: A package for doing neural decoding</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="calc_num_level_repetitions.html">calc_num_level_repetitions()</a></code> </p>
-        </td>
-        <td><p>calc_num_level_repetitions</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="cl_max_correlation.html">cl_max_correlation()</a></code> </p>
-        </td>
-        <td><p>A maximum correlation coefficient classifier (CL) object</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="cl_poisson_naive_bayes.html">cl_poisson_naive_bayes()</a></code> </p>
-        </td>
-        <td><p>A Poisson Naive Bayes classifier (CL) object</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="cl_svm.html">cl_svm()</a></code> </p>
-        </td>
-        <td><p>An support vector machine (CL) object</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="create_binned_data.html">create_binned_data()</a></code> </p>
-        </td>
-        <td><p>A function that converts data from raster format to binned format</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="create_binned_data_from_matlab_raster_data.html">create_binned_data_from_matlab_raster_data()</a></code> </p>
-        </td>
-        <td><p>A function that create binned data in .Rda format from raster data in .mat format</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="create_raster_data_from_matlab_raster_data.html">create_raster_data_from_matlab_raster_data()</a></code> </p>
-        </td>
-        <td><p>A function that converts raster data in .mat format to .Rda format</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="cv_standard.html">cv_standard()</a></code> </p>
-        </td>
-        <td><p>The standard cross-validator (CV) object</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="ds_basic.html">ds_basic()</a></code> </p>
-        </td>
-        <td><p>A basic datasource object</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="fp_select_k_features.html">fp_select_k_features()</a></code> </p>
-        </td>
-        <td><p>A feature preprocessor (FP) that reduces the data to the best k features</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="fp_zscore.html">fp_zscore()</a></code> </p>
-        </td>
-        <td><p>A feature preprocessor (FP) that zscore normalizes the data</p></td>
-      </tr>
-    </tbody>
-    </table>
+    <p>Note: this classifier uses spike counts, so the binned data must be converted
+to use this classifier, for exmaple, if you are using the basic_DS data
+source, then use_count_data = TRUE should be set in the contructor. Also,
+preprocessors that convert the data into values that are not integers should
+not be used, for example, the fp_zscore should not be used with this
+classifier.</p>
+    
+    <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
+
+    <div class='dont-index'><p>Other classifier: <code><a href='cl_max_correlation.html'>cl_max_correlation</a></code>,
+  <code><a href='cl_svm.html'>cl_svm</a></code></p></div>
+    
+
+    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
+    <pre class="examples"><div class='input'> <span class='no'>ds</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='ds_basic.html'>ds_basic</a></span>(<span class='no'>basedir_file_name</span>, <span class='st'>'stimulus_ID'</span>, <span class='fl'>18</span>, <span class='kw'>use_count_data</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</div><div class='output co'>#&gt; <span class='error'>Error in load(binned_file_name): object 'basedir_file_name' not found</span></div><div class='input'> <span class='no'>fps</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>()
+ <span class='no'>cl</span> <span class='kw'>&lt;-</span> <span class='fu'>cl_poisson_naive_bayes</span>()
+ <span class='no'>rms</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(<span class='fu'>rm_main_results</span>())
+ <span class='no'>cv</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='cv_standard.html'>cv_standard</a></span>(<span class='no'>ds</span>, <span class='no'>cl</span>, <span class='no'>fps</span>, <span class='fl'>3</span>, <span class='no'>rms</span>)</div><div class='output co'>#&gt; <span class='error'>Error in cv_standard(ds, cl, fps, 3, rms): object 'ds' not found</span></div><div class='input'> 
+
+</div></pre>
   </div>
-
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
-      <li><a href="#section-all-functions">All functions</a></li>
+      
+      <li><a href="#details">Details</a></li>
+
+      <li><a href="#see-also">See also</a></li>
+      
+      <li><a href="#examples">Examples</a></li>
     </ul>
+
   </div>
 </div>
 
