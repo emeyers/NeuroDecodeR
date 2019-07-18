@@ -18,8 +18,8 @@ basedir_file_name <- '~/research/NDT/NDTr/data/binned/ZD_150_samples_binned_ever
 ds <- ds_basic(basedir_file_name, 'stimulus_ID', 6, num_label_repeats_per_cv_split = 3)
 fps <- list(fp_zscore(), fp_select_k_features(100))
 #cl <- cl_svm(kernel = "linear")
-cl <- cl_svm()
-#cl <- cl_max_correlation()
+#cl <- cl_svm()
+cl <- cl_max_correlation()
 
 
 
