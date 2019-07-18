@@ -1,11 +1,44 @@
-#' A function that converts raster data in MATLAB .mat format to R .rda format
+#' Convert raster data in MATLAB .mat format to R .rda format
 #' 
+#' If one already has raster data created in MATLAB, this function can be used to convert it 
+#' to an R format (.rda files) that can be used with the NDTr.
 #' 
+#' @param matlab_raster_dir_name A character string specifying the path to a directory that 
+#'   contains raster data in MATLAB .mat files 
 #' 
-#' ! link to raster format and related two functions
-#'
-#' @export
+#' @param r_raster_dir_name A character string specifying the path to a
+#'   directory that where the converted raster data in R .rda files will be
+#'   saved. If this is not specified then the saved directory will have the same
+#'   name as the matlab directory with _rda appended to the end of the last
+#'   directory name.
+#' 
+#' @param start_ind A number specifying the start index for the data to be
+#'   converted if one wants to convert the data from a shorter time window than
+#'   the original MATLAB raster data. The default (NULL valu) is to use all the
+#'   data, i.e., start at the beginning with start_ind = 1.
+#' 
+#' @param end_ind A number specifying the end index for the data to be converted
+#'   if one wants to convert the data from a shorter time window than the
+#'   original MATLAB raster data. The default (NULL value) is to use all the
+#'   data, i.e., end value is the last time point.
+#' 
+#' @param files_contain A string specifying that only a subset of the MATLAB
+#'   raster data should be converted based on .mat files that contain this
+#'   string.
+#' 
+#' @examples 
+#' matlab_raster_dir_name <- file.path('..', '..', 'data', 'raster', 
+#'                                     'Zhang_Desimone_7objects_raster_data_mat', '')
+#' 
+#' create temporary directory to hold converted data
+#' r_raster_dir_name <- file.path("test_convert_matlab_raster_data", "")
+#' r_raster_dir_name <- convert_matlab_raster_data(matlab_raster_dir_name, 
+#'                                                 r_raster_dir_name, 
+#'                                                 files_contain = "bp1001spk")
+#' 
 
+
+#' @export
 convert_matlab_raster_data <- function(matlab_raster_dir_name, 
                                        r_raster_dir_name = NULL, 
                                        start_ind = NULL, 
@@ -146,8 +179,8 @@ convert_matlab_raster_data <- function(matlab_raster_dir_name,
     
     save(raster_site_info, raster_data, file = paste0(r_raster_dir_name, curr_r_file_name), compress = TRUE)
     
-
   }
+  
   
   r_raster_dir_name
   

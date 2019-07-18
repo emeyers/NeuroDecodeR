@@ -72,7 +72,7 @@ matlab_raster_dir_name <- file.path('..', '..', 'data', 'raster',
 
 
 # create temporary directory to hold converted data
-r_raster_dir_name <- file.path("testing_convert_matlab_raster_data", "")
+r_raster_dir_name <- file.path("test_convert_matlab_raster_data", "")
 
 if (file.exists(r_raster_dir_name)){
   # delete any saved results and manifest files that already exist
