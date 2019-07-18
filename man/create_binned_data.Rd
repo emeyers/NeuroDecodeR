@@ -8,6 +8,40 @@ create_binned_data(raster_dir_name, save_prefix_name, bin_width,
   sampling_interval, start_ind = NULL, end_ind = NULL,
   files_contain = "")
 }
+\arguments{
+\item{raster_dir_name}{A string that contains the path to a directory that
+has files in raster format. These files will be combined into binned format
+data.}
+
+\item{save_prefix_name}{A string with a prefix that will be used name of file
+that contains the saved binned format data.}
+
+\item{bin_width}{A number that has the bin width that data should be averaged over.}
+
+\item{sampling_interval}{A number that has the specifies the sampling
+interval between successive binned-data points.}
+
+\item{start_ind}{A number that specifies at which index should the binning
+start. By default it starts at the beginning time in the raster data.}
+
+\item{end_ind}{A number that specifies at which index should the binning
+end. By default it end at the end time in the raster data.}
+
+\item{files_contain}{A string that specifies that only raster files that
+contain this string should be included in the binned format data.}
+}
 \description{
-! link to raster format and binned format and related two functions
+This function takes the name of a directory that contains files in raster
+format, and averages the data within a specified bin size at specifid
+sampling inverval increments to create data in binned format used for
+decoding.
+}
+\examples{
+# create binned data with 150 ms bin sizes sampled at 10 ms intervals
+raster_dir_name <- file.path('..', '..', 'data', 'raster', 
+                             'Zhang_Desimone_7objects_raster_data_rda')
+                             
+binned_file_name <- create_binned_data(raster_dir_name, "ZD", 150, 50)
+
+
 }
