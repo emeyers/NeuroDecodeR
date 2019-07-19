@@ -22,11 +22,11 @@ save_and_log_results <- function(DECODING_RESULTS, save_directory_name){
   # load the manifest file, or if this is the first time save results has been run, 
   #  create the manifest file and give a warning that this is the first results saved
   if (!file.exists(manifest_file_name)) {
-
+    
     manifest_df <- data.frame()
     
     warning(paste("The manifest file does not exist.\n", 
-            " Assuming this is the first result that is saved and creating manifest file"))
+                  " Assuming this is the first result that is saved and creating manifest file"))
     
   } else {
     load(manifest_file_name)
@@ -40,12 +40,12 @@ save_and_log_results <- function(DECODING_RESULTS, save_directory_name){
   # curr_time <- gsub(" ", "_", curr_time)
   # rand_suffix <- paste0(round(runif(5, 0, 9)), collapse = "")
   # save_file_name <- paste(curr_time, rand_suffix, sep = "_")  
-
+  
   # get the decoding parameters and add the saved file name to them
   decoding_params <- get_parameters(DECODING_RESULTS$cross_validation_paramaters)
   #decoding_params$saved_file_name <- save_file_name
   #decoding_params <- dplyr::select(decoding_params, saved_file_name, everything())
-    
+  
   
   if (!("analysis_ID" %in% decoding_params)) {
     
@@ -53,7 +53,7 @@ save_and_log_results <- function(DECODING_RESULTS, save_directory_name){
     decoding_params <- dplyr::select(decoding_params, analysis_ID, everything())
   }
   
-
+  
   
   # if results already exist give a warning (maybe not needed but doesn't hurt)
   if (check_results_already_exist(decoding_params, manifest_df)){
@@ -132,7 +132,7 @@ add_current_parameters_to_manifest <- function(decoding_params, manifest_df){
   
   unique_decoding_names <- setdiff(decoding_names, manifest_names)
   unique_manifest_names <- setdiff(manifest_names, decoding_names)
-
+  
   
   # if there are some unique variables in the manifest, add them 
   # to the decoding params with NA values
@@ -146,7 +146,7 @@ add_current_parameters_to_manifest <- function(decoding_params, manifest_df){
     # decoding_params at the end
     decoding_params <- dplyr::select(decoding_params, {{manifest_names}}, everything()) 
   }
-
+  
   
   # if there are some unique variables in the decoding_params, add them 
   # to the manifest with NA values
@@ -215,16 +215,16 @@ load_decoding_results <- function(decoding_params, results_directory_name){
   all_decoding_results <- NULL
   c <- 1
   for (i in 1:num_manifest_rows){
-
+    
     if (duplicated(manifest_with_results_added[c(i,  num_manifest_rows + 1), ])[2]){
       load(paste0(results_directory_name, manifest_df[i, ]$analysis_ID, '.rda'))
       all_decoding_results[[c]] <- DECODING_RESULTS
       c <- c + 1
     }
-      
+    
   }
   
-
+  
   # if there is just one match for the results, return the DECODING_RESULTS rather
   # than a list of decoding results
   if (length(all_decoding_results) == 1){
