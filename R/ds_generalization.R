@@ -1,9 +1,9 @@
-#' A basic datasource object
+#' A datasource that allows one and test on different but related labels
 #'
-#' The standard datasource used to get training and test splits of data.
+#' This datasource is useful for assessing whether information is
+#' invariant/abstract to particular conditions.
 #' 
-#' This 'basic' datasource is the datasource that will most commonly be used for
-#' most analyses. Like all datasources, this datasource takes binned format data
+#' Like all datasources, this datasource takes binned format data
 #' and has a get_data() method that is called by a cross-validation object to 
 #' get training and testing splits of data that can be passed to a classifier. 
 #'
@@ -17,7 +17,11 @@
 #'  
 #' @param num_cv_splits A number specifying how many cross-validation splits
 #'  should be used. 
-#' 
+#'  
+#' @param train_label_levels A list...
+#'
+#' @param test_label_levels A list...
+#'   
 #' @param use_count_data If the binned data is neural spike counts, then setting
 #'   use_count_data = TRUE will convert the data into spike counts. This is
 #'   useful for classifiers that work on spike count data, e.g., the
@@ -26,9 +30,6 @@
 #' @param num_label_repeats_per_cv_split A number specifying how many times each
 #'   label should be repeated in each cross-validation split.
 #' 
-#' @param label_levels_to_use A vector of strings specifying specific label
-#'   levels that should be used. If this is set to NULL then all label levels
-#'   available will be used.
 #' 
 #' @param num_resample_sites The number of sites that should be randomly
 #'   selected when constructing training and test vectors. This number needs to
@@ -80,18 +81,27 @@
 
 
 #' @export
-ds_basic <- function(binned_file_name, 
+ds_generalization <- function(binned_file_name, 
                             var_to_decode, 
-                            num_cv_splits, 
+                            num_cv_splits,
+                            train_label_levels,
+                            test_label_levels,
                             use_count_data = FALSE,
                             num_label_repeats_per_cv_split = 1, 
-                            label_levels_to_use = NULL,
                             num_resample_sites = NULL,
                             site_IDs_to_use = NULL,
                             site_IDs_to_exclude = NULL,
                             randomly_shuffled_labels_before_running = FALSE,
                             create_simultaneously_recorded_populations = 0) {
   
+  
+  # construct a ds_basic object that will do most of the work
+  
+  the_basic_ds
+    
+    
+  
+
   # load the binned data and convert it to spike counts if specified
   load(binned_file_name)
   
@@ -206,7 +216,7 @@ ds_basic <- function(binned_file_name,
     create_simultaneously_recorded_populations = create_simultaneously_recorded_populations
   )
   
-  print("in consturctor2...")
+  
   attr(the_ds, "class") <- "ds_basic"
   the_ds
   
@@ -218,10 +228,7 @@ ds_basic <- function(binned_file_name,
       
 get_data.ds_basic = function(ds_basic_obj){
         
-  
-  print("in get data...")
-  
-  
+
     binned_data <- ds_basic_obj$binned_data
     var_to_decode <- ds_basic_obj$var_to_decode
     num_cv_splits <- ds_basic_obj$num_cv_splits
@@ -309,14 +316,10 @@ get_data.ds_basic = function(ds_basic_obj){
     }
 
 
-    all_cv_data <- dplyr::select(all_cv_data, -CV_slice_ID) %>% 
-      dplyr::ungroup()  # fails tests if I don't ungroup. Also remove the original CV_slice_ID field
+    all_cv_data <- dplyr::select(all_cv_data, -CV_slice_ID) %>% dplyr::ungroup()  # fails tests if I don't ungroup. Also remove the original CV_slice_ID field
 
-    
-    # add train_labels and test_labels columns
-    browser()
 
-    all_cv_data
+    return(all_cv_data)
 
 
 }  # end get_data()

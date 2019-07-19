@@ -34,14 +34,14 @@ test_that("get_data(ds_basic_obj) returns unique points in training and test set
 
 
 test_that("if labels_levels_to_use is set, only those label levels are returned", {
-
+  
   labels_levels_to_use <- c("flower", "guitar", "kiwi")
   
   ds <- ds_basic("fake_binned_data.Rda", "stim_names", 10, label_levels_to_use = labels_levels_to_use)
   the_data <- get_data(ds)
   
   expect_equal(as.character(unique(the_data$labels)), labels_levels_to_use)
-
+  
 })
 
 
@@ -53,7 +53,7 @@ test_that("if only specific sites to be used, only those sites are returned", {
   
   # use only a subset of sites
   sites_to_use <- sites_to_use <- seq(1, 100, 3)
- 
+  
   ds <- ds_basic("fake_binned_data.Rda", "stim_names", 10, site_IDs_to_use = sites_to_use)
   the_data <- get_data(ds)
   
@@ -82,8 +82,8 @@ test_that("if only specific sites to be used, only those sites are returned", {
   
   # use and exclude a subset of sites
   ds <- ds_basic("fake_binned_data.Rda", "stim_names", 10,   
-                     site_IDs_to_use = sites_to_use, site_IDs_to_exclude = sites_to_exclude)
-
+                 site_IDs_to_use = sites_to_use, site_IDs_to_exclude = sites_to_exclude)
+  
   remaining_sites_used <- setdiff(sites_to_use, sites_to_exclude)
   
   the_data <- get_data(ds)
@@ -101,11 +101,11 @@ test_that("if only specific sites to be used, only those sites are returned", {
 
 
 test_that("the correct number of resampled sites is returned", {
-
+  
   num_resample_sites <- 50
   ds <- ds_basic("fake_binned_data.Rda", "stim_names", 10,  
-                     num_resample_sites = num_resample_sites)
-
+                 num_resample_sites = num_resample_sites)
+  
   the_data <- get_data(ds)
   site_names <- the_data %>% 
     dplyr::select(starts_with("site")) %>% 
@@ -125,8 +125,8 @@ test_that("the correct number of repeats per CV block are returned", {
   num_reps <- 2
   
   ds <- ds_basic("fake_binned_data.Rda", "stim_names", num_CV,
-                     num_label_repeats_per_cv_split = num_reps)
-                     
+                 num_label_repeats_per_cv_split = num_reps)
+  
   the_data <- get_data(ds)
   
   total_num_labels <- the_data %>%
@@ -142,12 +142,12 @@ test_that("the correct number of repeats per CV block are returned", {
 
 # test create simultaneously recorded data is working
 test_that("simultaneously recorded data is returned correctly", {
- 
+  
   
   # all whole numbers on each row should be the same this data when gotten simultaneously 
   ds <- ds_basic("fake_simultaneous_binned_data.Rda", "stim_names", 10,
-                     create_simultaneously_recorded_populations = TRUE)
-
+                 create_simultaneously_recorded_populations = TRUE)
+  
   the_data <- get_data(ds)
   
   the_site_data <- the_data %>%
@@ -164,17 +164,17 @@ test_that("simultaneously recorded data is returned correctly", {
   
   site_name_fraction <- as.numeric(paste0('.', substr(names(the_site_data), 6, 9)))
   site_name_matrix <- matrix(rep(site_name_fraction, each = dim(the_site_data)[1]), 
-                nrow = dim(the_site_data)[1], 
-                ncol = dim(the_site_data)[2])
+                             nrow = dim(the_site_data)[1], 
+                             ncol = dim(the_site_data)[2])
   
   expect_lt(max(site_name_matrix - fraction), 10^-10)
-
   
   
-   
+  
+  
   # all whole numbers on each row should NOT be the same this data when NOT gotten simultaneously 
   ds <- ds_basic("fake_simultaneous_binned_data.Rda", "stim_names", 10,
-                     create_simultaneously_recorded_populations = FALSE)
+                 create_simultaneously_recorded_populations = FALSE)
   the_data <- get_data(ds)
   
   the_site_data <- the_data %>%
