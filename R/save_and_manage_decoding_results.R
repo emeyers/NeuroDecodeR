@@ -1,6 +1,15 @@
-
-
-
+#'  A function saves DECODING_RESULTS and logs the parameters used in the analysis 
+#' 
+#' This function takes results returned by the cross-validator's run_decoding() 
+#'  method and uses the cross-validator's get_properties() method to save a 
+#'  log of the results that be used to reload specific results
+#' 
+#' @param DECODING_RESULTS A list of results returned by the cross-validator's
+#'   run_decoding method.
+#'
+#' @param save_directory_name A directory where the decoding results should be
+#'   saved.
+#'
 #' @export
 save_and_log_results <- function(DECODING_RESULTS, save_directory_name){
   
@@ -70,6 +79,14 @@ save_and_log_results <- function(DECODING_RESULTS, save_directory_name){
 
 
 
+#'  A function that checks if a decoding analysis has already been run
+#' 
+#' @param decoding_params A data frame of decoding parameters that can
+#'  be created by calling the cross-validator's get_parameters() method.
+#' 
+#' @param manifest_df A manifest file that has the list of parameters
+#'  for which decoding analyses have already been run  
+#'    
 #' @export
 check_results_already_exist <- function(decoding_params, manifest_df){
   
@@ -81,7 +98,6 @@ check_results_already_exist <- function(decoding_params, manifest_df){
     
   } else {
     
-
     
     manifest_decoding_params_added <- add_current_parameters_to_manifest(decoding_params, manifest_df)
     
@@ -102,8 +118,7 @@ check_results_already_exist <- function(decoding_params, manifest_df){
 
 
 # helper function to get the decoding_params varaibles 
-# to match the manifest_df variables (maybe shouldn't be exported)
-#' @export
+# to match the manifest_df variables (not exporting this for the moment)
 add_current_parameters_to_manifest <- function(decoding_params, manifest_df){
   
   # if the manifest_df has no data in it, just return the decoding_params
@@ -158,7 +173,15 @@ add_current_parameters_to_manifest <- function(decoding_params, manifest_df){
 
 
 
-# load DECODING_RESULTS that match the decoding_parameters
+#' A function that loads DECODING_RESULTS based on decoding_parameters
+#' 
+#' @param decoding_params A data frame of decoding parameters that can
+#'  be created by calling the cross-validator's get_parameters() method.
+#' 
+#' @param results_directory_name A string containing the path to a directory
+#'   that contains all the decoding results
+#'  
+#'  
 #' @export
 load_decoding_results <- function(decoding_params, results_directory_name){
   
