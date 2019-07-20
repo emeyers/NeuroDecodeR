@@ -5,7 +5,7 @@
 \title{A function that converts data from raster format to binned format}
 \usage{
 create_binned_data(raster_dir_name, save_prefix_name, bin_width,
-  sampling_interval, start_ind = NULL, end_ind = NULL,
+  sampling_interval, start_time = NULL, end_time = NULL,
   files_contain = "")
 }
 \arguments{
@@ -21,11 +21,11 @@ that contains the saved binned format data.}
 \item{sampling_interval}{A number that has the specifies the sampling
 interval between successive binned-data points.}
 
-\item{start_ind}{A number that specifies at which index should the binning
-start. By default it starts at the beginning time in the raster data.}
+\item{start_time}{A number that specifies at which time should the binning
+start. By default it starts at the first time in the raster data.}
 
-\item{end_ind}{A number that specifies at which index should the binning
-end. By default it end at the end time in the raster data.}
+\item{end_time}{A number that specifies at which time should the binning
+end. By default is to end at the last time in the raster data.}
 
 \item{files_contain}{A string that specifies that only raster files that
 contain this string should be included in the binned format data.}

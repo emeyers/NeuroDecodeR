@@ -7,7 +7,8 @@ raster_dir_name <- file.path('..', '..', 'data', 'raster', 'Zhang_Desimone_7obje
 
 # testing create_binned_data --------------------------------------------------
 
-name_of_file_that_should_be_created <- "ZD_150_samples_binned_every_50_samples.Rda"
+name_of_file_that_should_be_created <- "ZD_150bins_50sampled.Rda" 
+# "ZD_150_samples_binned_every_50_samples.Rda"
 
 # deleting "ZD_150_samples_binned_every_50_samples.Rda" if it already exist
 if (file.exists(name_of_file_that_should_be_created)){
