@@ -115,7 +115,6 @@ ds_basic <- function(binned_file_name,
   
   # only use specified label_levels 
   if(!is.null(label_levels_to_use)) {
-    print(label_levels_to_use)
     binned_data <- dplyr::filter(binned_data, labels %in% label_levels_to_use)
   } else {
     label_levels_to_use <- as.list(levels(binned_data$labels))
