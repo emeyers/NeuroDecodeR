@@ -210,13 +210,48 @@ ds <- ds_generalization(real_data_binned_file_name,
                         train_label_levels, 
                         test_label_levels)
 
+test_valid_datasource(ds)
+
 the_data <- get_data(ds)
 
 
+# test that ds_generalization leads to results at chance in baseline 
+#  and above chance in stimulus period
 
 
 
 
+# more of an integration test than a unit test but ok
+test_that("testing classification results using generalization_ds seem reasonable", {
+  
+  # get firing rate data
+  ds <- ds_generalization(real_data_binned_file_name, 'combined_ID_position',
+                 num_cv_splits = 3, num_label_repeats_per_cv_split = 6,
+                 train_label_levels = train_label_levels, 
+                 test_label_levels = test_label_levels)
+  
+  cv_data <- get_data(ds)
+  training_set <- filter(cv_data, time_bin == "time.200_349", CV_1 == "train") %>% 
+    select(starts_with("site"), labels = train_labels)
+  test_set <- filter(cv_data, time_bin %in% c("time.-350_-201", "time.200_349"), CV_1 == "test") %>% 
+    select(starts_with("site"), labels = test_labels, time_bin)
+  levels(test_set$time_bin)[levels(test_set$time_bin)=="time.-350_-201"] <- "baseline"
+  levels(test_set$time_bin)[levels(test_set$time_bin)=="time.200_349"] <- "stimulus"
+  
+  cl <- cl_max_correlation()
+  
+  # prediction_results <- get_predictions(cl, normalized_training_set, normalized_test_set)
+  prediction_results <- get_predictions(cl, training_set, test_set)
+  
+  accuracies <- prediction_results %>%
+    dplyr::group_by(test_time) %>%
+    dplyr::summarize(mean_accuracy = mean(actual_labels == predicted_labels))
+  
+  expect_gt(filter(accuracies, test_time == "stimulus")$mean_accuracy, .6)
+  expect_lt(filter(accuracies, test_time == "baseline")$mean_accuracy, .3)
+
+})
+  
 
 
 

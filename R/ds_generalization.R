@@ -18,9 +18,19 @@
 #' @param num_cv_splits A number specifying how many cross-validation splits
 #'  should be used. 
 #'  
-#' @param train_label_levels A list...
+#' @param train_label_levels A list that contains vectors listing which label
+#'   levels belong to which training class. Each element in the list corresponds
+#'   to a class that the specified training labels will be mapped to. For
+#'   example, values in the vector in the first element in the list will be
+#'   mapped onto the first training class, etc.
 #'
-#' @param test_label_levels A list...
+#' @param test_label_levels A list that contains vectors listing which label
+#'   levels belong to which test class. Each element in the list corresponds to
+#'   a class that the specified test labels will be mapped to. For example,
+#'   values in the vector in the first element in the list will be mapped onto
+#'   the first test class, etc. The number of elements in this list must be the
+#'   same as the number of elements in train_label_levels
+#'
 #'   
 #' @param use_count_data If the binned data is neural spike counts, then setting
 #'   use_count_data = TRUE will convert the data into spike counts. This is
@@ -54,28 +64,25 @@
 #' 
 #' 
 #' @examples
-#'  # A typical example of creating a datasource to be passed cross-validation object   
-#'  binned_file_name <- file.path('data', 'binned', 'ZD_150_samples_binned_every_50_samples.Rda')
-#'  ds <- ds_basic(binned_file_name, 'stimulus_ID', 18)
-#'  
-#'  # If one has many repeats of each label, decoding can be faster if one
-#'  # uses fewer CV splits and repeats each label multiple times in each split.
-#'  ds <- ds_basic(binned_file_name, 'stimulus_ID', 6,
-#'                 num_label_repeats_per_cv_split = 3)
-#'  
-#'  # One can specify a subset of labels levels to be used in decoding. Here
-#'  #  we just do a three-way decoding analysis between "car", "hand" and "kiwi".
-#'  ds <- ds_basic(binned_file_name, 'stimulus_ID', 18,
-#'                 label_levels_to_use = c("car", "hand", "kiwi")) 
-#'  
-#'  # One never explicitely calls the get_data() function, but rather this is
-#'  # done by the cross-validator. However, to illustrate what this function
-#'  # does, we can call it explicitly here to get training and test data:
-#'  cv_data <- get_data(ds)  
-#'  names(cv_data)
+#' # Testing position invariance by generating training to discriminate between
+#' 7 objects # presented at the upper and middle locations and testing at the
+#' lower location
 #' 
-#'  
-#' 
+#' id_levels <- c("hand", "flower", "guitar", "face", "kiwi", "couch",  "car")   
+#' train_label_levels <- NULL
+#' test_label_levels <- NULL
+#' for (i in seq_along(id_levels)){
+#'    train_label_levels[[i]] <- c(paste(id_levels[i], "upper",sep = '_'), 
+#'                               paste(id_levels[i], "middle",sep = '_'))
+#'  test_label_levels[[i]] <- list(paste(id_levels[i], "lower",sep = '_'))
+#' }
+#'
+#'
+#'ds <- ds_generalization(real_data_binned_file_name, 
+#'                        'combined_ID_position', 18, 
+#'                        train_label_levels, 
+#'                        test_label_levels)
+#'
 #' @family datasource
 
 
@@ -172,6 +179,8 @@ get_data.ds_generalization = function(ds_generalization_obj){
   new_train_labels <- rep("not_used", dim(all_cv_data)[1])
   new_test_labels <- rep("not_used", dim(all_cv_data)[1])
   
+  
+  
   # remap the train_label_levels and test_label_levels
   for (iClass in seq_along(train_label_levels)) {
     
@@ -191,24 +200,43 @@ get_data.ds_generalization = function(ds_generalization_obj){
   }
   
   
-  browser()
+  # reformat the CV columns so that if a training or test point is not used on a give
+  #  cv split it will be set to "not_used" so that the classifier will ignore it
   
   cv_split_info <- select(all_cv_data, starts_with("CV"))
   
-  cv_split_info_train <- cbind(trial_num = 1:dim(cv_split_info)[1], new_train_labels, cv_split_info) %>%
-    tidyr::gather(CV, train_test, -new_train_labels, -trial_num)
-  
-  cv_split_info_train$train_test[cv_split_info_train$new_train_labels == "not_used"] <- "not_used"
-  
-  cv_split_info_train %>% 
-    select(-new_train_labels) %>%
-    tidyr::spread(CV, train_test) %>% View()  #, -trial_num)
+
+  cv_split_info_train_test <- cbind(trial_num = 1:dim(cv_split_info)[1], 
+                               new_train_labels, new_test_labels, cv_split_info) %>%
+    tidyr::gather(CV, train_test, -new_train_labels, -new_test_labels, -trial_num)
   
   
+  train_cv_inds <- which(cv_split_info_train_test$train_test == "train")
+  not_used_train_label_inds <- which(cv_split_info_train_test$new_train_labels == "not_used")
+  intersect_train_not_used_cv_inds <- intersect(train_cv_inds, not_used_train_label_inds)
+  cv_split_info_train_test$train_test[intersect_train_not_used_cv_inds] <- "not_used"
   
-  all_cv_data
+  test_cv_inds <- which(cv_split_info_train_test$train_test == "test")
+  not_used_test_label_inds <- which(cv_split_info_train_test$new_test_labels == "not_used")
+  intersect_test_not_used_cv_inds <- intersect(test_cv_inds, not_used_test_label_inds)
+  cv_split_info_train_test$train_test[intersect_test_not_used_cv_inds] <- "not_used"
   
 
+  cv_split_info_remapped <- cv_split_info_train_test %>% 
+    select(-new_train_labels, -new_test_labels) %>%
+    tidyr::spread(CV, train_test) 
+  
+  remapped_all_cv_data <- all_cv_data %>%
+    mutate(train_labels = new_train_labels, 
+           test_labels = new_test_labels) %>%
+    select(-starts_with("CV")) %>% 
+    cbind(cv_split_info_remapped) %>%
+    select(-trial_num)
+  
+  
+  remapped_all_cv_data
+  
+  
 }  
 
 
@@ -216,30 +244,22 @@ get_data.ds_generalization = function(ds_generalization_obj){
 
 
 
-get_parameters.ds_generalization = function(ds_basic_obj){
+get_parameters.ds_generalization = function(ds_generalization_obj){
 
-  ds_basic_obj$binned_data <- NULL
+  # get most of the parameters from the ds_basic
+  parameter_df <- get_parameters(ds_generalization_obj$the_basic_ds) %>%
+    select(-ds_basic.label_levels_to_use)
   
-  variable_lengths <- sapply(ds_basic_obj, length)
-  length_one_variables <- variable_lengths[variable_lengths < 2]
-  length_one_variables <- ds_basic_obj[names(length_one_variables)]
+  # rename them to ds_generalization
+  the_names <- names(parameter_df)
+  names(parameter_df) <- sub("ds_basic", "ds_generalization", the_names)
   
-  # convert null values to NAs so that the variables are retained
-  length_one_variables <- sapply(length_one_variables, function(x) ifelse(is.null(x), NA, x))
-  
-  parameter_df <- data.frame(val = unlist(length_one_variables)) %>%
-    mutate(key = rownames(.)) %>% 
-    tidyr::spread(key, val) %>%
-    mutate_all(type.convert) %>%
-    mutate_if(is.factor, as.character)
-  
-  parameter_df$label_levels_to_use <- list(sort(unlist(ds_basic_obj$label_levels_to_use)))
-  parameter_df$site_IDs_to_use <- list(ds_basic_obj$site_IDs_to_use)
-  
-  names(parameter_df) <- paste(class(ds_basic_obj), names(parameter_df), sep = ".")
+  # add the remapping train and test label levels
+  parameter_df$train_label_levels <- list(ds_generalization_obj$train_label_levels)
+  parameter_df$test_label_levels <- list(ds_generalization_obj$test_label_levels)
   
   parameter_df
-
+  
 }
 
 
