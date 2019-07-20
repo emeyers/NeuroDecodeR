@@ -84,7 +84,9 @@ create_binned_data <- function(raster_dir_name,
     binned_data <- rbind(binned_data, one_binned_site)
     
     # prepend siteID or raster site info, which is then added to binned site info
-    raster_site_info <- rlang::prepend(raster_site_info, setNames(as.list(iSite), "siteID"))
+    #raster_site_info <- rlang::prepend(raster_site_info, setNames(as.list(iSite), "siteID"))
+    raster_site_info$siteID <- iSite  # prepend() is deprecated so using this instead
+
     binned_site_info[[iSite]]<- raster_site_info
   }
   
