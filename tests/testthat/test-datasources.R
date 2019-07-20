@@ -7,11 +7,13 @@ real_data_binned_file_name <- file.path("..", "..", "data", "binned", "ZD_150_sa
 
 
 
+# test the ds_basic -----------------------------------------------------------
+
+
 # test that the datasource contains all the necessary methods
 #source("test_valid_NDTr_objects.R")
 ds <- ds_basic(real_data_binned_file_name, 'stimulus_ID', 18, 0)
 test_valid_datasource(ds)
-
 
 
 test_that("get_data(ds_basic_obj) returns unique points in training and test sets (no data leakage)", {
@@ -185,6 +187,31 @@ test_that("simultaneously recorded data is returned correctly", {
   
   
 })
+
+
+
+
+# test the ds_generalization  -------------------------------------------------
+
+id_levels <- c("hand", "flower", "guitar", "face", "kiwi", "couch",  "car")   
+position_levels <- c("lower", "middle", "upper")
+
+train_label_levels <- NULL
+test_label_levels <- NULL
+for (i in seq_along(id_levels)){
+  train_label_levels[[i]] <- c(paste(id_levels[i], "upper",sep = '_'), 
+                               paste(id_levels[i], "middle",sep = '_'))
+  test_label_levels[[i]] <- list(paste(id_levels[i], "lower",sep = '_'))
+}
+
+
+ds <- ds_generalization(real_data_binned_file_name, 
+                        'combined_ID_position', 18, 
+                        train_label_levels, 
+                        test_label_levels)
+
+the_data <- get_data(ds)
+
 
 
 
