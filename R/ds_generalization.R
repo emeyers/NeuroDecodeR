@@ -217,7 +217,7 @@ ds_generalization <- function(binned_file_name,
   )
   
   
-  attr(the_ds, "class") <- "ds_basic"
+  attr(the_ds, "class") <- "ds_generalization"
   the_ds
   
   
@@ -226,7 +226,7 @@ ds_generalization <- function(binned_file_name,
 
 
       
-get_data.ds_basic = function(ds_basic_obj){
+get_data.ds_generalization = function(ds_basic_obj){
         
 
     binned_data <- ds_basic_obj$binned_data
@@ -327,7 +327,7 @@ get_data.ds_basic = function(ds_basic_obj){
 
 
 
-get_parameters.ds_basic = function(ds_basic_obj){
+get_parameters.ds_generalization = function(ds_basic_obj){
 
   ds_basic_obj$binned_data <- NULL
   

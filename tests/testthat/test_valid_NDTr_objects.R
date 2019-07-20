@@ -82,7 +82,8 @@ test_valid_datasource <- function(the_datasource){
     the_data <- get_data(the_datasource)
     variable_names <- names(the_data)
   
-    expect_true("labels" %in% variable_names)
+    expect_true("train_labels" %in% variable_names)
+    expect_true("test_labels" %in% variable_names)
     expect_true("time_bin" %in% variable_names)
     expect_gt(length(grep("site", variable_names)), 0)
     expect_gt(length(grep("CV", variable_names)), 0)

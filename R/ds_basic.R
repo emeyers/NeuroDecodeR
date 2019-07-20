@@ -206,11 +206,11 @@ ds_basic <- function(binned_file_name,
     create_simultaneously_recorded_populations = create_simultaneously_recorded_populations
   )
   
-  print("in consturctor2...")
+
   attr(the_ds, "class") <- "ds_basic"
   the_ds
   
-  
+
 }
                       
 
@@ -218,9 +218,6 @@ ds_basic <- function(binned_file_name,
       
 get_data.ds_basic = function(ds_basic_obj){
         
-  
-  print("in get data...")
-  
   
     binned_data <- ds_basic_obj$binned_data
     var_to_decode <- ds_basic_obj$var_to_decode
@@ -239,8 +236,8 @@ get_data.ds_basic = function(ds_basic_obj){
     num_label_repeats_per_cv_split <- ds_basic_obj$num_label_repeats_per_cv_split
 
 
-    
-        
+
+      
     # the code that actually gets the data used to train and test the classifier  -----------
 
     curr_sites_to_use <- sample(site_IDs_to_use, num_resample_sites)
@@ -314,10 +311,14 @@ get_data.ds_basic = function(ds_basic_obj){
 
     
     # add train_labels and test_labels columns
-    browser()
+    all_cv_data  <- all_cv_data %>%
+      mutate(train_labels = labels) %>%
+      rename(test_labels = labels) %>%
+      select(train_labels, test_labels, everything())
+      
 
-    all_cv_data
-
+    all_cv_data 
+    
 
 }  # end get_data()
 

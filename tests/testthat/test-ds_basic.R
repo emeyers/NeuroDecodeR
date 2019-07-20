@@ -40,7 +40,8 @@ test_that("if labels_levels_to_use is set, only those label levels are returned"
   ds <- ds_basic("fake_binned_data.Rda", "stim_names", 10, label_levels_to_use = labels_levels_to_use)
   the_data <- get_data(ds)
   
-  expect_equal(as.character(unique(the_data$labels)), labels_levels_to_use)
+  expect_equal(as.character(unique(the_data$train_labels)), labels_levels_to_use)
+  expect_equal(as.character(unique(the_data$test_labels)), labels_levels_to_use)
   
 })
 
@@ -130,7 +131,7 @@ test_that("the correct number of repeats per CV block are returned", {
   the_data <- get_data(ds)
   
   total_num_labels <- the_data %>%
-    group_by(time_bin, labels) %>%
+    group_by(time_bin, train_labels) %>%
     summarize(n = n()) 
   
   expect_equal(total_num_labels$n, rep(num_CV * num_reps, 7 * length(unique(the_data$time_bin))))
