@@ -65,10 +65,13 @@ create_binned_data <- function(raster_dir_name,
   binned_site_info <- NULL
   
   
+
   # loop through all raster data files and bin them
   for (iSite in 1:length(file_names)) {
     
-    cat(paste(iSite, " "))
+    #cat(paste(iSite, " "))
+    cat(paste0(rep("\b", 19), collapse = ""), sprintf("binning site %-5s", iSite))
+    
     
     binned_data_object_name <- load(paste0(raster_dir_name, file_names[iSite]))
     
