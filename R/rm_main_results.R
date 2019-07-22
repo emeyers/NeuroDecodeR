@@ -27,7 +27,9 @@
 #' @export
 rm_main_results <- function(){
   
-  new_rm_main_results()
+  main_results_obj <- new_rm_main_results()
+  
+  main_results_obj
 
 }
 
