@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>A Poisson Naive Bayes classifier (CL) object — cl_poisson_naive_bayes • The Neural Decoding Toolbox in R</title>
+<title>A result metric (RM) that calculates confusion matrices — rm_confusion_matrix • The Neural Decoding Toolbox in R</title>
 
 <!-- jquery -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
@@ -32,11 +32,9 @@
 
 
 
-<meta property="og:title" content="A Poisson Naive Bayes classifier (CL) object — cl_poisson_naive_bayes" />
+<meta property="og:title" content="A result metric (RM) that calculates confusion matrices — rm_confusion_matrix" />
 
-<meta property="og:description" content="An implementation of a Poisson Naive Bayes classifier. Like all classifiers,
-this classifier learning a model based on training data and then makes
-predictions on new test data." />
+<meta property="og:description" content="This result metric calculate a confusion matrices from all points in time." />
 <meta name="twitter:card" content="summary" />
 
 
@@ -118,47 +116,52 @@ predictions on new test data." />
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>A Poisson Naive Bayes classifier (CL) object</h1>
+    <h1>A result metric (RM) that calculates confusion matrices</h1>
     
-    <div class="hidden name"><code>cl_poisson_naive_bayes.Rd</code></div>
+    <div class="hidden name"><code>rm_confusion_matrix.Rd</code></div>
     </div>
 
     <div class="ref-description">
     
-    <p>An implementation of a Poisson Naive Bayes classifier. Like all classifiers,
-this classifier learning a model based on training data and then makes
-predictions on new test data.</p>
+    <p>This result metric calculate a confusion matrices from all points in time.</p>
     
     </div>
 
-    <pre class="usage"><span class='fu'>cl_poisson_naive_bayes</span>()</pre>
-        
+    <pre class="usage"><span class='fu'>rm_confusion_matrix</span>(<span class='kw'>save_only_same_train_test_time</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</pre>
+    
+    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
+    <table class="ref-arguments">
+    <colgroup><col class="name" /><col class="desc" /></colgroup>
+    <tr>
+      <th>save_only_same_train_test_time</th>
+      <td><p>A boolean specifying whether one wants
+to create the confusion matrices when training at one point in time and
+testing a different point in time. This usually is not necessary and takes 
+up more memeory.</p></td>
+    </tr>
+    </table>
+    
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-    <p>Note: this classifier uses spike counts, so the binned data must be converted
-to use this classifier, for exmaple, if you are using the basic_DS data
-source, then use_count_data = TRUE should be set in the contructor. Also,
-preprocessors that convert the data into values that are not integers should
-not be used, for example, the fp_zscore should not be used with this
-classifier.</p>
+    <p>Like all result metrics, this result metric has functions to aggregregate
+results after completing each set of cross-validation classifications, and
+also after completing all the resample runs. The results should then be
+available in the DECODING_RESULTS object returned by the cross-validator.</p>
     
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
-    <div class='dont-index'><p>Other classifier: <code><a href='cl_max_correlation.html'>cl_max_correlation</a></code>,
-  <code><a href='cl_svm.html'>cl_svm</a></code></p></div>
+    <div class='dont-index'><p>Other result_metrics: <code><a href='rm_main_results.html'>rm_main_results</a></code></p></div>
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'> <span class='no'>ds</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='ds_basic.html'>ds_basic</a></span>(<span class='no'>basedir_file_name</span>, <span class='st'>'stimulus_ID'</span>, <span class='fl'>18</span>, <span class='kw'>use_count_data</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</div><div class='output co'>#&gt; <span class='error'>Error in load(binned_file_name): object 'basedir_file_name' not found</span></div><div class='input'> <span class='no'>fps</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>()
- <span class='no'>cl</span> <span class='kw'>&lt;-</span> <span class='fu'>cl_poisson_naive_bayes</span>()
- <span class='no'>rms</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(<span class='fu'><a href='rm_main_results.html'>rm_main_results</a></span>())
- <span class='no'>cv</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='cv_standard.html'>cv_standard</a></span>(<span class='no'>ds</span>, <span class='no'>cl</span>, <span class='no'>fps</span>, <span class='fl'>3</span>, <span class='no'>rms</span>)</div><div class='output co'>#&gt; <span class='error'>Error in cv_standard(ds, cl, fps, 3, rms): object 'ds' not found</span></div><div class='input'> 
-
-</div></pre>
+    <pre class="examples"><div class='input'><span class='co'># If you only want to use the rm_confusion_matrix(), then you can put it in a</span>
+<span class='co'># list by itself and pass it to the cross-validator.</span>
+<span class='no'>the_rms</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(<span class='fu'>rm_confusion_matrix</span>())</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
+      <li><a href="#arguments">Arguments</a></li>
       
       <li><a href="#details">Details</a></li>
 

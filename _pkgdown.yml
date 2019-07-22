@@ -27,6 +27,8 @@ reference:
 
 - title: "Result Metrics"
   contents: 
+  - "`rm_main_results`"
+  - "`rm_confusion_matrix`"
 
 - title: "Save and log results"
   contents: 
