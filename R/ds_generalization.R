@@ -107,15 +107,26 @@ ds_generalization <- function(binned_file_name,
     stop("train_label_levels must be a list of the same length as test_label_levels")
   }
   
+
   
-  # check that none of the same labels are in the training and test set
-  same_levels_in_train_and_test_sets <- intersect(unlist(train_label_levels), unlist(test_label_levels))
-  if (length(same_levels_in_train_and_test_sets) != 0){
-    stop(paste0("The label(s) ", "'", same_levels_in_train_and_test_sets), "'", 
-         "are in both the train_label_levels and test_label_levels")
+  # check that none of the same labels are in class_i of the training set and
+  # class_k of the test set where i != k
+  for (iClass in seq_along(train_label_levels)){
+    
+    train_lebels_without_class_i <- setdiff(unlist(train_label_levels), unlist(train_label_levels[[iClass]]))
+    test_labels_of_class_i <- test_label_levels[[iClass]]
+    levels_crossed_between_classes <- intersect(train_lebels_without_class_i, test_labels_of_class_i)
+    
+    if (length(levels_crossed_between_classes) != 0){
+      stop("The level(s) ", paste(levels_crossed_between_classes, collapse = " "), " 
+           are being assigned to different classes in the training and test sets which
+           is not allowed since this will lead to data leakage")
+    }
+    
   }
   
   
+
   # check that none of the the same labels are in different classes in the training set
   # (technically this could actually be ok, but the current implementation of the code
   # can't handle it)

@@ -193,34 +193,50 @@ test_that("simultaneously recorded data is returned correctly", {
 
 # test the ds_generalization  -------------------------------------------------
 
-id_levels <- c("hand", "flower", "guitar", "face", "kiwi", "couch",  "car")   
-position_levels <- c("lower", "middle", "upper")
 
-train_label_levels <- NULL
-test_label_levels <- NULL
-for (i in seq_along(id_levels)){
-  train_label_levels[[i]] <- c(paste(id_levels[i], "upper",sep = '_'), 
-                               paste(id_levels[i], "middle",sep = '_'))
-  test_label_levels[[i]] <- list(paste(id_levels[i], "lower",sep = '_'))
-}
+test_that("testing generalization_ds constructor and get data work", {
+  
+  id_levels <- c("hand", "flower", "guitar", "face", "kiwi", "couch",  "car")   
+  position_levels <- c("lower", "middle", "upper")
+  
+  train_label_levels <- NULL
+  test_label_levels <- NULL
+  for (i in seq_along(id_levels)){
+    train_label_levels[[i]] <- c(paste(id_levels[i], "upper",sep = '_'), 
+                                 paste(id_levels[i], "middle",sep = '_'))
+    test_label_levels[[i]] <- list(paste(id_levels[i], "lower",sep = '_'))
+  }
+  
+  
+  ds <- ds_generalization(real_data_binned_file_name, 
+                          'combined_ID_position', 18, 
+                          train_label_levels, 
+                          test_label_levels)
+  
+  test_valid_datasource(ds)
+  the_data <- get_data(ds)
+
+  
+  # test that if the same levels are assigned to different classes this gives an
+  # error (otherwise there could be data leakage)
+  test_label_levels2 <- train_label_levels
+  temp <- test_label_levels2[[1]]
+  test_label_levels2[[1]] <- test_label_levels2[[2]]
+  test_label_levels2[[2]] <- temp
+  expect_error(ds_generalization(real_data_binned_file_name, 
+                                        'combined_ID_position', 18, 
+                                        train_label_levels, 
+                                        test_label_levels2))
+  
+  
+})
 
 
-ds <- ds_generalization(real_data_binned_file_name, 
-                        'combined_ID_position', 18, 
-                        train_label_levels, 
-                        test_label_levels)
 
-test_valid_datasource(ds)
-
-the_data <- get_data(ds)
 
 
 # test that ds_generalization leads to results at chance in baseline 
 #  and above chance in stimulus period
-
-
-
-
 # more of an integration test than a unit test but ok
 test_that("testing classification results using generalization_ds seem reasonable", {
   
@@ -247,7 +263,7 @@ test_that("testing classification results using generalization_ds seem reasonabl
     dplyr::group_by(test_time) %>%
     dplyr::summarize(mean_accuracy = mean(actual_labels == predicted_labels))
   
-  expect_gt(filter(accuracies, test_time == "stimulus")$mean_accuracy, .6)
+  expect_gt(filter(accuracies, test_time == "stimulus")$mean_accuracy, .55)
   expect_lt(filter(accuracies, test_time == "baseline")$mean_accuracy, .3)
 
 })
