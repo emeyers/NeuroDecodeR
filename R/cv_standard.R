@@ -58,8 +58,8 @@ cv_standard <- function(datasource,
                         test_only_at_training_time = FALSE) {
   
   if (is.null(result_metrics)) {
-    result_metrics <- list(main_results_RM(), 
-                                confusion_matrix_RM())
+    result_metrics <- list(rm_main_results, 
+                                rm_confusion_matrix())
   }
         
   
