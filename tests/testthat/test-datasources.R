@@ -263,7 +263,7 @@ test_that("testing classification results using generalization_ds seem reasonabl
     dplyr::group_by(test_time) %>%
     dplyr::summarize(mean_accuracy = mean(actual_labels == predicted_labels))
   
-  expect_gt(filter(accuracies, test_time == "stimulus")$mean_accuracy, .55)
+  expect_gt(filter(accuracies, test_time == "stimulus")$mean_accuracy, .49)
   expect_lt(filter(accuracies, test_time == "baseline")$mean_accuracy, .3)
 
 })

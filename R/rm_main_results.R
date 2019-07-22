@@ -1,22 +1,50 @@
+#' A result metric (RM) that calculates central decoding accuracy measures
+#'
+#' This result metric calculate the zero-one loss, the normalized rank, and the
+#'  mean of the decision values. This is also an S3 object which has an associated
+#'  plot function to display the results.
+#' 
+#' @details
+#' Like all result metrics, this result metric has functions to aggregregate
+#' results after completing each set of cross-validation classifications, and
+#' also after completing all the resample runs. The results should then be
+#' available in the DECODING_RESULTS object returned by the cross-validator.
+#'
+#'
+#' @examples
+#' # This result metric does not take any arguments.
+#' # If you only want to use the rm_main_results(), then you can put it in a
+#' # list by itself and pass it to the cross-validator.
+#' the_rms <- list(rm_main_results())
+#' 
 
 
 
 
 # the constructor 
 #' @export
-rm_main_results <- function(the_data = data.frame(), state = 'initial', options = NULL){
+rm_main_results <- function(){
+  
+  new_rm_main_results()
+
+}
+
+
+# the internal private constructor
+new_rm_main_results <- function(the_data = data.frame(), state = 'initial', options = NULL){
   
   main_results_obj <- the_data
   
   attr(main_results_obj, "class") <- c("rm_main_results", 'data.frame')
   
   attr(main_results_obj, "state") <- state
-
+  
   attr(main_results_obj, "options") <- options
   
   main_results_obj
   
 }
+
 
 
 
@@ -84,7 +112,9 @@ aggregate_CV_split_results.rm_main_results = function(main_results_obj, predicti
               decision_vals = mean(decision_values))
 
   
-  rm_main_results(the_results, 'results combined over one cross-validation split', attributes(main_results_obj)$options)
+  new_rm_main_results(the_results, 
+                      'results combined over one cross-validation split', 
+                      attributes(main_results_obj)$options)
   
 }
 
@@ -103,10 +133,13 @@ aggregate_resample_run_results.rm_main_results = function(resample_run_results) 
               decision_vals = mean(decision_vals))
   
   
-  rm_main_results(central_results, 'final results', attributes(resample_run_results)$options)
-  
+ new_rm_main_results(central_results, 
+                     'final results', 
+                     attributes(resample_run_results)$options)
   
 }
+
+
 
 
 
