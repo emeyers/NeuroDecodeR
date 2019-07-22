@@ -23,9 +23,9 @@ different ranges of values (for example, it is useful when decoding neural
 data because different neurons can have different ranges of firing rates).
 }
 \examples{
-# The fp_zscore() constructor does not take any parameters. This
-# object just needs to added to a list and passed to the cross-validator 
-applied fp <- fp_zscore()
+# The fp_zscore() constructor does not take any parameters. This object
+# just needs to added to a list and passed to the cross-validator applied 
+fp <- fp_zscore()
 
 }
 \seealso{

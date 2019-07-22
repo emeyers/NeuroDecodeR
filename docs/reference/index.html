@@ -99,12 +99,7 @@
       </ul>
       
       <ul class="nav navbar-nav navbar-right">
-        <li>
-  <a href="https://github.com/rstudio/sparklyr">
-    <span class="fa fa-github"></span>
-     
-  </a>
-</li>
+        
       </ul>
       
     </div><!--/.nav-collapse -->
@@ -132,23 +127,51 @@
     <tbody>
       <tr>
         <th colspan="2">
-          <h2 id="section-all-functions" class="hasAnchor"><a href="#section-all-functions" class="anchor"></a>All functions</h2>
+          <h2 id="section-datasources" class="hasAnchor"><a href="#section-datasources" class="anchor"></a>Datasources</h2>
           <p class="section-desc"></p>
         </th>
       </tr>
       <tr>
         
         <td>
-          <p><code><a href="NDTr.html">NDTr</a></code> </p>
+          <p><code><a href="ds_basic.html">ds_basic()</a></code> </p>
         </td>
-        <td><p>NDTr: A package for doing neural decoding</p></td>
+        <td><p>A basic datasource object</p></td>
       </tr><tr>
         
         <td>
-          <p><code><a href="check_results_already_exist.html">check_results_already_exist()</a></code> </p>
+          <p><code><a href="ds_generalization.html">ds_generalization()</a></code> </p>
         </td>
-        <td><p>A function that checks if a decoding analysis has already been run</p></td>
+        <td><p>A datasource that allows one and test on different but related labels</p></td>
+      </tr>
+    </tbody><tbody>
+      <tr>
+        <th colspan="2">
+          <h2 id="section-feature-preprocessors" class="hasAnchor"><a href="#section-feature-preprocessors" class="anchor"></a>Feature preprocessors</h2>
+          <p class="section-desc"></p>
+        </th>
+      </tr>
+      <tr>
+        
+        <td>
+          <p><code><a href="fp_select_k_features.html">fp_select_k_features()</a></code> </p>
+        </td>
+        <td><p>A feature preprocessor (FP) that reduces the data to the best k features</p></td>
       </tr><tr>
+        
+        <td>
+          <p><code><a href="fp_zscore.html">fp_zscore()</a></code> </p>
+        </td>
+        <td><p>A feature preprocessor (FP) that zscore normalizes the data</p></td>
+      </tr>
+    </tbody><tbody>
+      <tr>
+        <th colspan="2">
+          <h2 id="section-classifiers" class="hasAnchor"><a href="#section-classifiers" class="anchor"></a>Classifiers</h2>
+          <p class="section-desc"></p>
+        </th>
+      </tr>
+      <tr>
         
         <td>
           <p><code><a href="cl_max_correlation.html">cl_max_correlation()</a></code> </p>
@@ -166,6 +189,68 @@
           <p><code><a href="cl_svm.html">cl_svm()</a></code> </p>
         </td>
         <td><p>An support vector machine (CL) object</p></td>
+      </tr>
+    </tbody><tbody>
+      <tr>
+        <th colspan="2">
+          <h2 id="section-cross-validators" class="hasAnchor"><a href="#section-cross-validators" class="anchor"></a>Cross-validators</h2>
+          <p class="section-desc"></p>
+        </th>
+      </tr>
+      <tr>
+        
+        <td>
+          <p><code><a href="cv_standard.html">cv_standard()</a></code> </p>
+        </td>
+        <td><p>The standard cross-validator (CV) object</p></td>
+      </tr>
+    </tbody><tbody>
+      <tr>
+        <th colspan="2">
+          <h2 id="section-result-metrics" class="hasAnchor"><a href="#section-result-metrics" class="anchor"></a>Result Metrics</h2>
+          <p class="section-desc"></p>
+        </th>
+      </tr>
+      
+    </tbody><tbody>
+      <tr>
+        <th colspan="2">
+          <h2 id="section-save-and-log-results" class="hasAnchor"><a href="#section-save-and-log-results" class="anchor"></a>Save and log results</h2>
+          <p class="section-desc"></p>
+        </th>
+      </tr>
+      <tr>
+        
+        <td>
+          <p><code><a href="save_and_log_results.html">save_and_log_results()</a></code> </p>
+        </td>
+        <td><p>A function saves DECODING_RESULTS and logs the parameters used in the analysis</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="check_results_already_exist.html">check_results_already_exist()</a></code> </p>
+        </td>
+        <td><p>A function that checks if a decoding analysis has already been run</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="load_decoding_results.html">load_decoding_results()</a></code> </p>
+        </td>
+        <td><p>A function that loads DECODING_RESULTS based on decoding_parameters</p></td>
+      </tr>
+    </tbody><tbody>
+      <tr>
+        <th colspan="2">
+          <h2 id="section-tools" class="hasAnchor"><a href="#section-tools" class="anchor"></a>Tools</h2>
+          <p class="section-desc"></p>
+        </th>
+      </tr>
+      <tr>
+        
+        <td>
+          <p><code><a href="create_binned_data.html">create_binned_data()</a></code> </p>
+        </td>
+        <td><p>A function that converts data from raster format to binned format</p></td>
       </tr><tr>
         
         <td>
@@ -175,57 +260,9 @@
       </tr><tr>
         
         <td>
-          <p><code><a href="create_binned_data.html">create_binned_data()</a></code> </p>
-        </td>
-        <td><p>A function that converts data from raster format to binned format</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="cv_standard.html">cv_standard()</a></code> </p>
-        </td>
-        <td><p>The standard cross-validator (CV) object</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="ds_basic.html">ds_basic()</a></code> </p>
-        </td>
-        <td><p>A basic datasource object</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="ds_generalization.html">ds_generalization()</a></code> </p>
-        </td>
-        <td><p>A datasource that allows one and test on different but related labels</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="fp_select_k_features.html">fp_select_k_features()</a></code> </p>
-        </td>
-        <td><p>A feature preprocessor (FP) that reduces the data to the best k features</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="fp_zscore.html">fp_zscore()</a></code> </p>
-        </td>
-        <td><p>A feature preprocessor (FP) that zscore normalizes the data</p></td>
-      </tr><tr>
-        
-        <td>
           <p><code><a href="get_num_label_repetitions.html">get_num_label_repetitions()</a></code> </p>
         </td>
         <td><p>Get the number of trial repetitions for a given label</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="load_decoding_results.html">load_decoding_results()</a></code> </p>
-        </td>
-        <td><p>A function that loads DECODING_RESULTS based on decoding_parameters</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="save_and_log_results.html">save_and_log_results()</a></code> </p>
-        </td>
-        <td><p>A function saves DECODING_RESULTS and logs the parameters used in the analysis</p></td>
       </tr>
     </tbody>
     </table>
@@ -234,7 +271,13 @@
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
-      <li><a href="#section-all-functions">All functions</a></li>
+      <li><a href="#section-datasources">Datasources</a></li>
+      <li><a href="#section-feature-preprocessors">Feature preprocessors</a></li>
+      <li><a href="#section-classifiers">Classifiers</a></li>
+      <li><a href="#section-cross-validators">Cross-validators</a></li>
+      <li><a href="#section-result-metrics">Result Metrics</a></li>
+      <li><a href="#section-save-and-log-results">Save and log results</a></li>
+      <li><a href="#section-tools">Tools</a></li>
     </ul>
   </div>
 </div>
