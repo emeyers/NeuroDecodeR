@@ -24,3 +24,7 @@ available in the DECODING_RESULTS object returned by the cross-validator.
 the_rms <- list(rm_main_results())
 
 }
+\seealso{
+Other result_metrics: \code{\link{rm_confusion_matrix}}
+}
+\concept{result_metrics}

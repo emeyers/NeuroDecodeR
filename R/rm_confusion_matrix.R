@@ -1,3 +1,29 @@
+#' A result metric (RM) that calculates confusion matrices
+#'
+#' This result metric calculate a confusion matrices from all points in time.
+#' 
+#' @details
+#' Like all result metrics, this result metric has functions to aggregregate
+#' results after completing each set of cross-validation classifications, and
+#' also after completing all the resample runs. The results should then be
+#' available in the DECODING_RESULTS object returned by the cross-validator.
+#'
+#' @param save_only_same_train_test_time A boolean specifying whether one wants
+#'  to create the confusion matrices when training at one point in time and
+#'  testing a different point in time. This usually is not necessary and takes 
+#'  up more memeory.
+#' 
+#' 
+#' @examples
+#' # If you only want to use the rm_confusion_matrix(), then you can put it in a
+#' # list by itself and pass it to the cross-validator.
+#' the_rms <- list(rm_confusion_matrix())
+#' 
+#' @family result_metrics
+
+
+
+
 
 
 

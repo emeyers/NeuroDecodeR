@@ -17,6 +17,8 @@
 #' # list by itself and pass it to the cross-validator.
 #' the_rms <- list(rm_main_results())
 #' 
+#' @family result_metrics
+
 
 
 
