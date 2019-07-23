@@ -69,7 +69,7 @@ aggregate_CV_split_results.rm_main_results = function(main_results_obj, predicti
   
   # calculate which predictions were correct for the zero-one loss metric
   prediction_results <- prediction_results %>%
-     dplyr::mutate(correct = actual_labels == predicted_labels)
+     dplyr::mutate(correct = .data$actual_labels == .data$predicted_labels)
   
   
   decision_vals <- select(prediction_results, starts_with("decision"))
@@ -110,10 +110,10 @@ aggregate_CV_split_results.rm_main_results = function(main_results_obj, predicti
                             normalized_rank_results = normalized_rank_results))
 
   the_results <- the_results %>%                 
-    group_by(CV, train_time, test_time) %>%
-    summarize(zero_one_loss = mean(correct),
-              normalized_rank = mean(normalized_rank_results),
-              decision_vals = mean(decision_values))
+    dplyr::group_by(.data$CV, .data$train_time, .data$test_time) %>%
+    summarize(zero_one_loss = mean(.data$correct),
+              normalized_rank = mean(.data$normalized_rank_results),
+              decision_vals = mean(.data$decision_values))
 
   
   new_rm_main_results(the_results, 
@@ -131,10 +131,10 @@ aggregate_resample_run_results.rm_main_results = function(resample_run_results) 
   
   
   central_results <- resample_run_results %>%                 
-    group_by(train_time, test_time) %>%
-    summarize(zero_one_loss = mean(zero_one_loss),
-              normalized_rank = mean(normalized_rank),
-              decision_vals = mean(decision_vals))
+    group_by(.data$train_time, .data$test_time) %>%
+    summarize(zero_one_loss = mean(.data$zero_one_loss),
+              normalized_rank = mean(.data$normalized_rank),
+              decision_vals = mean(.data$decision_vals))
   
   
  new_rm_main_results(central_results, 
@@ -179,11 +179,11 @@ plot.rm_main_results = function(main_results, result_type = 'zero_one_loss', plo
   if (result_type == 'all'){ 
     # do nothing
   } else if (result_type == 'zero_one_loss'){
-    main_results <- select(main_results, train_time, test_time, zero_one_loss)
+    main_results <- dplyr::select(main_results, train_time, test_time, zero_one_loss)
   } else if (result_type == 'normalized_rank'){
-    main_results <- select(main_results, train_time, test_time, normalized_rank)
+    main_results <- dplyr::select(main_results, train_time, test_time, normalized_rank)
   } else if (result_type == 'decision_vals'){
-    main_results <- select(main_results, train_time, test_time, decision_vals)
+    main_results <- dplyr::select(main_results, train_time, test_time, decision_vals)
   } else {
     warning(paste0("result_type must be set to either 'all', 'zero_one_loss', 'normalized_rank', or 'decision_vals'.",
                    "Using the default value of all"))
