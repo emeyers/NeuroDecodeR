@@ -11,7 +11,7 @@
 #'   saved.
 #'
 #' @export
-save_and_log_results <- function(DECODING_RESULTS, save_directory_name){
+log_save_results <- function(DECODING_RESULTS, save_directory_name){
   
   
   # maybe should deal with slash at the end of the save_directory_name...
@@ -56,7 +56,7 @@ save_and_log_results <- function(DECODING_RESULTS, save_directory_name){
   
   
   # if results already exist give a warning (maybe not needed but doesn't hurt)
-  if (check_results_already_exist(decoding_params, manifest_df)){
+  if (log_check_results_already_exist(decoding_params, manifest_df)){
     warning("The results with the same parameters already exist. Still going ahead and saving the results.")
   }
   
@@ -88,7 +88,7 @@ save_and_log_results <- function(DECODING_RESULTS, save_directory_name){
 #'  for which decoding analyses have already been run  
 #'    
 #' @export
-check_results_already_exist <- function(decoding_params, manifest_df){
+log_check_results_already_exist <- function(decoding_params, manifest_df){
   
   
   if (dim(manifest_df)[2] == 0) {
@@ -183,7 +183,7 @@ add_current_parameters_to_manifest <- function(decoding_params, manifest_df){
 #'  
 #'  
 #' @export
-load_decoding_results <- function(decoding_params, results_directory_name){
+log_load_decoding_results <- function(decoding_params, results_directory_name){
   
   
   manifest_file_name <- paste0(results_directory_name, "results_manifest.rda")
@@ -202,7 +202,7 @@ load_decoding_results <- function(decoding_params, results_directory_name){
   
   load(manifest_file_name)
   
-  if (!check_results_already_exist(decoding_params, manifest_df)){
+  if (!log_check_results_already_exist(decoding_params, manifest_df)){
     stop("It does not appear that results based on the parameters specified have been run yet.")
   }
   

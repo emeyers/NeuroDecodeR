@@ -26,14 +26,14 @@ test_that("Can save results and create a manifest file", {
   
   # add an intial result to the manifest file and save it
   # should get a warning that the manifest file does not exist
-  expect_warning(save_and_log_results(DECODING_RESULTS_1, results_dir_name))
+  expect_warning(log_save_results(DECODING_RESULTS_1, results_dir_name))
   
   # add a second result, should not get a warning
-  save_and_log_results(DECODING_RESULTS_2, results_dir_name)
+  log_save_results(DECODING_RESULTS_2, results_dir_name)
   
   
   # if the second result is added again should get a warning that there are duplicate results
-  expect_warning(save_and_log_results(DECODING_RESULTS_2, results_dir_name))
+  expect_warning(log_save_results(DECODING_RESULTS_2, results_dir_name))
   
   
 })
@@ -51,22 +51,22 @@ test_that("Can correctly assess which results have been saved", {
   
   # the parameters/results from DECODING_RESULTS_1 should be saved
   load(paste0(results_dir_name, "results_manifest.rda"))
-  expect_true(check_results_already_exist(test_params_1, manifest_df))
+  expect_true(log_check_results_already_exist(test_params_1, manifest_df))
   
   # the parameters/results from DECODING_RESULTS_3 should not exist                                   
-  expect_false(check_results_already_exist(test_params_3, manifest_df))
+  expect_false(log_check_results_already_exist(test_params_3, manifest_df))
   
   # add results 3 
-  save_and_log_results(DECODING_RESULTS_3, results_dir_name)
+  log_save_results(DECODING_RESULTS_3, results_dir_name)
 
   # now results 3 should exist
   load(paste0(results_dir_name, "results_manifest.rda"))
-  expect_true(check_results_already_exist(test_params_3, manifest_df))
+  expect_true(log_check_results_already_exist(test_params_3, manifest_df))
   
   # result 4 is the same as result 3 but only using siteIDs 1-100
   #  this should be noted as different (siteIDs is stored in a list
   #  in the manifest file so making sure comparing lists works)
-  expect_false(check_results_already_exist(test_params_4, manifest_df))
+  expect_false(log_check_results_already_exist(test_params_4, manifest_df))
   
   
   
@@ -83,15 +83,15 @@ test_that("Can load saved results", {
   test_params_2 <- get_parameters(DECODING_RESULTS_2$cross_validation_paramaters)
   test_params_5 <- get_parameters(DECODING_RESULTS_5$cross_validation_paramaters)
   
-    
+  
   # should return a single DECODING_RESULTS 
-  decoding_results_1 <- load_decoding_results(test_params_1, results_dir_name)
+  decoding_results_1 <- log_load_decoding_results(test_params_1, results_dir_name)
 
   # this is the usual DECODING_RESULTS which is a named list
   expect_named(decoding_results_1)
   
   # should return a list of DECODING_RESULTS since the data was saved twice
-  decoding_results_2 <- load_decoding_results(test_params_2, results_dir_name)
+  decoding_results_2 <- log_load_decoding_results(test_params_2, results_dir_name)
   
   # the names here are null since this is a list of decoding results
   expect_null(names(decoding_results_2))
@@ -99,7 +99,7 @@ test_that("Can load saved results", {
   # result 5 is the same as result 3 even though it was run at a different time
   # should still load result 3 using result 5 parameters (even though result 5
   # has not been added, if it had then a list of results would be returned)
-  decoding_results_3_and_5 <- load_decoding_results(test_params_5, results_dir_name)
+  decoding_results_3_and_5 <- log_load_decoding_results(test_params_5, results_dir_name)
   
 })
 
