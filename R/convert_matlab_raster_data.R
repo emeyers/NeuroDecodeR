@@ -30,7 +30,7 @@
 #' matlab_raster_dir_name <- file.path('..', '..', 'data', 'raster', 
 #'                                     'Zhang_Desimone_7objects_raster_data_mat', '')
 #' 
-#' create temporary directory to hold converted data
+#' # create temporary directory to hold converted data
 #' r_raster_dir_name <- file.path("test_convert_matlab_raster_data", "")
 #' r_raster_dir_name <- convert_matlab_raster_data(matlab_raster_dir_name, 
 #'                                                 r_raster_dir_name, 
