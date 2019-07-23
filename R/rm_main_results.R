@@ -147,9 +147,33 @@ aggregate_resample_run_results.rm_main_results = function(resample_run_results) 
 
 
 
-# plot results (TCT plot for now)
+#' A plot function for the rm_main_results object
+#'
+#' This function can plot line results or temporal cross-decoding results for
+#' the the zero-one loss, normalized rank and/or decision values after the
+#' decoding analysis has been run (and all results have been aggregated)
+#' 
+#' @param main_results A rm_main_result object that has aggregated runs from a
+#'   decoding analysis, e.g., if DECODING_RESULTS are the out from the
+#'   run_decoding(cv) then this argument should be
+#'   DECODING_RESULTS$rm_main_results.
+#' 
+#' @param result_type A string specifying the types of results to plot options
+#'   are: 'zero_one_loss', 'normalized_rank', 'decision_values', or 'all'
+#' 
+#' @param plot_type A string specifying the type of results to plot. Options are
+#'   'TCD' to plot a temporal cross decoding matrix or 'line' to create a line
+#'   plot of the decoding results as a function of time
+#' 
+#' @family result_metrics
+#' 
 #' @export
-plot.rm_main_results = function(main_results, result_type = 'all', plot_type = 'TCD') {
+plot.rm_main_results = function(main_results, result_type = 'zero_one_loss', plot_type = 'TCD') {
+  
+  
+  if (attributes(main_results)$state != "final results"){
+    stop("The results can only be plotted *after* the decoding analysis has been run")
+  }
   
   
   if (result_type == 'all'){ 
@@ -182,9 +206,21 @@ plot.rm_main_results = function(main_results, result_type = 'all', plot_type = '
     dplyr::mutate(result_type = replace(result_type, result_type == 'zero_one_loss', 'Zero-one loss'),
                  result_type = replace(result_type, result_type == 'normalized_rank', 'Normalized rank'),
                  result_type = replace(result_type, result_type == 'decision_vals', 'Decision values'))
+  
+
+  # if only a single time, just plot a bar for the decoding accuracy
+  if (length(unique(main_results$train_time)) == 1){
+    
+    main_results %>%
+      ggplot(aes(test_time, accuracy)) +
+      geom_col() +
+      facet_wrap(~result_type, scales = "free") + 
+      xlab('Time') + 
+      ylab('Accuracy')
     
 
-  if ((sum(main_results$train_time == main_results$test_time) == dim(main_results)[1]) || plot_type == 'line') {
+  } else if ((sum(main_results$train_time == main_results$test_time) == dim(main_results)[1]) || 
+             plot_type == 'line') {
     
     # if only trained and tested at the same time, create line plot
     main_results %>%

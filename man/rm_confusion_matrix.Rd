@@ -28,6 +28,7 @@ the_rms <- list(rm_confusion_matrix())
 
 }
 \seealso{
-Other result_metrics: \code{\link{rm_main_results}}
+Other result_metrics: \code{\link{plot.rm_main_results}},
+  \code{\link{rm_main_results}}
 }
 \concept{result_metrics}
