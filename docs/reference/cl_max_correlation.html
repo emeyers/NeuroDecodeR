@@ -152,16 +152,14 @@ correlation coefficients between all test points and all templates.</p>
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'># running a basic decoding analysis using the cl_max_correlation
-ds <- ds_basic(basedir_file_name, 'stimulus_ID', 18) fps <- list(fp_zscore())
-cl <- cl_max_correlation() rms <- rms <- list(rm_main_results(),
-rm_confusion_matrix()) cv <- cv_standard(ds, cl, fps, 3, rms)
-
-
-</div><div class='output co'>#&gt; <span class='error'>Error: &lt;text&gt;:2:54: unexpected symbol</span>
-#&gt; <span class='error'>1: # running a basic decoding analysis using the cl_max_correlation</span>
-#&gt; <span class='error'>2: ds &lt;- ds_basic(basedir_file_name, 'stimulus_ID', 18) fps</span>
-#&gt; <span class='error'>                                                        ^</span></div></pre>
+    <pre class="examples"><div class='input'><span class='co'># running a basic decoding analysis using the cl_max_correlation</span>
+<span class='no'>ds</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='ds_basic.html'>ds_basic</a></span>(<span class='st'>'ZD_150bins_50sampled.Rda'</span>, <span class='st'>'stimulus_ID'</span>, <span class='fl'>18</span>)
+<span class='no'>fps</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(<span class='fu'><a href='fp_zscore.html'>fp_zscore</a></span>())
+<span class='no'>cl</span> <span class='kw'>&lt;-</span> <span class='fu'>cl_max_correlation</span>()
+<span class='no'>cv</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='cv_standard.html'>cv_standard</a></span>(<span class='no'>ds</span>, <span class='no'>cl</span>, <span class='no'>fps</span>)</div><span class='co'># NOT RUN {</span>
+<span class='no'>DECODING_RESULTS</span> <span class='kw'>&lt;-</span> <span class='fu'>run_decoding</span>(<span class='no'>cv</span>)
+<span class='co'># }</span><div class='input'>
+</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>

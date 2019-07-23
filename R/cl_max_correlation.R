@@ -15,10 +15,11 @@
 #'
 #'
 #' @examples # running a basic decoding analysis using the cl_max_correlation
-#' ds <- ds_basic(basedir_file_name, 'stimulus_ID', 18) fps <- list(fp_zscore())
-#' cl <- cl_max_correlation() rms <- rms <- list(rm_main_results(),
-#' rm_confusion_matrix()) cv <- cv_standard(ds, cl, fps, 3, rms)
-#'
+#' ds <- ds_basic('ZD_150bins_50sampled.Rda', 'stimulus_ID', 18) 
+#' fps <- list(fp_zscore())
+#' cl <- cl_max_correlation() 
+#' cv <- cv_standard(ds, cl, fps)
+#' \dontrun{DECODING_RESULTS <- run_decoding(cv)}
 #'
 #' @family classifier
 

@@ -2,7 +2,7 @@
 % Please edit documentation in R/ds_generalization.R
 \name{ds_generalization}
 \alias{ds_generalization}
-\title{A datasource that allows one and test on different but related labels}
+\title{A datasource that allows training and testing on different but related labels}
 \usage{
 ds_generalization(binned_file_name, var_to_decode, num_cv_splits,
   train_label_levels, test_label_levels, use_count_data = FALSE,

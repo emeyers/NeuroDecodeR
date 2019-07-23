@@ -1,4 +1,4 @@
-#' A datasource that allows one and test on different but related labels
+#' A datasource that allows training and testing on different but related labels
 #'
 #' This datasource is useful for assessing whether information is
 #' invariant/abstract to particular conditions.
