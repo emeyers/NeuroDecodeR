@@ -35,6 +35,8 @@
 #' @docType package
 #' @name NDTr
 #'
+#' @import forcats
+#' @import purrr
 #' @import parallel  
 #' @import doParallel
 #' @import foreach
@@ -42,6 +44,7 @@
 #' @import e1071 
 #' @import ggplot2
 #' @import magrittr
+
 
 
 NULL
