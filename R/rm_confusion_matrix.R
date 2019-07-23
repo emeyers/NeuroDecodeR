@@ -62,13 +62,13 @@ aggregate_CV_split_results.rm_confusion_matrix = function(confusion_matrix_obj, 
   
   if (options$save_only_same_train_test_time) {
     prediction_results <- prediction_results %>% 
-      dplyr::filter(train_time == test_time)  
+      dplyr::filter(.data$train_time == .data$test_time)  
   }
   
   
   # create the confusion matrix
   confusion_matrix <- prediction_results %>%
-    dplyr::group_by(train_time, test_time, actual_labels, predicted_labels) %>%
+    dplyr::group_by(.data$train_time, .data$test_time, .data$actual_labels, .data$predicted_labels) %>%
     summarize(n = n())
   
   
@@ -150,9 +150,9 @@ aggregate_resample_run_results.rm_confusion_matrix = function(resample_run_resul
   
   # calculate the final confusion matrix
   confusion_matrix <-  confusion_matrix %>%
-    dplyr::group_by(train_time,  test_time, actual_labels,  predicted_labels) %>%
+    dplyr::group_by(.data$train_time,  .data$test_time, .data$actual_labels,  .data$predicted_labels) %>%
     summarize(n = sum(n)) %>%
-    dplyr::group_by(train_time,  test_time, actual_labels) %>%
+    dplyr::group_by(.data$train_time,  .data$test_time, .data$actual_labels) %>%
     mutate(conditional_pred_freq = n / sum(n))    # Pr(predicted = y | actual = k)
   
   #dplyr::group_by(train_time,  test_time) %>%
