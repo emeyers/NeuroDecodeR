@@ -14,11 +14,10 @@
 #' classifier.
 #'
 #' @examples 
-#'  ds <- ds_basic(basedir_file_name, 'stimulus_ID', 18, use_count_data = TRUE)
+#'  ds <- ds_basic('ZD_150bins_50sampled.Rda', 'stimulus_ID', 18, use_count_data = TRUE)
 #'  fps <- list()
 #'  cl <- cl_poisson_naive_bayes()
-#'  rms <- list(rm_main_results())
-#'  cv <- cv_standard(ds, cl, fps, 3, rms) 
+#'  cv <- cv_standard(ds, cl, fps) 
 #'  
 #'
 #' @family classifier

@@ -218,16 +218,16 @@ get training and testing splits of data that can be passed to a classifier.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'> <span class='co'># A typical example of creating a datasource to be passed cross-validation object   </span>
- <span class='no'>ds</span> <span class='kw'>&lt;-</span> <span class='fu'>ds_basic</span>(<span class='st'>"ZD_150bins_50sampled.Rda"</span>, <span class='st'>'stimulus_ID'</span>, <span class='fl'>18</span>)
+ <span class='no'>ds</span> <span class='kw'>&lt;-</span> <span class='fu'>ds_basic</span>(<span class='st'>'ZD_150bins_50sampled.Rda'</span>, <span class='st'>'stimulus_ID'</span>, <span class='fl'>18</span>)
 
  <span class='co'># If one has many repeats of each label, decoding can be faster if one</span>
  <span class='co'># uses fewer CV splits and repeats each label multiple times in each split.</span>
- <span class='no'>ds</span> <span class='kw'>&lt;-</span> <span class='fu'>ds_basic</span>(<span class='st'>"ZD_150bins_50sampled.Rda"</span>, <span class='st'>'stimulus_ID'</span>, <span class='fl'>6</span>,
+ <span class='no'>ds</span> <span class='kw'>&lt;-</span> <span class='fu'>ds_basic</span>(<span class='st'>'ZD_150bins_50sampled.Rda'</span>, <span class='st'>'stimulus_ID'</span>, <span class='fl'>6</span>,
                 <span class='kw'>num_label_repeats_per_cv_split</span> <span class='kw'>=</span> <span class='fl'>3</span>)
 
  <span class='co'># One can specify a subset of labels levels to be used in decoding. Here</span>
  <span class='co'>#  we just do a three-way decoding analysis between "car", "hand" and "kiwi".</span>
- <span class='no'>ds</span> <span class='kw'>&lt;-</span> <span class='fu'>ds_basic</span>(<span class='st'>"ZD_150bins_50sampled.Rda"</span>, <span class='st'>'stimulus_ID'</span>, <span class='fl'>18</span>,
+ <span class='no'>ds</span> <span class='kw'>&lt;-</span> <span class='fu'>ds_basic</span>(<span class='st'>'ZD_150bins_50sampled.Rda'</span>, <span class='st'>'stimulus_ID'</span>, <span class='fl'>18</span>,
                 <span class='kw'>label_levels_to_use</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"car"</span>, <span class='st'>"hand"</span>, <span class='st'>"kiwi"</span>))
 
  <span class='co'># One never explicitely calls the get_data() function, but rather this is</span>

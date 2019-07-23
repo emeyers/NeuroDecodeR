@@ -32,7 +32,7 @@
 #' raster_dir_name <- file.path('..', '..', 'data', 'raster', 
 #'                              'Zhang_Desimone_7objects_raster_data_rda')
 #'                              
-#' binned_file_name <- create_binned_data(raster_dir_name, "ZD", 150, 50)
+#' \dontrun{binned_file_name <- create_binned_data(raster_dir_name, "ZD", 150, 50)}
 #' 
 #' 
 
