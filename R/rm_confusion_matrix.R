@@ -184,7 +184,20 @@ new_rm_confusion_matrix <- function(the_data = data.frame(),
 
 
 
-# plot the confusion matrix results
+#' plot the confusion matrix results
+#'
+#' This function plots confusion matrices after the decoding analysis has been
+#' run (and all results have been aggregated)
+#' 
+#' @param confusion_matrix_obj A rm_confusion_matrix object that has aggregated
+#'   runs from a decoding analysis, e.g., if DECODING_RESULTS are the out from
+#'   the run_decoding(cv) then this argument should be
+#'   DECODING_RESULTS$rm_confusion_matrix.
+#' 
+#' 
+#' @family result_metrics
+
+
 #' @export
 plot.rm_confusion_matrix = function(confusion_matrix_obj) {
 
@@ -243,14 +256,30 @@ plot.rm_confusion_matrix = function(confusion_matrix_obj) {
 
 
 
-
-# plot the mutual information computed from a confusion matrix
+#' plot the mutual information computed from a confusion matrix
+#'
+#' This function can plot line results or temporal cross-decoding results for
+#' the the zero-one loss, normalized rank and/or decision values after the
+#' decoding analysis has been run (and all results have been aggregated)
+#' 
+#' @param confusion_matrix_obj A rm_confusion_matrix object that has aggregated
+#'   runs from a decoding analysis, e.g., if DECODING_RESULTS are the out from
+#'   the run_decoding(cv) then this argument should be
+#'   DECODING_RESULTS$rm_confusion_matrix.
+#' 
+#' @param plot_type A string specifying the type of results to plot. Options are
+#'   'TCD' to plot a temporal cross decoding matrix or 'line' to create a line
+#'   plot of the decoding results as a function of time
+#' 
+#' @family result_metrics
+#' 
 #' @export
 plot_MI.rm_confusion_matrix = function(confusion_matrix_obj, plot_type = 'TCD') {
   
   
   if (!(plot_type == 'TCD' || plot_type == 'line'))
     warning("plot_type must be set to 'TCD' or 'line'. Using the default value of 'TCD'")
+  
   
   # calculate the mutual information ------------------------------------------
   
