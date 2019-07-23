@@ -50,7 +50,7 @@ get_predictions.cl_poisson_naive_bayes <- function(cl_pnb_obj, training_set, tes
   
   # Train the classifier --------------------------------------------------
   lambdas_and_labels <- training_set %>% 
-    group_by(labels) %>% 
+    group_by(train_labels) %>% 
     #summarise_all(funs(mean))
     summarise_all(mean)
 
@@ -63,12 +63,12 @@ get_predictions.cl_poisson_naive_bayes <- function(cl_pnb_obj, training_set, tes
   # going to assume that for all lambda == 0, there is one additional
   # training point that had a value of 1, which will make all lambdas
   # greater than 0.
-  num_train_examples_in_each_class <- table(training_set$labels)
+  num_train_examples_in_each_class <- table(training_set$train_labels)
   
   
   # if there are the same number of training examples in each class  (as there should be)
   if (sum(abs(diff(num_train_examples_in_each_class))) == 0) {
-    lambda_data[lambda_data == 0] <- 1/(table(training_set$labels)[1] + 1)
+    lambda_data[lambda_data == 0] <- 1/(table(training_set$train_labels)[1] + 1)
   } else {
     # if there are the different numbers of training examples in different class (this really shouldn't happen)
     for (iClass in 1:length(num_train_examples_in_each_class)) {
@@ -82,7 +82,7 @@ get_predictions.cl_poisson_naive_bayes <- function(cl_pnb_obj, training_set, tes
   test_labels <- select(test_set, -starts_with("site"))
   test_data <- as.matrix(select(test_set, starts_with("site")))
   
-  num_classes <- length(unique(test_labels$labels))
+  num_classes <- length(unique(test_labels$test_labels))
   num_sites <- dim(test_data)[2]
   num_test_points <- dim(test_data)[1]
   
@@ -92,17 +92,17 @@ get_predictions.cl_poisson_naive_bayes <- function(cl_pnb_obj, training_set, tes
   log_likelihoods <- t(sweep(log_likelihoods, 1, rowSums(lgamma(test_data + 1))))
   
   # get the predicted labels
-  predicted_inds <- apply(log_likelihoods, 2, which.max)   # need to create rand.which.max() function...
-  predicted_labels <- lambdas_and_labels$labels[predicted_inds]
+  predicted_inds <- apply(log_likelihoods, 2, rand_which_max)   # NDTr helper rand_which_max() 
+  predicted_labels <- lambdas_and_labels$train_labels[predicted_inds]
   
   # create a data frame that has all the results
   results <- data.frame(test_time = test_set$time_bin, 
-                        actual_labels = test_set$labels, 
+                        actual_labels = test_set$test_labels, 
                         predicted_labels = predicted_labels)
   
   # get the decision values
   decision_values <- data.frame(t(log_likelihoods))
-  names(decision_values) <- paste0('decision_vals.', lambdas_and_labels$labels)  
+  names(decision_values) <- paste0('decision_vals.', lambdas_and_labels$train_labels)  
   
   # return the results
   results <- cbind(results, decision_values)

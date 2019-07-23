@@ -46,15 +46,15 @@ get_predictions.cl_svm <- function(cl_svm_obj, training_set, test_set) {
   
 
   ### Train the classifier  ---------------------------------------------------
-  #trained_svm <- svm(labels ~ ., data = training_set)
-  #trained_svm <- svm(x = select(training_set, -labels), y = training_set$labels)
+  #trained_svm <- svm(train_labels ~ ., data = training_set)
+  #trained_svm <- svm(x = select(training_set, -train_labels), y = training_set$train_labels)
   
   # if arguments to the svm have been supplied, use them
   if (length(cl_svm_obj$svm_options) == 0){
-    all_arguments <- list(x = select(training_set, -labels), y = training_set$labels)
+    all_arguments <- list(x = select(training_set, -train_labels), y = training_set$train_labels)
   } else{
-    all_arguments <- list(x = select(training_set, -labels), 
-                          y = training_set$labels, 
+    all_arguments <- list(x = select(training_set, -train_labels), 
+                          y = training_set$train_labels, 
                           unlist(cl_svm_obj$svm_options))
     names(all_arguments) <- c("x", "y", names(cl_svm_obj$svm_options))
   }
@@ -67,7 +67,7 @@ get_predictions.cl_svm <- function(cl_svm_obj, training_set, test_set) {
   #predicted_labels <- predict(trained_svm, test_set, decision.values = TRUE)  
   predicted_labels <- predict(trained_svm, select(test_set, starts_with("site")), decision.values = TRUE) 
   results <- data.frame(test_time = test_set$time_bin, 
-              actual_labels = test_set$labels,
+              actual_labels = test_set$test_labels,
               predicted_labels = predicted_labels)
           
   

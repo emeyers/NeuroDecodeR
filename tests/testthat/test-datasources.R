@@ -194,18 +194,24 @@ test_that("simultaneously recorded data is returned correctly", {
 # test the ds_generalization  -------------------------------------------------
 
 
+
+# generate the training and test levels for the ds_generalization
+
+id_levels <- c("hand", "flower", "guitar", "face", "kiwi", "couch",  "car")   
+position_levels <- c("lower", "middle", "upper")
+
+train_label_levels <- NULL
+test_label_levels <- NULL
+for (i in seq_along(id_levels)){
+  train_label_levels[[i]] <- c(paste(id_levels[i], "upper",sep = '_'), 
+                               paste(id_levels[i], "middle",sep = '_'))
+  test_label_levels[[i]] <- list(paste(id_levels[i], "lower",sep = '_'))
+}
+
+
+
 test_that("testing generalization_ds constructor and get data work", {
   
-  id_levels <- c("hand", "flower", "guitar", "face", "kiwi", "couch",  "car")   
-  position_levels <- c("lower", "middle", "upper")
-  
-  train_label_levels <- NULL
-  test_label_levels <- NULL
-  for (i in seq_along(id_levels)){
-    train_label_levels[[i]] <- c(paste(id_levels[i], "upper",sep = '_'), 
-                                 paste(id_levels[i], "middle",sep = '_'))
-    test_label_levels[[i]] <- list(paste(id_levels[i], "lower",sep = '_'))
-  }
   
   
   ds <- ds_generalization(real_data_binned_file_name, 
@@ -248,9 +254,9 @@ test_that("testing classification results using generalization_ds seem reasonabl
   
   cv_data <- get_data(ds)
   training_set <- filter(cv_data, time_bin == "time.200_349", CV_1 == "train") %>% 
-    select(starts_with("site"), labels = train_labels)
+    select(starts_with("site"), train_labels = train_labels)
   test_set <- filter(cv_data, time_bin %in% c("time.-350_-201", "time.200_349"), CV_1 == "test") %>% 
-    select(starts_with("site"), labels = test_labels, time_bin)
+    select(starts_with("site"), test_labels = test_labels, time_bin)
   levels(test_set$time_bin)[levels(test_set$time_bin)=="time.-350_-201"] <- "baseline"
   levels(test_set$time_bin)[levels(test_set$time_bin)=="time.200_349"] <- "stimulus"
   

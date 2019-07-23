@@ -45,7 +45,7 @@ test_that("fp_select_k_features p-values are correct", {
   all_pvals <- NULL
   for (iSite in 1:(ncol(training_set) - 1)){
        curr_data <- training_set[, iSite][[1]]
-       all_pvals[iSite] <- anova(lm(curr_data ~ training_set$labels))$Pr[1]
+       all_pvals[iSite] <- anova(lm(curr_data ~ training_set$train_labels))$Pr[1]
     }
   
   expect_equal(fp_pvals, all_pvals)  
@@ -63,8 +63,9 @@ test_that("fp_select_k_features returns the correct number of features", {
   
   fp <- fp_select_k_features(num_sites_to_exclude = 100)
   processed_data <- preprocess_data(fp, training_set, test_set)
-  expect_equal(dim(select(processed_data$training_set, starts_with("site")))[2], 32)  
-  expect_equal(dim(select(processed_data$test_set, starts_with("site")))[2], 32)  
+  expected_num_sites <- dim(select(training_set, starts_with("site")))[2] - 100
+  expect_equal(dim(select(processed_data$training_set, starts_with("site")))[2], expected_num_sites)  
+  expect_equal(dim(select(processed_data$test_set, starts_with("site")))[2], expected_num_sites)  
   
 
   num_site_to_use <- 50

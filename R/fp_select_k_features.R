@@ -59,16 +59,16 @@ preprocess_data.fp_select_k_features = function(fp, training_set, test_set){
 # writing the ANOVA function myself so that it runs faster
 
 # get the ANOVA p-values for all sites...   
-num_points_in_each_group <- training_set %>% group_by(labels) %>% summarize(n = n())
+num_points_in_each_group <- training_set %>% group_by(train_labels) %>% summarize(n = n())
 num_sites <- dim(training_set)[2] - 1
 num_groups <- dim(num_points_in_each_group)[1]    # the number of classes
 
 # marginally faster way to compute the group means (might have more of a speed up if more sites are used)
-split_data <- split(training_set[, 1:num_sites], training_set$labels)
+split_data <- split(training_set[, 1:num_sites], training_set$train_labels)
 group_means <- t(sapply(split_data, function(one_group_data) apply(one_group_data, 2, mean)))
 
 MSS <- apply(sweep(scale(group_means, scale = FALSE)^2, 1, num_points_in_each_group$n, FUN = "*"), 2, sum)
-TSS <- apply(scale(select(training_set, -labels), scale = FALSE)^2, 2, sum)
+TSS <- apply(scale(select(training_set, -train_labels), scale = FALSE)^2, 2, sum)
 SSE <- TSS - MSS   # residual SS = total SS + model SS
 
 between_deg_free <- num_groups - 1
@@ -106,8 +106,8 @@ fp_info <- data.frame(siteID = siteID,
 
  # return a list with the preprocessed data
  processed_data <- list(training_set = cbind(training_set[sites_to_use], 
-                                             labels = training_set$labels), 
-                        test_set = cbind(test_set[sites_to_use], labels = test_set$labels, 
+                                             train_labels = training_set$train_labels), 
+                        test_set = cbind(test_set[sites_to_use], test_labels = test_set$test_labels, 
                                          time_bin = test_set$time_bin), 
                         fp_info = fp_info)
     

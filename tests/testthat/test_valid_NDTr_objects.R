@@ -163,11 +163,11 @@ test_valid_feature_preprocessor <- function(the_feature_preprocessor){
     processed_data <- preprocess_data(the_feature_preprocessor, training_set, test_set)
     
     training_set_names <- names(processed_data$training_set)
-    expect_true("labels" %in% training_set_names)
+    expect_true("train_labels" %in% training_set_names)
     expect_gt(length(grep("site", training_set_names)), 0)
 
     test_set_names <- names(processed_data$test_set)
-    expect_true("labels" %in% test_set_names)
+    expect_true("test_labels" %in% test_set_names)
     expect_gt(length(grep("site", test_set_names)), 0)
     expect_true("time_bin" %in% test_set_names)
     

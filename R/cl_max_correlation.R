@@ -43,28 +43,28 @@ get_predictions.cl_max_correlation <- function(cl_max_correlation_obj,
     
   ### Train the classifier  ---------------------------------------------------
   prototypes <- train_data %>% 
-    dplyr::group_by(labels) %>% 
+    dplyr::group_by(train_labels) %>% 
     dplyr::summarise_all(mean)
   
 
   
   ### Test the classifier  ---------------------------------------------------
   train_test_cor <- cor(t(prototypes[, 2:dim(prototypes)[2]]), 
-                        t(dplyr::select(all_times_test_data, -labels, -time_bin)))
+                        t(dplyr::select(all_times_test_data, -test_labels, -time_bin)))
   
   # get the predicted labels
   predicted_inds <- apply(train_test_cor, 2, rand_which_max)
-  predicted_labels <- prototypes$labels[predicted_inds]
+  predicted_labels <- prototypes$train_labels[predicted_inds]
   
   # create a data frame that has all the results
   results <- data.frame(test_time = all_times_test_data$time_bin, 
-                        actual_labels = all_times_test_data$labels, 
+                        actual_labels = all_times_test_data$test_labels, 
                         predicted_labels = predicted_labels) # %>%
     # dplyr::mutate(correct = actual_labels == predicted_labels)
   
   # get the decision values
   decision_values <- data.frame(t(train_test_cor))
-  names(decision_values) <- paste0('decision_vals.', prototypes$labels)  
+  names(decision_values) <- paste0('decision_vals.', prototypes$train_labels)  
   
   # return the results
   results <- cbind(results, decision_values)
