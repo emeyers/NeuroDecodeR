@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>A function that loads DECODING_RESULTS based on decoding_parameters — load_decoding_results • The Neural Decoding Toolbox in R</title>
+<title>A function that checks if a decoding analysis has already been run — log_check_results_already_exist • The Neural Decoding Toolbox in R</title>
 
 <!-- jquery -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
@@ -32,9 +32,9 @@
 
 
 
-<meta property="og:title" content="A function that loads DECODING_RESULTS based on decoding_parameters — load_decoding_results" />
+<meta property="og:title" content="A function that checks if a decoding analysis has already been run — log_check_results_already_exist" />
 
-<meta property="og:description" content="A function that loads DECODING_RESULTS based on decoding_parameters" />
+<meta property="og:description" content="A function that checks if a decoding analysis has already been run" />
 <meta name="twitter:card" content="summary" />
 
 
@@ -116,18 +116,18 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>A function that loads DECODING_RESULTS based on decoding_parameters</h1>
+    <h1>A function that checks if a decoding analysis has already been run</h1>
     
-    <div class="hidden name"><code>load_decoding_results.Rd</code></div>
+    <div class="hidden name"><code>log_check_results_already_exist.Rd</code></div>
     </div>
 
     <div class="ref-description">
     
-    <p>A function that loads DECODING_RESULTS based on decoding_parameters</p>
+    <p>A function that checks if a decoding analysis has already been run</p>
     
     </div>
 
-    <pre class="usage"><span class='fu'>load_decoding_results</span>(<span class='no'>decoding_params</span>, <span class='no'>results_directory_name</span>)</pre>
+    <pre class="usage"><span class='fu'>log_check_results_already_exist</span>(<span class='no'>decoding_params</span>, <span class='no'>manifest_df</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -138,9 +138,9 @@
 be created by calling the cross-validator's get_parameters() method.</p></td>
     </tr>
     <tr>
-      <th>results_directory_name</th>
-      <td><p>A string containing the path to a directory
-that contains all the decoding results</p></td>
+      <th>manifest_df</th>
+      <td><p>A manifest file that has the list of parameters
+for which decoding analyses have already been run</p></td>
     </tr>
     </table>
     
