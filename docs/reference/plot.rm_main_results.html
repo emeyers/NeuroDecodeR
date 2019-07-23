@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>A result metric (RM) that calculates central decoding accuracy measures — rm_main_results • The Neural Decoding Toolbox in R</title>
+<title>A plot function for the rm_main_results object — plot.rm_main_results • The Neural Decoding Toolbox in R</title>
 
 <!-- jquery -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
@@ -32,11 +32,11 @@
 
 
 
-<meta property="og:title" content="A result metric (RM) that calculates central decoding accuracy measures — rm_main_results" />
+<meta property="og:title" content="A plot function for the rm_main_results object — plot.rm_main_results" />
 
-<meta property="og:description" content="This result metric calculate the zero-one loss, the normalized rank, and the
- mean of the decision values. This is also an S3 object which has an associated
- plot function to display the results." />
+<meta property="og:description" content="This function can plot line results or temporal cross-decoding results for
+the the zero-one loss, normalized rank and/or decision values after the
+decoding analysis has been run (and all results have been aggregated)" />
 <meta name="twitter:card" content="summary" />
 
 
@@ -118,52 +118,62 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>A result metric (RM) that calculates central decoding accuracy measures</h1>
+    <h1>A plot function for the rm_main_results object</h1>
     
-    <div class="hidden name"><code>rm_main_results.Rd</code></div>
+    <div class="hidden name"><code>plot.rm_main_results.Rd</code></div>
     </div>
 
     <div class="ref-description">
     
-    <p>This result metric calculate the zero-one loss, the normalized rank, and the
- mean of the decision values. This is also an S3 object which has an associated
- plot function to display the results.</p>
+    <p>This function can plot line results or temporal cross-decoding results for
+the the zero-one loss, normalized rank and/or decision values after the
+decoding analysis has been run (and all results have been aggregated)</p>
     
     </div>
 
-    <pre class="usage"><span class='fu'>rm_main_results</span>()</pre>
-        
-    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
-
-    <p>Like all result metrics, this result metric has functions to aggregregate
-results after completing each set of cross-validation classifications, and
-also after completing all the resample runs. The results should then be
-available in the DECODING_RESULTS object returned by the cross-validator.</p>
+    <pre class="usage"><span class='co'># S3 method for rm_main_results</span>
+<span class='fu'><a href='https://rdrr.io/r/graphics/plot.html'>plot</a></span>(<span class='no'>main_results</span>,
+  <span class='kw'>result_type</span> <span class='kw'>=</span> <span class='st'>"zero_one_loss"</span>, <span class='kw'>plot_type</span> <span class='kw'>=</span> <span class='st'>"TCD"</span>)</pre>
+    
+    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
+    <table class="ref-arguments">
+    <colgroup><col class="name" /><col class="desc" /></colgroup>
+    <tr>
+      <th>main_results</th>
+      <td><p>A rm_main_result object that has aggregated runs from a
+decoding analysis, e.g., if DECODING_RESULTS are the out from the
+run_decoding(cv) then this argument should be
+DECODING_RESULTS$rm_main_results.</p></td>
+    </tr>
+    <tr>
+      <th>result_type</th>
+      <td><p>A string specifying the types of results to plot options
+are: 'zero_one_loss', 'normalized_rank', 'decision_values', or 'all'</p></td>
+    </tr>
+    <tr>
+      <th>plot_type</th>
+      <td><p>A string specifying the type of results to plot. Options are
+'TCD' to plot a temporal cross decoding matrix or 'line' to create a line
+plot of the decoding results as a function of time</p></td>
+    </tr>
+    </table>
     
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
     <div class='dont-index'><p>Other result_metrics: <code><a href='plot.rm_confusion_matrix.html'>plot.rm_confusion_matrix</a></code>,
-  <code><a href='plot.rm_main_results.html'>plot.rm_main_results</a></code>,
   <code><a href='plot_MI.rm_confusion_matrix.html'>plot_MI.rm_confusion_matrix</a></code>,
-  <code><a href='rm_confusion_matrix.html'>rm_confusion_matrix</a></code></p></div>
+  <code><a href='rm_confusion_matrix.html'>rm_confusion_matrix</a></code>,
+  <code><a href='rm_main_results.html'>rm_main_results</a></code></p></div>
     
 
-    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='co'># This result metric does not take any arguments.</span>
-<span class='co'># If you only want to use the rm_main_results(), then you can put it in a</span>
-<span class='co'># list by itself and pass it to the cross-validator.</span>
-<span class='no'>the_rms</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(<span class='fu'>rm_main_results</span>())</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
+      <li><a href="#arguments">Arguments</a></li>
       
-      <li><a href="#details">Details</a></li>
-
       <li><a href="#see-also">See also</a></li>
-      
-      <li><a href="#examples">Examples</a></li>
-    </ul>
+          </ul>
 
   </div>
 </div>

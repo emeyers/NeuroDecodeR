@@ -54,24 +54,23 @@
 #' 
 #' @examples
 #'  # A typical example of creating a datasource to be passed cross-validation object   
-#'  binned_file_name <- file.path('data', 'binned', 'ZD_150_samples_binned_every_50_samples.Rda')
-#'  ds <- ds_basic(binned_file_name, 'stimulus_ID', 18)
+#'  ds <- ds_basic("ZD_150bins_50sampled.Rda", 'stimulus_ID', 18)
 #'  
 #'  # If one has many repeats of each label, decoding can be faster if one
 #'  # uses fewer CV splits and repeats each label multiple times in each split.
-#'  ds <- ds_basic(binned_file_name, 'stimulus_ID', 6,
+#'  ds <- ds_basic("ZD_150bins_50sampled.Rda", 'stimulus_ID', 6,
 #'                 num_label_repeats_per_cv_split = 3)
 #'  
 #'  # One can specify a subset of labels levels to be used in decoding. Here
 #'  #  we just do a three-way decoding analysis between "car", "hand" and "kiwi".
-#'  ds <- ds_basic(binned_file_name, 'stimulus_ID', 18,
+#'  ds <- ds_basic("ZD_150bins_50sampled.Rda", 'stimulus_ID', 18,
 #'                 label_levels_to_use = c("car", "hand", "kiwi")) 
 #'  
 #'  # One never explicitely calls the get_data() function, but rather this is
 #'  # done by the cross-validator. However, to illustrate what this function
 #'  # does, we can call it explicitly here to get training and test data:
-#'  cv_data <- get_data(ds)  
-#'  names(cv_data)
+#'  all_cv_data <- NDTr::get_data(ds)  
+#'  names(all_cv_data)
 #' 
 #'  
 #' 

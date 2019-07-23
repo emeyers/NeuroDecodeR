@@ -3,22 +3,26 @@ Title: The Neural Decoding Toolbox in R
 Version: 0.0.0.9000
 Authors@R: person("Ethan", "Meyers", email = "ethan.meyers@gmail.com", role = c("aut", "cre"))
 Description: A package that allows one to do a neural decoding analysis in R. 
-  The package is based on 4 abstract object types: datasources (DS), features preprocessors (FP), 
-  classifiers (CL), and cross-validators (CV). By combing different versions of these 4 object
-  types together, it is possible to run a range of different decoding analyses. See www.readout.info
-  for more information. 
+  The package is based on 5 abstract object types: datasources (DS), features preprocessors (FP), 
+  classifiers (CL), and result matrics (RM) and cross-validators (CV). By combing different 
+  versions of these 4 object types together, it is possible to run a range of different decoding
+  analyses. See www.readout.info for more information. 
 URL: www.readout.info
 BugReports: https://github.com/emeyers/NDTr/issues
 Depends: R (>= 3.3.3)
 License: GPL-3
 LazyData: true
 RoxygenNote: 6.1.1.9000
-Imports: R6,
+Imports: 
     stringr,
     dplyr,
     tictoc,
     R.matlab,
     e1071,
-    tidyr
+    tidyr,
+    doParallel,
+    magrittr,
+    ggplot2,
+    foreach
 Suggests: testthat
 Encoding: UTF-8
