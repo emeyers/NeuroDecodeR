@@ -75,8 +75,8 @@ get training and testing splits of data that can be passed to a classifier.
 }
 \examples{
 # Testing position invariance by generating training to discriminate between
-7 objects # presented at the upper and middle locations and testing at the
-lower location
+# 7 objects presented at the upper and middle locations and testing at the
+# lower location
 
 id_levels <- c("hand", "flower", "guitar", "face", "kiwi", "couch",  "car")   
 train_label_levels <- NULL
@@ -88,7 +88,7 @@ for (i in seq_along(id_levels)){
 }
 
 
-ds <- ds_generalization(real_data_binned_file_name, 
+ds <- ds_generalization("ZD_150bins_50sampled.Rda", 
                        'combined_ID_position', 18, 
                        train_label_levels, 
                        test_label_levels)
