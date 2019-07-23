@@ -289,7 +289,7 @@ get_parameters.cv_standard = function(cv_obj){
   
   # finally add the parameters from this cv_standard object as well
 
-  cv_parameters <- data.frame(#analysis_ID = cv_obj$analysis_ID, 
+  cv_parameters <- data.frame(analysis_ID = cv_obj$analysis_ID, 
                               cv_standard.num_resample_runs = cv_obj$num_resample_runs, 
                               cv_standard.test_only_at_training_time = cv_obj$test_only_at_training_time)
   

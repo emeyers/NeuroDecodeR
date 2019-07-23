@@ -47,12 +47,10 @@ log_save_results <- function(DECODING_RESULTS, save_directory_name){
   #decoding_params <- dplyr::select(decoding_params, saved_file_name, everything())
   
   
-  if (!("analysis_ID" %in% decoding_params)) {
-    
+  if (!("analysis_ID" %in% names(decoding_params))) {
     decoding_params$analysis_ID <- paste0(generate_analysis_ID(), "_gensave")
     decoding_params <- dplyr::select(decoding_params, analysis_ID, everything())
   }
-  
   
   
   # if results already exist give a warning (maybe not needed but doesn't hurt)
