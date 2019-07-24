@@ -126,7 +126,7 @@ generate_analysis_ID <- function(){
   curr_time <- gsub("-", "", curr_time)
   curr_time <- gsub(":", "", curr_time)
   curr_time <- gsub(" ", "_", curr_time)
-  rand_suffix <- paste0(round(runif(5, 0, 9)), collapse = "")
+  rand_suffix <- paste0(round(stats::runif(5, 0, 9)), collapse = "")
   
   analysis_ID <- paste(curr_time, rand_suffix, sep = "_")  
   

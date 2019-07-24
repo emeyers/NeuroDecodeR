@@ -105,10 +105,10 @@ ds_basic <- function(binned_file_name,
   # also keep the variable trial_number if it exists
   if (("trial_number" %in% colnames(binned_data))) {
     binned_data <- binned_data %>% 
-      dplyr::select(siteID, starts_with("time"), trial_number, labels = label_col_ind)
+      dplyr::select(.data$siteID, starts_with("time"), .data$trial_number, labels = label_col_ind)
   } else {
     binned_data <- binned_data %>% 
-      dplyr::select(siteID, starts_with("time"), labels = label_col_ind)
+      dplyr::select(.data$siteID, starts_with("time"), labels = label_col_ind)
   }
   
   
@@ -152,7 +152,7 @@ ds_basic <- function(binned_file_name,
 
     # for simultaneously recorded data there should be the same number of labels for each site
     num_trials_for_each_label_for_each_site <- binned_data %>%
-      dplyr::group_by(siteID, labels) %>%
+      dplyr::group_by(.data$siteID, labels) %>%
       dplyr::summarize(n = n()) 
     
     if (length(unique(num_trials_for_each_label_for_each_site$n)) != 1) {
@@ -169,14 +169,14 @@ ds_basic <- function(binned_file_name,
                     'by assuming all trials for each site are in the sequential same order.'))
 
       num_trials_each_site <- binned_data %>%
-        dplyr::group_by(siteID) %>%
+        dplyr::group_by(.data$siteID) %>%
         dplyr::summarize(n = n()) %>%
-        .$n
+        .data$n
       
       # assuming the trials are in order for each site, otherwise there is no way to align them
       binned_data$trial_number <- rep(1:num_trials_each_site[1], length(num_trials_each_site)) 
       
-      binned_data <- dplyr::select(binned_data, siteID, trial_number, everything())
+      binned_data <- dplyr::select(binned_data, .data$siteID, .data$trial_number, everything())
       
     }
     

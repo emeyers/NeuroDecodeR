@@ -95,7 +95,7 @@ create_binned_data <- function(raster_dir_name,
   
   
   # make the siteID be in the first column of binned dataa
-  binned_data <- binned_data %>% select(siteID, everything())
+  binned_data <- binned_data %>% select(.data$siteID, everything())
   
   # save the results to a .Rda file
   saved_binned_data_file_name <- paste0(save_prefix_name, "_", bin_width, "bins_", sampling_interval,
