@@ -49,9 +49,12 @@ The get_predictions() returns a data frame that has the following variables:
 the classifier rates a test point as coming from a particular class
 
 
+Like all NDTr objects, CL objects must also implement a get_properties() method
+which returns a data frame with one row that lists all the properties that have
+been set to allow for reproducible research.
+
 
 ## Example of internals of CL object using the cl_max_correlation
-
 
 
 If you want to implement a new FP object yourself, below is an

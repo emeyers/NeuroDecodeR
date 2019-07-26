@@ -47,6 +47,10 @@ The preprocess_data() returns a list with the two data frames *training_set* and
 *test_set* but the data in these data frames has been preprocessed based on
 parameters learned from the training_set
 
+Like all NDTr objects, FP objects must also implement a get_properties() method
+which returns a data frame with one row that lists all the properties that have
+been set to allow for reproducible research.
+
 
 ## Example of internals of FP objects using the fp_zscore
 

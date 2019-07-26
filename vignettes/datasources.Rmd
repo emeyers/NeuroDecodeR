@@ -27,6 +27,10 @@ All datasources must implement a get_data() method that returns a data frame tha
 5. CV_XXX: A list for each CV split whether a given row is in that train or test set
 
 
+Like all NDTr objects, DS objects must also implement a get_properties() method
+which returns a data frame with one row that lists all the properties that have
+been set to allow for reproducible research.
+
 
 ### Example of internals of DS objects using the ds_basic object
 

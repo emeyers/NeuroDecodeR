@@ -80,6 +80,7 @@
 <li><p>site_XXX: A collection of variables that each has data from one site (e.g., neuron, EEG channel etc.)</p></li>
 <li><p>CV_XXX: A list for each CV split whether a given row is in that train or test set</p></li>
 </ol>
+<p>Like all NDTr objects, DS objects must also implement a get_properties() method which returns a data frame with one row that lists all the properties that have been set to allow for reproducible research.</p>
 </div>
 <div id="example-of-internals-of-ds-objects-using-the-ds_basic-object" class="section level3">
 <h3 class="hasAnchor">
