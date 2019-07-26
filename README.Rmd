@@ -30,9 +30,9 @@ The package is based on 5 abstract object types:
 5. cross-validators (CV)
 
 
-By combing different versions of these 4 objecttypes together, it is possible to
-run a range of different decoding analyses. See www.readout.info for more
-information.
+By combing different versions of these 4 objecttypes together, it is
+possible to run a range of different decoding analyses. See
+www.readout.info and https://emeyers.github.io/NDTr/ for more information.
 
 
 ## Installation
@@ -43,4 +43,10 @@ You can install NDTr from github using:
 # install.packages("devtools")
 devtools::install_github("emeyers/NDTr")
 ```
+
+
+## Documentation
+
+The documetnation for this package is available at: https://emeyers.github.io/NDTr/
+
 
