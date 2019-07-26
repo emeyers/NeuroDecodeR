@@ -9,8 +9,6 @@ vignette: >
 
 
 
-## Feature Preprocessors
-
 Feature preprocessors (FP) learn a set of parameters from the training data and
 modify both the training and the test data based on these parameters, prior to
 the data being sent to the classifier. The features preprocessor objects must
@@ -18,7 +16,17 @@ only use the training data to learn the preprocessing parameters in order to
 prevent contamination between the training and test data which could bias the
 results. 
 
-### Implementing an FP: required methods and data formats
+
+## Feature preprocessors that come with the NDTr
+
+The NDTr comes with 2 feature preprocessors
+
+* `fp_zscore`
+* `fp_select_k_features`
+
+
+
+## Implementing an FP: required methods and data formats
 
 All feature preprocessors must implement preprocess_data(). This method takes
 two data frames called *training_set* and *test_set* have the following
@@ -40,9 +48,9 @@ The preprocess_data() returns a list with the two data frames *training_set* and
 parameters learned from the training_set
 
 
-### Example of internals of FP objects using the fp_zscore
+## Example of internals of FP objects using the fp_zscore
 
-If you want to implement a new FP object yourself (advanced method), below is an
+If you want to implement a new FP object yourself, below is an
 example of how the FP object gets and returns data.
 
 

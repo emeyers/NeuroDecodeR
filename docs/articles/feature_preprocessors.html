@@ -68,13 +68,19 @@
 
     
     
-<div id="feature-preprocessors" class="section level2">
-<h2 class="hasAnchor">
-<a href="#feature-preprocessors" class="anchor"></a>Feature Preprocessors</h2>
 <p>Feature preprocessors (FP) learn a set of parameters from the training data and modify both the training and the test data based on these parameters, prior to the data being sent to the classifier. The features preprocessor objects must only use the training data to learn the preprocessing parameters in order to prevent contamination between the training and test data which could bias the results.</p>
-<div id="implementing-an-fp-required-methods-and-data-formats" class="section level3">
-<h3 class="hasAnchor">
-<a href="#implementing-an-fp-required-methods-and-data-formats" class="anchor"></a>Implementing an FP: required methods and data formats</h3>
+<div id="feature-preprocessors-that-come-with-the-ndtr" class="section level2">
+<h2 class="hasAnchor">
+<a href="#feature-preprocessors-that-come-with-the-ndtr" class="anchor"></a>Feature preprocessors that come with the NDTr</h2>
+<p>The NDTr comes with 2 feature preprocessors</p>
+<ul>
+<li><code>fp_zscore</code></li>
+<li><code>fp_select_k_features</code></li>
+</ul>
+</div>
+<div id="implementing-an-fp-required-methods-and-data-formats" class="section level2">
+<h2 class="hasAnchor">
+<a href="#implementing-an-fp-required-methods-and-data-formats" class="anchor"></a>Implementing an FP: required methods and data formats</h2>
 <p>All feature preprocessors must implement preprocess_data(). This method takes two data frames called <em>training_set</em> and <em>test_set</em> have the following variables:</p>
 <div id="training_set" class="section level4">
 <h4 class="hasAnchor">
@@ -95,10 +101,10 @@
 <p>The preprocess_data() returns a list with the two data frames <em>training_set</em> and <em>test_set</em> but the data in these data frames has been preprocessed based on parameters learned from the training_set</p>
 </div>
 </div>
-<div id="example-of-internals-of-fp-objects-using-the-fp_zscore" class="section level3">
-<h3 class="hasAnchor">
-<a href="#example-of-internals-of-fp-objects-using-the-fp_zscore" class="anchor"></a>Example of internals of FP objects using the fp_zscore</h3>
-<p>If you want to implement a new FP object yourself (advanced method), below is an example of how the FP object gets and returns data.</p>
+<div id="example-of-internals-of-fp-objects-using-the-fp_zscore" class="section level2">
+<h2 class="hasAnchor">
+<a href="#example-of-internals-of-fp-objects-using-the-fp_zscore" class="anchor"></a>Example of internals of FP objects using the fp_zscore</h2>
+<p>If you want to implement a new FP object yourself, below is an example of how the FP object gets and returns data.</p>
 <div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" data-line-number="1"><span class="co"># create a ds_basic to get the data</span></a>
 <a class="sourceLine" id="cb1-2" data-line-number="2">ds &lt;-<span class="st"> </span><span class="kw"><a href="../reference/ds_basic.html">ds_basic</a></span>(<span class="st">"ZD_150bins_50sampled.Rda"</span>, <span class="st">'stimulus_ID'</span>, <span class="dv">18</span>)</a>
 <a class="sourceLine" id="cb1-3" data-line-number="3">cv_data &lt;-<span class="st"> </span><span class="kw">get_data</span>(ds)  </a>
@@ -122,11 +128,10 @@
 <a class="sourceLine" id="cb1-21" data-line-number="21"></a>
 <a class="sourceLine" id="cb1-22" data-line-number="22"><span class="co"># prior to z-score normalizing the mean (e.g. for site 1) is not 0</span></a>
 <a class="sourceLine" id="cb1-23" data-line-number="23"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/mean">mean</a></span>(training_set<span class="op">$</span>site_<span class="dv">0001</span>)</a></code></pre></div>
-<pre><code>## [1] 0.002184874</code></pre>
+<pre><code>## [1] 0.00280112</code></pre>
 <div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" data-line-number="1"><span class="co"># after normalizing the data the mean is pretty much 0</span></a>
 <a class="sourceLine" id="cb3-2" data-line-number="2"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/mean">mean</a></span>(processed_data<span class="op">$</span>training_set<span class="op">$</span>site_<span class="dv">0001</span>)</a></code></pre></div>
-<pre><code>## [1] -4.899888e-17</code></pre>
-</div>
+<pre><code>## [1] -4.639292e-18</code></pre>
 </div>
   </div>
 
@@ -135,7 +140,9 @@
       <h2 class="hasAnchor">
 <a href="#tocnav" class="anchor"></a>Contents</h2>
       <ul class="nav nav-pills nav-stacked">
-<li><a href="#feature-preprocessors">Feature Preprocessors</a></li>
+<li><a href="#feature-preprocessors-that-come-with-the-ndtr">Feature preprocessors that come with the NDTr</a></li>
+      <li><a href="#implementing-an-fp-required-methods-and-data-formats">Implementing an FP: required methods and data formats</a></li>
+      <li><a href="#example-of-internals-of-fp-objects-using-the-fp_zscore">Example of internals of FP objects using the fp_zscore</a></li>
       </ul>
 </div>
       </div>
