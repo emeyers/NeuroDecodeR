@@ -86,7 +86,7 @@ get_num_label_repetitions <- function(binned_data,
   
 
 
-
+#' @export
 plot.label_repetition <- function(label_rep_obj) {
 
   
