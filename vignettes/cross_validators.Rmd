@@ -9,7 +9,11 @@ vignette: >
 
 
 
-Cross-validators (CV) take a classifier (CL), a datasource (DS) feature preprocessors (FP) objects, and result metric (RM) objects and they run a cross-validation decoding scheme by training and testing the classifier with data generated from the datasource object (and possibly fed through the feature pre-processing first).
+Cross-validators (CV) take a classifier (CL), a datasource (DS) feature
+preprocessors (FP) objects, and result metric (RM) objects and they run a
+cross-validation decoding scheme by training and testing the classifier with
+data generated from the datasource object (and possibly fed through the feature
+pre-processing first).
 
 
 ## Cross-validators that come with the NDTr
@@ -43,7 +47,7 @@ the DS, FP, CL and RM objects) to allow for reproducible research.
 ## Example of cross-validators
 
 Examples of using the `cv_standard` can be seen by going through the
-introductory tutorial
+[Introduction tutorial](introduction_tutorial.html)
 
 
 

@@ -45,7 +45,7 @@ The get_predictions() returns a data frame that has the following variables:
 
 3. predicted_labels: the labels that the classifier predicted
 
-4. decision_val.X (optional): a group of variables that has values that indicate how strongly
+4. decision_vals.X (optional): a group of variables that has values that indicate how strongly
 the classifier rates a test point as coming from a particular class
 
 

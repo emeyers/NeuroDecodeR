@@ -13,4 +13,5 @@ articles:
   feature_preprocessors: feature_preprocessors.html
   introduction_tutorial: introduction_tutorial.html
   raster_format: raster_format.html
+  result_metrics: result_metrics.html
 
