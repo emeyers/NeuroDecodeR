@@ -8,8 +8,13 @@ vignette: >
 ---
 
 
+Datasources are used to generate training and tests splits of data. 
 
-Datasources are used to generate training and tests splits of data. All datasources must implement a get_data() method that returns a data frame that has the following variables in it: 
+
+
+### Implementing a DS: required methods and data formats
+
+All datasources must implement a get_data() method that returns a data frame that has the following variables in it: 
 
 1. train_labels: The label levels that occur on each trial in the training data set
 
@@ -22,7 +27,8 @@ Datasources are used to generate training and tests splits of data. All datasour
 5. CV_XXX: A list for each CV split whether a given row is in that train or test set
 
 
-## Example - ds_basic
+
+### Example of internals of DS objects using the ds_basic object
 
 Here is an example the data returned by the ds_basic datasource
 
@@ -40,8 +46,6 @@ all_cv_data <- get_data(ds)
  
 names(all_cv_data)
 
- 
- 
 ```
 
 

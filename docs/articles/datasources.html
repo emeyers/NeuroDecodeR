@@ -68,7 +68,11 @@
 
     
     
-<p>Datasources are used to generate training and tests splits of data. All datasources must implement a get_data() method that returns a data frame that has the following variables in it:</p>
+<p>Datasources are used to generate training and tests splits of data.</p>
+<div id="implementing-a-ds-required-methods-and-data-formats" class="section level3">
+<h3 class="hasAnchor">
+<a href="#implementing-a-ds-required-methods-and-data-formats" class="anchor"></a>Implementing a DS: required methods and data formats</h3>
+<p>All datasources must implement a get_data() method that returns a data frame that has the following variables in it:</p>
 <ol style="list-style-type: decimal">
 <li><p>train_labels: The label levels that occur on each trial in the training data set</p></li>
 <li><p>test_labels: The label levels that occur on each trial in the test data set</p></li>
@@ -76,9 +80,10 @@
 <li><p>site_XXX: A collection of variables that each has data from one site (e.g., neuron, EEG channel etc.)</p></li>
 <li><p>CV_XXX: A list for each CV split whether a given row is in that train or test set</p></li>
 </ol>
-<div id="example---ds_basic" class="section level2">
-<h2 class="hasAnchor">
-<a href="#example---ds_basic" class="anchor"></a>Example - ds_basic</h2>
+</div>
+<div id="example-of-internals-of-ds-objects-using-the-ds_basic-object" class="section level3">
+<h3 class="hasAnchor">
+<a href="#example-of-internals-of-ds-objects-using-the-ds_basic-object" class="anchor"></a>Example of internals of DS objects using the ds_basic object</h3>
 <p>Here is an example the data returned by the ds_basic datasource</p>
 <div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" data-line-number="1">ds &lt;-<span class="st"> </span><span class="kw"><a href="../reference/ds_basic.html">ds_basic</a></span>(<span class="st">"ZD_150bins_50sampled.Rda"</span>, <span class="st">'stimulus_ID'</span>, <span class="dv">18</span>)</a>
 <a class="sourceLine" id="cb1-2" data-line-number="2"></a>
@@ -130,13 +135,6 @@
   </div>
 
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
-        <div id="tocnav">
-      <h2 class="hasAnchor">
-<a href="#tocnav" class="anchor"></a>Contents</h2>
-      <ul class="nav nav-pills nav-stacked">
-<li><a href="#example---ds_basic">Example - ds_basic</a></li>
-      </ul>
-</div>
       </div>
 
 </div>

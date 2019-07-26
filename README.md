@@ -3,7 +3,7 @@
 
 <p>
 
-## Description:
+## Description
 
 The Neural Decoding Toolbox in R (NDTr) package allows one to do a
 neural decoding analysis in R.
