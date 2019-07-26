@@ -1,0 +1,191 @@
+
+---
+title: "Introduction to the NDTr"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Introduction to the NDTr}
+  %\VignetteEngine{knitr::rmarkdown}
+  \usepackage[utf8]{inputenc}
+---
+  
+ 
+The following tutorial gives a basic introduction to the data formats used by Neural Decoding Toolbox (NDTr) and shows how to run a simple decoding analysis. The tutorial is based on a dataset collected by Ying Zhang in Bob Desimone’s lab at MIT. The NDTr is based on the MATLAB Neural Decoding Toolbox which you can learn more about at [www.readout.info](www.readout.info).
+
+
+
+
+## Overview of the NDT
+
+Neural decoding is a process in which a pattern classifier learns the relationship between neural activity and experimental conditions using a *training set* of data. The reliability of the relationship between the neural activity and experimental conditions is evaluated by having the classifier predict what experimental conditions were present on a second *test set* of data.
+
+The NDTr is built around 5 different object classes that allow users to apply neural decoding in a flexible and robust way. The four types of objects are:
+
+  1. [Datasources (DS)](datasources.html) which generate training and test splits of the data.
+  
+  2. [Feature preprocessors (FP)](feature Preprocessors.html) which apply preprocessing to the training and test splits.
+ 
+  3. [Classifiers (CL)](classifiers.html) which learn the relationship between experimental conditions and data on the training set, and then predict experimental conditions on the test data.
+ 
+  4. [Result Metrics (RM)](result-metrics.html) which take the output predictions of a classifier and summerize the prediction accuracy.
+
+  5. [Cross-validators (CV)](cross-validators.html) which take the DS, FP and CL objects and run a cross-validation decoding procedure.
+
+The NDTr comes with a few implementations of each of these objects, and defines interfaces that allow one to create new objects that extend the basic functionality of the five object classes. 
+The following tutorial explains the data formats used by the Neural Decoding Toolbox, and how to run a decoding experiment using the basic versions of the four object classes.
+ 
+ 
+ 
+ 
+#### About the data used in this tutorial
+
+The data used in this tutorial was collected by Ying Zhang in Bob Desimone’s lab at MIT and was used in the supplemental figures in the paper [Object decoding with attention in inferior temporal cortex, PNAS, 2011](https://www.pnas.org/content/108/21/8850). The data consists of single unit recordings from the 132 neurons in inferior temporal cortex (IT). The recordings were made while a monkey viewed 7 different objects that were presented at three different locations (the monkey was also shown images that consisted of three objects shown simultaneously and had to perform an attention task, however for the purposes of this tutorial we are only going to analyze data from trials when single objects were shown). Each object was presented approximately 20 times at each of the three locations.
+
+To start let us load some libraries we will use in this tutorial
+
+```{r load_libraries, message=FALSE}
+
+library(NDTr)
+library(ggplot2)
+library(dplyr)
+library(tidyr)
+
+```
+
+
+
+### Data formats
+
+In order to use the NDTr, the neural data must be in a usable format. Typically this involves putting the data in [raster-format](raster-format.html) and then converting it to [binned-format](binned_format.html) using the `create_binned_data()` function. 
+
+
+#### Raster-format
+
+To run a decoding analysis using the NDTr you first need to have your data in a usable format. In this tutorial we will use data collected by Ying Zhang in Bob Desimone’s lab at MIT. The directory data/raster_format/Zhang_Desimone_7objects_raster_data/ contains data in raster-format. Each file in this directory contains data from one neuron. To start, let us load one of these files and examine its contents.
+
+```{r load_raster_file}
+
+raster_directory_name <- "../data/raster/Zhang_Desimone_7objects_raster_data_rda/"
+file_name <- "bp1001spk_01A_raster_data.rda"
+load(paste0(raster_directory_name, file_name))
+
+```
+
+
+Note that two objects were loaded into memory, raster_data, which contains the actual data from a single neuron and raster_site_info which contains any meta information about the site (for more information [see raster-format.html](raster-format.html)). Below we visualize the spiking pattern from this one neuron.
+
+
+```{r plot_raster_file, echo = FALSE}
+
+
+spikes_only_df <- raster_data %>%
+  dplyr::select(starts_with("time")) %>%
+  dplyr::mutate(trial_num = 1:dim(.)[1]) %>%    # add trial number to the data frame
+  tidyr::gather(time, spikes, -trial_num) %>%   # convert to long format for plotting
+  dplyr::mutate(time = as.numeric(substr(time, 6, 9)))  # convert time to numeric values
+
+ggplot(spikes_only_df, aes(x = time, y = trial_num)) +
+  geom_raster(aes(fill=factor(spikes))) +
+  scale_fill_manual(values=c("0"="white", "1"="black")) +
+  guides(fill = FALSE) + 
+  labs(x="Time (ms)", y="Trial") +
+  theme_classic() + 
+  ggtitle(paste("Spiking pattern from neuron: ", file_name))
+
+```
+
+
+Here, the x-axis represents time in the experiment in milliseconds, and the y-axis represents different trials. Each black tick mark represents the time when a neuron emitted an action potential. 
+
+
+
+
+#### Binning the data
+
+The NDTr decoding objects operate on data that is in binned-format. To convert data in raster-format to binned-format, we can use the function `create_binned_data()`, which calculates the average firing rate of neurons over specified intervals and sampled with a specified frequency (i.e., a boxcar filter is used). create_binned_data() takes in four arguments: 
+
+1. the name of the directory where the raster-format data is stored 
+2. the name (potentially including a directory) that the binned data should be saved as
+3. a bin size that specifies how much time the firing rates should be calculated over
+4. a sampling interval that specifies how frequently to calculate these firing rates. 
+
+To calculate the average firing rates in 150 ms bins sampled every 50 ms, the following commands can be used:
+
+```{r bin_data, eval=FALSE}
+
+library(NDTr)
+
+binned_file_name <- create_binned_data(raster_directory_name, "ZD", 150, 50)
+
+```
+
+
+#### Determining how many times each condition was repeated
+
+Before beginning the decoding analysis it is useful to know how many times each experimental condition (e.g., stimulus) was presented to each site (e.g., neuron). In particular, it is useful to know how many times the condition that has the fewest repetitions was presented. To do this we will use the function `get_num_label_repetitions` which finds uses data that is in binned-format and calculates how many trials each label level was presented. 
+
+Below we use the plot function assocated with the results that are returned to see how many times the labels were repeated.
+
+
+```{r label_repetitions}
+
+binned_file_name <- "ZD_150bins_50sampled.Rda" 
+label_rep_info <- get_num_label_repetitions(binned_file_name, "stimulus_ID") 
+plot(label_rep_info)  
+
+```
+
+Here we see that there are 132 neurons have 60 repetitions all of the labels, and that there are 6 neurons where the flower label was only presented 59 times. Thus if we want to use all the neurons in the decoding analysis the maximum number of cross-validation splits we could use would be 59. Alternatively, we could use 60 cross-validation splits and only use the 125 neurons that have 60 repetitions. 
+
+
+
+### Performing a decoding analysis
+
+Performing a decoding analyses involves several steps:
+
+1. creating a datasource (DS) object that generates training and test splits of the data.
+
+2. optionally creating feature-preprocessor (FP) objects that learn parameters from the training data, and preprocess the training and test data.
+
+3. creating a classifier (CL) object that learns the relationship between the training data and training labels, and then evaluates the strength of this relationship on the test data.
+
+4. creating result metric (RM) objects that aggregate the predictions to create result summaries
+
+5. running a cross-validator object that using the datasource (DS), the feature-preprocessor (FP) and the classifier (CL) objects to do a cross-validation procedure that estimates the decoding accuracy.
+
+
+Below we describe how to create and run these objects on the Zhang-Desimone dataset.
+
+
+
+#### Creating a Datasource (DS) object
+
+A datasource object is used by the cross-validator to generate training and test splits of the data. Below we create a `ds_basic` object that takes binned-format data, name of the labels variable to be decoding, and a scalar that specifies how many cross-validation splits to use. The default behavior of this datasource is to create test splits that have one example of each object in them and *num_cv_splits - 1* examples of each object in the training set.
+
+As calculated above, all 132 neurons have 59 repetitions of each stimulus, and 125 neurons have 60 repetitions of each stimulus. Thus we can use up to 59 cross-validation splits using all neurons, or we could set the datasource to use only a subset of neurons and use 60 cross-validation splits. For the purpose of this tutorial, we will use all the neurons and only 20 cross-validation splits to make the code run a little faster. The `ds_basic` datasource object also has many more properties that can be set, including specifying that only certain label levels or neurons should be used. More information about this object can be found [here](datasources.html).
+
+
+```{r datasource}
+
+binned_file_name <- "ZD_150bins_50sampled.Rda" 
+variable_to_decode <- "stimulus_ID"
+num_cv_splits <- 20
+  
+ds <- ds_basic(binned_file_name, variable_to_decode, num_cv_splits)
+  
+```
+
+
+#### Creating a feature-preprocessor (FP) object
+
+
+
+
+
+
+
+
+
+
+
+
+
