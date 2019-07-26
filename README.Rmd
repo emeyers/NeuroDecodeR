@@ -11,15 +11,33 @@ knitr::opts_chunk$set(
   fig.path = "README-"
 )
 ```
-##Description:
-A package that allows one to do a neural decoding analysis in R. 
-  The package is based on 5 abstract object types: datasources (DS), features preprocessors (FP), 
-  classifiers (CL), result metrics (RM) and cross-validators (CV). By combing different versions of these 4 object
-  types together, it is possible to run a range of different decoding analyses. See www.readout.info for more information. 
+
+
+<p>
+
+
+## Description:
+
+The Neural Decoding Toolbox in R (NDTr) package allows one to do a neural
+decoding analysis in R.
+
+The package is based on 5 abstract object types: 
+
+1. datasources (DS)
+2. features preprocessors (FP)
+3. classifiers (CL)
+4. result metrics (RM) 
+5. cross-validators (CV)
+
+
+By combing different versions of these 4 objecttypes together, it is possible to
+run a range of different decoding analyses. See www.readout.info for more
+information.
+
 
 ## Installation
 
-You can install NDTr from github with:
+You can install NDTr from github using:
 
 ```{r gh-installation, eval = FALSE}
 # install.packages("devtools")

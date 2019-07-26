@@ -33,17 +33,17 @@ neural decoding in a flexible and robust way. The four types of objects are:
   1. [Datasources (DS)](datasources.html) which generate training and test
   splits of the data.
   
-  2. [Feature preprocessors (FP)](feature Preprocessors.html) which apply
+  2. [Feature preprocessors (FP)](feature_preprocessors.html) which apply
   preprocessing to the training and test splits.
  
   3. [Classifiers (CL)](classifiers.html) which learn the relationship between
   experimental conditions and data on the training set, and then predict
   experimental conditions on the test data.
  
-  4. [Result Metrics (RM)](result-metrics.html) which take the output
+  4. [Result Metrics (RM)](result_metrics.html) which take the output
   predictions of a classifier and summerize the prediction accuracy.
 
-  5. [Cross-validators (CV)](cross-validators.html) which take the DS, FP and CL
+  5. [Cross-validators (CV)](cross_validators.html) which take the DS, FP and CL
   objects and run a cross-validation decoding procedure.
 
 The NDTr comes with a few implementations of each of these objects, and defines

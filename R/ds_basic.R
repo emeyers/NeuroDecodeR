@@ -213,7 +213,7 @@ ds_basic <- function(binned_file_name,
                       
 
 
-      
+#' @export
 get_data.ds_basic = function(ds_basic_obj){
         
   

@@ -211,7 +211,38 @@ get training and testing splits of data that can be passed to a classifier.</p>
  <span class='co'># One never explicitely calls the get_data() function, but rather this is</span>
  <span class='co'># done by the cross-validator. However, to illustrate what this function</span>
  <span class='co'># does, we can call it explicitly here to get training and test data:</span>
- <span class='no'>all_cv_data</span> <span class='kw'>&lt;-</span> <span class='kw pkg'>NDTr</span><span class='kw ns'>::</span><span class='fu'>get_data</span>(<span class='no'>ds</span>)</div><div class='output co'>#&gt; <span class='error'>Error in UseMethod("get_data"): no applicable method for 'get_data' applied to an object of class "ds_basic"</span></div><div class='input'> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/names'>names</a></span>(<span class='no'>all_cv_data</span>)</div><div class='output co'>#&gt; <span class='error'>Error in eval(expr, envir, enclos): object 'all_cv_data' not found</span></div><div class='input'>
+ <span class='no'>all_cv_data</span> <span class='kw'>&lt;-</span> <span class='kw pkg'>NDTr</span><span class='kw ns'>::</span><span class='fu'>get_data</span>(<span class='no'>ds</span>)
+ <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/names'>names</a></span>(<span class='no'>all_cv_data</span>)</div><div class='output co'>#&gt;   [1] "train_labels" "test_labels"  "time_bin"     "site_0001"    "site_0002"   
+#&gt;   [6] "site_0003"    "site_0004"    "site_0005"    "site_0006"    "site_0007"   
+#&gt;  [11] "site_0008"    "site_0009"    "site_0010"    "site_0011"    "site_0012"   
+#&gt;  [16] "site_0013"    "site_0014"    "site_0015"    "site_0016"    "site_0017"   
+#&gt;  [21] "site_0018"    "site_0019"    "site_0020"    "site_0021"    "site_0022"   
+#&gt;  [26] "site_0023"    "site_0024"    "site_0025"    "site_0026"    "site_0027"   
+#&gt;  [31] "site_0028"    "site_0029"    "site_0030"    "site_0031"    "site_0032"   
+#&gt;  [36] "site_0033"    "site_0034"    "site_0035"    "site_0036"    "site_0037"   
+#&gt;  [41] "site_0038"    "site_0039"    "site_0040"    "site_0041"    "site_0042"   
+#&gt;  [46] "site_0043"    "site_0044"    "site_0045"    "site_0046"    "site_0047"   
+#&gt;  [51] "site_0048"    "site_0049"    "site_0050"    "site_0051"    "site_0052"   
+#&gt;  [56] "site_0053"    "site_0054"    "site_0055"    "site_0056"    "site_0057"   
+#&gt;  [61] "site_0058"    "site_0059"    "site_0060"    "site_0061"    "site_0062"   
+#&gt;  [66] "site_0063"    "site_0064"    "site_0065"    "site_0066"    "site_0067"   
+#&gt;  [71] "site_0068"    "site_0069"    "site_0070"    "site_0071"    "site_0072"   
+#&gt;  [76] "site_0073"    "site_0074"    "site_0075"    "site_0076"    "site_0077"   
+#&gt;  [81] "site_0078"    "site_0079"    "site_0080"    "site_0081"    "site_0082"   
+#&gt;  [86] "site_0083"    "site_0084"    "site_0085"    "site_0086"    "site_0087"   
+#&gt;  [91] "site_0088"    "site_0089"    "site_0090"    "site_0091"    "site_0092"   
+#&gt;  [96] "site_0093"    "site_0094"    "site_0095"    "site_0096"    "site_0097"   
+#&gt; [101] "site_0098"    "site_0099"    "site_0100"    "site_0101"    "site_0102"   
+#&gt; [106] "site_0103"    "site_0104"    "site_0105"    "site_0106"    "site_0107"   
+#&gt; [111] "site_0108"    "site_0109"    "site_0110"    "site_0111"    "site_0112"   
+#&gt; [116] "site_0113"    "site_0114"    "site_0115"    "site_0116"    "site_0117"   
+#&gt; [121] "site_0118"    "site_0119"    "site_0120"    "site_0121"    "site_0122"   
+#&gt; [126] "site_0123"    "site_0124"    "site_0125"    "site_0126"    "site_0127"   
+#&gt; [131] "site_0128"    "site_0129"    "site_0130"    "site_0131"    "site_0132"   
+#&gt; [136] "CV_1"         "CV_2"         "CV_3"         "CV_4"         "CV_5"        
+#&gt; [141] "CV_6"         "CV_7"         "CV_8"         "CV_9"         "CV_10"       
+#&gt; [146] "CV_11"        "CV_12"        "CV_13"        "CV_14"        "CV_15"       
+#&gt; [151] "CV_16"        "CV_17"        "CV_18"       </div><div class='input'>
  
 
 </div></pre>

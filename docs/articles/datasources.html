@@ -5,11 +5,11 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Datasources(DS) • The Neural Decoding Toolbox in R</title>
+<title>Datasources • The Neural Decoding Toolbox in R</title>
 <!-- jquery --><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script><!-- Bootstrap --><link href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/3.3.7/sandstone/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha256-U5ZEeKfGNOja007MMD3YBI0A3OSZOQbeG6z2f2Y0hu8=" crossorigin="anonymous"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha256-eZrrJcwDc/3uDhsdt61sL2oOBY362qM3lon1gyExkL0=" crossorigin="anonymous">
 <!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.4/clipboard.min.js" integrity="sha256-FiZwavyI2V6+EXO1U+xzLG3IKldpiTFf3153ea9zikQ=" crossorigin="anonymous"></script><!-- sticky kit --><script src="https://cdnjs.cloudflare.com/ajax/libs/sticky-kit/1.1.3/sticky-kit.min.js" integrity="sha256-c4Rlo1ZozqTPE2RLuvbusY3+SU1pQaJC0TjuhygMipw=" crossorigin="anonymous"></script><!-- pkgdown --><link href="../pkgdown.css" rel="stylesheet">
-<script src="../pkgdown.js"></script><meta property="og:title" content="Datasources(DS)">
+<script src="../pkgdown.js"></script><meta property="og:title" content="Datasources">
 <meta property="og:description" content="">
 <meta name="twitter:card" content="summary">
 <!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script><!--[if lt IE 9]>
@@ -58,7 +58,7 @@
       </header><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
-      <h1>Datasources(DS)</h1>
+      <h1>Datasources</h1>
             
       
       
@@ -68,22 +68,75 @@
 
     
     
-<div style="line-height: 1.6em;">
-<p>Datasource objects (DS) take binned data and labels as inputs and generate population vectors (which are used by a cross-validator object to train and test a classifier). Datasources must implement a get_data method that returns the training and test data splits. The get_data method must have the following structure:</p>
-<p><strong>[all_XTr, all_YTr, all_XTe, all_YTe, ADDITIONAL_INFO] = ds.get_data</strong></p>
-<p>The outputs of this methods are:</p>
-<p><strong>1. all_XTr{iTime}{iCV} = [num_features x num_training_points]</strong></p>
-<p>A cell array that has the training data for all times and cross-validation splits</p>
-<p><strong>2. all_YTr = [num_training_point x 1]</strong></p>
-<p>The training labels</p>
-<p><strong>3. all_XTe{iTime}{iCV} = [num_features x num_test_points]</strong></p>
-<p>A cell array that has the test data for all times and cross-validation splits</p>
-<p><strong>4. all_YTe = [num_test_point x 1]</strong></p>
-<p>The test labels</p>
+<p>Datasources are used to generate training and tests splits of data. All datasources must implement a get_data() method that returns a data frame that has the following variables in it:</p>
+<ol style="list-style-type: decimal">
+<li><p>train_labels: The label levels that occur on each trial in the training data set</p></li>
+<li><p>test_labels: The label levels that occur on each trial in the test data set</p></li>
+<li><p>time_bin: The time in the experiment where the <em>test</em> data comes from</p></li>
+<li><p>site_XXX: A collection of variables that each has data from one site (e.g., neuron, EEG channel etc.)</p></li>
+<li><p>CV_XXX: A list for each CV split whether a given row is in that train or test set</p></li>
+</ol>
+<div id="example---ds_basic" class="section level2">
+<h2 class="hasAnchor">
+<a href="#example---ds_basic" class="anchor"></a>Example - ds_basic</h2>
+<p>Here is an example the data returned by the ds_basic datasource</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" data-line-number="1">ds &lt;-<span class="st"> </span><span class="kw"><a href="../reference/ds_basic.html">ds_basic</a></span>(<span class="st">"ZD_150bins_50sampled.Rda"</span>, <span class="st">'stimulus_ID'</span>, <span class="dv">18</span>)</a>
+<a class="sourceLine" id="cb1-2" data-line-number="2"></a>
+<a class="sourceLine" id="cb1-3" data-line-number="3">all_cv_data &lt;-<span class="st"> </span><span class="kw">get_data</span>(ds)  </a>
+<a class="sourceLine" id="cb1-4" data-line-number="4"> </a>
+<a class="sourceLine" id="cb1-5" data-line-number="5"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/names">names</a></span>(all_cv_data)</a></code></pre></div>
+<pre><code>##   [1] "train_labels" "test_labels"  "time_bin"     "site_0001"   
+##   [5] "site_0002"    "site_0003"    "site_0004"    "site_0005"   
+##   [9] "site_0006"    "site_0007"    "site_0008"    "site_0009"   
+##  [13] "site_0010"    "site_0011"    "site_0012"    "site_0013"   
+##  [17] "site_0014"    "site_0015"    "site_0016"    "site_0017"   
+##  [21] "site_0018"    "site_0019"    "site_0020"    "site_0021"   
+##  [25] "site_0022"    "site_0023"    "site_0024"    "site_0025"   
+##  [29] "site_0026"    "site_0027"    "site_0028"    "site_0029"   
+##  [33] "site_0030"    "site_0031"    "site_0032"    "site_0033"   
+##  [37] "site_0034"    "site_0035"    "site_0036"    "site_0037"   
+##  [41] "site_0038"    "site_0039"    "site_0040"    "site_0041"   
+##  [45] "site_0042"    "site_0043"    "site_0044"    "site_0045"   
+##  [49] "site_0046"    "site_0047"    "site_0048"    "site_0049"   
+##  [53] "site_0050"    "site_0051"    "site_0052"    "site_0053"   
+##  [57] "site_0054"    "site_0055"    "site_0056"    "site_0057"   
+##  [61] "site_0058"    "site_0059"    "site_0060"    "site_0061"   
+##  [65] "site_0062"    "site_0063"    "site_0064"    "site_0065"   
+##  [69] "site_0066"    "site_0067"    "site_0068"    "site_0069"   
+##  [73] "site_0070"    "site_0071"    "site_0072"    "site_0073"   
+##  [77] "site_0074"    "site_0075"    "site_0076"    "site_0077"   
+##  [81] "site_0078"    "site_0079"    "site_0080"    "site_0081"   
+##  [85] "site_0082"    "site_0083"    "site_0084"    "site_0085"   
+##  [89] "site_0086"    "site_0087"    "site_0088"    "site_0089"   
+##  [93] "site_0090"    "site_0091"    "site_0092"    "site_0093"   
+##  [97] "site_0094"    "site_0095"    "site_0096"    "site_0097"   
+## [101] "site_0098"    "site_0099"    "site_0100"    "site_0101"   
+## [105] "site_0102"    "site_0103"    "site_0104"    "site_0105"   
+## [109] "site_0106"    "site_0107"    "site_0108"    "site_0109"   
+## [113] "site_0110"    "site_0111"    "site_0112"    "site_0113"   
+## [117] "site_0114"    "site_0115"    "site_0116"    "site_0117"   
+## [121] "site_0118"    "site_0119"    "site_0120"    "site_0121"   
+## [125] "site_0122"    "site_0123"    "site_0124"    "site_0125"   
+## [129] "site_0126"    "site_0127"    "site_0128"    "site_0129"   
+## [133] "site_0130"    "site_0131"    "site_0132"    "CV_1"        
+## [137] "CV_2"         "CV_3"         "CV_4"         "CV_5"        
+## [141] "CV_6"         "CV_7"         "CV_8"         "CV_9"        
+## [145] "CV_10"        "CV_11"        "CV_12"        "CV_13"       
+## [149] "CV_14"        "CV_15"        "CV_16"        "CV_17"       
+## [153] "CV_18"</code></pre>
+<p>
+</p>
 </div>
   </div>
 
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
+        <div id="tocnav">
+      <h2 class="hasAnchor">
+<a href="#tocnav" class="anchor"></a>Contents</h2>
+      <ul class="nav nav-pills nav-stacked">
+<li><a href="#example---ds_basic">Example - ds_basic</a></li>
+      </ul>
+</div>
       </div>
 
 </div>
