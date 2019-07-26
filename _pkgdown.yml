@@ -54,15 +54,7 @@ navbar:
       href: "reference/index.html"
     
     - text: "Tutorial"
-      href: "articles/Tutorial.html"
+      href: "articles/introduction_tutorial.html"
       
-    - text: "Download Datasets"
-      menu:
-      - text: "Zhang-Desimone 7 object dataset"
-        href: "articles/Zhang-Desimone 7 object dataset.html"
-      - text: "Isik 26 letter MEG dataset"
-        href: "articles/Isik 26 letter MEG dataset.html"
-      - text: "Qi-Constantinidis pre and post training dataset"
-        href: "articles/Qi-Constantinidis pre and post training dataset.html"
   
 
