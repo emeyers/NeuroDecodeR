@@ -5,11 +5,11 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Raster-format • The Neural Decoding Toolbox in R</title>
+<title>Raster format • The Neural Decoding Toolbox in R</title>
 <!-- jquery --><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script><!-- Bootstrap --><link href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/3.3.7/sandstone/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha256-U5ZEeKfGNOja007MMD3YBI0A3OSZOQbeG6z2f2Y0hu8=" crossorigin="anonymous"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha256-eZrrJcwDc/3uDhsdt61sL2oOBY362qM3lon1gyExkL0=" crossorigin="anonymous">
 <!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.4/clipboard.min.js" integrity="sha256-FiZwavyI2V6+EXO1U+xzLG3IKldpiTFf3153ea9zikQ=" crossorigin="anonymous"></script><!-- sticky kit --><script src="https://cdnjs.cloudflare.com/ajax/libs/sticky-kit/1.1.3/sticky-kit.min.js" integrity="sha256-c4Rlo1ZozqTPE2RLuvbusY3+SU1pQaJC0TjuhygMipw=" crossorigin="anonymous"></script><!-- pkgdown --><link href="../pkgdown.css" rel="stylesheet">
-<script src="../pkgdown.js"></script><meta property="og:title" content="Raster-format">
+<script src="../pkgdown.js"></script><meta property="og:title" content="Raster format">
 <meta property="og:description" content="">
 <meta name="twitter:card" content="summary">
 <!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script><!--[if lt IE 9]>
@@ -58,7 +58,7 @@
       </header><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
-      <h1>Raster-format</h1>
+      <h1>Raster format</h1>
             
       
       
@@ -68,17 +68,30 @@
 
     
     
-<div style="line-height: 1.6em;">
 <p>Raster-format data files contain information from a single site (e.g., data from one neuron, one LFP channel, etc.). Data that is in raster-format contains two variables: raster_data, and raster_site_info, which are described below.</p>
-<p>####raster_data</p>
+<div id="raster_data" class="section level2">
+<h2 class="hasAnchor">
+<a href="#raster_data" class="anchor"></a>raster_data</h2>
 <p>The variable raster_data actually contains two things: labels and the result data. The result data is a <em>[num_trials x num_times]</em> matrix, where each row is data from one trial, and each column is data from one time point (relative to some event that the data was aligned to). The trials should be in the order that they were shown to a subject, i.e., the first row of the matrix should come from the first trial, the second row from the second trial, etc.. For spiking data, this matrix will contain a 1 at every time there is a spike and a zero at every time there was not a spike. For continuous data, such as LFPs, MEG data, etc., each point in a row should be the continuous LFP/MEG value that is recorded on each trial.</p>
 <p>In addition to these data, the label columns on the sides contain cell arrays of strings (or vectors of numbers) that indicate the labels for what experimental conditions were present on each trial (e.g., labels.stimulus_position = upper, labels.stimulus_ID = car). Having a structure with cell arrays that contain different labels is useful because it allows one to decoding different information from the data. For example, suppose we had an experiment in which images of ten different people and images of ten different cars were shown. Then we could have the variable raster_labels.stimulus_ID that had 20 unique string names corresponding to each exact person or car image that was shown on each trial. Additionally, we could have a second raster_labels.face_or_car that contained only the strings ‘face’, or ‘car’ that indicated whether a face or a car was shown on each trial. It would then be possible to run two decoding analyses, one in which we try to decode each image regardless of whether it is a face or a car (where chance would be 1/20), and a second analysis in which we try to decode whether an image is a face or a car (where chance would be 1/2).</p>
-<p>####raster_site_info</p>
+</div>
+<div id="raster_site_info" class="section level2">
+<h2 class="hasAnchor">
+<a href="#raster_site_info" class="anchor"></a>raster_site_info</h2>
 <p>The variable raster_site_info is structure that contains any additional information about the site that should be saved. For example, this structure could contain information about the date that data was recorded on (e.g., raster_site_info.date_recorded = 2011_9_28), or number to identify the session that the data was recorded from (e.g., raster_site_info.sessionID = 200), or information about the spike sorting quality (e.g., raster_site_info.isMUA = 1), etc.. At the moment any variable is allowed in this structure (and it is not strictly necessary to have this structure for the decoding algorithms to run).</p>
+</div>
 </div>
   </div>
 
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
+        <div id="tocnav">
+      <h2 class="hasAnchor">
+<a href="#tocnav" class="anchor"></a>Contents</h2>
+      <ul class="nav nav-pills nav-stacked">
+<li><a href="#raster_data">raster_data</a></li>
+      <li><a href="#raster_site_info">raster_site_info</a></li>
+      </ul>
+</div>
       </div>
 
 </div>
@@ -92,9 +105,5 @@
   <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.3.0.</p>
 </div>
       </footer>
-</div>
-
-  
-
-  </body>
+</body>
 </html>

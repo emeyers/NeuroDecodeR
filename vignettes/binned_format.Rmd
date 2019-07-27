@@ -1,15 +1,15 @@
 ---
-title: "Binned-format"
-
-output: html_document
+title: "Binned format"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Binned format}
+  %\VignetteEngine{knitr::rmarkdown}
+  \usepackage[utf8]{inputenc}
 ---
 
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
-```
-<div style="line-height: 1.6em;">
 
-Binned-format data contains data from multiple sites (e.g., data from many neurons, LFP channels, etc.). Data that is in binned-format is very similar to data that is in raster-format except that it contains information from multiple sites and often contains the information at a coarser resolution; for example, binned data would typically contain firing rates over some time interval sampled at a lower rate, as opposed to raster-format data that would typically contain individual spikes sampled at a higher rate. Binned-format data is typically created from raster-format data using the function `create_time_averaged_binned_data_from_raster_data` which converts a directory of raster-format files into a binned-format file that is useful for decoding. Like rater-format data, binned-format data also contains three variables which are: `binned_data`, `binned_labels` and `binned_site_info` . More details about these variables are described below and also see the documentation on [raster-format](Raster-format.html) for more information.
+
+Binned-format data contains data from multiple sites (e.g., data from many neurons, LFP channels, etc.). Data that is in binned-format is very similar to data that is in raster-format except that it contains information from multiple sites and often contains the information at a coarser resolution; for example, binned data would typically contain firing rates over some time interval sampled at a lower rate, as opposed to raster-format data that would typically contain individual spikes sampled at a higher rate. Binned-format data is typically created from raster-format data using the function `create_time_averaged_binned_data_from_raster_data` which converts a directory of raster-format files into a binned-format file that is useful for decoding. Like rater-format data, binned-format data also contains three variables which are: `binned_data`, `binned_labels` and `binned_site_info` . More details about these variables are described below and also see the documentation on [raster-format](raster-format.html) for more information.
 
 ####binned_data
 

@@ -71,7 +71,7 @@ approximately 20 times at each of the three locations.
 
 To start let us load some libraries we will use in this tutorial
 
-```{r load_libraries, message=FALSE}
+```{r load_libraries, message=FALSE, warning=FALSE}
 
 library(NDTr)
 library(ggplot2)

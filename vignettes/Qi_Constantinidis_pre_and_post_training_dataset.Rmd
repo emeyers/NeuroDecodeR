@@ -1,14 +1,12 @@
 ---
 title: "Qi-Constantinidis pre and post training dataset"
-
-output: html_document
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Qi-Constantinidis pre and post training dataset}
+  %\VignetteEngine{knitr::rmarkdown}
+  \usepackage[utf8]{inputenc}
 ---
 
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
-```
-
-<div style="line-height: 1.6em;">
 
 The Qi-Constantinidis pre and post training dataset was collected by Xue-Lian Qi in [Christos Constantinidis’ lab](http://neuroscience.graduate.wfu.edu/people/christos-constantinidis/) in Department of Neurobiology and Anatomy, at the Wake Forest University School of Medicine. The data consists of single unit recordings from the prefrontal cortex (PFC) while monkeys passively viewed images (in a feature and spatial configurations), and also after monkey were trained to engaged in a delayed match-to-sample task with these images.
 
@@ -18,6 +16,3 @@ Meyers E, Qi XL, Constantinidis C (2012). Incorporation of new information into 
 
 Qi X-L, Meyer T, Stanford TR, Constantinidis C (2011) Changes in prefrontal neuronal activity after learning to perform a spatial working memory task. Cereb Cortex 21:2722–2732
 
-
-
-</div>

@@ -87,16 +87,10 @@
 <a href="#about-the-data-used-in-this-tutorial" class="anchor"></a>About the data used in this tutorial</h3>
 <p>The data used in this tutorial was collected by Ying Zhang in Bob Desimone’s lab at MIT and was used in the supplemental figures in the paper <a href="https://www.pnas.org/content/108/21/8850">Object decoding with attention in inferior temporal cortex, PNAS, 2011</a>. The data consists of single unit recordings from the 132 neurons in inferior temporal cortex (IT). The recordings were made while a monkey viewed 7 different objects that were presented at three different locations (the monkey was also shown images that consisted of three objects shown simultaneously and had to perform an attention task, however for the purposes of this tutorial we are only going to analyze data from trials when single objects were shown). Each object was presented approximately 20 times at each of the three locations.</p>
 <p>To start let us load some libraries we will use in this tutorial</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" data-line-number="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(NDTr)</a></code></pre></div>
-<pre><code>## Warning: replacing previous import 'foreach::when' by 'purrr::when' when
-## loading 'NDTr'</code></pre>
-<pre><code>## Warning: replacing previous import 'magrittr::set_names' by
-## 'purrr::set_names' when loading 'NDTr'</code></pre>
-<pre><code>## Warning: replacing previous import 'foreach::accumulate' by
-## 'purrr::accumulate' when loading 'NDTr'</code></pre>
-<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" data-line-number="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(ggplot2)</a>
-<a class="sourceLine" id="cb5-2" data-line-number="2"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(dplyr)</a>
-<a class="sourceLine" id="cb5-3" data-line-number="3"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(tidyr)</a></code></pre></div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" data-line-number="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(NDTr)</a>
+<a class="sourceLine" id="cb1-2" data-line-number="2"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(ggplot2)</a>
+<a class="sourceLine" id="cb1-3" data-line-number="3"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(dplyr)</a>
+<a class="sourceLine" id="cb1-4" data-line-number="4"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(tidyr)</a></code></pre></div>
 </div>
 </div>
 <div id="data-formats" class="section level2">
@@ -107,9 +101,9 @@
 <h3 class="hasAnchor">
 <a href="#raster-format" class="anchor"></a>Raster-format</h3>
 <p>To run a decoding analysis using the NDTr you first need to have your data in a usable format. In this tutorial we will use data collected by Ying Zhang in Bob Desimone’s lab at MIT. The directory data/raster_format/Zhang_Desimone_7objects_raster_data/ contains data in raster-format. Each file in this directory contains data from one neuron. To start, let us load one of these files and examine its contents.</p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" data-line-number="1">raster_directory_name &lt;-<span class="st"> "../data/raster/Zhang_Desimone_7objects_raster_data_rda/"</span></a>
-<a class="sourceLine" id="cb6-2" data-line-number="2">file_name &lt;-<span class="st"> "bp1001spk_01A_raster_data.rda"</span></a>
-<a class="sourceLine" id="cb6-3" data-line-number="3"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/load">load</a></span>(<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/paste">paste0</a></span>(raster_directory_name, file_name))</a></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" data-line-number="1">raster_directory_name &lt;-<span class="st"> "../data/raster/Zhang_Desimone_7objects_raster_data_rda/"</span></a>
+<a class="sourceLine" id="cb2-2" data-line-number="2">file_name &lt;-<span class="st"> "bp1001spk_01A_raster_data.rda"</span></a>
+<a class="sourceLine" id="cb2-3" data-line-number="3"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/load">load</a></span>(<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/paste">paste0</a></span>(raster_directory_name, file_name))</a></code></pre></div>
 <p>Note that two objects were loaded into memory, raster_data, which contains the actual data from a single neuron and raster_site_info which contains any meta information about the site (for more information <a href="raster-format.html">see raster-format.html</a>). Below we visualize the spiking pattern from this one neuron.</p>
 <p><img src="introduction_tutorial_files/figure-html/plot_raster_file-1.png" width="700"></p>
 <p>Here, the x-axis represents time in the experiment in milliseconds, and the y-axis represents different trials. Each black tick mark represents the time when a neuron emitted an action potential.</p>
@@ -125,18 +119,18 @@
 <li>a sampling interval that specifies how frequently to calculate these firing rates.</li>
 </ol>
 <p>To calculate the average firing rates in 150 ms bins sampled every 50 ms, the following commands can be used:</p>
-<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb7-1" data-line-number="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(NDTr)</a>
-<a class="sourceLine" id="cb7-2" data-line-number="2"></a>
-<a class="sourceLine" id="cb7-3" data-line-number="3">binned_file_name &lt;-<span class="st"> </span><span class="kw"><a href="../reference/create_binned_data.html">create_binned_data</a></span>(raster_directory_name, <span class="st">"ZD"</span>, <span class="dv">150</span>, <span class="dv">50</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" data-line-number="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(NDTr)</a>
+<a class="sourceLine" id="cb3-2" data-line-number="2"></a>
+<a class="sourceLine" id="cb3-3" data-line-number="3">binned_file_name &lt;-<span class="st"> </span><span class="kw"><a href="../reference/create_binned_data.html">create_binned_data</a></span>(raster_directory_name, <span class="st">"ZD"</span>, <span class="dv">150</span>, <span class="dv">50</span>)</a></code></pre></div>
 </div>
 <div id="determining-how-many-times-each-condition-was-repeated" class="section level3">
 <h3 class="hasAnchor">
 <a href="#determining-how-many-times-each-condition-was-repeated" class="anchor"></a>Determining how many times each condition was repeated</h3>
 <p>Before beginning the decoding analysis it is useful to know how many times each experimental condition (e.g., stimulus) was presented to each site (e.g., neuron). In particular, it is useful to know how many times the condition that has the fewest repetitions was presented. To do this we will use the function <code>get_num_label_repetitions</code> which finds uses data that is in binned-format and calculates how many trials each label level was presented.</p>
 <p>Below we use the plot function assocated with the results that are returned to see how many times the labels were repeated.</p>
-<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb8-1" data-line-number="1">binned_file_name &lt;-<span class="st"> "ZD_150bins_50sampled.Rda"</span> </a>
-<a class="sourceLine" id="cb8-2" data-line-number="2">label_rep_info &lt;-<span class="st"> </span><span class="kw"><a href="../reference/get_num_label_repetitions.html">get_num_label_repetitions</a></span>(binned_file_name, <span class="st">"stimulus_ID"</span>) </a>
-<a class="sourceLine" id="cb8-3" data-line-number="3"><span class="kw"><a href="https://www.rdocumentation.org/packages/graphics/topics/plot">plot</a></span>(label_rep_info)  </a></code></pre></div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" data-line-number="1">binned_file_name &lt;-<span class="st"> "ZD_150bins_50sampled.Rda"</span> </a>
+<a class="sourceLine" id="cb4-2" data-line-number="2">label_rep_info &lt;-<span class="st"> </span><span class="kw"><a href="../reference/get_num_label_repetitions.html">get_num_label_repetitions</a></span>(binned_file_name, <span class="st">"stimulus_ID"</span>) </a>
+<a class="sourceLine" id="cb4-3" data-line-number="3"><span class="kw"><a href="https://www.rdocumentation.org/packages/graphics/topics/plot">plot</a></span>(label_rep_info)  </a></code></pre></div>
 <p><img src="introduction_tutorial_files/figure-html/label_repetitions-1.png" width="700"></p>
 <p>Here we see that there are 132 neurons have 60 repetitions all of the labels, and that there are 6 neurons where the flower label was only presented 59 times. Thus if we want to use all the neurons in the decoding analysis the maximum number of cross-validation splits we could use would be 59. Alternatively, we could use 60 cross-validation splits and only use the 125 neurons that have 60 repetitions.</p>
 </div>
@@ -158,45 +152,45 @@
 <a href="#creating-a-datasource-ds" class="anchor"></a>Creating a Datasource (DS)</h3>
 <p>A datasource object is used by the cross-validator to generate training and test splits of the data. Below we create a <code>ds_basic</code> object that takes binned-format data, name of the labels variable to be decoding, and a scalar that specifies how many cross-validation splits to use. The default behavior of this datasource is to create test splits that have one example of each object in them and <em>num_cv_splits - 1</em> examples of each object in the training set.</p>
 <p>As calculated above, all 132 neurons have 59 repetitions of each stimulus, and 125 neurons have 60 repetitions of each stimulus. Thus we can use up to 59 cross-validation splits using all neurons, or we could set the datasource to use only a subset of neurons and use 60 cross-validation splits. For the purpose of this tutorial, we will use all the neurons and only 20 cross-validation splits to make the code run a little faster. The <code>ds_basic</code> datasource object also has many more properties that can be set, including specifying that only certain label levels or neurons should be used. More information about this object can be found <a href="datasources.html">here</a>.</p>
-<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb9-1" data-line-number="1">binned_file_name &lt;-<span class="st"> "ZD_150bins_50sampled.Rda"</span> </a>
-<a class="sourceLine" id="cb9-2" data-line-number="2">variable_to_decode &lt;-<span class="st"> "stimulus_ID"</span></a>
-<a class="sourceLine" id="cb9-3" data-line-number="3">num_cv_splits &lt;-<span class="st"> </span><span class="dv">20</span></a>
-<a class="sourceLine" id="cb9-4" data-line-number="4">  </a>
-<a class="sourceLine" id="cb9-5" data-line-number="5">ds &lt;-<span class="st"> </span><span class="kw"><a href="../reference/ds_basic.html">ds_basic</a></span>(binned_file_name, variable_to_decode, num_cv_splits)</a></code></pre></div>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" data-line-number="1">binned_file_name &lt;-<span class="st"> "ZD_150bins_50sampled.Rda"</span> </a>
+<a class="sourceLine" id="cb5-2" data-line-number="2">variable_to_decode &lt;-<span class="st"> "stimulus_ID"</span></a>
+<a class="sourceLine" id="cb5-3" data-line-number="3">num_cv_splits &lt;-<span class="st"> </span><span class="dv">20</span></a>
+<a class="sourceLine" id="cb5-4" data-line-number="4">  </a>
+<a class="sourceLine" id="cb5-5" data-line-number="5">ds &lt;-<span class="st"> </span><span class="kw"><a href="../reference/ds_basic.html">ds_basic</a></span>(binned_file_name, variable_to_decode, num_cv_splits)</a></code></pre></div>
 </div>
 <div id="creating-a-feature-preprocessor-fp" class="section level3">
 <h3 class="hasAnchor">
 <a href="#creating-a-feature-preprocessor-fp" class="anchor"></a>Creating a feature-preprocessor (FP)</h3>
 <p>Feature preprocessors use the training set to learn particular parameters about the data, and then applying preprocessing to the training and test sets using these parameters. Below will we create a <code>fp_zscore</code> preprocessor that zscore normalizes the data so that each neuron’s activity has approximately zero mean and a standard deviation of 1 over all trials. This feature-preprocessor is useful so that neurons with high firing rates do not end up contributing more to the decoding results than neurons with lower firing rates when a <code>cl_max_correlation</code> classifier is used.</p>
-<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb10-1" data-line-number="1"><span class="co"># note that the FP objects are stored in a list</span></a>
-<a class="sourceLine" id="cb10-2" data-line-number="2"><span class="co">#  which allows multiple FP objects to be used in one analysis</span></a>
-<a class="sourceLine" id="cb10-3" data-line-number="3"> </a>
-<a class="sourceLine" id="cb10-4" data-line-number="4">fps &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/list">list</a></span>(<span class="kw"><a href="../reference/fp_zscore.html">fp_zscore</a></span>())</a></code></pre></div>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" data-line-number="1"><span class="co"># note that the FP objects are stored in a list</span></a>
+<a class="sourceLine" id="cb6-2" data-line-number="2"><span class="co">#  which allows multiple FP objects to be used in one analysis</span></a>
+<a class="sourceLine" id="cb6-3" data-line-number="3"> </a>
+<a class="sourceLine" id="cb6-4" data-line-number="4">fps &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/list">list</a></span>(<span class="kw"><a href="../reference/fp_zscore.html">fp_zscore</a></span>())</a></code></pre></div>
 </div>
 <div id="creating-a-classifier-cl" class="section level3">
 <h3 class="hasAnchor">
 <a href="#creating-a-classifier-cl" class="anchor"></a>Creating a classifier (CL)</h3>
 <p>Classifiers take a <em>training set</em> of data and learn the relationship between the neural responses and the experimental conditions (label levels) that were present on particular trials. The classifier is then used to make predictions about what experimental conditions are present on trials from a different <em>test set</em> of neural data. Below we create a <code>cl_max_correlation</code> classifier which learns prototypes of each class k that consists of the mean of all training data from class k. The predicted class for a new test point x is the class that has the maximum correlation coefficient value between the x and each class prototype.</p>
-<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb11-1" data-line-number="1">cl &lt;-<span class="st"> </span><span class="kw"><a href="../reference/cl_max_correlation.html">cl_max_correlation</a></span>()</a></code></pre></div>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb7-1" data-line-number="1">cl &lt;-<span class="st"> </span><span class="kw"><a href="../reference/cl_max_correlation.html">cl_max_correlation</a></span>()</a></code></pre></div>
 </div>
 <div id="creating-result-metrics-rm" class="section level3">
 <h3 class="hasAnchor">
 <a href="#creating-result-metrics-rm" class="anchor"></a>Creating result metrics (RM)</h3>
 <p>Result metrics take the predictions made by a classifier, as well as the groud truth (i.e., the actual label level values for what happened on each trial) and aggregate these predictions give a measure of the classifiers performance.</p>
 <p>Below we create two result metrics. The first result metric returns basic measures of decoding accuracy such as the proporition of predirctions that were correct (zero-one-loss). The second result metric create a confusion matrix showing the pattern of prediction mistakes that were made. Result metrics must also be put into a list to allow multiple result metrics to be used in an analysis.</p>
-<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb12-1" data-line-number="1">rms &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/list">list</a></span>(<span class="kw"><a href="../reference/rm_main_results.html">rm_main_results</a></span>(), <span class="kw"><a href="../reference/rm_confusion_matrix.html">rm_confusion_matrix</a></span>())</a></code></pre></div>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb8-1" data-line-number="1">rms &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/list">list</a></span>(<span class="kw"><a href="../reference/rm_main_results.html">rm_main_results</a></span>(), <span class="kw"><a href="../reference/rm_confusion_matrix.html">rm_confusion_matrix</a></span>())</a></code></pre></div>
 </div>
 <div id="creating-a-cross-validator-cv" class="section level3">
 <h3 class="hasAnchor">
 <a href="#creating-a-cross-validator-cv" class="anchor"></a>Creating a cross-validator (CV)</h3>
 <p>Cross-validator objects take a datasource, a classifier, result metrics and optionally feature-preprocessor objects and run a decoding procedure by generating training and test data from the datasource, preprocessing this data with the feature-preprocessors training and testing the classifier on the resulting data, and agregrated the results with the result metrics. This procedure is run in two nested loops. The inner ‘cross-validation’ loop runs a cross-validation procedure where the classifier is trained and tested on different divisions of the data. The outer, ‘resample’ loop generates new splits (and also potentially pseudo-populations) of data, which are then run in a cross-validation procedure by the inner loop. The number of resample runs is thus a parameter for this analysis as well, which we have set to 2 to make the procedure run quickly, although in general more resample runs will yield smoother results (the default value is 50). Below we create a <code>cv_standard</code> object that runs this decoding procedure.</p>
-<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb13-1" data-line-number="1">cv &lt;-<span class="st"> </span><span class="kw"><a href="../reference/cv_standard.html">cv_standard</a></span>(ds, cl, fps, rms, <span class="dv">2</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb9-1" data-line-number="1">cv &lt;-<span class="st"> </span><span class="kw"><a href="../reference/cv_standard.html">cv_standard</a></span>(ds, cl, fps, rms, <span class="dv">2</span>)</a></code></pre></div>
 </div>
 <div id="running-the-decoding-analysis" class="section level3">
 <h3 class="hasAnchor">
 <a href="#running-the-decoding-analysis" class="anchor"></a>Running the decoding analysis</h3>
 <p>To run the decoding procedure we call the cross-validator’s run_cv_decoding method, and the results stored in an object DECODING_RESULTS.</p>
-<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb14-1" data-line-number="1">DECODING_RESULTS &lt;-<span class="st"> </span><span class="kw">run_decoding</span>(cv)</a></code></pre></div>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb10-1" data-line-number="1">DECODING_RESULTS &lt;-<span class="st"> </span><span class="kw">run_decoding</span>(cv)</a></code></pre></div>
 <pre><code>## Warning in bind_rows_(x, .id): binding character and factor vector,
 ## coercing into character vector</code></pre>
 </div>
@@ -209,20 +203,20 @@
 <h3 class="hasAnchor">
 <a href="#plotting-the-main-results" class="anchor"></a>Plotting the main results</h3>
 <p>The rm_main_results plot function allows one to put plot temporal cross decoding results (where when training the classifier at one time and testing the classifier at a second time using the plot_standard_results_TCT_object object). This can be displayed by running the code below:</p>
-<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb16-1" data-line-number="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/graphics/topics/plot">plot</a></span>(DECODING_RESULTS<span class="op">$</span>rm_main_results)</a></code></pre></div>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb12-1" data-line-number="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/graphics/topics/plot">plot</a></span>(DECODING_RESULTS<span class="op">$</span>rm_main_results)</a></code></pre></div>
 <p><img src="introduction_tutorial_files/figure-html/plot_tcd-1.png" width="700"></p>
 <p>We also create simplier line plots by setting the plot_type = ‘line’. Additionally, we can plot all three types of results that that rm_main_results object saves using the type = ‘all’ argument. Below we should the results for setting both these arguments.</p>
-<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb17-1" data-line-number="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/graphics/topics/plot">plot</a></span>(DECODING_RESULTS<span class="op">$</span>rm_main_results, <span class="dt">result_type =</span> <span class="st">'all'</span>, <span class="dt">plot_type =</span> <span class="st">'line'</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb13-1" data-line-number="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/graphics/topics/plot">plot</a></span>(DECODING_RESULTS<span class="op">$</span>rm_main_results, <span class="dt">result_type =</span> <span class="st">'all'</span>, <span class="dt">plot_type =</span> <span class="st">'line'</span>)</a></code></pre></div>
 <p><img src="introduction_tutorial_files/figure-html/plot_line-1.png" width="700"></p>
 </div>
 <div id="plotting-confusion-matrices" class="section level3">
 <h3 class="hasAnchor">
 <a href="#plotting-confusion-matrices" class="anchor"></a>Plotting confusion matrices</h3>
 <p>We can also plot the confusion matrices aggregaged from the rm_confusion_matrix object which shows the pattern of classification mistakes at different points in time.</p>
-<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb18-1" data-line-number="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/graphics/topics/plot">plot</a></span>(DECODING_RESULTS<span class="op">$</span>rm_confusion_matrix)</a></code></pre></div>
+<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb14-1" data-line-number="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/graphics/topics/plot">plot</a></span>(DECODING_RESULTS<span class="op">$</span>rm_confusion_matrix)</a></code></pre></div>
 <p><img src="introduction_tutorial_files/figure-html/plot_confusion_matrix-1.png" width="700"></p>
 <p>The rm_confusion_matrix object also has a function plot_MI which calculated mutual information from the confusion matrix and plots this as a function of time or as a TCD plot.</p>
-<div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb19-1" data-line-number="1"><span class="kw">plot_MI</span>(DECODING_RESULTS<span class="op">$</span>rm_confusion_matrix)</a></code></pre></div>
+<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb15-1" data-line-number="1"><span class="kw">plot_MI</span>(DECODING_RESULTS<span class="op">$</span>rm_confusion_matrix)</a></code></pre></div>
 <p><img src="introduction_tutorial_files/figure-html/plot_MI-1.png" width="700"></p>
 </div>
 </div>
@@ -230,10 +224,10 @@
 <h2 class="hasAnchor">
 <a href="#saving-the-results" class="anchor"></a>Saving the results</h2>
 <p>Finally, the NDTr has “log” function that help you save and manage your results. Below we show how to use the log_save_results() function which takes a DECODING_RESULTS object and the name of a directory. This function save the results to the specified directory and also logs the parameters used in the analysis so that they can later be retrived. For more information, see the tutorial on saving and managing results.</p>
-<div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb20-1" data-line-number="1">results_dir_name &lt;-<span class="st"> "my_results/"</span></a>
-<a class="sourceLine" id="cb20-2" data-line-number="2"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/files2">dir.create</a></span>(results_dir_name)</a></code></pre></div>
+<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb16-1" data-line-number="1">results_dir_name &lt;-<span class="st"> "my_results/"</span></a>
+<a class="sourceLine" id="cb16-2" data-line-number="2"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/files2">dir.create</a></span>(results_dir_name)</a></code></pre></div>
 <pre><code>## Warning in dir.create(results_dir_name): 'my_results' already exists</code></pre>
-<div class="sourceCode" id="cb22"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb22-1" data-line-number="1"><span class="kw"><a href="../reference/log_save_results.html">log_save_results</a></span>(DECODING_RESULTS, results_dir_name)</a></code></pre></div>
+<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb18-1" data-line-number="1"><span class="kw"><a href="../reference/log_save_results.html">log_save_results</a></span>(DECODING_RESULTS, results_dir_name)</a></code></pre></div>
 <pre><code>## Warning in log_save_results(DECODING_RESULTS, results_dir_name): The
 ## results with the same parameters already exist. Still going ahead and
 ## saving the results.</code></pre>

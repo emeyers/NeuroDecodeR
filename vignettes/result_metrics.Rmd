@@ -47,8 +47,9 @@ in the output of the CL get_predictions() method, namely:
 
 5. predicted_labels: the labels that the classifier predicted
 
-6. decision_vals.X (optional): a group of variables that has values that indicate how strongly
-the classifier rates a test point as coming from a particular class
+6. decision_vals.X (optional): a group of variables that has values that
+indicate how strongly the classifier rates a test point as coming from a
+particular class
 
 
 The output of the aggregate_CV_split_results is a RM object of the same type
