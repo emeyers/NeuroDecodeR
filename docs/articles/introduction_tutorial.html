@@ -96,7 +96,7 @@
 <div id="data-formats" class="section level2">
 <h2 class="hasAnchor">
 <a href="#data-formats" class="anchor"></a>Data formats</h2>
-<p>In order to use the NDTr, the neural data must be in a usable format. Typically this involves putting the data in <a href="raster-format.html">raster-format</a> and then converting it to <a href="binned_format.html">binned-format</a> using the <code><a href="../reference/create_binned_data.html">create_binned_data()</a></code> function.</p>
+<p>In order to use the NDTr, the neural data must be in a usable format. Typically this involves putting the data in <a href="raster_format.html">raster-format</a> and then converting it to <a href="binned_format.html">binned-format</a> using the <code><a href="../reference/create_binned_data.html">create_binned_data()</a></code> function.</p>
 <div id="raster-format" class="section level3">
 <h3 class="hasAnchor">
 <a href="#raster-format" class="anchor"></a>Raster-format</h3>
@@ -104,7 +104,7 @@
 <div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" data-line-number="1">raster_directory_name &lt;-<span class="st"> "../data/raster/Zhang_Desimone_7objects_raster_data_rda/"</span></a>
 <a class="sourceLine" id="cb2-2" data-line-number="2">file_name &lt;-<span class="st"> "bp1001spk_01A_raster_data.rda"</span></a>
 <a class="sourceLine" id="cb2-3" data-line-number="3"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/load">load</a></span>(<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/paste">paste0</a></span>(raster_directory_name, file_name))</a></code></pre></div>
-<p>Note that two objects were loaded into memory, raster_data, which contains the actual data from a single neuron and raster_site_info which contains any meta information about the site (for more information <a href="raster-format.html">see raster-format.html</a>). Below we visualize the spiking pattern from this one neuron.</p>
+<p>Note that two objects were loaded into memory, raster_data, which contains the actual data from a single neuron and raster_site_info which contains any meta information about the site (for more information <a href="raster_format.html">see raster-format.html</a>). Below we visualize the spiking pattern from this one neuron.</p>
 <p><img src="introduction_tutorial_files/figure-html/plot_raster_file-1.png" width="700"></p>
 <p>Here, the x-axis represents time in the experiment in milliseconds, and the y-axis represents different trials. Each black tick mark represents the time when a neuron emitted an action potential.</p>
 </div>

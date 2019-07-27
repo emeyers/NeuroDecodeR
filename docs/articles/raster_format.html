@@ -69,17 +69,56 @@
     
     
 <p>Raster-format data files contain information from a single site (e.g., data from one neuron, one LFP channel, etc.). Data that is in raster-format contains two variables: raster_data, and raster_site_info, which are described below.</p>
-<div id="raster_data" class="section level2">
-<h2 class="hasAnchor">
-<a href="#raster_data" class="anchor"></a>raster_data</h2>
-<p>The variable raster_data actually contains two things: labels and the result data. The result data is a <em>[num_trials x num_times]</em> matrix, where each row is data from one trial, and each column is data from one time point (relative to some event that the data was aligned to). The trials should be in the order that they were shown to a subject, i.e., the first row of the matrix should come from the first trial, the second row from the second trial, etc.. For spiking data, this matrix will contain a 1 at every time there is a spike and a zero at every time there was not a spike. For continuous data, such as LFPs, MEG data, etc., each point in a row should be the continuous LFP/MEG value that is recorded on each trial.</p>
-<p>In addition to these data, the label columns on the sides contain cell arrays of strings (or vectors of numbers) that indicate the labels for what experimental conditions were present on each trial (e.g., labels.stimulus_position = upper, labels.stimulus_ID = car). Having a structure with cell arrays that contain different labels is useful because it allows one to decoding different information from the data. For example, suppose we had an experiment in which images of ten different people and images of ten different cars were shown. Then we could have the variable raster_labels.stimulus_ID that had 20 unique string names corresponding to each exact person or car image that was shown on each trial. Additionally, we could have a second raster_labels.face_or_car that contained only the strings ‘face’, or ‘car’ that indicated whether a face or a car was shown on each trial. It would then be possible to run two decoding analyses, one in which we try to decode each image regardless of whether it is a face or a car (where chance would be 1/20), and a second analysis in which we try to decode whether an image is a face or a car (where chance would be 1/2).</p>
+<div id="raster_data" class="section level3">
+<h3 class="hasAnchor">
+<a href="#raster_data" class="anchor"></a>raster_data</h3>
+<p>The variables raster_data is a data frame that has variables that must start with two pre-fixes:</p>
+<ol style="list-style-type: decimal">
+<li><p>labels. These variables contain labels of which experimental conditions were shown on a given trial</p></li>
+<li><p>time. These variables contain the data for a given time</p></li>
+</ol>
+<p>The number of rows in the data frame correspond to the number of trial in the experiment when the recording was made.</p>
 </div>
-<div id="raster_site_info" class="section level2">
-<h2 class="hasAnchor">
-<a href="#raster_site_info" class="anchor"></a>raster_site_info</h2>
-<p>The variable raster_site_info is structure that contains any additional information about the site that should be saved. For example, this structure could contain information about the date that data was recorded on (e.g., raster_site_info.date_recorded = 2011_9_28), or number to identify the session that the data was recorded from (e.g., raster_site_info.sessionID = 200), or information about the spike sorting quality (e.g., raster_site_info.isMUA = 1), etc.. At the moment any variable is allowed in this structure (and it is not strictly necessary to have this structure for the decoding algorithms to run).</p>
+<div id="raster_site_info" class="section level3">
+<h3 class="hasAnchor">
+<a href="#raster_site_info" class="anchor"></a>raster_site_info</h3>
+<p>Is a list that contains any remaining information that is useful to know about a given site. For example, this could contain information about the brain region a site was recorded from, information about the quality of the recording, etc.</p>
 </div>
+<div id="example-raster-format-data" class="section level2">
+<h2 class="hasAnchor">
+<a href="#example-raster-format-data" class="anchor"></a>Example raster-format data</h2>
+<p>Below is an example of raster format data file from the <a href="Zhang_Desimone_7_object_dataset.html">Zhang-Desimone 7 object data set</a> .</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" data-line-number="1">raster_directory_name &lt;-<span class="st"> "../data/raster/Zhang_Desimone_7objects_raster_data_rda/"</span></a>
+<a class="sourceLine" id="cb1-2" data-line-number="2">file_name &lt;-<span class="st"> "bp1001spk_01A_raster_data.rda"</span></a>
+<a class="sourceLine" id="cb1-3" data-line-number="3"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/load">load</a></span>(<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/paste">paste0</a></span>(raster_directory_name, file_name))</a>
+<a class="sourceLine" id="cb1-4" data-line-number="4"></a>
+<a class="sourceLine" id="cb1-5" data-line-number="5"><span class="kw"><a href="https://www.rdocumentation.org/packages/utils/topics/head">head</a></span>(raster_data[, <span class="dv">1</span><span class="op">:</span><span class="dv">10</span>])</a></code></pre></div>
+<pre><code>##   labels.combined_ID_position labels.stimulus_position labels.stimulus_ID
+## 1                  hand_upper                    upper               hand
+## 2               flower_middle                   middle             flower
+## 3               guitar_middle                   middle             guitar
+## 4                  face_upper                    upper               face
+## 5                 kiwi_middle                   middle               kiwi
+## 6                 couch_upper                    upper              couch
+##   time.-500 time.-499 time.-498 time.-497 time.-496 time.-495 time.-494
+## 1         0         0         0         0         0         0         0
+## 2         0         0         0         0         0         0         0
+## 3         0         0         0         0         0         0         0
+## 4         0         0         0         0         0         0         0
+## 5         0         0         0         0         0         0         0
+## 6         0         0         0         0         0         0         0</code></pre>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" data-line-number="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/utils/topics/head">head</a></span>(raster_site_info)</a></code></pre></div>
+<pre><code>## $session_ID
+## [1] 1001
+## 
+## $recording_channel
+## [1] 1
+## 
+## $unit
+## [1] "A"
+## 
+## $alignment_event_time
+## [1] 501</code></pre>
 </div>
   </div>
 
@@ -88,8 +127,7 @@
       <h2 class="hasAnchor">
 <a href="#tocnav" class="anchor"></a>Contents</h2>
       <ul class="nav nav-pills nav-stacked">
-<li><a href="#raster_data">raster_data</a></li>
-      <li><a href="#raster_site_info">raster_site_info</a></li>
+<li><a href="#example-raster-format-data">Example raster-format data</a></li>
       </ul>
 </div>
       </div>
@@ -105,5 +143,9 @@
   <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.3.0.</p>
 </div>
       </footer>
-</body>
+</div>
+
+  
+
+  </body>
 </html>

@@ -11,15 +11,47 @@ vignette: >
 Raster-format data files contain information from a single site (e.g., data from one neuron, one LFP channel, etc.). Data that is in raster-format contains two variables: raster_data, and raster_site_info, which are described below.
 
 
-## raster_data
+### raster_data
 
-The variable raster_data actually contains two things: labels and the result data. The result data is a *[num_trials x num_times]* matrix, where each row is data from one trial, and each column is data from one time point (relative to some event that the data was aligned to). The trials should be in the order that they were shown to a subject, i.e., the first row of the matrix should come from the first trial, the second row from the second trial, etc.. For spiking data, this matrix will contain a 1 at every time there is a spike and a zero at every time there was not a spike. For continuous data, such as LFPs, MEG data, etc., each point in a row should be the continuous LFP/MEG value that is recorded on each trial. 
+The variables raster_data is a data frame that has variables that must start with two pre-fixes:
 
-In addition to these data, the label columns on the sides contain cell arrays of strings (or vectors of numbers) that indicate the labels for what experimental conditions were present on each trial (e.g., labels.stimulus_position = upper, labels.stimulus_ID = car). Having a structure with cell arrays that contain different labels is useful because it allows one to decoding different information from the data. For example, suppose we had an experiment in which images of ten different people and images of ten different cars were shown. Then we could have the variable raster_labels.stimulus_ID that had 20 unique string names corresponding to each exact person or car image that was shown on each trial. Additionally, we could have a second raster_labels.face_or_car that contained only the strings ‘face’, or ‘car’ that indicated whether a face or a car was shown on each trial. It would then be possible to run two decoding analyses, one in which we try to decode each image regardless of whether it is a face or a car (where chance would be 1/20), and a second analysis in which we try to decode whether an image is a face or a car (where chance would be 1/2).
+1. labels.  These variables contain labels of which experimental conditions were shown on a given trial
+
+2. time.  These variables contain the data for a given time
+
+The number of rows in the data frame correspond to the number of trial in the experiment when the recording was made.
 
 
-## raster_site_info
+### raster_site_info
 
-The variable raster_site_info is structure that contains any additional information about the site that should be saved. For example, this structure could contain information about the date that data was recorded on (e.g., raster_site_info.date_recorded = 2011_9_28), or number to identify the session that the data was recorded from (e.g., raster_site_info.sessionID = 200), or information about the spike sorting quality (e.g., raster_site_info.isMUA = 1), etc.. At the moment any variable is allowed in this structure (and it is not strictly necessary to have this structure for the decoding algorithms to run).
+Is a list that contains any remaining information that is useful to know about a given site. For example, this could contain information about the brain region a site was recorded from, information about the quality of the recording, etc.
 
-</div> 
+
+
+## Example raster-format data
+
+Below is an example of raster format data file from the [Zhang-Desimone 7 object data set](Zhang_Desimone_7_object_dataset.html) .
+
+
+```{r load_raster_file}
+
+raster_directory_name <- "../data/raster/Zhang_Desimone_7objects_raster_data_rda/"
+file_name <- "bp1001spk_01A_raster_data.rda"
+load(paste0(raster_directory_name, file_name))
+
+head(raster_data[, 1:10])
+
+head(raster_site_info)
+
+
+```
+
+
+
+
+
+
+
+
+
+

@@ -85,7 +85,7 @@ library(tidyr)
 ## Data formats
 
 In order to use the NDTr, the neural data must be in a usable format. Typically
-this involves putting the data in [raster-format](raster-format.html) and then
+this involves putting the data in [raster-format](raster_format.html) and then
 converting it to [binned-format](binned_format.html) using the
 `create_binned_data()` function.
 
@@ -111,7 +111,7 @@ load(paste0(raster_directory_name, file_name))
 Note that two objects were loaded into memory, raster_data, which contains the
 actual data from a single neuron and raster_site_info which contains any meta
 information about the site (for more information [see
-raster-format.html](raster-format.html)). Below we visualize the spiking pattern
+raster-format.html](raster_format.html)). Below we visualize the spiking pattern
 from this one neuron.
 
 

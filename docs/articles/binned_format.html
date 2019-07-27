@@ -68,17 +68,96 @@
 
     
     
-<p>Binned-format data contains data from multiple sites (e.g., data from many neurons, LFP channels, etc.). Data that is in binned-format is very similar to data that is in raster-format except that it contains information from multiple sites and often contains the information at a coarser resolution; for example, binned data would typically contain firing rates over some time interval sampled at a lower rate, as opposed to raster-format data that would typically contain individual spikes sampled at a higher rate. Binned-format data is typically created from raster-format data using the function <code>create_time_averaged_binned_data_from_raster_data</code> which converts a directory of raster-format files into a binned-format file that is useful for decoding. Like rater-format data, binned-format data also contains three variables which are: <code>binned_data</code>, <code>binned_labels</code> and <code>binned_site_info</code> . More details about these variables are described below and also see the documentation on <a href="raster-format.html">raster-format</a> for more information.</p>
-<p>####binned_data</p>
-<p>The variable binned_data is a cell array, where each element of the array contains a [num_trials x num_time_bins] matrix, that has data from one site. In each of these matrices, the rows contain data from one trial, and each column is data from one bin. For example, if spiking data is used, then each row corresponds to a trial, and each column would correspond to the firing rate in a particular time period. If continuous data was used (e.g., LFP/MEG data, etc.), then each row would again correspond to a trial, and each column might correspond to some average of value over a particular time period, or perhaps some transform of the continuous data at a particular time period (e.g., a Fourier component, etc.). The number of elements in the binned_data cell array is equal to the number of recorded sites.</p>
-<p>####binned_labels</p>
-<p>The variable binned_labels is structure that contain cell arrays that have the labels for which conditions were present on each trial, i.e., binned_labels.variable_name1, is a num_sites length cell array with the labels for variable_name1 for each site, and binned_labels.variable_name1{iSite} is a [num_trials x 1] cell array of strings (or vector of numbers) that has all the labels for site ‘iSite’ for variable_name1 (number of elements for each site will vary depending on how many trials were recorded from that site).</p>
-<p>####binned_site_info</p>
-<p>The variable binned_site_info is structure that contains any additional information about the sites that should be saved. The structure contains cell arrays, where each entry in the array has data for one site.</p>
+<p>Binned-format data contains data from multiple sites (e.g., data from many neurons, LFP channels, etc.). Data that is in binned-format is very similar to data that is in raster-format except that it contains information from multiple sites and often contains the information at a coarser resolution; for example, binned data would typically contain firing rates over some time interval sampled at a lower rate, as opposed to raster-format data that would typically contain individual spikes sampled at a higher rate. Binned-format data is typicallycreated from raster-format data using the function <code>create_binned_data</code> which converts a directory of raster-format files into a binned-format file that is useful for decoding.</p>
+<p>Like rater-format data, binned-format data also contains two variables which are: <code>binned_data</code>, and <code>binned_site_info</code> . More details about these variables are described below and also see the documentation on <a href="raster-format.html">raster-format</a> for more information.</p>
+<div id="binned_data" class="section level3">
+<h3 class="hasAnchor">
+<a href="#binned_data" class="anchor"></a>binned_data</h3>
+<p>The data frame binned_data has the following variables</p>
+<ol style="list-style-type: decimal">
+<li><p>siteID A number indicating which site a given row of data corresponds to</p></li>
+<li><p>labels.X These variables contain labels of which experimental conditions occured on a given trial</p></li>
+<li><p>time.X_Y These variables contain data in a time range from X to Y</p></li>
+</ol>
+<p>The number of rows in the data frame correspond to the number of trial in all experimental recording sessions across all sites.</p>
+</div>
+<div id="binned_site_info" class="section level3">
+<h3 class="hasAnchor">
+<a href="#binned_site_info" class="anchor"></a>binned_site_info</h3>
+<p>The variable binned_site_info is list that contains any additional information about the sites. If the <code>created_binned_data</code> function was used to generate the data, then this is just combined from the raster_site info.</p>
+</div>
+<div id="example-binned-format-data" class="section level2">
+<h2 class="hasAnchor">
+<a href="#example-binned-format-data" class="anchor"></a>Example binned-format data</h2>
+<p>Below is an example of binned format data file from the <a href="Zhang_Desimone_7_object_dataset.html">Zhang-Desimone 7 object data set</a> .</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" data-line-number="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/load">load</a></span>(<span class="st">"ZD_150bins_50sampled.Rda"</span>)</a>
+<a class="sourceLine" id="cb1-2" data-line-number="2"></a>
+<a class="sourceLine" id="cb1-3" data-line-number="3"><span class="kw"><a href="https://www.rdocumentation.org/packages/utils/topics/head">head</a></span>(binned_data[, <span class="dv">1</span><span class="op">:</span><span class="dv">10</span>])</a></code></pre></div>
+<pre><code>##   siteID labels.combined_ID_position labels.stimulus_position
+## 1      1                  hand_upper                    upper
+## 2      1               flower_middle                   middle
+## 3      1               guitar_middle                   middle
+## 4      1                  face_upper                    upper
+## 5      1                 kiwi_middle                   middle
+## 6      1                 couch_upper                    upper
+##   labels.stimulus_ID time.-500_-351 time.-450_-301 time.-400_-251
+## 1               hand    0.006666667    0.013333333    0.020000000
+## 2             flower    0.000000000    0.006666667    0.006666667
+## 3             guitar    0.000000000    0.000000000    0.000000000
+## 4               face    0.000000000    0.000000000    0.000000000
+## 5               kiwi    0.000000000    0.000000000    0.000000000
+## 6              couch    0.000000000    0.006666667    0.006666667
+##   time.-350_-201 time.-300_-151 time.-250_-101
+## 1    0.013333333    0.006666667    0.006666667
+## 2    0.013333333    0.013333333    0.020000000
+## 3    0.000000000    0.000000000    0.000000000
+## 4    0.000000000    0.006666667    0.006666667
+## 5    0.000000000    0.000000000    0.000000000
+## 6    0.006666667    0.006666667    0.020000000</code></pre>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" data-line-number="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/utils/topics/head">head</a></span>(binned_site_info, <span class="dv">2</span>)</a></code></pre></div>
+<pre><code>## [[1]]
+## [[1]]$session_ID
+## [1] 1001
+## 
+## [[1]]$recording_channel
+## [1] 1
+## 
+## [[1]]$unit
+## [1] "A"
+## 
+## [[1]]$alignment_event_time
+## [1] 501
+## 
+## [[1]]$siteID
+## [1] 1
+## 
+## 
+## [[2]]
+## [[2]]$session_ID
+## [1] 1001
+## 
+## [[2]]$recording_channel
+## [1] 2
+## 
+## [[2]]$unit
+## [1] "A"
+## 
+## [[2]]$alignment_event_time
+## [1] 501
+## 
+## [[2]]$siteID
+## [1] 2</code></pre>
 </div>
   </div>
 
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
+        <div id="tocnav">
+      <h2 class="hasAnchor">
+<a href="#tocnav" class="anchor"></a>Contents</h2>
+      <ul class="nav nav-pills nav-stacked">
+<li><a href="#example-binned-format-data">Example binned-format data</a></li>
+      </ul>
+</div>
       </div>
 
 </div>
@@ -92,5 +171,9 @@
   <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.3.0.</p>
 </div>
       </footer>
-</body>
+</div>
+
+  
+
+  </body>
 </html>
