@@ -131,10 +131,9 @@ correlation coefficients between all test points and all templates.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='co'># running a basic decoding analysis using the cl_max_correlation</span>
-<span class='no'>ds</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='ds_basic.html'>ds_basic</a></span>(<span class='st'>'ZD_150bins_50sampled.Rda'</span>, <span class='st'>'stimulus_ID'</span>, <span class='fl'>18</span>)
-<span class='no'>fps</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/list'>list</a></span>(<span class='fu'><a href='fp_zscore.html'>fp_zscore</a></span>())
+<span class='no'>ds</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='ds_basic.html'>ds_basic</a></span>(<span class='st'>'ZD_150bins_50sampled.Rda'</span>, <span class='st'>'stimulus_ID'</span>, <span class='fl'>18</span>)</div><div class='output co'>#&gt; <span class='warning'>Warning: cannot open compressed file 'ZD_150bins_50sampled.Rda', probable reason 'No such file or directory'</span></div><div class='output co'>#&gt; <span class='error'>Error in readChar(con, 5L, useBytes = TRUE): cannot open the connection</span></div><div class='input'><span class='no'>fps</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/list'>list</a></span>(<span class='fu'><a href='fp_zscore.html'>fp_zscore</a></span>())
 <span class='no'>cl</span> <span class='kw'>&lt;-</span> <span class='fu'>cl_max_correlation</span>()
-<span class='no'>cv</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='cv_standard.html'>cv_standard</a></span>(<span class='no'>ds</span>, <span class='no'>cl</span>, <span class='no'>fps</span>)</div><span class='co'># NOT RUN {</span>
+<span class='no'>cv</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='cv_standard.html'>cv_standard</a></span>(<span class='no'>ds</span>, <span class='no'>cl</span>, <span class='no'>fps</span>)</div><div class='output co'>#&gt; <span class='error'>Error in cv_standard(ds, cl, fps): object 'ds' not found</span></div><span class='co'># NOT RUN {</span>
 <span class='no'>DECODING_RESULTS</span> <span class='kw'>&lt;-</span> <span class='fu'>run_decoding</span>(<span class='no'>cv</span>)
 <span class='co'># }</span><div class='input'>
 </div></pre>
