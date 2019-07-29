@@ -51,3 +51,4 @@ tests/testthat/testing_save_results/
 .Rproj.user
 Cindy*
 .DS_Store
+inst/doc
