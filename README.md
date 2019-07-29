@@ -1,6 +1,14 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
+<!-- badges: start -->
+
+[![Travis build
+status](https://travis-ci.com/muschellij2/NDTr.svg?branch=master)](https://travis-ci.com/muschellij2/NDTr)
+[![AppVeyor build
+status](https://ci.appveyor.com/api/projects/status/github/muschellij2/NDTr?branch=master&svg=true)](https://ci.appveyor.com/project/muschellij2/NDTr)
+<!-- badges: end -->
+
 <p>
 
 ## Description
