@@ -35,8 +35,6 @@
 #' @docType package
 #' @name NDTr
 #'
-#' @import forcats
-#' @import purrr
 #' @import parallel  
 #' @import doParallel
 #' @import foreach
