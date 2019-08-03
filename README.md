@@ -7,6 +7,8 @@
 status](https://travis-ci.com/muschellij2/NDTr.svg?branch=master)](https://travis-ci.com/muschellij2/NDTr)
 [![AppVeyor build
 status](https://ci.appveyor.com/api/projects/status/github/muschellij2/NDTr?branch=master&svg=true)](https://ci.appveyor.com/project/muschellij2/NDTr)
+[![Coveralls test
+coverage](https://coveralls.io/repos/github/emeyers/NDTr/badge.svg)](https://coveralls.io/r/emeyers/NDTr?branch=master)
 <!-- badges: end -->
 
 <p>
