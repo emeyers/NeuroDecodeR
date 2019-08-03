@@ -2,7 +2,7 @@
 title: "Feature preprocessors"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Datasources}
+  %\VignetteIndexEntry{Feature preprocessors}
   %\VignetteEngine{knitr::rmarkdown}
   \usepackage[utf8]{inputenc}
 ---

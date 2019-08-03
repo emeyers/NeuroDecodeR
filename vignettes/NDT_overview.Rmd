@@ -1,10 +1,10 @@
 ---
 title: "Tutorial"
-
-
-output: html_document
-  
-   
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{NDTr Overview}
+  %\VignetteEngine{knitr::rmarkdown}
+  \usepackage[utf8]{inputenc}
 ---
 
 ```{r setup, include=FALSE}

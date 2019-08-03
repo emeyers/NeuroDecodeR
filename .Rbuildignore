@@ -2,3 +2,6 @@
 ^\.Rproj\.user$
 ^_pkgdown\.yml$
 ^docs$
+^\.travis\.yml$
+^appveyor\.yml$
+^README\.Rmd$
