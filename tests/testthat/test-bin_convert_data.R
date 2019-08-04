@@ -1,6 +1,7 @@
 
 
-raster_dir_name <- file.path('..', '..', 'data', 'raster', 'Zhang_Desimone_7objects_raster_data_rda')
+#raster_dir_name <- file.path('..', '..', 'data', 'raster', 'Zhang_Desimone_7objects_raster_data_rda')
+raster_dir_name <- file.path('Zhang_Desimone_7objects_raster_data_rda')
 
 
 
