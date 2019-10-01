@@ -171,10 +171,10 @@ ds_basic <- function(binned_file_name,
       num_trials_each_site <- binned_data %>%
         dplyr::group_by(.data$siteID) %>%
         dplyr::summarize(n = n()) %>%
-        .data$n
+        dplyr::select(.data$n)
       
       # assuming the trials are in order for each site, otherwise there is no way to align them
-      binned_data$trial_number <- rep(1:num_trials_each_site[1], length(num_trials_each_site)) 
+      binned_data$trial_number <- rep(1:num_trials_each_site$n[1], dim(num_trials_each_site)[1]) 
       
       binned_data <- dplyr::select(binned_data, .data$siteID, .data$trial_number, everything())
       

@@ -186,6 +186,17 @@ test_that("simultaneously recorded data is returned correctly", {
   expect_false(sum(abs(diff(t(round(data.matrix(the_site_data)))))) == 0)
   
   
+  # test that the simultaneous argument works even when trial number is a variable in 
+  # the binned_data data frame
+  load("fake_simultaneous_binned_data.Rda")
+  binned_data <- binned_data %>%
+    dplyr::select(-trial_number)
+  save(binned_data , file = "fake_simultaneous_binned_data2.Rda")
+  
+  expect_warning(ds_basic("fake_simultaneous_binned_data2.Rda", "stim_names", 10,
+                 create_simultaneously_recorded_populations = TRUE))
+  
+  
 })
 
 
