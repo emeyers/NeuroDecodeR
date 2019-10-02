@@ -166,7 +166,7 @@ ds_basic <- function(binned_file_name,
       
       warning(paste('No variable named trial_number in the binned_data.\n',
                     'Attempting to add this variable to decode simultaneously recorded data',
-                    'by assuming all trials for each site are in the sequential same order.'))
+                    'by assuming all trials for each site are in the same sequential order.'))
 
       num_trials_each_site <- binned_data %>%
         dplyr::group_by(.data$siteID) %>%
@@ -215,8 +215,7 @@ ds_basic <- function(binned_file_name,
 
 #' @export
 get_data.ds_basic = function(ds_basic_obj){
-        
-  
+    
     binned_data <- ds_basic_obj$binned_data
     var_to_decode <- ds_basic_obj$var_to_decode
     num_cv_splits <- ds_basic_obj$num_cv_splits
@@ -278,6 +277,9 @@ get_data.ds_basic = function(ds_basic_obj){
     num_labels <- length(unique_labels)
 
 
+    # arrange the data by siteID and labels before adding on the CV_slide_ID (10/2/19)
+    all_k_fold_data <- dplyr::arrange(all_k_fold_data, siteID, labels)
+    
 
     # CV_slice_ID is a groups of data that have one example for each label
     #  - these groups are mapped into CV blocks where blocks contain num_label_repeats_per_cv_split of each label
