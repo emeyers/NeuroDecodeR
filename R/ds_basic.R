@@ -252,9 +252,15 @@ get_data.ds_basic = function(ds_basic_obj){
         .$label_trial_combo
 
       # apply specific simultaneous trials selected to all sites
+      #all_k_fold_data <- binned_data  %>%
+      #  filter(label_trial_combo %in% curr_label_trials_to_use) %>%
+      #  select(-label_trial_combo)
+      
       all_k_fold_data <- binned_data  %>%
         filter(label_trial_combo %in% curr_label_trials_to_use) %>%
+        arrange(siteID, label_trial_combo) %>%
         select(-label_trial_combo)
+      
 
     } else {
 
@@ -278,7 +284,7 @@ get_data.ds_basic = function(ds_basic_obj){
 
 
     # arrange the data by siteID and labels before adding on the CV_slide_ID (10/2/19)
-    all_k_fold_data <- dplyr::arrange(all_k_fold_data, siteID, labels)
+    # all_k_fold_data <- dplyr::arrange(all_k_fold_data, siteID, labels)
     
 
     # CV_slice_ID is a groups of data that have one example for each label
