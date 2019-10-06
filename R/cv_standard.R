@@ -88,8 +88,13 @@ run_decoding.cv_standard = function(cv_obj) {
 
   # register parallel resources
   cores <- parallel::detectCores()
-  the_cluster <- parallel::makeCluster(cores)
-  doParallel::registerDoParallel(the_cluster)
+  #the_cluster <- parallel::makeCluster(cores)
+  #doParallel::registerDoParallel(the_cluster)
+  
+  # switching to the doSNOW package b/c there seems to be a memory leak with doParallel
+  the_cluster <- makeCluster(cores, type="SOCK")
+  doSNOW::registerDoSNOW(the_cluster)
+  
   
   
   # copy over the main objects
@@ -208,7 +213,10 @@ run_decoding.cv_standard = function(cv_obj) {
   # aggregate results over all resample runs  ---------------------------------
 
   # close parallel resources
-  doParallel::stopImplicitCluster()
+  #doParallel::stopImplicitCluster()
+  
+  # switching to the doSNOW package b/c there seems to be a memory leak with doParallel
+  stopCluster(the_cluster)  
   
   
   # go through each Result Metric and aggregate the final results from all resample runs using each metric

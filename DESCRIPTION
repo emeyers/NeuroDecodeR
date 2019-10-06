@@ -29,7 +29,8 @@ Imports:
     doParallel,
     magrittr,
     ggplot2,
-    foreach
+    foreach,
+    doSNOW
 Suggests: 
     testthat,
     knitr,
