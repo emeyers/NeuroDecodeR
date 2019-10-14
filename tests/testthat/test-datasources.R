@@ -202,6 +202,59 @@ test_that("simultaneously recorded data is returned correctly", {
 
 
 
+
+
+
+test_that("shuffling labels works", {
+  
+  num_CV <- 5
+  num_reps <- 2
+
+  ds <- ds_basic("fake_simultaneous_binned_data.Rda", "stim_names", num_CV,
+                 num_label_repeats_per_cv_split = num_reps)
+  
+  unshuffled_data1 <- get_data(ds) %>% 
+    select(site_0001, train_labels) %>%
+    arrange(train_labels, site_0001)
+  
+  unshuffled_data2 <- get_data(ds) %>% 
+    select(site_0001, train_labels) %>%
+    arrange(train_labels, site_0001)
+  
+  expect_equal(unshuffled_data1$site_0001, unshuffled_data2$site_0001)
+  
+  
+  ds <- ds_basic("fake_simultaneous_binned_data.Rda", "stim_names", num_CV,
+                 num_label_repeats_per_cv_split = num_reps,
+                      randomly_shuffled_labels_before_running = TRUE)
+  
+  shuffled_data1 <- get_data(ds) %>% 
+    select(site_0001, train_labels, test_labels) %>%
+    arrange(train_labels, test_labels, site_0001)
+  
+  shuffled_data2 <- get_data(ds) %>% 
+    select(site_0001, train_labels, test_labels) %>%
+    arrange(train_labels, test_labels, site_0001)
+  
+  # hmmm, these should be different :(
+  #sum(shuffled_data1$site_0001 != shuffled_data2$site_0001)
+  
+  # this should fail but it's not :(
+  # other tests suggest the shuffling is working though, should look more into this later
+  #expect_equal(shuffled_data1$site_0001, shuffled_data2$site_0001) 
+  
+   
+  # could/should implement a more rigourous test here...
+   
+})
+
+
+
+
+
+
+
+
 # test the ds_generalization  -------------------------------------------------
 
 

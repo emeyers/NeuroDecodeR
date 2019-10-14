@@ -122,7 +122,11 @@ ds_basic <- function(binned_file_name,
   
   # shuffle the labels if specified
   if(randomly_shuffled_labels_before_running == TRUE) {
-    binned_data$labels <- sample(binned_data$labels)
+    binned_data <- binned_data %>%
+      ungroup() %>%
+      group_by(siteID) %>% 
+      mutate(labels = labels[sample(row_number())])  %>%
+      ungroup()
   }
     
   

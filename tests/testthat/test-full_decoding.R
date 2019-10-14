@@ -16,6 +16,13 @@ basedir_file_name <- '~/research/NDT/NDTr/data/binned/ZD_150_samples_binned_ever
 
 
 ds <- ds_basic(basedir_file_name, 'stimulus_ID', 6, num_label_repeats_per_cv_split = 3)
+
+# should produce chance results
+#ds <- ds_basic(basedir_file_name, 'stimulus_ID', 6, num_label_repeats_per_cv_split = 3,
+#               randomly_shuffled_labels_before_running = TRUE)
+
+
+
 fps <- list(fp_zscore(), fp_select_k_features(100))
 #cl <- cl_svm(kernel = "linear")
 #cl <- cl_svm()
