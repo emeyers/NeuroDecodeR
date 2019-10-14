@@ -119,17 +119,7 @@ ds_basic <- function(binned_file_name,
     label_levels_to_use <- as.list(levels(binned_data$labels))
   }
   
-  
-  # shuffle the labels if specified
-  if(randomly_shuffled_labels_before_running == TRUE) {
-    binned_data <- binned_data %>%
-      ungroup() %>%
-      group_by(siteID) %>% 
-      mutate(labels = labels[sample(row_number())])  %>%
-      ungroup()
-  }
-    
-  
+
   if(is.null(site_IDs_to_use)) {
     site_IDs_to_use <- unique(binned_data$siteID)
   }
@@ -152,7 +142,7 @@ ds_basic <- function(binned_file_name,
   
   
   # check if data is valid to get simultaneously recorded data
-  if(create_simultaneously_recorded_populations == 1) {
+  if(create_simultaneously_recorded_populations == 1 || create_simultaneously_recorded_populations == TRUE) {
 
     # for simultaneously recorded data there should be the same number of labels for each site
     num_trials_for_each_label_for_each_site <- binned_data %>%
@@ -185,11 +175,40 @@ ds_basic <- function(binned_file_name,
     }
     
     
+    # shuffle the labels if specified
+    # shuffle labels the same way for each site...
+    if(randomly_shuffled_labels_before_running == TRUE) {
+      min_site_ID <- min(binned_data$siteID)
+      first_site_data <- dplyr::filter(binned_data, siteID == min_site_ID)
+      the_labels <- sample(first_site_data$labels)
+      binned_data$labels <- rep(the_labels, length(unique(binned_data$siteID)))
+    }
+    
+    
     # add variable label_trial_combo
     binned_data <- binned_data  %>% 
       mutate(label_trial_combo = paste0(binned_data$labels, binned_data$trial_number))
     
-  }  # end pre-processing for simultaneously recorded data...
+    
+
+    
+    
+    
+    
+    # end pre-processing for simultaneously recorded data...
+  } else {  
+    
+    
+    # shuffle the labels if specified
+    if(randomly_shuffled_labels_before_running == TRUE) {
+      binned_data <- binned_data %>%
+        ungroup() %>%
+        group_by(siteID) %>% 
+        mutate(labels = labels[sample(row_number())])  %>%
+        ungroup()
+    }
+    
+  } 
   
   
   

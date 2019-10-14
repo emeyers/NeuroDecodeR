@@ -226,7 +226,8 @@ test_that("shuffling labels works", {
   
   ds <- ds_basic("fake_simultaneous_binned_data.Rda", "stim_names", num_CV,
                  num_label_repeats_per_cv_split = num_reps,
-                      randomly_shuffled_labels_before_running = TRUE)
+                      randomly_shuffled_labels_before_running = TRUE,
+                 create_simultaneously_recorded_populations = 1)
   
   shuffled_data1 <- get_data(ds) %>% 
     select(site_0001, train_labels, test_labels) %>%
