@@ -194,12 +194,15 @@ new_rm_confusion_matrix <- function(the_data = data.frame(),
 #'   the run_decoding(cv) then this argument should be
 #'   DECODING_RESULTS$rm_confusion_matrix.
 #' 
+#' @param plot_only_same_train_test_time A boolean indicating whether
+#'   the confusion matrices should only be plotted at the same training 
+#'   and test times.
 #' 
 #' @family result_metrics
 
 
 #' @export
-plot.rm_confusion_matrix = function(confusion_matrix_obj) {
+plot.rm_confusion_matrix = function(confusion_matrix_obj, plot_only_same_train_test_time = FALSE) {
 
   # should perhaps give an option to choose a different color scale, and maybe other options? 
   
@@ -209,14 +212,21 @@ plot.rm_confusion_matrix = function(confusion_matrix_obj) {
   only_has_same_train_test_time_results <- 
     (sum(confusion_matrix_obj$train_time == confusion_matrix_obj$test_time) == dim(confusion_matrix_obj)[1])
 
-  #confusion_matrix_obj$train_time <- round(get_center_bin_time(confusion_matrix_obj$train_time))
-  #confusion_matrix_obj$test_time <- round(get_center_bin_time(confusion_matrix_obj$test_time))
+  confusion_matrix_obj$train_time <- round(get_center_bin_time(confusion_matrix_obj$train_time))
+  confusion_matrix_obj$test_time <- round(get_center_bin_time(confusion_matrix_obj$test_time))
 
-  confusion_matrix_obj$train_time <- get_time_range_strings(confusion_matrix_obj$train_time)
-  confusion_matrix_obj$test_time <- get_time_range_strings(confusion_matrix_obj$test_time)
+  #confusion_matrix_obj$train_time <- get_time_range_strings(confusion_matrix_obj$train_time)
+  #confusion_matrix_obj$test_time <- get_time_range_strings(confusion_matrix_obj$test_time)
   
   
-  if (only_has_same_train_test_time_results) {
+  # if only want the results plotted for the same training and test times
+  if (!only_has_same_train_test_time_results && plot_only_same_train_test_time) {
+    confusion_matrix_obj <- confusion_matrix_obj %>%
+      filter(train_time == test_time)
+  }
+  
+
+  if (FALSE) {  #(only_has_same_train_test_time_results) {
     
     # Add the word 'Time' to the title since there is enough space to plot it 
     # when only training and testing at the same time
@@ -237,12 +247,12 @@ plot.rm_confusion_matrix = function(confusion_matrix_obj) {
   
 
   g <- confusion_matrix_obj %>%
-    ggplot(aes(predicted_labels, forcats::fct_rev(actual_labels), fill = conditional_pred_freq)) +
+    ggplot(aes(predicted_labels, forcats::fct_rev(actual_labels), fill = conditional_pred_freq * 100)) +
     geom_tile() + 
     theme(axis.text.x = element_text(angle = 90, hjust = 1)) +
     ylab('True class') + 
     xlab('Predicted class') +    # or should I transpose this (people do it differently...)
-    scale_fill_continuous(type = "viridis", name = "Prediction\n accuracy") #+ 
+    scale_fill_continuous(type = "viridis", name = "Prediction\n frequency") #+ 
 
   if (sum(confusion_matrix_obj$train_time == confusion_matrix_obj$test_time) == dim(confusion_matrix_obj)[1]){
         g + facet_wrap(~train_time)

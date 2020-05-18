@@ -4,13 +4,18 @@
 \alias{plot.rm_confusion_matrix}
 \title{plot the confusion matrix results}
 \usage{
-\method{plot}{rm_confusion_matrix}(confusion_matrix_obj)
+\method{plot}{rm_confusion_matrix}(confusion_matrix_obj,
+  plot_only_same_train_test_time = FALSE)
 }
 \arguments{
 \item{confusion_matrix_obj}{A rm_confusion_matrix object that has aggregated
 runs from a decoding analysis, e.g., if DECODING_RESULTS are the out from
 the run_decoding(cv) then this argument should be
 DECODING_RESULTS$rm_confusion_matrix.}
+
+\item{plot_only_same_train_test_time}{A boolean indicating whether
+the confusion matrices should only be plotted at the same training 
+and test times.}
 }
 \description{
 This function plots confusion matrices after the decoding analysis has been
