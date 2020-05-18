@@ -176,6 +176,10 @@ plot.rm_main_results = function(main_results, result_type = 'zero_one_loss', plo
   }
   
   
+  # convert the zero-one loss results to percentages
+  main_results <- dplyr::mutate(main_results, zero_one_loss = zero_one_loss * 100)
+  
+  
   if (result_type == 'all'){ 
     # do nothing
   } else if (result_type == 'zero_one_loss'){
