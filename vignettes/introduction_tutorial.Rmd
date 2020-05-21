@@ -181,7 +181,7 @@ see how many times the labels were repeated.
 
 ```{r label_repetitions}
 
-binned_file_name <- "ZD_150bins_50sampled.Rda" 
+binned_file_name <- system.file("extdata/ZD_150bins_50sampled.Rda", package="NDTr")
 label_rep_info <- get_num_label_repetitions(binned_file_name, "stimulus_ID") 
 plot(label_rep_info)  
 
@@ -246,7 +246,7 @@ be found [here](datasources.html).
 
 ```{r datasource}
 
-binned_file_name <- "ZD_150bins_50sampled.Rda" 
+binned_file_name <- system.file("extdata/ZD_150bins_50sampled.Rda", package="NDTr")
 variable_to_decode <- "stimulus_ID"
 num_cv_splits <- 20
   

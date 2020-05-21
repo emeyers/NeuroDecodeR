@@ -44,7 +44,8 @@ library(NDTr)
 
 ```{r}
 
-ds <- ds_basic("ZD_150bins_50sampled.Rda", 'stimulus_ID', 18)
+data_file_name <- system.file("extdata/ZD_150bins_50sampled.Rda", package="NDTr")
+ds <- ds_basic(data_file_name, 'stimulus_ID', 18)
 
 all_cv_data <- get_data(ds)  
  

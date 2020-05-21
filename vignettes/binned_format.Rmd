@@ -55,8 +55,7 @@ Below is an example of binned format data file from the [Zhang-Desimone 7 object
 
 ```{r load_raster_file}
 
-
-load("ZD_150bins_50sampled.Rda")
+load(system.file("extdata/ZD_150bins_50sampled.Rda", package="NDTr"))
 
 head(binned_data[, 1:10])
 
