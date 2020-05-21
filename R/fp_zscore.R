@@ -49,9 +49,14 @@ preprocess_data.fp_zscore = function(fp, training_set, test_set){
   # get the parameters and cale the rianing data (all in one line!)
   train_zscored <- scale(train_data, center = TRUE, scale = TRUE)
   
+  
   # apply the parameters from trianing data to scale the test data
-  test_centered <- sweep(test_data, 2, attr(train_zscored, "scaled:center") )
-  test_zscored <- sweep(test_centered, 2, attr(train_zscored, "scaled:scale"), FUN = "/")
+  # test_centered <- sweep(test_data, 2, attr(train_zscored, "scaled:center") )
+  # test_zscored <- sweep(test_centered, 2, attr(train_zscored, "scaled:scale"), FUN = "/")
+  
+  # this might be much faster
+  test_zscored <- scale(test_data, center = attr(train_zscored, "scaled:center"), 
+                scale = attr(train_zscored, "scaled:scale"))
   
   
   # set to 0 all InF and NAs that could occur due to the standard deviation of a site being 0
@@ -71,6 +76,7 @@ preprocess_data.fp_zscore = function(fp, training_set, test_set){
 
 # since there are no parameters for the fp_zscore just return a data frame with
 # fp_zscore.fp_zscore and a value of "No parameters"
+#' @export
 get_parameters.fp_zscore = function(fp_zscore){
   data.frame(fp_zscore.fp_zscore = "does not have settable parameters")
 }
