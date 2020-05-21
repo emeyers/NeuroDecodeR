@@ -4,12 +4,19 @@
 \alias{ds_basic}
 \title{A basic datasource object}
 \usage{
-ds_basic(binned_file_name, var_to_decode, num_cv_splits,
-  use_count_data = FALSE, num_label_repeats_per_cv_split = 1,
-  label_levels_to_use = NULL, num_resample_sites = NULL,
-  site_IDs_to_use = NULL, site_IDs_to_exclude = NULL,
+ds_basic(
+  binned_file_name,
+  var_to_decode,
+  num_cv_splits,
+  use_count_data = FALSE,
+  num_label_repeats_per_cv_split = 1,
+  label_levels_to_use = NULL,
+  num_resample_sites = NULL,
+  site_IDs_to_use = NULL,
+  site_IDs_to_exclude = NULL,
   randomly_shuffled_labels_before_running = FALSE,
-  create_simultaneously_recorded_populations = 0)
+  create_simultaneously_recorded_populations = 0
+)
 }
 \arguments{
 \item{binned_file_name}{A string with the name of a file that has 
@@ -88,6 +95,7 @@ get training and testing splits of data that can be passed to a classifier.
 
 }
 \seealso{
-Other datasource: \code{\link{ds_generalization}}
+Other datasource: 
+\code{\link{ds_generalization}()}
 }
 \concept{datasource}

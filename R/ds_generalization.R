@@ -173,7 +173,7 @@ ds_generalization <- function(binned_file_name,
                       
 
 
-      
+#' @export
 get_data.ds_generalization = function(ds_generalization_obj){
         
   
@@ -254,7 +254,7 @@ get_data.ds_generalization = function(ds_generalization_obj){
 
 
 
-
+#' @export
 get_parameters.ds_generalization = function(ds_generalization_obj){
 
   # get most of the parameters from the ds_basic

@@ -341,7 +341,7 @@ plot_MI.rm_confusion_matrix = function(confusion_matrix_obj, plot_type = 'TCD') 
 
 
 
-
+#' @export
 get_parameters.rm_confusion_matrix = function(confusion_matrix_obj){
 
   # there is only one parameter option that can be set here so return it  

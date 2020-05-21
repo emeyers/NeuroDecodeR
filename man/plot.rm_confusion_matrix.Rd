@@ -4,8 +4,7 @@
 \alias{plot.rm_confusion_matrix}
 \title{plot the confusion matrix results}
 \usage{
-\method{plot}{rm_confusion_matrix}(confusion_matrix_obj,
-  plot_only_same_train_test_time = FALSE)
+\method{plot}{rm_confusion_matrix}(confusion_matrix_obj, plot_only_same_train_test_time = FALSE)
 }
 \arguments{
 \item{confusion_matrix_obj}{A rm_confusion_matrix object that has aggregated
@@ -22,9 +21,10 @@ This function plots confusion matrices after the decoding analysis has been
 run (and all results have been aggregated)
 }
 \seealso{
-Other result_metrics: \code{\link{plot.rm_main_results}},
-  \code{\link{plot_MI.rm_confusion_matrix}},
-  \code{\link{rm_confusion_matrix}},
-  \code{\link{rm_main_results}}
+Other result_metrics: 
+\code{\link{plot.rm_main_results}()},
+\code{\link{plot_MI.rm_confusion_matrix}()},
+\code{\link{rm_confusion_matrix}()},
+\code{\link{rm_main_results}()}
 }
 \concept{result_metrics}

@@ -256,7 +256,7 @@ plot.rm_main_results = function(main_results, result_type = 'zero_one_loss', plo
 
 
 
-
+#' @export
 get_parameters.rm_main_results = function(confusion_matrix_obj){
   
   data.frame(rm_main_results.rm_main_results = "does not have settable parameters")

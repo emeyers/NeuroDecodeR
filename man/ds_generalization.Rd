@@ -4,12 +4,20 @@
 \alias{ds_generalization}
 \title{A datasource that allows training and testing on different but related labels}
 \usage{
-ds_generalization(binned_file_name, var_to_decode, num_cv_splits,
-  train_label_levels, test_label_levels, use_count_data = FALSE,
-  num_label_repeats_per_cv_split = 1, num_resample_sites = NULL,
-  site_IDs_to_use = NULL, site_IDs_to_exclude = NULL,
+ds_generalization(
+  binned_file_name,
+  var_to_decode,
+  num_cv_splits,
+  train_label_levels,
+  test_label_levels,
+  use_count_data = FALSE,
+  num_label_repeats_per_cv_split = 1,
+  num_resample_sites = NULL,
+  site_IDs_to_use = NULL,
+  site_IDs_to_exclude = NULL,
   randomly_shuffled_labels_before_running = FALSE,
-  create_simultaneously_recorded_populations = 0)
+  create_simultaneously_recorded_populations = 0
+)
 }
 \arguments{
 \item{binned_file_name}{A string with the name of a file that has 
@@ -95,6 +103,7 @@ ds <- ds_generalization("ZD_150bins_50sampled.Rda",
 
 }
 \seealso{
-Other datasource: \code{\link{ds_basic}}
+Other datasource: 
+\code{\link{ds_basic}()}
 }
 \concept{datasource}

@@ -52,3 +52,5 @@ tests/testthat/testing_save_results/
 Cindy*
 .DS_Store
 inst/doc
+doc
+Meta

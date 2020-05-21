@@ -347,7 +347,7 @@ get_data.ds_basic = function(ds_basic_obj){
 
 
 
-
+#' @export
 get_parameters.ds_basic = function(ds_basic_obj){
 
   ds_basic_obj$binned_data <- NULL

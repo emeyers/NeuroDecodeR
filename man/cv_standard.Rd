@@ -4,9 +4,14 @@
 \alias{cv_standard}
 \title{The standard cross-validator (CV) object}
 \usage{
-cv_standard(datasource, classifier, feature_preprocessors,
-  result_metrics = NULL, num_resample_runs = 50,
-  test_only_at_training_time = FALSE)
+cv_standard(
+  datasource,
+  classifier,
+  feature_preprocessors,
+  result_metrics = NULL,
+  num_resample_runs = 50,
+  test_only_at_training_time = FALSE
+)
 }
 \arguments{
 \item{datasource}{a datasource (DS) object that will generate the training

@@ -107,6 +107,7 @@ get_predictions.cl_svm <- function(cl_svm_obj, training_set, test_set) {
 
 
 # Get the parameters that were used in the svm
+#' @export
 get_parameters.cl_svm = function(cl_svm_obj){
 
   if (length(cl_svm_obj$svm_options) == 0){
