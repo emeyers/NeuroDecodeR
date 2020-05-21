@@ -108,7 +108,7 @@ run_decoding.cv_standard = function(cv_obj) {
   
   
   # Do a parallel loop over resample runs
-  all_resample_run_decoding_results <- foreach(iResample = 1:num_resample_runs) %dopar% {  # %dopar% {  
+  all_resample_run_decoding_results <- foreach(iResample = 1:num_resample_runs) %do% {  # %dopar% {  
                                                                       
                                     
     # get the data from the current cross-validation run
@@ -132,7 +132,7 @@ run_decoding.cv_standard = function(cv_obj) {
       all_time_results <- NULL
       
       tictoc::tic()
-      print(iCV)
+      print(paste0("CV: ", iCV))
       
       for (iTrain in 1:num_time_bins) {
         
