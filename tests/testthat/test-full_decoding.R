@@ -9,7 +9,10 @@
 devtools::load_all()
 rm(list = ls())
 
-basedir_file_name <- '~/research/NDT/NDTr/data/binned/ZD_150_samples_binned_every_50_samples.Rda'
+package_base_dir_name <- find.package('NDTr')
+basedir_file_name <- paste0(package_base_dir_name, "/data/binned/ZD_150_samples_binned_every_50_samples.Rda")
+
+#basedir_file_name <- '~/research/NDT/NDTr/data/binned/ZD_150_samples_binned_every_50_samples.Rda'
 
 #basedir_file_name <- "/home/faculty/emmCS/research/NDT/other_binned_data/ZD_100_samples_binned_every_30_samples.Rda"
 
@@ -45,7 +48,7 @@ rms <- list(rm_main_results(),
 cv <- cv_standard(ds, cl, fps, rms, 3, test_only_at_training_time = FALSE) 
 
 
-test_valid_cross_validator(cv)
+#test_valid_cross_validator(cv)
 
 
 DECODING_RESULTS <- run_decoding(cv)
