@@ -33,6 +33,11 @@
 #'   now temporal cross-decoding analysis will be run). Setting this to true can
 #'   potentially speed up the analysis and save memory at the cost of not
 #'   calculated the temporal cross-decoding results.
+#'   
+#'  @param run_parallel A boolean to indicate whether the code should be run in
+#'    parallel. It is useful to set this to FALSE for debugging purposes or 
+#'    if you are running a job that takes a lot of memory and runtime is not
+#'    of much concern.
 #'
 #' @examples
 #' binned_file <- file.path("..", "..", "data", "binned", 
@@ -55,7 +60,8 @@ cv_standard <- function(datasource,
                         feature_preprocessors, 
                         result_metrics = NULL,
                         num_resample_runs = 50, 
-                        test_only_at_training_time = FALSE) {
+                        test_only_at_training_time = FALSE,
+                        run_parallel = TRUE) {
   
   if (is.null(result_metrics)) {
     result_metrics <- list(rm_main_results(), 
@@ -71,7 +77,8 @@ cv_standard <- function(datasource,
                  feature_preprocessors = feature_preprocessors,
                  num_resample_runs = num_resample_runs,
                  result_metrics = result_metrics,
-                 test_only_at_training_time = test_only_at_training_time)
+                 test_only_at_training_time = test_only_at_training_time,
+                 run_parallel = run_parallel)
       
   attr(the_cv, "class") <- "cv_standard"
   the_cv 
@@ -85,17 +92,6 @@ cv_standard <- function(datasource,
 #' @export
 run_decoding.cv_standard = function(cv_obj) {
   
-
-  # register parallel resources
-  cores <- parallel::detectCores()
-  #the_cluster <- parallel::makeCluster(cores)
-  #doParallel::registerDoParallel(the_cluster)
-  
-  # switching to the doSNOW package b/c there seems to be a memory leak with doParallel
-  the_cluster <- makeCluster(cores, type="SOCK")
-  doSNOW::registerDoSNOW(the_cluster)
-  
-  
   
   # copy over the main objects
   datasource <- cv_obj$datasource
@@ -104,13 +100,34 @@ run_decoding.cv_standard = function(cv_obj) {
   num_resample_runs = cv_obj$num_resample_runs
   result_metrics = cv_obj$result_metrics
   test_only_at_training_time = cv_obj$test_only_at_training_time
+  run_parallel <- cv_obj$run_parallel  
+
+
+  
+  if (run_parallel) {
+  
+    # register parallel resources
+    cores <- parallel::detectCores()
+    #the_cluster <- parallel::makeCluster(cores)
+    #doParallel::registerDoParallel(the_cluster)
+  
+    # switching to the doSNOW package b/c there seems to be a memory leak with doParallel
+    the_cluster <- makeCluster(cores, type="SOCK")
+    doSNOW::registerDoSNOW(the_cluster)
+  
+    '%do_type%' <- get('%dopar%') 
+    
+  } else {
+    
+    '%do_type%' <- get('%do%') 
+  }
   
   
   
   # Do a parallel loop over resample runs
-  all_resample_run_decoding_results <- foreach(iResample = 1:num_resample_runs) %do% {  # %dopar% {  
-                                                                      
-                                    
+  all_resample_run_decoding_results <- foreach(iResample = 1:num_resample_runs) %do_type% {  # %dopar% {  
+    
+    
     # get the data from the current cross-validation run
     cv_data <- get_data(datasource)  
     
@@ -216,7 +233,9 @@ run_decoding.cv_standard = function(cv_obj) {
   #doParallel::stopImplicitCluster()
   
   # switching to the doSNOW package b/c there seems to be a memory leak with doParallel
-  stopCluster(the_cluster)  
+  if (run_parallel) {
+    stopCluster(the_cluster)  
+  }
   
   
   # go through each Result Metric and aggregate the final results from all resample runs using each metric

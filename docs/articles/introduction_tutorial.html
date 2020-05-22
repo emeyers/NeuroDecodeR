@@ -200,86 +200,6 @@
 <a href="#running-the-decoding-analysis" class="anchor"></a>Running the decoding analysis</h3>
 <p>To run the decoding procedure we call the cross-validator’s run_cv_decoding method, and the results stored in an object DECODING_RESULTS.</p>
 <div class="sourceCode" id="cb10"><html><body><pre class="r"><span class="no">DECODING_RESULTS</span> <span class="kw">&lt;-</span> <span class="fu">run_decoding</span>(<span class="no">cv</span>)</pre></body></html></div>
-<pre><code>## [1] "CV: 1"
-## 0.988 sec elapsed
-## [1] "CV: 2"
-## 0.679 sec elapsed
-## [1] "CV: 3"
-## 0.625 sec elapsed
-## [1] "CV: 4"
-## 0.662 sec elapsed
-## [1] "CV: 5"
-## 0.894 sec elapsed
-## [1] "CV: 6"
-## 0.683 sec elapsed
-## [1] "CV: 7"
-## 0.841 sec elapsed
-## [1] "CV: 8"
-## 0.671 sec elapsed
-## [1] "CV: 9"
-## 0.646 sec elapsed
-## [1] "CV: 10"
-## 0.65 sec elapsed
-## [1] "CV: 11"
-## 0.645 sec elapsed
-## [1] "CV: 12"
-## 0.633 sec elapsed
-## [1] "CV: 13"
-## 0.72 sec elapsed
-## [1] "CV: 14"
-## 0.615 sec elapsed
-## [1] "CV: 15"
-## 0.605 sec elapsed
-## [1] "CV: 16"
-## 0.636 sec elapsed
-## [1] "CV: 17"
-## 0.651 sec elapsed
-## [1] "CV: 18"
-## 0.629 sec elapsed
-## [1] "CV: 19"
-## 0.635 sec elapsed
-## [1] "CV: 20"
-## 0.623 sec elapsed
-## [1] "CV: 1"
-## 0.696 sec elapsed
-## [1] "CV: 2"
-## 0.701 sec elapsed
-## [1] "CV: 3"
-## 0.894 sec elapsed
-## [1] "CV: 4"
-## 1.231 sec elapsed
-## [1] "CV: 5"
-## 0.762 sec elapsed
-## [1] "CV: 6"
-## 0.726 sec elapsed
-## [1] "CV: 7"
-## 0.831 sec elapsed
-## [1] "CV: 8"
-## 0.873 sec elapsed
-## [1] "CV: 9"
-## 0.651 sec elapsed
-## [1] "CV: 10"
-## 0.623 sec elapsed
-## [1] "CV: 11"
-## 0.617 sec elapsed
-## [1] "CV: 12"
-## 0.624 sec elapsed
-## [1] "CV: 13"
-## 0.628 sec elapsed
-## [1] "CV: 14"
-## 0.624 sec elapsed
-## [1] "CV: 15"
-## 0.627 sec elapsed
-## [1] "CV: 16"
-## 0.645 sec elapsed
-## [1] "CV: 17"
-## 0.631 sec elapsed
-## [1] "CV: 18"
-## 0.638 sec elapsed
-## [1] "CV: 19"
-## 0.651 sec elapsed
-## [1] "CV: 20"
-## 0.694 sec elapsed</code></pre>
 </div>
 </div>
 <div id="plotting-the-results" class="section level2">
@@ -290,20 +210,20 @@
 <h3 class="hasAnchor">
 <a href="#plotting-the-main-results" class="anchor"></a>Plotting the main results</h3>
 <p>The rm_main_results plot function allows one to put plot temporal cross decoding results (where when training the classifier at one time and testing the classifier at a second time using the plot_standard_results_TCT_object object). This can be displayed by running the code below:</p>
-<div class="sourceCode" id="cb12"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/plot.html">plot</a></span>(<span class="no">DECODING_RESULTS</span>$<span class="no">rm_main_results</span>)</pre></body></html></div>
+<div class="sourceCode" id="cb11"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/plot.html">plot</a></span>(<span class="no">DECODING_RESULTS</span>$<span class="no">rm_main_results</span>)</pre></body></html></div>
 <p><img src="introduction_tutorial_files/figure-html/plot_tcd-1.png" width="700"></p>
 <p>We also create simplier line plots by setting the plot_type = ‘line’. Additionally, we can plot all three types of results that that rm_main_results object saves using the type = ‘all’ argument. Below we should the results for setting both these arguments.</p>
-<div class="sourceCode" id="cb13"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/plot.html">plot</a></span>(<span class="no">DECODING_RESULTS</span>$<span class="no">rm_main_results</span>, <span class="kw">result_type</span> <span class="kw">=</span> <span class="st">'all'</span>, <span class="kw">plot_type</span> <span class="kw">=</span> <span class="st">'line'</span>)</pre></body></html></div>
+<div class="sourceCode" id="cb12"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/plot.html">plot</a></span>(<span class="no">DECODING_RESULTS</span>$<span class="no">rm_main_results</span>, <span class="kw">result_type</span> <span class="kw">=</span> <span class="st">'all'</span>, <span class="kw">plot_type</span> <span class="kw">=</span> <span class="st">'line'</span>)</pre></body></html></div>
 <p><img src="introduction_tutorial_files/figure-html/plot_line-1.png" width="700"></p>
 </div>
 <div id="plotting-confusion-matrices" class="section level3">
 <h3 class="hasAnchor">
 <a href="#plotting-confusion-matrices" class="anchor"></a>Plotting confusion matrices</h3>
 <p>We can also plot the confusion matrices aggregaged from the rm_confusion_matrix object which shows the pattern of classification mistakes at different points in time.</p>
-<div class="sourceCode" id="cb14"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/plot.html">plot</a></span>(<span class="no">DECODING_RESULTS</span>$<span class="no">rm_confusion_matrix</span>)</pre></body></html></div>
+<div class="sourceCode" id="cb13"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/plot.html">plot</a></span>(<span class="no">DECODING_RESULTS</span>$<span class="no">rm_confusion_matrix</span>)</pre></body></html></div>
 <p><img src="introduction_tutorial_files/figure-html/plot_confusion_matrix-1.png" width="700"></p>
 <p>The rm_confusion_matrix object also has a function plot_MI which calculated mutual information from the confusion matrix and plots this as a function of time or as a TCD plot.</p>
-<div class="sourceCode" id="cb15"><html><body><pre class="r"><span class="fu">plot_MI</span>(<span class="no">DECODING_RESULTS</span>$<span class="no">rm_confusion_matrix</span>)</pre></body></html></div>
+<div class="sourceCode" id="cb14"><html><body><pre class="r"><span class="fu">plot_MI</span>(<span class="no">DECODING_RESULTS</span>$<span class="no">rm_confusion_matrix</span>)</pre></body></html></div>
 <p><img src="introduction_tutorial_files/figure-html/plot_MI-1.png" width="700"></p>
 </div>
 </div>
@@ -311,7 +231,7 @@
 <h2 class="hasAnchor">
 <a href="#saving-the-results" class="anchor"></a>Saving the results</h2>
 <p>Finally, the NDTr has “log” function that help you save and manage your results. Below we show how to use the log_save_results() function which takes a DECODING_RESULTS object and the name of a directory. This function save the results to the specified directory and also logs the parameters used in the analysis so that they can later be retrived. For more information, see the tutorial on saving and managing results.</p>
-<div class="sourceCode" id="cb16"><html><body><pre class="r"><span class="no">results_dir_name</span> <span class="kw">&lt;-</span> <span class="st">"my_results/"</span>
+<div class="sourceCode" id="cb15"><html><body><pre class="r"><span class="no">results_dir_name</span> <span class="kw">&lt;-</span> <span class="st">"my_results/"</span>
 <span class="fu"><a href="https://rdrr.io/r/base/files2.html">dir.create</a></span>(<span class="no">results_dir_name</span>)
 
 <span class="fu"><a href="../reference/log_save_results.html">log_save_results</a></span>(<span class="no">DECODING_RESULTS</span>, <span class="no">results_dir_name</span>)</pre></body></html></div>

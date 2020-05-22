@@ -123,7 +123,8 @@
   <span class='no'>feature_preprocessors</span>,
   <span class='kw'>result_metrics</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
   <span class='kw'>num_resample_runs</span> <span class='kw'>=</span> <span class='fl'>50</span>,
-  <span class='kw'>test_only_at_training_time</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>
+  <span class='kw'>test_only_at_training_time</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
+  <span class='kw'>run_parallel</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>
 )</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
@@ -161,10 +162,14 @@ new pseduo-populations will be generated on each resample run as well.</p></td>
     <tr>
       <th>test_only_at_training_time</th>
       <td><p>Whether the analysis should only be run
-where the classifier is trained and tested at the same time point (i.e.,
-now temporal cross-decoding analysis will be run). Setting this to true can
-potentially speed up the analysis and save memory at the cost of not
-calculated the temporal cross-decoding results.</p></td>
+ where the classifier is trained and tested at the same time point (i.e.,
+ now temporal cross-decoding analysis will be run). Setting this to true can
+ potentially speed up the analysis and save memory at the cost of not
+ calculated the temporal cross-decoding results.</p> 
+<p>@param run_parallel A boolean to indicate whether the code should be run in
+  parallel. It is useful to set this to FALSE for debugging purposes or 
+  if you are running a job that takes a lot of memory and runtime is not
+  of much concern.</p></td>
     </tr>
     </table>
 
