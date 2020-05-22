@@ -152,7 +152,7 @@
 <div class="sourceCode" id="cb3"><html><body><pre class="r"><span class="co"># see how accurate the predictions are (chance is 1/7)</span>
 <span class="no">predictions_at_100ms</span> <span class="kw">&lt;-</span> <span class="kw pkg">dplyr</span><span class="kw ns">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span>(<span class="no">predictions</span>, <span class="no">test_time</span> <span class="kw">==</span> <span class="st">"time.100_249"</span>)
 <span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span>(<span class="no">predictions_at_100ms</span>$<span class="no">actual_labels</span> <span class="kw">==</span> <span class="no">predictions_at_100ms</span>$<span class="no">predicted_labels</span>)</pre></body></html></div>
-<pre><code>## [1] 0.5714286</code></pre>
+<pre><code>## [1] 0.8571429</code></pre>
 </div>
   </div>
 

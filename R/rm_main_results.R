@@ -10,6 +10,26 @@
 #' also after completing all the resample runs. The results should then be
 #' available in the DECODING_RESULTS object returned by the cross-validator.
 #'
+#' @param aggregate_decision_values A string or boolean specifying how the
+#'  decision values should be aggregated. If this is a boolean
+#'  set to TRUE or to the string "full", then the decision values for the correct 
+#'  category will be calculated. If this is a boolean set to FALSE or to the 
+#'  string "none", then the decision values will not be calculated. If this is a
+#'  string set to either "diag" or "only same train test time" then the decision
+#'  values will only be calculated when for results when training and testing
+#'  at the same time. Not returning the full results can speed up the runtime
+#'  of the code and will use less memory so this can be useful for large data sets.
+#' 
+#' @param aggregate_normalized_rank A string or boolean specifying how the
+#'  normalized rank results should be aggregated. If this is a boolean
+#'  set to TRUE or to the string "full", then the decision values for the correct 
+#'  category will be calculated. If this is a boolean set to FALSE or to the 
+#'  string "none", then the decision values will not be calculated. If this is a
+#'  string set to either "diag" or "only same train test time" then the decision
+#'  values will only be calculated when for results when training and testing
+#'  at the same time. Not returning the full results can grealy speed up the runtime
+#'  of the code and will use less memory so this can be useful for large data sets.
+#'  
 #'
 #' @examples
 #' # This result metric does not take any arguments.
@@ -25,9 +45,12 @@
 
 # the constructor 
 #' @export
-rm_main_results <- function(){
+rm_main_results <- function(aggregate_decision_values = TRUE, aggregate_normalized_rank = TRUE){
   
-  main_results_obj <- new_rm_main_results()
+  options <- list(aggregate_decision_values = aggregate_decision_values, 
+                  aggregate_normalized_rank = aggregate_normalized_rank)
+  
+  main_results_obj <- new_rm_main_results(options = options)
   
   main_results_obj
 
@@ -67,55 +90,80 @@ aggregate_CV_split_results.rm_main_results = function(main_results_obj, predicti
   }
 
   
-  # calculate which predictions were correct for the zero-one loss metric
-  prediction_results <- prediction_results %>%
-     dplyr::mutate(correct = .data$actual_labels == .data$predicted_labels)
+  # get the options for now the normalized rank and decision values should be aggregated
+  aggregate_decision_values <- attr(main_results_obj, "options")$aggregate_decision_values
+  aggregate_normalized_rank <- attr(main_results_obj, "options")$aggregate_normalized_rank
   
   
-  decision_vals <- select(prediction_results, starts_with("decision"))
-  num_classes <- ncol(decision_vals)
-  num_test_points <- nrow(decision_vals)
+  # get the zero-one loss loss results
+  the_results <- prediction_results %>%
+    dplyr::mutate(correct = .data$actual_labels == .data$predicted_labels) %>%
+    dplyr::group_by(.data$CV, .data$train_time, .data$test_time) %>%
+    summarize(zero_one_loss = mean(.data$correct))
   
+
   
-  # remove the prefix 'decision_vals' from the column names...
-  the_names <- names(decision_vals)
-  the_names <- unlist(strsplit(the_names, "decision_vals.", fixed = TRUE))
-  the_names <- the_names[the_names != ""]
-  names(decision_vals) <- the_names
-  decision_vals_aug <- cbind(prediction_results$actual_labels, decision_vals)
-  
-  
-  get_rank_one_row <- function(decision_vals_aug_row) {
-    actual_label <- decision_vals_aug_row[1]
-    decision_vals_row <- decision_vals_aug_row[2:length(decision_vals_aug_row)]
-    the_names <- names(decision_vals_row)
-    the_order <- order(as.numeric(decision_vals_row), decreasing = TRUE)
-    which(the_names[the_order] == actual_label)
+  # get the normalized rank decision values
+  if (aggregate_normalized_rank != FALSE || aggregate_normalized_rank != "none") {
+    
+    # data slightly augmented version of that has actual_labels with decision_vals. appended
+    prediction_results_aug <- get_augmented_prediction_results(prediction_results, aggregate_normalized_rank)
+    decision_vals_aug <- select(prediction_results_aug, starts_with("decision"))
+    decision_vals_rest <- select(prediction_results_aug, -starts_with("decision"))
+    
+    # get the normalized rank decision values
+    get_rank_one_row <- function(decision_vals_aug_row) {
+      actual_label <- decision_vals_aug_row[1]
+      decision_vals_row <- decision_vals_aug_row[2:length(decision_vals_aug_row)]
+      the_names <- names(decision_vals_row)
+      the_order <- order(as.numeric(decision_vals_row), decreasing = TRUE)
+      which(the_names[the_order] == actual_label)
+    }
+    
+    
+    num_classes <- prediction_results %>% select(starts_with("decision_vals")) %>% ncol(.)
+    
+    normalized_rank_results <- 1 - ((apply(decision_vals_aug, 1, get_rank_one_row) - 1)/(num_classes - 1))
+    
+    summarized_normalized_rank_results <- decision_vals_rest %>%
+      mutate(normalized_rank = normalized_rank_results) %>%
+      dplyr::group_by(.data$CV, .data$train_time, .data$test_time) %>%
+      summarize(normalized_rank = mean(.data$normalized_rank))
+    
+    the_results <- left_join(the_results, summarized_normalized_rank_results, 
+                             by = c("CV", "train_time", "test_time"))
+    
   }
+    
+
   
-  normalized_rank_results <- 1 - ((apply(decision_vals_aug, 1, get_rank_one_row) - 1)/(num_classes - 1))
   
   
   # get the decision values for the correct label
-  get_decision_vals_one_row <- function(decision_vals_aug_row) {
-    decision_vals_aug_row[which(as.character(as.matrix(decision_vals_aug_row[1])) == names(decision_vals_aug_row[2:length(decision_vals_aug_row)])) + 1]
+  if (aggregate_decision_values != FALSE || aggregate_decision_values != "none") {
+    
+    
+    prediction_results_aug <- get_augmented_prediction_results(prediction_results, aggregate_normalized_rank)
+    decision_vals_aug <- select(prediction_results_aug, starts_with("decision"))
+    decision_vals_rest <- select(prediction_results_aug, -starts_with("decision"))
+    
+    get_decision_vals_one_row <- function(decision_vals_aug_row) {
+      decision_vals_aug_row[which(as.character(as.matrix(decision_vals_aug_row[1])) == names(decision_vals_aug_row[2:length(decision_vals_aug_row)])) + 1]
+    }
+    
+    correct_class_decision_val <- as.numeric(apply(decision_vals_aug, 1, get_decision_vals_one_row))
+  
+    summarized_correct_decision_val_results <- decision_vals_rest %>%
+      mutate(decision_vals = correct_class_decision_val) %>%
+      dplyr::group_by(.data$CV, .data$train_time, .data$test_time) %>%
+      summarize(decision_vals = mean(.data$decision_vals))
+    
+    the_results <- left_join(the_results, summarized_correct_decision_val_results, 
+                             by = c("CV", "train_time", "test_time"))
+  
   }
   
-  correct_class_decision_val <- as.numeric(apply(decision_vals_aug, 1, get_decision_vals_one_row))
-  
-  
 
-  the_results <- cbind(dplyr::select(prediction_results, -starts_with("decision_val")),
-                       data.frame(decision_values = correct_class_decision_val,
-                            normalized_rank_results = normalized_rank_results))
-
-  the_results <- the_results %>%                 
-    dplyr::group_by(.data$CV, .data$train_time, .data$test_time) %>%
-    summarize(zero_one_loss = mean(.data$correct),
-              normalized_rank = mean(.data$normalized_rank_results),
-              decision_vals = mean(.data$decision_values))
-
-  
   new_rm_main_results(the_results, 
                       'results combined over one cross-validation split', 
                       attributes(main_results_obj)$options)
@@ -262,6 +310,44 @@ get_parameters.rm_main_results = function(confusion_matrix_obj){
   data.frame(rm_main_results.rm_main_results = "does not have settable parameters")
 
 }
+
+
+
+
+
+# private helper function to get data needed to create the normalized rank 
+#  and decision value results
+get_augmented_prediction_results <- function(prediction_results, aggregate_options) {
+  
+  # if only getting the decision values when training and testing at the same time
+  if (aggregate_options == "diag" || aggregate_options == "only same train test time"){
+    
+    prediction_results <- prediction_results %>%
+      filter(train_time == test_time)
+    
+    # if getting the decision values for all time points    
+  } else if (aggregate_options == TRUE || aggregate_options == "full") {
+    
+      # if getting data from all times do nothing
+    
+  } else {
+    
+    argument_name <- deparse(substitute(aggregate_options)) 
+    stop(paste0(argument_name, " must be set to one of the following: ",
+                "TRUE, 'all', FALSE, 'none', 'diag', or 'only same train test time'"))
+  }
+  
+  
+  # add decision_vals. to the actual label names to allow a comparion
+  #  of the actual labels to column names
+  prediction_results <- prediction_results %>%
+    mutate(decision_actual_labels = paste0("decision_vals.", actual_labels)) %>%
+    select(decision_actual_labels, starts_with("decision"), everything())
+  
+  prediction_results
+    
+}
+
 
 
 

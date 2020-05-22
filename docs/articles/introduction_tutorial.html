@@ -232,11 +232,9 @@
 <a href="#saving-the-results" class="anchor"></a>Saving the results</h2>
 <p>Finally, the NDTr has “log” function that help you save and manage your results. Below we show how to use the log_save_results() function which takes a DECODING_RESULTS object and the name of a directory. This function save the results to the specified directory and also logs the parameters used in the analysis so that they can later be retrived. For more information, see the tutorial on saving and managing results.</p>
 <div class="sourceCode" id="cb15"><html><body><pre class="r"><span class="no">results_dir_name</span> <span class="kw">&lt;-</span> <span class="st">"my_results/"</span>
-<span class="fu"><a href="https://rdrr.io/r/base/files2.html">dir.create</a></span>(<span class="no">results_dir_name</span>)
-
-<span class="fu"><a href="../reference/log_save_results.html">log_save_results</a></span>(<span class="no">DECODING_RESULTS</span>, <span class="no">results_dir_name</span>)</pre></body></html></div>
-<pre><code>## Warning in log_save_results(DECODING_RESULTS, results_dir_name): The manifest file does not exist.
-##   Assuming this is the first result that is saved and creating manifest file</code></pre>
+<span class="fu"><a href="https://rdrr.io/r/base/files2.html">dir.create</a></span>(<span class="no">results_dir_name</span>)</pre></body></html></div>
+<pre><code>## Warning in dir.create(results_dir_name): 'my_results' already exists</code></pre>
+<div class="sourceCode" id="cb17"><html><body><pre class="r"><span class="fu"><a href="../reference/log_save_results.html">log_save_results</a></span>(<span class="no">DECODING_RESULTS</span>, <span class="no">results_dir_name</span>)</pre></body></html></div>
 </div>
   </div>
 
