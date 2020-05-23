@@ -58,6 +58,12 @@ test_that("rm_main_results the aggregate functions don't give an error", {
   
   test_aggregate_functions_work(main_rm)
   
+  main_rm_2 <- rm_main_results("diag", "diag")  
+  test_aggregate_functions_work(main_rm_2)
+  
+  main_rm_3 <- rm_main_results(FALSE, FALSE)  
+  test_aggregate_functions_work(main_rm_3)
+  
 })
 
 

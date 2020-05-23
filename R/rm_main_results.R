@@ -99,12 +99,12 @@ aggregate_CV_split_results.rm_main_results = function(main_results_obj, predicti
   the_results <- prediction_results %>%
     dplyr::mutate(correct = .data$actual_labels == .data$predicted_labels) %>%
     dplyr::group_by(.data$CV, .data$train_time, .data$test_time) %>%
-    summarize(zero_one_loss = mean(.data$correct))
+    summarize(zero_one_loss = mean(.data$correct, na.rm = TRUE))
   
 
   
   # get the normalized rank decision values
-  if (aggregate_normalized_rank != FALSE || aggregate_normalized_rank != "none") {
+  if (aggregate_normalized_rank != FALSE && aggregate_normalized_rank != "none") {
     
     # data slightly augmented version of that has actual_labels with decision_vals. appended
     prediction_results_aug <- get_augmented_prediction_results(prediction_results, aggregate_normalized_rank)
@@ -128,7 +128,7 @@ aggregate_CV_split_results.rm_main_results = function(main_results_obj, predicti
     summarized_normalized_rank_results <- decision_vals_rest %>%
       mutate(normalized_rank = normalized_rank_results) %>%
       dplyr::group_by(.data$CV, .data$train_time, .data$test_time) %>%
-      summarize(normalized_rank = mean(.data$normalized_rank))
+      summarize(normalized_rank = mean(.data$normalized_rank, na.rm = TRUE))
     
     the_results <- left_join(the_results, summarized_normalized_rank_results, 
                              by = c("CV", "train_time", "test_time"))
@@ -140,10 +140,9 @@ aggregate_CV_split_results.rm_main_results = function(main_results_obj, predicti
   
   
   # get the decision values for the correct label
-  if (aggregate_decision_values != FALSE || aggregate_decision_values != "none") {
+  if (aggregate_decision_values != FALSE && aggregate_decision_values != "none") {
     
-    
-    prediction_results_aug <- get_augmented_prediction_results(prediction_results, aggregate_normalized_rank)
+    prediction_results_aug <- get_augmented_prediction_results(prediction_results, aggregate_decision_values)
     decision_vals_aug <- select(prediction_results_aug, starts_with("decision"))
     decision_vals_rest <- select(prediction_results_aug, -starts_with("decision"))
     
@@ -156,7 +155,7 @@ aggregate_CV_split_results.rm_main_results = function(main_results_obj, predicti
     summarized_correct_decision_val_results <- decision_vals_rest %>%
       mutate(decision_vals = correct_class_decision_val) %>%
       dplyr::group_by(.data$CV, .data$train_time, .data$test_time) %>%
-      summarize(decision_vals = mean(.data$decision_vals))
+      summarize(decision_vals = mean(.data$decision_vals, na.rm = TRUE))
     
     the_results <- left_join(the_results, summarized_correct_decision_val_results, 
                              by = c("CV", "train_time", "test_time"))
@@ -180,11 +179,31 @@ aggregate_resample_run_results.rm_main_results = function(resample_run_results) 
   
   central_results <- resample_run_results %>%                 
     group_by(.data$train_time, .data$test_time) %>%
-    summarize(zero_one_loss = mean(.data$zero_one_loss),
-              normalized_rank = mean(.data$normalized_rank),
-              decision_vals = mean(.data$decision_vals))
+    summarize(zero_one_loss = mean(.data$zero_one_loss))
   
   
+  if ("normalized_rank" %in% names(resample_run_results)) {
+    
+    normalized_rank_results <- resample_run_results %>%                 
+      group_by(.data$train_time, .data$test_time) %>%
+      summarize(normalized_rank = mean(.data$normalized_rank))
+    
+    central_results <- left_join(central_results, normalized_rank_results, by = c("train_time", "test_time"))
+    
+  }
+    
+    
+  if ("decision_vals" %in% names(resample_run_results)) {
+    
+    decision_vals_results <- resample_run_results %>%                 
+      group_by(.data$train_time, .data$test_time) %>%
+      summarize(decision_vals = mean(.data$decision_vals))
+    
+    central_results <- left_join(central_results, decision_vals_results, by = c("train_time", "test_time"))
+    
+  }
+              
+
  new_rm_main_results(central_results, 
                      'final results', 
                      attributes(resample_run_results)$options)
@@ -233,8 +252,12 @@ plot.rm_main_results = function(main_results, result_type = 'zero_one_loss', plo
   } else if (result_type == 'zero_one_loss'){
     main_results <- dplyr::select(main_results, train_time, test_time, zero_one_loss)
   } else if (result_type == 'normalized_rank'){
+    if (!(result_type %in% main_results)){ 
+      stop(paste("Can't plot", result_type, "results because this type of result was not saved."))}
     main_results <- dplyr::select(main_results, train_time, test_time, normalized_rank)
   } else if (result_type == 'decision_vals'){
+    if (!(result_type %in% main_results)){ 
+      stop(paste("Can't plot", result_type, "results because this type of result was not saved."))}
     main_results <- dplyr::select(main_results, train_time, test_time, decision_vals)
   } else {
     warning(paste0("result_type must be set to either 'all', 'zero_one_loss', 'normalized_rank', or 'decision_vals'.",
@@ -253,7 +276,7 @@ plot.rm_main_results = function(main_results, result_type = 'zero_one_loss', plo
   #main_results$test_time <- get_time_range_strings(main_results$test_time)
   
   
-  main_results <-  main_results %>%
+  main_results <- main_results %>%
     tidyr::gather(result_type, accuracy, -train_time, -test_time) %>%
     dplyr::mutate(result_type = replace(result_type, result_type == 'zero_one_loss', 'Zero-one loss'),
                  result_type = replace(result_type, result_type == 'normalized_rank', 'Normalized rank'),
@@ -333,7 +356,8 @@ get_augmented_prediction_results <- function(prediction_results, aggregate_optio
   } else {
     
     argument_name <- deparse(substitute(aggregate_options)) 
-    stop(paste0(argument_name, " must be set to one of the following: ",
+    stop(paste0(argument_name, " was set to ", aggregate_options, ". ", argument_name, 
+                " must be set to one of the following: ",
                 "TRUE, 'all', FALSE, 'none', 'diag', or 'only same train test time'"))
   }
   
