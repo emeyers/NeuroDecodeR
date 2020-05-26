@@ -187,10 +187,7 @@ ds_basic <- function(binned_file_name,
     
     # add variable label_trial_combo
     binned_data <- binned_data  %>% 
-      mutate(label_trial_combo = paste0(binned_data$labels, binned_data$trial_number))
-    
-    
-
+      mutate(label_trial_combo = paste0(binned_data$labels, '_', binned_data$trial_number))
     
     
     
