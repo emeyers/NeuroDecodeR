@@ -73,11 +73,12 @@ get_predictions.cl_svm <- function(cl_svm_obj, training_set, test_set) {
   
   # Parse the all-pairs decision values ---------------------------------------
   all_pairs_results <- data.frame(attr(predicted_labels, "decision.values"))
+  names(all_pairs_results) <- colnames(attr(predicted_labels, "decision.values"))
 
   all_pairs_results <- cbind(test_point_num = 1:dim(results)[1], all_pairs_results) %>%
     tidyr::gather(class_pair, val, -test_point_num) %>%
     mutate(sign_prediction = sign(val)) %>%
-    tidyr::separate(class_pair, c("pos_class", "neg_class")) #, sep = "/")
+    tidyr::separate(class_pair, c("pos_class", "neg_class"), sep = "/")
   
   pos_wins <- all_pairs_results %>%
     group_by(pos_class, test_point_num) %>%
@@ -100,7 +101,7 @@ get_predictions.cl_svm <- function(cl_svm_obj, training_set, test_set) {
   names(decision_val_df) <- paste0("decision_vals.", names(decision_val_df))
   
   results <- cbind(results, decision_val_df)
-  
+
   results
 
 }   
