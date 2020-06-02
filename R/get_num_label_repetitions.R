@@ -21,9 +21,8 @@
 #' has an associated plot() method.
 #'
 #' @examples 
-#'  file_name <- file.path('..', '..', 'data', 'binned', 
-#'                          'ZD_150_samples_binned_every_50_samples.Rda')
-#'  label_rep_info <- get_num_label_repetitions(file_name, "stimulus_ID") 
+#'  data_file <- system.file("extdata/ZD_150bins_50sampled.Rda", package = "NDTr") 
+#'  label_rep_info <- get_num_label_repetitions(data_file, "stimulus_ID") 
 #'  plot(label_rep_info)
 
 

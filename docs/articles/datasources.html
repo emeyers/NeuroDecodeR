@@ -6,19 +6,18 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Datasources • The Neural Decoding Toolbox in R</title>
-<!-- jquery --><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script><!-- Bootstrap --><link href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/3.4.0/sandstone/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha256-nuL8/2cJ5NDSSwnKD8VqreErSWHtnEP9E7AySL+1ev4=" crossorigin="anonymous"></script><!-- bootstrap-toc --><link rel="stylesheet" href="../bootstrap-toc.css">
-<script src="../bootstrap-toc.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous">
-<!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- pkgdown --><link href="../pkgdown.css" rel="stylesheet">
+<!-- jquery --><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script><!-- Bootstrap --><link href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/3.3.7/sandstone/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha256-U5ZEeKfGNOja007MMD3YBI0A3OSZOQbeG6z2f2Y0hu8=" crossorigin="anonymous"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha256-eZrrJcwDc/3uDhsdt61sL2oOBY362qM3lon1gyExkL0=" crossorigin="anonymous">
+<!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.4/clipboard.min.js" integrity="sha256-FiZwavyI2V6+EXO1U+xzLG3IKldpiTFf3153ea9zikQ=" crossorigin="anonymous"></script><!-- sticky kit --><script src="https://cdnjs.cloudflare.com/ajax/libs/sticky-kit/1.1.3/sticky-kit.min.js" integrity="sha256-c4Rlo1ZozqTPE2RLuvbusY3+SU1pQaJC0TjuhygMipw=" crossorigin="anonymous"></script><!-- pkgdown --><link href="../pkgdown.css" rel="stylesheet">
 <script src="../pkgdown.js"></script><meta property="og:title" content="Datasources">
-<meta property="og:description" content="NDTr">
+<meta property="og:description" content="">
+<meta name="twitter:card" content="summary">
 <!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script><!--[if lt IE 9]>
 <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
 <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
 <![endif]-->
 </head>
-<body data-spy="scroll" data-target="#toc">
+<body>
     <div class="container template-article">
       <header><div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
   <div class="container">
@@ -47,14 +46,7 @@
   <a href="../articles/introduction_tutorial.html">Tutorial</a>
 </li>
       </ul>
-<ul class="nav navbar-nav navbar-right">
-<li>
-  <a href="https://github.com/emeyers/NDTr/">
-    <span class="fab fa fab fa-github fa-lg"></span>
-     
-  </a>
-</li>
-      </ul>
+<ul class="nav navbar-nav navbar-right"></ul>
 </div>
 <!--/.nav-collapse -->
   </div>
@@ -63,14 +55,13 @@
 <!--/.navbar -->
 
       
-
       </header><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
-      <h1 data-toc-skip>Datasources</h1>
+      <h1>Datasources</h1>
             
       
-      <small class="dont-index">Source: <a href="https://github.com/emeyers/NDTr/blob/master/vignettes/datasources.Rmd"><code>vignettes/datasources.Rmd</code></a></small>
+      
       <div class="hidden name"><code>datasources.Rmd</code></div>
 
     </div>
@@ -95,54 +86,60 @@
 <h3 class="hasAnchor">
 <a href="#example-of-internals-of-ds-objects-using-the-ds_basic-object" class="anchor"></a>Example of internals of DS objects using the ds_basic object</h3>
 <p>Here is an example the data returned by the ds_basic datasource</p>
-<div class="sourceCode" id="cb1"><html><body><pre class="r"><span class="no">data_file_name</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html">system.file</a></span>(<span class="st">"extdata/ZD_150bins_50sampled.Rda"</span>, <span class="kw">package</span><span class="kw">=</span><span class="st">"NDTr"</span>)
-<span class="no">ds</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/ds_basic.html">ds_basic</a></span>(<span class="no">data_file_name</span>, <span class="st">'stimulus_ID'</span>, <span class="fl">18</span>)
-
-<span class="no">all_cv_data</span> <span class="kw">&lt;-</span> <span class="fu">get_data</span>(<span class="no">ds</span>)
-
-<span class="fu"><a href="https://rdrr.io/r/base/names.html">names</a></span>(<span class="no">all_cv_data</span>)</pre></body></html></div>
-<pre><code>##   [1] "train_labels" "test_labels"  "time_bin"     "site_0001"    "site_0002"   
-##   [6] "site_0003"    "site_0004"    "site_0005"    "site_0006"    "site_0007"   
-##  [11] "site_0008"    "site_0009"    "site_0010"    "site_0011"    "site_0012"   
-##  [16] "site_0013"    "site_0014"    "site_0015"    "site_0016"    "site_0017"   
-##  [21] "site_0018"    "site_0019"    "site_0020"    "site_0021"    "site_0022"   
-##  [26] "site_0023"    "site_0024"    "site_0025"    "site_0026"    "site_0027"   
-##  [31] "site_0028"    "site_0029"    "site_0030"    "site_0031"    "site_0032"   
-##  [36] "site_0033"    "site_0034"    "site_0035"    "site_0036"    "site_0037"   
-##  [41] "site_0038"    "site_0039"    "site_0040"    "site_0041"    "site_0042"   
-##  [46] "site_0043"    "site_0044"    "site_0045"    "site_0046"    "site_0047"   
-##  [51] "site_0048"    "site_0049"    "site_0050"    "site_0051"    "site_0052"   
-##  [56] "site_0053"    "site_0054"    "site_0055"    "site_0056"    "site_0057"   
-##  [61] "site_0058"    "site_0059"    "site_0060"    "site_0061"    "site_0062"   
-##  [66] "site_0063"    "site_0064"    "site_0065"    "site_0066"    "site_0067"   
-##  [71] "site_0068"    "site_0069"    "site_0070"    "site_0071"    "site_0072"   
-##  [76] "site_0073"    "site_0074"    "site_0075"    "site_0076"    "site_0077"   
-##  [81] "site_0078"    "site_0079"    "site_0080"    "site_0081"    "site_0082"   
-##  [86] "site_0083"    "site_0084"    "site_0085"    "site_0086"    "site_0087"   
-##  [91] "site_0088"    "site_0089"    "site_0090"    "site_0091"    "site_0092"   
-##  [96] "site_0093"    "site_0094"    "site_0095"    "site_0096"    "site_0097"   
-## [101] "site_0098"    "site_0099"    "site_0100"    "site_0101"    "site_0102"   
-## [106] "site_0103"    "site_0104"    "site_0105"    "site_0106"    "site_0107"   
-## [111] "site_0108"    "site_0109"    "site_0110"    "site_0111"    "site_0112"   
-## [116] "site_0113"    "site_0114"    "site_0115"    "site_0116"    "site_0117"   
-## [121] "site_0118"    "site_0119"    "site_0120"    "site_0121"    "site_0122"   
-## [126] "site_0123"    "site_0124"    "site_0125"    "site_0126"    "site_0127"   
-## [131] "site_0128"    "site_0129"    "site_0130"    "site_0131"    "site_0132"   
-## [136] "CV_1"         "CV_2"         "CV_3"         "CV_4"         "CV_5"        
-## [141] "CV_6"         "CV_7"         "CV_8"         "CV_9"         "CV_10"       
-## [146] "CV_11"        "CV_12"        "CV_13"        "CV_14"        "CV_15"       
-## [151] "CV_16"        "CV_17"        "CV_18"</code></pre>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" data-line-number="1">data_file_name &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/system.file">system.file</a></span>(<span class="st">"extdata/ZD_150bins_50sampled.Rda"</span>, <span class="dt">package=</span><span class="st">"NDTr"</span>)</a>
+<a class="sourceLine" id="cb1-2" data-line-number="2">ds &lt;-<span class="st"> </span><span class="kw"><a href="../reference/ds_basic.html">ds_basic</a></span>(data_file_name, <span class="st">'stimulus_ID'</span>, <span class="dv">18</span>)</a>
+<a class="sourceLine" id="cb1-3" data-line-number="3"></a>
+<a class="sourceLine" id="cb1-4" data-line-number="4">all_cv_data &lt;-<span class="st"> </span><span class="kw">get_data</span>(ds)  </a>
+<a class="sourceLine" id="cb1-5" data-line-number="5"> </a>
+<a class="sourceLine" id="cb1-6" data-line-number="6"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/names">names</a></span>(all_cv_data)</a></code></pre></div>
+<pre><code>##   [1] "train_labels" "test_labels"  "time_bin"     "site_0001"   
+##   [5] "site_0002"    "site_0003"    "site_0004"    "site_0005"   
+##   [9] "site_0006"    "site_0007"    "site_0008"    "site_0009"   
+##  [13] "site_0010"    "site_0011"    "site_0012"    "site_0013"   
+##  [17] "site_0014"    "site_0015"    "site_0016"    "site_0017"   
+##  [21] "site_0018"    "site_0019"    "site_0020"    "site_0021"   
+##  [25] "site_0022"    "site_0023"    "site_0024"    "site_0025"   
+##  [29] "site_0026"    "site_0027"    "site_0028"    "site_0029"   
+##  [33] "site_0030"    "site_0031"    "site_0032"    "site_0033"   
+##  [37] "site_0034"    "site_0035"    "site_0036"    "site_0037"   
+##  [41] "site_0038"    "site_0039"    "site_0040"    "site_0041"   
+##  [45] "site_0042"    "site_0043"    "site_0044"    "site_0045"   
+##  [49] "site_0046"    "site_0047"    "site_0048"    "site_0049"   
+##  [53] "site_0050"    "site_0051"    "site_0052"    "site_0053"   
+##  [57] "site_0054"    "site_0055"    "site_0056"    "site_0057"   
+##  [61] "site_0058"    "site_0059"    "site_0060"    "site_0061"   
+##  [65] "site_0062"    "site_0063"    "site_0064"    "site_0065"   
+##  [69] "site_0066"    "site_0067"    "site_0068"    "site_0069"   
+##  [73] "site_0070"    "site_0071"    "site_0072"    "site_0073"   
+##  [77] "site_0074"    "site_0075"    "site_0076"    "site_0077"   
+##  [81] "site_0078"    "site_0079"    "site_0080"    "site_0081"   
+##  [85] "site_0082"    "site_0083"    "site_0084"    "site_0085"   
+##  [89] "site_0086"    "site_0087"    "site_0088"    "site_0089"   
+##  [93] "site_0090"    "site_0091"    "site_0092"    "site_0093"   
+##  [97] "site_0094"    "site_0095"    "site_0096"    "site_0097"   
+## [101] "site_0098"    "site_0099"    "site_0100"    "site_0101"   
+## [105] "site_0102"    "site_0103"    "site_0104"    "site_0105"   
+## [109] "site_0106"    "site_0107"    "site_0108"    "site_0109"   
+## [113] "site_0110"    "site_0111"    "site_0112"    "site_0113"   
+## [117] "site_0114"    "site_0115"    "site_0116"    "site_0117"   
+## [121] "site_0118"    "site_0119"    "site_0120"    "site_0121"   
+## [125] "site_0122"    "site_0123"    "site_0124"    "site_0125"   
+## [129] "site_0126"    "site_0127"    "site_0128"    "site_0129"   
+## [133] "site_0130"    "site_0131"    "site_0132"    "CV_1"        
+## [137] "CV_2"         "CV_3"         "CV_4"         "CV_5"        
+## [141] "CV_6"         "CV_7"         "CV_8"         "CV_9"        
+## [145] "CV_10"        "CV_11"        "CV_12"        "CV_13"       
+## [149] "CV_14"        "CV_15"        "CV_16"        "CV_17"       
+## [153] "CV_18"</code></pre>
 <p>
 </p>
 </div>
   </div>
 
-  <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
-
+  <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
       </div>
 
 </div>
-
 
 
       <footer><div class="copyright">
@@ -150,14 +147,12 @@
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.3.0.</p>
 </div>
-
       </footer>
 </div>
 
   
-
 
   </body>
 </html>

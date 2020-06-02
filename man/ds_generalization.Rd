@@ -96,7 +96,8 @@ for (i in seq_along(id_levels)){
 }
 
 
-ds <- ds_generalization("ZD_150bins_50sampled.Rda", 
+data_file <- system.file("extdata/ZD_150bins_50sampled.Rda", package = "NDTr") 
+ds <- ds_generalization(data_file, 
                        'combined_ID_position', 18, 
                        train_label_levels, 
                        test_label_levels)

@@ -23,7 +23,8 @@ correlation coefficients between all test points and all templates.
 }
 \examples{
 # running a basic decoding analysis using the cl_max_correlation
-ds <- ds_basic('ZD_150bins_50sampled.Rda', 'stimulus_ID', 18) 
+data_file <- system.file("extdata/ZD_150bins_50sampled.Rda", package = "NDTr") 
+ds <- ds_basic(data_file, 'stimulus_ID', 18) 
 fps <- list(fp_zscore())
 cl <- cl_max_correlation() 
 cv <- cv_standard(ds, cl, fps)

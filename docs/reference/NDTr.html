@@ -8,29 +8,21 @@
 
 <title>NDTr: A package for doing neural decoding — NDTr • The Neural Decoding Toolbox in R</title>
 
-
 <!-- jquery -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
 <!-- Bootstrap -->
-<link href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/3.4.0/sandstone/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous" />
+<link href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/3.3.7/sandstone/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous" />
 
-
-<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha256-nuL8/2cJ5NDSSwnKD8VqreErSWHtnEP9E7AySL+1ev4=" crossorigin="anonymous"></script>
-
-<!-- bootstrap-toc -->
-<link rel="stylesheet" href="../bootstrap-toc.css">
-<script src="../bootstrap-toc.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha256-U5ZEeKfGNOja007MMD3YBI0A3OSZOQbeG6z2f2Y0hu8=" crossorigin="anonymous"></script>
 
 <!-- Font Awesome icons -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous" />
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha256-eZrrJcwDc/3uDhsdt61sL2oOBY362qM3lon1gyExkL0=" crossorigin="anonymous" />
 
 <!-- clipboard.js -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.4/clipboard.min.js" integrity="sha256-FiZwavyI2V6+EXO1U+xzLG3IKldpiTFf3153ea9zikQ=" crossorigin="anonymous"></script>
 
-<!-- headroom.js -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script>
+<!-- sticky kit -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/sticky-kit/1.1.3/sticky-kit.min.js" integrity="sha256-c4Rlo1ZozqTPE2RLuvbusY3+SU1pQaJC0TjuhygMipw=" crossorigin="anonymous"></script>
 
 <!-- pkgdown -->
 <link href="../pkgdown.css" rel="stylesheet">
@@ -38,10 +30,10 @@
 
 
 
-
 <meta property="og:title" content="NDTr: A package for doing neural decoding — NDTr" />
-<meta property="og:description" content="The NDTr is a package that makes it easy to do neural decoding analyses" />
 
+<meta property="og:description" content="The NDTr is a package that makes it easy to do neural decoding analyses" />
+<meta name="twitter:card" content="summary" />
 
 
 
@@ -55,10 +47,9 @@
 <![endif]-->
 
 
-
   </head>
 
-  <body data-spy="scroll" data-target="#toc">
+  <body>
     <div class="container template-reference-topic">
       <header>
       <div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
@@ -88,13 +79,9 @@
   <a href="../articles/introduction_tutorial.html">Tutorial</a>
 </li>
       </ul>
+      
       <ul class="nav navbar-nav navbar-right">
-        <li>
-  <a href="https://github.com/emeyers/NDTr/">
-    <span class="fab fa fab fa-github fa-lg"></span>
-     
-  </a>
-</li>
+        
       </ul>
       
     </div><!--/.nav-collapse -->
@@ -102,75 +89,90 @@
 </div><!--/.navbar -->
 
       
-
       </header>
 
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>NDTr: A package for doing neural decoding</h1>
-    <small class="dont-index">Source: <a href='https://github.com/emeyers/NDTr/blob/master/R/NDTr.R'><code>R/NDTr.R</code></a></small>
+    
     <div class="hidden name"><code>NDTr.Rd</code></div>
     </div>
 
     <div class="ref-description">
+    
     <p>The NDTr is a package that makes it easy to do neural decoding analyses</p>
+    
     </div>
 
-
-
+        
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
     <p>The NDTr is built around 5 abstract object types that work together in a
 modular way to allow a range of neural decoding analyses. These five object
 types are:</p>
+    
     <h2 class="hasAnchor" id="-datasources-ds-"><a class="anchor" href="#-datasources-ds-"></a>1. Datasources (DS)</h2>
 
     
- 
-<p>Generate training and test splits of the data</p>
+    <p>Generate training and test splits of the data</p>
+    
     <h2 class="hasAnchor" id="-feature-preprofessors-fp-"><a class="anchor" href="#-feature-preprofessors-fp-"></a>2. Feature preprofessors (FP)</h2>
 
     
-
-<p>Learn parameters on the training set and
+    <p>Learn parameters on the training set and
   apply transformations to the training and test sets</p>
+    
     <h2 class="hasAnchor" id="-classifiers-cl-"><a class="anchor" href="#-classifiers-cl-"></a>3. Classifiers (CL)</h2>
 
     
- 
-<p>learn the relationship between experimental
+    <p>learn the relationship between experimental
   conditions and data on the training set, and then predict experimental
   conditions on the test data.</p>
+    
     <h2 class="hasAnchor" id="-result-metrics-rm-"><a class="anchor" href="#-result-metrics-rm-"></a>4. Result metrics (RM)</h2>
 
     
- 
-<p>Aggregate results from across validation splits and over resampled runs and
+    <p>Aggregate results from across validation splits and over resampled runs and
  compute and plot final decoding accuracy metrics</p>
+    
     <h2 class="hasAnchor" id="-cross-validators-cv-"><a class="anchor" href="#-cross-validators-cv-"></a>5. Cross-validators (CV)</h2>
 
     
-
-<p>Take the DS, FP and CL objects and run a cross-validation decoding
+    <p>Take the DS, FP and CL objects and run a cross-validation decoding
  procedure.</p>
+    
     <h2 class="hasAnchor" id="data-formats"><a class="anchor" href="#data-formats"></a>Data formats</h2>
 
     
- 
-<p>Two data formats are used: 1) 'raster format' which contains high temporal
+    <p>Two data formats are used: 1) 'raster format' which contains high temporal
  precision data where each site is stored in a spearate file and 2) 'binned
  format' where data more coarsely binned across time. The function
  created_binned_data() converts data from raster format to binned format.</p>
+    
 
   </div>
-  <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
-    <nav id="toc" data-toggle="toc" class="sticky-top">
-      <h2 data-toc-skip>Contents</h2>
-    </nav>
+  <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
+    <h2>Contents</h2>
+    <ul class="nav nav-pills nav-stacked">
+      
+      <li><a href="#details">Details</a></li>
+
+      <li><a href="#-datasources-ds-">1. Datasources (DS)</a></li>
+
+      <li><a href="#-feature-preprofessors-fp-">2. Feature preprofessors (FP)</a></li>
+
+      <li><a href="#-classifiers-cl-">3. Classifiers (CL)</a></li>
+
+      <li><a href="#-result-metrics-rm-">4. Result metrics (RM)</a></li>
+
+      <li><a href="#-cross-validators-cv-">5. Cross-validators (CV)</a></li>
+
+      <li><a href="#data-formats">Data formats</a></li>
+          </ul>
+
   </div>
 </div>
-
 
       <footer>
       <div class="copyright">
@@ -178,16 +180,13 @@ types are:</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.3.0.</p>
 </div>
-
       </footer>
    </div>
 
   
 
-
   </body>
 </html>
-
 

@@ -57,9 +57,8 @@ classifier, and uses the result metric objects to evaluate the classification
 performance on the test set.
 }
 \examples{
-binned_file <- file.path("..", "..", "data", "binned", 
-                         "ZD_150_samples_binned_every_50_samples.Rda")
-ds <- ds_basic(basedir_file, 'stimulus_ID', 18)
+data_file <- system.file("extdata/ZD_150bins_50sampled.Rda", package = "NDTr") 
+ds <- ds_basic(data_file, 'stimulus_ID', 18)
 fps <- list(fp_zscore())
 cl <- cl_max_correlation()
 cv <- cv_standard(ds, cl, fps) 

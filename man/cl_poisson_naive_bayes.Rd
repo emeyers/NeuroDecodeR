@@ -20,7 +20,8 @@ not be used, for example, the fp_zscore should not be used with this
 classifier.
 }
 \examples{
- ds <- ds_basic('ZD_150bins_50sampled.Rda', 'stimulus_ID', 18, use_count_data = TRUE)
+ data_file <- system.file("extdata/ZD_150bins_50sampled.Rda", package = "NDTr") 
+ ds <- ds_basic(data_file, 'stimulus_ID', 18, use_count_data = TRUE)
  fps <- list()
  cl <- cl_poisson_naive_bayes()
  cv <- cv_standard(ds, cl, fps) 
