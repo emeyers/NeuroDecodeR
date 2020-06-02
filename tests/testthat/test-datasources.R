@@ -3,7 +3,7 @@ library(testthat)
 
 
 
-real_data_binned_file_name <- file.path("..", "..", "data", "binned", "ZD_150_samples_binned_every_50_samples.Rda")
+real_data_binned_file_name <- system.file("extdata/ZD_150bins_50sampled.Rda", package = "NDTr")
 
 
 

@@ -9,13 +9,10 @@
 devtools::load_all()
 rm(list = ls())
 
-package_base_dir_name <- find.package('NDTr')
-basedir_file_name <- paste0(package_base_dir_name, "/data/binned/ZD_150_samples_binned_every_50_samples.Rda")
+#package_base_dir_name <- find.package('NDTr')
+#basedir_file_name <- paste0(package_base_dir_name, "/data/binned/ZD_150_samples_binned_every_50_samples.Rda")
 
-#basedir_file_name <- '~/research/NDT/NDTr/data/binned/ZD_150_samples_binned_every_50_samples.Rda'
-
-#basedir_file_name <- "/home/faculty/emmCS/research/NDT/other_binned_data/ZD_100_samples_binned_every_30_samples.Rda"
-
+basedir_file_name <- system.file("extdata/ZD_150bins_50sampled.Rda", package = "NDTr")
 
 
 ds <- ds_basic(basedir_file_name, 'stimulus_ID', 6, num_label_repeats_per_cv_split = 3)

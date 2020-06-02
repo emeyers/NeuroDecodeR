@@ -1,15 +1,14 @@
 
 
-#raster_dir_name <- file.path('..', '..', 'data', 'raster', 'Zhang_Desimone_7objects_raster_data_rda')
-raster_dir_name <- file.path('Zhang_Desimone_7objects_raster_data_rda')
 
+raster_dir_name <- file.path(system.file("extdata", package = "NDTr"), "Zhang_Desimone_7object_raster_data_rda")
 
 
 
 # testing create_binned_data --------------------------------------------------
 
 name_of_file_that_should_be_created <- "ZD_150bins_50sampled.Rda" 
-# "ZD_150_samples_binned_every_50_samples.Rda"
+
 
 # deleting "ZD_150_samples_binned_every_50_samples.Rda" if it already exist
 if (file.exists(name_of_file_that_should_be_created)){
@@ -33,8 +32,10 @@ file.remove(name_of_file_that_should_be_created)
 
 # testing converting MATLAB raster data to R raster data ----------------------
 
-matlab_raster_dir_name <- file.path('..', '..', 'data', 'raster', 
-                                    'Zhang_Desimone_7objects_raster_data_mat', '')
+
+matlab_raster_dir_name <- file.path(system.file("extdata", package = "NDTr"), 
+                                   "Zhang_Desimone_7object_raster_data_mat")
+
 
 
 # create temporary directory to hold converted data
@@ -79,9 +80,7 @@ file.remove(r_raster_dir_name)
 # testing calculating the number of times a label was repeated ----------------
 
 
-file_name <- file.path('..', '..', 'data', 'binned', 
-               'ZD_150_samples_binned_every_50_samples.Rda')
-
+file_name <-  system.file("extdata/ZD_150bins_50sampled.Rda", package = "NDTr")
 
 expect_error(get_num_label_repetitions(file_name, "stimulus_ID", levels_to_use = c("kiwi", "dog")))
 
