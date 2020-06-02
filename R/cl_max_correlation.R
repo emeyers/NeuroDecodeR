@@ -57,6 +57,13 @@ get_predictions.cl_max_correlation <- function(cl_max_correlation_obj,
   predicted_inds <- apply(train_test_cor, 2, rand_which_max)
   predicted_labels <- prototypes$train_labels[predicted_inds]
   
+  
+  if (sum(is.na(predicted_labels))) {
+    warning('some of the predicted results returned by the max correlation classifier are NAs')
+    #  browser()
+  }
+  
+  
   # create a data frame that has all the results
   results <- data.frame(test_time = test_set$time_bin, 
                         actual_labels = test_set$test_labels, 
