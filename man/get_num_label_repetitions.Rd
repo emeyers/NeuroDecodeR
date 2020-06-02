@@ -4,7 +4,8 @@
 \alias{get_num_label_repetitions}
 \title{Get the number of trial repetitions for a given label}
 \usage{
-get_num_label_repetitions(binned_data, variable_to_use, levels_to_use = NULL)
+get_num_label_repetitions(binned_data, variable_to_use,
+  levels_to_use = NULL)
 }
 \arguments{
 \item{binned_data}{Can be either a string that list that path to a file that

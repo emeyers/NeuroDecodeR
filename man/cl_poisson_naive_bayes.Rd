@@ -28,8 +28,7 @@ classifier.
 
 }
 \seealso{
-Other classifier: 
-\code{\link{cl_max_correlation}()},
-\code{\link{cl_svm}()}
+Other classifier: \code{\link{cl_max_correlation}},
+  \code{\link{cl_svm}}
 }
 \concept{classifier}

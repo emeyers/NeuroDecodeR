@@ -29,7 +29,6 @@ fp <- fp_zscore()
 
 }
 \seealso{
-Other feature_preprocessor: 
-\code{\link{fp_select_k_features}()}
+Other feature_preprocessor: \code{\link{fp_select_k_features}}
 }
 \concept{feature_preprocessor}

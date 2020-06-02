@@ -4,15 +4,9 @@
 \alias{create_binned_data}
 \title{A function that converts data from raster format to binned format}
 \usage{
-create_binned_data(
-  raster_dir_name,
-  save_prefix_name,
-  bin_width,
-  sampling_interval,
-  start_time = NULL,
-  end_time = NULL,
-  files_contain = ""
-)
+create_binned_data(raster_dir_name, save_prefix_name, bin_width,
+  sampling_interval, start_time = NULL, end_time = NULL,
+  files_contain = "")
 }
 \arguments{
 \item{raster_dir_name}{A string that contains the path to a directory that

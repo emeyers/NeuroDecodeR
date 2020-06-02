@@ -3,6 +3,7 @@
 \docType{package}
 \name{NDTr}
 \alias{NDTr}
+\alias{NDTr-package}
 \title{NDTr: A package for doing neural decoding}
 \description{
 The NDTr is a package that makes it easy to do neural decoding analyses

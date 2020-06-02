@@ -31,8 +31,7 @@ cv <- cv_standard(ds, cl, fps)
 
 }
 \seealso{
-Other classifier: 
-\code{\link{cl_poisson_naive_bayes}()},
-\code{\link{cl_svm}()}
+Other classifier: \code{\link{cl_poisson_naive_bayes}},
+  \code{\link{cl_svm}}
 }
 \concept{classifier}

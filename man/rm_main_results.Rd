@@ -4,10 +4,8 @@
 \alias{rm_main_results}
 \title{A result metric (RM) that calculates central decoding accuracy measures}
 \usage{
-rm_main_results(
-  aggregate_decision_values = TRUE,
-  aggregate_normalized_rank = TRUE
-)
+rm_main_results(aggregate_decision_values = TRUE,
+  aggregate_normalized_rank = TRUE)
 }
 \arguments{
 \item{aggregate_decision_values}{A string or boolean specifying how the
@@ -49,10 +47,9 @@ the_rms <- list(rm_main_results())
 
 }
 \seealso{
-Other result_metrics: 
-\code{\link{plot.rm_confusion_matrix}()},
-\code{\link{plot.rm_main_results}()},
-\code{\link{plot_MI.rm_confusion_matrix}()},
-\code{\link{rm_confusion_matrix}()}
+Other result_metrics: \code{\link{plot.rm_confusion_matrix}},
+  \code{\link{plot.rm_main_results}},
+  \code{\link{plot_MI.rm_confusion_matrix}},
+  \code{\link{rm_confusion_matrix}}
 }
 \concept{result_metrics}

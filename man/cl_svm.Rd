@@ -32,8 +32,7 @@ cl <- cl_svm(kernel = "linear")
 \seealso{
 e1071
 
-Other classifier: 
-\code{\link{cl_max_correlation}()},
-\code{\link{cl_poisson_naive_bayes}()}
+Other classifier: \code{\link{cl_max_correlation}},
+  \code{\link{cl_poisson_naive_bayes}}
 }
 \concept{classifier}
