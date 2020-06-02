@@ -1,21 +1,16 @@
 
-# ultimately will use this as the file name in the final version but for now easiest to have absolute path
-#basedir_file_name <- '../../data/binned/ZD_150_samples_binned_every_50_samples.Rda'
-
 
 # devtools::install()
 
+#devtools::load_all()
+#rm(list = ls())
 
-devtools::load_all()
-rm(list = ls())
-
-#package_base_dir_name <- find.package('NDTr')
-#basedir_file_name <- paste0(package_base_dir_name, "/data/binned/ZD_150_samples_binned_every_50_samples.Rda")
 
 basedir_file_name <- system.file("extdata/ZD_150bins_50sampled.Rda", package = "NDTr")
 
 
 ds <- ds_basic(basedir_file_name, 'stimulus_ID', 6, num_label_repeats_per_cv_split = 3)
+
 
 # should produce chance results
 #ds <- ds_basic(basedir_file_name, 'stimulus_ID', 6, num_label_repeats_per_cv_split = 3,

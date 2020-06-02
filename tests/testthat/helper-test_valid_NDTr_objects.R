@@ -4,8 +4,15 @@
 #  have appropriate methods to implement their interfaces
 
 
-the_package_name = "package:NDTr"
 
+
+# a helper function to test if a given class has a method
+# this is useful to check that particular object types in the NDTr fulfill the interface
+helper_test_has_method <- function(class_name, method_name){
+  
+  expect_true(exists(paste(method_name, class_name, sep = "."), mode='function'))
+  
+}
 
 
 
@@ -51,8 +58,9 @@ test_get_parameters_method <- function(NDTr_object){
     
     class_name <- class(NDTr_object)[1]
     
-    package_with_method <- find(paste0("get_parameters.", class_name))
-    expect_equal(package_with_method, the_package_name)
+    #expect_true(exists(paste0("get_parameters.", class_name), mode='function'))
+    helper_test_has_method(class_name, "get_parameters")
+    
     
     the_parameters <- get_parameters(NDTr_object)
     expect_equal(dim(the_parameters)[1], 1)
@@ -70,8 +78,7 @@ test_valid_datasource <- function(the_datasource){
   
   test_that("the datasource has get_data() method", {
   
-    package_with_method <- find(paste0("get_data.", class_name))
-    expect_equal(package_with_method, the_package_name)
+    helper_test_has_method(class_name, "get_data")
     
   })
   
@@ -107,8 +114,10 @@ test_valid_classifier <- function(the_classifier){
   class_name <- class(the_classifier)[1]
   
   test_that("the classifier has get_predictions() method", {
-    package_with_method <- find(paste0("get_predictions.", class_name))
-    expect_equal(package_with_method, the_package_name)
+    
+    #expect_true(exists(paste0("get_predictions.", class_name), mode='function'))
+    helper_test_has_method(class_name, "get_predictions")
+
   })
   
   
@@ -144,8 +153,7 @@ test_valid_feature_preprocessor <- function(the_feature_preprocessor){
     
     class_name <- class(the_feature_preprocessor)[1]
     
-    package_with_method <- find(paste0("preprocess_data.", class_name))
-    expect_equal(package_with_method, the_package_name)
+    helper_test_has_method(class_name, "preprocess_data")
     
   })
   
@@ -188,9 +196,9 @@ test_valid_cross_validator <- function(the_cross_validator){
   test_that("the cross-validator has a run_decoding() method", {
     
     class_name <- class(the_cross_validator)[1]
-    
-    package_with_method <- find(paste0("run_decoding.", class_name))
-    expect_equal(package_with_method, the_package_name)
+  
+    #expect_true(exists(paste0("run_decoding.", class_name), mode='function'))
+    helper_test_has_method(class_name, "run_decoding")
     
   })
   
@@ -222,11 +230,11 @@ test_valid_result_metric <- function(the_result_metric){
     
     class_name <- class(the_result_metric)[1]
               
-    package_with_method <- find(paste0("aggregate_CV_split_results.", class_name))
-    expect_equal(package_with_method, the_package_name)
+    #expect_true(exists(paste0("aggregate_CV_split_results.", class_name), mode='function'))
+    #expect_true(exists(paste0("aggregate_resample_run_results.", class_name), mode='function'))
     
-    package_with_method <- find(paste0("aggregate_resample_run_results.", class_name))
-    expect_equal(package_with_method, the_package_name)
+    helper_test_has_method(class_name, "aggregate_CV_split_results")
+    helper_test_has_method(class_name, "aggregate_resample_run_results")
     
   })
   
