@@ -13,7 +13,7 @@ Description: A package that allows one to do a neural decoding analysis in R.
     analyses. See www.readout.info for more information. 
 URL: www.readout.info
 BugReports: https://github.com/emeyers/NDTr/issues
-Depends: R (>= 3.3.3)
+Depends: R (>= 3.5.0)
 License: GPL-3
 LazyData: true
 RoxygenNote: 7.1.0

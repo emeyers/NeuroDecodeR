@@ -4,8 +4,7 @@
 \alias{plot.rm_main_results}
 \title{A plot function for the rm_main_results object}
 \usage{
-\method{plot}{rm_main_results}(main_results,
-  result_type = "zero_one_loss", plot_type = "TCD")
+\method{plot}{rm_main_results}(main_results, result_type = "zero_one_loss", plot_type = "TCD")
 }
 \arguments{
 \item{main_results}{A rm_main_result object that has aggregated runs from a
@@ -26,9 +25,10 @@ the the zero-one loss, normalized rank and/or decision values after the
 decoding analysis has been run (and all results have been aggregated)
 }
 \seealso{
-Other result_metrics: \code{\link{plot.rm_confusion_matrix}},
-  \code{\link{plot_MI.rm_confusion_matrix}},
-  \code{\link{rm_confusion_matrix}},
-  \code{\link{rm_main_results}}
+Other result_metrics: 
+\code{\link{plot.rm_confusion_matrix}()},
+\code{\link{plot_MI.rm_confusion_matrix}()},
+\code{\link{rm_confusion_matrix}()},
+\code{\link{rm_main_results}()}
 }
 \concept{result_metrics}

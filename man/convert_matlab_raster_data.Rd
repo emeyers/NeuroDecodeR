@@ -4,9 +4,13 @@
 \alias{convert_matlab_raster_data}
 \title{Convert raster data in MATLAB .mat format to R .rda format}
 \usage{
-convert_matlab_raster_data(matlab_raster_dir_name,
-  r_raster_dir_name = NULL, start_ind = NULL, end_ind = NULL,
-  files_contain = "")
+convert_matlab_raster_data(
+  matlab_raster_dir_name,
+  r_raster_dir_name = NULL,
+  start_ind = NULL,
+  end_ind = NULL,
+  files_contain = ""
+)
 }
 \arguments{
 \item{matlab_raster_dir_name}{A character string specifying the path to a directory that 

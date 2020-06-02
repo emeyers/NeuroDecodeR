@@ -4,9 +4,15 @@
 \alias{cv_standard}
 \title{The standard cross-validator (CV) object}
 \usage{
-cv_standard(datasource, classifier, feature_preprocessors,
-  result_metrics = NULL, num_resample_runs = 50,
-  test_only_at_training_time = FALSE, run_parallel = TRUE)
+cv_standard(
+  datasource,
+  classifier,
+  feature_preprocessors,
+  result_metrics = NULL,
+  num_resample_runs = 50,
+  test_only_at_training_time = FALSE,
+  run_parallel = TRUE
+)
 }
 \arguments{
 \item{datasource}{a datasource (DS) object that will generate the training
@@ -59,8 +65,5 @@ cl <- cl_max_correlation()
 cv <- cv_standard(ds, cl, fps) 
 
 
-}
-\seealso{
-Other cross-validator: \code{\link{cv_standard_non_parallel}}
 }
 \concept{cross-validator}
