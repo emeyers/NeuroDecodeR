@@ -35,7 +35,7 @@ Below is an example of raster format data file from the [Zhang-Desimone 7 object
 
 ```{r load_raster_file}
 
-raster_directory_name <- "../data/raster/Zhang_Desimone_7objects_raster_data_rda/"
+raster_directory_name <- "../data-raw/raster/Zhang_Desimone_7objects_raster_data_rda/"
 file_name <- "bp1001spk_01A_raster_data.rda"
 load(paste0(raster_directory_name, file_name))
 
