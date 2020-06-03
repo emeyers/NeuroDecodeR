@@ -4,9 +4,9 @@
 <!-- badges: start -->
 
 [![Travis build
-status](https://travis-ci.com/muschellij2/NDTr.svg?branch=master)](https://travis-ci.com/muschellij2/NDTr)
+status](https://travis-ci.com/emeyers/NDTr.svg?branch=master)](https://travis-ci.com/emeyers/NDTr)
 [![AppVeyor build
-status](https://ci.appveyor.com/api/projects/status/github/muschellij2/NDTr?branch=master&svg=true)](https://ci.appveyor.com/project/muschellij2/NDTr)
+status](https://ci.appveyor.com/api/projects/status/github/emeyers/NDTr?branch=master&svg=true)](https://ci.appveyor.com/project/emeyers/NDTr)
 [![Coveralls test
 coverage](https://coveralls.io/repos/github/emeyers/NDTr/badge.svg)](https://coveralls.io/r/emeyers/NDTr?branch=master)
 <!-- badges: end -->
