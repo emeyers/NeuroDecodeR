@@ -41,8 +41,7 @@ If one already has raster data created in MATLAB, this function can be used to c
 to an R format (.rda files) that can be used with the NDTr.
 }
 \examples{
-matlab_raster_dir_name <- file.path('..', '..', 'data', 'raster', 
-                                    'Zhang_Desimone_7objects_raster_data_mat', '')
+matlab_raster_dir_name <- "../data-raw/raster/Zhang_Desimone_7objects_raster_data_mat/"
 
 # create temporary directory to hold converted data
 r_raster_dir_name <- file.path("test_convert_matlab_raster_data", "")
