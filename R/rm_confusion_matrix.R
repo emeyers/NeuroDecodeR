@@ -13,6 +13,11 @@
 #'  testing a different point in time. This usually is not necessary and takes 
 #'  up more memeory.
 #' 
+#' @param create_decision_vals_confusion_matrix A boolean specifying whether one wants
+#'  to create the create a confusion matrix of the decision values. In this confusion
+#'  matrix, each row corresponds to the correct class (like a regular confusion matrix)
+#'  and each column corresponds to the mean decision value of the predictions for 
+#'  each class. 
 #' 
 #' @examples
 #' # If you only want to use the rm_confusion_matrix(), then you can put it in a
@@ -29,9 +34,11 @@
 
 # the constructor 
 #' @export
-rm_confusion_matrix <- function(save_only_same_train_test_time = TRUE) {
+rm_confusion_matrix <- function(save_only_same_train_test_time = TRUE, 
+                                create_decision_vals_confusion_matrix = TRUE) {
   
-  options <- list(save_only_same_train_test_time = save_only_same_train_test_time)
+  options <- list(save_only_same_train_test_time = save_only_same_train_test_time,
+                  create_decision_vals_confusion_matrix = create_decision_vals_confusion_matrix)
   
   new_rm_confusion_matrix(data.frame(), 'initial', options)
 
@@ -72,6 +79,25 @@ aggregate_CV_split_results.rm_confusion_matrix = function(confusion_matrix_obj, 
     summarize(n = n())
   
   
+  if (options$create_decision_vals_confusion_matrix) {
+    
+    # create the decision value confusion matrix
+    confusion_matrix_decision_vals <- prediction_results %>%
+      select(-predicted_labels, -CV) %>%
+      dplyr::group_by(.data$train_time, .data$test_time, .data$actual_labels) %>%
+      summarize_all(mean) %>%
+      tidyr::pivot_longer(starts_with("decision_vals"), names_to = "predicted_labels", 
+                        values_to = "mean_decision_vals") %>%
+      mutate(predicted_labels = gsub("decision_vals.", "", predicted_labels))
+  
+    confusion_matrix <- left_join(confusion_matrix_decision_vals, confusion_matrix, 
+                                   by = c("train_time", "test_time", "actual_labels", "predicted_labels")) 
+    
+    confusion_matrix$n[is.na(confusion_matrix$n)] = 0
+    
+  }
+  
+  
   # # Adding this instead to the final aggregation step to save a little memory.
   # # However, doing it here has only a small advantage of making the confusion matrices 
   # # from all runs are the same size (but saving memory seems more important).
@@ -108,7 +134,6 @@ aggregate_resample_run_results.rm_confusion_matrix = function(resample_run_resul
 
   confusion_matrix <- resample_run_results 
 
-  
   # add on 0's for all entries in the confusion matrix that are missing  -----------------------------------------
 
   # check if only specified that one should only save the results at the same training and test time
@@ -158,6 +183,25 @@ aggregate_resample_run_results.rm_confusion_matrix = function(resample_run_resul
   #dplyr::group_by(train_time,  test_time) %>%
   #mutate(predicted_frequency = n / sum(n))   # Pr(predicted = y, actual = k)
   
+  
+  if (options$create_decision_vals_confusion_matrix) {
+    
+    confusion_matrix_decision_vals <- resample_run_results %>%
+      dplyr::group_by(.data$train_time,  .data$test_time, .data$actual_labels,  .data$predicted_labels) %>%
+      summarize(mean_decision_vals = mean(mean_decision_vals))
+    
+    if (dim(confusion_matrix_decision_vals)[1] != dim(confusion_matrix)[1]){
+      warning(paste('Something has gone wrong where the confusion_matrix_decision_vals and",
+                    "confusion_matrix do not have the same number of rows'))
+    }
+    
+    confusion_matrix <- confusion_matrix %>%
+      left_join(confusion_matrix_decision_vals, 
+                by = c("train_time", "test_time", "actual_labels", "predicted_labels"))
+    
+  }
+  
+  
   new_rm_confusion_matrix(confusion_matrix, 
                           'final results', 
                           attr(resample_run_results, 'options'))
@@ -202,7 +246,8 @@ new_rm_confusion_matrix <- function(the_data = data.frame(),
 
 
 #' @export
-plot.rm_confusion_matrix = function(confusion_matrix_obj, plot_only_same_train_test_time = FALSE) {
+plot.rm_confusion_matrix = function(confusion_matrix_obj, plot_only_same_train_test_time = FALSE,
+                                    plot_decision_vals_confusion_matrix = FALSE) {
 
   # should perhaps give an option to choose a different color scale, and maybe other options? 
   
@@ -245,15 +290,33 @@ plot.rm_confusion_matrix = function(confusion_matrix_obj, plot_only_same_train_t
     
   }
   
+  
+  if (plot_decision_vals_confusion_matrix){
+    
+    g <- confusion_matrix_obj %>%
+      ggplot(aes(predicted_labels, forcats::fct_rev(actual_labels), fill = mean_decision_vals)) +
+      geom_tile() + 
+      theme(axis.text.x = element_text(angle = 90, hjust = 1)) +
+      ylab('True class') + 
+      xlab('Predicted class') +    # or should I transpose this (people do it differently...)
+      scale_fill_continuous(type = "viridis", name = "Mean\n decision\n value") #+ 
+    
+    
+  } else {
+    
+    g <- confusion_matrix_obj %>%
+      ggplot(aes(predicted_labels, forcats::fct_rev(actual_labels), fill = conditional_pred_freq * 100)) +
+      geom_tile() + 
+      theme(axis.text.x = element_text(angle = 90, hjust = 1)) +
+      ylab('True class') + 
+      xlab('Predicted class') +    # or should I transpose this (people do it differently...)
+      scale_fill_continuous(type = "viridis", name = "Prediction\n frequency") #+ 
+  }
 
-  g <- confusion_matrix_obj %>%
-    ggplot(aes(predicted_labels, forcats::fct_rev(actual_labels), fill = conditional_pred_freq * 100)) +
-    geom_tile() + 
-    theme(axis.text.x = element_text(angle = 90, hjust = 1)) +
-    ylab('True class') + 
-    xlab('Predicted class') +    # or should I transpose this (people do it differently...)
-    scale_fill_continuous(type = "viridis", name = "Prediction\n frequency") #+ 
 
+
+  
+  
   if (sum(confusion_matrix_obj$train_time == confusion_matrix_obj$test_time) == dim(confusion_matrix_obj)[1]){
         g + facet_wrap(~train_time)
   } else {    

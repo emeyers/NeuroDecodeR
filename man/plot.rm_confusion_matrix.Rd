@@ -4,7 +4,11 @@
 \alias{plot.rm_confusion_matrix}
 \title{plot the confusion matrix results}
 \usage{
-\method{plot}{rm_confusion_matrix}(confusion_matrix_obj, plot_only_same_train_test_time = FALSE)
+\method{plot}{rm_confusion_matrix}(
+  confusion_matrix_obj,
+  plot_only_same_train_test_time = FALSE,
+  plot_decision_vals_confusion_matrix = FALSE
+)
 }
 \arguments{
 \item{confusion_matrix_obj}{A rm_confusion_matrix object that has aggregated

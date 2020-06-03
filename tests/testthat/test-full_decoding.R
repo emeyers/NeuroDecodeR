@@ -44,6 +44,7 @@ rms <- list(rm_main_results(aggregate_decision_values = "diag", aggregate_normal
 #            rm_confusion_matrix(save_only_same_train_test_time = FALSE))
 
 
+#cv <- cv_standard(ds, cl, fps, rms, 3, test_only_at_training_time = FALSE, run_parallel = FALSE) 
 
 cv <- cv_standard(ds, cl, fps, rms, 3, test_only_at_training_time = FALSE) 
 
