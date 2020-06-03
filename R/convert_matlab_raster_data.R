@@ -27,7 +27,8 @@
 #'   string.
 #' 
 #' @examples 
-#' matlab_raster_dir_name <- "../data-raw/raster/Zhang_Desimone_7objects_raster_data_mat/"
+#' matlab_raster_dir_name <- file.path(system.file("extdata", package = "NDTr"), 
+#'                                                "Zhang_Desimone_7object_raster_data_small_mat")
 #' 
 #' # create temporary directory to hold converted data
 #' r_raster_dir_name <- file.path("test_convert_matlab_raster_data", "")

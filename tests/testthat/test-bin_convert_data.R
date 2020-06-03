@@ -34,7 +34,7 @@ file.remove(name_of_file_that_should_be_created)
 
 
 matlab_raster_dir_name <- file.path(system.file("extdata", package = "NDTr"), 
-                                   "Zhang_Desimone_7object_raster_data_mat")
+                                   "Zhang_Desimone_7object_raster_data_small_mat")
 
 
 
