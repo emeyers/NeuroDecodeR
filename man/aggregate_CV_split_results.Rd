@@ -8,10 +8,10 @@ aggregrate results across all cross-validation splits. Note: this function shoul
 called by users of the package but instead is called interally by cross-validator
 objects.}
 \usage{
-aggregate_CV_split_results(obj, prediction_results)
+aggregate_CV_split_results(rm_obj, prediction_results)
 }
 \arguments{
-\item{obj}{The RM object}
+\item{rm_obj}{The results metric object}
 
 \item{prediction_results}{the prediction results to be aggregated over CV splits}
 }

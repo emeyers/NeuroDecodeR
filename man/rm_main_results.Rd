@@ -2,7 +2,7 @@
 % Please edit documentation in R/rm_main_results.R
 \name{rm_main_results}
 \alias{rm_main_results}
-\title{A result metric (RM) that calculates central decoding accuracy measures}
+\title{A result metric (RM) that calculates main decoding accuracy measures}
 \usage{
 rm_main_results(
   aggregate_decision_values = TRUE,

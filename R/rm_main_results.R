@@ -1,4 +1,4 @@
-#' A result metric (RM) that calculates central decoding accuracy measures
+#' A result metric (RM) that calculates main decoding accuracy measures
 #'
 #' This result metric calculate the zero-one loss, the normalized rank, and the
 #'  mean of the decision values. This is also an S3 object which has an associated
@@ -50,9 +50,9 @@ rm_main_results <- function(aggregate_decision_values = TRUE, aggregate_normaliz
   options <- list(aggregate_decision_values = aggregate_decision_values, 
                   aggregate_normalized_rank = aggregate_normalized_rank)
   
-  main_results_obj <- new_rm_main_results(options = options)
+  rm_obj <- new_rm_main_results(options = options)
   
-  main_results_obj
+  rm_obj
 
 }
 
@@ -60,15 +60,15 @@ rm_main_results <- function(aggregate_decision_values = TRUE, aggregate_normaliz
 # the internal private constructor
 new_rm_main_results <- function(the_data = data.frame(), state = 'initial', options = NULL){
   
-  main_results_obj <- the_data
+  rm_obj <- the_data
   
-  attr(main_results_obj, "class") <- c("rm_main_results", 'data.frame')
+  attr(rm_obj, "class") <- c("rm_main_results", 'data.frame')
   
-  attr(main_results_obj, "state") <- state
+  attr(rm_obj, "state") <- state
   
-  attr(main_results_obj, "options") <- options
+  attr(rm_obj, "options") <- options
   
-  main_results_obj
+  rm_obj
   
 }
 
@@ -79,11 +79,11 @@ new_rm_main_results <- function(the_data = data.frame(), state = 'initial', opti
 
 # The aggregate_CV_split_results method needed to fulfill the results metric interface
 #' @export
-aggregate_CV_split_results.rm_main_results = function(main_results_obj, prediction_results) {
+aggregate_CV_split_results.rm_main_results = function(rm_obj, prediction_results) {
   
   
   # perhaps include a warning if the state is not intial
-  if (attr(main_results_obj, "state") != "initial") {    
+  if (attr(rm_obj, "state") != "initial") {    
     warning(paste0("The method aggregate_CV_split_results() should only be called on",
                    "rm_main_results that are in the intial state.",
                    "Any data that was already stored in this object will be overwritten"))
@@ -91,8 +91,8 @@ aggregate_CV_split_results.rm_main_results = function(main_results_obj, predicti
 
   
   # get the options for now the normalized rank and decision values should be aggregated
-  aggregate_decision_values <- attr(main_results_obj, "options")$aggregate_decision_values
-  aggregate_normalized_rank <- attr(main_results_obj, "options")$aggregate_normalized_rank
+  aggregate_decision_values <- attr(rm_obj, "options")$aggregate_decision_values
+  aggregate_normalized_rank <- attr(rm_obj, "options")$aggregate_normalized_rank
   
   
   # get the zero-one loss loss results
@@ -165,7 +165,7 @@ aggregate_CV_split_results.rm_main_results = function(main_results_obj, predicti
 
   new_rm_main_results(the_results, 
                       'results combined over one cross-validation split', 
-                      attributes(main_results_obj)$options)
+                      attributes(rm_obj)$options)
   
 }
 

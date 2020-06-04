@@ -8,10 +8,10 @@ aggregrate results across all resample runs. Note: this function should not be
 called by users of the package but instead is called interally by cross-validator
 objects.}
 \usage{
-aggregate_resample_run_results(obj)
+aggregate_resample_run_results(resample_run_results)
 }
 \arguments{
-\item{obj}{The RM object}
+\item{resample_run_results}{The decoding results from all resample runs}
 }
 \description{
 The required aggregate_resample_run_results method is needed to fulfill the

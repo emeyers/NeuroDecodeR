@@ -48,14 +48,31 @@ rm_confusion_matrix <- function(save_only_same_train_test_time = TRUE,
 
 
 
+# the internal constructor
+new_rm_confusion_matrix <- function(the_data = data.frame(), 
+                                    the_state = NULL,
+                                    options = NULL) {
+  
+  rm_obj <- the_data
+  attr(rm_obj, "state") <- the_state
+  attr(rm_obj, "options") <- options
+  attr(rm_obj, "class") <- c("rm_confusion_matrix", 'data.frame')
+  
+  rm_obj
+  
+}
+
+
+
+
 
 # The aggregate_CV_split_results method needed to fulfill the results metric interface
 #' @export
-aggregate_CV_split_results.rm_confusion_matrix = function(confusion_matrix_obj, prediction_results) {
+aggregate_CV_split_results.rm_confusion_matrix = function(rm_obj, prediction_results) {
   
 
   # include a warning if the state is not intial
-  if (attr(confusion_matrix_obj, "state") != "initial") {    
+  if (attr(rm_obj, "state") != "initial") {    
     warning(paste0("The method aggregate_CV_split_results() should only be called on",
                    "normalized_rank_and_decision_values_RM that are in the intial state.",
                    "Any data that was already stored in this object will be overwritten"))
@@ -67,7 +84,7 @@ aggregate_CV_split_results.rm_confusion_matrix = function(confusion_matrix_obj, 
   # can't generally of too much interest (however they could be of interest when 
   # converting the confusion matrix to mutual information). 
   
-  options <- attr(confusion_matrix_obj, 'options')
+  options <- attr(rm_obj, 'options')
   
   if (options$save_only_same_train_test_time) {
     prediction_results <- prediction_results %>% 
@@ -122,9 +139,11 @@ aggregate_CV_split_results.rm_confusion_matrix = function(confusion_matrix_obj, 
   
   new_rm_confusion_matrix(confusion_matrix, 
                           'results combined over one cross-validation split', 
-                          attr(confusion_matrix_obj, 'options'))
+                          attr(rm_obj, 'options'))
   
 }
+
+
 
 
 
@@ -210,24 +229,6 @@ aggregate_resample_run_results.rm_confusion_matrix = function(resample_run_resul
                           attr(resample_run_results, 'options'))
   
 }
-
-
-
-
-# the internal constructor
-new_rm_confusion_matrix <- function(the_data = data.frame(), 
-                                    the_state = NULL,
-                                    options = NULL) {
-  
-    confusion_matrix_obj <- the_data
-    attr(confusion_matrix_obj, "state") <- the_state
-    attr(confusion_matrix_obj, "options") <- options
-    attr(confusion_matrix_obj, "class") <- c("rm_confusion_matrix", 'data.frame')
-    
-    confusion_matrix_obj
-  
-}
-
 
 
 

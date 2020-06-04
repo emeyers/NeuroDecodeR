@@ -39,11 +39,11 @@ get_data <- function(ds_obj) {
 
 #' Register the generic function preprocess_data() for feature preprocessor (FP) objects
 #' Need to fill in more complete documentation here about the FP interface
-#' @param fp_obj The FP object
-#' @param train_data The training data
-#' @param all_times_test_data The test data
+#' @param fp The FP object
+#' @param training_set The training set for a particular time
+#' @param test_set The test set from all times
 #' @export
-preprocess_data <- function(fp_obj, train_data, all_times_test_data) {
+preprocess_data <- function(fp, training_set, test_set) {
   UseMethod("preprocess_data")
 }
 
@@ -66,10 +66,10 @@ run_decoding <- function(cv_obj) {
 #' aggregrate results across all cross-validation splits. Note: this function should not be
 #' called by users of the package but instead is called interally by cross-validator
 #' objects.
-#' @param obj The RM object
+#' @param rm_obj The results metric object
 #' @param prediction_results the prediction results to be aggregated over CV splits
 #' @export
-aggregate_CV_split_results <- function(obj, prediction_results) {
+aggregate_CV_split_results <- function(rm_obj, prediction_results) {
   UseMethod("aggregate_CV_split_results")
 }
 
@@ -84,9 +84,9 @@ aggregate_CV_split_results <- function(obj, prediction_results) {
 #' aggregrate results across all resample runs. Note: this function should not be
 #' called by users of the package but instead is called interally by cross-validator
 #' objects.
-#' @param obj The RM object
+#' @param resample_run_results The decoding results from all resample runs
 #' @export
-aggregate_resample_run_results <- function(obj) {
+aggregate_resample_run_results <- function(resample_run_results) {
     UseMethod("aggregate_resample_run_results")
 }
 

@@ -5,14 +5,14 @@
 \title{Register the generic function preprocess_data() for feature preprocessor (FP) objects
 Need to fill in more complete documentation here about the FP interface}
 \usage{
-preprocess_data(fp_obj, train_data, all_times_test_data)
+preprocess_data(fp, training_set, test_set)
 }
 \arguments{
-\item{fp_obj}{The FP object}
+\item{fp}{The FP object}
 
-\item{train_data}{The training data}
+\item{training_set}{The training set for a particular time}
 
-\item{all_times_test_data}{The test data}
+\item{test_set}{The test set from all times}
 }
 \description{
 Register the generic function preprocess_data() for feature preprocessor (FP) objects
