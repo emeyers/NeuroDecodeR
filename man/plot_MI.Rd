@@ -4,10 +4,10 @@
 \alias{plot_MI}
 \title{Plot the mutual information computed from a confusion matrix}
 \usage{
-plot_MI(obj, plot_type)
+plot_MI(rm_obj, plot_type)
 }
 \arguments{
-\item{obj}{the RM object}
+\item{rm_obj}{the result metric object}
 
 \item{plot_type}{The type of plot that should be displayed}
 }

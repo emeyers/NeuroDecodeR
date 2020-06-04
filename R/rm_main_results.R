@@ -220,10 +220,12 @@ aggregate_resample_run_results.rm_main_results = function(resample_run_results) 
 #' the the zero-one loss, normalized rank and/or decision values after the
 #' decoding analysis has been run (and all results have been aggregated)
 #' 
-#' @param main_results A rm_main_result object that has aggregated runs from a
+#' @param x A rm_main_result object that has aggregated runs from a
 #'   decoding analysis, e.g., if DECODING_RESULTS are the out from the
 #'   run_decoding(cv) then this argument should be
 #'   DECODING_RESULTS$rm_main_results.
+#' 
+#' @param ... This is needed to conform to the plot generic interface
 #' 
 #' @param result_type A string specifying the types of results to plot options
 #'   are: 'zero_one_loss', 'normalized_rank', 'decision_values', or 'all'
@@ -235,8 +237,9 @@ aggregate_resample_run_results.rm_main_results = function(resample_run_results) 
 #' @family result_metrics
 #' 
 #' @export
-plot.rm_main_results = function(main_results, result_type = 'zero_one_loss', plot_type = 'TCD') {
+plot.rm_main_results = function(x, ..., result_type = 'zero_one_loss', plot_type = 'TCD') {
   
+  main_results <- x 
   
   if (attributes(main_results)$state != "final results"){
     stop("The results can only be plotted *after* the decoding analysis has been run")

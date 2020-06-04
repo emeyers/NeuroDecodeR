@@ -86,8 +86,9 @@ get_num_label_repetitions <- function(binned_data,
 
 
 #' @export
-plot.label_repetition <- function(label_rep_obj) {
+plot.label_repetition <- function(x, ...) {
 
+  label_rep_obj <- x
   
   num_sites_with_k_repeats <- get_num_sites_with_k_label_repetitions(label_rep_obj)
   

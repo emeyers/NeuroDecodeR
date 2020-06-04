@@ -5,16 +5,19 @@
 \title{plot the confusion matrix results}
 \usage{
 \method{plot}{rm_confusion_matrix}(
-  confusion_matrix_obj,
+  x,
+  ...,
   plot_only_same_train_test_time = FALSE,
   plot_decision_vals_confusion_matrix = FALSE
 )
 }
 \arguments{
-\item{confusion_matrix_obj}{A rm_confusion_matrix object that has aggregated
+\item{x}{A rm_confusion_matrix object that has aggregated
 runs from a decoding analysis, e.g., if DECODING_RESULTS are the out from
 the run_decoding(cv) then this argument should be
 DECODING_RESULTS$rm_confusion_matrix.}
+
+\item{...}{This is needed to conform to the plot generic interface}
 
 \item{plot_only_same_train_test_time}{A boolean indicating whether
 the confusion matrices should only be plotted at the same training 

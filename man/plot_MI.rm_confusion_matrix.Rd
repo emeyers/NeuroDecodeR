@@ -4,10 +4,10 @@
 \alias{plot_MI.rm_confusion_matrix}
 \title{plot the mutual information computed from a confusion matrix}
 \usage{
-\method{plot_MI}{rm_confusion_matrix}(confusion_matrix_obj, plot_type = "TCD")
+\method{plot_MI}{rm_confusion_matrix}(rm_obj, plot_type = "TCD")
 }
 \arguments{
-\item{confusion_matrix_obj}{A rm_confusion_matrix object that has aggregated
+\item{rm_obj}{A rm_confusion_matrix object that has aggregated
 runs from a decoding analysis, e.g., if DECODING_RESULTS are the out from
 the run_decoding(cv) then this argument should be
 DECODING_RESULTS$rm_confusion_matrix.}

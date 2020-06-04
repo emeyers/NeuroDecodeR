@@ -239,10 +239,12 @@ aggregate_resample_run_results.rm_confusion_matrix = function(resample_run_resul
 #' This function plots confusion matrices after the decoding analysis has been
 #' run (and all results have been aggregated)
 #' 
-#' @param confusion_matrix_obj A rm_confusion_matrix object that has aggregated
+#' @param x A rm_confusion_matrix object that has aggregated
 #'   runs from a decoding analysis, e.g., if DECODING_RESULTS are the out from
 #'   the run_decoding(cv) then this argument should be
 #'   DECODING_RESULTS$rm_confusion_matrix.
+#' 
+#' @param ... This is needed to conform to the plot generic interface
 #' 
 #' @param plot_only_same_train_test_time A boolean indicating whether
 #'   the confusion matrices should only be plotted at the same training 
@@ -257,9 +259,13 @@ aggregate_resample_run_results.rm_confusion_matrix = function(resample_run_resul
 
 
 #' @export
-plot.rm_confusion_matrix = function(confusion_matrix_obj, plot_only_same_train_test_time = FALSE,
+plot.rm_confusion_matrix = function(x, ..., plot_only_same_train_test_time = FALSE,
                                     plot_decision_vals_confusion_matrix = FALSE) {
 
+  
+  confusion_matrix_obj <- x
+  
+  
   # should perhaps give an option to choose a different color scale, and maybe other options? 
   
   # checking if only have the results for training and testing at the same time
@@ -348,7 +354,7 @@ plot.rm_confusion_matrix = function(confusion_matrix_obj, plot_only_same_train_t
 #' the the zero-one loss, normalized rank and/or decision values after the
 #' decoding analysis has been run (and all results have been aggregated)
 #' 
-#' @param confusion_matrix_obj A rm_confusion_matrix object that has aggregated
+#' @param rm_obj A rm_confusion_matrix object that has aggregated
 #'   runs from a decoding analysis, e.g., if DECODING_RESULTS are the out from
 #'   the run_decoding(cv) then this argument should be
 #'   DECODING_RESULTS$rm_confusion_matrix.
@@ -360,7 +366,7 @@ plot.rm_confusion_matrix = function(confusion_matrix_obj, plot_only_same_train_t
 #' @family result_metrics
 #' 
 #' @export
-plot_MI.rm_confusion_matrix = function(confusion_matrix_obj, plot_type = 'TCD') {
+plot_MI.rm_confusion_matrix = function(rm_obj, plot_type = 'TCD') {
   
   
   if (!(plot_type == 'TCD' || plot_type == 'line'))
@@ -369,7 +375,7 @@ plot_MI.rm_confusion_matrix = function(confusion_matrix_obj, plot_type = 'TCD') 
   
   # calculate the mutual information ------------------------------------------
   
-  MI_obj <-  confusion_matrix_obj %>%
+  MI_obj <-  rm_obj %>%
     group_by(train_time,  test_time) %>%
     mutate(joint_probability = n/sum(n))   %>%
     group_by(train_time,  test_time, actual_labels) %>%

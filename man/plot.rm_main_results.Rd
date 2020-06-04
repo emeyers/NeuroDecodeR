@@ -4,13 +4,15 @@
 \alias{plot.rm_main_results}
 \title{A plot function for the rm_main_results object}
 \usage{
-\method{plot}{rm_main_results}(main_results, result_type = "zero_one_loss", plot_type = "TCD")
+\method{plot}{rm_main_results}(x, ..., result_type = "zero_one_loss", plot_type = "TCD")
 }
 \arguments{
-\item{main_results}{A rm_main_result object that has aggregated runs from a
+\item{x}{A rm_main_result object that has aggregated runs from a
 decoding analysis, e.g., if DECODING_RESULTS are the out from the
 run_decoding(cv) then this argument should be
 DECODING_RESULTS$rm_main_results.}
+
+\item{...}{This is needed to conform to the plot generic interface}
 
 \item{result_type}{A string specifying the types of results to plot options
 are: 'zero_one_loss', 'normalized_rank', 'decision_values', or 'all'}
