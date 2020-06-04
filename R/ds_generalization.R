@@ -260,10 +260,10 @@ get_data.ds_generalization = function(ds_obj){
 
 
 #' @export
-get_parameters.ds_generalization = function(ds_generalization_obj){
+get_parameters.ds_generalization = function(ndtr_obj){
 
   # get most of the parameters from the ds_basic
-  parameter_df <- get_parameters(ds_generalization_obj$the_basic_ds) %>%
+  parameter_df <- get_parameters(ndtr_obj$the_basic_ds) %>%
     select(-ds_basic.label_levels_to_use)
   
   # rename them to ds_generalization
@@ -271,8 +271,8 @@ get_parameters.ds_generalization = function(ds_generalization_obj){
   names(parameter_df) <- sub("ds_basic", "ds_generalization", the_names)
   
   # add the remapping train and test label levels
-  parameter_df$train_label_levels <- list(ds_generalization_obj$train_label_levels)
-  parameter_df$test_label_levels <- list(ds_generalization_obj$test_label_levels)
+  parameter_df$train_label_levels <- list(ndtr_obj$train_label_levels)
+  parameter_df$test_label_levels <- list(ndtr_obj$test_label_levels)
   
   parameter_df
   

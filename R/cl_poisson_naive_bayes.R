@@ -119,7 +119,7 @@ get_predictions.cl_poisson_naive_bayes <- function(cl_obj, training_set, test_se
 # since there are no parameters for the cl_max_correlation just return a data frame with
 # cl_poisson_naive_bayes.cl_poisson_naive_bayes and a value of "no parameters"
 #' @export
-get_parameters.cl_poisson_naive_bayes = function(cl_pnb_obj){
+get_parameters.cl_poisson_naive_bayes = function(ndtr_obj){
   data.frame(cl_poisson_naive_bayes.cl_poisson_naive_bayes = "does not have settable parameters")
 }
 

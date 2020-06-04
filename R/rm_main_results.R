@@ -328,10 +328,15 @@ plot.rm_main_results = function(main_results, result_type = 'zero_one_loss', plo
 
 
 #' @export
-get_parameters.rm_main_results = function(confusion_matrix_obj){
+get_parameters.rm_main_results = function(ndtr_obj){
   
-  data.frame(rm_main_results.rm_main_results = "does not have settable parameters")
-
+  # get the options for now the normalized rank and decision values should be aggregated
+  aggregate_decision_values <- attr(ndtr_obj, "options")$aggregate_decision_values
+  aggregate_normalized_rank <- attr(ndtr_obj, "options")$aggregate_normalized_rank
+  
+  data.frame(rm_main_results.aggregate_decision_values = aggregate_decision_values,
+             rm_main_results.aggregate_normalized_rank = aggregate_normalized_rank)
+  
 }
 
 

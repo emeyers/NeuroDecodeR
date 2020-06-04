@@ -418,11 +418,13 @@ plot_MI.rm_confusion_matrix = function(confusion_matrix_obj, plot_type = 'TCD') 
 
 
 #' @export
-get_parameters.rm_confusion_matrix = function(confusion_matrix_obj){
+get_parameters.rm_confusion_matrix = function(ndtr_obj){
 
   # there is only one parameter option that can be set here so return it  
   data.frame(rm_confusion_matrix.save_only_same_train_test_time = 
-               attributes(confusion_matrix_obj)$options$save_only_same_train_test_time)
+               attributes(ndtr_obj)$options$save_only_same_train_test_time,
+             rm_confusion_matrix.create_decision_vals_confusion_matrix = 
+               attributes(ndtr_obj)$options$create_decision_vals_confusion_matrix)
 }
 
 

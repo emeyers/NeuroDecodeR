@@ -9,8 +9,8 @@
 
 #' Return all parameters that an object uses to enable reproducible analyses
 #' @export
-#' @param obj The object that one should get the parameters from
-get_parameters <- function(obj) {
+#' @param ndtr_obj The object from the NDTr package that one should get the parameters from
+get_parameters <- function(ndtr_obj) {
   UseMethod("get_parameters")
 }
 

@@ -34,7 +34,7 @@ save(binned_data, file = "fake_simultaneous_binned_data.Rda")
 
 # data useful for testing classifiers and feature proprocessors
 
-real_data_binned_file_name <- file.path("..", "..", "data", "binned", "ZD_150_samples_binned_every_50_samples.Rda")
+real_data_binned_file_name <- system.file("extdata/ZD_150bins_50sampled.Rda", package = "NDTr") 
 
  # just use data at 200-349 post stimulus onset for testing
 
@@ -114,8 +114,7 @@ save(training_set, test_set,
 
 
 # generate data to get saving the results, this could will take a while to run...
-real_data_binned_file_name <- file.path("..", "..", "data", "binned", "ZD_150_samples_binned_every_50_samples.Rda")
-
+real_data_binned_file_name <- system.file("extdata/ZD_150bins_50sampled.Rda", package = "NDTr") 
 
 # no z-score preprocessor
 ds <- ds_basic(real_data_binned_file_name, 'stimulus_ID', 18, 0)

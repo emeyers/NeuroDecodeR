@@ -350,13 +350,13 @@ get_data.ds_basic = function(ds_obj){
 
 
 #' @export
-get_parameters.ds_basic = function(ds_basic_obj){
+get_parameters.ds_basic = function(ndtr_obj){
 
-  ds_basic_obj$binned_data <- NULL
+  ndtr_obj$binned_data <- NULL
   
-  variable_lengths <- sapply(ds_basic_obj, length)
+  variable_lengths <- sapply(ndtr_obj, length)
   length_one_variables <- variable_lengths[variable_lengths < 2]
-  length_one_variables <- ds_basic_obj[names(length_one_variables)]
+  length_one_variables <- ndtr_obj[names(length_one_variables)]
   
   # convert null values to NAs so that the variables are retained
   length_one_variables <- sapply(length_one_variables, function(x) ifelse(is.null(x), NA, x))
@@ -367,10 +367,10 @@ get_parameters.ds_basic = function(ds_basic_obj){
     mutate_all(type.convert) %>%
     mutate_if(is.factor, as.character)
   
-  parameter_df$label_levels_to_use <- list(sort(unlist(ds_basic_obj$label_levels_to_use)))
-  parameter_df$site_IDs_to_use <- list(ds_basic_obj$site_IDs_to_use)
+  parameter_df$label_levels_to_use <- list(sort(unlist(ndtr_obj$label_levels_to_use)))
+  parameter_df$site_IDs_to_use <- list(ndtr_obj$site_IDs_to_use)
   
-  names(parameter_df) <- paste(class(ds_basic_obj), names(parameter_df), sep = ".")
+  names(parameter_df) <- paste(class(ndtr_obj), names(parameter_df), sep = ".")
   
   parameter_df
 

@@ -4,10 +4,10 @@
 \alias{get_parameters}
 \title{Return all parameters that an object uses to enable reproducible analyses}
 \usage{
-get_parameters(obj)
+get_parameters(ndtr_obj)
 }
 \arguments{
-\item{obj}{The object that one should get the parameters from}
+\item{ndtr_obj}{The object from the NDTr package that one should get the parameters from}
 }
 \description{
 Return all parameters that an object uses to enable reproducible analyses

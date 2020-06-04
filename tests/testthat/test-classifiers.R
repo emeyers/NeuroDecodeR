@@ -25,7 +25,7 @@ test_reasonable_classification_accuracy <- function(cl){
       dplyr::group_by(test_time) %>%
       dplyr::summarize(mean_accuracy = mean(actual_labels == predicted_labels))
     
-    expect_gt(filter(accuracies, test_time == "stimulus")$mean_accuracy, .59)
+    expect_gt(filter(accuracies, test_time == "stimulus")$mean_accuracy, .53)
     expect_lt(filter(accuracies, test_time == "baseline")$mean_accuracy, .3)
     
   })

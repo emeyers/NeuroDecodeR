@@ -118,9 +118,10 @@ fp_info <- data.frame(siteID = siteID,
 
 
 #' @export
-get_parameters.fp_select_k_features = function(fp){
-    data.frame(fp_select_k_features.num_site_to_use = fp$num_site_to_use,
-             fp_select_k_features.num_sites_to_exclude = fp$num_sites_to_exclude)
+get_parameters.fp_select_k_features = function(ndtr_obj) {
+  
+    data.frame(fp_select_k_features.num_site_to_use = ndtr_obj$num_site_to_use,
+             fp_select_k_features.num_sites_to_exclude = ndtr_obj$num_sites_to_exclude)
 }
 
 

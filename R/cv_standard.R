@@ -281,23 +281,23 @@ run_decoding.cv_standard = function(cv_obj) {
 
 
 
-get_parameters.cv_standard = function(cv_obj){
+get_parameters.cv_standard = function(ndtr_obj){
   
   # get parameters from all objects and save the in a data frame so that
   # which will be useful to tell if an analysis has already been run
   
   # start by getting the parameters from the datasource
-  parameter_df <- get_parameters(cv_obj$datasource)
+  parameter_df <- get_parameters(ndtr_obj$datasource)
   
   
   # add the parameters from the classifier
-  parameter_df <- cbind(parameter_df, get_parameters(cv_obj$classifier))
+  parameter_df <- cbind(parameter_df, get_parameters(ndtr_obj$classifier))
   
   
   # if feature-processors have been specified, add their parameters to the data frame
-  if (length(cv_obj$feature_preprocessors) >= 1) {
-    for (iFP in 1:length(cv_obj$feature_preprocessors)) {
-      curr_FP_parameters <- get_parameters(cv_obj$feature_preprocessors[[iFP]])
+  if (length(ndtr_obj$feature_preprocessors) >= 1) {
+    for (iFP in 1:length(ndtr_obj$feature_preprocessors)) {
+      curr_FP_parameters <- get_parameters(ndtr_obj$feature_preprocessors[[iFP]])
       parameter_df <- cbind(parameter_df, curr_FP_parameters)
     }
   }  # end the if statement for doing preprocessing
@@ -305,8 +305,8 @@ get_parameters.cv_standard = function(cv_obj){
   
   
   # go through each Result Metric and get their parameters
-  for (iMetric in 1:length(cv_obj$result_metrics)) {
-    curr_metric_parameters <- get_parameters(cv_obj$result_metrics[[iMetric]])
+  for (iMetric in 1:length(ndtr_obj$result_metrics)) {
+    curr_metric_parameters <- get_parameters(ndtr_obj$result_metrics[[iMetric]])
     parameter_df <- cbind(parameter_df, curr_metric_parameters)
   }
   
@@ -314,9 +314,9 @@ get_parameters.cv_standard = function(cv_obj){
   
   # finally add the parameters from this cv_standard object as well
 
-  cv_parameters <- data.frame(analysis_ID = cv_obj$analysis_ID, 
-                              cv_standard.num_resample_runs = cv_obj$num_resample_runs, 
-                              cv_standard.test_only_at_training_time = cv_obj$test_only_at_training_time)
+  cv_parameters <- data.frame(analysis_ID = ndtr_obj$analysis_ID, 
+                              cv_standard.num_resample_runs = ndtr_obj$num_resample_runs, 
+                              cv_standard.test_only_at_training_time = ndtr_obj$test_only_at_training_time)
   
   
   parameter_df <- cbind(cv_parameters, parameter_df)

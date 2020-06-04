@@ -112,15 +112,15 @@ get_predictions.cl_svm <- function(cl_obj, training_set, test_set) {
 
 # Get the parameters that were used in the svm
 #' @export
-get_parameters.cl_svm = function(cl_svm_obj){
+get_parameters.cl_svm = function(ndtr_obj){
 
-  if (length(cl_svm_obj$svm_options) == 0){
+  if (length(ndtr_obj$svm_options) == 0){
     
     parameter_df <- data.frame(cl_svm.cl_svm = "default svm parameters")
   
     } else{
 
-      parameter_df <- data.frame(val = unlist(cl_svm_obj$svm_options)) %>%
+      parameter_df <- data.frame(val = unlist(ndtr_obj$svm_options)) %>%
       mutate(key = rownames(.)) %>% 
       tidyr::spread(key, val) %>%
       mutate_all(type.convert) %>%
