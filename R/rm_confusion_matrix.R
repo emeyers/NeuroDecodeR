@@ -246,6 +246,11 @@ new_rm_confusion_matrix <- function(the_data = data.frame(),
 #' @param plot_only_same_train_test_time A boolean indicating whether
 #'   the confusion matrices should only be plotted at the same training 
 #'   and test times.
+#'   
+#' @param plot_decision_vals_confusion_matrix A boolean that if set to 
+#'  TRUE will cause the decision value confusion matrix to be plotted
+#'  instead of the zero-one loss (i.e., normal) confusion matrix to be
+#'  plotted. 
 #' 
 #' @family result_metrics
 
