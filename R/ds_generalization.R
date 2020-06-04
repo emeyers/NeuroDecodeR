@@ -88,6 +88,8 @@
 
 
 
+
+# the constructor
 #' @export
 ds_generalization <- function(binned_file_name, 
                             var_to_decode, 
@@ -174,19 +176,21 @@ ds_generalization <- function(binned_file_name,
                       
 
 
+
+
 #' @export
-get_data.ds_generalization = function(ds_generalization_obj){
+get_data.ds_generalization = function(ds_obj){
         
   
   # the ds_basic does all the hard work of getting the data
-  all_cv_data <- get_data(ds_generalization_obj$the_basic_ds)
+  all_cv_data <- get_data(ds_obj$the_basic_ds)
 
   all_cv_data <- all_cv_data %>%
     mutate(train_labels = as.character(train_labels),
            test_labels = as.character(test_labels))
 
-  train_label_levels <- ds_generalization_obj$train_label_levels
-  test_label_levels <- ds_generalization_obj$test_label_levels
+  train_label_levels <- ds_obj$train_label_levels
+  test_label_levels <- ds_obj$test_label_levels
   
   new_train_labels <- rep("not_used", dim(all_cv_data)[1])
   new_test_labels <- rep("not_used", dim(all_cv_data)[1])

@@ -4,14 +4,14 @@
 \alias{get_predictions}
 \title{Register the generic function get_predictions for the classifier (CL) objects}
 \usage{
-get_predictions(obj, train_data, all_times_test_data)
+get_predictions(cl_obj, training_set, test_set)
 }
 \arguments{
-\item{obj}{The CL object}
+\item{cl_obj}{The classifier object}
 
-\item{train_data}{The training data}
+\item{training_set}{The training data}
 
-\item{all_times_test_data}{The test data}
+\item{test_set}{The test data from all times}
 }
 \description{
 Register the generic function get_predictions for the classifier (CL) objects

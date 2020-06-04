@@ -17,11 +17,11 @@ get_parameters <- function(obj) {
 
 
 #' Register the generic function get_predictions for the classifier (CL) objects
-#' @param obj The CL object
-#' @param train_data The training data
-#' @param all_times_test_data The test data
+#' @param cl_obj The classifier object
+#' @param training_set The training data
+#' @param test_set The test data from all times
 #' @export
-get_predictions <- function(obj, train_data, all_times_test_data) {
+get_predictions <- function(cl_obj, training_set, test_set) {
   UseMethod("get_predictions")
 }
 
@@ -75,8 +75,6 @@ aggregate_CV_split_results <- function(rm_obj, prediction_results) {
 
 
 
-# register the generic function get_predictions for the PM objects
-#aggregate_resample_run_results <- function(obj, resample_run_results) {
 
 
 #' The required aggregate_resample_run_results method is needed to fulfill the

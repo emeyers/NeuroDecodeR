@@ -37,7 +37,7 @@ cl_poisson_naive_bayes <- function(){
 
 
 #' @export
-get_predictions.cl_poisson_naive_bayes <- function(cl_pnb_obj, training_set, test_set) {
+get_predictions.cl_poisson_naive_bayes <- function(cl_obj, training_set, test_set) {
   
   
   # check that the training and test data are all integers
@@ -110,6 +110,9 @@ get_predictions.cl_poisson_naive_bayes <- function(cl_pnb_obj, training_set, tes
   results
 
 } 
+
+
+
 
 
 

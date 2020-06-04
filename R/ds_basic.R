@@ -79,6 +79,8 @@
 
 
 
+
+# the constructor 
 #' @export
 ds_basic <- function(binned_file_name, 
                             var_to_decode, 
@@ -235,23 +237,23 @@ ds_basic <- function(binned_file_name,
 
 
 #' @export
-get_data.ds_basic = function(ds_basic_obj){
+get_data.ds_basic = function(ds_obj){
     
-    binned_data <- ds_basic_obj$binned_data
-    var_to_decode <- ds_basic_obj$var_to_decode
-    num_cv_splits <- ds_basic_obj$num_cv_splits
-    num_trials_used_per_label <- ds_basic_obj$num_cv_splits * ds_basic_obj$num_label_repeats_per_cv_split
-    label_levels_to_use <- ds_basic_obj$label_levels_to_use
+    binned_data <- ds_obj$binned_data
+    var_to_decode <- ds_obj$var_to_decode
+    num_cv_splits <- ds_obj$num_cv_splits
+    num_trials_used_per_label <- ds_obj$num_cv_splits * ds_obj$num_label_repeats_per_cv_split
+    label_levels_to_use <- ds_obj$label_levels_to_use
 
-    create_simultaneously_recorded_populations <- ds_basic_obj$create_simultaneously_recorded_populations
-    sample_sites_with_replacement <- ds_basic_obj$sample_sites_with_replacement
-    num_resample_sites <- ds_basic_obj$num_resample_sites
-    site_IDs_to_use <- ds_basic_obj$site_IDs_to_use
-    site_IDs_to_exclude <- ds_basic_obj$site_IDs_to_exclude
+    create_simultaneously_recorded_populations <- ds_obj$create_simultaneously_recorded_populations
+    sample_sites_with_replacement <- ds_obj$sample_sites_with_replacement
+    num_resample_sites <- ds_obj$num_resample_sites
+    site_IDs_to_use <- ds_obj$site_IDs_to_use
+    site_IDs_to_exclude <- ds_obj$site_IDs_to_exclude
 
-    create_simultaneously_recorded_populations <- ds_basic_obj$create_simultaneously_recorded_populations
+    create_simultaneously_recorded_populations <- ds_obj$create_simultaneously_recorded_populations
 
-    num_label_repeats_per_cv_split <- ds_basic_obj$num_label_repeats_per_cv_split
+    num_label_repeats_per_cv_split <- ds_obj$num_label_repeats_per_cv_split
 
 
 
@@ -342,6 +344,8 @@ get_data.ds_basic = function(ds_basic_obj){
     
 
 }  # end get_data()
+
+
 
 
 

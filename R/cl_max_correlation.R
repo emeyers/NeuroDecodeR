@@ -38,7 +38,7 @@ cl_max_correlation <- function(){
 
 # the get_predictions method
 #' @export
-get_predictions.cl_max_correlation <- function(cl_max_correlation_obj, 
+get_predictions.cl_max_correlation <- function(cl_obj, 
                                                training_set, 
                                                test_set) {  
 

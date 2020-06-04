@@ -42,7 +42,7 @@ cl_svm <- function(...){
 
 
 #' @export
-get_predictions.cl_svm <- function(cl_svm_obj, training_set, test_set) {
+get_predictions.cl_svm <- function(cl_obj, training_set, test_set) {
   
 
   ### Train the classifier  ---------------------------------------------------
@@ -50,13 +50,13 @@ get_predictions.cl_svm <- function(cl_svm_obj, training_set, test_set) {
   #trained_svm <- svm(x = select(training_set, -train_labels), y = training_set$train_labels)
   
   # if arguments to the svm have been supplied, use them
-  if (length(cl_svm_obj$svm_options) == 0){
+  if (length(cl_obj$svm_options) == 0){
     all_arguments <- list(x = select(training_set, -train_labels), y = training_set$train_labels)
   } else{
     all_arguments <- list(x = select(training_set, -train_labels), 
                           y = training_set$train_labels, 
-                          unlist(cl_svm_obj$svm_options))
-    names(all_arguments) <- c("x", "y", names(cl_svm_obj$svm_options))
+                          unlist(cl_obj$svm_options))
+    names(all_arguments) <- c("x", "y", names(cl_obj$svm_options))
   }
 
   
@@ -105,6 +105,9 @@ get_predictions.cl_svm <- function(cl_svm_obj, training_set, test_set) {
   results
 
 }   
+
+
+
 
 
 # Get the parameters that were used in the svm
