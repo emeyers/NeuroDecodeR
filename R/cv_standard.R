@@ -34,7 +34,7 @@
 #'   potentially speed up the analysis and save memory at the cost of not
 #'   calculated the temporal cross-decoding results.
 #'   
-#'  @param run_parallel A boolean to indicate whether the code should be run in
+#' @param run_parallel A boolean to indicate whether the code should be run in
 #'    parallel. It is useful to set this to FALSE for debugging purposes or 
 #'    if you are running a job that takes a lot of memory and runtime is not
 #'    of much concern.
@@ -87,7 +87,6 @@ cv_standard <- function(datasource,
 
 
 
-#run_decoding_one_resample_run <- function(cv_obj) {
 #' @export
 run_decoding.cv_standard = function(cv_obj) {
   

@@ -47,7 +47,9 @@ rm_confusion_matrix <- function(save_only_same_train_test_time = TRUE,
 
 
 
-# aggregate the results from all the cross-validation splits
+
+
+# The aggregate_CV_split_results method needed to fulfill the results metric interface
 #' @export
 aggregate_CV_split_results.rm_confusion_matrix = function(confusion_matrix_obj, prediction_results) {
   
@@ -127,7 +129,8 @@ aggregate_CV_split_results.rm_confusion_matrix = function(confusion_matrix_obj, 
 
 
 
-# aggregate the results from all the resample runs
+
+# The aggregate_resample_run_results method needed to fulfill the results metric interface
 #' @export
 aggregate_resample_run_results.rm_confusion_matrix = function(resample_run_results) {
 
@@ -228,6 +231,8 @@ new_rm_confusion_matrix <- function(the_data = data.frame(),
 
 
 
+
+
 #' plot the confusion matrix results
 #'
 #' This function plots confusion matrices after the decoding analysis has been
@@ -314,8 +319,6 @@ plot.rm_confusion_matrix = function(confusion_matrix_obj, plot_only_same_train_t
   }
 
 
-
-  
   
   if (sum(confusion_matrix_obj$train_time == confusion_matrix_obj$test_time) == dim(confusion_matrix_obj)[1]){
         g + facet_wrap(~train_time)
@@ -326,6 +329,10 @@ plot.rm_confusion_matrix = function(confusion_matrix_obj, plot_only_same_train_t
   
   
 }
+
+
+
+
 
 
 

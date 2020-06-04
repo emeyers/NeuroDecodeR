@@ -7,35 +7,52 @@
 
 
 
-# return all parameters that an object uses to enable reproducible analyses
+#' Return all parameters that an object uses to enable reproducible analyses
 #' @export
+#' @param obj The object that one should get the parameters from
 get_parameters <- function(obj) {
   UseMethod("get_parameters")
 }
 
 
-# register the generic function get_predictions for the classifier (CL) objects
+
+#' Register the generic function get_predictions for the classifier (CL) objects
+#' @param obj The CL object
+#' @param train_data The training data
+#' @param all_times_test_data The test data
 #' @export
 get_predictions <- function(obj, train_data, all_times_test_data) {
   UseMethod("get_predictions")
 }
 
 
-# register the generic function get_data() for datasource (DS) objects
+
+#' Register the generic function get_data() for datasource (DS) objects
+#' Need to fill in more complete documentation here about the DS interface
+#' @param ds_obj The data source object
 #' @export
 get_data <- function(ds_obj) {
   UseMethod("get_data")
 }
 
 
-# register the generic function preprocess_data() for feature preprocessor (FP) objects
+
+#' Register the generic function preprocess_data() for feature preprocessor (FP) objects
+#' Need to fill in more complete documentation here about the FP interface
+#' @param fp_obj The FP object
+#' @param train_data The training data
+#' @param all_times_test_data The test data
 #' @export
 preprocess_data <- function(fp_obj, train_data, all_times_test_data) {
   UseMethod("preprocess_data")
 }
 
 
-# register the generic function preprocess_data() for feature preprocessor (FP) objects
+
+
+#' Register the generic function run_decoding
+#' Need to fill in more complete documentation here about the CV interface
+#' @param cv_obj The CV object
 #' @export
 run_decoding <- function(cv_obj) {
   UseMethod("run_decoding")
@@ -43,16 +60,31 @@ run_decoding <- function(cv_obj) {
 
 
 
-# register the generic function get_predictions for the PM objects
+
+#' The required aggregate_resample_run_results method is needed to fulfill the
+#' metric object interface. This function is called by the cross-validator to 
+#' aggregrate results across all cross-validation splits. Note: this function should not be
+#' called by users of the package but instead is called interally by cross-validator
+#' objects.
+#' @param obj The RM object
+#' @param prediction_results the prediction results to be aggregated over CV splits
 #' @export
 aggregate_CV_split_results <- function(obj, prediction_results) {
   UseMethod("aggregate_CV_split_results")
 }
 
 
+
 # register the generic function get_predictions for the PM objects
 #aggregate_resample_run_results <- function(obj, resample_run_results) {
 
+
+#' The required aggregate_resample_run_results method is needed to fulfill the
+#' metric object interface. This function is called by the cross-validator to 
+#' aggregrate results across all resample runs. Note: this function should not be
+#' called by users of the package but instead is called interally by cross-validator
+#' objects.
+#' @param obj The RM object
 #' @export
 aggregate_resample_run_results <- function(obj) {
     UseMethod("aggregate_resample_run_results")
@@ -60,7 +92,9 @@ aggregate_resample_run_results <- function(obj) {
 
 
 
-# plot the mutual information computed from a confusion matrix
+#' Plot the mutual information computed from a confusion matrix
+#' @param obj the RM object
+#' @param plot_type The type of plot that should be displayed
 #' @export
 plot_MI <- function(obj, plot_type) {
   UseMethod("plot_MI")

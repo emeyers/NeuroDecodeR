@@ -77,7 +77,7 @@ new_rm_main_results <- function(the_data = data.frame(), state = 'initial', opti
 
 
 
-# aggregate the results from all the cross-validation splits
+# The aggregate_CV_split_results method needed to fulfill the results metric interface
 #' @export
 aggregate_CV_split_results.rm_main_results = function(main_results_obj, prediction_results) {
   
@@ -172,7 +172,7 @@ aggregate_CV_split_results.rm_main_results = function(main_results_obj, predicti
 
 
 
-# aggregate the results from all the resample runs
+# The aggregate_resample_run_results method needed to fulfill the results metric interface
 #' @export
 aggregate_resample_run_results.rm_main_results = function(resample_run_results) {
   

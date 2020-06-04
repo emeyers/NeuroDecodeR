@@ -35,15 +35,15 @@ are generated. If pseudo-populations are used (say with the ds_basic) then
 new pseduo-populations will be generated on each resample run as well.}
 
 \item{test_only_at_training_time}{Whether the analysis should only be run
- where the classifier is trained and tested at the same time point (i.e.,
- now temporal cross-decoding analysis will be run). Setting this to true can
- potentially speed up the analysis and save memory at the cost of not
- calculated the temporal cross-decoding results.
- 
-@param run_parallel A boolean to indicate whether the code should be run in
-  parallel. It is useful to set this to FALSE for debugging purposes or 
-  if you are running a job that takes a lot of memory and runtime is not
-  of much concern.}
+where the classifier is trained and tested at the same time point (i.e.,
+now temporal cross-decoding analysis will be run). Setting this to true can
+potentially speed up the analysis and save memory at the cost of not
+calculated the temporal cross-decoding results.}
+
+\item{run_parallel}{A boolean to indicate whether the code should be run in
+parallel. It is useful to set this to FALSE for debugging purposes or 
+if you are running a job that takes a lot of memory and runtime is not
+of much concern.}
 }
 \description{
 This uses cross-validation to run a decoding analysis
