@@ -186,8 +186,8 @@ get_data.ds_generalization = function(ds_obj){
   all_cv_data <- get_data(ds_obj$the_basic_ds)
 
   all_cv_data <- all_cv_data %>%
-    mutate(train_labels = as.character(train_labels),
-           test_labels = as.character(test_labels))
+    mutate(train_labels = as.character(.data$train_labels),
+           test_labels = as.character(.data$test_labels))
 
   train_label_levels <- ds_obj$train_label_levels
   test_label_levels <- ds_obj$test_label_levels
@@ -224,7 +224,7 @@ get_data.ds_generalization = function(ds_obj){
 
   cv_split_info_train_test <- cbind(trial_num = 1:dim(cv_split_info)[1], 
                                new_train_labels, new_test_labels, cv_split_info) %>%
-    tidyr::gather(CV, train_test, -new_train_labels, -new_test_labels, -trial_num)
+    tidyr::gather("CV", "train_test", -.data$new_train_labels, -.data$new_test_labels, -.data$trial_num)
   
   
   train_cv_inds <- which(cv_split_info_train_test$train_test == "train")
@@ -240,14 +240,14 @@ get_data.ds_generalization = function(ds_obj){
 
   cv_split_info_remapped <- cv_split_info_train_test %>% 
     select(-new_train_labels, -new_test_labels) %>%
-    tidyr::spread(CV, train_test) 
+    tidyr::spread("CV", "train_test") 
   
   remapped_all_cv_data <- all_cv_data %>%
     mutate(train_labels = new_train_labels, 
            test_labels = new_test_labels) %>%
     select(-starts_with("CV")) %>% 
     cbind(cv_split_info_remapped) %>%
-    select(-trial_num)
+    select(-.data$trial_num)
   
   
   remapped_all_cv_data
@@ -264,7 +264,7 @@ get_parameters.ds_generalization = function(ndtr_obj){
 
   # get most of the parameters from the ds_basic
   parameter_df <- get_parameters(ndtr_obj$the_basic_ds) %>%
-    select(-ds_basic.label_levels_to_use)
+    select(-.data$ds_basic.label_levels_to_use)
   
   # rename them to ds_generalization
   the_names <- names(parameter_df)

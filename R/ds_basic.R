@@ -182,7 +182,7 @@ ds_basic <- function(binned_file_name,
     # shuffle labels the same way for each site...
     if(randomly_shuffled_labels_before_running == TRUE) {
       min_site_ID <- min(binned_data$siteID)
-      first_site_data <- dplyr::filter(binned_data, siteID == min_site_ID)
+      first_site_data <- dplyr::filter(binned_data, .data$siteID == min_site_ID)
       the_labels <- sample(first_site_data$labels)
       binned_data$labels <- rep(the_labels, length(unique(binned_data$siteID)))
     }
@@ -203,7 +203,7 @@ ds_basic <- function(binned_file_name,
     if(randomly_shuffled_labels_before_running == TRUE) {
       binned_data <- binned_data %>%
         ungroup() %>%
-        group_by(siteID) %>% 
+        group_by(.data$siteID) %>% 
         mutate(labels = labels[sample(row_number())])  %>%
         ungroup()
     }
@@ -261,36 +261,36 @@ get_data.ds_basic = function(ds_obj){
     # the code that actually gets the data used to train and test the classifier  -----------
 
     curr_sites_to_use <- sample(site_IDs_to_use, num_resample_sites)
-    binned_data <- dplyr::filter(binned_data, siteID %in% curr_sites_to_use)
+    binned_data <- dplyr::filter(binned_data, .data$siteID %in% curr_sites_to_use)
 
 
     if (create_simultaneously_recorded_populations == 1) {
 
       # use one site to select the trials to use and then apply to all sites
       curr_label_trials_to_use <- binned_data %>%
-        filter(siteID == binned_data$siteID[1]) %>%
-        select(labels, label_trial_combo) %>%
+        filter(.data$siteID == binned_data$siteID[1]) %>%
+        select(labels, .data$label_trial_combo) %>%
         group_by(labels) %>%
         sample_n(size = num_trials_used_per_label) %>%
-        .$label_trial_combo
+        pull(.data$label_trial_combo)
 
       # apply specific simultaneous trials selected to all sites
       all_k_fold_data <- binned_data  %>%
-        filter(label_trial_combo %in% curr_label_trials_to_use) %>%
-        select(-label_trial_combo)
+        filter(.data$label_trial_combo %in% curr_label_trials_to_use) %>%
+        select(-.data$label_trial_combo)
       
     } else {
 
       # for data not recorded simultaneously
       all_k_fold_data <- binned_data  %>%
-        group_by(labels, siteID) %>%
+        group_by(labels, .data$siteID) %>%
         sample_n(size = num_trials_used_per_label)
     }
 
 
     # remove the variable trial_number if it exists in all_k_fold_data
     if ("trial_number" %in% names(all_k_fold_data)) {
-      all_k_fold_data <- select(all_k_fold_data, -trial_number)
+      all_k_fold_data <- select(all_k_fold_data, -.data$trial_number)
     }
 
 
@@ -301,7 +301,7 @@ get_data.ds_basic = function(ds_obj){
 
 
     # arrange the data by siteID and labels before adding on the CV_slide_ID (10/2/19)
-    all_k_fold_data <- dplyr::arrange(all_k_fold_data, siteID, labels)
+    all_k_fold_data <- dplyr::arrange(all_k_fold_data, .data$siteID, labels)
     
 
     # CV_slice_ID is a groups of data that have one example for each label
@@ -315,10 +315,10 @@ get_data.ds_basic = function(ds_obj){
     all_k_fold_data$siteID <- paste0("site_", stringr::str_pad(all_k_fold_data$siteID, 4, pad = "0"))
 
     # convert so that there are one column for each site
-    melted_data <- tidyr::gather(all_k_fold_data, time_bin, activity, -siteID, -labels, -CV_slice_ID)
-    all_cv_data <- tidyr::spread(melted_data, siteID, activity) %>%
-      select(labels, time_bin, CV_slice_ID, everything()) %>%
-      mutate(time_bin = as.factor(time_bin))    #  %>%  arrange(labels, time_bin)
+    melted_data <- tidyr::gather(all_k_fold_data, "time_bin", "activity", -.data$siteID, -labels, -CV_slice_ID)
+    all_cv_data <- tidyr::spread(melted_data, .data$siteID, .data$activity) %>%
+      select(labels, .data$time_bin, CV_slice_ID, everything()) %>%
+      mutate(time_bin = as.factor(.data$time_bin))    #  %>%  arrange(labels, time_bin)
 
     # create different CV_1, CV_2 which list which points are training points and which points are test points
     for (iCV in 1:num_cv_splits) {
@@ -337,7 +337,7 @@ get_data.ds_basic = function(ds_obj){
     all_cv_data  <- all_cv_data %>%
       mutate(train_labels = labels) %>%
       rename(test_labels = labels) %>%
-      select(train_labels, test_labels, everything())
+      select(.data$train_labels, .data$test_labels, everything())
       
 
     all_cv_data 
@@ -362,10 +362,9 @@ get_parameters.ds_basic = function(ndtr_obj){
   length_one_variables <- sapply(length_one_variables, function(x) ifelse(is.null(x), NA, x))
   
   parameter_df <- data.frame(val = unlist(length_one_variables)) %>%
-    mutate(key = rownames(.)) %>% 
-    tidyr::spread(key, val) %>%
-    mutate_all(type.convert) %>%
-    mutate_if(is.factor, as.character)
+    tibble::rownames_to_column("key") %>% 
+    tidyr::spread("key", "val") %>%
+    mutate(across(where(is.factor), as.character))
   
   parameter_df$label_levels_to_use <- list(sort(unlist(ndtr_obj$label_levels_to_use)))
   parameter_df$site_IDs_to_use <- list(ndtr_obj$site_IDs_to_use)

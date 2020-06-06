@@ -51,9 +51,9 @@ get_predictions.cl_svm <- function(cl_obj, training_set, test_set) {
   
   # if arguments to the svm have been supplied, use them
   if (length(cl_obj$svm_options) == 0){
-    all_arguments <- list(x = select(training_set, -train_labels), y = training_set$train_labels)
+    all_arguments <- list(x = select(training_set, -.data$train_labels), y = training_set$train_labels)
   } else{
-    all_arguments <- list(x = select(training_set, -train_labels), 
+    all_arguments <- list(x = select(training_set, -.data$train_labels), 
                           y = training_set$train_labels, 
                           unlist(cl_obj$svm_options))
     names(all_arguments) <- c("x", "y", names(cl_obj$svm_options))
@@ -76,27 +76,27 @@ get_predictions.cl_svm <- function(cl_obj, training_set, test_set) {
   names(all_pairs_results) <- colnames(attr(predicted_labels, "decision.values"))
 
   all_pairs_results <- cbind(test_point_num = 1:dim(results)[1], all_pairs_results) %>%
-    tidyr::gather(class_pair, val, -test_point_num) %>%
-    mutate(sign_prediction = sign(val)) %>%
-    tidyr::separate(class_pair, c("pos_class", "neg_class"), sep = "/")
+    tidyr::gather("class_pair", "val", -.data$test_point_num) %>%
+    mutate(sign_prediction = sign(.data$val)) %>%
+    tidyr::separate(.data$class_pair, c("pos_class", "neg_class"), sep = "/")
   
   pos_wins <- all_pairs_results %>%
-    group_by(pos_class, test_point_num) %>%
-    summarize(pos_wins = sum(sign_prediction))
+    group_by(.data$pos_class, .data$test_point_num) %>%
+    summarize(pos_wins = sum(.data$sign_prediction))
   
   neg_wins <- all_pairs_results %>%
-    group_by(neg_class, test_point_num) %>%
-    summarize(neg_wins = sum(-1 * sign_prediction))
+    group_by(.data$neg_class, .data$test_point_num) %>%
+    summarize(neg_wins = sum(-1 * .data$sign_prediction))
   
   decision_val_df <- full_join(pos_wins, neg_wins, 
                                by = c("pos_class" = "neg_class", 
                                       "test_point_num" = "test_point_num")) %>%
     tidyr::replace_na(list(pos_wins = 0, neg_wins = 0)) %>%
     mutate(tot_wins = pos_wins + neg_wins) %>%
-    select(pos_class, tot_wins, test_point_num) %>%
-    tidyr::spread(pos_class, tot_wins) %>%
-    arrange(test_point_num) %>%
-    select(-test_point_num)
+    select(.data$pos_class, .data$tot_wins, .data$test_point_num) %>%
+    tidyr::spread(.data$pos_class, .data$tot_wins) %>%
+    arrange(.data$test_point_num) %>%
+    select(-.data$test_point_num)
   
   names(decision_val_df) <- paste0("decision_vals.", names(decision_val_df))
   
@@ -121,11 +121,10 @@ get_parameters.cl_svm = function(ndtr_obj){
     } else{
 
       parameter_df <- data.frame(val = unlist(ndtr_obj$svm_options)) %>%
-      mutate(key = rownames(.)) %>% 
-      tidyr::spread(key, val) %>%
-      mutate_all(type.convert) %>%
-      mutate_if(is.factor, as.character)
-      
+        tibble::rownames_to_column("key") %>% 
+        tidyr::spread("key", "val") %>%
+        mutate(across(where(is.factor), as.character))
+        
       names(parameter_df) <- paste0("cl_svm.", names(parameter_df))
   }
 

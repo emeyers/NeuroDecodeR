@@ -50,7 +50,7 @@ get_predictions.cl_poisson_naive_bayes <- function(cl_obj, training_set, test_se
   
   # Train the classifier --------------------------------------------------
   lambdas_and_labels <- training_set %>% 
-    group_by(train_labels) %>% 
+    group_by(.data$train_labels) %>% 
     #summarise_all(funs(mean))
     summarise_all(mean)
 

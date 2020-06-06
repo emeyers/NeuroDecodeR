@@ -45,14 +45,14 @@ get_predictions.cl_max_correlation <- function(cl_obj,
     
   ### Train the classifier  ---------------------------------------------------
   prototypes <- training_set %>% 
-    dplyr::group_by(train_labels) %>% 
+    dplyr::group_by(.data$train_labels) %>% 
     dplyr::summarise_all(mean)
   
 
   
   ### Test the classifier  ---------------------------------------------------
   train_test_cor <- cor(t(prototypes[, 2:dim(prototypes)[2]]), 
-                        t(dplyr::select(test_set, -test_labels, -time_bin)))
+                        t(dplyr::select(test_set, -.data$test_labels, -.data$time_bin)))
   
   # get the predicted labels
   predicted_inds <- apply(train_test_cor, 2, rand_which_max)

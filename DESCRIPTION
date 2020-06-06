@@ -18,14 +18,17 @@ License: GPL-3
 LazyData: true
 RoxygenNote: 7.1.0
 Imports: 
+    stats,
     forcats,
     purrr,
     stringr,
     dplyr,
+    tidyselect,
     tictoc,
     R.matlab,
     e1071,
     tidyr,
+    tibble,
     doParallel,
     magrittr,
     ggplot2,
