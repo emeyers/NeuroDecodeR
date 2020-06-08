@@ -59,7 +59,7 @@ preprocess_data.fp_select_k_features = function(fp, training_set, test_set){
 # writing the ANOVA function myself so that it runs faster
 
 # get the ANOVA p-values for all sites...   
-num_points_in_each_group <- training_set %>% group_by(train_labels) %>% summarize(n = n())
+num_points_in_each_group <- training_set %>% group_by(.data$train_labels) %>% summarize(n = n())
 num_sites <- dim(training_set)[2] - 1
 num_groups <- dim(num_points_in_each_group)[1]    # the number of classes
 
@@ -68,7 +68,7 @@ split_data <- split(training_set[, 1:num_sites], training_set$train_labels)
 group_means <- t(sapply(split_data, function(one_group_data) apply(one_group_data, 2, mean)))
 
 MSS <- apply(sweep(scale(group_means, scale = FALSE)^2, 1, num_points_in_each_group$n, FUN = "*"), 2, sum)
-TSS <- apply(scale(select(training_set, -train_labels), scale = FALSE)^2, 2, sum)
+TSS <- apply(scale(select(training_set, -.data$train_labels), scale = FALSE)^2, 2, sum)
 SSE <- TSS - MSS   # residual SS = total SS + model SS
 
 between_deg_free <- num_groups - 1

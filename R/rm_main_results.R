@@ -121,7 +121,7 @@ aggregate_CV_split_results.rm_main_results = function(rm_obj, prediction_results
     }
     
     
-    num_classes <- prediction_results %>% select(starts_with("decision_vals")) %>% ncol(.)
+    num_classes <- prediction_results %>% select(starts_with("decision_vals")) %>% ncol()
     
     normalized_rank_results <- 1 - ((apply(decision_vals_aug, 1, get_rank_one_row) - 1)/(num_classes - 1))
     
@@ -253,15 +253,15 @@ plot.rm_main_results = function(x, ..., result_type = 'zero_one_loss', plot_type
   if (result_type == 'all'){ 
     # do nothing
   } else if (result_type == 'zero_one_loss'){
-    main_results <- dplyr::select(main_results, train_time, test_time, zero_one_loss)
+    main_results <- dplyr::select(main_results, .data$train_time, .data$test_time, zero_one_loss)
   } else if (result_type == 'normalized_rank'){
     if (!(result_type %in% main_results)){ 
       stop(paste("Can't plot", result_type, "results because this type of result was not saved."))}
-    main_results <- dplyr::select(main_results, train_time, test_time, normalized_rank)
+    main_results <- dplyr::select(main_results, .data$train_time, .data$test_time, normalized_rank)
   } else if (result_type == 'decision_vals'){
     if (!(result_type %in% main_results)){ 
       stop(paste("Can't plot", result_type, "results because this type of result was not saved."))}
-    main_results <- dplyr::select(main_results, train_time, test_time, decision_vals)
+    main_results <- dplyr::select(main_results, .data$train_time, .data$test_time, decision_vals)
   } else {
     warning(paste0("result_type must be set to either 'all', 'zero_one_loss', 'normalized_rank', or 'decision_vals'.",
                    "Using the default value of all"))
@@ -280,7 +280,7 @@ plot.rm_main_results = function(x, ..., result_type = 'zero_one_loss', plot_type
   
   
   main_results <- main_results %>%
-    tidyr::gather(result_type, accuracy, -train_time, -test_time) %>%
+    tidyr::gather(result_type, accuracy, -.data$train_time, -.data$test_time) %>%
     dplyr::mutate(result_type = replace(result_type, result_type == 'zero_one_loss', 'Zero-one loss'),
                  result_type = replace(result_type, result_type == 'normalized_rank', 'Normalized rank'),
                  result_type = replace(result_type, result_type == 'decision_vals', 'Decision values'))
@@ -354,7 +354,7 @@ get_augmented_prediction_results <- function(prediction_results, aggregate_optio
   if (aggregate_options == "diag" || aggregate_options == "only same train test time"){
     
     prediction_results <- prediction_results %>%
-      dplyr::filter(train_time == test_time)
+      dplyr::filter(.data$train_time == .data$test_time)
     
     # if getting the decision values for all time points    
   } else if (aggregate_options == TRUE || aggregate_options == "full") {
@@ -373,8 +373,8 @@ get_augmented_prediction_results <- function(prediction_results, aggregate_optio
   # add decision_vals. to the actual label names to allow a comparion
   #  of the actual labels to column names
   prediction_results <- prediction_results %>%
-    mutate(decision_actual_labels = paste0("decision_vals.", actual_labels)) %>%
-    select(decision_actual_labels, starts_with("decision"), everything())
+    mutate(decision_actual_labels = paste0("decision_vals.", .data$actual_labels)) %>%
+    select(.data$decision_actual_labels, starts_with("decision"), everything())
   
   prediction_results
     

@@ -43,7 +43,7 @@ get_num_label_repetitions <- function(binned_data,
   }
   
   # select only the siteID and labels we want to count number of repetitions
-  binned_data <- select(binned_data, siteID, label = paste0("labels.", variable_to_use))
+  binned_data <- select(binned_data, .data$siteID, label = paste0("labels.", variable_to_use))
 
 
   if (is.null(levels_to_use)) {
@@ -62,16 +62,16 @@ get_num_label_repetitions <- function(binned_data,
   binned_data <- dplyr::filter(binned_data, binned_data$label %in% levels_to_use)
 
   num_repeats_per_level <- binned_data %>%
-    group_by(siteID, label) %>%
+    group_by(.data$siteID, .data$label) %>%
     count()
 
   min_num_repeats_per_level <- num_repeats_per_level %>% 
-    group_by(siteID) %>%
+    group_by(.data$siteID) %>%
     summarize(min_repeats = min(n))
   
-  label_rep_obj <- tidyr::spread(num_repeats_per_level, label, n) %>%
+  label_rep_obj <- tidyr::spread(num_repeats_per_level, .data$label, n) %>%
     full_join(min_num_repeats_per_level, by = "siteID") %>%
-    select(siteID, min_repeats, everything())
+    select(.data$siteID, .data$min_repeats, everything())
  
    
   # making this an S3 object so that it can have an associated plot() function
@@ -93,7 +93,7 @@ plot.label_repetition <- function(x, ...) {
   num_sites_with_k_repeats <- get_num_sites_with_k_label_repetitions(label_rep_obj)
   
   num_sites_with_k_repeats_long <- num_sites_with_k_repeats %>%
-    tidyr::gather(min_reps, num_sites, -label) %>%
+    tidyr::gather(min_reps, num_sites, -.data$label) %>%
     mutate(min_reps = as.numeric(min_reps))
   
   
@@ -130,18 +130,18 @@ get_num_sites_with_k_label_repetitions <- function(label_rep_obj) {
   
   max_min_num_reps <- max(label_rep_obj$min_repeats)
   
-  label_rep_long <- tidyr::gather(label_rep_obj, label, num_reps, -siteID)
+  label_rep_long <- tidyr::gather(label_rep_obj, "label", "num_reps", -.data$siteID)
   
   num_sites_with_k_repeats <- label_rep_long %>%
-    group_by(label) %>%
-    summarize("0" = sum(num_reps >= 0)) 
+    group_by(.data$label) %>%
+    summarize("0" = sum(.data$num_reps >= 0)) 
   
   for (k in 1:max_min_num_reps) {
     
     curr_count <- label_rep_long %>%
-      group_by(label) %>%
-      summarize(num_with_k_reps = sum(num_reps >= k)) %>%
-      select(num_with_k_reps)
+      group_by(.data$label) %>%
+      summarize(num_with_k_reps = sum(.data$num_reps >= k)) %>%
+      select(.data$num_with_k_reps)
     
     names(curr_count) <- k  #paste0("reps_", sprintf('%03d', k))
     

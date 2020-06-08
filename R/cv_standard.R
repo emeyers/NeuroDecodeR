@@ -152,10 +152,10 @@ run_decoding.cv_standard = function(cv_obj) {
       for (iTrain in 1:num_time_bins) {
         
         training_set <- dplyr::filter(cv_data, time_bin == unique_times[iTrain], all_cv_train_test_inds[iCV] == "train") %>% 
-          dplyr::select(starts_with("site"), train_labels)
+          dplyr::select(starts_with("site"), .data$train_labels)
         
         test_set <- dplyr::filter(cv_data, all_cv_train_test_inds[iCV] == "test") %>% 
-          dplyr::select(starts_with("site"), test_labels, time_bin) 
+          dplyr::select(starts_with("site"), .data$test_labels, .data$time_bin) 
 
         if (test_only_at_training_time) {
           test_set <- dplyr::filter(test_set, time_bin == unique_times[iTrain])
@@ -180,7 +180,7 @@ run_decoding.cv_standard = function(cv_obj) {
         # add the current CV run number, train time to the results data frame
         curr_cv_prediction_results <- curr_cv_prediction_results %>%
           dplyr::mutate(CV = iCV, train_time = unique_times[iTrain]) %>%
-          select(CV, train_time, everything())
+          select(.data$CV, .data$train_time, everything())
         
         
         #all_cv_results <- rbind(all_cv_results, curr_cv_prediction_results)

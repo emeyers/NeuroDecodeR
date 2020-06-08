@@ -49,7 +49,7 @@ log_save_results <- function(DECODING_RESULTS, save_directory_name){
   
   if (!("analysis_ID" %in% names(decoding_params))) {
     decoding_params$analysis_ID <- paste0(generate_analysis_ID(), "_gensave")
-    decoding_params <- dplyr::select(decoding_params, analysis_ID, everything())
+    decoding_params <- dplyr::select(decoding_params, .data$analysis_ID, everything())
   }
   
   
@@ -99,7 +99,7 @@ log_check_results_already_exist <- function(decoding_params, manifest_df){
     
     manifest_decoding_params_added <- add_current_parameters_to_manifest(decoding_params, manifest_df)
     
-    manifest_decoding_params_added <- dplyr::select(manifest_decoding_params_added, -analysis_ID)
+    manifest_decoding_params_added <- dplyr::select(manifest_decoding_params_added, -.data$analysis_ID)
     duplicated_results <- duplicated(manifest_decoding_params_added)
     
     
@@ -206,7 +206,7 @@ log_load_decoding_results <- function(decoding_params, results_directory_name){
   
   
   manifest_with_results_added <- add_current_parameters_to_manifest(decoding_params, manifest_df) %>%
-    select(-analysis_ID)
+    select(-.data$analysis_ID)
   
   # find all rows that match the last row...
   num_manifest_rows <- dim(manifest_df)[1]

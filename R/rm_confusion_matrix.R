@@ -102,12 +102,12 @@ aggregate_CV_split_results.rm_confusion_matrix = function(rm_obj, prediction_res
     
     # create the decision value confusion matrix
     confusion_matrix_decision_vals <- prediction_results %>%
-      select(-predicted_labels, -CV) %>%
+      select(-.data$predicted_labels, -.data$CV) %>%
       dplyr::group_by(.data$train_time, .data$test_time, .data$actual_labels) %>%
       summarize_all(mean) %>%
       tidyr::pivot_longer(starts_with("decision_vals"), names_to = "predicted_labels", 
                         values_to = "mean_decision_vals") %>%
-      mutate(predicted_labels = gsub("decision_vals.", "", predicted_labels))
+      mutate(predicted_labels = gsub("decision_vals.", "", .data$predicted_labels))
   
     confusion_matrix <- left_join(confusion_matrix_decision_vals, confusion_matrix, 
                                    by = c("train_time", "test_time", "actual_labels", "predicted_labels")) 
@@ -210,7 +210,7 @@ aggregate_resample_run_results.rm_confusion_matrix = function(resample_run_resul
     
     confusion_matrix_decision_vals <- resample_run_results %>%
       dplyr::group_by(.data$train_time,  .data$test_time, .data$actual_labels,  .data$predicted_labels) %>%
-      summarize(mean_decision_vals = mean(mean_decision_vals))
+      summarize(mean_decision_vals = mean(.data$mean_decision_vals))
     
     if (dim(confusion_matrix_decision_vals)[1] != dim(confusion_matrix)[1]){
       warning(paste('Something has gone wrong where the confusion_matrix_decision_vals and",
@@ -380,7 +380,7 @@ plot_MI.rm_confusion_matrix = function(rm_obj, plot_type = 'TCD') {
     mutate(joint_probability = n/sum(n))   %>%
     group_by(train_time,  test_time, actual_labels) %>%
     mutate(log_marginal_actual = log2(sum(joint_probability))) %>%
-    group_by(train_time,  test_time, predicted_labels) %>%
+    group_by(train_time,  test_time, .data$predicted_labels) %>%
     mutate(log_marginal_predicted = log2(sum(joint_probability))) %>%
     ungroup() %>%
     mutate(log_joint_probability = log2(joint_probability))   %>%
