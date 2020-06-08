@@ -284,7 +284,7 @@ plot.rm_confusion_matrix = function(x, ..., plot_only_same_train_test_time = FAL
   # if only want the results plotted for the same training and test times
   if (!only_has_same_train_test_time_results && plot_only_same_train_test_time) {
     confusion_matrix_obj <- confusion_matrix_obj %>%
-      filter(train_time == test_time)
+      filter(.data$train_time == .data$test_time)
   }
   
 
@@ -311,7 +311,7 @@ plot.rm_confusion_matrix = function(x, ..., plot_only_same_train_test_time = FAL
   if (plot_decision_vals_confusion_matrix){
     
     g <- confusion_matrix_obj %>%
-      ggplot(aes(predicted_labels, forcats::fct_rev(actual_labels), fill = mean_decision_vals)) +
+      ggplot(aes(.data$predicted_labels, forcats::fct_rev(.data$actual_labels), fill = .data$mean_decision_vals)) +
       geom_tile() + 
       theme(axis.text.x = element_text(angle = 90, hjust = 1)) +
       ylab('True class') + 
@@ -322,7 +322,7 @@ plot.rm_confusion_matrix = function(x, ..., plot_only_same_train_test_time = FAL
   } else {
     
     g <- confusion_matrix_obj %>%
-      ggplot(aes(predicted_labels, forcats::fct_rev(actual_labels), fill = conditional_pred_freq * 100)) +
+      ggplot(aes(.data$predicted_labels, forcats::fct_rev(.data$actual_labels), fill = .data$conditional_pred_freq * 100)) +
       geom_tile() + 
       theme(axis.text.x = element_text(angle = 90, hjust = 1)) +
       ylab('True class') + 
@@ -333,9 +333,9 @@ plot.rm_confusion_matrix = function(x, ..., plot_only_same_train_test_time = FAL
 
   
   if (sum(confusion_matrix_obj$train_time == confusion_matrix_obj$test_time) == dim(confusion_matrix_obj)[1]){
-        g + facet_wrap(~train_time)
+    g + facet_wrap(~.data$train_time)
   } else {    
-      g + facet_grid(train_time ~ test_time)
+    g + facet_grid(.data$train_time ~ .data$test_time)
   } 
   
   
@@ -376,18 +376,18 @@ plot_MI.rm_confusion_matrix = function(rm_obj, plot_type = 'TCD') {
   # calculate the mutual information ------------------------------------------
   
   MI_obj <-  rm_obj %>%
-    group_by(train_time,  test_time) %>%
+    group_by(.data$train_time,  .data$test_time) %>%
     mutate(joint_probability = n/sum(n))   %>%
-    group_by(train_time,  test_time, actual_labels) %>%
-    mutate(log_marginal_actual = log2(sum(joint_probability))) %>%
-    group_by(train_time,  test_time, .data$predicted_labels) %>%
-    mutate(log_marginal_predicted = log2(sum(joint_probability))) %>%
+    group_by(.data$train_time,  .data$test_time, .data$actual_labels) %>%
+    mutate(log_marginal_actual = log2(sum(.data$joint_probability))) %>%
+    group_by(.data$train_time,  .data$test_time, .data$predicted_labels) %>%
+    mutate(log_marginal_predicted = log2(sum(.data$joint_probability))) %>%
     ungroup() %>%
-    mutate(log_joint_probability = log2(joint_probability))   %>%
-    mutate(log_joint_probability = replace(log_joint_probability, log_joint_probability == -Inf, 0)) %>%
-    mutate(MI_piece = joint_probability * (log_joint_probability - log_marginal_actual - log_marginal_predicted)) %>%
-    group_by(train_time, test_time) %>%
-    summarize(MI = sum(MI_piece))
+    mutate(log_joint_probability = log2(.data$joint_probability))   %>%
+    mutate(log_joint_probability = replace(.data$log_joint_probability, .data$log_joint_probability == -Inf, 0)) %>%
+    mutate(MI_piece = .data$joint_probability * (.data$log_joint_probability - .data$log_marginal_actual - .data$log_marginal_predicted)) %>%
+    group_by(.data$train_time, .data$test_time) %>%
+    summarize(MI = sum(.data$MI_piece))
 
   
   # plot the mutual information  ----------------------------------------------
@@ -400,8 +400,8 @@ plot_MI.rm_confusion_matrix = function(rm_obj, plot_type = 'TCD') {
     
     # if only trained and tested at the same time, create line plot
     MI_obj %>%
-      dplyr::filter(train_time == test_time) %>%
-      ggplot(aes(test_time, MI)) +
+      dplyr::filter(.data$train_time == .data$test_time) %>%
+      ggplot(aes(.data$test_time, .data$MI)) +
       geom_line() +
       xlab('Time') + 
       ylab('Mutual information (bits)') # + 
@@ -410,7 +410,7 @@ plot_MI.rm_confusion_matrix = function(rm_obj, plot_type = 'TCD') {
   } else {
     
     MI_obj %>%
-      ggplot(aes(test_time, train_time, fill = MI)) + 
+      ggplot(aes(.data$test_time, .data$train_time, fill = .data$MI)) + 
       geom_tile() + 
       ylab('Test time') + 
       xlab('Train time') +    

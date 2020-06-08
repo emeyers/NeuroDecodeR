@@ -44,7 +44,7 @@ get_num_label_repetitions <- function(binned_data,
   
   # select only the siteID and labels we want to count number of repetitions
   binned_data <- select(binned_data, .data$siteID, label = paste0("labels.", variable_to_use))
-
+  
 
   if (is.null(levels_to_use)) {
     levels_to_use <- levels(binned_data$label)
@@ -93,8 +93,8 @@ plot.label_repetition <- function(x, ...) {
   num_sites_with_k_repeats <- get_num_sites_with_k_label_repetitions(label_rep_obj)
   
   num_sites_with_k_repeats_long <- num_sites_with_k_repeats %>%
-    tidyr::gather(min_reps, num_sites, -.data$label) %>%
-    mutate(min_reps = as.numeric(min_reps))
+    tidyr::gather("min_reps", "num_sites", -.data$label) %>%
+    mutate(min_reps = as.numeric(.data$min_reps))
   
   
   # just plot the minimum number of repeats  
@@ -109,8 +109,8 @@ plot.label_repetition <- function(x, ...) {
   
   
   g <- num_sites_with_k_repeats_long %>%
-    dplyr::filter(label != "min_repeats") %>%
-    ggplot(aes(min_reps, num_sites, col = label)) +
+    dplyr::filter(.data$label != "min_repeats") %>%
+    ggplot(aes(.data$min_reps, .data$num_sites, col = .data$label)) +
     geom_line() + 
     geom_point() + 
     xlab("Number of repeated conditions") + 

@@ -247,21 +247,21 @@ plot.rm_main_results = function(x, ..., result_type = 'zero_one_loss', plot_type
   
   
   # convert the zero-one loss results to percentages
-  main_results <- dplyr::mutate(main_results, zero_one_loss = zero_one_loss * 100)
+  main_results <- dplyr::mutate(main_results, zero_one_loss = .data$zero_one_loss * 100)
   
   
   if (result_type == 'all'){ 
     # do nothing
   } else if (result_type == 'zero_one_loss'){
-    main_results <- dplyr::select(main_results, .data$train_time, .data$test_time, zero_one_loss)
+    main_results <- dplyr::select(main_results, .data$train_time, .data$test_time, .data$zero_one_loss)
   } else if (result_type == 'normalized_rank'){
     if (!(result_type %in% main_results)){ 
       stop(paste("Can't plot", result_type, "results because this type of result was not saved."))}
-    main_results <- dplyr::select(main_results, .data$train_time, .data$test_time, normalized_rank)
+    main_results <- dplyr::select(main_results, .data$train_time, .data$test_time, .data$normalized_rank)
   } else if (result_type == 'decision_vals'){
     if (!(result_type %in% main_results)){ 
       stop(paste("Can't plot", result_type, "results because this type of result was not saved."))}
-    main_results <- dplyr::select(main_results, .data$train_time, .data$test_time, decision_vals)
+    main_results <- dplyr::select(main_results, .data$train_time, .data$test_time, .data$decision_vals)
   } else {
     warning(paste0("result_type must be set to either 'all', 'zero_one_loss', 'normalized_rank', or 'decision_vals'.",
                    "Using the default value of all"))
@@ -280,7 +280,7 @@ plot.rm_main_results = function(x, ..., result_type = 'zero_one_loss', plot_type
   
   
   main_results <- main_results %>%
-    tidyr::gather(result_type, accuracy, -.data$train_time, -.data$test_time) %>%
+    tidyr::gather("result_type", "accuracy", -.data$train_time, -.data$test_time) %>%
     dplyr::mutate(result_type = replace(result_type, result_type == 'zero_one_loss', 'Zero-one loss'),
                  result_type = replace(result_type, result_type == 'normalized_rank', 'Normalized rank'),
                  result_type = replace(result_type, result_type == 'decision_vals', 'Decision values'))
@@ -290,7 +290,7 @@ plot.rm_main_results = function(x, ..., result_type = 'zero_one_loss', plot_type
   if (length(unique(main_results$train_time)) == 1){
     
     main_results %>%
-      ggplot(aes(test_time, accuracy)) +
+      ggplot(aes(.data$test_time, .data$accuracy)) +
       geom_col() +
       facet_wrap(~result_type, scales = "free") + 
       xlab('Time') + 
@@ -302,8 +302,8 @@ plot.rm_main_results = function(x, ..., result_type = 'zero_one_loss', plot_type
     
     # if only trained and tested at the same time, create line plot
     main_results %>%
-      dplyr::filter(train_time == test_time) %>%
-      ggplot(aes(test_time, accuracy)) +
+      dplyr::filter(.data$train_time == .data$test_time) %>%
+      ggplot(aes(.data$test_time, .data$accuracy)) +
       geom_line() +
       facet_wrap(~result_type, scales = "free") + 
       xlab('Time') + 
@@ -317,7 +317,7 @@ plot.rm_main_results = function(x, ..., result_type = 'zero_one_loss', plot_type
     
     # if trained and testing at all times, create a TCD plot
     main_results %>%
-      ggplot(aes(test_time, train_time, fill = accuracy)) + 
+      ggplot(aes(.data$test_time, .data$train_time, fill = .data$accuracy)) + 
       geom_tile() +
       facet_wrap(~result_type) +
       scale_fill_continuous(type = "viridis", name = "Prediction \n accuracy") +

@@ -151,14 +151,14 @@ run_decoding.cv_standard = function(cv_obj) {
       
       for (iTrain in 1:num_time_bins) {
         
-        training_set <- dplyr::filter(cv_data, time_bin == unique_times[iTrain], all_cv_train_test_inds[iCV] == "train") %>% 
+        training_set <- dplyr::filter(cv_data, .data$time_bin == unique_times[iTrain], all_cv_train_test_inds[iCV] == "train") %>% 
           dplyr::select(starts_with("site"), .data$train_labels)
         
         test_set <- dplyr::filter(cv_data, all_cv_train_test_inds[iCV] == "test") %>% 
           dplyr::select(starts_with("site"), .data$test_labels, .data$time_bin) 
 
         if (test_only_at_training_time) {
-          test_set <- dplyr::filter(test_set, time_bin == unique_times[iTrain])
+          test_set <- dplyr::filter(test_set, .data$time_bin == unique_times[iTrain])
         }
      
         # if feature-processors have been specified, do feature processing...
