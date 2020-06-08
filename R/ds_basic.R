@@ -268,7 +268,7 @@ get_data.ds_basic = function(ds_obj){
 
       # use one site to select the trials to use and then apply to all sites
       curr_label_trials_to_use <- binned_data %>%
-        filter(.data$siteID == binned_data$siteID[1]) %>%
+        dplyr::filter(.data$siteID == binned_data$siteID[1]) %>%
         select(labels, .data$label_trial_combo) %>%
         group_by(labels) %>%
         sample_n(size = num_trials_used_per_label) %>%
@@ -276,7 +276,7 @@ get_data.ds_basic = function(ds_obj){
 
       # apply specific simultaneous trials selected to all sites
       all_k_fold_data <- binned_data  %>%
-        filter(.data$label_trial_combo %in% curr_label_trials_to_use) %>%
+        dplyr::filter(.data$label_trial_combo %in% curr_label_trials_to_use) %>%
         select(-.data$label_trial_combo)
       
     } else {

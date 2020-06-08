@@ -318,9 +318,9 @@ test_that("testing classification results using generalization_ds seem reasonabl
                  test_label_levels = test_label_levels)
   
   cv_data <- get_data(ds)
-  training_set <- filter(cv_data, time_bin == "time.200_349", CV_1 == "train") %>% 
+  training_set <- dplyr::filter(cv_data, time_bin == "time.200_349", CV_1 == "train") %>% 
     select(starts_with("site"), train_labels = train_labels)
-  test_set <- filter(cv_data, time_bin %in% c("time.-350_-201", "time.200_349"), CV_1 == "test") %>% 
+  test_set <- dplyr::filter(cv_data, time_bin %in% c("time.-350_-201", "time.200_349"), CV_1 == "test") %>% 
     select(starts_with("site"), test_labels = test_labels, time_bin)
   levels(test_set$time_bin)[levels(test_set$time_bin)=="time.-350_-201"] <- "baseline"
   levels(test_set$time_bin)[levels(test_set$time_bin)=="time.200_349"] <- "stimulus"
@@ -334,8 +334,8 @@ test_that("testing classification results using generalization_ds seem reasonabl
     dplyr::group_by(test_time) %>%
     dplyr::summarize(mean_accuracy = mean(actual_labels == predicted_labels))
   
-  expect_gt(filter(accuracies, test_time == "stimulus")$mean_accuracy, .49)
-  expect_lt(filter(accuracies, test_time == "baseline")$mean_accuracy, .3)
+  expect_gt(dplyr::filter(accuracies, test_time == "stimulus")$mean_accuracy, .49)
+  expect_lt(dplyr::filter(accuracies, test_time == "baseline")$mean_accuracy, .3)
 
 })
   

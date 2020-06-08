@@ -354,7 +354,7 @@ get_augmented_prediction_results <- function(prediction_results, aggregate_optio
   if (aggregate_options == "diag" || aggregate_options == "only same train test time"){
     
     prediction_results <- prediction_results %>%
-      filter(train_time == test_time)
+      dplyr::filter(train_time == test_time)
     
     # if getting the decision values for all time points    
   } else if (aggregate_options == TRUE || aggregate_options == "full") {

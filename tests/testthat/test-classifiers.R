@@ -25,8 +25,8 @@ test_reasonable_classification_accuracy <- function(cl){
       dplyr::group_by(test_time) %>%
       dplyr::summarize(mean_accuracy = mean(actual_labels == predicted_labels))
     
-    expect_gt(filter(accuracies, test_time == "stimulus")$mean_accuracy, .53)
-    expect_lt(filter(accuracies, test_time == "baseline")$mean_accuracy, .3)
+    expect_gt(dplyr::filter(accuracies, test_time == "stimulus")$mean_accuracy, .53)
+    expect_lt(dplyr::filter(accuracies, test_time == "baseline")$mean_accuracy, .3)
     
   })
   
@@ -44,8 +44,8 @@ test_shuffle_results_at_chance <- function(cl){
       dplyr::group_by(test_time) %>%
       dplyr::summarize(mean_accuracy = mean(actual_labels == predicted_labels))
     
-    expect_lt(filter(accuracies, test_time == "stimulus")$mean_accuracy, .3)
-    expect_lt(filter(accuracies, test_time == "baseline")$mean_accuracy, .3)
+    expect_lt(dplyr::filter(accuracies, test_time == "stimulus")$mean_accuracy, .3)
+    expect_lt(dplyr::filter(accuracies, test_time == "baseline")$mean_accuracy, .3)
   })
 }
   

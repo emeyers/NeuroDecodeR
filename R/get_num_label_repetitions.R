@@ -59,7 +59,7 @@ get_num_label_repetitions <- function(binned_data,
 
   
   # reduce data to only the levels specified
-  binned_data <- filter(binned_data, binned_data$label %in% levels_to_use)
+  binned_data <- dplyr::filter(binned_data, binned_data$label %in% levels_to_use)
 
   num_repeats_per_level <- binned_data %>%
     group_by(siteID, label) %>%
@@ -109,7 +109,7 @@ plot.label_repetition <- function(x, ...) {
   
   
   g <- num_sites_with_k_repeats_long %>%
-    filter(label != "min_repeats") %>%
+    dplyr::filter(label != "min_repeats") %>%
     ggplot(aes(min_reps, num_sites, col = label)) +
     geom_line() + 
     geom_point() + 
