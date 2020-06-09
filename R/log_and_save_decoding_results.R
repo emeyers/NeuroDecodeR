@@ -171,6 +171,7 @@ add_current_parameters_to_manifest <- function(decoding_params, manifest_df){
 
 
 
+
 #' A function that loads DECODING_RESULTS based on decoding_parameters
 #' 
 #' @param decoding_params A data frame of decoding parameters that can
@@ -184,8 +185,8 @@ add_current_parameters_to_manifest <- function(decoding_params, manifest_df){
 log_load_decoding_results <- function(decoding_params, results_directory_name){
   
   
-  manifest_file_name <- paste0(results_directory_name, "results_manifest.rda")
-  #manifest_file_name <- file.path(results_directory_name, "results_manifest_.rda")
+  #manifest_file_name <- paste0(results_directory_name, "results_manifest.rda")
+  manifest_file_name <- file.path(results_directory_name, "results_manifest.rda")
   
   
   # if the directory of results or manifest file doesn't exist, throw and error
@@ -242,14 +243,6 @@ log_load_decoding_results <- function(decoding_params, results_directory_name){
   all_decoding_results
   
 }
-
-
-
-
-
-
-
-
 
 
 
