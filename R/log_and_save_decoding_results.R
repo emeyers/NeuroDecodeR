@@ -194,14 +194,24 @@ log_load_decoding_results <- function(decoding_params, results_directory_name){
   }
   
   if (!file.exists(manifest_file_name)) {
+    
     stop("The manifest files doesn't exist. Check that you specified the correct results directory.")
+    
+    # added this line to get rid of R CMD check note: no visible binding for global variable 'manifest_df'
+    manifest_df <- NULL
+    
   }
   
   
   load(manifest_file_name)
   
   if (!log_check_results_already_exist(decoding_params, manifest_df)){
+    
     stop("It does not appear that results based on the parameters specified have been run yet.")
+    
+    # added this line to get rid of R CMD check note: no visible binding for global variable 'DECODING_RESULTS'
+    DECODING_RESULTS <- NULL
+    
   }
   
   

@@ -364,7 +364,7 @@ get_parameters.ds_basic = function(ndtr_obj){
   parameter_df <- data.frame(val = unlist(length_one_variables)) %>%
     tibble::rownames_to_column("key") %>% 
     tidyr::spread("key", "val") %>%
-    mutate(across(where(is.factor), as.character))
+    dplyr::mutate(dplyr::across(where(is.factor), as.character))
   
   parameter_df$label_levels_to_use <- list(sort(unlist(ndtr_obj$label_levels_to_use)))
   parameter_df$site_IDs_to_use <- list(ndtr_obj$site_IDs_to_use)

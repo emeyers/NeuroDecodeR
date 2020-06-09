@@ -45,11 +45,15 @@
 #' @importFrom stats cor pf predict
 
 
-
-
 NULL
 
 
+
+# making the where() function from the tidyselect package a global variable to get rid of a note 
+#  in R CMD check because the authors of tidyselect have not exported this function yet 
+#  (although according to a reaply to a GitHub issue they are likely to do this soon)
+
+globalVariables("where")
 
 
 

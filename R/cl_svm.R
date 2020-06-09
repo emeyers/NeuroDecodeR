@@ -123,7 +123,7 @@ get_parameters.cl_svm = function(ndtr_obj){
       parameter_df <- data.frame(val = unlist(ndtr_obj$svm_options)) %>%
         tibble::rownames_to_column("key") %>% 
         tidyr::spread("key", "val") %>%
-        mutate(across(where(is.factor), as.character))
+        dplyr::mutate(across(where(is.factor), as.character))
         
       names(parameter_df) <- paste0("cl_svm.", names(parameter_df))
   }

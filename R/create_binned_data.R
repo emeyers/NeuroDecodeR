@@ -75,8 +75,13 @@ create_binned_data <- function(raster_dir_name,
     binned_data_object_name <- load(paste0(raster_dir_name, file_names[iSite]))
     
     if (!((length(binned_data_object_name) == 2) && (match("raster_data", binned_data_object_name) + match("raster_site_info", binned_data_object_name) == 3))){
+      
       stop(paste0('Data stored in raster files must contain two R objets one called "raster_data"', 
            'and another called "raster_site_info"'))
+      
+      # added this line to get rid of R CMD check note: no visible binding for global variable 'raster_data'
+      raster_data <- NULL  
+      
     }
     
     one_binned_site <- bin_saved_data_one_site(raster_data, bin_width, sampling_interval, start_time, end_time)
