@@ -80,7 +80,7 @@ file.remove(r_raster_dir_name)
 # testing calculating the number of times a label was repeated ----------------
 
 
-file_name <-  system.file("extdata/ZD_150bins_50sampled.Rda", package = "NDTr")
+file_name <-  system.file(file.path("extdata", "ZD_150bins_50sampled.Rda"), package = "NDTr")
 
 expect_error(get_num_label_repetitions(file_name, "stimulus_ID", levels_to_use = c("kiwi", "dog")))
 
