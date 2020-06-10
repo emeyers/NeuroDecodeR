@@ -66,8 +66,8 @@ convert_matlab_raster_data <- function(matlab_raster_dir_name,
     # replace .mat with .rda for matlab_raster_directory_name
     curr_r_file_name <- paste0(substr(curr_matlab_file_name, 1, nchar(curr_matlab_file_name)-3), "rda")
     
-    raster <- R.matlab::readMat(paste0(matlab_raster_dir_name, "/", curr_matlab_file_name))
-    
+    #raster <- R.matlab::readMat(paste0(matlab_raster_dir_name, "/", curr_matlab_file_name))
+    raster <- R.matlab::readMat(file.path(matlab_raster_dir_name, curr_matlab_file_name))
     
     
     # second, create the raster_site_info list
@@ -167,7 +167,8 @@ convert_matlab_raster_data <- function(matlab_raster_dir_name,
       } 
       
       # append start and end index if applicable and append "_rda/"
-      r_raster_dir_name <- paste0(r_raster_dir_name, start_ind_save_dir_name, end_ind_save_dir_name, "_rda/")
+      r_raster_dir_name <- file.path(paste0(r_raster_dir_name, start_ind_save_dir_name, 
+                                            end_ind_save_dir_name, "_rda"), "")
       
     }
     

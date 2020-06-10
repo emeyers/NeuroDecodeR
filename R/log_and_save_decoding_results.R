@@ -196,7 +196,8 @@ log_load_decoding_results <- function(decoding_params, results_directory_name){
   
   if (!file.exists(manifest_file_name)) {
     
-    stop("The manifest files doesn't exist. Check that you specified the correct results directory.")
+    stop(paste("The manifest files doesn't exist in the specified path", manifest_file_name, ".",
+               "Check that you specified the correct results directory."))
     
     # added this line to get rid of R CMD check note: no visible binding for global variable 'manifest_df'
     manifest_df <- NULL
