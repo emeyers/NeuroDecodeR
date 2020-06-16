@@ -2,9 +2,13 @@
 % Please edit documentation in R/log_and_save_decoding_results.R
 \name{log_save_results}
 \alias{log_save_results}
-\title{A function saves DECODING_RESULTS and logs the parameters used in the analysis}
+\title{A function that saves the DECODING_RESULTS and logs the parameters used in the analysis}
 \usage{
-log_save_results(DECODING_RESULTS, save_directory_name)
+log_save_results(
+  DECODING_RESULTS,
+  save_directory_name,
+  result_name = "No result name set"
+)
 }
 \arguments{
 \item{DECODING_RESULTS}{A list of results returned by the cross-validator's
@@ -12,6 +16,9 @@ run_decoding method.}
 
 \item{save_directory_name}{A directory where the decoding results should be
 saved.}
+
+\item{result_name}{A string that gives a human readable name for the results 
+that are to be saved. The default value is "No result name set".}
 }
 \description{
 This function takes results returned by the cross-validator's run_decoding() 

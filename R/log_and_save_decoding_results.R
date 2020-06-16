@@ -1,4 +1,4 @@
-#'  A function saves DECODING_RESULTS and logs the parameters used in the analysis 
+#'  A function that saves the DECODING_RESULTS and logs the parameters used in the analysis 
 #' 
 #' This function takes results returned by the cross-validator's run_decoding() 
 #'  method and uses the cross-validator's get_properties() method to save a 
@@ -9,9 +9,12 @@
 #'
 #' @param save_directory_name A directory where the decoding results should be
 #'   saved.
+#'   
+#' @param result_name A string that gives a human readable name for the results 
+#'   that are to be saved. The default value is "No result name set".
 #'
 #' @export
-log_save_results <- function(DECODING_RESULTS, save_directory_name){
+log_save_results <- function(DECODING_RESULTS, save_directory_name, result_name = "No result name set"){
   
   
   # maybe should deal with slash at the end of the save_directory_name...
@@ -49,8 +52,14 @@ log_save_results <- function(DECODING_RESULTS, save_directory_name){
   
   if (!("analysis_ID" %in% names(decoding_params))) {
     decoding_params$analysis_ID <- paste0(generate_analysis_ID(), "_gensave")
-    decoding_params <- dplyr::select(decoding_params, .data$analysis_ID, everything())
   }
+  
+  
+  # add the result_name and put the results in order
+  decoding_params <- decoding_params %>%
+    dplyr::mutate(result_name = result_name) %>%
+    select(.data$analysis_ID, .data$result_name, everything())
+  
   
   
   # if results already exist give a warning (maybe not needed but doesn't hurt)
@@ -62,12 +71,10 @@ log_save_results <- function(DECODING_RESULTS, save_directory_name){
   # add the current parameters to the manifest file
   manifest_df <- add_current_parameters_to_manifest(decoding_params, manifest_df)
   
-  
   # save the results and the updated manifest file...
   save(DECODING_RESULTS, file = file.path(save_directory_name, paste0(decoding_params$analysis_ID, ".rda")))
   
   save(manifest_df, file = manifest_file_name)
-  
   
 }
 
@@ -99,7 +106,9 @@ log_check_results_already_exist <- function(decoding_params, manifest_df){
     
     manifest_decoding_params_added <- add_current_parameters_to_manifest(decoding_params, manifest_df)
     
-    manifest_decoding_params_added <- dplyr::select(manifest_decoding_params_added, -.data$analysis_ID)
+    manifest_decoding_params_added <- dplyr::select(manifest_decoding_params_added, 
+                                                    -.data$analysis_ID, -.data$result_name)
+    
     duplicated_results <- duplicated(manifest_decoding_params_added)
     
     
@@ -182,7 +191,7 @@ add_current_parameters_to_manifest <- function(decoding_params, manifest_df){
 #'  
 #'  
 #' @export
-log_load_decoding_results <- function(decoding_params, results_directory_name){
+log_load_results_from_params <- function(decoding_params, results_directory_name){
   
   
   #manifest_file_name <- paste0(results_directory_name, "results_manifest.rda")
@@ -218,7 +227,7 @@ log_load_decoding_results <- function(decoding_params, results_directory_name){
   
   
   manifest_with_results_added <- add_current_parameters_to_manifest(decoding_params, manifest_df) %>%
-    select(-.data$analysis_ID)
+    select(-.data$analysis_ID, -.data$result_name)
   
   # find all rows that match the last row...
   num_manifest_rows <- dim(manifest_df)[1]
@@ -244,6 +253,90 @@ log_load_decoding_results <- function(decoding_params, results_directory_name){
   all_decoding_results
   
 }
+
+
+
+
+
+
+
+#' A function that loads DECODING_RESULTS based on the result_name
+#' 
+#' @param result_name A string a specifying the result that should be loaded
+#'   based on the name given. This result_name can be a regular expression in 
+#'   which all result_name values that match the regular expression will be
+#'   returned as a list.
+#' 
+#' @param results_directory_name A string containing the path to a directory
+#'   that contains all the decoding results
+#'  
+#'  
+#' @export
+log_load_results_from_result_name <- function(result_name, results_directory_name){
+  
+  
+  manifest_file_name <- file.path(results_directory_name, "results_manifest.rda")
+  
+  
+  # if the directory of results or manifest file doesn't exist, throw and error
+  if (!file.exists(results_directory_name)) {
+    stop(paste("The specified results_directory_name,", results_directory_name, "does not exist."))
+  }
+  
+  if (!file.exists(manifest_file_name)) {
+    
+    stop(paste("The manifest files doesn't exist in the specified path", manifest_file_name, ".",
+               "Check that you specified the correct results directory."))
+    
+    # added this line to get rid of R CMD check note: no visible binding for global variable 'manifest_df'
+    manifest_df <- NULL
+    
+  }
+  
+  
+  load(manifest_file_name)
+  
+  matching_results <- manifest_df[grepl(result_name, manifest_df$result_name), ]
+  
+  
+  if (dim(matching_results)[1] == 0) {
+    
+    stop(paste("There is no saved result_name that matches the specified result name of: ", result_name))
+    
+    # added this line to get rid of R CMD check note: no visible binding for global variable 'DECODING_RESULTS'
+    DECODING_RESULTS <- NULL
+    
+  } else if (dim(matching_results)[1] == 1) {  
+
+    # only one result exists so load it and return it     
+    load(paste0(results_directory_name, matching_results$analysis_ID[1], '.rda'))
+    DECODING_RESULTS
+
+  } else {   
+    
+    # more than one result matches the result_name given return all the results in a list
+    
+    num_matching_results <- dim(matching_results)[1]
+    all_decoding_results <- list()
+    
+    for (i in 1:num_matching_results) {
+      
+      load(paste0(results_directory_name, matching_results$analysis_ID[i], '.rda'))
+      all_decoding_results[[i]] <- DECODING_RESULTS
+      
+    }
+    
+    # return all the decoding results as a list
+    all_decoding_results
+    
+  }
+  
+  
+}
+
+
+
+
 
 
 
