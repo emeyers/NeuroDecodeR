@@ -8,3 +8,4 @@
 ^doc$
 ^Meta$
 ^data-raw$
+^vignettes/pkgdown_documentation/*.Rmd$

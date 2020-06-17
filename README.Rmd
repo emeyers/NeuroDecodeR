@@ -35,7 +35,7 @@ The package is based on 5 abstract object types:
 5. cross-validators (CV)
 
 
-By combing different versions of these 4 objecttypes together, it is
+By combing different versions of these 5 objecttypes together, it is
 possible to run a range of different decoding analyses. See
 www.readout.info and https://emeyers.github.io/NDTr/ for more information.
 

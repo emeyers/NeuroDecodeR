@@ -2,17 +2,20 @@ pandoc: 2.3.1
 pkgdown: 1.3.0
 pkgdown_sha: ~
 articles:
-  Isik_26_letter_MEG_dataset: Isik_26_letter_MEG_dataset.html
-  NDT_overview: NDT_overview.html
-  Qi_Constantinidis_pre_and_post_training_dataset: Qi_Constantinidis_pre_and_post_training_dataset.html
-  Zhang_Desimone_7_object_dataset: Zhang_Desimone_7_object_dataset.html
-  binned_format: binned_format.html
-  classifiers: classifiers.html
-  cross_validators: cross_validators.html
-  datasources: datasources.html
-  feature_preprocessors: feature_preprocessors.html
   generalization_tutorial: generalization_tutorial.html
   introduction_tutorial: introduction_tutorial.html
-  raster_format: raster_format.html
-  result_metrics: result_metrics.html
+  Isik_26_letter_MEG_dataset: pkgdown_documentation/Isik_26_letter_MEG_dataset.html
+  NDT_overview: pkgdown_documentation/NDT_overview.html
+  Qi_Constantinidis_pre_and_post_training_dataset: pkgdown_documentation/Qi_Constantinidis_pre_and_post_training_dataset.html
+  Zhang_Desimone_7_object_dataset: pkgdown_documentation/Zhang_Desimone_7_object_dataset.html
+  binned_format: pkgdown_documentation/binned_format.html
+  classifiers: pkgdown_documentation/classifiers.html
+  cross_validators: pkgdown_documentation/cross_validators.html
+  datasources: pkgdown_documentation/datasources.html
+  feature_preprocessors: pkgdown_documentation/feature_preprocessors.html
+  raster_format: pkgdown_documentation/raster_format.html
+  result_metrics: pkgdown_documentation/result_metrics.html
+urls:
+  reference: https://github.com/emeyers/NDTr/reference
+  article: https://github.com/emeyers/NDTr/articles
 

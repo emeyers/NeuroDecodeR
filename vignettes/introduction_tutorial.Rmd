@@ -12,7 +12,7 @@ The following tutorial gives a basic introduction to the data formats used by
 Neural Decoding Toolbox (NDTr) and shows how to run a simple decoding analysis.
 The tutorial is based on a dataset collected by Ying Zhang in Bob Desimone’s lab
 at MIT. The NDTr is based on the MATLAB Neural Decoding Toolbox which you can
-learn more about at [www.readout.info](www.readout.info).
+learn more about at [www.readout.info](http://www.readout.info).
 
 
 
@@ -29,20 +29,20 @@ data.
 The NDTr is built around 5 different object classes that allow users to apply
 neural decoding in a flexible and robust way. The four types of objects are:
 
-  1. [Datasources (DS)](datasources.html) which generate training and test
+  1. [Datasources (DS)](pkgdown_documentation/datasources.html) which generate training and test
   splits of the data.
   
-  2. [Feature preprocessors (FP)](feature_preprocessors.html) which apply
+  2. [Feature preprocessors (FP)](pkgdown_documentation/feature_preprocessors.html) which apply
   preprocessing to the training and test splits.
  
-  3. [Classifiers (CL)](classifiers.html) which learn the relationship between
+  3. [Classifiers (CL)](pkgdown_documentation/classifiers.html) which learn the relationship between
   experimental conditions and data on the training set, and then predict
   experimental conditions on the test data.
  
-  4. [Result Metrics (RM)](result_metrics.html) which take the output
+  4. [Result Metrics (RM)](pkgdown_documentation/result_metrics.html) which take the output
   predictions of a classifier and summerize the prediction accuracy.
 
-  5. [Cross-validators (CV)](cross_validators.html) which take the DS, FP and CL
+  5. [Cross-validators (CV)](pkgdown_documentation/cross_validators.html) which take the DS, FP and CL
   objects and run a cross-validation decoding procedure.
 
 The NDTr comes with a few implementations of each of these objects, and defines
@@ -84,8 +84,8 @@ library(tidyr)
 ## Data formats
 
 In order to use the NDTr, the neural data must be in a usable format. Typically
-this involves putting the data in [raster-format](raster_format.html) and then
-converting it to [binned-format](binned_format.html) using the
+this involves putting the data in [raster-format](pkgdown_documentation/raster_format.html) and then
+converting it to [binned-format](pkgdown_documentation/binned_format.html) using the
 `create_binned_data()` function.
 
 
@@ -110,7 +110,7 @@ load(file.path(raster_dir_name, file_name))
 Note that two objects were loaded into memory, raster_data, which contains the
 actual data from a single neuron and raster_site_info which contains any meta
 information about the site (for more information [see
-raster-format.html](raster_format.html)). Below we visualize the spiking pattern
+raster-format.html](pkgdown_documentation/raster_format.html)). Below we visualize the spiking pattern
 from this one neuron.
 
 
@@ -172,7 +172,7 @@ Before beginning the decoding analysis it is useful to know how many times each
 experimental condition (e.g., stimulus) was presented to each site (e.g.,
 neuron). In particular, it is useful to know how many times the condition that
 has the fewest repetitions was presented. To do this we will use the function
-`get_num_label_repetitions` which finds uses data that is in binned-format and
+`get_num_label_repetitions()` which finds uses data that is in binned-format and
 calculates how many trials each label level was presented.
 
 Below we use the plot function assocated with the results that are returned to
@@ -227,7 +227,7 @@ dataset.
 ### Creating a Datasource (DS)
 
 A datasource object is used by the cross-validator to generate training and test
-splits of the data. Below we create a `ds_basic` object that takes binned-format
+splits of the data. Below we create a `ds_basic()` object that takes binned-format
 data, name of the labels variable to be decoding, and a scalar that specifies
 how many cross-validation splits to use. The default behavior of this datasource
 is to create test splits that have one example of each object in them and
@@ -238,10 +238,9 @@ As calculated above, all 132 neurons have 59 repetitions of each stimulus, and
 cross-validation splits using all neurons, or we could set the datasource to use
 only a subset of neurons and use 60 cross-validation splits. For the purpose of
 this tutorial, we will use all the neurons and only 20 cross-validation splits
-to make the code run a little faster. The `ds_basic` datasource object also has
+to make the code run a little faster. The `ds_basic()` datasource object also has
 many more properties that can be set, including specifying that only certain
-label levels or neurons should be used. More information about this object can
-be found [here](datasources.html).
+label levels or neurons should be used. 
 
 
 ```{r datasource}
@@ -263,12 +262,12 @@ ds <- ds_basic(binned_file_name, variable_to_decode, num_cv_splits)
 
 Feature preprocessors use the training set to learn particular parameters about
 the data, and then applying preprocessing to the training and test sets using
-these parameters. Below will we create a `fp_zscore` preprocessor that zscore
+these parameters. Below will we create a `fp_zscore()` preprocessor that zscore
 normalizes the data so that each neuron’s activity has approximately zero mean
 and a standard deviation of 1 over all trials. This feature-preprocessor is
 useful so that neurons with high firing rates do not end up contributing more to
 the decoding results than neurons with lower firing rates when a
-`cl_max_correlation` classifier is used.
+`cl_max_correlation()` classifier is used.
 
 ```{r feature_preprocessor}
 
@@ -289,7 +288,7 @@ Classifiers take a *training set* of data and learn the relationship between the
 neural responses and the experimental conditions (label levels) that were
 present on particular trials. The classifier is then used to make predictions
 about what experimental conditions are present on trials from a different *test
-set* of neural data. Below we create a `cl_max_correlation` classifier which
+set* of neural data. Below we create a `cl_max_correlation()` classifier which
 learns prototypes of each class k that consists of the mean of all training data
 from class k. The predicted class for a new test point x is the class that has
 the maximum correlation coefficient value between the x and each class
@@ -345,7 +344,7 @@ different divisions of the data. The outer, ‘resample’ loop generates new sp
 cross-validation procedure by the inner loop. The number of resample runs is
 thus a parameter for this analysis as well, which we have set to 2 to make the
 procedure run quickly, although in general more resample runs will yield
-smoother results (the default value is 50). Below we create a `cv_standard`
+smoother results (the default value is 50). Below we create a `cv_standard()`
 object that runs this decoding procedure.
 
 
@@ -378,10 +377,9 @@ the result metrics plot functions to plot these aggregated results.
 
 ### Plotting the main results
 
-The rm_main_results plot function allows one to put plot temporal cross decoding
-results (where when training the classifier at one time and testing the
-classifier at a second time using the plot_standard_results_TCT_object object).
-This can be displayed by running the code below:
+The `rm_main_results()` plot function allows one to put plot temporal cross decoding
+results, where when training the classifier at one time and testing the
+classifier at a second time. This can be displayed by running the code below:
 
 
 ```{r plot_tcd}
@@ -391,9 +389,9 @@ plot(DECODING_RESULTS$rm_main_results)
 ```
 
 
-We also create simplier line plots by setting the plot_type = 'line'.
+We also create simplier line plots by setting the `plot_type = 'line'`.
 Additionally, we can plot all three types of results that that rm_main_results
-object saves using the type = 'all' argument. Below we should the results for
+object saves using the `type = 'all'` argument. Below we should the results for
 setting both these arguments.
 
 ```{r plot_line}
@@ -416,7 +414,7 @@ plot(DECODING_RESULTS$rm_confusion_matrix)
 ```
 
 
-The rm_confusion_matrix object also has a function plot_MI which calculated
+The `rm_confusion_matrix()` object also has a function `plot_MI()` which calculated
 mutual information from the confusion matrix and plots this as a function of
 time or as a TCD plot.
 
@@ -431,8 +429,8 @@ plot_MI(DECODING_RESULTS$rm_confusion_matrix)
 ## Saving the results
 
 Finally, the NDTr has "log" function that help you save and manage your results.
-Below we show how to use the log_save_results() function which takes a
-DECODING_RESULTS object and the name of a directory. This function save the
+Below we show how to use the `log_save_results()` function which takes a
+`DECODING_RESULTS` object and the name of a directory. This function save the
 results to the specified directory and also logs the parameters used in the
 analysis so that they can later be retrived. For more information, see the
 tutorial on saving and managing results.

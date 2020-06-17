@@ -25,7 +25,8 @@
 vignettes/*.html
 vignettes/*.pdf
 vignettes/position_invariance_results/*.rda
-
+vignettes/my_results/
+vignettes/*.Rda
 
 # OAuth2 token, see https://github.com/hadley/httr/releases/tag/v0.3
 .httr-oauth
@@ -41,18 +42,15 @@ vignettes/position_invariance_results/*.rda
 
 # End of https://www.gitignore.io/api/r
 
+
 # added by Ethan
-tests/create_R_package.R
-tests/test_results
-tests/Rprof.out
 tests/testthat/testing_save_results/
 
+
+
+
+
 # added by Cindy
-*.swo
-*.swp
 .Rproj.user
-Cindy*
-.DS_Store
-inst/doc
 doc
 Meta
