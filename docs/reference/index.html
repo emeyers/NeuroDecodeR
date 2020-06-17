@@ -60,7 +60,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">The Neural Decoding Toolbox in R</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.0.9001</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.0.9002</span>
       </span>
     </div>
 
@@ -72,8 +72,20 @@
 <li>
   <a href="../reference/index.html">Reference</a>
 </li>
-<li>
-  <a href="../articles/introduction_tutorial.html">Tutorial</a>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Tutorials
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="../articles/introduction_tutorial.html">Introductory tutorial</a>
+    </li>
+    <li>
+      <a href="../articles/generalization_tutorial.html">Generalization analysis tutorial</a>
+    </li>
+  </ul>
 </li>
       </ul>
       
@@ -194,7 +206,7 @@
         <td>
           <p><code><a href="rm_main_results.html">rm_main_results()</a></code> </p>
         </td>
-        <td><p>A result metric (RM) that calculates central decoding accuracy measures</p></td>
+        <td><p>A result metric (RM) that calculates main decoding accuracy measures</p></td>
       </tr><tr>
         
         <td>
@@ -214,7 +226,7 @@
         <td>
           <p><code><a href="log_save_results.html">log_save_results()</a></code> </p>
         </td>
-        <td><p>A function saves DECODING_RESULTS and logs the parameters used in the analysis</p></td>
+        <td><p>A function that saves the DECODING_RESULTS and logs the parameters used in the analysis</p></td>
       </tr><tr>
         
         <td>
@@ -224,7 +236,13 @@
       </tr><tr>
         
         <td>
-          <p><code><a href="log_load_decoding_results.html">log_load_decoding_results()</a></code> </p>
+          <p><code><a href="log_load_results_from_result_name.html">log_load_results_from_result_name()</a></code> </p>
+        </td>
+        <td><p>A function that loads DECODING_RESULTS based on the result_name</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="log_load_results_from_params.html">log_load_results_from_params()</a></code> </p>
         </td>
         <td><p>A function that loads DECODING_RESULTS based on decoding_parameters</p></td>
       </tr>

@@ -30,7 +30,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">The Neural Decoding Toolbox in R</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.0.9001</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.0.9002</span>
       </span>
     </div>
 
@@ -42,8 +42,20 @@
 <li>
   <a href="../reference/index.html">Reference</a>
 </li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Tutorials
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
 <li>
-  <a href="../articles/introduction_tutorial.html">Tutorial</a>
+      <a href="../articles/introduction_tutorial.html">Introductory tutorial</a>
+    </li>
+    <li>
+      <a href="../articles/generalization_tutorial.html">Generalization analysis tutorial</a>
+    </li>
+  </ul>
 </li>
       </ul>
 <ul class="nav navbar-nav navbar-right"></ul>
@@ -101,9 +113,9 @@
 <h3 class="hasAnchor">
 <a href="#raster-format" class="anchor"></a>Raster-format</h3>
 <p>To run a decoding analysis using the NDTr you first need to have your data in a usable format. In this tutorial we will use data collected by Ying Zhang in Bob Desimone’s lab at MIT. The directory data/raster_format/Zhang_Desimone_7objects_raster_data/ contains data in raster-format. Each file in this directory contains data from one neuron. To start, let us load one of these files and examine its contents.</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" data-line-number="1">raster_directory_name &lt;-<span class="st"> "../data-raw/raster/Zhang_Desimone_7objects_raster_data_rda/"</span></a>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" data-line-number="1">raster_dir_name &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/file.path">file.path</a></span>(<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/system.file">system.file</a></span>(<span class="st">"extdata"</span>, <span class="dt">package =</span> <span class="st">"NDTr"</span>), <span class="st">"Zhang_Desimone_7object_raster_data_rda"</span>)</a>
 <a class="sourceLine" id="cb2-2" data-line-number="2">file_name &lt;-<span class="st"> "bp1001spk_01A_raster_data.rda"</span></a>
-<a class="sourceLine" id="cb2-3" data-line-number="3"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/load">load</a></span>(<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/paste">paste0</a></span>(raster_directory_name, file_name))</a></code></pre></div>
+<a class="sourceLine" id="cb2-3" data-line-number="3"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/load">load</a></span>(<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/file.path">file.path</a></span>(raster_dir_name, file_name))</a></code></pre></div>
 <p>Note that two objects were loaded into memory, raster_data, which contains the actual data from a single neuron and raster_site_info which contains any meta information about the site (for more information <a href="raster_format.html">see raster-format.html</a>). Below we visualize the spiking pattern from this one neuron.</p>
 <p><img src="introduction_tutorial_files/figure-html/plot_raster_file-1.png" width="700"></p>
 <p>Here, the x-axis represents time in the experiment in milliseconds, and the y-axis represents different trials. Each black tick mark represents the time when a neuron emitted an action potential.</p>
@@ -190,7 +202,7 @@
 <h3 class="hasAnchor">
 <a href="#running-the-decoding-analysis" class="anchor"></a>Running the decoding analysis</h3>
 <p>To run the decoding procedure we call the cross-validator’s run_cv_decoding method, and the results stored in an object DECODING_RESULTS.</p>
-<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb10-1" data-line-number="1">DECODING_RESULTS &lt;-<span class="st"> </span><span class="kw">run_decoding</span>(cv)</a></code></pre></div>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb10-1" data-line-number="1">DECODING_RESULTS &lt;-<span class="st"> </span><span class="kw"><a href="../reference/run_decoding.html">run_decoding</a></span>(cv)</a></code></pre></div>
 </div>
 </div>
 <div id="plotting-the-results" class="section level2">
@@ -214,7 +226,7 @@
 <div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb13-1" data-line-number="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/graphics/topics/plot">plot</a></span>(DECODING_RESULTS<span class="op">$</span>rm_confusion_matrix)</a></code></pre></div>
 <p><img src="introduction_tutorial_files/figure-html/plot_confusion_matrix-1.png" width="700"></p>
 <p>The rm_confusion_matrix object also has a function plot_MI which calculated mutual information from the confusion matrix and plots this as a function of time or as a TCD plot.</p>
-<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb14-1" data-line-number="1"><span class="kw">plot_MI</span>(DECODING_RESULTS<span class="op">$</span>rm_confusion_matrix)</a></code></pre></div>
+<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb14-1" data-line-number="1"><span class="kw"><a href="../reference/plot_MI.html">plot_MI</a></span>(DECODING_RESULTS<span class="op">$</span>rm_confusion_matrix)</a></code></pre></div>
 <p><img src="introduction_tutorial_files/figure-html/plot_MI-1.png" width="700"></p>
 </div>
 </div>
@@ -226,6 +238,9 @@
 <a class="sourceLine" id="cb15-2" data-line-number="2"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/files2">dir.create</a></span>(results_dir_name)</a></code></pre></div>
 <pre><code>## Warning in dir.create(results_dir_name): 'my_results' already exists</code></pre>
 <div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb17-1" data-line-number="1"><span class="kw"><a href="../reference/log_save_results.html">log_save_results</a></span>(DECODING_RESULTS, results_dir_name)</a></code></pre></div>
+<pre><code>## Warning in log_save_results(DECODING_RESULTS, results_dir_name): The
+## results with the same parameters already exist. Still going ahead and
+## saving the results.</code></pre>
 </div>
   </div>
 

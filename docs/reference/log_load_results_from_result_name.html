@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>A function that loads DECODING_RESULTS based on decoding_parameters — log_load_decoding_results • The Neural Decoding Toolbox in R</title>
+<title>A function that loads DECODING_RESULTS based on the result_name — log_load_results_from_result_name • The Neural Decoding Toolbox in R</title>
 
 <!-- jquery -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
@@ -30,9 +30,9 @@
 
 
 
-<meta property="og:title" content="A function that loads DECODING_RESULTS based on decoding_parameters — log_load_decoding_results" />
+<meta property="og:title" content="A function that loads DECODING_RESULTS based on the result_name — log_load_results_from_result_name" />
 
-<meta property="og:description" content="A function that loads DECODING_RESULTS based on decoding_parameters" />
+<meta property="og:description" content="A function that loads DECODING_RESULTS based on the result_name" />
 <meta name="twitter:card" content="summary" />
 
 
@@ -63,7 +63,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">The Neural Decoding Toolbox in R</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.0.9001</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.0.9002</span>
       </span>
     </div>
 
@@ -75,8 +75,20 @@
 <li>
   <a href="../reference/index.html">Reference</a>
 </li>
-<li>
-  <a href="../articles/introduction_tutorial.html">Tutorial</a>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Tutorials
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="../articles/introduction_tutorial.html">Introductory tutorial</a>
+    </li>
+    <li>
+      <a href="../articles/generalization_tutorial.html">Generalization analysis tutorial</a>
+    </li>
+  </ul>
 </li>
       </ul>
       
@@ -94,26 +106,28 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>A function that loads DECODING_RESULTS based on decoding_parameters</h1>
+    <h1>A function that loads DECODING_RESULTS based on the result_name</h1>
     
-    <div class="hidden name"><code>log_load_decoding_results.Rd</code></div>
+    <div class="hidden name"><code>log_load_results_from_result_name.Rd</code></div>
     </div>
 
     <div class="ref-description">
     
-    <p>A function that loads DECODING_RESULTS based on decoding_parameters</p>
+    <p>A function that loads DECODING_RESULTS based on the result_name</p>
     
     </div>
 
-    <pre class="usage"><span class='fu'>log_load_decoding_results</span>(<span class='no'>decoding_params</span>, <span class='no'>results_directory_name</span>)</pre>
+    <pre class="usage"><span class='fu'>log_load_results_from_result_name</span>(<span class='no'>result_name</span>, <span class='no'>results_directory_name</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>decoding_params</th>
-      <td><p>A data frame of decoding parameters that can
-be created by calling the cross-validator's get_parameters() method.</p></td>
+      <th>result_name</th>
+      <td><p>A string a specifying the result that should be loaded
+based on the name given. This result_name can be a regular expression in 
+which all result_name values that match the regular expression will be
+returned as a list.</p></td>
     </tr>
     <tr>
       <th>results_directory_name</th>

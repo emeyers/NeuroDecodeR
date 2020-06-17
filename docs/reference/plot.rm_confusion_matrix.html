@@ -64,7 +64,7 @@ run (and all results have been aggregated)" />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">The Neural Decoding Toolbox in R</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.0.9001</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.0.9002</span>
       </span>
     </div>
 
@@ -76,8 +76,20 @@ run (and all results have been aggregated)" />
 <li>
   <a href="../reference/index.html">Reference</a>
 </li>
-<li>
-  <a href="../articles/introduction_tutorial.html">Tutorial</a>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Tutorials
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="../articles/introduction_tutorial.html">Introductory tutorial</a>
+    </li>
+    <li>
+      <a href="../articles/generalization_tutorial.html">Generalization analysis tutorial</a>
+    </li>
+  </ul>
 </li>
       </ul>
       
@@ -108,23 +120,39 @@ run (and all results have been aggregated)</p>
     </div>
 
     <pre class="usage"><span class='co'># S3 method for rm_confusion_matrix</span>
-<span class='fu'><a href='https://www.rdocumentation.org/packages/graphics/topics/plot'>plot</a></span>(<span class='no'>confusion_matrix_obj</span>, <span class='kw'>plot_only_same_train_test_time</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</pre>
+<span class='fu'><a href='https://www.rdocumentation.org/packages/graphics/topics/plot'>plot</a></span>(
+  <span class='no'>x</span>,
+  <span class='no'>...</span>,
+  <span class='kw'>plot_only_same_train_test_time</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
+  <span class='kw'>plot_decision_vals_confusion_matrix</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>
+)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>confusion_matrix_obj</th>
+      <th>x</th>
       <td><p>A rm_confusion_matrix object that has aggregated
 runs from a decoding analysis, e.g., if DECODING_RESULTS are the out from
 the run_decoding(cv) then this argument should be
 DECODING_RESULTS$rm_confusion_matrix.</p></td>
     </tr>
     <tr>
+      <th>...</th>
+      <td><p>This is needed to conform to the plot generic interface</p></td>
+    </tr>
+    <tr>
       <th>plot_only_same_train_test_time</th>
       <td><p>A boolean indicating whether
 the confusion matrices should only be plotted at the same training 
 and test times.</p></td>
+    </tr>
+    <tr>
+      <th>plot_decision_vals_confusion_matrix</th>
+      <td><p>A boolean that if set to 
+TRUE will cause the decision value confusion matrix to be plotted
+instead of the zero-one loss (i.e., normal) confusion matrix to be
+plotted.</p></td>
     </tr>
     </table>
     

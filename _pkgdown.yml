@@ -34,7 +34,8 @@ reference:
   contents: 
   - "`log_save_results`"
   - "`log_check_results_already_exist`"
-  - "`log_load_decoding_results`"
+  - "`log_load_results_from_result_name`"
+  - "`log_load_results_from_params`"
 
 - title: "Tools"
   contents: 
@@ -53,8 +54,10 @@ navbar:
     - text: "Reference"
       href: "reference/index.html"
     
-    - text: "Tutorial"
-      href: "articles/introduction_tutorial.html"
-      
-  
+    - text: "Tutorials"
+      menu:
+          - text: "Introductory tutorial"
+            href: "articles/introduction_tutorial.html"
+          - text: "Generalization analysis tutorial"
+            href: "articles/generalization_tutorial.html"
 

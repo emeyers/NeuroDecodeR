@@ -11,6 +11,7 @@ articles:
   cross_validators: cross_validators.html
   datasources: datasources.html
   feature_preprocessors: feature_preprocessors.html
+  generalization_tutorial: generalization_tutorial.html
   introduction_tutorial: introduction_tutorial.html
   raster_format: raster_format.html
   result_metrics: result_metrics.html

@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>A function saves DECODING_RESULTS and logs the parameters used in the analysis — log_save_results • The Neural Decoding Toolbox in R</title>
+<title>A function that saves the DECODING_RESULTS and logs the parameters used in the analysis — log_save_results • The Neural Decoding Toolbox in R</title>
 
 <!-- jquery -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
@@ -30,7 +30,7 @@
 
 
 
-<meta property="og:title" content="A function saves DECODING_RESULTS and logs the parameters used in the analysis — log_save_results" />
+<meta property="og:title" content="A function that saves the DECODING_RESULTS and logs the parameters used in the analysis — log_save_results" />
 
 <meta property="og:description" content="This function takes results returned by the cross-validator's run_decoding() 
  method and uses the cross-validator's get_properties() method to save a 
@@ -65,7 +65,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">The Neural Decoding Toolbox in R</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.0.9001</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.0.9002</span>
       </span>
     </div>
 
@@ -77,8 +77,20 @@
 <li>
   <a href="../reference/index.html">Reference</a>
 </li>
-<li>
-  <a href="../articles/introduction_tutorial.html">Tutorial</a>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Tutorials
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="../articles/introduction_tutorial.html">Introductory tutorial</a>
+    </li>
+    <li>
+      <a href="../articles/generalization_tutorial.html">Generalization analysis tutorial</a>
+    </li>
+  </ul>
 </li>
       </ul>
       
@@ -96,7 +108,7 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>A function saves DECODING_RESULTS and logs the parameters used in the analysis</h1>
+    <h1>A function that saves the DECODING_RESULTS and logs the parameters used in the analysis</h1>
     
     <div class="hidden name"><code>log_save_results.Rd</code></div>
     </div>
@@ -109,7 +121,11 @@
     
     </div>
 
-    <pre class="usage"><span class='fu'>log_save_results</span>(<span class='no'>DECODING_RESULTS</span>, <span class='no'>save_directory_name</span>)</pre>
+    <pre class="usage"><span class='fu'>log_save_results</span>(
+  <span class='no'>DECODING_RESULTS</span>,
+  <span class='no'>save_directory_name</span>,
+  <span class='kw'>result_name</span> <span class='kw'>=</span> <span class='st'>"No result name set"</span>
+)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -123,6 +139,11 @@ run_decoding method.</p></td>
       <th>save_directory_name</th>
       <td><p>A directory where the decoding results should be
 saved.</p></td>
+    </tr>
+    <tr>
+      <th>result_name</th>
+      <td><p>A string that gives a human readable name for the results 
+that are to be saved. The default value is "No result name set".</p></td>
     </tr>
     </table>
     

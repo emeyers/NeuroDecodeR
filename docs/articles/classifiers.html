@@ -30,7 +30,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">The Neural Decoding Toolbox in R</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.0.9001</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.0.9002</span>
       </span>
     </div>
 
@@ -42,8 +42,20 @@
 <li>
   <a href="../reference/index.html">Reference</a>
 </li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Tutorials
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
 <li>
-  <a href="../articles/introduction_tutorial.html">Tutorial</a>
+      <a href="../articles/introduction_tutorial.html">Introductory tutorial</a>
+    </li>
+    <li>
+      <a href="../articles/generalization_tutorial.html">Generalization analysis tutorial</a>
+    </li>
+  </ul>
 </li>
       </ul>
 <ul class="nav navbar-nav navbar-right"></ul>
@@ -116,7 +128,7 @@
 <div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" data-line-number="1"><span class="co"># create a ds_basic to get the data</span></a>
 <a class="sourceLine" id="cb1-2" data-line-number="2">data_file_name &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/system.file">system.file</a></span>(<span class="st">"extdata/ZD_150bins_50sampled.Rda"</span>, <span class="dt">package=</span><span class="st">"NDTr"</span>)</a>
 <a class="sourceLine" id="cb1-3" data-line-number="3">ds &lt;-<span class="st"> </span><span class="kw"><a href="../reference/ds_basic.html">ds_basic</a></span>(data_file_name, <span class="st">'stimulus_ID'</span>, <span class="dv">18</span>)</a>
-<a class="sourceLine" id="cb1-4" data-line-number="4">cv_data &lt;-<span class="st"> </span><span class="kw">get_data</span>(ds)  </a>
+<a class="sourceLine" id="cb1-4" data-line-number="4">cv_data &lt;-<span class="st"> </span><span class="kw"><a href="../reference/get_data.html">get_data</a></span>(ds)  </a>
 <a class="sourceLine" id="cb1-5" data-line-number="5"> </a>
 <a class="sourceLine" id="cb1-6" data-line-number="6"></a>
 <a class="sourceLine" id="cb1-7" data-line-number="7"><span class="co"># an example of spliting the data into a training and test set, </span></a>
@@ -133,7 +145,7 @@
 <a class="sourceLine" id="cb1-18" data-line-number="18"></a>
 <a class="sourceLine" id="cb1-19" data-line-number="19"><span class="co"># use the cl object to make predictions </span></a>
 <a class="sourceLine" id="cb1-20" data-line-number="20">cl &lt;-<span class="st"> </span><span class="kw"><a href="../reference/cl_max_correlation.html">cl_max_correlation</a></span>()</a>
-<a class="sourceLine" id="cb1-21" data-line-number="21">predictions &lt;-<span class="st"> </span><span class="kw">get_predictions</span>(cl, training_set, test_set)</a>
+<a class="sourceLine" id="cb1-21" data-line-number="21">predictions &lt;-<span class="st"> </span><span class="kw"><a href="../reference/get_predictions.html">get_predictions</a></span>(cl, training_set, test_set)</a>
 <a class="sourceLine" id="cb1-22" data-line-number="22"></a>
 <a class="sourceLine" id="cb1-23" data-line-number="23"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/names">names</a></span>(predictions)</a></code></pre></div>
 <pre><code>##  [1] "test_time"            "actual_labels"        "predicted_labels"    
@@ -143,7 +155,7 @@
 <div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" data-line-number="1"><span class="co"># see how accurate the predictions are (chance is 1/7)</span></a>
 <a class="sourceLine" id="cb3-2" data-line-number="2">predictions_at_100ms &lt;-<span class="st"> </span>dplyr<span class="op">::</span><span class="kw"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span>(predictions, test_time <span class="op">==</span><span class="st"> "time.100_249"</span>)</a>
 <a class="sourceLine" id="cb3-3" data-line-number="3"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/mean">mean</a></span>(predictions_at_100ms<span class="op">$</span>actual_labels <span class="op">==</span><span class="st"> </span>predictions_at_100ms<span class="op">$</span>predicted_labels)</a></code></pre></div>
-<pre><code>## [1] 0.7142857</code></pre>
+<pre><code>## [1] 0.5714286</code></pre>
 </div>
   </div>
 

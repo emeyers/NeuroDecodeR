@@ -63,7 +63,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">The Neural Decoding Toolbox in R</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.0.9001</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.0.9002</span>
       </span>
     </div>
 
@@ -75,8 +75,20 @@
 <li>
   <a href="../reference/index.html">Reference</a>
 </li>
-<li>
-  <a href="../articles/introduction_tutorial.html">Tutorial</a>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Tutorials
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="../articles/introduction_tutorial.html">Introductory tutorial</a>
+    </li>
+    <li>
+      <a href="../articles/generalization_tutorial.html">Generalization analysis tutorial</a>
+    </li>
+  </ul>
 </li>
       </ul>
       
@@ -105,7 +117,10 @@
     
     </div>
 
-    <pre class="usage"><span class='fu'>rm_confusion_matrix</span>(<span class='kw'>save_only_same_train_test_time</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</pre>
+    <pre class="usage"><span class='fu'>rm_confusion_matrix</span>(
+  <span class='kw'>save_only_same_train_test_time</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
+  <span class='kw'>create_decision_vals_confusion_matrix</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>
+)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -116,6 +131,14 @@
 to create the confusion matrices when training at one point in time and
 testing a different point in time. This usually is not necessary and takes 
 up more memeory.</p></td>
+    </tr>
+    <tr>
+      <th>create_decision_vals_confusion_matrix</th>
+      <td><p>A boolean specifying whether one wants
+to create the create a confusion matrix of the decision values. In this confusion
+matrix, each row corresponds to the correct class (like a regular confusion matrix)
+and each column corresponds to the mean decision value of the predictions for 
+each class.</p></td>
     </tr>
     </table>
     
