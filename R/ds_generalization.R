@@ -111,7 +111,6 @@ ds_generalization <- function(binned_file_name,
   }
   
 
-  
   # check that none of the same labels are in class_i of the training set and
   # class_k of the test set where i != k
   for (iClass in seq_along(train_label_levels)){
@@ -146,7 +145,10 @@ ds_generalization <- function(binned_file_name,
 
   # construct a ds_basic object that will do most of the work
   
-  all_label_levels_to_use <- c(unlist(train_label_levels), unlist(test_label_levels))
+  
+  # using unique() here because for generalization analysis it is ok for some of the same labels
+  # to be listed in the training and test label levels
+  all_label_levels_to_use <- unique(c(unlist(train_label_levels), unlist(test_label_levels)))
   
   the_basic_ds <- ds_basic(binned_file_name, 
                            var_to_decode, 
