@@ -6,11 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>The required aggregate_resample_run_results method is needed to fulfill the
-metric object interface. This function is called by the cross-validator to 
-aggregrate results across all resample runs. Note: this function should not be
-called by users of the package but instead is called interally by cross-validator
-objects. — aggregate_resample_run_results • The Neural Decoding Toolbox in R</title>
+<title>A result metric (RM) method to aggregate results over resample runs — aggregate_resample_run_results • The Neural Decoding Toolbox in R</title>
 
 <!-- jquery -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
@@ -34,17 +30,12 @@ objects. — aggregate_resample_run_results • The Neural Decoding Toolbox in R
 
 
 
-<meta property="og:title" content="The required aggregate_resample_run_results method is needed to fulfill the
-metric object interface. This function is called by the cross-validator to 
-aggregrate results across all resample runs. Note: this function should not be
-called by users of the package but instead is called interally by cross-validator
-objects. — aggregate_resample_run_results" />
+<meta property="og:title" content="A result metric (RM) method to aggregate results over resample runs — aggregate_resample_run_results" />
 
-<meta property="og:description" content="The required aggregate_resample_run_results method is needed to fulfill the
-metric object interface. This function is called by the cross-validator to 
-aggregrate results across all resample runs. Note: this function should not be
-called by users of the package but instead is called interally by cross-validator
-objects." />
+<meta property="og:description" content="This is a generic function that must be implemented by all RM objects. This
+function is called by the cross-validator to aggregrate results across all
+resample runs. This method should not be called directly but instead it is
+used internally by the cross-validator (CV) object." />
 <meta name="twitter:card" content="summary" />
 
 
@@ -123,22 +114,17 @@ objects." />
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>The required aggregate_resample_run_results method is needed to fulfill the
-metric object interface. This function is called by the cross-validator to 
-aggregrate results across all resample runs. Note: this function should not be
-called by users of the package but instead is called interally by cross-validator
-objects.</h1>
-    <small class="dont-index">Source: <a href='https://github.com/emeyers/NDTr/blob/master/R/register_generic_functions.R'><code>R/register_generic_functions.R</code></a></small>
+    <h1>A result metric (RM) method to aggregate results over resample runs</h1>
+    <small class="dont-index">Source: <a href='https://github.com/emeyers/NDTr/blob/master/R/generic_functions.R'><code>R/generic_functions.R</code></a></small>
     <div class="hidden name"><code>aggregate_resample_run_results.Rd</code></div>
     </div>
 
     <div class="ref-description">
     
-    <p>The required aggregate_resample_run_results method is needed to fulfill the
-metric object interface. This function is called by the cross-validator to 
-aggregrate results across all resample runs. Note: this function should not be
-called by users of the package but instead is called interally by cross-validator
-objects.</p>
+    <p>This is a generic function that must be implemented by all RM objects. This
+function is called by the cross-validator to aggregrate results across all
+resample runs. This method should not be called directly but instead it is
+used internally by the cross-validator (CV) object.</p>
     
     </div>
 
@@ -149,9 +135,19 @@ objects.</p>
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>resample_run_results</th>
-      <td><p>The decoding results from all resample runs</p></td>
+      <td><p>The decoding results from all resample runs.</p></td>
     </tr>
     </table>
+    
+    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
+
+    <p>A result metric object that contains the decoding results aggregated
+across resample runs. This compressed final results can be plotted (often
+by using the RM plot methods).</p>
+    
+    <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
+
+    <div class='dont-index'><p><code><a href='rm_main_results.html'>rm_main_results()</a></code>, <code><a href='rm_confusion_matrix.html'>rm_confusion_matrix()</a></code></p></div>
     
 
   </div>
@@ -159,7 +155,11 @@ objects.</p>
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
       <li><a href="#arguments">Arguments</a></li>
-                </ul>
+      
+      <li><a href="#value">Value</a></li>
+
+      <li><a href="#see-also">See also</a></li>
+          </ul>
 
   </div>
 </div>

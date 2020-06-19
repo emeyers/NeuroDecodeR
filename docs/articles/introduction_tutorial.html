@@ -171,7 +171,7 @@
 <a href="#creating-a-datasource-ds" class="anchor"></a>Creating a Datasource (DS)</h3>
 <p>A datasource object is used by the cross-validator to generate training and test splits of the data. Below we create a <code><a href="../reference/ds_basic.html">ds_basic()</a></code> object that takes binned-format data, name of the labels variable to be decoding, and a scalar that specifies how many cross-validation splits to use. The default behavior of this datasource is to create test splits that have one example of each object in them and <em>num_cv_splits - 1</em> examples of each object in the training set.</p>
 <p>As calculated above, all 132 neurons have 59 repetitions of each stimulus, and 125 neurons have 60 repetitions of each stimulus. Thus we can use up to 59 cross-validation splits using all neurons, or we could set the datasource to use only a subset of neurons and use 60 cross-validation splits. For the purpose of this tutorial, we will use all the neurons and only 20 cross-validation splits to make the code run a little faster. The <code><a href="../reference/ds_basic.html">ds_basic()</a></code> datasource object also has many more properties that can be set, including specifying that only certain label levels or neurons should be used.</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" data-line-number="1">binned_file_name &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/system.file">system.file</a></span>(<span class="st">"extdata/ZD_150bins_50sampled.Rda"</span>, <span class="dt">package=</span><span class="st">"NDTr"</span>)</a>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" data-line-number="1">binned_file_name &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/system.file">system.file</a></span>(<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/file.path">file.path</a></span>(<span class="st">"extdata"</span>, <span class="st">"ZD_150bins_50sampled.Rda"</span>), <span class="dt">package=</span><span class="st">"NDTr"</span>)</a>
 <a class="sourceLine" id="cb5-2" data-line-number="2">variable_to_decode &lt;-<span class="st"> "stimulus_ID"</span></a>
 <a class="sourceLine" id="cb5-3" data-line-number="3">num_cv_splits &lt;-<span class="st"> </span><span class="dv">20</span></a>
 <a class="sourceLine" id="cb5-4" data-line-number="4">  </a>
@@ -232,8 +232,8 @@
 <p>We can also plot the confusion matrices aggregaged from the rm_confusion_matrix object which shows the pattern of classification mistakes at different points in time.</p>
 <div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb13-1" data-line-number="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/graphics/topics/plot">plot</a></span>(DECODING_RESULTS<span class="op">$</span>rm_confusion_matrix)</a></code></pre></div>
 <p><img src="introduction_tutorial_files/figure-html/plot_confusion_matrix-1.png" width="700"></p>
-<p>The <code><a href="../reference/rm_confusion_matrix.html">rm_confusion_matrix()</a></code> object also has a function <code><a href="../reference/plot_MI.html">plot_MI()</a></code> which calculated mutual information from the confusion matrix and plots this as a function of time or as a TCD plot.</p>
-<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb14-1" data-line-number="1"><span class="kw"><a href="../reference/plot_MI.html">plot_MI</a></span>(DECODING_RESULTS<span class="op">$</span>rm_confusion_matrix)</a></code></pre></div>
+<p>The <code><a href="../reference/rm_confusion_matrix.html">rm_confusion_matrix()</a></code> object also has a function <code>plot_MI()</code> which calculated mutual information from the confusion matrix and plots this as a function of time or as a TCD plot.</p>
+<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb14-1" data-line-number="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/graphics/topics/plot">plot</a></span>(DECODING_RESULTS<span class="op">$</span>rm_confusion_matrix, <span class="dt">result_type =</span> <span class="st">"mutual_information"</span>)</a></code></pre></div>
 <p><img src="introduction_tutorial_files/figure-html/plot_MI-1.png" width="700"></p>
 </div>
 </div>
@@ -241,13 +241,12 @@
 <h2 class="hasAnchor">
 <a href="#saving-the-results" class="anchor"></a>Saving the results</h2>
 <p>Finally, the NDTr has “log” function that help you save and manage your results. Below we show how to use the <code><a href="../reference/log_save_results.html">log_save_results()</a></code> function which takes a <code>DECODING_RESULTS</code> object and the name of a directory. This function save the results to the specified directory and also logs the parameters used in the analysis so that they can later be retrived. For more information, see the tutorial on saving and managing results.</p>
-<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb15-1" data-line-number="1">results_dir_name &lt;-<span class="st"> "my_results/"</span></a>
-<a class="sourceLine" id="cb15-2" data-line-number="2"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/files2">dir.create</a></span>(results_dir_name)</a></code></pre></div>
-<pre><code>## Warning in dir.create(results_dir_name): 'my_results' already exists</code></pre>
-<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb17-1" data-line-number="1"><span class="kw"><a href="../reference/log_save_results.html">log_save_results</a></span>(DECODING_RESULTS, results_dir_name)</a></code></pre></div>
-<pre><code>## Warning in log_save_results(DECODING_RESULTS, results_dir_name): The
-## results with the same parameters already exist. Still going ahead and
-## saving the results.</code></pre>
+<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb15-1" data-line-number="1">results_dir_name &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/file.path">file.path</a></span>(<span class="st">"results"</span>, <span class="st">""</span>)</a>
+<a class="sourceLine" id="cb15-2" data-line-number="2"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/files2">dir.create</a></span>(results_dir_name)</a>
+<a class="sourceLine" id="cb15-3" data-line-number="3"></a>
+<a class="sourceLine" id="cb15-4" data-line-number="4"><span class="kw"><a href="../reference/log_save_results.html">log_save_results</a></span>(DECODING_RESULTS, results_dir_name)</a></code></pre></div>
+<pre><code>## Warning in log_save_results(DECODING_RESULTS, results_dir_name): The manifest file does not exist.
+##   Assuming this is the first result that is saved and creating manifest file</code></pre>
 </div>
   </div>
 

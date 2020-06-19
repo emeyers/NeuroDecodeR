@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>NDTr: A package for doing neural decoding — NDTr • The Neural Decoding Toolbox in R</title>
+<title>NDTr: A package for neural decoding analyses — NDTr • The Neural Decoding Toolbox in R</title>
 
 <!-- jquery -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
@@ -30,9 +30,9 @@
 
 
 
-<meta property="og:title" content="NDTr: A package for doing neural decoding — NDTr" />
+<meta property="og:title" content="NDTr: A package for neural decoding analyses — NDTr" />
 
-<meta property="og:description" content="The NDTr is a package that makes it easy to do neural decoding analyses" />
+<meta property="og:description" content="The NDTr is a package that makes it easy to do neural decoding analyses." />
 <meta name="twitter:card" content="summary" />
 
 
@@ -111,14 +111,14 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>NDTr: A package for doing neural decoding</h1>
+    <h1>NDTr: A package for neural decoding analyses</h1>
     <small class="dont-index">Source: <a href='https://github.com/emeyers/NDTr/blob/master/R/NDTr.R'><code>R/NDTr.R</code></a></small>
     <div class="hidden name"><code>NDTr.Rd</code></div>
     </div>
 
     <div class="ref-description">
     
-    <p>The NDTr is a package that makes it easy to do neural decoding analyses</p>
+    <p>The NDTr is a package that makes it easy to do neural decoding analyses.</p>
     
     </div>
 
@@ -127,45 +127,30 @@
 
     <p>The NDTr is built around 5 abstract object types that work together in a
 modular way to allow a range of neural decoding analyses. These five object
-types are:</p>
-    
-    <h2 class="hasAnchor" id="-datasources-ds-"><a class="anchor" href="#-datasources-ds-"></a>1. Datasources (DS)</h2>
-
-    
-    <p>Generate training and test splits of the data</p>
-    
-    <h2 class="hasAnchor" id="-feature-preprofessors-fp-"><a class="anchor" href="#-feature-preprofessors-fp-"></a>2. Feature preprofessors (FP)</h2>
-
-    
-    <p>Learn parameters on the training set and
-  apply transformations to the training and test sets</p>
-    
-    <h2 class="hasAnchor" id="-classifiers-cl-"><a class="anchor" href="#-classifiers-cl-"></a>3. Classifiers (CL)</h2>
-
-    
-    <p>learn the relationship between experimental
-  conditions and data on the training set, and then predict experimental
-  conditions on the test data.</p>
-    
-    <h2 class="hasAnchor" id="-result-metrics-rm-"><a class="anchor" href="#-result-metrics-rm-"></a>4. Result metrics (RM)</h2>
-
-    
-    <p>Aggregate results from across validation splits and over resampled runs and
- compute and plot final decoding accuracy metrics</p>
-    
-    <h2 class="hasAnchor" id="-cross-validators-cv-"><a class="anchor" href="#-cross-validators-cv-"></a>5. Cross-validators (CV)</h2>
-
-    
-    <p>Take the DS, FP and CL objects and run a cross-validation decoding
- procedure.</p>
+types are:</p><ol>
+<li><p>Datasources (DS): Generate training and test splits of the data.</p></li>
+<li><p>Feature preprofessors (FP): Learn parameters on the training set and apply
+transformations to the training and test sets.</p></li>
+<li><p>Classifiers (CL): Learn the relationship between experimental conditions
+(i.e., "labels") and neural data on a training set, and then predict
+experimental conditions neural data in a test set.</p></li>
+<li><p>Result metrics (RM): Aggregate results across validation splits and
+over resampled runs and compute and plot final decoding accuracy metrics.</p></li>
+<li><p>Cross-validators (CV): Take the DS, FP, CL and RM objects and run a
+cross-validation decoding procedure.</p></li>
+</ol>
     
     <h2 class="hasAnchor" id="data-formats"><a class="anchor" href="#data-formats"></a>Data formats</h2>
 
-    
-    <p>Two data formats are used: 1) 'raster format' which contains high temporal
- precision data where each site is stored in a spearate file and 2) 'binned
- format' where data more coarsely binned across time. The function
- created_binned_data() converts data from raster format to binned format.</p>
+    <p>Two data formats are used to do decoding analyses which are:</p><ol>
+<li><p><code>raster format</code> contains high temporal precision data where neural
+activity from each site is stored in a spearate file.</p></li>
+<li><p><code>binned format</code> contains data from multiple sites and the data is more
+coarsely binned across time.</p></li>
+</ol>
+    <p>A user of the NDTr will typically store their data in <code>raster format</code> and
+then use the <code><a href='create_binned_data.html'>create_binned_data()</a></code> to create a <code>binned format</code> data file
+that will be used in the decoding analysis.</p>
     
 
   </div>
@@ -174,16 +159,6 @@ types are:</p>
     <ul class="nav nav-pills nav-stacked">
       
       <li><a href="#details">Details</a></li>
-
-      <li><a href="#-datasources-ds-">1. Datasources (DS)</a></li>
-
-      <li><a href="#-feature-preprofessors-fp-">2. Feature preprofessors (FP)</a></li>
-
-      <li><a href="#-classifiers-cl-">3. Classifiers (CL)</a></li>
-
-      <li><a href="#-result-metrics-rm-">4. Result metrics (RM)</a></li>
-
-      <li><a href="#-cross-validators-cv-">5. Cross-validators (CV)</a></li>
 
       <li><a href="#data-formats">Data formats</a></li>
           </ul>

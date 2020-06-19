@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Register the generic function get_predictions for the classifier (CL) objects — get_predictions • The Neural Decoding Toolbox in R</title>
+<title>A classifier (CL) method to train the CL and returns predictions — get_predictions • The Neural Decoding Toolbox in R</title>
 
 <!-- jquery -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
@@ -30,9 +30,13 @@
 
 
 
-<meta property="og:title" content="Register the generic function get_predictions for the classifier (CL) objects — get_predictions" />
+<meta property="og:title" content="A classifier (CL) method to train the CL and returns predictions — get_predictions" />
 
-<meta property="og:description" content="Register the generic function get_predictions for the classifier (CL) objects" />
+<meta property="og:description" content="get_predictions takes a training set and a test set of data. It trains the
+CL object on the training set and returns the predictions of the on the test
+set. This is a generic function that must be implemented by all CL objects.
+This method should not be called directly but instead it is used internally
+by the cross-validator (CV) object." />
 <meta name="twitter:card" content="summary" />
 
 
@@ -111,14 +115,18 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Register the generic function get_predictions for the classifier (CL) objects</h1>
-    <small class="dont-index">Source: <a href='https://github.com/emeyers/NDTr/blob/master/R/register_generic_functions.R'><code>R/register_generic_functions.R</code></a></small>
+    <h1>A classifier (CL) method to train the CL and returns predictions</h1>
+    <small class="dont-index">Source: <a href='https://github.com/emeyers/NDTr/blob/master/R/generic_functions.R'><code>R/generic_functions.R</code></a></small>
     <div class="hidden name"><code>get_predictions.Rd</code></div>
     </div>
 
     <div class="ref-description">
     
-    <p>Register the generic function get_predictions for the classifier (CL) objects</p>
+    <p><code>get_predictions</code> takes a training set and a test set of data. It trains the
+CL object on the training set and returns the predictions of the on the test
+set. This is a generic function that must be implemented by all CL objects.
+This method should not be called directly but instead it is used internally
+by the cross-validator (CV) object.</p>
     
     </div>
 
@@ -129,17 +137,43 @@
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>cl_obj</th>
-      <td><p>The classifier object</p></td>
+      <td><p>The classifier object.</p></td>
     </tr>
     <tr>
       <th>training_set</th>
-      <td><p>The training data</p></td>
+      <td><p>The training set data from one time bin. This is a data
+frame where the rows correspond to data from a given trial. There must be a
+column called <code>train_labels</code> that has the labels of what occurred on each
+trial. The rest of the  columns correspond to the neural activity of a
+particular site on each trial (and typically have names like site_0001,
+site_0002, etc).</p></td>
     </tr>
     <tr>
       <th>test_set</th>
-      <td><p>The test data from all times</p></td>
+      <td><p>The test set data from all times. This is a data frame where
+the rows correspond to data from a given trial. There must be a column
+called <code>time_bin</code> that contains a label indicating the time point that a
+row (test point) came from.  The rest of the  columns correspond to the
+neural activity of a particular site on each test trial (and typically have
+names like site_0001, site_0002, etc).</p></td>
     </tr>
     </table>
+    
+    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
+
+    <p>This method returns a data frame where each row corresponds to a
+prediction for one of the test points. The columns in this data frame are:</p><ul>
+<li><p><em>test_time</em>: The time bin a test point came from.</p></li>
+<li><p><em>actual_labels</em>: The actual labels for what happened on a trial.</p></li>
+<li><p><em>predicted_labels</em>: The predictions that classifier made.</p></li>
+<li><p><em>decision_vals.___</em>: A set of columns with the decision values
+for each class.</p></li>
+</ul>
+
+    
+    <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
+
+    <div class='dont-index'><p><code><a href='cl_max_correlation.html'>cl_max_correlation()</a></code>, <code><a href='cl_poisson_naive_bayes.html'>cl_poisson_naive_bayes()</a></code>, <code><a href='cl_svm.html'>cl_svm()</a></code></p></div>
     
 
   </div>
@@ -147,7 +181,11 @@
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
       <li><a href="#arguments">Arguments</a></li>
-                </ul>
+      
+      <li><a href="#value">Value</a></li>
+
+      <li><a href="#see-also">See also</a></li>
+          </ul>
 
   </div>
 </div>

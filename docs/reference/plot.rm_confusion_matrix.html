@@ -33,7 +33,8 @@
 <meta property="og:title" content="plot the confusion matrix results — plot.rm_confusion_matrix" />
 
 <meta property="og:description" content="This function plots confusion matrices after the decoding analysis has been
-run (and all results have been aggregated)" />
+run (and all results have been aggregated). This function can also plot
+mutual information calculated from the confusion matrix." />
 <meta name="twitter:card" content="summary" />
 
 
@@ -120,7 +121,8 @@ run (and all results have been aggregated)" />
     <div class="ref-description">
     
     <p>This function plots confusion matrices after the decoding analysis has been
-run (and all results have been aggregated)</p>
+run (and all results have been aggregated). This function can also plot
+mutual information calculated from the confusion matrix.</p>
     
     </div>
 
@@ -128,8 +130,8 @@ run (and all results have been aggregated)</p>
 <span class='fu'><a href='https://www.rdocumentation.org/packages/graphics/topics/plot'>plot</a></span>(
   <span class='no'>x</span>,
   <span class='no'>...</span>,
-  <span class='kw'>plot_only_same_train_test_time</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
-  <span class='kw'>plot_decision_vals_confusion_matrix</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>
+  <span class='kw'>result_type</span> <span class='kw'>=</span> <span class='st'>"zero_one_loss"</span>,
+  <span class='kw'>plot_only_same_train_test_time</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>
 )</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
@@ -137,27 +139,33 @@ run (and all results have been aggregated)</p>
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>x</th>
-      <td><p>A rm_confusion_matrix object that has aggregated
-runs from a decoding analysis, e.g., if DECODING_RESULTS are the out from
-the run_decoding(cv) then this argument should be
-DECODING_RESULTS$rm_confusion_matrix.</p></td>
+      <td><p>A rm_confusion_matrix object that has aggregated runs from a
+decoding analysis, e.g., if DECODING_RESULTS are the out from the
+run_decoding(cv) then this argument should be
+<code>DECODING_RESULTS$rm_confusion_matrix</code>.</p></td>
     </tr>
     <tr>
       <th>...</th>
-      <td><p>This is needed to conform to the plot generic interface</p></td>
+      <td><p>This is needed to conform to the plot generic interface.</p></td>
+    </tr>
+    <tr>
+      <th>result_type</th>
+      <td><p>A string specifying the type of result to plot that can
+take the following values:</p><ul>
+<li><p>"zero_one_loss": plot a regular confusion matrix.</p></li>
+<li><p>"decision_vals": plot a confusion matrix with the average decision values.</p></li>
+<li><p>"mutual_information": plot mutual information calculated from the
+zero-one loss confusion matrix</p></li>
+</ul></td>
     </tr>
     <tr>
       <th>plot_only_same_train_test_time</th>
-      <td><p>A boolean indicating whether
-the confusion matrices should only be plotted at the same training 
-and test times.</p></td>
-    </tr>
-    <tr>
-      <th>plot_decision_vals_confusion_matrix</th>
-      <td><p>A boolean that if set to 
-TRUE will cause the decision value confusion matrix to be plotted
-instead of the zero-one loss (i.e., normal) confusion matrix to be
-plotted.</p></td>
+      <td><p>A boolean indicating whether the
+confusion matrices should only be plotted at the same training and test
+times. If the <code>result_type == "mutual_information"</code> setting this to TRUE
+will plot a TCD plot of the mutual information otherwise it will plot a
+line plot of the mutual information for training and testing at the same
+time.</p></td>
     </tr>
     </table>
     
@@ -165,7 +173,6 @@ plotted.</p></td>
 
     <div class='dont-index'><p>Other result_metrics: 
 <code><a href='plot.rm_main_results.html'>plot.rm_main_results</a>()</code>,
-<code><a href='plot_MI.rm_confusion_matrix.html'>plot_MI.rm_confusion_matrix</a>()</code>,
 <code><a href='rm_confusion_matrix.html'>rm_confusion_matrix</a>()</code>,
 <code><a href='rm_main_results.html'>rm_main_results</a>()</code></p></div>
     

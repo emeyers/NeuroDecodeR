@@ -6,8 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Register the generic function get_data() for datasource (DS) objects
-Need to fill in more complete documentation here about the DS interface — get_data • The Neural Decoding Toolbox in R</title>
+<title>A datasource (DS) method to generate training and test sets — get_data • The Neural Decoding Toolbox in R</title>
 
 <!-- jquery -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
@@ -31,11 +30,11 @@ Need to fill in more complete documentation here about the DS interface — get_
 
 
 
-<meta property="og:title" content="Register the generic function get_data() for datasource (DS) objects
-Need to fill in more complete documentation here about the DS interface — get_data" />
+<meta property="og:title" content="A datasource (DS) method to generate training and test sets — get_data" />
 
-<meta property="og:description" content="Register the generic function get_data() for datasource (DS) objects
-Need to fill in more complete documentation here about the DS interface" />
+<meta property="og:description" content="This is a generic function that must be implemented by all DS objects. This
+method should not be called directly but instead it is used internally by the
+cross-validator (CV) object." />
 <meta name="twitter:card" content="summary" />
 
 
@@ -114,16 +113,16 @@ Need to fill in more complete documentation here about the DS interface" />
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Register the generic function get_data() for datasource (DS) objects
-Need to fill in more complete documentation here about the DS interface</h1>
-    <small class="dont-index">Source: <a href='https://github.com/emeyers/NDTr/blob/master/R/register_generic_functions.R'><code>R/register_generic_functions.R</code></a></small>
+    <h1>A datasource (DS) method to generate training and test sets</h1>
+    <small class="dont-index">Source: <a href='https://github.com/emeyers/NDTr/blob/master/R/generic_functions.R'><code>R/generic_functions.R</code></a></small>
     <div class="hidden name"><code>get_data.Rd</code></div>
     </div>
 
     <div class="ref-description">
     
-    <p>Register the generic function get_data() for datasource (DS) objects
-Need to fill in more complete documentation here about the DS interface</p>
+    <p>This is a generic function that must be implemented by all DS objects. This
+method should not be called directly but instead it is used internally by the
+cross-validator (CV) object.</p>
     
     </div>
 
@@ -134,9 +133,29 @@ Need to fill in more complete documentation here about the DS interface</p>
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>ds_obj</th>
-      <td><p>The data source object</p></td>
+      <td><p>The datasource object.</p></td>
     </tr>
     </table>
+    
+    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
+
+    <p>This method returns a data frame where each row corresponds to a
+data from one time point on a single trial.</p><ul>
+<li><p><em>train_labels</em>: The labels that should be used when training the classifier.</p></li>
+<li><p><em>test_labels</em>: The labels that should be used when the classifier
+is tested. Note, this can be different than the training labels when
+remapping the data using the <code><a href='ds_generalization.html'>ds_generalization()</a></code> data source.</p></li>
+<li><p><em>time_bin</em>: The time bin where the data point came from.</p></li>
+<li><p><em>site_XXXX</em>: A set of columns with neural activity from each site.</p></li>
+<li><p><em>CV_XX</em>: A set of columns that indicate for each
+cross-validation split whether a data point belongs to the training or test
+set.</p></li>
+</ul>
+
+    
+    <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
+
+    <div class='dont-index'><p><code><a href='ds_basic.html'>ds_basic()</a></code>, <code><a href='ds_generalization.html'>ds_generalization()</a></code></p></div>
     
 
   </div>
@@ -144,7 +163,11 @@ Need to fill in more complete documentation here about the DS interface</p>
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
       <li><a href="#arguments">Arguments</a></li>
-                </ul>
+      
+      <li><a href="#value">Value</a></li>
+
+      <li><a href="#see-also">See also</a></li>
+          </ul>
 
   </div>
 </div>

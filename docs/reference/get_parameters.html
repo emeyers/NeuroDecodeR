@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Return all parameters that an object uses to enable reproducible analyses — get_parameters • The Neural Decoding Toolbox in R</title>
+<title>Get parameters of an NDTr object — get_parameters • The Neural Decoding Toolbox in R</title>
 
 <!-- jquery -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
@@ -30,9 +30,9 @@
 
 
 
-<meta property="og:title" content="Return all parameters that an object uses to enable reproducible analyses — get_parameters" />
+<meta property="og:title" content="Get parameters of an NDTr object — get_parameters" />
 
-<meta property="og:description" content="Return all parameters that an object uses to enable reproducible analyses" />
+<meta property="og:description" content="Returns the parameters set in an NDTr object to enable reproducible analyses." />
 <meta name="twitter:card" content="summary" />
 
 
@@ -111,14 +111,14 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Return all parameters that an object uses to enable reproducible analyses</h1>
-    <small class="dont-index">Source: <a href='https://github.com/emeyers/NDTr/blob/master/R/register_generic_functions.R'><code>R/register_generic_functions.R</code></a></small>
+    <h1>Get parameters of an NDTr object</h1>
+    <small class="dont-index">Source: <a href='https://github.com/emeyers/NDTr/blob/master/R/generic_functions.R'><code>R/generic_functions.R</code></a></small>
     <div class="hidden name"><code>get_parameters.Rd</code></div>
     </div>
 
     <div class="ref-description">
     
-    <p>Return all parameters that an object uses to enable reproducible analyses</p>
+    <p>Returns the parameters set in an NDTr object to enable reproducible analyses.</p>
     
     </div>
 
@@ -129,9 +129,28 @@
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>ndtr_obj</th>
-      <td><p>The object from the NDTr package that one should get the parameters from</p></td>
+      <td><p>An object from the NDTr package to get the parameters from.</p></td>
     </tr>
     </table>
+    
+    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
+
+    <p>Returns a data frame with a single row that contains all the NDTr
+object's parameter values (e.g., values that were set in the object's
+constructor).</p>
+    
+    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
+
+    <p>This is a generic function that returns a data frame with the parameters of
+an NDTr object. All NDTr objects (i.e., DS, FP, CL, RM and CV) need to define
+a method that implements this generic function. The CV object's
+<code>get_parameters()</code> method usually will call all the DS, FP, CL, RM and CV
+<code>get_parameters()</code> methods and aggregate and return all the parameters
+aggregated from these objects. These aggregrated parameters can then be used
+to save the results of a particular analysis based on the parameters using
+the <code><a href='log_save_results.html'>log_save_results()</a></code> function. This method is most frequently used
+privately by other NDTr objects to save all the parameters that were used in
+an analysis.</p>
     
 
   </div>
@@ -139,7 +158,11 @@
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
       <li><a href="#arguments">Arguments</a></li>
-                </ul>
+      
+      <li><a href="#value">Value</a></li>
+
+      <li><a href="#details">Details</a></li>
+          </ul>
 
   </div>
 </div>
