@@ -6,8 +6,7 @@
 #rm(list = ls())
 
 
-basedir_file_name <- system.file("extdata/ZD_150bins_50sampled.Rda", package = "NDTr")
-
+basedir_file_name <- system.file(file.path("extdata", "ZD_150bins_50sampled.Rda"), package="NDTr")
 
 ds <- ds_basic(basedir_file_name, 'stimulus_ID', 6, num_label_repeats_per_cv_split = 3)
 

@@ -16,7 +16,7 @@ testing a different point in time. This usually is not necessary and takes
 up more memeory.}
 
 \item{create_decision_vals_confusion_matrix}{A boolean specifying whether one wants
-to create the create a confusion matrix of the decision values. In this confusion
+to create a confusion matrix of the decision values. In this confusion
 matrix, each row corresponds to the correct class (like a regular confusion matrix)
 and each column corresponds to the mean decision value of the predictions for
 each class.}
@@ -40,7 +40,6 @@ the_rms <- list(rm_confusion_matrix())
 Other result_metrics: 
 \code{\link{plot.rm_confusion_matrix}()},
 \code{\link{plot.rm_main_results}()},
-\code{\link{plot_MI.rm_confusion_matrix}()},
 \code{\link{rm_main_results}()}
 }
 \concept{result_metrics}

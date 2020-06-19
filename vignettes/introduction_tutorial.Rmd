@@ -245,7 +245,7 @@ label levels or neurons should be used.
 
 ```{r datasource}
 
-binned_file_name <- system.file("extdata/ZD_150bins_50sampled.Rda", package="NDTr")
+binned_file_name <- system.file(file.path("extdata", "ZD_150bins_50sampled.Rda"), package="NDTr")
 variable_to_decode <- "stimulus_ID"
 num_cv_splits <- 20
   
@@ -421,7 +421,7 @@ time or as a TCD plot.
 
 ```{r plot_MI}
 
-plot_MI(DECODING_RESULTS$rm_confusion_matrix)
+plot(DECODING_RESULTS$rm_confusion_matrix, result_type = "mutual_information")
 
 ```
 
@@ -438,7 +438,7 @@ tutorial on saving and managing results.
 
 ```{r save_results}
 
-results_dir_name <- "my_results/"
+results_dir_name <- file.path("results", "")
 dir.create(results_dir_name)
 
 log_save_results(DECODING_RESULTS, results_dir_name)

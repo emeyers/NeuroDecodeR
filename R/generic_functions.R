@@ -242,16 +242,4 @@ aggregate_resample_run_results <- function(resample_run_results) {
 
 
 
-#' Plot the mutual information computed from a confusion matrix
-#' 
-#' @param rm_obj the result metric object.
-#' 
-#' @param plot_type The type of plot that should be displayed.
-#'  
-#' @export
-plot_MI <- function(rm_obj, plot_type) {
-  UseMethod("plot_MI")
-}
-  
-
 

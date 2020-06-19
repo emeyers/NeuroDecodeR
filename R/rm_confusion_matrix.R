@@ -14,7 +14,7 @@
 #'  up more memeory.
 #' 
 #' @param create_decision_vals_confusion_matrix A boolean specifying whether one wants
-#'  to create the create a confusion matrix of the decision values. In this confusion
+#'  to create a confusion matrix of the decision values. In this confusion
 #'  matrix, each row corresponds to the correct class (like a regular confusion matrix)
 #'  and each column corresponds to the mean decision value of the predictions for 
 #'  each class. 
@@ -234,38 +234,95 @@ aggregate_resample_run_results.rm_confusion_matrix = function(resample_run_resul
 
 
 
+
 #' plot the confusion matrix results
 #'
 #' This function plots confusion matrices after the decoding analysis has been
-#' run (and all results have been aggregated)
+#' run (and all results have been aggregated). This function can also plot 
+#' mutual information calculated from the confusion matrix. 
 #' 
-#' @param x A rm_confusion_matrix object that has aggregated
-#'   runs from a decoding analysis, e.g., if DECODING_RESULTS are the out from
-#'   the run_decoding(cv) then this argument should be
-#'   DECODING_RESULTS$rm_confusion_matrix.
+#' @param x A rm_confusion_matrix object that has aggregated runs from a
+#'   decoding analysis, e.g., if DECODING_RESULTS are the out from the
+#'   run_decoding(cv) then this argument should be
+#'   `DECODING_RESULTS$rm_confusion_matrix`.
 #' 
-#' @param ... This is needed to conform to the plot generic interface
+#' @param ... This is needed to conform to the plot generic interface.
 #' 
-#' @param plot_only_same_train_test_time A boolean indicating whether
-#'   the confusion matrices should only be plotted at the same training 
-#'   and test times.
+#' @param result_type A string specifying the type of result to plot that can
+#'   take the following values: 
+#'   * "zero_one_loss": plot a regular confusion matrix. 
+#'   * "decision_vals": plot a confusion matrix with the average decision values.
+#'   * "mutual_information": plot mutual information calculated from the
+#'   zero-one loss confusion matrix
+#' 
+#' @param plot_only_same_train_test_time A boolean indicating whether the
+#'   confusion matrices should only be plotted at the same training and test
+#'   times. If the `result_type == "mutual_information"` setting this to TRUE
+#'   will plot a TCD plot of the mutual information otherwise it will plot a
+#'   line plot of the mutual information for training and testing at the same
+#'   time.
 #'   
-#' @param plot_decision_vals_confusion_matrix A boolean that if set to 
-#'  TRUE will cause the decision value confusion matrix to be plotted
-#'  instead of the zero-one loss (i.e., normal) confusion matrix to be
-#'  plotted. 
-#' 
+#'   
 #' @family result_metrics
-
-
+#' 
+#' 
 #' @export
-plot.rm_confusion_matrix = function(x, ..., plot_only_same_train_test_time = FALSE,
-                                    plot_decision_vals_confusion_matrix = FALSE) {
+plot.rm_confusion_matrix = function(x, ..., result_type = "zero_one_loss", 
+                                    plot_only_same_train_test_time = TRUE) {
+
+  saved_only_at_same_train_test_time <- attr(x, "options")$save_only_same_train_test_time
+  
+  
+  if ((saved_only_at_same_train_test_time) && plot_only_same_train_test_time == FALSE) {
+    
+    warning(paste("Options are set to plot at all times (plot_only_same_train_test_time = FALSE)",
+                  "but the results were only saved for training and testing at the same time.",
+                  "To plot the results for training and testing at all times you need to set",
+                  "rm_confusion_matrix(save_only_same_train_test_time = FALSE) in the",
+                  "rm_confusion_matrix constructor prior to running the decoding analysis."))
+  }
+  
+  
+  # if result_type is "zero_one_loss" or "decision_vals" plot a confusion matrix
+  if ((result_type == "zero_one_loss") || (result_type == "decision_vals")) {
+    
+    should_decision_vals_cm <- result_type == "decision_vals"
+    plot_confusion_matrix(x, plot_only_same_train_test_time, should_decision_vals_cm)
+    
+    
+  # otherwise plot mutual information calculated from zero-one loss confusion matrix
+  } else if (result_type == "mutual_information") {
+    
+    
+    if (plot_only_same_train_test_time) {
+      plot_type <- "line"
+    } else {
+      plot_type <- "TCD"
+    }
+    
+    plot_MI(x, plot_type)
+    
+
+  }  else {
+    
+    stop("result_type must be set to the value of 'zero_one_loss', 'decision_vals' or
+         'mutual_information'")
+  }
 
   
-  confusion_matrix_obj <- x
+}
+
+  
+
+
+
+# a priviate function to plot the confusion matrix  
+plot_confusion_matrix <- function(confusion_matrix_obj, 
+                      plot_only_same_train_test_time = FALSE,
+                      plot_decision_vals_confusion_matrix = FALSE) {
   
   
+
   # should perhaps give an option to choose a different color scale, and maybe other options? 
   
   # checking if only have the results for training and testing at the same time
@@ -331,42 +388,21 @@ plot.rm_confusion_matrix = function(x, ..., plot_only_same_train_test_time = FAL
   }
 
 
-  
   if (sum(confusion_matrix_obj$train_time == confusion_matrix_obj$test_time) == dim(confusion_matrix_obj)[1]){
     g + facet_wrap(~.data$train_time)
   } else {    
     g + facet_grid(.data$train_time ~ .data$test_time)
   } 
   
-  
-  
+
 }
 
 
 
 
 
-
-
-#' plot the mutual information computed from a confusion matrix
-#'
-#' This function can plot line results or temporal cross-decoding results for
-#' the the zero-one loss, normalized rank and/or decision values after the
-#' decoding analysis has been run (and all results have been aggregated)
-#' 
-#' @param rm_obj A rm_confusion_matrix object that has aggregated
-#'   runs from a decoding analysis, e.g., if DECODING_RESULTS are the out from
-#'   the run_decoding(cv) then this argument should be
-#'   DECODING_RESULTS$rm_confusion_matrix.
-#' 
-#' @param plot_type A string specifying the type of results to plot. Options are
-#'   'TCD' to plot a temporal cross decoding matrix or 'line' to create a line
-#'   plot of the decoding results as a function of time
-#' 
-#' @family result_metrics
-#' 
-#' @export
-plot_MI.rm_confusion_matrix = function(rm_obj, plot_type = 'TCD') {
+# a private helper function to plot calculate and plot mutual information from the confusion matrix
+plot_MI <- function(rm_obj, plot_type = 'TCD') {
   
   
   if (!(plot_type == 'TCD' || plot_type == 'line'))
@@ -420,6 +456,8 @@ plot_MI.rm_confusion_matrix = function(rm_obj, plot_type = 'TCD') {
   }
   
 }
+
+
 
 
 

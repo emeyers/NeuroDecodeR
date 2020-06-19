@@ -29,7 +29,6 @@ decoding analysis has been run (and all results have been aggregated)
 \seealso{
 Other result_metrics: 
 \code{\link{plot.rm_confusion_matrix}()},
-\code{\link{plot_MI.rm_confusion_matrix}()},
 \code{\link{rm_confusion_matrix}()},
 \code{\link{rm_main_results}()}
 }
