@@ -20,10 +20,10 @@ DECODING_RESULTS$rm_confusion_matrix.}
 \item{...}{This is needed to conform to the plot generic interface}
 
 \item{plot_only_same_train_test_time}{A boolean indicating whether
-the confusion matrices should only be plotted at the same training 
+the confusion matrices should only be plotted at the same training
 and test times.}
 
-\item{plot_decision_vals_confusion_matrix}{A boolean that if set to 
+\item{plot_decision_vals_confusion_matrix}{A boolean that if set to
 TRUE will cause the decision value confusion matrix to be plotted
 instead of the zero-one loss (i.e., normal) confusion matrix to be
 plotted.}

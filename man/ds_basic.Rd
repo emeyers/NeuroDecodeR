@@ -19,7 +19,7 @@ ds_basic(
 )
 }
 \arguments{
-\item{binned_file_name}{A string with the name of a file that has 
+\item{binned_file_name}{A string with the name of a file that has
 data in binned format.}
 
 \item{var_to_decode}{A string specifying the name of the labels that
@@ -68,7 +68,7 @@ The standard datasource used to get training and test splits of data.
 \details{
 This 'basic' datasource is the datasource that will most commonly be used for
 most analyses. Like all datasources, this datasource takes binned format data
-and has a get_data() method that is called by a cross-validation object to 
+and has a get_data() method that is called by a cross-validation object to
 get training and testing splits of data that can be passed to a classifier.
 }
 \examples{

@@ -17,11 +17,11 @@ run_decoding method.}
 \item{save_directory_name}{A directory where the decoding results should be
 saved.}
 
-\item{result_name}{A string that gives a human readable name for the results 
+\item{result_name}{A string that gives a human readable name for the results
 that are to be saved. The default value is "No result name set".}
 }
 \description{
-This function takes results returned by the cross-validator's run_decoding() 
- method and uses the cross-validator's get_properties() method to save a 
- log of the results that be used to reload specific results
+This function takes results returned by the cross-validator's run_decoding()
+method and uses the cross-validator's get_properties() method to save a
+log of the results that be used to reload specific results
 }

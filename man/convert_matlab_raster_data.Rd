@@ -13,7 +13,7 @@ convert_matlab_raster_data(
 )
 }
 \arguments{
-\item{matlab_raster_dir_name}{A character string specifying the path to a directory that 
+\item{matlab_raster_dir_name}{A character string specifying the path to a directory that
 contains raster data in MATLAB .mat files}
 
 \item{r_raster_dir_name}{A character string specifying the path to a
@@ -37,7 +37,7 @@ raster data should be converted based on .mat files that contain this
 string.}
 }
 \description{
-If one already has raster data created in MATLAB, this function can be used to convert it 
+If one already has raster data created in MATLAB, this function can be used to convert it
 to an R format (.rda files) that can be used with the NDTr.
 }
 \examples{

@@ -8,7 +8,7 @@ log_load_results_from_result_name(result_name, results_directory_name)
 }
 \arguments{
 \item{result_name}{A string a specifying the result that should be loaded
-based on the name given. This result_name can be a regular expression in 
+based on the name given. This result_name can be a regular expression in
 which all result_name values that match the regular expression will be
 returned as a list.}
 

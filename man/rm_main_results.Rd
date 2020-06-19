@@ -12,8 +12,8 @@ rm_main_results(
 \arguments{
 \item{aggregate_decision_values}{A string or boolean specifying how the
 decision values should be aggregated. If this is a boolean
-set to TRUE or to the string "full", then the decision values for the correct 
-category will be calculated. If this is a boolean set to FALSE or to the 
+set to TRUE or to the string "full", then the decision values for the correct
+category will be calculated. If this is a boolean set to FALSE or to the
 string "none", then the decision values will not be calculated. If this is a
 string set to either "diag" or "only same train test time" then the decision
 values will only be calculated when for results when training and testing
@@ -22,8 +22,8 @@ of the code and will use less memory so this can be useful for large data sets.}
 
 \item{aggregate_normalized_rank}{A string or boolean specifying how the
 normalized rank results should be aggregated. If this is a boolean
-set to TRUE or to the string "full", then the decision values for the correct 
-category will be calculated. If this is a boolean set to FALSE or to the 
+set to TRUE or to the string "full", then the decision values for the correct
+category will be calculated. If this is a boolean set to FALSE or to the
 string "none", then the decision values will not be calculated. If this is a
 string set to either "diag" or "only same train test time" then the decision
 values will only be calculated when for results when training and testing
@@ -32,8 +32,8 @@ of the code and will use less memory so this can be useful for large data sets.}
 }
 \description{
 This result metric calculate the zero-one loss, the normalized rank, and the
- mean of the decision values. This is also an S3 object which has an associated
- plot function to display the results.
+mean of the decision values. This is also an S3 object which has an associated
+plot function to display the results.
 }
 \details{
 Like all result metrics, this result metric has functions to aggregregate

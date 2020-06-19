@@ -25,8 +25,6 @@
 #' @family classifier
 
 
-
-
 # the constructor 
 #' @export
 cl_max_correlation <- function(){

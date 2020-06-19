@@ -1,4 +1,4 @@
-#' A function that converts data from raster format to binned format
+#' Converts data from raster format to binned format
 #'
 #' This function takes the name of a directory that contains files in raster
 #' format, and averages the data within a specified bin size at specifid

@@ -26,7 +26,7 @@ learn preprocessing parameters from the training data and apply
 preprocessing of both the training and test data based on these parameters}
 
 \item{result_metrics}{a list of result metric (RM) objects that are used to
-evaluate the classification performance. If this is set to null then the 
+evaluate the classification performance. If this is set to null then the
 rm_main_results(), rm_confusion_matrix() results metrics will be used.}
 
 \item{num_resample_runs}{The number of times the cross-validation should be
@@ -41,7 +41,7 @@ potentially speed up the analysis and save memory at the cost of not
 calculated the temporal cross-decoding results.}
 
 \item{run_parallel}{A boolean to indicate whether the code should be run in
-parallel. It is useful to set this to FALSE for debugging purposes or 
+parallel. It is useful to set this to FALSE for debugging purposes or
 if you are running a job that takes a lot of memory and runtime is not
 of much concern.}
 }

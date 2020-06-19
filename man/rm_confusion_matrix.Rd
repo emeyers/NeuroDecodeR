@@ -12,13 +12,13 @@ rm_confusion_matrix(
 \arguments{
 \item{save_only_same_train_test_time}{A boolean specifying whether one wants
 to create the confusion matrices when training at one point in time and
-testing a different point in time. This usually is not necessary and takes 
+testing a different point in time. This usually is not necessary and takes
 up more memeory.}
 
 \item{create_decision_vals_confusion_matrix}{A boolean specifying whether one wants
 to create the create a confusion matrix of the decision values. In this confusion
 matrix, each row corresponds to the correct class (like a regular confusion matrix)
-and each column corresponds to the mean decision value of the predictions for 
+and each column corresponds to the mean decision value of the predictions for
 each class.}
 }
 \description{
