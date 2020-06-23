@@ -116,6 +116,9 @@ convert_matlab_raster_data <- function(matlab_raster_dir_name,
       
       data_times <- (data_times - rep.int(raster_site_info$alignment_event_time - (start_ind - 1), length(data_times)))
 
+      # remove the alignment time from the site info since it is incorporated into the time bin names
+      raster_site_info$alignment_event_time <- NULL
+      
       # update the names if start_ind or end_ind were given as arguments      
       if (!(start_ind_save_dir_name == ""))
         start_ind_save_dir_name <- paste0("_start_", start_ind - raster_site_info$alignment_event_time)
@@ -157,7 +160,14 @@ convert_matlab_raster_data <- function(matlab_raster_dir_name,
     }
     
     
-    # finally, save both raster_site_info and raster data in the file
+    # convert the raster site info to a data frame and add it to the raster data
+    raster_site_info_df <- as.data.frame(raster_site_info)
+    names(raster_site_info_df) <- paste0("site_info.", names(raster_site_info_df))
+    
+    raster_data <- cbind(raster_site_info_df[rep(1, nrow(raster_data)), ], raster_data) 
+    
+    
+    # finally, save the raster data in the file
     if(is.null(r_raster_dir_name)) {
       
       # if the directory name ends with "_mat", remove "_mat"
@@ -178,7 +188,7 @@ convert_matlab_raster_data <- function(matlab_raster_dir_name,
     }
     
     
-    save(raster_site_info, raster_data, file = paste0(r_raster_dir_name, curr_r_file_name), compress = TRUE)
+    save(raster_data, file = paste0(r_raster_dir_name, curr_r_file_name), compress = TRUE)
     
   }
   

@@ -1,4 +1,4 @@
-#' Converts data from raster format to binned format
+#' A function that converts data from raster format to binned format
 #'
 #' This function takes the name of a directory that contains files in raster
 #' format, and averages the data within a specified bin size at specifid
@@ -53,7 +53,7 @@ create_binned_data <- function(raster_dir_name,
   # if the directory name does not end with a slash, add a slash to the directory name
   desired_pattern = '.*/$'
   if (grepl(desired_pattern, raster_dir_name) == FALSE){
-    raster_dir_name <- paste0(raster_dir_name, '/')
+    raster_dir_name <- file.path(raster_dir_name, "")
   }  
   
   
@@ -61,8 +61,7 @@ create_binned_data <- function(raster_dir_name,
   
   
   binned_data <- NULL
-  binned_site_info <- NULL
-  
+
   
 
   # loop through all raster data files and bin them
@@ -74,10 +73,9 @@ create_binned_data <- function(raster_dir_name,
     
     binned_data_object_name <- load(paste0(raster_dir_name, file_names[iSite]))
     
-    if (!((length(binned_data_object_name) == 2) && (match("raster_data", binned_data_object_name) + match("raster_site_info", binned_data_object_name) == 3))){
+    if (binned_data_object_name != "raster_data"){
       
-      stop(paste0('Data stored in raster files must contain two R objets one called "raster_data"', 
-           'and another called "raster_site_info"'))
+      stop('Data stored in raster files must contain an object called "raster_data"')
       
       # added this line to get rid of R CMD check note: no visible binding for global variable 'raster_data'
       raster_data <- NULL  
@@ -90,11 +88,6 @@ create_binned_data <- function(raster_dir_name,
     one_binned_site$siteID <- rep(iSite, dim(one_binned_site)[1])
     binned_data <- rbind(binned_data, one_binned_site)
     
-    # prepend siteID or raster site info, which is then added to binned site info
-    #raster_site_info <- rlang::prepend(raster_site_info, setNames(as.list(iSite), "siteID"))
-    raster_site_info$siteID <- iSite  # prepend() is deprecated so using this instead
-
-    binned_site_info[[iSite]]<- raster_site_info
   }
   
   
@@ -116,7 +109,7 @@ create_binned_data <- function(raster_dir_name,
   }
   
   saved_binned_data_file_name <- paste0(saved_binned_data_file_name, start_time_name, end_time_name, ".Rda")
-  save("binned_data", "binned_site_info", file = saved_binned_data_file_name, compress = TRUE)
+  save("binned_data", file = saved_binned_data_file_name, compress = TRUE)
   
   saved_binned_data_file_name
     

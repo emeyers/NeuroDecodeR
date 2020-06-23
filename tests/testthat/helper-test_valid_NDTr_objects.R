@@ -21,14 +21,27 @@ test_valid_raster_data_format <- function(raster_file_name) {
   
   load(raster_file_name)
   
-  expect_true(exists("raster_site_info"))
-  expect_true(exists("raster_data"))
+  # there shold be a data frame called "raster_data" in all raster data formmated files
+  # expect_true(exists("raster_data"))
+  # #expect_true(exists("raster_site_info"))
   
   unique_prefixes <- sort(unique(sapply(strsplit(names(raster_data), '[.]'), function(x) x[1])))
   
-  expect_equal(unique_prefixes[1:2], c("labels", "time"))  
+  # needs to have a variables that start with "time" and with "labels"
+  expect_equal(sum(unique_prefixes == "time"), 1)
+  expect_equal(sum(unique_prefixes == "labels"), 1)
+  
+  # if a third type of variable is defined it should be called "site_info"
+  if (length(unique_prefixes) == 3) {
+    expect_equal(sum(unique_prefixes == "site_info"), 1)
+  }
+  
+  # should only be three types of variables that start with labels, time or site info
+  expect_true(length(unique_prefixes) <= 3)
   
 }
+
+
 
 
 
@@ -38,13 +51,25 @@ test_valid_binned_data_format <- function(binned_file_name) {
   
   load(binned_file_name)
   
-  expect_true(exists("binned_site_info"))
+  #expect_true(exists("binned_site_info"))
   expect_true(exists("binned_data"))
   
   unique_prefixes <- unique(sapply(strsplit(names(binned_data), '[.]'), function(x) x[1]))
   
-  expect_equal(unique_prefixes, c("siteID", "labels", "time"))  
   
+  # needs to have a variables that start with "siteID", time" and "labels"
+  expect_equal(sum(unique_prefixes == "time"), 1)
+  expect_equal(sum(unique_prefixes == "labels"), 1)
+  expect_equal(sum(unique_prefixes == "siteID"), 1)
+  
+  # if a third type of variable is defined it should be called "site_info"
+  if (length(unique_prefixes) == 4) {
+    expect_equal(sum(unique_prefixes == "site_info"), 1)
+  }
+  
+  # should only be four types of variables that start with siteDi, labels, time or site_info
+  expect_true(length(unique_prefixes) <= 4)
+
 }
 
 
