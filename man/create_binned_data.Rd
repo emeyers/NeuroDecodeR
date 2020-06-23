@@ -2,7 +2,7 @@
 % Please edit documentation in R/create_binned_data.R
 \name{create_binned_data}
 \alias{create_binned_data}
-\title{Converts data from raster format to binned format}
+\title{A function that converts data from raster format to binned format}
 \usage{
 create_binned_data(
   raster_dir_name,
