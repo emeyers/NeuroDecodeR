@@ -56,7 +56,7 @@ NDTr to try new analyses.
 Datasources are used to generate training and tests splits of data. 
 
 
-## Implementing an DS: methods and data formats
+### Implementing an DS: methods and data formats
 
 All datasources must implement a `get_data()` method that returns a data frame
 that has the following variables in it:
@@ -77,7 +77,7 @@ which returns a data frame with one row that lists all the properties that have
 been set to allow for reproducible research.
 
 
-## Example of internals of DS objects using the ds_basic object
+### Example of internals of DS objects using the ds_basic object
 
 Here is an example the data returned by the `ds_basic()` datasource
 
@@ -117,7 +117,7 @@ results.
 
 
 
-## Implementing an FP: required methods and data formats
+### Implementing an FP: required methods and data formats
 
 All feature preprocessors must implement `preprocess_data()`. This method takes
 two data frames called *training_set* and *test_set* have the following
@@ -144,7 +144,7 @@ which returns a data frame with one row that lists all the properties that have
 been set to allow for reproducible research.
 
 
-## Example of internals of FP objects using the fp_zscore
+### Example of internals of FP objects using the fp_zscore
 
 If you want to implement a new FP object yourself, below is an
 example of how the FP object gets and returns data.
@@ -209,7 +209,7 @@ present in a new set of test data.
 
 
 
-## Implementing a CL: required methods and data formats
+### Implementing a CL: required methods and data formats
 
 
 Objects that are classifiers must implement the `get_predictions()` method. This method takes
@@ -243,7 +243,7 @@ which returns a data frame with one row that lists all the properties that have
 been set to allow for reproducible research.
 
 
-## Example of internals of CL object using the cl_max_correlation
+### Example of internals of CL object using the cl_max_correlation
 
 
 If you want to implement a new CL object yourself, below is an
@@ -303,7 +303,7 @@ Result metrics take the predictions made by a classifier and aggregate the
 results to that they can be interpreated.
 
 
-## Implementing an RM: required methods and data formats
+### Implementing an RM: required methods and data formats
 
 To create a result metric two methods must be implemented
 `aggregate_CV_split_results()` which aggregates the results after a set of
@@ -362,7 +362,7 @@ to be plotted
 
 
 
-## Example of result metrics
+### Example of result metrics
 
 Examples of using result metrics can be seen by going through the [Introduction tutorial](introduction_tutorial.html)
 
@@ -387,7 +387,7 @@ pre-processing first).
 
 
 
-## Implementing a CV: required methods and data formats
+### Implementing a CV: required methods and data formats
 
 All cross-validators must implement `run_decoding()` method. This method does not take 
 any additional arguments (apart from the cross-validator itself). 
@@ -403,7 +403,7 @@ the DS, FP, CL and RM objects) to allow for reproducible research.
 
 
 
-## Example of cross-validators
+### Example of cross-validators
 
 Examples of using the `cv_standard` can be seen by going through the
 [Introduction tutorial](introduction_tutorial.html)

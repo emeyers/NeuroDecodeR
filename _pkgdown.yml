@@ -31,6 +31,11 @@ reference:
   contents: 
   - "`rm_main_results`"
   - "`rm_confusion_matrix`"
+  
+- title: "Plot functions"
+  contents:
+  - "`plot.rm_main_results`"
+  - "`plot.rm_confusion_matrix`"
 
 - title: "Save and log results"
   contents: 
@@ -53,9 +58,6 @@ navbar:
     - text: "Home"
       href: "index.html"
     
-    - text: "Reference"
-      href: "reference/index.html"
-    
     - text: "Tutorials"
       menu:
           - text: "Introductory tutorial"
@@ -63,3 +65,15 @@ navbar:
           - text: "Generalization analysis tutorial"
             href: "articles/generalization_tutorial.html"
 
+    - text: "Reference"
+      href: "reference/index.html"
+    
+    - text: "Documentation"
+      menu:
+          - text: "Data formats"
+            href: "articles/data_formats.html"
+          - text: "Datasets"
+            href: "articles/datasets.html"
+          - text: "NDTr object specification"
+            href: "articles/NDTr_object_specification.html"
+            

@@ -2,7 +2,7 @@
 % Please edit documentation in R/rm_confusion_matrix.R
 \name{plot.rm_confusion_matrix}
 \alias{plot.rm_confusion_matrix}
-\title{plot the confusion matrix results}
+\title{A plot function for the rm_confusion_matrix object}
 \usage{
 \method{plot}{rm_confusion_matrix}(
   x,

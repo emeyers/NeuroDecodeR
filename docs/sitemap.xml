@@ -85,42 +85,18 @@
     <loc>https://github.com/emeyers/NDTr/reference/run_decoding.html</loc>
   </url>
   <url>
+    <loc>https://github.com/emeyers/NDTr/articles/NDTr_object_specification.html</loc>
+  </url>
+  <url>
+    <loc>https://github.com/emeyers/NDTr/articles/data_formats.html</loc>
+  </url>
+  <url>
+    <loc>https://github.com/emeyers/NDTr/articles/datasets.html</loc>
+  </url>
+  <url>
     <loc>https://github.com/emeyers/NDTr/articles/generalization_tutorial.html</loc>
   </url>
   <url>
     <loc>https://github.com/emeyers/NDTr/articles/introduction_tutorial.html</loc>
-  </url>
-  <url>
-    <loc>https://github.com/emeyers/NDTr/articles/pkgdown_documentation/Isik_26_letter_MEG_dataset.html</loc>
-  </url>
-  <url>
-    <loc>https://github.com/emeyers/NDTr/articles/pkgdown_documentation/NDT_overview.html</loc>
-  </url>
-  <url>
-    <loc>https://github.com/emeyers/NDTr/articles/pkgdown_documentation/Qi_Constantinidis_pre_and_post_training_dataset.html</loc>
-  </url>
-  <url>
-    <loc>https://github.com/emeyers/NDTr/articles/pkgdown_documentation/Zhang_Desimone_7_object_dataset.html</loc>
-  </url>
-  <url>
-    <loc>https://github.com/emeyers/NDTr/articles/pkgdown_documentation/binned_format.html</loc>
-  </url>
-  <url>
-    <loc>https://github.com/emeyers/NDTr/articles/pkgdown_documentation/classifiers.html</loc>
-  </url>
-  <url>
-    <loc>https://github.com/emeyers/NDTr/articles/pkgdown_documentation/cross_validators.html</loc>
-  </url>
-  <url>
-    <loc>https://github.com/emeyers/NDTr/articles/pkgdown_documentation/datasources.html</loc>
-  </url>
-  <url>
-    <loc>https://github.com/emeyers/NDTr/articles/pkgdown_documentation/feature_preprocessors.html</loc>
-  </url>
-  <url>
-    <loc>https://github.com/emeyers/NDTr/articles/pkgdown_documentation/raster_format.html</loc>
-  </url>
-  <url>
-    <loc>https://github.com/emeyers/NDTr/articles/pkgdown_documentation/result_metrics.html</loc>
   </url>
 </urlset>

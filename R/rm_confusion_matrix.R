@@ -235,7 +235,7 @@ aggregate_resample_run_results.rm_confusion_matrix = function(resample_run_resul
 
 
 
-#' plot the confusion matrix results
+#' A plot function for the rm_confusion_matrix object
 #'
 #' This function plots confusion matrices after the decoding analysis has been
 #' run (and all results have been aggregated). This function can also plot 

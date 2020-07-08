@@ -39,9 +39,6 @@
 <li>
   <a href="../index.html">Home</a>
 </li>
-<li>
-  <a href="../reference/index.html">Reference</a>
-</li>
 <li class="dropdown">
   <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
     Tutorials
@@ -54,6 +51,27 @@
     </li>
     <li>
       <a href="../articles/generalization_tutorial.html">Generalization analysis tutorial</a>
+    </li>
+  </ul>
+</li>
+<li>
+  <a href="../reference/index.html">Reference</a>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Documentation
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+<li>
+      <a href="../articles/data_formats.html">Data formats</a>
+    </li>
+    <li>
+      <a href="../articles/datasets.html">Datasets</a>
+    </li>
+    <li>
+      <a href="../articles/NDTr_object_specification.html">NDTr object specification</a>
     </li>
   </ul>
 </li>
@@ -94,11 +112,11 @@
 <p>Neural decoding is a process in which a pattern classifier learns the relationship between neural activity and experimental conditions using a <em>training set</em> of data. The reliability of the relationship between the neural activity and experimental conditions is evaluated by having the classifier predict what experimental conditions were present on a second <em>test set</em> of data.</p>
 <p>The NDTr is built around 5 different object classes that allow users to apply neural decoding in a flexible and robust way. The four types of objects are:</p>
 <ol style="list-style-type: decimal">
-<li><p><a href="pkgdown_documentation/datasources.html">Datasources (DS)</a> which generate training and test splits of the data.</p></li>
-<li><p><a href="pkgdown_documentation/feature_preprocessors.html">Feature preprocessors (FP)</a> which apply preprocessing to the training and test splits.</p></li>
-<li><p><a href="pkgdown_documentation/classifiers.html">Classifiers (CL)</a> which learn the relationship between experimental conditions and data on the training set, and then predict experimental conditions on the test data.</p></li>
-<li><p><a href="pkgdown_documentation/result_metrics.html">Result Metrics (RM)</a> which take the output predictions of a classifier and summerize the prediction accuracy.</p></li>
-<li><p><a href="pkgdown_documentation/cross_validators.html">Cross-validators (CV)</a> which take the DS, FP and CL objects and run a cross-validation decoding procedure.</p></li>
+<li><p><strong>Datasources (DS)</strong> which generate training and test splits of the data.</p></li>
+<li><p><strong>Feature preprocessors (FP)</strong> which apply preprocessing to the training and test splits.</p></li>
+<li><p><strong>Classifiers (CL)</strong> which learn the relationship between experimental conditions and data on the training set, and then predict experimental conditions on the test data.</p></li>
+<li><p><strong>Result Metrics (RM)</strong> which take the output predictions of a classifier and summerize the prediction accuracy.</p></li>
+<li><p><strong>Cross-validators (CV)</strong> which take the DS, FP and CL objects and run a cross-validation decoding procedure.</p></li>
 </ol>
 <p>The NDTr comes with a few implementations of each of these objects, and defines interfaces that allow one to create new objects that extend the basic functionality of the five object classes. The following tutorial explains the data formats used by the Neural Decoding Toolbox, and how to run a decoding experiment using the basic versions of the four object classes.</p>
 <div id="about-the-data-used-in-this-tutorial" class="section level3">
@@ -115,15 +133,15 @@
 <div id="data-formats" class="section level2">
 <h2 class="hasAnchor">
 <a href="#data-formats" class="anchor"></a>Data formats</h2>
-<p>In order to use the NDTr, the neural data must be in a usable format. Typically this involves putting the data in <a href="pkgdown_documentation/raster_format.html">raster-format</a> and then converting it to <a href="pkgdown_documentation/binned_format.html">binned-format</a> using the <code><a href="../reference/create_binned_data.html">create_binned_data()</a></code> function.</p>
+<p>In order to use the NDTr, the neural data must be in a usable format. Typically this involves putting the data in <a href="data_formats.html">raster format</a> and then converting it to <a href="data_formats.html">binned format</a> using the <code><a href="../reference/create_binned_data.html">create_binned_data()</a></code> function.</p>
 <div id="raster-format" class="section level3">
 <h3 class="hasAnchor">
-<a href="#raster-format" class="anchor"></a>Raster-format</h3>
-<p>To run a decoding analysis using the NDTr you first need to have your data in a usable format. In this tutorial we will use data collected by Ying Zhang in Bob Desimone’s lab at MIT. The directory data/raster_format/Zhang_Desimone_7objects_raster_data/ contains data in raster-format. Each file in this directory contains data from one neuron. To start, let us load one of these files and examine its contents.</p>
+<a href="#raster-format" class="anchor"></a>Raster format</h3>
+<p>To run a decoding analysis using the NDTr you first need to have your data in a usable format. In this tutorial we will use data collected by <a href="datasets.hmtl">Ying Zhang in Bob Desimone’s lab at MIT</a>. The directory extdata/Zhang_Desimone_7objects_raster_data_rda/ contains data in raster format. Each file in this directory contains data from one neuron. To start, let us load one of these files and examine its contents.</p>
 <div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" data-line-number="1">raster_dir_name &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/file.path">file.path</a></span>(<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/system.file">system.file</a></span>(<span class="st">"extdata"</span>, <span class="dt">package =</span> <span class="st">"NDTr"</span>), <span class="st">"Zhang_Desimone_7object_raster_data_rda"</span>)</a>
 <a class="sourceLine" id="cb2-2" data-line-number="2">file_name &lt;-<span class="st"> "bp1001spk_01A_raster_data.rda"</span></a>
 <a class="sourceLine" id="cb2-3" data-line-number="3"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/load">load</a></span>(<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/file.path">file.path</a></span>(raster_dir_name, file_name))</a></code></pre></div>
-<p>Note that two objects were loaded into memory, raster_data, which contains the actual data from a single neuron and raster_site_info which contains any meta information about the site (for more information <a href="pkgdown_documentation/raster_format.html">see raster-format.html</a>). Below we visualize the spiking pattern from this one neuron.</p>
+<p>Below we visualize the spiking pattern from this one neuron.</p>
 <p><img src="introduction_tutorial_files/figure-html/plot_raster_file-1.png" width="700"></p>
 <p>Here, the x-axis represents time in the experiment in milliseconds, and the y-axis represents different trials. Each black tick mark represents the time when a neuron emitted an action potential.</p>
 </div>

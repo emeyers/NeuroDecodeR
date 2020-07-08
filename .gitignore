@@ -26,6 +26,7 @@ vignettes/*.html
 vignettes/*.pdf
 vignettes/position_invariance_results/*.rda
 vignettes/my_results/
+vignettes/results/
 vignettes/*.Rda
 
 # OAuth2 token, see https://github.com/hadley/httr/releases/tag/v0.3

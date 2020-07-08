@@ -38,8 +38,8 @@ whether a particular population of neural activity has created representations
 that are invariant to particular transformations. To do such a *generalization
 analysis*, one can train a classifier under one set of conditions, and then see
 if the classifier can generalize to a new related set of conditions in which a
-particular transformation has been applied. The [datasource](datasources.html))
-object ds_generalization is designed for this purpose and we will explain how to
+particular transformation has been applied. The datasource object
+`ds_generalization()` is designed for this purpose and we will explain how to
 use it below.
 
 
@@ -48,7 +48,7 @@ use it below.
 ### Using the Zhang-Desimone 7 object dataset to test position invariance
 
 In this tutorial we will use the [Zhang-Desimone 7 object
-dataset](Zhang_Desimone_7_object_dataset.html) to test how invariant neural
+dataset](datasets.html) to test how invariant neural
 representations in Inferior Temporal (IT) cortex are to changes in the retinal
 position of objects. The Zhang-Desimone 7 object dataset consists of neural
 responses to 7 different objects that were shown to a monkey at three different
@@ -79,7 +79,7 @@ library(tidyr)
 For this tutorial we will use binned-format data that consists of the firing
 rate in a 400 ms window that starts 100 ms after the onset of the stimulus. The
 following code shows how to create this binned data. For more informaiton about
-binning the data see the [introduction tutorial](intorduction_tutorial.html).
+binning the data see the [introduction tutorial](introduction_tutorial.html).
 
 
 

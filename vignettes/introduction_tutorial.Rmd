@@ -29,21 +29,20 @@ data.
 The NDTr is built around 5 different object classes that allow users to apply
 neural decoding in a flexible and robust way. The four types of objects are:
 
-  1. [Datasources (DS)](pkgdown_documentation/datasources.html) which generate training and test
+  1. **Datasources (DS)** which generate training and test
   splits of the data.
   
-  2. [Feature preprocessors (FP)](pkgdown_documentation/feature_preprocessors.html) which apply
-  preprocessing to the training and test splits.
+  2. **Feature preprocessors (FP)** which apply preprocessing to the training and test splits.
  
-  3. [Classifiers (CL)](pkgdown_documentation/classifiers.html) which learn the relationship between
+  3. **Classifiers (CL)** which learn the relationship between
   experimental conditions and data on the training set, and then predict
   experimental conditions on the test data.
  
-  4. [Result Metrics (RM)](pkgdown_documentation/result_metrics.html) which take the output
-  predictions of a classifier and summerize the prediction accuracy.
+  4. **Result Metrics (RM)** which take the output predictions of a classifier
+  and summerize the prediction accuracy.
 
-  5. [Cross-validators (CV)](pkgdown_documentation/cross_validators.html) which take the DS, FP and CL
-  objects and run a cross-validation decoding procedure.
+  5. **Cross-validators (CV)** which take the DS, FP and CL objects and run a
+  cross-validation decoding procedure.
 
 The NDTr comes with a few implementations of each of these objects, and defines
 interfaces that allow one to create new objects that extend the basic
@@ -84,18 +83,18 @@ library(tidyr)
 ## Data formats
 
 In order to use the NDTr, the neural data must be in a usable format. Typically
-this involves putting the data in [raster-format](pkgdown_documentation/raster_format.html) and then
-converting it to [binned-format](pkgdown_documentation/binned_format.html) using the
+this involves putting the data in [raster format](data_formats.html) and then
+converting it to [binned format](data_formats.html) using the
 `create_binned_data()` function.
 
 
-### Raster-format
+### Raster format
 
 To run a decoding analysis using the NDTr you first need to have your data in a
-usable format. In this tutorial we will use data collected by Ying Zhang in Bob
-Desimone’s lab at MIT. The directory
-data/raster_format/Zhang_Desimone_7objects_raster_data/ contains data in
-raster-format. Each file in this directory contains data from one neuron. To
+usable format. In this tutorial we will use data collected by [Ying Zhang in Bob
+Desimone’s lab at MIT](datasets.hmtl). The directory
+extdata/Zhang_Desimone_7objects_raster_data_rda/ contains data in
+raster format. Each file in this directory contains data from one neuron. To
 start, let us load one of these files and examine its contents.
 
 ```{r load_raster_file}
@@ -107,11 +106,7 @@ load(file.path(raster_dir_name, file_name))
 ```
 
 
-Note that two objects were loaded into memory, raster_data, which contains the
-actual data from a single neuron and raster_site_info which contains any meta
-information about the site (for more information [see
-raster-format.html](pkgdown_documentation/raster_format.html)). Below we visualize the spiking pattern
-from this one neuron.
+Below we visualize the spiking pattern from this one neuron.
 
 
 ```{r plot_raster_file, echo = FALSE}

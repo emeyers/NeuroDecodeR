@@ -48,7 +48,7 @@ from. All rows for a given `site_info.XXX` variables typically have the same val
 ### Example raster-format data
 
 Below is an example of raster format data file from the [Zhang-Desimone 7 object
-data set](Zhang_Desimone_7_object_dataset.html).
+data set](datasets.html).
 
 
 ```{r load_raster_file}
@@ -101,10 +101,10 @@ from.
 
 
 
-## Example binned-format data
+### Example binned-format data
 
 Below is an example of binned format data file from the [Zhang-Desimone 7 object
-data set](Zhang_Desimone_7_object_dataset.html).
+data set](datasets.html).
 
 
 ```{r load_binned_file}
