@@ -1,0 +1,123 @@
+---
+title: "Data formats"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Data formats}
+  %\VignetteEngine{knitr::rmarkdown}
+  \usepackage[utf8]{inputenc}
+---
+
+
+
+The NDTr uses two closely related data formats called `raster format` and
+`binned format`. For almost all analysis, one starts by saving data from each
+site in `raster format`. One then converts it to `binned format` using the
+`create_binned_data()` which has the data from all the sites at a coaser
+temporal resolution. The `binned format` data is then used in all decoding
+analyses. More information about what is required to have data in these
+specified formats is described below.
+
+
+
+## Raster format
+
+Raster format data contains the data at the highest temporal resolution. For
+raster data, there is a separate file that contains a data frame of data each
+site (e.g., there is a separate file for each single neuron, each LFP channel,
+etc.). The reason for having data from each site in a separate file is to
+prevent memory one from running out of memory when trying to load data from many
+sites when the data is at a high temporal resolution.
+
+For raster format data, the number of rows in the data frame correspond to the
+number of trials in the experiment. Data that is in raster format is a data
+frame that must contain variables (columns) that start with the following
+prefixes:
+
+1. `labels.XXX`  These variables contain labels of which experimental conditions
+were shown on a given trial.
+
+2. `time.XXX`  These variables contain the data for a given time.
+
+There can also be variables that start with the `site_info.XXX` that contain
+additional meta data out the site. For example, one could have a variable called
+`site_info.brain_area` which indicated which brain region a given site came
+from. All rows for a given `site_info.XXX` variables typically have the same value.
+
+
+
+### Example raster-format data
+
+Below is an example of raster format data file from the [Zhang-Desimone 7 object
+data set](Zhang_Desimone_7_object_dataset.html).
+
+
+```{r load_raster_file}
+
+raster_dir_name <- file.path(system.file("extdata", package = "NDTr"), "Zhang_Desimone_7object_raster_data_rda")
+file_name <- "bp1001spk_01A_raster_data.rda"
+load(file.path(raster_dir_name, file_name))
+
+head(raster_data[, 1:10])
+
+```
+
+
+
+
+
+
+## Binned format
+
+
+Binned format data contains data from multiple sites (e.g., data from many
+neurons, LFP channels, etc.). Data that is in binned format is very similar to
+data that is in raster format except that it contains information from multiple
+sites and often contains the information at a coarser resolution. For example,
+binned data would typically contain firing rates over some time interval sampled
+at a lower rate, as opposed to raster format data that would typically contain
+individual spikes sampled at a higher rate. Binned format data is typically
+created from raster format data using the function `create_binned_data` which
+converts a directory of raster format files into a binned-format file that is
+used in subsequent decoding analyses. 
+
+Binned format data must be in a data frame where the number of rows in the data
+frame correspond to the number of trial in all experimental recording sessions
+across all sites.  The binned format data frame must also containthe variables
+that start with the following prefixes:
+
+1. `siteID.XXX` A unique number indicating a site a given row of data corresponds to.
+
+2. `labels.XXX`  These variables contain labels of which experimental conditions
+occured on a given trial.
+
+3. `time.X_Y`  These variables contain data in a time range from X to Y.
+
+
+There can also be variables that start with the `site_info.XXX` that contain
+additional meta data out the site. For example, one could have a variable called
+`site_info.brain_area` which indicated which brain region a given site came
+from. 
+
+
+
+
+## Example binned-format data
+
+Below is an example of binned format data file from the [Zhang-Desimone 7 object
+data set](Zhang_Desimone_7_object_dataset.html).
+
+
+```{r load_binned_file}
+
+load(system.file("extdata/ZD_150bins_50sampled.Rda", package="NDTr"))
+
+head(binned_data[, 1:10])
+
+
+```
+
+
+
+
+
+
