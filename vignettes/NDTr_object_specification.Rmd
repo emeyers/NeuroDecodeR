@@ -1,0 +1,418 @@
+---
+title: "NDTr object specification"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{NDTr object specification}
+  %\VignetteEngine{knitr::rmarkdown}
+  \usepackage[utf8]{inputenc}
+---
+
+
+<br>
+
+
+The Neural Decoding Toolbox in R (NDTr) is designed around five abstract object
+types which are:
+
+ 1. Datasources (DS): Generate training and test splits of the data.
+ 
+ 2. Feature preprofessors (FP): Learn parameters on the training set and apply
+ transformations to the training and test sets.
+ 
+ 3. Classifiers (CL): Learn the relationship between experimental conditions
+ (i.e., "labels") and neural data on a training set, and then predict
+ experimental conditions neural data in a test set.
+
+ 4. Result metrics (RM): Aggregate results across validation splits and over
+ resampled runs and compute and plot final decoding accuracy metrics.
+
+ 5. Cross-validators (CV): Take the DS, FP, CL and RM objects and run a
+ cross-validation decoding procedure.
+
+By having a standard set of object types, one can easily use different instances
+of these five object types to do different types of analyses.
+
+For most common analyses, one can use instances of these different object types
+that come with the NDTr. However, in some cases, one might want to extend the
+functionality of the NDTr to gain additional insights. For example, one might
+want to try a different classifier to gain a better understanding of how
+populations of neurons code information (e.g., see Meyers, Borzello, Freiwald
+and Tsao, J Neurosci 2015). 
+
+The following document describes the methods and data formats that need to be
+implemented to create valid DS, FP, CL, RM, and CV objec types. By creating new
+classes of objects that conform to these interfaces, one can easily extend the
+NDTr to try new analyses. 
+
+
+<br>
+
+<br>
+
+
+# Datasources (DS)
+
+
+Datasources are used to generate training and tests splits of data. 
+
+
+## Implementing an DS: methods and data formats
+
+All datasources must implement a `get_data()` method that returns a data frame
+that has the following variables in it:
+
+1. `train_labels`: The label levels that occur on each trial in the training data set
+
+2. `test_labels`: The label levels that occur on each trial in the test data set
+
+3. `time_bin`: The time in the experiment where the *test* data comes from
+
+4. `site_XXX`: A collection of variables that each has data from one site  (e.g., neuron, EEG channel etc.) 
+
+5. `CV_XXX`: A list for each CV split whether a given row is in that train or test set
+
+
+Like all NDTr objects, DS objects must also implement a `get_properties()` method
+which returns a data frame with one row that lists all the properties that have
+been set to allow for reproducible research.
+
+
+## Example of internals of DS objects using the ds_basic object
+
+Here is an example the data returned by the `ds_basic()` datasource
+
+
+```{r, echo = FALSE, warning=FALSE}
+library(NDTr)
+```
+
+
+```{r}
+
+data_file_name <- system.file("extdata/ZD_150bins_50sampled.Rda", package="NDTr")
+ds <- ds_basic(data_file_name, 'stimulus_ID', 18)
+
+all_cv_data <- get_data(ds)  
+ 
+names(all_cv_data)
+
+```
+
+
+
+<br>
+
+<br>
+
+
+
+# Feature preprocessors (FP)
+
+Feature preprocessors learn a set of parameters from the training data and
+modify both the training and the test data based on these parameters, prior to
+the data being sent to the classifier. The features preprocessor objects must
+only use the training data to learn the preprocessing parameters in order to
+prevent contamination between the training and test data which could bias the
+results. 
+
+
+
+## Implementing an FP: required methods and data formats
+
+All feature preprocessors must implement `preprocess_data()`. This method takes
+two data frames called *training_set* and *test_set* have the following
+variables:
+
+#### training_set
+
+1. `training_labels`: The labels used to train the classifier.
+2. `site_X`: a group of varaibles that has data from multiple sites.
+
+
+#### test_set
+
+1. `test_labels`: The labels used to testthe classifier
+2. `site_X`: a group of varaibles that has data from multiple sites
+3. `time_bin`: character strings listing which times different rows correspond to
+
+The `preprocess_data()` returns a list with the two data frames *training_set* and
+*test_set* but the data in these data frames has been preprocessed based on
+parameters learned from the training_set.
+
+Like all NDTr objects, FP objects must also implement a `get_properties()` method
+which returns a data frame with one row that lists all the properties that have
+been set to allow for reproducible research.
+
+
+## Example of internals of FP objects using the fp_zscore
+
+If you want to implement a new FP object yourself, below is an
+example of how the FP object gets and returns data.
+
+
+```{r, echo = FALSE, message=FALSE, warning=FALSE}
+library(NDTr)
+library(dplyr)
+```
+
+
+```{r}
+
+# create a ds_basic to get the data
+data_file_name <- system.file("extdata/ZD_150bins_50sampled.Rda", package="NDTr")
+ds <- ds_basic(data_file_name, 'stimulus_ID', 18)
+cv_data <- get_data(ds)  
+ 
+
+# an example of spliting the data into a training and test set, 
+# this is done in the cross-validator
+training_set <- dplyr::filter(cv_data, 
+                              time_bin == "time.100_249", 
+                              CV_1 == "train") %>%       # get data from the first CV split
+  dplyr::select(starts_with("site"), train_labels)
+        
+test_set <- dplyr::filter(cv_data, CV_1 == "test") %>%   # get data from the first CV split
+  dplyr::select(starts_with("site"), test_labels, time_bin) 
+
+
+
+# use the fp object to normalize the data 
+fp <- fp_zscore()
+processed_data <- preprocess_data(fp, training_set, test_set)
+
+# prior to z-score normalizing the mean (e.g. for site 1) is not 0
+mean(training_set$site_0001)
+
+# after normalizing the data the mean is pretty much 0
+mean(processed_data$training_set$site_0001)
+
+
+```
+
+
+
+
+<br>
+
+<br>
+
+
+
+# Classifiers (CL)
+
+
+Classifiers take a set of training data and training labels, and learn a model
+of the relationship between the training data and the labels from the different
+classes. Once this model has been learned (i.e., once the classifier has been
+trained), the classifier is then used to make predictions about what labels were
+present in a new set of test data.
+
+
+
+## Implementing a CL: required methods and data formats
+
+
+Objects that are classifiers must implement the `get_predictions()` method. This method takes
+two data frames called *training_set* and *test_set* have the following variables:
+
+#### training_set
+
+1. `training_labels`: The labels used to train the classifier.
+2. `site_X`: a group of varaibles that has data from multiple sites.
+
+#### test_set
+
+1. `test_labels` The labels used to testthe classifier.
+2. `site_X`: a group of varaibles that has data from multiple sites.
+3. `time_bin`: character strings listing which times different rows correspond to.
+
+The `get_predictions()` returns a data frame that has the following variables: 
+
+1. `test_time`: a character vector indicating the times which the rows come from
+
+2. `actual_labels`: the labels that were actually present on each trial
+
+3. `predicted_labels`: the labels that the classifier predicted
+
+4. `decision_vals.X` (optional): a group of variables that has values that indicate how strongly
+the classifier rates a test point as coming from a particular class
+
+
+Like all NDTr objects, CL objects must also implement a `get_properties()` method
+which returns a data frame with one row that lists all the properties that have
+been set to allow for reproducible research.
+
+
+## Example of internals of CL object using the cl_max_correlation
+
+
+If you want to implement a new CL object yourself, below is an
+example of how the CL object gets and returns data.
+
+
+```{r, echo = FALSE, message=FALSE, warning=FALSE}
+library(NDTr)
+library(dplyr)
+```
+
+
+```{r}
+
+# create a ds_basic to get the data
+data_file_name <- system.file("extdata/ZD_150bins_50sampled.Rda", package="NDTr")
+ds <- ds_basic(data_file_name, 'stimulus_ID', 18)
+cv_data <- get_data(ds)  
+ 
+
+# an example of spliting the data into a training and test set, 
+# this is done in the cross-validator
+training_set <- dplyr::filter(cv_data, 
+                              time_bin == "time.100_249", 
+                              CV_1 == "train") %>%       # get data from the first CV split
+  dplyr::select(starts_with("site"), train_labels)
+        
+test_set <- dplyr::filter(cv_data, CV_1 == "test") %>%   # get data from the first CV split
+  dplyr::select(starts_with("site"), test_labels, time_bin) 
+
+
+
+# use the cl object to make predictions 
+cl <- cl_max_correlation()
+predictions <- get_predictions(cl, training_set, test_set)
+
+names(predictions)
+
+
+# see how accurate the predictions are (chance is 1/7)
+predictions_at_100ms <- dplyr::filter(predictions, test_time == "time.100_249")
+mean(predictions_at_100ms$actual_labels == predictions_at_100ms$predicted_labels)
+
+
+```
+
+
+
+<br>
+
+<br>
+
+
+# Result metrics (RM)
+
+Result metrics take the predictions made by a classifier and aggregate the
+results to that they can be interpreated.
+
+
+## Implementing an RM: required methods and data formats
+
+To create a result metric two methods must be implemented
+`aggregate_CV_split_results()` which aggregates the results after a set of
+cross-valiation sweeps have been completed and `aggregate_resample_run_results()`
+which aggregates the final results across all the resample runs. 
+
+
+#### aggregate_CV_split_results() method
+
+The `aggregate_CV_split_results()` method takes a data frame that is a
+contentation of the prediction data frames made by the classifier (CL) objects
+across all times and cross-validation splits in one resample run. Thus the input
+data frame to the `aggregate_CV_split_results()` method has similar variables as
+in the output of the CL `get_predictions()` method, namely:
+
+1. `CV`: a number indicating which cross-validation split the current row comes from                  
+
+2. `train_time`: the train time that the current row comes from. 
+
+3. `test_time`: the test time that the current row comes from. 
+
+4. `actual_labels`: the labels that were actually present on each trial.      
+
+5. `predicted_labels`: the labels that the classifier predicted.
+
+6. `decision_vals.X` (optional): a group of variables that has values that
+indicate how strongly the classifier rates a test point as coming from a
+particular class
+
+
+The output of the `aggregate_CV_split_results` is a RM object of the same type
+that contains inherts from a data frame so that the results can be can be
+aggregated together (e.g., via rbind) across resample runs. The variables in the
+data frame can be anything that is useful to capture about the classification
+performance.
+
+
+
+#### aggregate_resample_run_results() method
+
+The `aggregate_resample_run_results()` method takes result metric data frames that
+have been aggregated together (e.g., via rbind) across resample runs. Thus this
+input data frame as the same variables as the data frame returned by the
+`aggregate_CV_split_results()` along with one additional variable indicating which
+resample run each row comes from.
+
+The output of this method should be a RM object of the same type that is a data
+frame which most likely is of a smaller size.
+
+Like all NDTr objects, RM objects must also implement a `get_properties()` method
+which returns a data frame with one row that lists all the properties that have
+been set to allow for reproducible research.
+
+RM objects can also have plot methods to allow the different aggregated results
+to be plotted
+
+
+
+## Example of result metrics
+
+Examples of using result metrics can be seen by going through the [Introduction tutorial](introduction_tutorial.html)
+
+
+
+
+
+
+<br>
+
+<br>
+
+
+
+# Cross-validators (CV)
+
+Cross-validators take a classifier (CL), a datasource (DS) feature
+preprocessors (FP) objects, and result metric (RM) objects and they run a
+cross-validation decoding scheme by training and testing the classifier with
+data generated from the datasource object (and possibly fed through the feature
+pre-processing first).
+
+
+
+## Implementing a CV: required methods and data formats
+
+All cross-validators must implement `run_decoding()` method. This method does not take 
+any additional arguments (apart from the cross-validator itself). 
+
+The cross-validator returns a list `DECODING_RESULTS` which contains different RM
+objects that can be used to assess how accurately the classifier made
+predictions at different points in time.
+
+Like all NDTr objects, CV objects must also implement a `get_properties()` method
+which returns a data frame with one row that lists all the properties that have
+been set and also pulls all properties from the other NDTr objects (e.g., from
+the DS, FP, CL and RM objects) to allow for reproducible research.
+
+
+
+## Example of cross-validators
+
+Examples of using the `cv_standard` can be seen by going through the
+[Introduction tutorial](introduction_tutorial.html)
+
+
+
+
+
+
+
+
+
