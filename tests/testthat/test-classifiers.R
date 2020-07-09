@@ -33,6 +33,10 @@ test_reasonable_classification_accuracy <- function(cl){
 }
 
 
+
+
+
+
 test_shuffle_results_at_chance <- function(cl){
   
   test_that("testing classification results on shuffled data are around chance", {
@@ -51,6 +55,9 @@ test_shuffle_results_at_chance <- function(cl){
   
   
 
+
+
+
 # test cl_max_correlation -----------------------------------------------------
 
 # test classifier has required methods and returns correctly formatted results
@@ -59,6 +66,7 @@ test_valid_classifier(cl)
 
 test_reasonable_classification_accuracy(cl)
 test_shuffle_results_at_chance(cl)
+
 
 
 
@@ -73,6 +81,8 @@ test_shuffle_results_at_chance(cl)
 
 
 
+
+
 # test cl_svm -----------------------------------------------------------------
 cl <- cl_svm()
 test_valid_classifier(cl) 
@@ -80,14 +90,11 @@ test_reasonable_classification_accuracy(cl)
 test_shuffle_results_at_chance(cl)
 
 
+
 cl <- cl_svm(kernel = "linear")
 test_valid_classifier(cl) 
 test_reasonable_classification_accuracy(cl)
 test_shuffle_results_at_chance(cl)
-
-
-
-
 
 
 
