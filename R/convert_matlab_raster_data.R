@@ -51,13 +51,13 @@ convert_matlab_raster_data <- function(matlab_raster_dir_name,
   matlab_raster_dir_name <- paste0(file.path(dirname(matlab_raster_dir_name), ''), 
                                    basename(matlab_raster_dir_name))  
   
-
+  
   matlab_file_names <- list.files(matlab_raster_dir_name, pattern = files_contain)
   
   
   
   for (iSite in seq_along(matlab_file_names)) {
-  
+    
     cat(paste(iSite, " "))
     
     # first, load in raster as a list
@@ -72,15 +72,50 @@ convert_matlab_raster_data <- function(matlab_raster_dir_name,
     
     # second, create the raster_site_info list
     raster_site_info <- raster$raster.site.info[, , 1]
-    raster_site_info_names <- convert_dot_back_to_underscore(names(raster_site_info))
-    names(raster_site_info) <- raster_site_info_names
+    
     
     # take elements out from a matrix into an ordinary list
-    raster_site_info <- lapply(raster_site_info, function(x) x[[1]])
+    #raster_site_info <- lapply(raster_site_info, function(x) x[[1]])
     
-    # in the future, might consider making site_info.X, site_info.Y etc,
-    # variables in the raster_data and not having a separate object
-    # raster_site_info
+    # find if any of the site_info is missing values and add them as NAs
+    if (sum(sapply(lapply(raster_site_info, dim), function(x) x[[1]]) == 0)) {
+      raster_site_info[sapply(lapply(raster_site_info, dim), function(x) x[[1]]) == 0][[1]] <- matrix(NA)
+    }
+    
+    # convert the raster site info to a data frame and add it to the raster data
+    raster_site_info_df <- as.data.frame(raster_site_info)
+    
+    
+    # if there are more then one row to site_info_df, flatten it to a single row
+    if (dim(raster_site_info_df)[1] > 1) {
+      
+      all_rows_same_vals <- sapply(raster_site_info_df, n_distinct)
+      raster_site_info_df_diff_row_vals <- dplyr::select(raster_site_info_df, which(all_rows_same_vals > 1))
+      
+      # reduce to a single row all columns that have all of the same values
+      raster_site_info_df <- dplyr::select(raster_site_info_df, which(all_rows_same_vals <= 1))
+      raster_site_info_df <- raster_site_info_df[1, ]
+
+      # deal with rows that don't have the same value in each row
+      for (iDupSiteInfo in 1:dim(raster_site_info_df_diff_row_vals)[2]) {
+        
+        curr_dup_col_df <- dplyr::select(raster_site_info_df_diff_row_vals, iDupSiteInfo)
+        curr_dup_col_df <- distinct(curr_dup_col_df)  # remove duplicated rows (keep nested df)
+        curr_dup_col_df <- as.data.frame(t(as.matrix(curr_dup_col_df)))  # a bit of a hack 
+        
+        raster_site_info_df <- cbind(raster_site_info_df, curr_dup_col_df)
+        
+      }
+      
+    }
+    
+    
+    # create the appropriave site_info.X prefix variables names
+    raster_site_info_names <- convert_dot_back_to_underscore(names(raster_site_info_df))
+    names(raster_site_info_df) <- raster_site_info_names
+    names(raster_site_info_df) <- paste0("site_info.", names(raster_site_info_df))
+    
+    
     
     
     # third, create the raster_data df
@@ -95,8 +130,8 @@ convert_matlab_raster_data <- function(matlab_raster_dir_name,
     } else {
       start_ind_save_dir_name <- paste0("_start_", start_ind)
     }
-      
-      
+    
+    
     if (is.null(end_ind)) {
       end_ind <- dim(raster_data)[2]
       end_ind_save_dir_name <- ""
@@ -106,19 +141,19 @@ convert_matlab_raster_data <- function(matlab_raster_dir_name,
     
     
     raster_data <- raster_data[, start_ind:end_ind]
-
+    
     # Add column names to the raster data in the form of: time.1, time.2 etc.
     data_times <- 1:dim(raster_data)[2]
     
     # if there is an alignment time, subtract the start_ind offset from the
     # alignment and subtract alignment from the raster times
-    if (sum(names(raster_site_info) == "alignment_event_time")) {
+    if (sum(names(raster_site_info) == "alignment.event.time")) {
       
-      data_times <- (data_times - rep.int(raster_site_info$alignment_event_time - (start_ind - 1), length(data_times)))
-
+      data_times <- (data_times - rep.int(raster_site_info$alignment.event.time - (start_ind - 1), length(data_times)))
+      
       # remove the alignment time from the site info since it is incorporated into the time bin names
-      raster_site_info$alignment_event_time <- NULL
-      
+      raster_site_info_df$site_info.alignment_event_time <- NULL
+
       # update the names if start_ind or end_ind were given as arguments      
       if (!(start_ind_save_dir_name == ""))
         start_ind_save_dir_name <- paste0("_start_", start_ind - raster_site_info$alignment_event_time)
@@ -161,10 +196,13 @@ convert_matlab_raster_data <- function(matlab_raster_dir_name,
     
     
     # convert the raster site info to a data frame and add it to the raster data
-    raster_site_info_df <- as.data.frame(raster_site_info)
-    names(raster_site_info_df) <- paste0("site_info.", names(raster_site_info_df))
+    #raster_site_info_df <- as.data.frame(raster_site_info)
+    #names(raster_site_info_df) <- paste0("site_info.", names(raster_site_info_df))
     
     raster_data <- cbind(raster_site_info_df[rep(1, nrow(raster_data)), ], raster_data) 
+    
+    # remove any row names if they exist
+    rownames(raster_data) <- NULL
     
     
     # finally, save the raster data in the file
@@ -207,4 +245,3 @@ convert_dot_back_to_underscore <- function(oldnames) {
 }
 
 
-  
