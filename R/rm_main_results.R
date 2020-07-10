@@ -255,11 +255,11 @@ plot.rm_main_results = function(x, ..., result_type = 'zero_one_loss', plot_type
   } else if (result_type == 'zero_one_loss'){
     main_results <- dplyr::select(main_results, .data$train_time, .data$test_time, .data$zero_one_loss)
   } else if (result_type == 'normalized_rank'){
-    if (!(result_type %in% main_results)){ 
+    if (!(result_type %in% names(main_results))){ 
       stop(paste("Can't plot", result_type, "results because this type of result was not saved."))}
     main_results <- dplyr::select(main_results, .data$train_time, .data$test_time, .data$normalized_rank)
   } else if (result_type == 'decision_vals'){
-    if (!(result_type %in% main_results)){ 
+    if (!(result_type %in% names(main_results))){ 
       stop(paste("Can't plot", result_type, "results because this type of result was not saved."))}
     main_results <- dplyr::select(main_results, .data$train_time, .data$test_time, .data$decision_vals)
   } else {
@@ -316,13 +316,46 @@ plot.rm_main_results = function(x, ..., result_type = 'zero_one_loss', plot_type
     # should come up with something better so that the fill colors can be on different scales
     
     # if trained and testing at all times, create a TCD plot
-    main_results %>%
-      ggplot(aes(.data$test_time, .data$train_time, fill = .data$accuracy)) + 
-      geom_tile() +
-      facet_wrap(~result_type) +
-      scale_fill_continuous(type = "viridis", name = "Prediction \n accuracy") +
-      ylab('Train time') + 
-      xlab('Test time') 
+    
+    if (result_type != 'all') {
+      
+      g <- main_results %>%
+        ggplot(aes(.data$test_time, .data$train_time, fill = .data$accuracy)) + 
+        geom_tile() +
+        facet_wrap(~result_type) +
+        scale_fill_continuous(type = "viridis", name = "Prediction \n accuracy") +
+        ylab('Train time') + 
+        xlab('Test time') 
+      
+      g
+      
+    } else if (result_type == 'all'){
+      
+      all_TCD_plots <- lapply(unique(main_results$result_type), function(curr_result_name) {
+        
+        curr_results <- filter(main_results, .data$result_type == curr_result_name)
+        
+        g <- curr_results %>%
+          ggplot(aes(.data$test_time, .data$train_time, fill = .data$accuracy)) + 
+          geom_tile() +
+          facet_wrap(~result_type, scales = 'free') +
+          #scale_fill_continuous(type = "viridis", name = curr_results$result_type[1]) +
+          scale_fill_continuous(type = "viridis", name = "") +
+          ylab('Train time') + 
+          xlab('Test time')  + 
+          theme(legend.position="bottom") +
+          theme(panel.grid.major = element_blank(),
+                panel.grid.minor = element_blank(),
+                strip.background = element_rect(colour="white", fill="white"))
+        g
+        
+      }) 
+      
+      all_TCD_plots[["ncol"]] <- 3
+      do.call(grid.arrange, all_TCD_plots)
+      
+    }
+    
     
   }
   

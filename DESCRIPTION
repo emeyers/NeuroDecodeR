@@ -26,6 +26,7 @@ Imports:
     forcats,
     foreach,
     ggplot2,
+    gridExtra,
     magrittr,
     purrr,
     R.matlab,
