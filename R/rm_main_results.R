@@ -313,8 +313,6 @@ plot.rm_main_results = function(x, ..., result_type = 'zero_one_loss', plot_type
   } else {
     
     
-    # should come up with something better so that the fill colors can be on different scales
-    
     # if trained and testing at all times, create a TCD plot
     
     if (result_type != 'all') {
@@ -353,11 +351,10 @@ plot.rm_main_results = function(x, ..., result_type = 'zero_one_loss', plot_type
       
       all_TCD_plots[["ncol"]] <- 3
       do.call(grid.arrange, all_TCD_plots)
-      
     }
     
-    
   }
+  
   
 }
 
