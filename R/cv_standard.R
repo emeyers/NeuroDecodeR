@@ -1,38 +1,42 @@
-#' The standard cross-validator (CV) object
+#' The standard cross-validator (CV) 
 #'
-#' This uses cross-validation to run a decoding analysis
+#' This object runs a decoding analysis where a classifier is repeatedly trained
+#' and tested using cross-validation.
 #'
 #' @details A cross-validator object takes a datasource (DS), a classifier (CL),
-#' feature preprocessors (FP) and result metric (RM) objects, and runs multiple
-#' cross-validation cycles by getting new training and test data splits, running
-#' the preprocessor to do preprocessing of the data, trains and tests the
-#' classifier, and uses the result metric objects to evaluate the classification
-#' performance on the test set.
+#'   feature preprocessors (FP) and result metric (RM) objects, and runs
+#'   multiple cross-validation cycles where: 
+#'   
+#'   1. A datasource (DS) generates training and test data splits of the data
+#'   2. Feature preprocessors (FPs) do preprcessing of the data 
+#'   3. A classifier (CL) is trained and predictions are generated on a test set
+#'   4. Result metrics (RMs) assess the accuracy of the predictions and compile
+#'   the results.
 #'
-#' @param datasource a datasource (DS) object that will generate the training
-#'   and test data
+#' @param datasource A datasource (DS) object that will generate the training
+#'   and test data.
 #'
-#' @param classifier a classifier (CS) object that will learn parameters based
+#' @param classifier A classifier (CS) object that will learn parameters based
 #'   on the training data and will generate predictions based on the test data.
 #'
-#' @param feature_preprocessors a list of feature preprocessor (FP) objects that
+#' @param feature_preprocessors A list of feature preprocessor (FP) objects that
 #'   learn preprocessing parameters from the training data and apply
-#'   preprocessing of both the training and test data based on these parameters
+#'   preprocessing of both the training and test data based on these parameters.
 #'
-#' @param result_metrics a list of result metric (RM) objects that are used to
+#' @param result_metrics A list of result metric (RM) objects that are used to
 #'   evaluate the classification performance. If this is set to null then the 
 #'   rm_main_results(), rm_confusion_matrix() results metrics will be used. 
 #'   
 #' @param num_resample_runs The number of times the cross-validation should be
 #'   run (i.e., "resample runs"), where on each run, new training and test sets
-#'   are generated. If pseudo-populations are used (say with the ds_basic) then
+#'   are generated. If pseudo-populations are used (e.g., with the ds_basic), then
 #'   new pseduo-populations will be generated on each resample run as well.
 #'
-#' @param test_only_at_training_time Whether the analysis should only be run
-#'   where the classifier is trained and tested at the same time point (i.e.,
-#'   now temporal cross-decoding analysis will be run). Setting this to true can
+#' @param test_only_at_training_time A boolean indicated whether the classifier
+#'   should only be trained and tested at the same time point (i.e., if TRUE a
+#'   temporal cross-decoding analysis will NOT be run). Setting this to true can
 #'   potentially speed up the analysis and save memory at the cost of not
-#'   calculated the temporal cross-decoding results.
+#'   calculated the temporal cross decoding results.
 #'   
 #' @param run_parallel A boolean to indicate whether the code should be run in
 #'    parallel. It is useful to set this to FALSE for debugging purposes or 
@@ -40,18 +44,20 @@
 #'    of much concern.
 #'
 #' @examples
-#' data_file <- system.file("extdata/ZD_150bins_50sampled.Rda", package = "NDTr") 
+#' data_file <- system.file("extdata/ZD_150bins_50sampled.Rda",
+#'                           package = "NDTr") 
+#' 
 #' ds <- ds_basic(data_file, 'stimulus_ID', 18)
 #' fps <- list(fp_zscore())
 #' cl <- cl_max_correlation()
+#' 
 #' cv <- cv_standard(ds, cl, fps) 
 #'
 #'
 #' @family cross-validator
-
-
-
-
+#' 
+#' 
+#' 
 # the constructor 
 #' @export
 cv_standard <- function(datasource, 
@@ -103,15 +109,10 @@ run_decoding.cv_standard = function(cv_obj) {
   run_parallel <- cv_obj$run_parallel  
 
 
-  
   if (run_parallel) {
   
     # register parallel resources
     cores <- parallel::detectCores()
-    #the_cluster <- parallel::makeCluster(cores)
-    #doParallel::registerDoParallel(the_cluster)
-  
-    # switching to the doSNOW package b/c there seems to be a memory leak with doParallel
     the_cluster <- makeCluster(cores, type="SOCK")
     doSNOW::registerDoSNOW(the_cluster)
   
@@ -148,12 +149,14 @@ run_decoding.cv_standard = function(cv_obj) {
 
       all_time_results <- NULL
       
+      # when the code is not run in parallel, the CV number will be printed
       tictoc::tic()
       print(paste0("CV: ", iCV))
       
       for (iTrain in 1:num_time_bins) {
         
-        training_set <- dplyr::filter(cv_data, .data$time_bin == unique_times[iTrain], all_cv_train_test_inds[iCV] == "train") %>% 
+        training_set <- dplyr::filter(cv_data, .data$time_bin == unique_times[iTrain], 
+                                      all_cv_train_test_inds[iCV] == "train") %>% 
           dplyr::select(starts_with("site"), .data$train_labels)
         
         test_set <- dplyr::filter(cv_data, all_cv_train_test_inds[iCV] == "test") %>% 
@@ -191,6 +194,7 @@ run_decoding.cv_standard = function(cv_obj) {
         
         
       }   # end the for loop over time bins
+      
       tictoc::toc()
   
       
@@ -204,7 +208,6 @@ run_decoding.cv_standard = function(cv_obj) {
 
     # convert the results from each CV split from a list into a data frame
     all_cv_results <- dplyr::bind_rows(all_cv_results)
-    
     
     
     # go through each Result Metric and aggregate the results from all CV splits using each metric
@@ -229,10 +232,8 @@ run_decoding.cv_standard = function(cv_obj) {
   
   # aggregate results over all resample runs  ---------------------------------
 
-  # close parallel resources
-  #doParallel::stopImplicitCluster()
   
-  # switching to the doSNOW package b/c there seems to be a memory leak with doParallel
+  # close parallel resources
   if (run_parallel) {
     stopCluster(the_cluster)  
   }
@@ -288,19 +289,19 @@ run_decoding.cv_standard = function(cv_obj) {
 
 
 
+
+# get parameters from all objects and save the in a data frame so that
+# which will be useful to tell if an analysis has already been run
 get_parameters.cv_standard = function(ndtr_obj){
   
-  # get parameters from all objects and save the in a data frame so that
-  # which will be useful to tell if an analysis has already been run
   
   # start by getting the parameters from the datasource
   parameter_df <- get_parameters(ndtr_obj$datasource)
   
-  
   # add the parameters from the classifier
   parameter_df <- cbind(parameter_df, get_parameters(ndtr_obj$classifier))
   
-  
+
   # if feature-processors have been specified, add their parameters to the data frame
   if (length(ndtr_obj$feature_preprocessors) >= 1) {
     for (iFP in 1:length(ndtr_obj$feature_preprocessors)) {
@@ -311,16 +312,14 @@ get_parameters.cv_standard = function(ndtr_obj){
   
   
   
-  # go through each Result Metric and get their parameters
+  # go through each result metric and get their parameters
   for (iMetric in 1:length(ndtr_obj$result_metrics)) {
     curr_metric_parameters <- get_parameters(ndtr_obj$result_metrics[[iMetric]])
     parameter_df <- cbind(parameter_df, curr_metric_parameters)
   }
   
   
-  
   # finally add the parameters from this cv_standard object as well
-
   cv_parameters <- data.frame(analysis_ID = ndtr_obj$analysis_ID, 
                               cv_standard.num_resample_runs = ndtr_obj$num_resample_runs, 
                               cv_standard.test_only_at_training_time = ndtr_obj$test_only_at_training_time)
@@ -332,3 +331,5 @@ get_parameters.cv_standard = function(ndtr_obj){
   
   
 }
+
+

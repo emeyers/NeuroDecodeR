@@ -1,10 +1,14 @@
-#' A basic datasource object
+#' A basic datasource (DS)
 #'
 #' The standard datasource used to get training and test splits of data.
 #' 
 #' This 'basic' datasource is the datasource that will most commonly be used for
-#' most analyses. Like all datasources, this datasource takes binned format data
-#' and has a get_data() method that is called by a cross-validation object to 
+#' most analyses. It can generate training and tests sets for data that has been 
+#' recorded simultaneously or pseudo-populations for data that was not recoded
+#' simultaneously. 
+#' 
+#' Like all datasources, this datasource takes binned format data
+#' and has a `get_data()` method that is called by a cross-validation object to 
 #' get training and testing splits of data that can be passed to a classifier. 
 #'
 #'
@@ -70,14 +74,13 @@
 #'  # One never explicitely calls the get_data() function, but rather this is
 #'  # done by the cross-validator. However, to illustrate what this function
 #'  # does, we can call it explicitly here to get training and test data:
-#'  all_cv_data <- NDTr::get_data(ds)  
+#'  all_cv_data <- NDTr:::get_data(ds)  
 #'  names(all_cv_data)
 #' 
 #'  
 #' 
 #' @family datasource
-
-
+#' 
 
 
 # the constructor 
@@ -102,7 +105,7 @@ ds_basic <- function(binned_file_name,
   }
   
   
-  # remove all labels that aren't being used, and rename the labels that are being used "labels"
+  # remove all labels that aren't being used, and rename the labels that are being used to "labels"
   label_col_ind <- match(paste0("labels.", var_to_decode), names(binned_data))
   
   # also keep the variable trial_number if it exists
@@ -178,8 +181,7 @@ ds_basic <- function(binned_file_name,
     }
     
     
-    # shuffle the labels if specified
-    # shuffle labels the same way for each site...
+    # shuffle the labels if specified (shuffle labels the same way for each site)
     if(randomly_shuffled_labels_before_running == TRUE) {
       min_site_ID <- min(binned_data$siteID)
       first_site_data <- dplyr::filter(binned_data, .data$siteID == min_site_ID)
@@ -191,8 +193,6 @@ ds_basic <- function(binned_file_name,
     # add variable label_trial_combo
     binned_data <- binned_data  %>% 
       mutate(label_trial_combo = paste0(binned_data$labels, '_', binned_data$trial_number))
-    
-    
     
     
     # end pre-processing for simultaneously recorded data...
@@ -234,6 +234,7 @@ ds_basic <- function(binned_file_name,
 
 }
                       
+
 
 
 #' @export
@@ -300,7 +301,7 @@ get_data.ds_basic = function(ds_obj){
     num_labels <- length(unique_labels)
 
 
-    # arrange the data by siteID and labels before adding on the CV_slide_ID (10/2/19)
+    # arrange the data by siteID and labels before adding on the CV_slide_ID 
     all_k_fold_data <- dplyr::arrange(all_k_fold_data, .data$siteID, labels)
     
 
@@ -344,6 +345,7 @@ get_data.ds_basic = function(ds_obj){
     
 
 }  # end get_data()
+
 
 
 

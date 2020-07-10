@@ -1,4 +1,4 @@
-#' A datasource that allows training and testing on different but related labels
+#' A datasource (DS) that allows training and testing on different but related labels
 #'
 #' This datasource is useful for assessing whether information is
 #' invariant/abstract to particular conditions.
@@ -18,28 +18,26 @@
 #' @param num_cv_splits A number specifying how many cross-validation splits
 #'  should be used. 
 #'  
-#' @param train_label_levels A list that contains vectors listing which label
+#' @param train_label_levels A list that contains vectors specifying which label
 #'   levels belong to which training class. Each element in the list corresponds
 #'   to a class that the specified training labels will be mapped to. For
 #'   example, values in the vector in the first element in the list will be
 #'   mapped onto the first training class, etc.
 #'
-#' @param test_label_levels A list that contains vectors listing which label
+#' @param test_label_levels A list that contains vectors specifying which label
 #'   levels belong to which test class. Each element in the list corresponds to
 #'   a class that the specified test labels will be mapped to. For example,
 #'   values in the vector in the first element in the list will be mapped onto
 #'   the first test class, etc. The number of elements in this list must be the
-#'   same as the number of elements in train_label_levels
+#'   same as the number of elements in `train_label_levels`.
 #'
-#'   
 #' @param use_count_data If the binned data is neural spike counts, then setting
 #'   use_count_data = TRUE will convert the data into spike counts. This is
 #'   useful for classifiers that work on spike count data, e.g., the
 #'   poisson_naive_bayes_CL.
 #' 
 #' @param num_label_repeats_per_cv_split A number specifying how many times each
-#'   label should be repeated in each cross-validation split.
-#' 
+#'   label level should be repeated in each cross-validation split.
 #' 
 #' @param num_resample_sites The number of sites that should be randomly
 #'   selected when constructing training and test vectors. This number needs to
@@ -58,15 +56,15 @@
 #'   comparing when decoding results are above chance.
 #' 
 #' @param create_simultaneously_recorded_populations If the data from all sites
-#'   was recorded simultaneously, then setting this variable to 1 will cause the
+#'   were recorded simultaneously, then setting this variable to 1 will cause the
 #'   get_data() function to return simultaneous populations rather than
 #'   pseudo-populations.
 #' 
 #' 
 #' @examples
-#' # Testing position invariance by generating training to discriminate between
-#' # 7 objects presented at the upper and middle locations and testing at the
-#' # lower location
+#' # One can test if a neural population contains information that is position
+#' invariant by generating training data for objects presented at 'upper' and 'middle'
+#' locations, and generating test data at a 'lower' location.
 #' 
 #' id_levels <- c("hand", "flower", "guitar", "face", "kiwi", "couch",  "car")   
 #' train_label_levels <- NULL
@@ -144,7 +142,6 @@ ds_generalization <- function(binned_file_name,
   
 
   # construct a ds_basic object that will do most of the work
-  
   
   # using unique() here because for generalization analysis it is ok for some of the same labels
   # to be listed in the training and test label levels
@@ -261,6 +258,7 @@ get_data.ds_generalization = function(ds_obj){
 
 
 
+
 #' @export
 get_parameters.ds_generalization = function(ndtr_obj){
 
@@ -279,5 +277,6 @@ get_parameters.ds_generalization = function(ndtr_obj){
   parameter_df
   
 }
+
 
 
