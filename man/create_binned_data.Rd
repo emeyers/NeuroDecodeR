@@ -2,7 +2,7 @@
 % Please edit documentation in R/create_binned_data.R
 \name{create_binned_data}
 \alias{create_binned_data}
-\title{A function that converts data from raster format to binned format}
+\title{Convert data from raster format to binned format}
 \usage{
 create_binned_data(
   raster_dir_name,
@@ -25,7 +25,7 @@ that contains the saved binned format data.}
 \item{bin_width}{A number that has the bin width that data should be averaged over.}
 
 \item{sampling_interval}{A number that has the specifies the sampling
-interval between successive binned-data points.}
+interval between successive binned data points.}
 
 \item{start_time}{A number that specifies at which time should the binning
 start. By default it starts at the first time in the raster data.}
@@ -38,15 +38,17 @@ contain this string should be included in the binned format data.}
 }
 \description{
 This function takes the name of a directory that contains files in raster
-format, and averages the data within a specified bin size at specifid
+format and averages the data within a specified bin width at specified
 sampling inverval increments to create data in binned format used for
 decoding.
 }
 \examples{
 # create binned data with 150 ms bin sizes sampled at 10 ms intervals
-raster_dir_name <- "../data-raw/raster/Zhang_Desimone_7objects_raster_data_rda/"
+raster_dir_name <- file.path("..", "data-raw", "raster", 
+                             "Zhang_Desimone_7objects_raster_data_rda", "")
                              
 \dontrun{binned_file_name <- create_binned_data(raster_dir_name, "ZD", 150, 50)}
+
 
 
 }

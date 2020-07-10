@@ -1,7 +1,7 @@
-#' A function that converts data from raster format to binned format
+#' Convert data from raster format to binned format
 #'
 #' This function takes the name of a directory that contains files in raster
-#' format, and averages the data within a specified bin size at specifid
+#' format and averages the data within a specified bin width at specified
 #' sampling inverval increments to create data in binned format used for
 #' decoding.
 #'
@@ -16,7 +16,7 @@
 #' @param bin_width A number that has the bin width that data should be averaged over. 
 #' 
 #' @param sampling_interval A number that has the specifies the sampling
-#'   interval between successive binned-data points.
+#'   interval between successive binned data points.
 #' 
 #' @param start_time A number that specifies at which time should the binning
 #'   start. By default it starts at the first time in the raster data.
@@ -29,17 +29,13 @@
 #' 
 #' @examples 
 #' # create binned data with 150 ms bin sizes sampled at 10 ms intervals
-#' raster_dir_name <- "../data-raw/raster/Zhang_Desimone_7objects_raster_data_rda/"
+#' raster_dir_name <- file.path("..", "data-raw", "raster", 
+#'                              "Zhang_Desimone_7objects_raster_data_rda", "")
 #'                              
 #' \dontrun{binned_file_name <- create_binned_data(raster_dir_name, "ZD", 150, 50)}
 #' 
 #' 
-
-
-
-
-
-
+#' 
 #' @export
 create_binned_data <- function(raster_dir_name, 
                                save_prefix_name, 
@@ -51,8 +47,8 @@ create_binned_data <- function(raster_dir_name,
   
   
   # if the directory name does not end with a slash, add a slash to the directory name
-  desired_pattern = '.*/$'
-  if (grepl(desired_pattern, raster_dir_name) == FALSE){
+  last_dir_char <- substr(raster_dir_name, nchar(raster_dir_name), nchar(raster_dir_name))
+  if (!(last_dir_char == "\\" || last_dir_char == "/")) {
     raster_dir_name <- file.path(raster_dir_name, "")
   }  
   
@@ -63,11 +59,9 @@ create_binned_data <- function(raster_dir_name,
   binned_data <- NULL
 
   
-
   # loop through all raster data files and bin them
   for (iSite in 1:length(file_names)) {
     
-    #cat(paste(iSite, " "))
     cat(paste0(rep("\b", 19), collapse = ""), sprintf("binning site %-5s", iSite))
     
     
@@ -81,6 +75,7 @@ create_binned_data <- function(raster_dir_name,
       raster_data <- NULL  
       
     }
+    
     
     one_binned_site <- bin_saved_data_one_site(raster_data, bin_width, sampling_interval, start_time, end_time)
     

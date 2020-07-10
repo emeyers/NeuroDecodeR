@@ -1,20 +1,20 @@
-#' Convert raster data in MATLAB .mat format to R .rda format
+#' Convert raster data in MATLAB to R 
 #' 
-#' If one already has raster data created in MATLAB, this function can be used to convert it 
-#' to an R format (.rda files) that can be used with the NDTr.
+#' If one already has raster data created in MATLAB (.mat files), this function
+#' can be used to convert it to an R format (.rda files) that can be used with
+#' the NDTr.
 #' 
-#' @param matlab_raster_dir_name A character string specifying the path to a directory that 
-#'   contains raster data in MATLAB .mat files 
+#' @param matlab_raster_dir_name A character string specifying the path to a
+#'   directory that contains raster data in MATLAB .mat files.
 #' 
 #' @param r_raster_dir_name A character string specifying the path to a
-#'   directory that where the converted raster data in R .rda files will be
-#'   saved. If this is not specified then the saved directory will have the same
-#'   name as the matlab directory with _rda appended to the end of the last
-#'   directory name.
+#'   directory where the converted raster data in R .rda files will be saved. If
+#'   this is not specified then the saved directory will have the same name as
+#'   the matlab directory with _rda appended to the end of the directory name.
 #' 
 #' @param start_ind A number specifying the start index for the data to be
 #'   converted if one wants to convert the data from a shorter time window than
-#'   the original MATLAB raster data. The default (NULL valu) is to use all the
+#'   the original MATLAB raster data. The default (NULL value) is to use all the
 #'   data, i.e., start at the beginning with start_ind = 1.
 #' 
 #' @param end_ind A number specifying the end index for the data to be converted
@@ -36,15 +36,13 @@
 #'                                                 r_raster_dir_name, 
 #'                                                 files_contain = "bp1001spk")
 #' 
-
-
+#' 
 #' @export
 convert_matlab_raster_data <- function(matlab_raster_dir_name, 
                                        r_raster_dir_name = NULL, 
                                        start_ind = NULL, 
                                        end_ind = NULL,
                                        files_contain = ""){
-  
   
   
   # if matlab directory name ends with a slash, remove this slash (should work for all OS)
@@ -66,16 +64,12 @@ convert_matlab_raster_data <- function(matlab_raster_dir_name,
     # replace .mat with .rda for matlab_raster_directory_name
     curr_r_file_name <- paste0(substr(curr_matlab_file_name, 1, nchar(curr_matlab_file_name)-3), "rda")
     
-    #raster <- R.matlab::readMat(paste0(matlab_raster_dir_name, "/", curr_matlab_file_name))
     raster <- R.matlab::readMat(file.path(matlab_raster_dir_name, curr_matlab_file_name))
     
     
     # second, create the raster_site_info list
     raster_site_info <- raster$raster.site.info[, , 1]
     
-    
-    # take elements out from a matrix into an ordinary list
-    #raster_site_info <- lapply(raster_site_info, function(x) x[[1]])
     
     # find if any of the site_info is missing values and add them as NAs
     if (sum(sapply(lapply(raster_site_info, dim), function(x) x[[1]]) == 0)) {
@@ -116,8 +110,6 @@ convert_matlab_raster_data <- function(matlab_raster_dir_name,
     names(raster_site_info_df) <- paste0("site_info.", names(raster_site_info_df))
     
     
-    
-    
     # third, create the raster_data df
     raster_data <- data.frame(raster$raster.data)
     
@@ -142,8 +134,10 @@ convert_matlab_raster_data <- function(matlab_raster_dir_name,
     
     raster_data <- raster_data[, start_ind:end_ind]
     
+    
     # Add column names to the raster data in the form of: time.1, time.2 etc.
     data_times <- 1:dim(raster_data)[2]
+    
     
     # if there is an alignment time, subtract the start_ind offset from the
     # alignment and subtract alignment from the raster times
@@ -171,7 +165,7 @@ convert_matlab_raster_data <- function(matlab_raster_dir_name,
     raster_labels <- raster$raster.labels
     
     
-    # loop over label names
+    # loop over label names and parse them
     all_labels <- convert_dot_back_to_underscore(row.names(raster_labels))
     
     for (iLabel in seq_along(all_labels)) {
@@ -195,14 +189,10 @@ convert_matlab_raster_data <- function(matlab_raster_dir_name,
     }
     
     
-    # convert the raster site info to a data frame and add it to the raster data
-    #raster_site_info_df <- as.data.frame(raster_site_info)
-    #names(raster_site_info_df) <- paste0("site_info.", names(raster_site_info_df))
-    
+    # add the site_info to the raster_data with the same values in each row (trial)
     raster_data <- cbind(raster_site_info_df[rep(1, nrow(raster_data)), ], raster_data) 
+    rownames(raster_data) <- NULL       # remove any row names if they exist
     
-    # remove any row names if they exist
-    rownames(raster_data) <- NULL
     
     
     # finally, save the raster data in the file
@@ -234,6 +224,7 @@ convert_matlab_raster_data <- function(matlab_raster_dir_name,
   r_raster_dir_name
   
 }
+
 
 
 

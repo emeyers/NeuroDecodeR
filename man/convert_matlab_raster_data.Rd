@@ -2,7 +2,7 @@
 % Please edit documentation in R/convert_matlab_raster_data.R
 \name{convert_matlab_raster_data}
 \alias{convert_matlab_raster_data}
-\title{Convert raster data in MATLAB .mat format to R .rda format}
+\title{Convert raster data in MATLAB to R}
 \usage{
 convert_matlab_raster_data(
   matlab_raster_dir_name,
@@ -13,18 +13,17 @@ convert_matlab_raster_data(
 )
 }
 \arguments{
-\item{matlab_raster_dir_name}{A character string specifying the path to a directory that
-contains raster data in MATLAB .mat files}
+\item{matlab_raster_dir_name}{A character string specifying the path to a
+directory that contains raster data in MATLAB .mat files.}
 
 \item{r_raster_dir_name}{A character string specifying the path to a
-directory that where the converted raster data in R .rda files will be
-saved. If this is not specified then the saved directory will have the same
-name as the matlab directory with _rda appended to the end of the last
-directory name.}
+directory where the converted raster data in R .rda files will be saved. If
+this is not specified then the saved directory will have the same name as
+the matlab directory with _rda appended to the end of the directory name.}
 
 \item{start_ind}{A number specifying the start index for the data to be
 converted if one wants to convert the data from a shorter time window than
-the original MATLAB raster data. The default (NULL valu) is to use all the
+the original MATLAB raster data. The default (NULL value) is to use all the
 data, i.e., start at the beginning with start_ind = 1.}
 
 \item{end_ind}{A number specifying the end index for the data to be converted
@@ -37,8 +36,9 @@ raster data should be converted based on .mat files that contain this
 string.}
 }
 \description{
-If one already has raster data created in MATLAB, this function can be used to convert it
-to an R format (.rda files) that can be used with the NDTr.
+If one already has raster data created in MATLAB (.mat files), this function
+can be used to convert it to an R format (.rda files) that can be used with
+the NDTr.
 }
 \examples{
 matlab_raster_dir_name <- file.path(system.file("extdata", package = "NDTr"), 
@@ -49,5 +49,6 @@ r_raster_dir_name <- file.path("test_convert_matlab_raster_data", "")
 r_raster_dir_name <- convert_matlab_raster_data(matlab_raster_dir_name, 
                                                 r_raster_dir_name, 
                                                 files_contain = "bp1001spk")
+
 
 }
