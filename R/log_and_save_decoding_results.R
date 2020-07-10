@@ -107,7 +107,7 @@ log_check_results_already_exist <- function(decoding_params, manifest_df){
     manifest_decoding_params_added <- add_current_parameters_to_manifest(decoding_params, manifest_df)
     
     manifest_decoding_params_added <- dplyr::select(manifest_decoding_params_added, 
-                                                    -.data$analysis_ID, -.data$result_name)
+                                                    -starts_with("analysis"), -.data$result_name)
     
     duplicated_results <- duplicated(manifest_decoding_params_added)
     
