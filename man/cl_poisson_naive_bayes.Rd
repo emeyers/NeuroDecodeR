@@ -2,30 +2,50 @@
 % Please edit documentation in R/cl_poisson_naive_bayes.R
 \name{cl_poisson_naive_bayes}
 \alias{cl_poisson_naive_bayes}
-\title{A Poisson Naive Bayes classifier (CL) object}
+\title{A Poisson Naive Bayes classifier (CL)}
 \usage{
 cl_poisson_naive_bayes()
 }
 \description{
-An implementation of a Poisson Naive Bayes classifier. Like all classifiers,
-this classifier learning a model based on training data and then makes
-predictions on new test data.
+An implementation of a Poisson Naive Bayes classifier.
 }
 \details{
-Note: this classifier uses spike counts, so the binned data must be converted
+This classifier object implements a Poisson Naive Bayes classifier. The
+classifier works by learning the expected number of occurrences (denoted
+lambda) for each feature and each class by taking the average of the training
+data over all trials (separately for each feature and each class). To
+evaluate whether a given test point belongs to class i, the log of the
+likelihood function is calculated using the lambda values as parameters of
+Poisson distributions (i.e., there is a separate Poisson distribution for
+each feature, that is based on the lambda value for that feature). The
+overall likelihood value is calculated by multiplying the probabilities for
+each neuron together (i.e,. Naive Bayes classifiers assume that each feature
+is independent), or equivalently, adding the log of the probabilities for
+each feature together. The class with the highest likelihood value is chosen
+as the predicted label, and the decision values are the log likelihood
+values.
+
+\strong{Note:} this classifier uses spike counts, so the binned data must be converted
 to use this classifier, for exmaple, if you are using the basic_DS data
 source, then use_count_data = TRUE should be set in the contructor. Also,
 preprocessors that convert the data into values that are not integers should
 not be used, for example, the fp_zscore should not be used with this
 classifier.
+
+Like all classifiers, this classifier learning a model based on training data
+and then makes predictions on new test data.
 }
 \examples{
+# running a basic decoding analysis using the cl_max_correlation
+
  data_file <- system.file("extdata/ZD_150bins_50sampled.Rda", package = "NDTr") 
  ds <- ds_basic(data_file, 'stimulus_ID', 18, use_count_data = TRUE)
  fps <- list()
+ 
  cl <- cl_poisson_naive_bayes()
  cv <- cv_standard(ds, cl, fps) 
- 
+
+ \dontrun{DECODING_RESULTS <- run_decoding(cv)}
 
 }
 \seealso{

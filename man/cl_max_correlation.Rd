@@ -2,15 +2,12 @@
 % Please edit documentation in R/cl_max_correlation.R
 \name{cl_max_correlation}
 \alias{cl_max_correlation}
-\title{A maximum correlation coefficient classifier (CL) object}
+\title{A maximum correlation coefficient classifier (CL)}
 \usage{
 cl_max_correlation()
 }
 \description{
-An implementation of a maximum correlation coefficeint classifier. Like all
-classifiers (CL) objects, this classifier has a get_predictions() method which
-learns a model based on training data and then makes predictions on the test
-data.
+An implementation of a maximum correlation coefficeint classifier.
 }
 \details{
 This CL object learns a mean population vector (template) for each
@@ -20,14 +17,21 @@ correlation coefficient between a test point and the templates learned from
 the training set, and the class with the highest correlation value is returned
 as the predicted label. The decision values returned by the classifier are the
 correlation coefficients between all test points and all templates.
+
+Like all classifiers (CL) objects, this classifier has a get_predictions()
+method which learns a model based on training data and then makes predictions
+on the test data.
 }
 \examples{
 # running a basic decoding analysis using the cl_max_correlation
+
 data_file <- system.file("extdata/ZD_150bins_50sampled.Rda", package = "NDTr") 
 ds <- ds_basic(data_file, 'stimulus_ID', 18) 
 fps <- list(fp_zscore())
+
 cl <- cl_max_correlation() 
 cv <- cv_standard(ds, cl, fps)
+
 \dontrun{DECODING_RESULTS <- run_decoding(cv)}
 
 }

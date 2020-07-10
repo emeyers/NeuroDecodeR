@@ -2,24 +2,37 @@
 % Please edit documentation in R/cl_svm.R
 \name{cl_svm}
 \alias{cl_svm}
-\title{An support vector machine (CL) object}
+\title{A support vector machine classifier (CL)}
 \usage{
 cl_svm(...)
 }
 \arguments{
-\item{...}{all parameters that are available in the e1071 package should work
-with this CL object}
+\item{...}{All parameters that are available in the e1071 package svm()
+object should work with this CL object.}
 }
 \description{
 This classifier uses the e1071 package to implement a support vector machine.
 }
 \details{
-The multi-class classification is based on the number of "wins" each class
-has using all-pairs classification scheme (the default for the e1071
-package). The predicted label is the class with the most wins. The decision
-values are the number of all-pairs "wins" each each class has. Thus, the
-maximum number for a decision value is thus number of classes - 1, which is
-the maximum number of "wins" a given class could have vs. all other classes.
+A support vector machine (SVM) is a classifier that learns a function \emph{f} that
+minimizes the hinge loss between predictions made on the training data, while
+also applying a penalty for more complex \emph{f} (the penalty is based on the norm
+of \emph{f} in a reproducing kernel Hilbert space). The SVM has a parameter \emph{C} that
+controls the trade off between the empirical loss (i.e., a smaller prediction
+error on the training set), and the complexity of the \emph{f}. SVMs can use
+different kernels to create nonlinear decision boundaries.
+
+SVMs are work on binary classification problems, so to do
+multi-class classification, an \emph{all-pairs} classification scheme (which is
+the default for the e1071 package). In the all-pairs scheme,training separate
+classifiers for all pairs of labels (i.e., if there are 100 different classes
+then nchoosek(100, 2) = 4950 different classifiers are trained). Testing the
+classifier in all-pairs involves having all classifiers classify the test
+point, and then the class label is given to the class the was chosen most
+often by the binary classifiers (in the case of a tie in the number of
+classes that won a contest the class label is randomly chosen). The decision
+values for all-pairs are the number of contests won by each class (for each
+test point).
 }
 \examples{
 # using the default e1071 parameters
