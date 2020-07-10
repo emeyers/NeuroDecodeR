@@ -1,4 +1,4 @@
-#' A feature preprocessor (FP) that reduces the data to the best k features
+#' A feature preprocessor (FP) that reduces data to the k most selective features
 #'
 #' This feature preprocessor object applies an ANOVA to the training data to
 #' find the p-value of all features. It then either uses the top k features with
@@ -28,9 +28,8 @@
 #' 
 #'
 #' @family feature_preprocessor
-
-
-
+#' 
+#' 
 # the constructor 
 #' @export
 fp_select_k_features <- function(num_site_to_use = NA,
@@ -48,6 +47,7 @@ fp_select_k_features <- function(num_site_to_use = NA,
   attr(the_fp, "class") <- "fp_select_k_features"
   the_fp
 }
+
 
 
 
@@ -114,6 +114,8 @@ fp_info <- data.frame(siteID = siteID,
  processed_data
  
 }  
+
+
 
 
 

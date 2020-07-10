@@ -2,7 +2,7 @@
 % Please edit documentation in R/fp_zscore.R
 \name{fp_zscore}
 \alias{fp_zscore}
-\title{A feature preprocessor (FP) that zscore normalizes the data}
+\title{A feature preprocessor (FP) that z-score normalizes the data}
 \usage{
 fp_zscore()
 }
@@ -26,6 +26,7 @@ data because different neurons can have different ranges of firing rates).
 # The fp_zscore() constructor does not take any parameters. This object
 # just needs to added to a list and passed to the cross-validator applied 
 fp <- fp_zscore()
+
 
 }
 \seealso{

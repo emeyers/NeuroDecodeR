@@ -2,7 +2,7 @@
 % Please edit documentation in R/fp_select_k_features.R
 \name{fp_select_k_features}
 \alias{fp_select_k_features}
-\title{A feature preprocessor (FP) that reduces the data to the best k features}
+\title{A feature preprocessor (FP) that reduces data to the k most selective features}
 \usage{
 fp_select_k_features(num_site_to_use = NA, num_sites_to_exclude = NA)
 }

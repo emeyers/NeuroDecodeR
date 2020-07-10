@@ -1,14 +1,9 @@
-#' A feature preprocessor (FP) that zscore normalizes the data
+#' A feature preprocessor (FP) that z-score normalizes the data
 #'
 #' This feature preprocessor object finds the mean and standard deviation using
 #' the training data. The proprocessor then z-score transforms the training and
 #' test data using this mean and standard deviation by subtracting the mean and
 #' dividing by the standard deviation.
-#'
-#' @examples 
-#' # The fp_zscore() constructor does not take any parameters. This object
-#' # just needs to added to a list and passed to the cross-validator applied 
-#' fp <- fp_zscore()
 #'
 #' @details This feature preprocessor object applies z-score normalization to
 #' each feature by calculating the mean and the standard deviation for each
@@ -19,12 +14,15 @@
 #' different ranges of values (for example, it is useful when decoding neural
 #' data because different neurons can have different ranges of firing rates).
 #'
+#'@examples 
+#' # The fp_zscore() constructor does not take any parameters. This object
+#' # just needs to added to a list and passed to the cross-validator applied 
+#' fp <- fp_zscore()
 #'
 #'
 #' @family feature_preprocessor
-
-
-
+#' 
+#' 
 # the constructor 
 #' @export
 fp_zscore <- function(){
@@ -54,7 +52,7 @@ preprocess_data.fp_zscore = function(fp, training_set, test_set){
   # test_centered <- sweep(test_data, 2, attr(train_zscored, "scaled:center") )
   # test_zscored <- sweep(test_centered, 2, attr(train_zscored, "scaled:scale"), FUN = "/")
   
-  # this might be much faster
+  # this is much faster
   test_zscored <- scale(test_data, center = attr(train_zscored, "scaled:center"), 
                 scale = attr(train_zscored, "scaled:scale"))
   
@@ -72,6 +70,8 @@ preprocess_data.fp_zscore = function(fp, training_set, test_set){
   return(processed_data)
   
 } 
+
+
 
 
 # since there are no parameters for the fp_zscore just return a data frame with

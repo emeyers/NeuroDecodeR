@@ -83,8 +83,8 @@ get training and testing splits of data that can be passed to a classifier.
 }
 \examples{
 # One can test if a neural population contains information that is position
-invariant by generating training data for objects presented at 'upper' and 'middle'
-locations, and generating test data at a 'lower' location.
+# invariant by generating training data for objects presented at 'upper' and 'middle'
+# locations, and generating test data at a 'lower' location.
 
 id_levels <- c("hand", "flower", "guitar", "face", "kiwi", "couch",  "car")   
 train_label_levels <- NULL
