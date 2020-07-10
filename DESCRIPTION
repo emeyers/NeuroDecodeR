@@ -31,12 +31,12 @@ Imports:
     R.matlab,
     stats,
     stringr,
+    testthat,
     tibble,
     tictoc,
     tidyr,
     tidyselect
 Suggests: 
-    testthat,
     knitr,
     rmarkdown,
     covr
