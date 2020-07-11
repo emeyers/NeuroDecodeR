@@ -180,6 +180,9 @@ convert_matlab_raster_data <- function(matlab_raster_dir_name,
       curr_levels <- raster_labels[iLabel, , ][[1]]
       curr_levels <- sapply(curr_levels, function(x) x[[1]])
       
+      # convert to a factor
+      curr_levels <- as.factor(curr_levels)
+      
       # put into a data frame with the appropriate column name
       curr_var_column <- eval(parse(text = paste0("curr_var_column <- data.frame(", curr_var_name, " = curr_levels)")))
       
