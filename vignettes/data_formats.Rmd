@@ -38,11 +38,24 @@ were shown on a given trial.
 
 2. `time.XXX`  These variables contain the data for a given time.
 
-There can also be variables that start with the `site_info.XXX` that contain
-additional meta data out the site. For example, one could have a variable called
-`site_info.brain_area` which indicated which brain region a given site came
-from. All rows for a given `site_info.XXX` variables typically have the same value.
 
+There can also be two additional optional variables in a raster format data frame which are: 
+
+3. `site_info.XXX` These variables contain additional meta data out the site.
+For example, one could have a variable called `site_info.brain_area` which
+indicated which brain region a given site came from. All rows for a given
+`site_info.XXX` variables typically have the same value.
+
+4. `trial_number` This is a variable that specifies a unique for each row
+indicating which trial a given row of data came from. This is useful for data
+where all sites were recorded simultaneously in order to allow one to do the
+decoding on actual simultaneously recorded data (e.g., by using the `ds_basic()` `create_simultaneously_recorded_populations` argument).
+
+
+### Checking if data is in valid raster format
+
+To test whether data correctly conforms to the requirements of raster format,
+one can use the internal function `NDTr:::test_valid_raster_data_format()`.
 
 
 ### Example raster-format data
@@ -54,9 +67,13 @@ data set](datasets.html).
 ```{r load_raster_file}
 
 raster_dir_name <- file.path(system.file("extdata", package = "NDTr"), "Zhang_Desimone_7object_raster_data_rda")
-file_name <- "bp1001spk_01A_raster_data.rda"
-load(file.path(raster_dir_name, file_name))
+full_file_name <- file.path(raster_dir_name, "bp1001spk_01A_raster_data.rda")
 
+# test the file is in valid raster format
+NDTr:::test_valid_raster_data_format(full_file_name)
+
+# load the data to see the variables in it
+load(full_file_name)
 head(raster_data[, 1:10])
 
 ```
@@ -93,12 +110,23 @@ occured on a given trial.
 3. `time.X_Y`  These variables contain data in a time range from X to Y.
 
 
-There can also be variables that start with the `site_info.XXX` that contain
-additional meta data out the site. For example, one could have a variable called
-`site_info.brain_area` which indicated which brain region a given site came
-from. 
+There can also be two additional optional variables in a binned format data frame which are: 
+
+4. `site_info.XXX` These variables contain additional meta data out the site.
+For example, one could have a variable called `site_info.brain_area` which
+indicated which brain region a given site came from. All rows for a given
+`site_info.XXX` variables typically have the same value.
+
+5. `trial_number` This is a variable that specifies a unique for each row
+indicating which trial a given row of data came from. This is useful for data
+where all sites were recorded simultaneously in order to allow one to do the
+decoding on actual simultaneously recorded data (e.g., by using the `ds_basic()` `create_simultaneously_recorded_populations` argument).
 
 
+### Checking if data is in valid binned format
+
+To test whether data correctly conforms to the requirements of binned format,
+one can use the internal function `NDTr:::test_valid_binned_data_format()`.
 
 
 ### Example binned-format data
@@ -109,8 +137,14 @@ data set](datasets.html).
 
 ```{r load_binned_file}
 
-load(system.file("extdata/ZD_150bins_50sampled.Rda", package="NDTr"))
+binned_file_name <- system.file("extdata/ZD_150bins_50sampled.Rda", package="NDTr")
 
+# test the file is in valid binned format
+NDTr:::test_valid_binned_data_format(binned_file_name)
+
+
+# load the data to see the variables in it
+load(binned_file_name)
 head(binned_data[, 1:10])
 
 

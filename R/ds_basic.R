@@ -12,8 +12,8 @@
 #' get training and testing splits of data that can be passed to a classifier. 
 #'
 #'
-#' @param binned_file_name A string with the name of a file that has 
-#'  data in binned format.
+#' @param binned_data A string that list a path to a file that has data in
+#'   binned format, or a data frame of binned_data that is in binned format.
 #' 
 #' @param var_to_decode A string specifying the name of the labels that
 #'  should be decoded. This label must be one of the columns in the binned
@@ -85,7 +85,7 @@
 
 # the constructor 
 #' @export
-ds_basic <- function(binned_file_name, 
+ds_basic <- function(binned_data, 
                             var_to_decode, 
                             num_cv_splits, 
                             use_count_data = FALSE,
@@ -97,8 +97,15 @@ ds_basic <- function(binned_file_name,
                             randomly_shuffled_labels_before_running = FALSE,
                             create_simultaneously_recorded_populations = 0) {
   
-  # load the binned data and convert it to spike counts if specified
-  load(binned_file_name)
+  
+  if (is.character(binned_data)) {
+    binned_file_name <- binned_data
+  } else {
+    binned_file_name <- "Loaded binned data given"
+  }
+
+  # load data if a string is given and check that the data is in binned format 
+  binned_data <- check_and_load_binned_data(binned_data)
   
   if (use_count_data) {
     binned_data <- convert_rates_to_counts(binned_data) 

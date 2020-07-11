@@ -4,6 +4,38 @@
 
 
 
+# This function can either a string containing a file name to data in binned
+# format or an actual data frame in binned format. If the argument is a string 
+# then the data is loaded from the file name. The binned data is checked to make
+# sure it is valid binned data and then it is returned. 
+check_and_load_binned_data <- function(binned_data){
+  
+  # if a file name has been given load it
+  if (is.character(binned_data)) {
+    binned_data_object_name <- load(binned_data)
+    expect_equal((length(binned_data_object_name)), 1)
+    eval(parse(text = paste0("binned_data <- ", binned_data_object_name)))
+  }
+  
+  # check that the binned_data is in a valid format
+  result = tryCatch({
+    
+    test_valid_binned_data_format(binned_data)
+    
+  }, error = function(e) {
+    stop(paste("The argement binned_data must either be a data frame containing data in binned format,", 
+         "or a string listing a path to a file that has data in binned format.", 
+         "Use NDTr:::test_valid_binned_data_format(binned_data) for more information on",
+         "how the data is not conforming to the binned format."))
+  })
+  
+  
+  binned_data
+  
+}
+
+
+
 
 
 # Takes a vector of strings where each string is in the format of time.X_Y and

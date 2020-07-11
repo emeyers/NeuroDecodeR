@@ -23,12 +23,16 @@ test_valid_raster_data_format <- function(raster_file_name) {
   expect_equal(sum(unique_prefixes == "labels"), 1)
   
   # if a third type of variable is defined it should be called "site_info"
-  if (length(unique_prefixes) == 3) {
-    expect_equal(sum(unique_prefixes == "site_info"), 1)
+  if (length(unique_prefixes) > 2) {
+    expect_gt(sum(unique_prefixes == "site_info") + sum(unique_prefixes == "trial_number"), 0)
   }
   
-  # should only be three types of variables that start with labels, time or site info
-  expect_true(length(unique_prefixes) <= 3)
+  if (length(unique_prefixes) == 4) {
+    expect_equal(sum(unique_prefixes == "site_info") + sum(unique_prefixes == "trial_number"), 2)
+  }
+  
+  # should be a maximum of 4 types of variables that start with labels, time, trial_number or site info
+  expect_true(length(unique_prefixes) <= 4)
   
 }
 
@@ -37,15 +41,17 @@ test_valid_raster_data_format <- function(raster_file_name) {
 
 
 # A function that checks if binned data is in a valid format
-test_valid_binned_data_format <- function(binned_file_name) {
+test_valid_binned_data_format <- function(binned_data) {
   
-  binned_data <- NULL
-  binned_data_object_name <- load(binned_file_name)
-  # expect_true(exists("binned_data"))
-  
-  # there should be only 1 object in the binned_file
-  expect_equal((length(binned_data_object_name)), 1)
-  eval(parse(text = paste0("binned_data <- ", binned_data_object_name)))
+  if (is.character(binned_data)){
+    
+    binned_data_object_name <- load(binned_data)
+    
+    # there should be only 1 object in the binned_file
+    expect_equal((length(binned_data_object_name)), 1)
+    eval(parse(text = paste0("binned_data <- ", binned_data_object_name)))
+    
+  }  
   
   
   # needs to have a variables that start with "siteID", time" and "labels"
@@ -55,13 +61,17 @@ test_valid_binned_data_format <- function(binned_file_name) {
   expect_equal(sum(unique_prefixes == "siteID"), 1)
   
   
-  # if a third type of variable is defined it should be called "site_info"
+  # if additional variables are in the data frame they should be called either "site_info" or "trial_number"
   if (length(unique_prefixes) == 4) {
-    expect_equal(sum(unique_prefixes == "site_info"), 1)
+    expect_gt(sum(unique_prefixes == "site_info") + sum(unique_prefixes == "trial_number"), 0)
   }
   
-  # should only be four types of variables that start with siteDi, labels, time or site_info
-  expect_true(length(unique_prefixes) <= 4)
+  if (length(unique_prefixes) == 5) {
+    expect_equal(sum(unique_prefixes == "site_info") + sum(unique_prefixes == "trial_number"), 2)
+  }
+  
+  # should only be at most 5 types of variables that start with siteID, labels, time, trial_number, or site_info
+  expect_true(length(unique_prefixes) <= 5)
 
 }
 

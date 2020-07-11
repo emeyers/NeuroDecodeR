@@ -8,8 +8,8 @@
 #' get training and testing splits of data that can be passed to a classifier. 
 #'
 #'
-#' @param binned_file_name A string with the name of a file that has 
-#'  data in binned format.
+#' @param binned_data A string that list a path to a file that has data in
+#'   binned format, or a data frame of binned_data that is in binned format.
 #' 
 #' @param var_to_decode A string specifying the name of the labels that
 #'  should be decoded. This label must be one of the columns in the binned
@@ -89,7 +89,7 @@
 
 # the constructor
 #' @export
-ds_generalization <- function(binned_file_name, 
+ds_generalization <- function(binned_data, 
                             var_to_decode, 
                             num_cv_splits,
                             train_label_levels,
@@ -147,7 +147,7 @@ ds_generalization <- function(binned_file_name,
   # to be listed in the training and test label levels
   all_label_levels_to_use <- unique(c(unlist(train_label_levels), unlist(test_label_levels)))
   
-  the_basic_ds <- ds_basic(binned_file_name, 
+  the_basic_ds <- ds_basic(binned_data, 
                            var_to_decode, 
                            num_cv_splits, 
                            use_count_data,

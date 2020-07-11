@@ -5,7 +5,7 @@
 \title{A basic datasource (DS)}
 \usage{
 ds_basic(
-  binned_file_name,
+  binned_data,
   var_to_decode,
   num_cv_splits,
   use_count_data = FALSE,
@@ -19,8 +19,8 @@ ds_basic(
 )
 }
 \arguments{
-\item{binned_file_name}{A string with the name of a file that has
-data in binned format.}
+\item{binned_data}{A string that list a path to a file that has data in
+binned format, or a data frame of binned_data that is in binned format.}
 
 \item{var_to_decode}{A string specifying the name of the labels that
 should be decoded. This label must be one of the columns in the binned

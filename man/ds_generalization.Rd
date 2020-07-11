@@ -5,7 +5,7 @@
 \title{A datasource (DS) that allows training and testing on different but related labels}
 \usage{
 ds_generalization(
-  binned_file_name,
+  binned_data,
   var_to_decode,
   num_cv_splits,
   train_label_levels,
@@ -20,8 +20,8 @@ ds_generalization(
 )
 }
 \arguments{
-\item{binned_file_name}{A string with the name of a file that has
-data in binned format.}
+\item{binned_data}{A string that list a path to a file that has data in
+binned format, or a data frame of binned_data that is in binned format.}
 
 \item{var_to_decode}{A string specifying the name of the labels that
 should be decoded. This label must be one of the columns in the binned

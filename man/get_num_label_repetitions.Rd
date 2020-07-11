@@ -7,27 +7,28 @@
 get_num_label_repetitions(binned_data, variable_to_use, levels_to_use = NULL)
 }
 \arguments{
-\item{binned_data}{Can be either a string that list that path to a file that
-has data in binned format, or a data frame of binned_data that is in binned
-format.}
+\item{binned_data}{A string that list a path to a file that has data in
+binned format, or a data frame of binned_data that is in binned format.}
 
 \item{variable_to_use}{A string specifying whether label variable should be
 used for calculating the minimum number of level repetitions.}
 
 \item{levels_to_use}{A character vector specifying which levels to include.
-If not set, all levels will be included.}
+If not set, all levels will be used.}
 }
 \description{
-Calculates how many repeated trials there are for of label level. This can be
+Calculates how many repeated trials there are for each label level. This can be
 useful for selecting sites that have a minimum number of repetitions of
 each stimulus or other experimental condition.
 }
 \note{
-The retured value is actually a S3 object that inherts from data.frame that
+The retured value is an S3 object that inherts from data.frame that
 has an associated plot() method.
 }
 \examples{
  data_file <- system.file("extdata/ZD_150bins_50sampled.Rda", package = "NDTr") 
  label_rep_info <- get_num_label_repetitions(data_file, "stimulus_ID") 
  plot(label_rep_info)
+ 
+ 
 }

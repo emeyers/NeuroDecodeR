@@ -1,46 +1,37 @@
 #' @title Get the number of trial repetitions for a given label
 #'
 #' @description
-#' Calculates how many repeated trials there are for of label level. This can be
+#' Calculates how many repeated trials there are for each label level. This can be
 #' useful for selecting sites that have a minimum number of repetitions of
 #' each stimulus or other experimental condition. 
 #'
-#'
-#' @param binned_data Can be either a string that list that path to a file that
-#'   has data in binned format, or a data frame of binned_data that is in binned
-#'   format.
+#' @param binned_data A string that list a path to a file that has data in
+#'   binned format, or a data frame of binned_data that is in binned format.
 #'
 #' @param variable_to_use A string specifying whether label variable should be
 #'   used for calculating the minimum number of level repetitions.
 #' 
 #' @param levels_to_use A character vector specifying which levels to include.
-#' If not set, all levels will be included.
+#' If not set, all levels will be used.
 #' 
-#' @note
-#' The retured value is actually a S3 object that inherts from data.frame that
+#' @note The retured value is an S3 object that inherts from data.frame that
 #' has an associated plot() method.
 #'
 #' @examples 
 #'  data_file <- system.file("extdata/ZD_150bins_50sampled.Rda", package = "NDTr") 
 #'  label_rep_info <- get_num_label_repetitions(data_file, "stimulus_ID") 
 #'  plot(label_rep_info)
-
-
-
+#'  
+#'  
 #' @export
 get_num_label_repetitions <- function(binned_data, 
                                       variable_to_use, 
                                       levels_to_use = NULL) {
 
-  if (is.character(binned_data)){
-    load(binned_data)
-  }
   
-  # could have a more rigorus test to check that the binned_data is in a valid format...
-  if (!(is.data.frame(binned_data))) {
-    stop("The argement binned_data must either be a data frame containing data in binned format, 
-         or a string listing a path to a file that has data in binned format")
-  }
+  # load data if a string is given and check that the data is in binned format 
+  binned_data <- check_and_load_binned_data(binned_data)
+  
   
   # select only the siteID and labels we want to count number of repetitions
   binned_data <- select(binned_data, .data$siteID, label = paste0("labels.", variable_to_use))
@@ -73,7 +64,7 @@ get_num_label_repetitions <- function(binned_data,
     full_join(min_num_repeats_per_level, by = "siteID") %>%
     select(.data$siteID, .data$min_repeats, everything())
  
-   
+  
   # making this an S3 object so that it can have an associated plot() function
   attr(label_rep_obj, "class") <- c("label_repetition", "data.frame")
   attr(label_rep_obj, "variable_used") <- variable_to_use
@@ -83,6 +74,8 @@ get_num_label_repetitions <- function(binned_data,
   
 }
   
+
+
 
 
 #' @export
@@ -98,16 +91,6 @@ plot.label_repetition <- function(x, ...) {
   
   
   # just plot the minimum number of repeats  
-  # num_sites_with_k_repeats_long %>%
-  #   filter(label == "min_repeats") %>%
-  #   ggplot(aes(min_reps, num_sites)) +
-  #   geom_line() + 
-  #   geom_point() + 
-  #   xlab("Number of repeated conditions") + 
-  #   ylab("Number of sites with repeats for all label levels") + 
-  #   ggtitle(paste("Label:", attr(label_rep_obj, "variable_used")))
-  
-  
   g <- num_sites_with_k_repeats_long %>%
     dplyr::filter(.data$label != "min_repeats") %>%
     ggplot(aes(.data$min_reps, .data$num_sites, col = .data$label)) +
@@ -117,14 +100,13 @@ plot.label_repetition <- function(x, ...) {
     ylab("Number of sites") + 
     ggtitle(paste("Label:", attr(label_rep_obj, "variable_used")))
 
-  g    # could add plotly features here too
+  g    
   
 }
 
 
 
-
-# a function that returns how many sites have k repeats for all labels
+# a helper function that returns how many sites have k repeats for all labels
 # this is used above to plot the data
 get_num_sites_with_k_label_repetitions <- function(label_rep_obj) {
   
@@ -152,16 +134,6 @@ get_num_sites_with_k_label_repetitions <- function(label_rep_obj) {
   num_sites_with_k_repeats
 
 }
-
-
-
-
-# could register this as a generic function or just have it be a normal function
-# that uses the code above to first create a label_rep_obj
-#  get_siteID_with_k_repetitions.label_repetition
-# get_siteID_with_k_repetitions <- function(label_rep_obj, k){
-#  filter(label_rep_obj, min_repeats >= k)
-# }
 
 
 
