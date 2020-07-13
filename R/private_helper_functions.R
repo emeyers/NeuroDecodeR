@@ -1,13 +1,13 @@
 
 # This file contains helper functions that will not be publicly visible, but
-#  instead are used interally by other functions in the NDTr
+#  instead are used internally by other functions in the NDTr
 
 
 
-# This function can either a string containing a file name to data in binned
-# format or an actual data frame in binned format. If the argument is a string 
-# then the data is loaded from the file name. The binned data is checked to make
-# sure it is valid binned data and then it is returned. 
+# This function can take either a string containing a file name to data in
+# binned format or an actual data frame in binned format. If the argument is a
+# string then the data is loaded from the file name. The binned data is checked
+# to make sure it is valid binned data format and then it is returned.
 check_and_load_binned_data <- function(binned_data){
   
   # if a file name has been given load it
@@ -16,6 +16,7 @@ check_and_load_binned_data <- function(binned_data){
     expect_equal((length(binned_data_object_name)), 1)
     eval(parse(text = paste0("binned_data <- ", binned_data_object_name)))
   }
+  
   
   # check that the binned_data is in a valid format
   result = tryCatch({
@@ -128,8 +129,8 @@ get_bin_widths <- function(time_vector) {
 
 
 # If there are ties in the maximum value, then this function returns an index of
-# one of these maximum values randomly (this function was copied from the nnet
-# package which had a fast implementation)
+# one of these maximum values randomly selected (this function was copied from
+# the nnet package which had a fast implementation)
 
 rand_which_max <- function(x) {
   y <- seq_along(x)[x == max(x)]
@@ -144,11 +145,11 @@ rand_which_max <- function(x) {
 
 
 
-# creates an ID based on the date, time, and a random number so 
-# that different analyses can be uniquely identified by this number.
-# This is primarily used by the cross-validation object to uniquely identify each
-# analysis and by the functions in the save_and_manage_decoding_results to 
-# save each result with an unique ID.
+# creates an ID based on the date, time, and a random number so that different
+# analyses can be uniquely identified by this number. This is primarily used by
+# the cross-validation object to uniquely identify each analysis and by the
+# functions in the save_and_manage_decoding_results to save each result with an
+# unique ID.
 
 generate_analysis_ID <- function(){
   
@@ -165,8 +166,6 @@ generate_analysis_ID <- function(){
   analysis_ID
   
 }
-
-
 
 
 
