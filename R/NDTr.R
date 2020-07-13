@@ -2,7 +2,7 @@
 #'
 #' The NDTr is a package that makes it easy to do neural decoding analyses.
 #' 
-#' The NDTr is built around 5 abstract object types that work together in a
+#' The NDTr is built around five abstract object types that work together in a
 #' modular way to allow a range of neural decoding analyses. These five object
 #' types are:
 #' 
@@ -13,7 +13,7 @@
 #' 
 #' 3. Classifiers (CL): Learn the relationship between experimental conditions
 #' (i.e., "labels") and neural data on a training set, and then predict
-#' experimental conditions neural data in a test set.
+#' experimental conditions from neural data in a test set.
 #' 
 #' 4. Result metrics (RM): Aggregate results across validation splits and
 #' over resampled runs and compute and plot final decoding accuracy metrics.
@@ -28,7 +28,7 @@
 #'  1. `raster format` contains high temporal precision data where neural
 #'  activity from each site is stored in a spearate file.
 #'  
-#'  2. `binned format` contains data from multiple sites and the data is more
+#'  2. `binned format` contains data from multiple sites where the data is more
 #'  coarsely binned across time. 
 #'  
 #'  A user of the NDTr will typically store their data in `raster format` and

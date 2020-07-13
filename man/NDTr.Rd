@@ -8,7 +8,7 @@
 The NDTr is a package that makes it easy to do neural decoding analyses.
 }
 \details{
-The NDTr is built around 5 abstract object types that work together in a
+The NDTr is built around five abstract object types that work together in a
 modular way to allow a range of neural decoding analyses. These five object
 types are:
 \enumerate{
@@ -17,7 +17,7 @@ types are:
 transformations to the training and test sets.
 \item Classifiers (CL): Learn the relationship between experimental conditions
 (i.e., "labels") and neural data on a training set, and then predict
-experimental conditions neural data in a test set.
+experimental conditions from neural data in a test set.
 \item Result metrics (RM): Aggregate results across validation splits and
 over resampled runs and compute and plot final decoding accuracy metrics.
 \item Cross-validators (CV): Take the DS, FP, CL and RM objects and run a
@@ -29,7 +29,7 @@ Two data formats are used to do decoding analyses which are:
 \enumerate{
 \item \verb{raster format} contains high temporal precision data where neural
 activity from each site is stored in a spearate file.
-\item \verb{binned format} contains data from multiple sites and the data is more
+\item \verb{binned format} contains data from multiple sites where the data is more
 coarsely binned across time.
 }
 
