@@ -11,7 +11,7 @@ log_check_results_already_exist(decoding_params, manifest_df)
 be created by calling the cross-validator's get_parameters() method.}
 
 \item{manifest_df}{A manifest file that has the list of parameters
-for which decoding analyses have already been run}
+for which decoding analyses have already been run.}
 }
 \description{
 A function that checks if a decoding analysis has already been run

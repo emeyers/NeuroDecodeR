@@ -1,24 +1,27 @@
-#'  A function that saves the DECODING_RESULTS and logs the parameters used in the analysis 
+#'  Saves the DECODING_RESULTS and logs the parameters used in the analysis 
 #' 
-#' This function takes results returned by the cross-validator's run_decoding() 
-#'  method and uses the cross-validator's get_properties() method to save a 
-#'  log of the results that be used to reload specific results
+#' This function takes results returned by the cross-validator's run_decoding()
+#' method and uses the cross-validator's get_properties() method to save a log
+#' of the results that be used to reload the results.
 #' 
 #' @param DECODING_RESULTS A list of results returned by the cross-validator's
 #'   run_decoding method.
 #'
-#' @param save_directory_name A directory where the decoding results should be
-#'   saved.
+#' @param save_directory_name A string specifying the directory name where the
+#'   decoding results should be saved.
 #'   
-#' @param result_name A string that gives a human readable name for the results 
-#'   that are to be saved. The default value is "No result name set".
+#' @param result_name A string that gives a human readable name for the results
+#'   that are to be saved. This name can be used to load the results later. The
+#'   default value is "No result name set".
+#'
 #'
 #' @export
 log_save_results <- function(DECODING_RESULTS, save_directory_name, result_name = "No result name set"){
   
-  
-  # maybe should deal with slash at the end of the save_directory_name...
-  #manifest_file_name <- file.path(save_directory_name, "results_manifest.rda")
+
+  # if the directory name does not end with a slash, add a slash to the directory name
+  save_directory_name <- add_last_character_to_directory_name(save_directory_name)
+
   manifest_file_name <- paste0(save_directory_name, "results_manifest.rda")
   
 
@@ -36,30 +39,17 @@ log_save_results <- function(DECODING_RESULTS, save_directory_name, result_name 
   }
   
   
-  # # create a name for the file that will hold the results
-  # curr_time <- as.character(Sys.time())
-  # curr_time <- gsub("-", "", curr_time)
-  # curr_time <- gsub(":", "", curr_time)
-  # curr_time <- gsub(" ", "_", curr_time)
-  # rand_suffix <- paste0(round(runif(5, 0, 9)), collapse = "")
-  # save_file_name <- paste(curr_time, rand_suffix, sep = "_")  
-  
-  # get the decoding parameters and add the saved file name to them
+  # get the decoding parameters and add an analysis_ID if it does not exist
   decoding_params <- get_parameters(DECODING_RESULTS$cross_validation_paramaters)
-  #decoding_params$saved_file_name <- save_file_name
-  #decoding_params <- dplyr::select(decoding_params, saved_file_name, everything())
-  
-  
   if (!("analysis_ID" %in% names(decoding_params))) {
     decoding_params$analysis_ID <- paste0(generate_analysis_ID(), "_gensave")
   }
   
   
-  # add the result_name and put the results in order
+  # add the result_name (human readible name of the results) and put the results in order
   decoding_params <- decoding_params %>%
     dplyr::mutate(result_name = result_name) %>%
     select(.data$analysis_ID, .data$result_name, everything())
-  
   
   
   # if results already exist give a warning (maybe not needed but doesn't hurt)
@@ -90,7 +80,8 @@ log_save_results <- function(DECODING_RESULTS, save_directory_name, result_name 
 #'  be created by calling the cross-validator's get_parameters() method.
 #' 
 #' @param manifest_df A manifest file that has the list of parameters
-#'  for which decoding analyses have already been run  
+#'  for which decoding analyses have already been run.  
+#'    
 #'    
 #' @export
 log_check_results_already_exist <- function(decoding_params, manifest_df){
@@ -124,6 +115,8 @@ log_check_results_already_exist <- function(decoding_params, manifest_df){
 
 
 
+
+
 # helper function to get the decoding_params varaibles 
 # to match the manifest_df variables (not exporting this for the moment)
 add_current_parameters_to_manifest <- function(decoding_params, manifest_df){
@@ -132,7 +125,6 @@ add_current_parameters_to_manifest <- function(decoding_params, manifest_df){
   if (dim(manifest_df)[2] == 0) {
     return(decoding_params)
   }
-  
   
   decoding_names <- names(decoding_params)
   manifest_names <- names(manifest_df)
@@ -187,16 +179,18 @@ add_current_parameters_to_manifest <- function(decoding_params, manifest_df){
 #'  be created by calling the cross-validator's get_parameters() method.
 #' 
 #' @param results_directory_name A string containing the path to a directory
-#'   that contains all the decoding results
+#'   that contains all the decoding results.
 #'  
 #'  
 #' @export
 log_load_results_from_params <- function(decoding_params, results_directory_name){
   
   
-  #manifest_file_name <- paste0(results_directory_name, "results_manifest.rda")
-  manifest_file_name <- file.path(results_directory_name, "results_manifest.rda")
+  # if the directory name does not end with a slash, add a slash to the directory name
+  results_directory_name <- add_last_character_to_directory_name(results_directory_name)
   
+  manifest_file_name <- paste0(results_directory_name, "results_manifest.rda")
+
   
   # if the directory of results or manifest file doesn't exist, throw and error
   if (!file.exists(results_directory_name)) {
@@ -268,14 +262,15 @@ log_load_results_from_params <- function(decoding_params, results_directory_name
 #'   returned as a list.
 #' 
 #' @param results_directory_name A string containing the path to a directory
-#'   that contains all the decoding results
+#'   that contains all the decoding results.
 #'  
 #'  
 #' @export
 log_load_results_from_result_name <- function(result_name, results_directory_name){
   
   
-  manifest_file_name <- file.path(results_directory_name, "results_manifest.rda")
+  results_directory_name <- add_last_character_to_directory_name(results_directory_name)
+  manifest_file_name <- paste0(results_directory_name, "results_manifest.rda")
   
   
   # if the directory of results or manifest file doesn't exist, throw and error
@@ -339,6 +334,18 @@ log_load_results_from_result_name <- function(result_name, results_directory_nam
 
 
 
+# A helper function that adds the last character of a / or a \ to the directory name
+#  if the directory name doesn't contain this character already.
+add_last_character_to_directory_name <- function(directory_name){
+  
+  # if the directory name does not end with a slash, add a slash to the directory name
+  last_dir_char <- substr(directory_name, nchar(directory_name), nchar(directory_name))
+  if (!(last_dir_char == "\\" || last_dir_char == "/")) {
+    directory_name <- file.path(directory_name, "")
+  } 
+  
+  directory_name
+}
 
 
 

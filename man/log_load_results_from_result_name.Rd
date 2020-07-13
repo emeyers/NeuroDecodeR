@@ -13,7 +13,7 @@ which all result_name values that match the regular expression will be
 returned as a list.}
 
 \item{results_directory_name}{A string containing the path to a directory
-that contains all the decoding results}
+that contains all the decoding results.}
 }
 \description{
 A function that loads DECODING_RESULTS based on the result_name

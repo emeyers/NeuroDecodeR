@@ -11,7 +11,7 @@ log_load_results_from_params(decoding_params, results_directory_name)
 be created by calling the cross-validator's get_parameters() method.}
 
 \item{results_directory_name}{A string containing the path to a directory
-that contains all the decoding results}
+that contains all the decoding results.}
 }
 \description{
 A function that loads DECODING_RESULTS based on decoding_parameters
