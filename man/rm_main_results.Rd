@@ -32,8 +32,8 @@ of the code and will use less memory so this can be useful for large data sets.}
 }
 \description{
 This result metric calculate the zero-one loss, the normalized rank, and the
-mean of the decision values. This is also an S3 object which has an associated
-plot function to display the results.
+mean of the decision values. This is also an S3 object which has an
+associated plot function to display the results.
 }
 \details{
 Like all result metrics, this result metric has functions to aggregregate
@@ -42,7 +42,6 @@ also after completing all the resample runs. The results should then be
 available in the DECODING_RESULTS object returned by the cross-validator.
 }
 \examples{
-# This result metric does not take any arguments.
 # If you only want to use the rm_main_results(), then you can put it in a
 # list by itself and pass it to the cross-validator.
 the_rms <- list(rm_main_results())

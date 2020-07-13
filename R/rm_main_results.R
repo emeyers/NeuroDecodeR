@@ -1,8 +1,8 @@
 #' A result metric (RM) that calculates main decoding accuracy measures
 #'
 #' This result metric calculate the zero-one loss, the normalized rank, and the
-#'  mean of the decision values. This is also an S3 object which has an associated
-#'  plot function to display the results.
+#' mean of the decision values. This is also an S3 object which has an
+#' associated plot function to display the results.
 #' 
 #' @details
 #' Like all result metrics, this result metric has functions to aggregregate
@@ -32,18 +32,14 @@
 #'  
 #'
 #' @examples
-#' # This result metric does not take any arguments.
 #' # If you only want to use the rm_main_results(), then you can put it in a
 #' # list by itself and pass it to the cross-validator.
 #' the_rms <- list(rm_main_results())
 #' 
 #' @family result_metrics
-
-
-
-
-
-# the constructor 
+#' 
+#' 
+#' 
 #' @export
 rm_main_results <- function(aggregate_decision_values = TRUE, aggregate_normalized_rank = TRUE){
   
@@ -55,6 +51,8 @@ rm_main_results <- function(aggregate_decision_values = TRUE, aggregate_normaliz
   rm_obj
 
 }
+
+
 
 
 # the internal private constructor
@@ -77,12 +75,11 @@ new_rm_main_results <- function(the_data = data.frame(), state = 'initial', opti
 
 
 
-# The aggregate_CV_split_results method needed to fulfill the results metric interface
-#' @export
+# The aggregate_CV_split_results method needed to fulfill the results metric interface.
 aggregate_CV_split_results.rm_main_results = function(rm_obj, prediction_results) {
   
   
-  # perhaps include a warning if the state is not intial
+  # return a warning if the state is not intial
   if (attr(rm_obj, "state") != "initial") {    
     warning(paste0("The method aggregate_CV_split_results() should only be called on",
                    "rm_main_results that are in the intial state.",
@@ -90,7 +87,7 @@ aggregate_CV_split_results.rm_main_results = function(rm_obj, prediction_results
   }
 
   
-  # get the options for now the normalized rank and decision values should be aggregated
+  # get the options for how the normalized rank and decision values should be aggregated
   aggregate_decision_values <- attr(rm_obj, "options")$aggregate_decision_values
   aggregate_normalized_rank <- attr(rm_obj, "options")$aggregate_normalized_rank
   
@@ -173,7 +170,6 @@ aggregate_CV_split_results.rm_main_results = function(rm_obj, prediction_results
 
 
 # The aggregate_resample_run_results method needed to fulfill the results metric interface
-#' @export
 aggregate_resample_run_results.rm_main_results = function(resample_run_results) {
   
   
@@ -216,25 +212,28 @@ aggregate_resample_run_results.rm_main_results = function(resample_run_results) 
 
 #' A plot function for the rm_main_results object
 #'
-#' This function can plot line results or temporal cross-decoding results for
-#' the the zero-one loss, normalized rank and/or decision values after the
-#' decoding analysis has been run (and all results have been aggregated)
+#' This function can create a line plot of the results or temporal
+#' cross-decoding results for the the zero-one loss, normalized rank and/or
+#' decision values after the decoding analysis has been run (and all results
+#' have been aggregated).
 #' 
 #' @param x A rm_main_result object that has aggregated runs from a
 #'   decoding analysis, e.g., if DECODING_RESULTS are the out from the
 #'   run_decoding(cv) then this argument should be
-#'   DECODING_RESULTS$rm_main_results.
+#'   `DECODING_RESULTS$rm_main_results`.
 #' 
-#' @param ... This is needed to conform to the plot generic interface
+#' @param ... This is needed to conform to the plot generic interface.
 #' 
-#' @param result_type A string specifying the types of results to plot options
-#'   are: 'zero_one_loss', 'normalized_rank', 'decision_values', or 'all'
+#' @param result_type A string specifying the types of results to plot. Options
+#'   are: 'zero_one_loss', 'normalized_rank', 'decision_values', or 'all'.
 #' 
 #' @param plot_type A string specifying the type of results to plot. Options are
 #'   'TCD' to plot a temporal cross decoding matrix or 'line' to create a line
 #'   plot of the decoding results as a function of time
 #' 
 #' @family result_metrics
+#' 
+#' 
 #' 
 #' @export
 plot.rm_main_results = function(x, ..., result_type = 'zero_one_loss', plot_type = 'TCD') {
@@ -250,31 +249,44 @@ plot.rm_main_results = function(x, ..., result_type = 'zero_one_loss', plot_type
   main_results <- dplyr::mutate(main_results, zero_one_loss = .data$zero_one_loss * 100)
   
   
+  # parse which type of results should be plotted 
   if (result_type == 'all'){ 
     # do nothing
   } else if (result_type == 'zero_one_loss'){
+    
     main_results <- dplyr::select(main_results, .data$train_time, .data$test_time, .data$zero_one_loss)
+    
   } else if (result_type == 'normalized_rank'){
+    
     if (!(result_type %in% names(main_results))){ 
       stop(paste("Can't plot", result_type, "results because this type of result was not saved."))}
+    
     main_results <- dplyr::select(main_results, .data$train_time, .data$test_time, .data$normalized_rank)
+    
   } else if (result_type == 'decision_vals'){
+    
     if (!(result_type %in% names(main_results))){ 
       stop(paste("Can't plot", result_type, "results because this type of result was not saved."))}
+    
     main_results <- dplyr::select(main_results, .data$train_time, .data$test_time, .data$decision_vals)
+    
   } else {
+    
     warning(paste0("result_type must be set to either 'all', 'zero_one_loss', 'normalized_rank', or 'decision_vals'.",
                    "Using the default value of all"))
   }
+  
   
   
   if (!(plot_type == 'TCD' || plot_type == 'line'))
       warning("plot_type must be set to 'TCD' or 'line'. Using the default value of 'TCD'")
   
   
+  
   main_results$train_time <- round(get_center_bin_time(main_results$train_time))
   main_results$test_time <- round(get_center_bin_time(main_results$test_time))
   
+  # an alternative way to display the labels (not used)
   #main_results$train_time <- get_time_range_strings(main_results$train_time)
   #main_results$test_time <- get_time_range_strings(main_results$test_time)
   
@@ -329,6 +341,8 @@ plot.rm_main_results = function(x, ..., result_type = 'zero_one_loss', plot_type
       
     } else if (result_type == 'all'){
       
+      # plotting multiple TCD subplots on the same figure
+      
       all_TCD_plots <- lapply(unique(main_results$result_type), function(curr_result_name) {
         
         curr_results <- filter(main_results, .data$result_type == curr_result_name)
@@ -360,6 +374,8 @@ plot.rm_main_results = function(x, ..., result_type = 'zero_one_loss', plot_type
 
 
 
+
+# Get the parameters for the rm_main_results object
 #' @export
 get_parameters.rm_main_results = function(ndtr_obj){
   
@@ -376,7 +392,7 @@ get_parameters.rm_main_results = function(ndtr_obj){
 
 
 
-# private helper function to get data needed to create the normalized rank 
+# A private helper function to get data needed to create the normalized rank 
 #  and decision value results
 get_augmented_prediction_results <- function(prediction_results, aggregate_options) {
   
@@ -409,7 +425,6 @@ get_augmented_prediction_results <- function(prediction_results, aggregate_optio
   prediction_results
     
 }
-
 
 
 

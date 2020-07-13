@@ -10,21 +10,22 @@
 \item{x}{A rm_main_result object that has aggregated runs from a
 decoding analysis, e.g., if DECODING_RESULTS are the out from the
 run_decoding(cv) then this argument should be
-DECODING_RESULTS$rm_main_results.}
+\code{DECODING_RESULTS$rm_main_results}.}
 
-\item{...}{This is needed to conform to the plot generic interface}
+\item{...}{This is needed to conform to the plot generic interface.}
 
-\item{result_type}{A string specifying the types of results to plot options
-are: 'zero_one_loss', 'normalized_rank', 'decision_values', or 'all'}
+\item{result_type}{A string specifying the types of results to plot. Options
+are: 'zero_one_loss', 'normalized_rank', 'decision_values', or 'all'.}
 
 \item{plot_type}{A string specifying the type of results to plot. Options are
 'TCD' to plot a temporal cross decoding matrix or 'line' to create a line
 plot of the decoding results as a function of time}
 }
 \description{
-This function can plot line results or temporal cross-decoding results for
-the the zero-one loss, normalized rank and/or decision values after the
-decoding analysis has been run (and all results have been aggregated)
+This function can create a line plot of the results or temporal
+cross-decoding results for the the zero-one loss, normalized rank and/or
+decision values after the decoding analysis has been run (and all results
+have been aggregated).
 }
 \seealso{
 Other result_metrics: 
