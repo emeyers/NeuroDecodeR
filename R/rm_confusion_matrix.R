@@ -9,9 +9,9 @@
 #' available in the DECODING_RESULTS object returned by the cross-validator.
 #'
 #' @param save_only_same_train_test_time A boolean specifying whether one wants
-#'  to create the confusion matrices when training at one point in time and
-#'  testing a different point in time. This usually is not necessary and takes 
-#'  up more memeory.
+#'   to save results to allow one to create the confusion matrices when training
+#'   at one point in time and testing a different point in time. Setting this to 
+#'   FALSE can save memory.
 #' 
 #' @param create_decision_vals_confusion_matrix A boolean specifying whether one wants
 #'  to create a confusion matrix of the decision values. In this confusion
@@ -25,14 +25,9 @@
 #' the_rms <- list(rm_confusion_matrix())
 #' 
 #' @family result_metrics
-
-
-
-
-
-
-
-# the constructor 
+#' 
+#' 
+#'
 #' @export
 rm_confusion_matrix <- function(save_only_same_train_test_time = TRUE, 
                                 create_decision_vals_confusion_matrix = TRUE) {
@@ -66,8 +61,8 @@ new_rm_confusion_matrix <- function(the_data = data.frame(),
 
 
 
-# The aggregate_CV_split_results method needed to fulfill the results metric interface
-#' @export
+# The aggregate_CV_split_results method needed to fulfill the results metric interface.
+# Not going to export this since it should never be directly called by users of the NDTr. 
 aggregate_CV_split_results.rm_confusion_matrix = function(rm_obj, prediction_results) {
   
 
@@ -79,10 +74,11 @@ aggregate_CV_split_results.rm_confusion_matrix = function(rm_obj, prediction_res
   }
   
   
-  # If specied in the constructur, save the confusion matrix only for training and testing 
+  
+  # If specied in the constructor, save the confusion matrix only for training and testing 
   # the same times. This will save memory, and the off diagonal element confusion matrices 
-  # can't generally of too much interest (however they could be of interest when 
-  # converting the confusion matrix to mutual information). 
+  # won't generally be of too much interest - however they could be of interest for
+  # computing a TCD plot of mutual information.  
   
   options <- attr(rm_obj, 'options')
   
@@ -149,17 +145,18 @@ aggregate_CV_split_results.rm_confusion_matrix = function(rm_obj, prediction_res
 
 
 
-# The aggregate_resample_run_results method needed to fulfill the results metric interface
-#' @export
+# The aggregate_resample_run_results method needed to fulfill the results metric interface.
+# Not going to export this since it should never be directly called by users of the NDTr. 
 aggregate_resample_run_results.rm_confusion_matrix = function(resample_run_results) {
 
 
   confusion_matrix <- resample_run_results 
 
-  # add on 0's for all entries in the confusion matrix that are missing  -----------------------------------------
-
-  # check if only specified that one should only save the results at the same training and test time
-  #  or if the results only were recorded for the same train and test times (since this was specied in the CV obj)
+  # add on 0's for all entries in the confusion matrix that are missing  
+  
+  # check if only specified that one should only save the results at the same
+  # training and test time or if the results only were recorded for the same
+  # train and test times (since this was specied in the CV obj)
   options <- attr(resample_run_results, 'options')
   only_has_same_train_test_time_results <- 
     (sum(resample_run_results$train_time == resample_run_results$test_time) == dim(resample_run_results)[1])
@@ -202,9 +199,6 @@ aggregate_resample_run_results.rm_confusion_matrix = function(resample_run_resul
     dplyr::group_by(.data$train_time,  .data$test_time, .data$actual_labels) %>%
     mutate(conditional_pred_freq = n / sum(n))    # Pr(predicted = y | actual = k)
   
-  #dplyr::group_by(train_time,  test_time) %>%
-  #mutate(predicted_frequency = n / sum(n))   # Pr(predicted = y, actual = k)
-  
   
   if (options$create_decision_vals_confusion_matrix) {
     
@@ -242,7 +236,7 @@ aggregate_resample_run_results.rm_confusion_matrix = function(resample_run_resul
 #' mutual information calculated from the confusion matrix. 
 #' 
 #' @param x A rm_confusion_matrix object that has aggregated runs from a
-#'   decoding analysis, e.g., if DECODING_RESULTS are the out from the
+#'   decoding analysis, e.g., if DECODING_RESULTS are the output from the
 #'   run_decoding(cv) then this argument should be
 #'   `DECODING_RESULTS$rm_confusion_matrix`.
 #' 
@@ -252,8 +246,8 @@ aggregate_resample_run_results.rm_confusion_matrix = function(resample_run_resul
 #'   take the following values: 
 #'   * "zero_one_loss": plot a regular confusion matrix. 
 #'   * "decision_vals": plot a confusion matrix with the average decision values.
-#'   * "mutual_information": plot mutual information calculated from the
-#'   zero-one loss confusion matrix
+#'   * "mutual_information": plot the mutual information calculated from the
+#'   zero-one loss confusion matrix.
 #' 
 #' @param plot_only_same_train_test_time A boolean indicating whether the
 #'   confusion matrices should only be plotted at the same training and test
@@ -322,7 +316,6 @@ plot_confusion_matrix <- function(confusion_matrix_obj,
                       plot_decision_vals_confusion_matrix = FALSE) {
   
   
-
   # should perhaps give an option to choose a different color scale, and maybe other options? 
   
   # checking if only have the results for training and testing at the same time
@@ -401,7 +394,7 @@ plot_confusion_matrix <- function(confusion_matrix_obj,
 
 
 
-# a private helper function to plot calculate and plot mutual information from the confusion matrix
+# a private helper function to calculate and plot mutual information from the confusion matrix
 plot_MI <- function(rm_obj, plot_type = 'TCD') {
   
   
@@ -460,7 +453,7 @@ plot_MI <- function(rm_obj, plot_type = 'TCD') {
 
 
 
-
+# Returns the parameters that were set in the rm_confusion_matrix object
 #' @export
 get_parameters.rm_confusion_matrix = function(ndtr_obj){
 

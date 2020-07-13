@@ -11,9 +11,9 @@ rm_confusion_matrix(
 }
 \arguments{
 \item{save_only_same_train_test_time}{A boolean specifying whether one wants
-to create the confusion matrices when training at one point in time and
-testing a different point in time. This usually is not necessary and takes
-up more memeory.}
+to save results to allow one to create the confusion matrices when training
+at one point in time and testing a different point in time. Setting this to
+FALSE can save memory.}
 
 \item{create_decision_vals_confusion_matrix}{A boolean specifying whether one wants
 to create a confusion matrix of the decision values. In this confusion

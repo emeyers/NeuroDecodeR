@@ -13,7 +13,7 @@
 }
 \arguments{
 \item{x}{A rm_confusion_matrix object that has aggregated runs from a
-decoding analysis, e.g., if DECODING_RESULTS are the out from the
+decoding analysis, e.g., if DECODING_RESULTS are the output from the
 run_decoding(cv) then this argument should be
 \code{DECODING_RESULTS$rm_confusion_matrix}.}
 
@@ -24,8 +24,8 @@ take the following values:
 \itemize{
 \item "zero_one_loss": plot a regular confusion matrix.
 \item "decision_vals": plot a confusion matrix with the average decision values.
-\item "mutual_information": plot mutual information calculated from the
-zero-one loss confusion matrix
+\item "mutual_information": plot the mutual information calculated from the
+zero-one loss confusion matrix.
 }}
 
 \item{plot_only_same_train_test_time}{A boolean indicating whether the
