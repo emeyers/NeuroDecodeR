@@ -21,7 +21,7 @@ test_that("can create binned_data", {
 
   expect_equal(name_of_file_that_should_be_created, binned_file_name)
 
-  test_valid_binned_data_format(binned_file_name)
+  test_valid_binned_format(binned_file_name)
 
   file.remove(name_of_file_that_should_be_created)
 
@@ -65,9 +65,9 @@ test_that("can convert MATLAB raster data to R raster data", {
 
   a_converted_file <- paste0(r_raster_dir_name, list.files(r_raster_dir_name)[1])
   
-  test_valid_raster_data_format(a_converted_file)
+  expect_null(test_valid_raster_format(a_converted_file))
 
-
+  
   the_files <- paste0(r_raster_dir_name, list.files(r_raster_dir_name))
   file.remove(the_files)
   file.remove(r_raster_dir_name)

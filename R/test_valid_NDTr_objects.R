@@ -1,38 +1,84 @@
 
-
-# Functions to make sure that the objects in the NDTr have appropriate methods
+# Functions to test that NDTr objects have appropriate methods
 # to implement the NDTr interfaces.
 
 
 
-
-# A function that checks if raster data is in a valid format
-test_valid_raster_data_format <- function(raster_file_name) {
+#' Tests if a data frame is in valid raster format
+#'
+#' This function takes a data frame and tests that the data frame is in valid
+#' raster format by checking that the data frame contains variables with the
+#' appropriate names. If the data frame is not in correct raster format, an
+#' error will be thrown that contains a message why the data is not in valid
+#' raster format.
+#' 
+#' @param raster_data A data frame that will be checked to see if it
+#' is in valid raster format. 
+#'
+#' @examples 
+#' # This is valid raster data so the function will return no error message
+#' raster_dir_name <- file.path(system.file("extdata", package = "NDTr"), 
+#'                               "Zhang_Desimone_7object_raster_data_rda")
+#' file_name <- "bp1001spk_01A_raster_data.rda"
+#' raster_full_path <- file.path(raster_dir_name, file_name)
+#' 
+#' test_valid_raster_format(raster_full_path)
+#'
+#' 
+#' # Binned data is not in raster format (it has an extra column called siteID) so 
+#' # checking if it is in raster format should return an error. 
+#' 
+#' binned_file_name <- system.file("extdata/ZD_150bins_50sampled.Rda", package="NDTr")
+#' try(test_valid_raster_format(binned_file_name))
+#' 
+#' 
+#' @export 
+test_valid_raster_format <- function(raster_data) {
   
-  raster_data <- NULL
-  raster_data_object_name <- load(raster_file_name)
-  # expect_true(exists("raster_data"))
-
-  # there should be only 1 object in the binned_file
-  expect_equal((length(raster_data_object_name)), 1)
-  eval(parse(text = paste0("raster_data <- ", raster_data_object_name)))
   
-  # needs to have a variables that start with "time" and with "labels"
+  if (is.character(raster_data)) {
+    
+    # if a file name is given, load the raster data
+    raster_data_object_name <- load(raster_data)
+    
+    # there should be only 1 object in the raster_file_name
+    if (length(raster_data_object_name) != 1){
+      stop(paste("Data not in valid raster format:",
+                 "raster data files must contain a single object that has the raster data."))
+    }
+    
+    eval(parse(text = paste0("raster_data <- ", raster_data_object_name)))
+    
+  }
+  
+
+  # raster data needs to have a variables that start with "time" and with "labels"
   unique_prefixes <- sort(unique(sapply(strsplit(names(raster_data), '[.]'), function(x) x[1])))
-  expect_equal(sum(unique_prefixes == "time"), 1)
-  expect_equal(sum(unique_prefixes == "labels"), 1)
   
-  # if a third type of variable is defined it should be called "site_info"
-  if (length(unique_prefixes) > 2) {
-    expect_gt(sum(unique_prefixes == "site_info") + sum(unique_prefixes == "trial_number"), 0)
+  if (sum(unique_prefixes == "time") != 1){
+    stop(paste("Data not in valid raster format:",
+               "raster data must be a data frame that contains a variables that start with 'time.'"))
   }
   
-  if (length(unique_prefixes) == 4) {
-    expect_equal(sum(unique_prefixes == "site_info") + sum(unique_prefixes == "trial_number"), 2)
+  if (sum(unique_prefixes == "labels") != 1){
+    stop(paste("Data not in valid raster format:",
+               "raster data must be a data frame that contains a variables that start with 'labels.'"))
   }
   
-  # should be a maximum of 4 types of variables that start with labels, time, trial_number or site info
-  expect_true(length(unique_prefixes) <= 4)
+  
+  
+  # only two additional variable prefixes names are allowed which are "site_info." and "trial_number"
+  valid_raster_data_variable_names <- c("time", "labels", "site_info", "trial_number")
+  
+  invalid_variable_names <- setdiff(unique_prefixes, valid_raster_data_variable_names)
+  
+  if (length(invalid_variable_names) != 0){
+    stop(paste("Data not in valid raster format:",
+               "raster data must only contain variables names that start with 'labels.'", 
+               "'time.', 'site_info.' or 'trial_number'. The following are not valid variable", 
+               "names to have in data that is in raster format:", invalid_variable_names))
+  }
+  
   
 }
 
@@ -40,60 +86,66 @@ test_valid_raster_data_format <- function(raster_file_name) {
 
 
 
+
+
+# The following functions will not be exported for now. If users want to
+# create new NDTr objects they can still use these internal functions to check
+# that the objects they creatd conform to NDTr interfaces.
+
+
+
 # A function that checks if binned data is in a valid format
-test_valid_binned_data_format <- function(binned_data) {
+test_valid_binned_format <- function(binned_data) {
   
   if (is.character(binned_data)){
     
     binned_data_object_name <- load(binned_data)
     
     # there should be only 1 object in the binned_file
-    expect_equal((length(binned_data_object_name)), 1)
+    if (length(binned_data_object_name) != 1){
+      stop(paste("Data not in valid binned format:",
+                 "binned data files must contain a single object that has the binned data."))
+    }
+    
     eval(parse(text = paste0("binned_data <- ", binned_data_object_name)))
     
   }  
   
   
-  # needs to have a variables that start with "siteID", time" and "labels"
+  # need to have a variables that start with "siteID", time" and "labels"
   unique_prefixes <- unique(sapply(strsplit(names(binned_data), '[.]'), function(x) x[1]))
-  expect_equal(sum(unique_prefixes == "time"), 1)
-  expect_equal(sum(unique_prefixes == "labels"), 1)
-  expect_equal(sum(unique_prefixes == "siteID"), 1)
   
-  
-  # if additional variables are in the data frame they should be called either "site_info" or "trial_number"
-  if (length(unique_prefixes) == 4) {
-    expect_gt(sum(unique_prefixes == "site_info") + sum(unique_prefixes == "trial_number"), 0)
+  if (sum(unique_prefixes == "time") != 1){
+    stop(paste("Data not in valid binned format:",
+               "binned data must be a data frame that contains a variables that start with 'time.'"))
   }
   
-  if (length(unique_prefixes) == 5) {
-    expect_equal(sum(unique_prefixes == "site_info") + sum(unique_prefixes == "trial_number"), 2)
+  if (sum(unique_prefixes == "labels") != 1){
+    stop(paste("Data not in valid binned format:",
+               "binned data must be a data frame that contains a variables that start with 'labels.'"))
   }
   
-  # should only be at most 5 types of variables that start with siteID, labels, time, trial_number, or site_info
-  expect_true(length(unique_prefixes) <= 5)
-
-}
-
-
-
-
-
-# A function that checks that a get_parameters() method exists
-test_get_parameters_method <- function(NDTr_object){
+  if (sum(unique_prefixes == "siteID") != 1){
+    stop(paste("Data not in valid binned format:",
+               "binned data must be a data frame that contains a variable called 'siteID'"))
+  }
   
-  test_that("the get_parameters methods exists and returns a data frame with one row", {
-    
-    class_name <- class(NDTr_object)[1]
-    
-    helper_test_has_method(class_name, "get_parameters")
-    
-    the_parameters <- get_parameters(NDTr_object)
-    expect_equal(dim(the_parameters)[1], 1)
-    
-  })
+
+
+  # only two additional variable prefixes names are allowed which are "site_info" and "trial_number"
+  valid_binned_data_variable_names <- c("siteID", "time", "labels", "site_info", "trial_number")
+  
+  invalid_variable_names <- setdiff(unique_prefixes, valid_binned_data_variable_names)
+  
+  if (length(invalid_variable_names) != 0){
+    stop(paste("Data not in valid binned format:",
+               "binned data must only contain variables names that start with 'siteID', labels.'", 
+               "'time.', 'site_info' or 'trial_number'. The following are not valid variable", 
+               "names to have in data that is in binned format:", invalid_variable_names))
+  }
   
 }
+
 
 
 
@@ -103,35 +155,24 @@ test_get_parameters_method <- function(NDTr_object){
 # A function that checks that a datasource conforms to the NDTr interface
 test_valid_datasource <- function(the_datasource){
   
-  class_name <- class(the_datasource)[1]
-  
-  test_that("the datasource has get_data() method", {
-  
-    helper_test_has_method(class_name, "get_data")
+  # make sure the data source has a get_data() method
+  test_has_method(the_datasource, "get_data")
     
-  })
+  # make sure the get_data() function returns a data frame with required variables
+  the_data <- get_data(the_datasource)
+    
+  # should have exactly one column name that matches exactly these variable names
+  check_df_contains_variable(the_data, "train_labels", "get_data()")
+  check_df_contains_variable(the_data, "test_labels", "get_data()")
+  check_df_contains_variable(the_data, "time_bin", "get_data()")
   
+  # should have one or more column names that start with these variables
+  check_df_contains_variable(the_data, "site", "get_data()", FALSE, FALSE)
+  check_df_contains_variable(the_data, "CV", "get_data()", FALSE, FALSE)
 
-  test_that("get_data() returns a data frame with the appropriate variables", {
-    
-    # make sure the get_data() function returns a data frame with required variables
-    the_data <- get_data(the_datasource)
-    variable_names <- names(the_data)
-  
-    expect_true("train_labels" %in% variable_names)
-    expect_true("test_labels" %in% variable_names)
-    expect_true("time_bin" %in% variable_names)
-    expect_gt(length(grep("site", variable_names)), 0)
-    expect_gt(length(grep("CV", variable_names)), 0)
-    
-  })
-  
-  
   test_get_parameters_method(the_datasource)
   
 }
-
-
 
 
 
@@ -140,31 +181,25 @@ test_valid_datasource <- function(the_datasource){
 test_valid_classifier <- function(the_classifier){
   
   
-  # make sure the classifier has a get_predictions method
-  class_name <- class(the_classifier)[1]
-  
-  test_that("the classifier has get_predictions() method", {
-    
-    helper_test_has_method(class_name, "get_predictions")
+  # make sure the classifier has a get_predictions() method
+  test_has_method(the_classifier, "get_predictions")
 
-  })
-  
   
   # get data for testing
-  example_data <- helper_get_example_training_and_test_data()
+  example_data <- get_example_training_and_test_data()
   training_set <- example_data$training_set
   test_set <- example_data$test_set
   
-  test_that("classification results are in the correct format", {
+
+  predictions_df <- get_predictions(the_classifier, training_set, test_set)
     
-    predictions_df <- get_predictions(the_classifier, training_set, test_set)
-    
-    non_decision_val_df <- select(predictions_df, -starts_with("decision_vals."))
-    prediction_col_names <- sort(names(non_decision_val_df))
-    expected_col_names <- sort(c("test_time", "actual_labels", "predicted_labels"))
-    expect_equal(prediction_col_names, expected_col_names)
-    
-  })
+  # should have exactly one column name that matches exactly these variable names
+  check_df_contains_variable(predictions_df, "test_time", "get_predictions()")
+  check_df_contains_variable(predictions_df, "actual_labels", "get_predictions()")
+  check_df_contains_variable(predictions_df, "predicted_labels", "get_predictions()")
+  
+  # should have one or more column names that start with this variable name
+  check_df_contains_variable(predictions_df, "decision_vals", "get_predictions()", FALSE, FALSE)
   
   test_get_parameters_method(the_classifier)
   
@@ -177,40 +212,27 @@ test_valid_classifier <- function(the_classifier){
 # A function that checks that a feature preprocessor conforms to the NDTr interface
 test_valid_feature_preprocessor <- function(the_feature_preprocessor){
   
-  
-  test_that("the preprocessor has a preprocess_data() method", {
-    
-    class_name <- class(the_feature_preprocessor)[1]
-    
-    helper_test_has_method(class_name, "preprocess_data")
-    
-  })
-  
-  
-  # check that preprocessed_data returns:
-  #  1) processed_data$training_set which has site_X's and labels
-  #  2) processed_data$test_set which has site_X's, labels and time_bin
-  
-  test_that("the preprocess_data() results in the correct format", {
-    
-    # get data for testing
-    example_data <- helper_get_example_training_and_test_data()
-    training_set <- example_data$training_set
-    test_set <- example_data$test_set
-    
-    processed_data <- preprocess_data(the_feature_preprocessor, training_set, test_set)
-    
-    training_set_names <- names(processed_data$training_set)
-    expect_true("train_labels" %in% training_set_names)
-    expect_gt(length(grep("site", training_set_names)), 0)
 
-    test_set_names <- names(processed_data$test_set)
-    expect_true("test_labels" %in% test_set_names)
-    expect_gt(length(grep("site", test_set_names)), 0)
-    expect_true("time_bin" %in% test_set_names)
+  # make sure that the feature preprocessor has a preprocess_data() method
+  test_has_method(the_feature_preprocessor, "preprocess_data")
     
+  
+ # get data for testing
+  example_data <- get_example_training_and_test_data()
+  training_set <- example_data$training_set
+  test_set <- example_data$test_set
+    
+  processed_data <- preprocess_data(the_feature_preprocessor, training_set, test_set)
+    
+  # should have exactly one column name that matches exactly these variable names
+  check_df_contains_variable(processed_data$training_set, "train_labels", "preprocess_data()")
+  check_df_contains_variable(processed_data$test_set, "test_labels", "preprocess_data()")
+  check_df_contains_variable(processed_data$test_set, "time_bin", "preprocess_data()")
 
-  })
+    # should have one or more column names that start with this variable name
+  check_df_contains_variable(processed_data$training_set, "site", "preprocess_data()", FALSE, FALSE)
+  check_df_contains_variable(processed_data$test_set, "site", "preprocess_data()", FALSE, FALSE)
+  
   
   test_get_parameters_method(the_feature_preprocessor)
 
@@ -220,17 +242,12 @@ test_valid_feature_preprocessor <- function(the_feature_preprocessor){
 
 
 
-
 # A function that checks that a cross-validator conforms to the NDTr interface
 test_valid_cross_validator <- function(the_cross_validator){
   
-  test_that("the cross-validator has a run_decoding() method", {
-    
-    class_name <- class(the_cross_validator)[1]
-    
-    helper_test_has_method(class_name, "run_decoding")
-    
-  })
+  
+  # make sure that the cross-validator has a run_decoding() method
+  test_has_method(the_cross_validator, "run_decoding")
   
   
   # analysis_ID is not required for a cross-validator but should have one so
@@ -251,23 +268,14 @@ test_valid_cross_validator <- function(the_cross_validator){
 
 
 
-
 # A function that checks that a result metric conforms to the NDTr interface
 test_valid_result_metric <- function(the_result_metric){
   
   # Check these methods exist. No requirements that they do anything useful
-  test_that(paste("the result metric has aggregate_CV_split_results() and", 
-            "aggregate_resample_run_results() methods"), {
-    
-    class_name <- class(the_result_metric)[1]
-              
-    helper_test_has_method(class_name, "aggregate_CV_split_results")
-    helper_test_has_method(class_name, "aggregate_resample_run_results")
-    
-  })
-  
-  
-  test_get_parameters_method(the_result_metric)
+    test_has_method(the_result_metric, "aggregate_CV_split_results")
+    test_has_method(the_result_metric, "aggregate_resample_run_results")
+
+   test_get_parameters_method(the_result_metric)
   
 }
 
@@ -275,20 +283,93 @@ test_valid_result_metric <- function(the_result_metric){
 
 
 
-# A helper function to test if a given class has a method this is useful to
+
+
+
+# Helper functions for testing if data is in valid NDTr format --------------
+
+
+
+# A helper function to test if a given class has a method. This is useful to
 # check that particular object types in the NDTr fulfill the interface.
-helper_test_has_method <- function(class_name, method_name){
+test_has_method <- function(ndtr_object, method_name){
   
-  expect_true(exists(paste(method_name, class_name, sep = "."), mode='function'))
+  class_name <- class(ndtr_object)[1]
+  
+  if (!(exists(paste(method_name, class_name, sep = "."), mode='function'))) {
+    stop(paste(class(ndtr_object), "does not have a method called", method_name))
+  }
   
 }
+
+
+
+
+
+# A function that checks that a get_parameters() method exists and returns
+# a data frame with a single row. 
+test_get_parameters_method <- function(ndtr_object){
+  
+  test_has_method(ndtr_object, "get_parameters")
+  
+  the_parameters <- get_parameters(ndtr_object)
+  
+  if (!is.data.frame(the_parameters)){
+    stop(paste("The get_parameters method for", class(ndtr_object)), 
+          "is not returning a data frame.")
+  }
+  
+  if (dim(the_parameters)[1] != 1){
+    stop(paste("The get_parameters method for", class(ndtr_object)), 
+          "must return a data frame with a *single* row.")
+  }
+  
+}
+
+
+
+
+
+
+# A helper function that checks if a data frame contains a variable and prints a
+#  useful error message if the data frame does not contain the variable.
+check_df_contains_variable <- function(df, variable_name, error_message_method_name,
+                                       exact_variable_match = TRUE, exactly_one_match = TRUE){
+  
+  df_variable_names <- names(df)
+  
+  if (exact_variable_match) {
+    num_matches <- sum(variable_name %in% df_variable_names)
+  } else {
+    num_matches <- length(grep(variable_name, df_variable_names))
+  }
+  
+  check_is_valid <- FALSE
+ 
+  if (exactly_one_match) {
+    check_is_valid <- num_matches == 1
+  } else {
+    check_is_valid <- num_matches > 0
+  }
+  
+  # if the df does not contain the variable name as specified, print an error message  
+  if (!check_is_valid){
+    
+    stop(paste0("The data frame returned by the ", error_message_method_name,
+               " method does not have the required variable name '", variable_name, "' as required."))
+    
+  }
+  
+}
+
+
 
 
 
 
 
 # A helper function that generates data to test datasources and feature-preprocessors 
-helper_get_example_training_and_test_data <- function() {
+get_example_training_and_test_data <- function() {
   
   real_data_binned_file_name <- system.file(file.path("extdata", "ZD_150bins_50sampled.Rda"), package="NDTr")
 

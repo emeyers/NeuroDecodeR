@@ -13,7 +13,6 @@ check_and_load_binned_data <- function(binned_data){
   # if a file name has been given load it
   if (is.character(binned_data)) {
     binned_data_object_name <- load(binned_data)
-    expect_equal((length(binned_data_object_name)), 1)
     eval(parse(text = paste0("binned_data <- ", binned_data_object_name)))
   }
   
@@ -21,7 +20,7 @@ check_and_load_binned_data <- function(binned_data){
   # check that the binned_data is in a valid format
   result = tryCatch({
     
-    test_valid_binned_data_format(binned_data)
+    test_valid_binned_format(binned_data)
     
   }, error = function(e) {
     stop(paste("The argement binned_data must either be a data frame containing data in binned format,", 

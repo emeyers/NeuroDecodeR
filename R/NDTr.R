@@ -47,7 +47,6 @@
 #' @import ggplot2
 #' @import magrittr
 #' @importFrom stats cor pf predict
-#' @importFrom testthat expect_equal expect_true expect_gt test_that
 #' @importFrom gridExtra grid.arrange
 
 

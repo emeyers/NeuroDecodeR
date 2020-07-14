@@ -59,42 +59,47 @@ test_shuffle_results_at_chance <- function(cl){
 
 
 # test cl_max_correlation -----------------------------------------------------
+test_that("The MCC classifier is working", {
+  
+  
+  # test classifier has required methods and returns correctly formatted results
+  cl <- cl_max_correlation()
+  expect_null(test_valid_classifier(cl))
 
-# test classifier has required methods and returns correctly formatted results
-cl <- cl_max_correlation()
-test_valid_classifier(cl) 
+  test_reasonable_classification_accuracy(cl)
+  test_shuffle_results_at_chance(cl)
 
-test_reasonable_classification_accuracy(cl)
-test_shuffle_results_at_chance(cl)
-
-
+})
 
 
 
 # test cl_poison_naive_bayes --------------------------------------------------
 
-cl <- cl_poisson_naive_bayes()
-test_valid_classifier(cl) 
+test_that("Poison Naive Bayes classifier is working", {
+  
+  cl <- cl_poisson_naive_bayes()
+  expect_null(test_valid_classifier(cl))
 
-test_reasonable_classification_accuracy(cl)
-test_shuffle_results_at_chance(cl)
+  test_reasonable_classification_accuracy(cl)
+  test_shuffle_results_at_chance(cl)
 
-
+})
 
 
 
 # test cl_svm -----------------------------------------------------------------
-cl <- cl_svm()
-test_valid_classifier(cl) 
-test_reasonable_classification_accuracy(cl)
-test_shuffle_results_at_chance(cl)
+test_that("SVM claissifier is working", {
+  
+  cl <- cl_svm()
+  expect_null(test_valid_classifier(cl))
+  test_reasonable_classification_accuracy(cl)
+  test_shuffle_results_at_chance(cl)
 
+  
+  cl <- cl_svm(kernel = "linear")
+  expect_null(test_valid_classifier(cl))
+  test_reasonable_classification_accuracy(cl)
+  test_shuffle_results_at_chance(cl)
 
-
-cl <- cl_svm(kernel = "linear")
-test_valid_classifier(cl) 
-test_reasonable_classification_accuracy(cl)
-test_shuffle_results_at_chance(cl)
-
-
+})
 

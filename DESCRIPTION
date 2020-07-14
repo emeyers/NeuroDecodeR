@@ -32,7 +32,6 @@ Imports:
     R.matlab,
     stats,
     stringr,
-    testthat,
     tibble,
     tictoc,
     tidyr,
@@ -40,6 +39,7 @@ Imports:
 Suggests: 
     knitr,
     rmarkdown,
-    covr
+    covr,
+    testthat
 Encoding: UTF-8
 VignetteBuilder: knitr

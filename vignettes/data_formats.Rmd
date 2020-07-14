@@ -70,7 +70,7 @@ raster_dir_name <- file.path(system.file("extdata", package = "NDTr"), "Zhang_De
 full_file_name <- file.path(raster_dir_name, "bp1001spk_01A_raster_data.rda")
 
 # test the file is in valid raster format
-NDTr:::test_valid_raster_data_format(full_file_name)
+NDTr::test_valid_raster_format(full_file_name)
 
 # load the data to see the variables in it
 load(full_file_name)
@@ -139,8 +139,9 @@ data set](datasets.html).
 
 binned_file_name <- system.file("extdata/ZD_150bins_50sampled.Rda", package="NDTr")
 
-# test the file is in valid binned format
-NDTr:::test_valid_binned_data_format(binned_file_name)
+
+# test the file is in valid binned format using an internal function
+NDTr:::test_valid_binned_format(binned_file_name)
 
 
 # load the data to see the variables in it
