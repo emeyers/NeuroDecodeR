@@ -95,13 +95,21 @@ usable format. In this tutorial we will use data collected by [Ying Zhang in Bob
 Desimone’s lab at MIT](datasets.hmtl). The directory
 extdata/Zhang_Desimone_7objects_raster_data_rda/ contains data in
 raster format. Each file in this directory contains data from one neuron. To
-start, let us load one of these files and examine its contents.
+start, let us load one of these files and examine its contents. 
+
+We can also use the `test_valid_raster_format()` method to verify that the data
+is in valid raster format. If you start analyzing your own data,
+`test_valid_raster_format()` can be a useful function to make sure you have your
+raster data in the correct format.
+
 
 ```{r load_raster_file}
 
 raster_dir_name <- file.path(system.file("extdata", package = "NDTr"), "Zhang_Desimone_7object_raster_data_rda")
 file_name <- "bp1001spk_01A_raster_data.rda"
 load(file.path(raster_dir_name, file_name))
+
+test_valid_raster_format(file.path(raster_dir_name, file_name))
 
 ```
 
