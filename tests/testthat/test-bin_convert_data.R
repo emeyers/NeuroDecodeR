@@ -1,17 +1,19 @@
 
 
 
-raster_dir_name <- file.path(system.file("extdata", package = "NDTr"), "Zhang_Desimone_7object_raster_data_rda")
+raster_dir_name <- file.path(system.file("extdata", package = "NDTr"), 
+                             "Zhang_Desimone_7object_raster_data_rda")
+
 
 
 
 # testing create_binned_data --------------------------------------------------
 
-test_that("can create binned_data", {
+test_that("create_binned_data() creates binned data from raster data in the correct format", {
 
   name_of_file_that_should_be_created <- "ZD_150bins_50sampled.Rda" 
 
-  # deleting "ZD_150_samples_binned_every_50_samples.Rda" if it already exist\
+  # deleting "ZD_150_samples_binned_every_50_samples.Rda" if it already exist
   if (file.exists(name_of_file_that_should_be_created)){
     file.remove(name_of_file_that_should_be_created)
   } 
@@ -29,9 +31,11 @@ test_that("can create binned_data", {
 
 
 
+
+
 # testing converting MATLAB raster data to R raster data ----------------------
 
-test_that("can convert MATLAB raster data to R raster data", {
+test_that("convert_matlab_raster_data() convert MATLAB raster data to R raster data", {
   
 
   matlab_raster_dir_name <- file.path(system.file("extdata", package = "NDTr"), 
@@ -65,9 +69,9 @@ test_that("can convert MATLAB raster data to R raster data", {
 
   a_converted_file <- paste0(r_raster_dir_name, list.files(r_raster_dir_name)[1])
   
+  # will return NULL if the converted data is correctly in raster format
   expect_null(test_valid_raster_format(a_converted_file))
 
-  
   the_files <- paste0(r_raster_dir_name, list.files(r_raster_dir_name))
   file.remove(the_files)
   file.remove(r_raster_dir_name)
@@ -79,7 +83,7 @@ test_that("can convert MATLAB raster data to R raster data", {
 
 # testing calculating the number of times a label was repeated ----------------
 
-test_that("can correctly assess how many times a label was repeated", {
+test_that("get_num_label_repetitions() correctly assesses how many times a label was repeated", {
 
   file_name <-  system.file(file.path("extdata", "ZD_150bins_50sampled.Rda"), package = "NDTr")
   
@@ -88,16 +92,6 @@ test_that("can correctly assess how many times a label was repeated", {
   label_rep_info <- get_num_label_repetitions(file_name, "stimulus_ID") 
 
 })
-
-
-
-
-
-
-
-
-
-
 
 
 

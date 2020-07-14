@@ -3,7 +3,7 @@
 
 
 
- # data useful for testing data sources
+ # data useful for testing datasources ------------------------------
 
  # Here each time point has a unique integer
 binned_data <- data.frame(siteID = rep(1:100, each = 70),
@@ -14,7 +14,6 @@ binned_data <- data.frame(siteID = rep(1:100, each = 70),
                           time.301_400 = 21001:28000)
 
 save(binned_data, file = "fake_binned_data.Rda")
-
 
 
  # Here each whole value corresponds to a trial number and each decimal corresponds to a siteID
@@ -32,14 +31,14 @@ save(binned_data, file = "fake_simultaneous_binned_data.Rda")
 
 
 
-# data useful for testing classifiers and feature proprocessors
-
-real_data_binned_file_name <- system.file("extdata/ZD_150bins_50sampled.Rda", package = "NDTr") 
-
- # just use data at 200-349 post stimulus onset for testing
 
 
-# get firing rate data
+# data useful for testing classifiers and feature proprocessors ------------
+
+real_data_binned_file_name <- system.file(file.path("extdata", "ZD_150bins_50sampled.Rda"), package="NDTr")
+
+
+# get firing rate data (just use data at 200-349 post stimulus onset for testing)
 ds <- ds_basic(real_data_binned_file_name, "stimulus_ID", site_IDs_to_exclude = 63,
                num_cv_splits = 3, num_label_repeats_per_cv_split = 6, use_count_data = TRUE)
 cv_data <- get_data(ds)
@@ -47,6 +46,8 @@ training_set <- filter(cv_data, time_bin == "time.200_349", CV_1 == "train") %>%
 test_set <- filter(cv_data, time_bin %in% c("time.-350_-201", "time.200_349"), CV_1 == "test") %>% select(starts_with("site"), test_labels, time_bin)
 levels(test_set$time_bin)[levels(test_set$time_bin)=="time.-350_-201"] <- "baseline"
 levels(test_set$time_bin)[levels(test_set$time_bin)=="time.200_349"] <- "stimulus"
+
+
 
 # get data a spike counts
 ds <- ds_basic(real_data_binned_file_name, "stimulus_ID", site_IDs_to_exclude = 63,
@@ -58,7 +59,7 @@ levels(count_test_set$time_bin)[levels(count_test_set$time_bin)=="time.-350_-201
 levels(count_test_set$time_bin)[levels(count_test_set$time_bin)=="time.200_349"] <- "stimulus"
 
 
-# get data z-score normalized
+# get data z-score normalized data
 fp <- fp_zscore()
 processed_data <- preprocess_data(fp, training_set, test_set)
 normalized_training_set <- processed_data$training_set
@@ -109,12 +110,12 @@ save(training_set, test_set,
 
 
 
-
-# data for testing saving the results
+# data for testing saving the results ------------------
 
 
 # generate data to get saving the results, this could will take a while to run...
-real_data_binned_file_name <- system.file("extdata/ZD_150bins_50sampled.Rda", package = "NDTr") 
+real_data_binned_file_name <- system.file(file.path("extdata", "ZD_150bins_50sampled.Rda"), package="NDTr")
+
 
 # no z-score preprocessor
 ds <- ds_basic(real_data_binned_file_name, 'stimulus_ID', 18, 0)
@@ -171,12 +172,6 @@ save(DECODING_RESULTS_1,
      DECODING_RESULTS_4, 
      DECODING_RESULTS_5, 
      file = "example_DECODING_RESULTS.Rda")
-
-
-
-
-
-
 
 
 

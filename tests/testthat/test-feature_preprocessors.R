@@ -5,11 +5,15 @@ load("example_ZD_train_and_test_set.Rda")
 rm(count_training_set, count_test_set, normalized_training_set, normalized_test_set)
 
 
+
 # tests for the fp_zscore -----------------------------------------------------
 
-# test that the feature processor conforms to the interface
-fp <- fp_zscore()
-test_valid_feature_preprocessor(fp)
+
+test_that("fp_zscore() conforms to the NDTr datasouce interface", {
+  fp <- fp_zscore()
+  expect_null(test_valid_feature_preprocessor(fp))
+})
+
 
 
 test_that("fp_zscore normalized the training data so that it has a mean of 0 and a sd of 1", {
@@ -28,10 +32,15 @@ test_that("fp_zscore normalized the training data so that it has a mean of 0 and
 
 
 
+
+
 # fp_select_k_features --------------------------------------------------------
 
-fp <- fp_select_k_features(num_site_to_use = 100)
-test_valid_feature_preprocessor(fp)
+test_that("fp_select_k_features() conforms to the NDTr datasouce interface", {
+  fp <- fp_select_k_features(num_site_to_use = 100)
+  expect_null(test_valid_feature_preprocessor(fp))
+})
+
 
 
 test_that("fp_select_k_features p-values are correct", {
@@ -51,6 +60,7 @@ test_that("fp_select_k_features p-values are correct", {
   expect_equal(fp_pvals, all_pvals)  
 
 })
+
 
 
 
@@ -80,11 +90,6 @@ test_that("fp_select_k_features returns the correct number of features", {
   expect_equal(sum(ordered_sites$selected_site), num_site_to_use)
   
 })
-
-
-
-
-
 
 
 

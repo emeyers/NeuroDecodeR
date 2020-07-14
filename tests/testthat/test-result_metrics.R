@@ -29,19 +29,17 @@ test_aggregate_functions_work <- function(result_metric_obj){
   expect_lte(dim(aggregated_resample_rm)[1], dim(fake_resample_run_data)[1])
   
   
-  #plot(aggregated_resample_rm)
-  
 }
 
 
 
 
 
-test_that("rm_confusion_matrix the aggregate functions don't give an error", {
+test_that("rm_confusion_matrix aggregate methods don't give errors", {
   
-  cm_rm <- rm_confusion_matrix()    #, save_only_same_train_test_time = TRUE)
+  cm_rm <- rm_confusion_matrix()    
   
-  test_valid_result_metric(cm_rm)
+  expect_null(test_valid_result_metric(cm_rm))
   
   test_aggregate_functions_work(cm_rm)
   
@@ -50,11 +48,12 @@ test_that("rm_confusion_matrix the aggregate functions don't give an error", {
 
 
 
-test_that("rm_main_results the aggregate functions don't give an error", {
+
+test_that("rm_main_results aggregate methods don't give errors", {
   
   main_rm <- rm_main_results()    #, save_only_same_train_test_time = TRUE)
   
-  test_valid_result_metric(main_rm)
+  expect_null(test_valid_result_metric(main_rm))
   
   test_aggregate_functions_work(main_rm)
   

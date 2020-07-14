@@ -3,20 +3,22 @@ library(testthat)
 
 
 
-real_data_binned_file_name <- system.file("extdata/ZD_150bins_50sampled.Rda", package = "NDTr")
+real_data_binned_file_name <- system.file(file.path("extdata", "ZD_150bins_50sampled.Rda"), package = "NDTr")
 
 
 
 # test the ds_basic -----------------------------------------------------------
 
 
-# test that the datasource contains all the necessary methods
-#source("test_valid_NDTr_objects.R")
-ds <- ds_basic(real_data_binned_file_name, 'stimulus_ID', 18, 0)
-test_valid_datasource(ds)
+test_that("ds_basic() conforms to the NDTr datasouce interface", {
+  
+  ds <- ds_basic(real_data_binned_file_name, 'stimulus_ID', 18, 0)
+  expect_null(test_valid_datasource(ds))
+
+})
 
 
-test_that("get_data(ds_basic_obj) returns unique points in training and test sets (no data leakage)", {
+test_that("ds_basic: the get_data() functions returns unique points in training and test sets (no data leakage)", {
   
   ds <- ds_basic("fake_binned_data.Rda", "stim_names", 10)
   the_data <- get_data(ds)
@@ -31,11 +33,7 @@ test_that("get_data(ds_basic_obj) returns unique points in training and test set
 
 
 
-
-
-
-
-test_that("if labels_levels_to_use is set, only those label levels are returned", {
+test_that("ds_basic: if the labels_levels_to_use is set, only those label levels are returned", {
   
   labels_levels_to_use <- c("flower", "guitar", "kiwi")
   
@@ -50,9 +48,7 @@ test_that("if labels_levels_to_use is set, only those label levels are returned"
 
 
 
-
-
-test_that("if only specific sites to be used, only those sites are returned", {
+test_that("basic_ds: if only specific sites to be used, only those sites are returned", {
   
   # use only a subset of sites
   sites_to_use <- sites_to_use <- seq(1, 100, 3)
@@ -102,8 +98,7 @@ test_that("if only specific sites to be used, only those sites are returned", {
 
 
 
-
-test_that("the correct number of resampled sites is returned", {
+test_that("basic_ds: the correct number of resampled sites is returned", {
   
   num_resample_sites <- 50
   ds <- ds_basic("fake_binned_data.Rda", "stim_names", 10,  
@@ -122,7 +117,7 @@ test_that("the correct number of resampled sites is returned", {
 
 
 
-test_that("the correct number of repeats per CV block are returned", {
+test_that("basic_ds: the correct number of repeats per CV block are returned", {
   
   num_CV <- 5
   num_reps <- 2
@@ -143,8 +138,7 @@ test_that("the correct number of repeats per CV block are returned", {
 
 
 
-# test create simultaneously recorded data is working
-test_that("simultaneously recorded data is returned correctly", {
+test_that("basic_ds: simultaneously recorded data is returned correctly", {
   
   
   # all whole numbers on each row should be the same this data when gotten simultaneously 
@@ -157,7 +151,6 @@ test_that("simultaneously recorded data is returned correctly", {
     select(starts_with('site')) 
   
   expect_equal(sum(abs(diff(t(round(data.matrix(the_site_data)))))), 0)
-  
   
   
   # the fractional part should match the site digit names
@@ -173,9 +166,7 @@ test_that("simultaneously recorded data is returned correctly", {
   expect_lt(max(site_name_matrix - fraction), 10^-10)
   
   
-  
-  
-  # all whole numbers on each row should NOT be the same this data when NOT gotten simultaneously 
+  # all whole numbers on each row should NOT be the same this data when data is NOT gotten simultaneously 
   ds <- ds_basic("fake_simultaneous_binned_data.Rda", "stim_names", 10,
                  create_simultaneously_recorded_populations = FALSE)
   the_data <- get_data(ds)
@@ -186,69 +177,120 @@ test_that("simultaneously recorded data is returned correctly", {
   expect_false(sum(abs(diff(t(round(data.matrix(the_site_data)))))) == 0)
   
   
-  # test that the simultaneous argument works even when trial number is a variable in 
+  # test that the simultaneous argument works even when trial number is a not variable in 
   # the binned_data data frame
   load("fake_simultaneous_binned_data.Rda")
   binned_data <- binned_data %>%
     dplyr::select(-trial_number)
-  save(binned_data , file = "fake_simultaneous_binned_data2.Rda")
   
-  expect_warning(ds_basic("fake_simultaneous_binned_data2.Rda", "stim_names", 10,
-                 create_simultaneously_recorded_populations = TRUE))
-  
+  expect_warning(ds_basic(binned_data, "stim_names", 10,
+                          create_simultaneously_recorded_populations = TRUE))
   
 })
 
 
 
 
-
-
-
-test_that("shuffling labels works", {
+test_that("basic_ds: shuffling labels works", {
+  
   
   num_CV <- 5
   num_reps <- 2
 
-  ds <- ds_basic("fake_simultaneous_binned_data.Rda", "stim_names", num_CV,
-                 num_label_repeats_per_cv_split = num_reps)
+  # check 1: when the label levels are not shuffled and we pull all 10 sites, there
+  # should always be the same mapping for sites and labels everytime we get a
+  # new set of data
   
-  unshuffled_data1 <- get_data(ds) %>% 
-    select(site_0001, train_labels) %>%
-    arrange(train_labels, site_0001)
+  ds1 <- ds_basic("fake_simultaneous_binned_data.Rda", "stim_names", num_CV,
+                  num_label_repeats_per_cv_split = num_reps)
   
-  unshuffled_data2 <- get_data(ds) %>% 
-    select(site_0001, train_labels) %>%
-    arrange(train_labels, site_0001)
-  
-  expect_equal(unshuffled_data1$site_0001, unshuffled_data2$site_0001)
+  unshuffled_data1 <- get_data(ds1) %>% 
+    select(site_0001, train_labels, test_labels) %>%
+    arrange(train_labels, test_labels, site_0001)
   
   
-  ds <- ds_basic("fake_simultaneous_binned_data.Rda", "stim_names", num_CV,
+  ds2 <- ds_basic("fake_simultaneous_binned_data.Rda", "stim_names", num_CV,
+                  num_label_repeats_per_cv_split = num_reps)
+  
+  unshuffled_data2 <- get_data(ds2) %>% 
+    select(site_0001, train_labels, test_labels) %>%
+    arrange(train_labels, test_labels, site_0001)
+  
+  expect_true(identical(unshuffled_data1, unshuffled_data2))  
+  
+  
+  
+  # check 2a: when the label levels are shuffled before running, and we pull all 10 sites,
+  # there be a different mapping for sites and labels everytime we get a new set
+  # of data
+  
+  ds1 <- ds_basic("fake_simultaneous_binned_data.Rda", "stim_names", num_CV,
                  num_label_repeats_per_cv_split = num_reps,
-                      randomly_shuffled_labels_before_running = TRUE,
-                 create_simultaneously_recorded_populations = 1)
+                      randomly_shuffled_labels_before_running = TRUE)
   
-  shuffled_data1 <- get_data(ds) %>% 
+  shuffled_data1 <- get_data(ds1) %>% 
     select(site_0001, train_labels, test_labels) %>%
     arrange(train_labels, test_labels, site_0001)
   
-  shuffled_data2 <- get_data(ds) %>% 
+  ds2 <- ds_basic("fake_simultaneous_binned_data.Rda", "stim_names", num_CV,
+                  num_label_repeats_per_cv_split = num_reps,
+                  randomly_shuffled_labels_before_running = TRUE)
+  
+  shuffled_data2 <- get_data(ds2) %>% 
     select(site_0001, train_labels, test_labels) %>%
     arrange(train_labels, test_labels, site_0001)
   
-  # hmmm, these should be different :(
-  #sum(shuffled_data1$site_0001 != shuffled_data2$site_0001)
+  expect_false(identical(shuffled_data1, shuffled_data2))
   
-  # this should fail but it's not :(
-  # other tests suggest the shuffling is working though, should look more into this later
-  #expect_equal(shuffled_data1$site_0001, shuffled_data2$site_0001) 
   
-   
-  # could/should implement a more rigourous test here...
-   
+  # check 2b: since the shuffling happens before using the get_data() method
+  #  a second pull should give rise to the same label site ID shuffling
+  
+  shuffled_data1_second_pull <- get_data(ds1) %>% 
+    select(site_0001, train_labels, test_labels) %>%
+    arrange(train_labels, test_labels, site_0001)
+  
+  expect_true(identical(shuffled_data1, shuffled_data1_second_pull))
+  
+  
+  
+  # check 3: when suffling simulatenous data, all sites should have the same
+  # random trial to label mapping...
+  
+  ds_simul1 <- ds_basic("fake_simultaneous_binned_data.Rda", "stim_names", num_CV,
+                  num_label_repeats_per_cv_split = num_reps,
+                  randomly_shuffled_labels_before_running = TRUE,
+                  create_simultaneously_recorded_populations = TRUE)
+  
+  simul_shuffled_data1 <- get_data(ds_simul1) %>% 
+    mutate(site_0001 = round(site_0001), site_0002 = round(site_0002)) %>%
+    select(site_0001, site_0002, train_labels, test_labels) %>%
+    arrange(train_labels, test_labels, site_0001)
+  
+  expect_equal(simul_shuffled_data1$site_0001, simul_shuffled_data1$site_0002) 
+  
+  
+  
+  # check 4: when one creates a new data source and get the data a second time using
+  # simulatenous populations the mapping should be different from the first
+  # time.
+  
+  
+  ds_simul2 <- ds_basic("fake_simultaneous_binned_data.Rda", "stim_names", num_CV,
+                        num_label_repeats_per_cv_split = num_reps,
+                        randomly_shuffled_labels_before_running = TRUE,
+                        create_simultaneously_recorded_populations = TRUE)
+  
+  simul_shuffled_data2 <- get_data(ds_simul2) %>% 
+    mutate(site_0001 = round(site_0001), site_0002 = round(site_0002)) %>%
+    select(site_0001, site_0002, train_labels, test_labels) %>%
+    arrange(train_labels, test_labels, site_0001)
+  
+  
+  expect_false(identical(simul_shuffled_data1$site_0001, simul_shuffled_data2$site_0001))
+  
+  
 })
-
 
 
 
@@ -257,7 +299,6 @@ test_that("shuffling labels works", {
 
 
 # test the ds_generalization  -------------------------------------------------
-
 
 
 # generate the training and test levels for the ds_generalization
@@ -275,8 +316,7 @@ for (i in seq_along(id_levels)){
 
 
 
-test_that("testing generalization_ds constructor and get data work", {
-  
+test_that("generalization_ds constructor and get data work", {
   
   
   ds <- ds_generalization(real_data_binned_file_name, 
@@ -284,12 +324,14 @@ test_that("testing generalization_ds constructor and get data work", {
                           train_label_levels, 
                           test_label_levels)
   
-  test_valid_datasource(ds)
+  expect_null(test_valid_datasource(ds))
+  
   the_data <- get_data(ds)
 
-  
+
   # test that if the same levels are assigned to different classes this gives an
   # error (otherwise there could be data leakage)
+  
   test_label_levels2 <- train_label_levels
   temp <- test_label_levels2[[1]]
   test_label_levels2[[1]] <- test_label_levels2[[2]]
@@ -307,9 +349,9 @@ test_that("testing generalization_ds constructor and get data work", {
 
 
 # test that ds_generalization leads to results at chance in baseline 
-#  and above chance in stimulus period
-# more of an integration test than a unit test but ok
-test_that("testing classification results using generalization_ds seem reasonable", {
+#  and above chance in stimulus period (more of an integration test than a unit test)
+
+test_that("generalization_ds classification accuracy seem reasonable", {
   
   # get firing rate data
   ds <- ds_generalization(real_data_binned_file_name, 'combined_ID_position',
@@ -318,10 +360,13 @@ test_that("testing classification results using generalization_ds seem reasonabl
                  test_label_levels = test_label_levels)
   
   cv_data <- get_data(ds)
+  
   training_set <- dplyr::filter(cv_data, time_bin == "time.200_349", CV_1 == "train") %>% 
     select(starts_with("site"), train_labels = train_labels)
+  
   test_set <- dplyr::filter(cv_data, time_bin %in% c("time.-350_-201", "time.200_349"), CV_1 == "test") %>% 
     select(starts_with("site"), test_labels = test_labels, time_bin)
+  
   levels(test_set$time_bin)[levels(test_set$time_bin)=="time.-350_-201"] <- "baseline"
   levels(test_set$time_bin)[levels(test_set$time_bin)=="time.200_349"] <- "stimulus"
   
@@ -339,7 +384,5 @@ test_that("testing classification results using generalization_ds seem reasonabl
 
 })
   
-
-
 
 
