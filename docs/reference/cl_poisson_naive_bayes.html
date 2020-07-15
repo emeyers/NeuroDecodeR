@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>A Poisson Naive Bayes classifier (CL) object — cl_poisson_naive_bayes • The Neural Decoding Toolbox in R</title>
+<title>A Poisson Naive Bayes classifier (CL) — cl_poisson_naive_bayes • The Neural Decoding Toolbox in R</title>
 
 <!-- jquery -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
@@ -30,11 +30,9 @@
 
 
 
-<meta property="og:title" content="A Poisson Naive Bayes classifier (CL) object — cl_poisson_naive_bayes" />
+<meta property="og:title" content="A Poisson Naive Bayes classifier (CL) — cl_poisson_naive_bayes" />
 
-<meta property="og:description" content="An implementation of a Poisson Naive Bayes classifier. Like all classifiers,
-this classifier learning a model based on training data and then makes
-predictions on new test data." />
+<meta property="og:description" content="An implementation of a Poisson Naive Bayes classifier." />
 <meta name="twitter:card" content="summary" />
 
 
@@ -131,16 +129,14 @@ predictions on new test data." />
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>A Poisson Naive Bayes classifier (CL) object</h1>
+    <h1>A Poisson Naive Bayes classifier (CL)</h1>
     <small class="dont-index">Source: <a href='https://github.com/emeyers/NDTr/blob/master/R/cl_poisson_naive_bayes.R'><code>R/cl_poisson_naive_bayes.R</code></a></small>
     <div class="hidden name"><code>cl_poisson_naive_bayes.Rd</code></div>
     </div>
 
     <div class="ref-description">
     
-    <p>An implementation of a Poisson Naive Bayes classifier. Like all classifiers,
-this classifier learning a model based on training data and then makes
-predictions on new test data.</p>
+    <p>An implementation of a Poisson Naive Bayes classifier.</p>
     
     </div>
 
@@ -148,12 +144,28 @@ predictions on new test data.</p>
         
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-    <p>Note: this classifier uses spike counts, so the binned data must be converted
+    <p>This classifier object implements a Poisson Naive Bayes classifier. The
+classifier works by learning the expected number of occurrences (denoted
+lambda) for each feature and each class by taking the average of the training
+data over all trials (separately for each feature and each class). To
+evaluate whether a given test point belongs to class i, the log of the
+likelihood function is calculated using the lambda values as parameters of
+Poisson distributions (i.e., there is a separate Poisson distribution for
+each feature, that is based on the lambda value for that feature). The
+overall likelihood value is calculated by multiplying the probabilities for
+each neuron together (i.e,. Naive Bayes classifiers assume that each feature
+is independent), or equivalently, adding the log of the probabilities for
+each feature together. The class with the highest likelihood value is chosen
+as the predicted label, and the decision values are the log likelihood
+values.</p>
+<p><strong>Note:</strong> this classifier uses spike counts, so the binned data must be converted
 to use this classifier, for exmaple, if you are using the basic_DS data
 source, then use_count_data = TRUE should be set in the contructor. Also,
 preprocessors that convert the data into values that are not integers should
 not be used, for example, the fp_zscore should not be used with this
 classifier.</p>
+<p>Like all classifiers, this classifier learning a model based on training data
+and then makes predictions on new test data.</p>
     
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
@@ -163,11 +175,17 @@ classifier.</p>
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'> <span class='no'>data_file</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/system.file'>system.file</a></span>(<span class='st'>"extdata/ZD_150bins_50sampled.Rda"</span>, <span class='kw'>package</span> <span class='kw'>=</span> <span class='st'>"NDTr"</span>)
+    <pre class="examples"><div class='input'><span class='co'># running a basic decoding analysis using the cl_max_correlation</span>
+
+ <span class='no'>data_file</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/system.file'>system.file</a></span>(<span class='st'>"extdata/ZD_150bins_50sampled.Rda"</span>, <span class='kw'>package</span> <span class='kw'>=</span> <span class='st'>"NDTr"</span>)
  <span class='no'>ds</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='ds_basic.html'>ds_basic</a></span>(<span class='no'>data_file</span>, <span class='st'>'stimulus_ID'</span>, <span class='fl'>18</span>, <span class='kw'>use_count_data</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)
  <span class='no'>fps</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/list'>list</a></span>()
+
  <span class='no'>cl</span> <span class='kw'>&lt;-</span> <span class='fu'>cl_poisson_naive_bayes</span>()
- <span class='no'>cv</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='cv_standard.html'>cv_standard</a></span>(<span class='no'>ds</span>, <span class='no'>cl</span>, <span class='no'>fps</span>)</div></pre>
+ <span class='no'>cv</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='cv_standard.html'>cv_standard</a></span>(<span class='no'>ds</span>, <span class='no'>cl</span>, <span class='no'>fps</span>)</div><span class='co'># NOT RUN {</span>
+<span class='no'>DECODING_RESULTS</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='run_decoding.html'>run_decoding</a></span>(<span class='no'>cv</span>)
+<span class='co'># }</span><div class='input'>
+</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>

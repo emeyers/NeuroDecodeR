@@ -115,16 +115,29 @@
 <li><p><code>labels.XXX</code> These variables contain labels of which experimental conditions were shown on a given trial.</p></li>
 <li><p><code>time.XXX</code> These variables contain the data for a given time.</p></li>
 </ol>
-<p>There can also be variables that start with the <code>site_info.XXX</code> that contain additional meta data out the site. For example, one could have a variable called <code>site_info.brain_area</code> which indicated which brain region a given site came from. All rows for a given <code>site_info.XXX</code> variables typically have the same value.</p>
+<p>There can also be two additional optional variables in a raster format data frame which are:</p>
+<ol start="3" style="list-style-type: decimal">
+<li><p><code>site_info.XXX</code> These variables contain additional meta data out the site. For example, one could have a variable called <code>site_info.brain_area</code> which indicated which brain region a given site came from. All rows for a given <code>site_info.XXX</code> variables typically have the same value.</p></li>
+<li><p><code>trial_number</code> This is a variable that specifies a unique for each row indicating which trial a given row of data came from. This is useful for data where all sites were recorded simultaneously in order to allow one to do the decoding on actual simultaneously recorded data (e.g., by using the <code><a href="../reference/ds_basic.html">ds_basic()</a></code> <code>create_simultaneously_recorded_populations</code> argument).</p></li>
+</ol>
+<div id="checking-if-data-is-in-valid-raster-format" class="section level3">
+<h3 class="hasAnchor">
+<a href="#checking-if-data-is-in-valid-raster-format" class="anchor"></a>Checking if data is in valid raster format</h3>
+<p>To test whether data correctly conforms to the requirements of raster format, one can use the internal function <code>NDTr:::test_valid_raster_data_format()</code>.</p>
+</div>
 <div id="example-raster-format-data" class="section level3">
 <h3 class="hasAnchor">
 <a href="#example-raster-format-data" class="anchor"></a>Example raster-format data</h3>
 <p>Below is an example of raster format data file from the <a href="datasets.html">Zhang-Desimone 7 object data set</a>.</p>
 <div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" data-line-number="1">raster_dir_name &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/file.path">file.path</a></span>(<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/system.file">system.file</a></span>(<span class="st">"extdata"</span>, <span class="dt">package =</span> <span class="st">"NDTr"</span>), <span class="st">"Zhang_Desimone_7object_raster_data_rda"</span>)</a>
-<a class="sourceLine" id="cb1-2" data-line-number="2">file_name &lt;-<span class="st"> "bp1001spk_01A_raster_data.rda"</span></a>
-<a class="sourceLine" id="cb1-3" data-line-number="3"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/load">load</a></span>(<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/file.path">file.path</a></span>(raster_dir_name, file_name))</a>
-<a class="sourceLine" id="cb1-4" data-line-number="4"></a>
-<a class="sourceLine" id="cb1-5" data-line-number="5"><span class="kw"><a href="https://www.rdocumentation.org/packages/utils/topics/head">head</a></span>(raster_data[, <span class="dv">1</span><span class="op">:</span><span class="dv">10</span>])</a></code></pre></div>
+<a class="sourceLine" id="cb1-2" data-line-number="2">full_file_name &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/file.path">file.path</a></span>(raster_dir_name, <span class="st">"bp1001spk_01A_raster_data.rda"</span>)</a>
+<a class="sourceLine" id="cb1-3" data-line-number="3"></a>
+<a class="sourceLine" id="cb1-4" data-line-number="4"><span class="co"># test the file is in valid raster format</span></a>
+<a class="sourceLine" id="cb1-5" data-line-number="5">NDTr<span class="op">::</span><span class="kw"><a href="https://www.rdocumentation.org/packages/NDTr/topics/test_valid_raster_format">test_valid_raster_format</a></span>(full_file_name)</a>
+<a class="sourceLine" id="cb1-6" data-line-number="6"></a>
+<a class="sourceLine" id="cb1-7" data-line-number="7"><span class="co"># load the data to see the variables in it</span></a>
+<a class="sourceLine" id="cb1-8" data-line-number="8"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/load">load</a></span>(full_file_name)</a>
+<a class="sourceLine" id="cb1-9" data-line-number="9"><span class="kw"><a href="https://www.rdocumentation.org/packages/utils/topics/head">head</a></span>(raster_data[, <span class="dv">1</span><span class="op">:</span><span class="dv">10</span>])</a></code></pre></div>
 <pre><code>##     site_info.session_ID site_info.recording_channel site_info.unit
 ## 1                   1001                           1              A
 ## 1.1                 1001                           1              A
@@ -158,14 +171,30 @@
 <li><p><code>labels.XXX</code> These variables contain labels of which experimental conditions occured on a given trial.</p></li>
 <li><p><code>time.X_Y</code> These variables contain data in a time range from X to Y.</p></li>
 </ol>
-<p>There can also be variables that start with the <code>site_info.XXX</code> that contain additional meta data out the site. For example, one could have a variable called <code>site_info.brain_area</code> which indicated which brain region a given site came from.</p>
+<p>There can also be two additional optional variables in a binned format data frame which are:</p>
+<ol start="4" style="list-style-type: decimal">
+<li><p><code>site_info.XXX</code> These variables contain additional meta data out the site. For example, one could have a variable called <code>site_info.brain_area</code> which indicated which brain region a given site came from. All rows for a given <code>site_info.XXX</code> variables typically have the same value.</p></li>
+<li><p><code>trial_number</code> This is a variable that specifies a unique for each row indicating which trial a given row of data came from. This is useful for data where all sites were recorded simultaneously in order to allow one to do the decoding on actual simultaneously recorded data (e.g., by using the <code><a href="../reference/ds_basic.html">ds_basic()</a></code> <code>create_simultaneously_recorded_populations</code> argument).</p></li>
+</ol>
+<div id="checking-if-data-is-in-valid-binned-format" class="section level3">
+<h3 class="hasAnchor">
+<a href="#checking-if-data-is-in-valid-binned-format" class="anchor"></a>Checking if data is in valid binned format</h3>
+<p>To test whether data correctly conforms to the requirements of binned format, one can use the internal function <code>NDTr:::test_valid_binned_data_format()</code>.</p>
+</div>
 <div id="example-binned-format-data" class="section level3">
 <h3 class="hasAnchor">
 <a href="#example-binned-format-data" class="anchor"></a>Example binned-format data</h3>
 <p>Below is an example of binned format data file from the <a href="datasets.html">Zhang-Desimone 7 object data set</a>.</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" data-line-number="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/load">load</a></span>(<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/system.file">system.file</a></span>(<span class="st">"extdata/ZD_150bins_50sampled.Rda"</span>, <span class="dt">package=</span><span class="st">"NDTr"</span>))</a>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" data-line-number="1">binned_file_name &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/system.file">system.file</a></span>(<span class="st">"extdata/ZD_150bins_50sampled.Rda"</span>, <span class="dt">package=</span><span class="st">"NDTr"</span>)</a>
 <a class="sourceLine" id="cb3-2" data-line-number="2"></a>
-<a class="sourceLine" id="cb3-3" data-line-number="3"><span class="kw"><a href="https://www.rdocumentation.org/packages/utils/topics/head">head</a></span>(binned_data[, <span class="dv">1</span><span class="op">:</span><span class="dv">10</span>])</a></code></pre></div>
+<a class="sourceLine" id="cb3-3" data-line-number="3"></a>
+<a class="sourceLine" id="cb3-4" data-line-number="4"><span class="co"># test the file is in valid binned format using an internal function</span></a>
+<a class="sourceLine" id="cb3-5" data-line-number="5">NDTr<span class="op">:::</span><span class="kw">test_valid_binned_format</span>(binned_file_name)</a>
+<a class="sourceLine" id="cb3-6" data-line-number="6"></a>
+<a class="sourceLine" id="cb3-7" data-line-number="7"></a>
+<a class="sourceLine" id="cb3-8" data-line-number="8"><span class="co"># load the data to see the variables in it</span></a>
+<a class="sourceLine" id="cb3-9" data-line-number="9"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/load">load</a></span>(binned_file_name)</a>
+<a class="sourceLine" id="cb3-10" data-line-number="10"><span class="kw"><a href="https://www.rdocumentation.org/packages/utils/topics/head">head</a></span>(binned_data[, <span class="dv">1</span><span class="op">:</span><span class="dv">10</span>])</a></code></pre></div>
 <pre><code>##     siteID site_info.session_ID site_info.recording_channel site_info.unit
 ## 1        1                 1001                           1              A
 ## 1.1      1                 1001                           1              A

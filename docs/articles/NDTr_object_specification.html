@@ -250,10 +250,10 @@
 <a class="sourceLine" id="cb3-22" data-line-number="22"></a>
 <a class="sourceLine" id="cb3-23" data-line-number="23"><span class="co"># prior to z-score normalizing the mean (e.g. for site 1) is not 0</span></a>
 <a class="sourceLine" id="cb3-24" data-line-number="24"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/mean">mean</a></span>(training_set<span class="op">$</span>site_<span class="dv">0001</span>)</a></code></pre></div>
-<pre><code>## [1] 0.002745098</code></pre>
+<pre><code>## [1] 0.002913165</code></pre>
 <div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" data-line-number="1"><span class="co"># after normalizing the data the mean is pretty much 0</span></a>
 <a class="sourceLine" id="cb5-2" data-line-number="2"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/mean">mean</a></span>(processed_data<span class="op">$</span>training_set<span class="op">$</span>site_<span class="dv">0001</span>)</a></code></pre></div>
-<pre><code>## [1] 2.715608e-17</code></pre>
+<pre><code>## [1] 4.288703e-17</code></pre>
 <p><br></p>
 <p><br></p>
 </div>

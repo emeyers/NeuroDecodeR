@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>A datasource that allows training and testing on different but related labels — ds_generalization • The Neural Decoding Toolbox in R</title>
+<title>A datasource (DS) that allows training and testing on different but related labels — ds_generalization • The Neural Decoding Toolbox in R</title>
 
 <!-- jquery -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
@@ -30,7 +30,7 @@
 
 
 
-<meta property="og:title" content="A datasource that allows training and testing on different but related labels — ds_generalization" />
+<meta property="og:title" content="A datasource (DS) that allows training and testing on different but related labels — ds_generalization" />
 
 <meta property="og:description" content="This datasource is useful for assessing whether information is
 invariant/abstract to particular conditions." />
@@ -130,7 +130,7 @@ invariant/abstract to particular conditions." />
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>A datasource that allows training and testing on different but related labels</h1>
+    <h1>A datasource (DS) that allows training and testing on different but related labels</h1>
     <small class="dont-index">Source: <a href='https://github.com/emeyers/NDTr/blob/master/R/ds_generalization.R'><code>R/ds_generalization.R</code></a></small>
     <div class="hidden name"><code>ds_generalization.Rd</code></div>
     </div>
@@ -143,7 +143,7 @@ invariant/abstract to particular conditions.</p>
     </div>
 
     <pre class="usage"><span class='fu'>ds_generalization</span>(
-  <span class='no'>binned_file_name</span>,
+  <span class='no'>binned_data</span>,
   <span class='no'>var_to_decode</span>,
   <span class='no'>num_cv_splits</span>,
   <span class='no'>train_label_levels</span>,
@@ -161,9 +161,9 @@ invariant/abstract to particular conditions.</p>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>binned_file_name</th>
-      <td><p>A string with the name of a file that has
-data in binned format.</p></td>
+      <th>binned_data</th>
+      <td><p>A string that list a path to a file that has data in
+binned format, or a data frame of binned_data that is in binned format.</p></td>
     </tr>
     <tr>
       <th>var_to_decode</th>
@@ -178,7 +178,7 @@ should be used.</p></td>
     </tr>
     <tr>
       <th>train_label_levels</th>
-      <td><p>A list that contains vectors listing which label
+      <td><p>A list that contains vectors specifying which label
 levels belong to which training class. Each element in the list corresponds
 to a class that the specified training labels will be mapped to. For
 example, values in the vector in the first element in the list will be
@@ -186,12 +186,12 @@ mapped onto the first training class, etc.</p></td>
     </tr>
     <tr>
       <th>test_label_levels</th>
-      <td><p>A list that contains vectors listing which label
+      <td><p>A list that contains vectors specifying which label
 levels belong to which test class. Each element in the list corresponds to
 a class that the specified test labels will be mapped to. For example,
 values in the vector in the first element in the list will be mapped onto
 the first test class, etc. The number of elements in this list must be the
-same as the number of elements in train_label_levels</p></td>
+same as the number of elements in <code>train_label_levels</code>.</p></td>
     </tr>
     <tr>
       <th>use_count_data</th>
@@ -203,7 +203,7 @@ poisson_naive_bayes_CL.</p></td>
     <tr>
       <th>num_label_repeats_per_cv_split</th>
       <td><p>A number specifying how many times each
-label should be repeated in each cross-validation split.</p></td>
+label level should be repeated in each cross-validation split.</p></td>
     </tr>
     <tr>
       <th>num_resample_sites</th>
@@ -232,7 +232,7 @@ comparing when decoding results are above chance.</p></td>
     <tr>
       <th>create_simultaneously_recorded_populations</th>
       <td><p>If the data from all sites
-was recorded simultaneously, then setting this variable to 1 will cause the
+were recorded simultaneously, then setting this variable to 1 will cause the
 get_data() function to return simultaneous populations rather than
 pseudo-populations.</p></td>
     </tr>
@@ -251,9 +251,9 @@ get training and testing splits of data that can be passed to a classifier.</p>
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='co'># Testing position invariance by generating training to discriminate between</span>
-<span class='co'># 7 objects presented at the upper and middle locations and testing at the</span>
-<span class='co'># lower location</span>
+    <pre class="examples"><div class='input'><span class='co'># One can test if a neural population contains information that is position</span>
+<span class='co'># invariant by generating training data for objects presented at 'upper' and 'middle'</span>
+<span class='co'># locations, and generating test data at a 'lower' location.</span>
 
 <span class='no'>id_levels</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>"hand"</span>, <span class='st'>"flower"</span>, <span class='st'>"guitar"</span>, <span class='st'>"face"</span>, <span class='st'>"kiwi"</span>, <span class='st'>"couch"</span>,  <span class='st'>"car"</span>)
 <span class='no'>train_label_levels</span> <span class='kw'>&lt;-</span> <span class='kw'>NULL</span>

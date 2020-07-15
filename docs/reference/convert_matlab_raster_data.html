@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Convert raster data in MATLAB .mat format to R .rda format — convert_matlab_raster_data • The Neural Decoding Toolbox in R</title>
+<title>Convert raster data in MATLAB to R — convert_matlab_raster_data • The Neural Decoding Toolbox in R</title>
 
 <!-- jquery -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
@@ -30,10 +30,11 @@
 
 
 
-<meta property="og:title" content="Convert raster data in MATLAB .mat format to R .rda format — convert_matlab_raster_data" />
+<meta property="og:title" content="Convert raster data in MATLAB to R — convert_matlab_raster_data" />
 
-<meta property="og:description" content="If one already has raster data created in MATLAB, this function can be used to convert it
-to an R format (.rda files) that can be used with the NDTr." />
+<meta property="og:description" content="If one already has raster data created in MATLAB (.mat files), this function
+can be used to convert it to an R format (.rda files) that can be used with
+the NDTr." />
 <meta name="twitter:card" content="summary" />
 
 
@@ -130,15 +131,16 @@ to an R format (.rda files) that can be used with the NDTr." />
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Convert raster data in MATLAB .mat format to R .rda format</h1>
+    <h1>Convert raster data in MATLAB to R</h1>
     <small class="dont-index">Source: <a href='https://github.com/emeyers/NDTr/blob/master/R/convert_matlab_raster_data.R'><code>R/convert_matlab_raster_data.R</code></a></small>
     <div class="hidden name"><code>convert_matlab_raster_data.Rd</code></div>
     </div>
 
     <div class="ref-description">
     
-    <p>If one already has raster data created in MATLAB, this function can be used to convert it
-to an R format (.rda files) that can be used with the NDTr.</p>
+    <p>If one already has raster data created in MATLAB (.mat files), this function
+can be used to convert it to an R format (.rda files) that can be used with
+the NDTr.</p>
     
     </div>
 
@@ -155,22 +157,21 @@ to an R format (.rda files) that can be used with the NDTr.</p>
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>matlab_raster_dir_name</th>
-      <td><p>A character string specifying the path to a directory that
-contains raster data in MATLAB .mat files</p></td>
+      <td><p>A character string specifying the path to a
+directory that contains raster data in MATLAB .mat files.</p></td>
     </tr>
     <tr>
       <th>r_raster_dir_name</th>
       <td><p>A character string specifying the path to a
-directory that where the converted raster data in R .rda files will be
-saved. If this is not specified then the saved directory will have the same
-name as the matlab directory with _rda appended to the end of the last
-directory name.</p></td>
+directory where the converted raster data in R .rda files will be saved. If
+this is not specified then the saved directory will have the same name as
+the matlab directory with _rda appended to the end of the directory name.</p></td>
     </tr>
     <tr>
       <th>start_ind</th>
       <td><p>A number specifying the start index for the data to be
 converted if one wants to convert the data from a shorter time window than
-the original MATLAB raster data. The default (NULL valu) is to use all the
+the original MATLAB raster data. The default (NULL value) is to use all the
 data, i.e., start at the beginning with start_ind = 1.</p></td>
     </tr>
     <tr>
@@ -198,6 +199,7 @@ string.</p></td>
 <span class='no'>r_raster_dir_name</span> <span class='kw'>&lt;-</span> <span class='fu'>convert_matlab_raster_data</span>(<span class='no'>matlab_raster_dir_name</span>,
                                                 <span class='no'>r_raster_dir_name</span>,
                                                 <span class='kw'>files_contain</span> <span class='kw'>=</span> <span class='st'>"bp1001spk"</span>)</div><div class='output co'>#&gt; 1  2  3  4  </div><div class='input'>
+
 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">

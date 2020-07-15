@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>A maximum correlation coefficient classifier (CL) — cl_max_correlation • The Neural Decoding Toolbox in R</title>
+<title>Tests if a data frame is in valid raster format — test_valid_raster_format • The Neural Decoding Toolbox in R</title>
 
 <!-- jquery -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
@@ -30,9 +30,13 @@
 
 
 
-<meta property="og:title" content="A maximum correlation coefficient classifier (CL) — cl_max_correlation" />
+<meta property="og:title" content="Tests if a data frame is in valid raster format — test_valid_raster_format" />
 
-<meta property="og:description" content="An implementation of a maximum correlation coefficeint classifier." />
+<meta property="og:description" content="This function takes a data frame and tests that the data frame is in valid
+raster format by checking that the data frame contains variables with the
+appropriate names. If the data frame is not in correct raster format, an
+error will be thrown that contains a message why the data is not in valid
+raster format." />
 <meta name="twitter:card" content="summary" />
 
 
@@ -129,60 +133,58 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>A maximum correlation coefficient classifier (CL)</h1>
-    <small class="dont-index">Source: <a href='https://github.com/emeyers/NDTr/blob/master/R/cl_max_correlation.R'><code>R/cl_max_correlation.R</code></a></small>
-    <div class="hidden name"><code>cl_max_correlation.Rd</code></div>
+    <h1>Tests if a data frame is in valid raster format</h1>
+    <small class="dont-index">Source: <a href='https://github.com/emeyers/NDTr/blob/master/R/test_valid_NDTr_objects.R'><code>R/test_valid_NDTr_objects.R</code></a></small>
+    <div class="hidden name"><code>test_valid_raster_format.Rd</code></div>
     </div>
 
     <div class="ref-description">
     
-    <p>An implementation of a maximum correlation coefficeint classifier.</p>
+    <p>This function takes a data frame and tests that the data frame is in valid
+raster format by checking that the data frame contains variables with the
+appropriate names. If the data frame is not in correct raster format, an
+error will be thrown that contains a message why the data is not in valid
+raster format.</p>
     
     </div>
 
-    <pre class="usage"><span class='fu'>cl_max_correlation</span>()</pre>
-        
-    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
-
-    <p>This CL object learns a mean population vector (template) for each
-class from the training set (by averaging together the all training points
-within each class). The classifier is tested by calculated Pearson’s
-correlation coefficient between a test point and the templates learned from
-the training set, and the class with the highest correlation value is returned
-as the predicted label. The decision values returned by the classifier are the
-correlation coefficients between all test points and all templates.</p>
-<p>Like all classifiers (CL) objects, this classifier has a get_predictions()
-method which learns a model based on training data and then makes predictions
-on the test data.</p>
+    <pre class="usage"><span class='fu'>test_valid_raster_format</span>(<span class='no'>raster_data</span>)</pre>
     
-    <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
-
-    <div class='dont-index'><p>Other classifier: 
-<code><a href='cl_poisson_naive_bayes.html'>cl_poisson_naive_bayes</a>()</code>,
-<code><a href='cl_svm.html'>cl_svm</a>()</code></p></div>
+    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
+    <table class="ref-arguments">
+    <colgroup><col class="name" /><col class="desc" /></colgroup>
+    <tr>
+      <th>raster_data</th>
+      <td><p>A data frame that will be checked to see if it
+is in valid raster format.</p></td>
+    </tr>
+    </table>
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='co'># running a basic decoding analysis using the cl_max_correlation</span>
+    <pre class="examples"><div class='input'><span class='co'># This is valid raster data so the function will return no error message</span>
+<span class='no'>raster_dir_name</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/file.path'>file.path</a></span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/system.file'>system.file</a></span>(<span class='st'>"extdata"</span>, <span class='kw'>package</span> <span class='kw'>=</span> <span class='st'>"NDTr"</span>),
+                              <span class='st'>"Zhang_Desimone_7object_raster_data_rda"</span>)
+<span class='no'>file_name</span> <span class='kw'>&lt;-</span> <span class='st'>"bp1001spk_01A_raster_data.rda"</span>
+<span class='no'>raster_full_path</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/file.path'>file.path</a></span>(<span class='no'>raster_dir_name</span>, <span class='no'>file_name</span>)
 
-<span class='no'>data_file</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/system.file'>system.file</a></span>(<span class='st'>"extdata/ZD_150bins_50sampled.Rda"</span>, <span class='kw'>package</span> <span class='kw'>=</span> <span class='st'>"NDTr"</span>)
-<span class='no'>ds</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='ds_basic.html'>ds_basic</a></span>(<span class='no'>data_file</span>, <span class='st'>'stimulus_ID'</span>, <span class='fl'>18</span>)
-<span class='no'>fps</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/list'>list</a></span>(<span class='fu'><a href='fp_zscore.html'>fp_zscore</a></span>())
+<span class='fu'>test_valid_raster_format</span>(<span class='no'>raster_full_path</span>)
 
-<span class='no'>cl</span> <span class='kw'>&lt;-</span> <span class='fu'>cl_max_correlation</span>()
-<span class='no'>cv</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='cv_standard.html'>cv_standard</a></span>(<span class='no'>ds</span>, <span class='no'>cl</span>, <span class='no'>fps</span>)</div><span class='co'># NOT RUN {</span>
-<span class='no'>DECODING_RESULTS</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='run_decoding.html'>run_decoding</a></span>(<span class='no'>cv</span>)
-<span class='co'># }</span><div class='input'>
+
+<span class='co'># Binned data is not in raster format (it has an extra column called siteID) so </span>
+<span class='co'># checking if it is in raster format should return an error. </span>
+
+<span class='no'>binned_file_name</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/system.file'>system.file</a></span>(<span class='st'>"extdata/ZD_150bins_50sampled.Rda"</span>, <span class='kw'>package</span><span class='kw'>=</span><span class='st'>"NDTr"</span>)
+<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/try'>try</a></span>(<span class='fu'>test_valid_raster_format</span>(<span class='no'>binned_file_name</span>))</div><div class='output co'>#&gt; Error in test_valid_raster_format(binned_file_name) : 
+#&gt;   Data not in valid raster format: raster data must only contain variables names that start with 'labels.' 'time.', 'site_info.' or 'trial_number'. The following are not valid variable names to have in data that is in raster format: siteID</div><div class='input'>
+
 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
-      
-      <li><a href="#details">Details</a></li>
-
-      <li><a href="#see-also">See also</a></li>
-      
+      <li><a href="#arguments">Arguments</a></li>
+            
       <li><a href="#examples">Examples</a></li>
     </ul>
 

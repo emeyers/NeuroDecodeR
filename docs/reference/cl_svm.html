@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>An support vector machine (CL) object — cl_svm • The Neural Decoding Toolbox in R</title>
+<title>A support vector machine classifier (CL) — cl_svm • The Neural Decoding Toolbox in R</title>
 
 <!-- jquery -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
@@ -30,7 +30,7 @@
 
 
 
-<meta property="og:title" content="An support vector machine (CL) object — cl_svm" />
+<meta property="og:title" content="A support vector machine classifier (CL) — cl_svm" />
 
 <meta property="og:description" content="This classifier uses the e1071 package to implement a support vector machine." />
 <meta name="twitter:card" content="summary" />
@@ -129,7 +129,7 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>An support vector machine (CL) object</h1>
+    <h1>A support vector machine classifier (CL)</h1>
     <small class="dont-index">Source: <a href='https://github.com/emeyers/NDTr/blob/master/R/cl_svm.R'><code>R/cl_svm.R</code></a></small>
     <div class="hidden name"><code>cl_svm.Rd</code></div>
     </div>
@@ -147,19 +147,31 @@
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>...</th>
-      <td><p>all parameters that are available in the e1071 package should work
-with this CL object</p></td>
+      <td><p>All parameters that are available in the e1071 package svm()
+object should work with this CL object.</p></td>
     </tr>
     </table>
     
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-    <p>The multi-class classification is based on the number of "wins" each class
-has using all-pairs classification scheme (the default for the e1071
-package). The predicted label is the class with the most wins. The decision
-values are the number of all-pairs "wins" each each class has. Thus, the
-maximum number for a decision value is thus number of classes - 1, which is
-the maximum number of "wins" a given class could have vs. all other classes.</p>
+    <p>A support vector machine (SVM) is a classifier that learns a function <em>f</em> that
+minimizes the hinge loss between predictions made on the training data, while
+also applying a penalty for more complex <em>f</em> (the penalty is based on the norm
+of <em>f</em> in a reproducing kernel Hilbert space). The SVM has a parameter <em>C</em> that
+controls the trade off between the empirical loss (i.e., a smaller prediction
+error on the training set), and the complexity of the <em>f</em>. SVMs can use
+different kernels to create nonlinear decision boundaries.</p>
+<p>SVMs are work on binary classification problems, so to do
+multi-class classification, an <em>all-pairs</em> classification scheme (which is
+the default for the e1071 package). In the all-pairs scheme,training separate
+classifiers for all pairs of labels (i.e., if there are 100 different classes
+then nchoosek(100, 2) = 4950 different classifiers are trained). Testing the
+classifier in all-pairs involves having all classifiers classify the test
+point, and then the class label is given to the class the was chosen most
+often by the binary classifiers (in the case of a tie in the number of
+classes that won a contest the class label is randomly chosen). The decision
+values for all-pairs are the number of contests won by each class (for each
+test point).</p>
     
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 

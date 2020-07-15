@@ -32,9 +32,10 @@
 
 <meta property="og:title" content="A plot function for the rm_main_results object — plot.rm_main_results" />
 
-<meta property="og:description" content="This function can plot line results or temporal cross-decoding results for
-the the zero-one loss, normalized rank and/or decision values after the
-decoding analysis has been run (and all results have been aggregated)" />
+<meta property="og:description" content="This function can create a line plot of the results or temporal
+cross-decoding results for the the zero-one loss, normalized rank and/or
+decision values after the decoding analysis has been run (and all results
+have been aggregated)." />
 <meta name="twitter:card" content="summary" />
 
 
@@ -138,9 +139,10 @@ decoding analysis has been run (and all results have been aggregated)" />
 
     <div class="ref-description">
     
-    <p>This function can plot line results or temporal cross-decoding results for
-the the zero-one loss, normalized rank and/or decision values after the
-decoding analysis has been run (and all results have been aggregated)</p>
+    <p>This function can create a line plot of the results or temporal
+cross-decoding results for the the zero-one loss, normalized rank and/or
+decision values after the decoding analysis has been run (and all results
+have been aggregated).</p>
     
     </div>
 
@@ -155,16 +157,16 @@ decoding analysis has been run (and all results have been aggregated)</p>
       <td><p>A rm_main_result object that has aggregated runs from a
 decoding analysis, e.g., if DECODING_RESULTS are the out from the
 run_decoding(cv) then this argument should be
-DECODING_RESULTS$rm_main_results.</p></td>
+<code>DECODING_RESULTS$rm_main_results</code>.</p></td>
     </tr>
     <tr>
       <th>...</th>
-      <td><p>This is needed to conform to the plot generic interface</p></td>
+      <td><p>This is needed to conform to the plot generic interface.</p></td>
     </tr>
     <tr>
       <th>result_type</th>
-      <td><p>A string specifying the types of results to plot options
-are: 'zero_one_loss', 'normalized_rank', 'decision_values', or 'all'</p></td>
+      <td><p>A string specifying the types of results to plot. Options
+are: 'zero_one_loss', 'normalized_rank', 'decision_values', or 'all'.</p></td>
     </tr>
     <tr>
       <th>plot_type</th>

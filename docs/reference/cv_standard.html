@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>The standard cross-validator (CV) object — cv_standard • The Neural Decoding Toolbox in R</title>
+<title>The standard cross-validator (CV) — cv_standard • The Neural Decoding Toolbox in R</title>
 
 <!-- jquery -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
@@ -30,9 +30,10 @@
 
 
 
-<meta property="og:title" content="The standard cross-validator (CV) object — cv_standard" />
+<meta property="og:title" content="The standard cross-validator (CV) — cv_standard" />
 
-<meta property="og:description" content="This uses cross-validation to run a decoding analysis" />
+<meta property="og:description" content="This object runs a decoding analysis where a classifier is repeatedly trained
+and tested using cross-validation." />
 <meta name="twitter:card" content="summary" />
 
 
@@ -129,14 +130,15 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>The standard cross-validator (CV) object</h1>
+    <h1>The standard cross-validator (CV)</h1>
     <small class="dont-index">Source: <a href='https://github.com/emeyers/NDTr/blob/master/R/cv_standard.R'><code>R/cv_standard.R</code></a></small>
     <div class="hidden name"><code>cv_standard.Rd</code></div>
     </div>
 
     <div class="ref-description">
     
-    <p>This uses cross-validation to run a decoding analysis</p>
+    <p>This object runs a decoding analysis where a classifier is repeatedly trained
+and tested using cross-validation.</p>
     
     </div>
 
@@ -155,23 +157,23 @@
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>datasource</th>
-      <td><p>a datasource (DS) object that will generate the training
-and test data</p></td>
+      <td><p>A datasource (DS) object that will generate the training
+and test data.</p></td>
     </tr>
     <tr>
       <th>classifier</th>
-      <td><p>a classifier (CS) object that will learn parameters based
+      <td><p>A classifier (CS) object that will learn parameters based
 on the training data and will generate predictions based on the test data.</p></td>
     </tr>
     <tr>
       <th>feature_preprocessors</th>
-      <td><p>a list of feature preprocessor (FP) objects that
+      <td><p>A list of feature preprocessor (FP) objects that
 learn preprocessing parameters from the training data and apply
-preprocessing of both the training and test data based on these parameters</p></td>
+preprocessing of both the training and test data based on these parameters.</p></td>
     </tr>
     <tr>
       <th>result_metrics</th>
-      <td><p>a list of result metric (RM) objects that are used to
+      <td><p>A list of result metric (RM) objects that are used to
 evaluate the classification performance. If this is set to null then the
 rm_main_results(), rm_confusion_matrix() results metrics will be used.</p></td>
     </tr>
@@ -179,16 +181,16 @@ rm_main_results(), rm_confusion_matrix() results metrics will be used.</p></td>
       <th>num_resample_runs</th>
       <td><p>The number of times the cross-validation should be
 run (i.e., "resample runs"), where on each run, new training and test sets
-are generated. If pseudo-populations are used (say with the ds_basic) then
+are generated. If pseudo-populations are used (e.g., with the ds_basic), then
 new pseduo-populations will be generated on each resample run as well.</p></td>
     </tr>
     <tr>
       <th>test_only_at_training_time</th>
-      <td><p>Whether the analysis should only be run
-where the classifier is trained and tested at the same time point (i.e.,
-now temporal cross-decoding analysis will be run). Setting this to true can
+      <td><p>A boolean indicated whether the classifier
+should only be trained and tested at the same time point (i.e., if TRUE a
+temporal cross-decoding analysis will NOT be run). Setting this to true can
 potentially speed up the analysis and save memory at the cost of not
-calculated the temporal cross-decoding results.</p></td>
+calculated the temporal cross decoding results.</p></td>
     </tr>
     <tr>
       <th>run_parallel</th>
@@ -202,18 +204,24 @@ of much concern.</p></td>
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
     <p>A cross-validator object takes a datasource (DS), a classifier (CL),
-feature preprocessors (FP) and result metric (RM) objects, and runs multiple
-cross-validation cycles by getting new training and test data splits, running
-the preprocessor to do preprocessing of the data, trains and tests the
-classifier, and uses the result metric objects to evaluate the classification
-performance on the test set.</p>
+feature preprocessors (FP) and result metric (RM) objects, and runs
+multiple cross-validation cycles where:</p><ol>
+<li><p>A datasource (DS) generates training and test data splits of the data</p></li>
+<li><p>Feature preprocessors (FPs) do preprcessing of the data</p></li>
+<li><p>A classifier (CL) is trained and predictions are generated on a test set</p></li>
+<li><p>Result metrics (RMs) assess the accuracy of the predictions and compile
+the results.</p></li>
+</ol>
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='no'>data_file</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/system.file'>system.file</a></span>(<span class='st'>"extdata/ZD_150bins_50sampled.Rda"</span>, <span class='kw'>package</span> <span class='kw'>=</span> <span class='st'>"NDTr"</span>)
+    <pre class="examples"><div class='input'><span class='no'>data_file</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/system.file'>system.file</a></span>(<span class='st'>"extdata/ZD_150bins_50sampled.Rda"</span>,
+                          <span class='kw'>package</span> <span class='kw'>=</span> <span class='st'>"NDTr"</span>)
+
 <span class='no'>ds</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='ds_basic.html'>ds_basic</a></span>(<span class='no'>data_file</span>, <span class='st'>'stimulus_ID'</span>, <span class='fl'>18</span>)
 <span class='no'>fps</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/list'>list</a></span>(<span class='fu'><a href='fp_zscore.html'>fp_zscore</a></span>())
 <span class='no'>cl</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='cl_max_correlation.html'>cl_max_correlation</a></span>()
+
 <span class='no'>cv</span> <span class='kw'>&lt;-</span> <span class='fu'>cv_standard</span>(<span class='no'>ds</span>, <span class='no'>cl</span>, <span class='no'>fps</span>)</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">

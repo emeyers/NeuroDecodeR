@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>A function that saves the DECODING_RESULTS and logs the parameters used in the analysis — log_save_results • The Neural Decoding Toolbox in R</title>
+<title>Saves the DECODING_RESULTS and logs the parameters used in the analysis — log_save_results • The Neural Decoding Toolbox in R</title>
 
 <!-- jquery -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
@@ -30,11 +30,11 @@
 
 
 
-<meta property="og:title" content="A function that saves the DECODING_RESULTS and logs the parameters used in the analysis — log_save_results" />
+<meta property="og:title" content="Saves the DECODING_RESULTS and logs the parameters used in the analysis — log_save_results" />
 
 <meta property="og:description" content="This function takes results returned by the cross-validator's run_decoding()
-method and uses the cross-validator's get_properties() method to save a
-log of the results that be used to reload specific results" />
+method and uses the cross-validator's get_properties() method to save a log
+of the results that be used to reload the results." />
 <meta name="twitter:card" content="summary" />
 
 
@@ -131,7 +131,7 @@ log of the results that be used to reload specific results" />
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>A function that saves the DECODING_RESULTS and logs the parameters used in the analysis</h1>
+    <h1>Saves the DECODING_RESULTS and logs the parameters used in the analysis</h1>
     <small class="dont-index">Source: <a href='https://github.com/emeyers/NDTr/blob/master/R/log_and_save_decoding_results.R'><code>R/log_and_save_decoding_results.R</code></a></small>
     <div class="hidden name"><code>log_save_results.Rd</code></div>
     </div>
@@ -139,8 +139,8 @@ log of the results that be used to reload specific results" />
     <div class="ref-description">
     
     <p>This function takes results returned by the cross-validator's run_decoding()
-method and uses the cross-validator's get_properties() method to save a
-log of the results that be used to reload specific results</p>
+method and uses the cross-validator's get_properties() method to save a log
+of the results that be used to reload the results.</p>
     
     </div>
 
@@ -160,13 +160,14 @@ run_decoding method.</p></td>
     </tr>
     <tr>
       <th>save_directory_name</th>
-      <td><p>A directory where the decoding results should be
-saved.</p></td>
+      <td><p>A string specifying the directory name where the
+decoding results should be saved.</p></td>
     </tr>
     <tr>
       <th>result_name</th>
       <td><p>A string that gives a human readable name for the results
-that are to be saved. The default value is "No result name set".</p></td>
+that are to be saved. This name can be used to load the results later. The
+default value is "No result name set".</p></td>
     </tr>
     </table>
     

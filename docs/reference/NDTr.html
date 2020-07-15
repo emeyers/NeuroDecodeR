@@ -143,7 +143,7 @@
         
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-    <p>The NDTr is built around 5 abstract object types that work together in a
+    <p>The NDTr is built around five abstract object types that work together in a
 modular way to allow a range of neural decoding analyses. These five object
 types are:</p><ol>
 <li><p>Datasources (DS): Generate training and test splits of the data.</p></li>
@@ -151,7 +151,7 @@ types are:</p><ol>
 transformations to the training and test sets.</p></li>
 <li><p>Classifiers (CL): Learn the relationship between experimental conditions
 (i.e., "labels") and neural data on a training set, and then predict
-experimental conditions neural data in a test set.</p></li>
+experimental conditions from neural data in a test set.</p></li>
 <li><p>Result metrics (RM): Aggregate results across validation splits and
 over resampled runs and compute and plot final decoding accuracy metrics.</p></li>
 <li><p>Cross-validators (CV): Take the DS, FP, CL and RM objects and run a
@@ -163,7 +163,7 @@ cross-validation decoding procedure.</p></li>
     <p>Two data formats are used to do decoding analyses which are:</p><ol>
 <li><p><code>raster format</code> contains high temporal precision data where neural
 activity from each site is stored in a spearate file.</p></li>
-<li><p><code>binned format</code> contains data from multiple sites and the data is more
+<li><p><code>binned format</code> contains data from multiple sites where the data is more
 coarsely binned across time.</p></li>
 </ol>
     <p>A user of the NDTr will typically store their data in <code>raster format</code> and
