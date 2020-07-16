@@ -19,18 +19,20 @@ raster format.
 }
 \examples{
 # This is valid raster data so the function will return no error message
-raster_dir_name <- file.path(system.file("extdata", package = "NDTr"), 
-                              "Zhang_Desimone_7object_raster_data_rda")
+raster_dir_name <- file.path(
+  system.file("extdata", package = "NDTr"),
+  "Zhang_Desimone_7object_raster_data_rda"
+)
 file_name <- "bp1001spk_01A_raster_data.rda"
 raster_full_path <- file.path(raster_dir_name, file_name)
 
 test_valid_raster_format(raster_full_path)
 
 
-# Binned data is not in raster format (it has an extra column called siteID) so 
-# checking if it is in raster format should return an error. 
+# Binned data is not in raster format (it has an extra column called siteID) so
+# checking if it is in raster format should return an error.
 
-binned_file_name <- system.file("extdata/ZD_150bins_50sampled.Rda", package="NDTr")
+binned_file_name <- system.file("extdata/ZD_150bins_50sampled.Rda", package = "NDTr")
 try(test_valid_raster_format(binned_file_name))
 
 

@@ -10,18 +10,15 @@ aggregate_CV_split_results(rm_obj, prediction_results)
 \item{rm_obj}{The results metric object.}
 
 \item{prediction_results}{A data frame containing the prediction results to
-be aggregated over CV splits. The results in this data frame are the results
-returned by the CL's \code{\link[=get_predictions]{get_predictions()}} method, along with a column that
-specifies which cross-validation split the results come from. Thus the
-columns in the \code{prediction_results} data frame are:
-\itemize{
-\item \emph{CV}: The cross-validation split number the results come from.
-\item \emph{test_time}: The time bin a test point comes from.
-\item \emph{actual_labels}: The actual labels for what happened on a trial.
-\item \emph{predicted_labels}: The predictions that classifier made.
-\item \emph{decision_vals.___}: A set of columns with the decision values
-for each class returned by the classifier.
-}}
+be aggregated over CV splits. The results in this data frame are the
+results returned by the CL's \code{\link[=get_predictions]{get_predictions()}} method, along with a
+column that specifies which cross-validation split the results come from.
+Thus the columns in the \code{prediction_results} data frame are: * \emph{CV}: The
+cross-validation split number the results come from. * \emph{test_time}: The
+time bin a test point comes from. * \emph{actual_labels}: The actual labels for
+what happened on a trial. * \emph{predicted_labels}: The predictions that
+classifier made. * \emph{decision_vals.___}: A set of columns with the
+decision values for each class returned by the classifier.}
 }
 \value{
 A result-metric object that contains the decoding results aggregated

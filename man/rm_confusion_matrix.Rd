@@ -15,11 +15,11 @@ to save results to allow one to create the confusion matrices when training
 at one point in time and testing a different point in time. Setting this to
 FALSE can save memory.}
 
-\item{create_decision_vals_confusion_matrix}{A boolean specifying whether one wants
-to create a confusion matrix of the decision values. In this confusion
-matrix, each row corresponds to the correct class (like a regular confusion matrix)
-and each column corresponds to the mean decision value of the predictions for
-each class.}
+\item{create_decision_vals_confusion_matrix}{A boolean specifying whether one
+wants to create a confusion matrix of the decision values. In this
+confusion matrix, each row corresponds to the correct class (like a regular
+confusion matrix) and each column corresponds to the mean decision value of
+the predictions for each class.}
 }
 \description{
 This result metric calculate a confusion matrices from all points in time.
@@ -34,6 +34,7 @@ available in the DECODING_RESULTS object returned by the cross-validator.
 # If you only want to use the rm_confusion_matrix(), then you can put it in a
 # list by itself and pass it to the cross-validator.
 the_rms <- list(rm_confusion_matrix())
+
 
 }
 \seealso{

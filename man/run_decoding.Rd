@@ -14,8 +14,8 @@ set in the CV's constructor.}
 A list, usually called \code{DECODING_RESULTS}, that contains the results
 from the decoding analysis. This \code{DECODING_RESULTS} list should contain the
 result compiled by the result metric objects, as well as a list in
-\code{DECODING_RESULTS$cross_validation_paramaters$parameter_df} contains data on
-all that DS, FP, CL and RM parameters that were used in the decoding
+\code{DECODING_RESULTS$cross_validation_paramaters$parameter_df} contains data
+on all that DS, FP, CL and RM parameters that were used in the decoding
 analysis that can be used to store and retrieve the results. Additionally,
 the DS, FP, CL and RM objects used in the analysis can be saved in the
 \code{DECODING_RESULTS$cross_validation_paramaters}.

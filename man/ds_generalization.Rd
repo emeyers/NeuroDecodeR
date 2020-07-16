@@ -86,22 +86,25 @@ get training and testing splits of data that can be passed to a classifier.
 # invariant by generating training data for objects presented at 'upper' and 'middle'
 # locations, and generating test data at a 'lower' location.
 
-id_levels <- c("hand", "flower", "guitar", "face", "kiwi", "couch",  "car")   
+id_levels <- c("hand", "flower", "guitar", "face", "kiwi", "couch", "car")
 train_label_levels <- NULL
 test_label_levels <- NULL
-for (i in seq_along(id_levels)){
-   train_label_levels[[i]] <- c(paste(id_levels[i], "upper",sep = '_'), 
-                              paste(id_levels[i], "middle",sep = '_'))
- test_label_levels[[i]] <- list(paste(id_levels[i], "lower",sep = '_'))
+for (i in seq_along(id_levels)) {
+  train_label_levels[[i]] <- c(
+    paste(id_levels[i], "upper", sep = "_"),
+    paste(id_levels[i], "middle", sep = "_")
+  )
+  test_label_levels[[i]] <- list(paste(id_levels[i], "lower", sep = "_"))
 }
 
 
-data_file <- system.file("extdata/ZD_150bins_50sampled.Rda", package = "NDTr") 
-ds <- ds_generalization(data_file, 
-                       'combined_ID_position', 18, 
-                       train_label_levels, 
-                       test_label_levels)
-
+data_file <- system.file("extdata/ZD_150bins_50sampled.Rda", package = "NDTr")
+ds <- ds_generalization(
+  data_file,
+  "combined_ID_position", 18,
+  train_label_levels,
+  test_label_levels
+)
 }
 \seealso{
 Other datasource: 

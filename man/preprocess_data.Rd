@@ -24,18 +24,19 @@ neural activity of a particular site on each test trial (and typically have
 names like site_0001, site_0002, etc).}
 }
 \value{
-A list is returned that contains two data frames called \code{training_set}
-and \code{test_set} which contain data in the same format as the \code{training_set} and
-\code{test_set} arguments passed to this function, however the data in these data
-frames has been processed by the FP object.
+A list is returned that contains two data frames called
+\code{training_set} and \code{test_set} which contain data in the same format as the
+\code{training_set} and \code{test_set} arguments passed to this function, however
+the data in these data frames has been processed by the FP object.
 }
 \description{
 This is a generic function that must be implemented by all FP objects. This
 object learns a set of parameters from the training data (i.e., the data
-genereated from a datasource get_data() method). The \code{preprocess_data()}  method
-then uses these parameters do processing on the training and test data before
-the data is sent to the classifier. This method should not be called directly
-but instead it is used internally by the cross-validator (CV) object.
+genereated from a datasource get_data() method). The \code{preprocess_data()}
+method then uses these parameters do processing on the training and test data
+before the data is sent to the classifier. This method should not be called
+directly but instead it is used internally by the cross-validator (CV)
+object.
 }
 \seealso{
 \code{\link[=fp_zscore]{fp_zscore()}}, \code{\link[=fp_select_k_features]{fp_select_k_features()}}
