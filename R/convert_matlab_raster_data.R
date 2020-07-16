@@ -61,7 +61,12 @@ convert_matlab_raster_data <- function(matlab_raster_dir_name,
 
   for (iSite in seq_along(matlab_file_names)) {
 
-    cat(paste(iSite, " "))
+    # print message to show progress the number of sites that have been converted    
+    if (iSite == 1) {
+      message(sprintf("converting site %-5s", iSite))
+    } else {
+      message(paste0(rep("\b", 22), collapse = ""), sprintf("converting site %-5s", iSite))
+    }
 
     # first, load in raster as a list
     curr_matlab_file_name <- matlab_file_names[iSite]
