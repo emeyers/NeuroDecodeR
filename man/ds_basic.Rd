@@ -76,28 +76,27 @@ and has a \code{get_data()} method that is called by a cross-validation object t
 get training and testing splits of data that can be passed to a classifier.
 }
 \examples{
- # A typical example of creating a datasource to be passed cross-validation object
- data_file <- system.file("extdata/ZD_150bins_50sampled.Rda", package = "NDTr")   
- ds <- ds_basic(data_file, 'stimulus_ID', 18)
- 
- # If one has many repeats of each label, decoding can be faster if one
- # uses fewer CV splits and repeats each label multiple times in each split.
- ds <- ds_basic(data_file, 'stimulus_ID', 6,
-                num_label_repeats_per_cv_split = 3)
- 
- # One can specify a subset of labels levels to be used in decoding. Here
- #  we just do a three-way decoding analysis between "car", "hand" and "kiwi".
- ds <- ds_basic(data_file, 'stimulus_ID', 18,
-                label_levels_to_use = c("car", "hand", "kiwi")) 
- 
- # One never explicitely calls the get_data() function, but rather this is
- # done by the cross-validator. However, to illustrate what this function
- # does, we can call it explicitly here to get training and test data:
- all_cv_data <- NDTr:::get_data(ds)  
- names(all_cv_data)
+# A typical example of creating a datasource to be passed cross-validation object
+data_file <- system.file("extdata/ZD_150bins_50sampled.Rda", package = "NDTr")
+ds <- ds_basic(data_file, "stimulus_ID", 18)
 
- 
+# If one has many repeats of each label, decoding can be faster if one
+# uses fewer CV splits and repeats each label multiple times in each split.
+ds <- ds_basic(data_file, "stimulus_ID", 6,
+  num_label_repeats_per_cv_split = 3
+)
 
+# One can specify a subset of labels levels to be used in decoding. Here
+#  we just do a three-way decoding analysis between "car", "hand" and "kiwi".
+ds <- ds_basic(data_file, "stimulus_ID", 18,
+  label_levels_to_use = c("car", "hand", "kiwi")
+)
+
+# One never explicitely calls the get_data() function, but rather this is
+# done by the cross-validator. However, to illustrate what this function
+# does, we can call it explicitly here to get training and test data:
+all_cv_data <- NDTr:::get_data(ds)
+names(all_cv_data)
 }
 \seealso{
 Other datasource: 

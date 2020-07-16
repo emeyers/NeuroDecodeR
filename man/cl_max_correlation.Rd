@@ -14,9 +14,10 @@ This CL object learns a mean population vector (template) for each
 class from the training set (by averaging together the all training points
 within each class). The classifier is tested by calculated Pearson’s
 correlation coefficient between a test point and the templates learned from
-the training set, and the class with the highest correlation value is returned
-as the predicted label. The decision values returned by the classifier are the
-correlation coefficients between all test points and all templates.
+the training set, and the class with the highest correlation value is
+returned as the predicted label. The decision values returned by the
+classifier are the correlation coefficients between all test points and all
+templates.
 
 Like all classifiers (CL) objects, this classifier has a get_predictions()
 method which learns a model based on training data and then makes predictions
@@ -24,15 +25,16 @@ on the test data.
 }
 \examples{
 # running a basic decoding analysis using the cl_max_correlation
-
-data_file <- system.file("extdata/ZD_150bins_50sampled.Rda", package = "NDTr") 
-ds <- ds_basic(data_file, 'stimulus_ID', 18) 
+data_file <- system.file(file.path("extdata", "ZD_150bins_50sampled.Rda"),
+                         package = "NDTr")
+ds <- ds_basic(data_file, "stimulus_ID", 18)
 fps <- list(fp_zscore())
 
-cl <- cl_max_correlation() 
+cl <- cl_max_correlation()
 cv <- cv_standard(ds, cl, fps)
-
-\dontrun{DECODING_RESULTS <- run_decoding(cv)}
+\dontrun{
+DECODING_RESULTS <- run_decoding(cv)
+}
 
 }
 \seealso{

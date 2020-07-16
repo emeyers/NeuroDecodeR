@@ -25,11 +25,11 @@ each feature together. The class with the highest likelihood value is chosen
 as the predicted label, and the decision values are the log likelihood
 values.
 
-\strong{Note:} this classifier uses spike counts, so the binned data must be converted
-to use this classifier, for exmaple, if you are using the basic_DS data
-source, then use_count_data = TRUE should be set in the contructor. Also,
-preprocessors that convert the data into values that are not integers should
-not be used, for example, the fp_zscore should not be used with this
+\strong{Note:} this classifier uses spike counts, so the binned data must be
+converted to use this classifier, for exmaple, if you are using the basic_DS
+data source, then use_count_data = TRUE should be set in the contructor.
+Also, preprocessors that convert the data into values that are not integers
+should not be used, for example, the fp_zscore should not be used with this
 classifier.
 
 Like all classifiers, this classifier learning a model based on training data
@@ -38,14 +38,16 @@ and then makes predictions on new test data.
 \examples{
 # running a basic decoding analysis using the cl_max_correlation
 
- data_file <- system.file("extdata/ZD_150bins_50sampled.Rda", package = "NDTr") 
- ds <- ds_basic(data_file, 'stimulus_ID', 18, use_count_data = TRUE)
- fps <- list()
- 
- cl <- cl_poisson_naive_bayes()
- cv <- cv_standard(ds, cl, fps) 
+data_file <- system.file(file.path("extdata", "ZD_150bins_50sampled.Rda"),
+                         package = "NDTr")
+ds <- ds_basic(data_file, "stimulus_ID", 18, use_count_data = TRUE)
+fps <- list()
 
- \dontrun{DECODING_RESULTS <- run_decoding(cv)}
+cl <- cl_poisson_naive_bayes()
+cv <- cv_standard(ds, cl, fps)
+\dontrun{
+DECODING_RESULTS <- run_decoding(cv)
+}
 
 }
 \seealso{

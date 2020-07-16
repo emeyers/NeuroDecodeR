@@ -41,14 +41,17 @@ can be used to convert it to an R format (.rda files) that can be used with
 the NDTr.
 }
 \examples{
-matlab_raster_dir_name <- file.path(system.file("extdata", package = "NDTr"), 
-                                               "Zhang_Desimone_7object_raster_data_small_mat")
+matlab_raster_dir_name <- file.path(
+  system.file("extdata", package = "NDTr"),
+  "Zhang_Desimone_7object_raster_data_small_mat"
+)
 
 # create temporary directory to hold converted data
 r_raster_dir_name <- file.path("test_convert_matlab_raster_data", "")
-r_raster_dir_name <- convert_matlab_raster_data(matlab_raster_dir_name, 
-                                                r_raster_dir_name, 
-                                                files_contain = "bp1001spk")
+r_raster_dir_name <- convert_matlab_raster_data(matlab_raster_dir_name,
+  r_raster_dir_name,
+  files_contain = "bp1001spk"
+)
 
 
 }

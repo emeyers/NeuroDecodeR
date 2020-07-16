@@ -44,11 +44,12 @@ decoding.
 }
 \examples{
 # create binned data with 150 ms bin sizes sampled at 10 ms intervals
-raster_dir_name <- file.path("..", "data-raw", "raster", 
-                             "Zhang_Desimone_7objects_raster_data_rda", "")
-                             
-\dontrun{binned_file_name <- create_binned_data(raster_dir_name, "ZD", 150, 50)}
-
-
+raster_dir_name <- file.path(
+  "..", "data-raw", "raster",
+  "Zhang_Desimone_7objects_raster_data_rda", ""
+)
+\dontrun{
+binned_file_name <- create_binned_data(raster_dir_name, "ZD", 150, 50)
+}
 
 }

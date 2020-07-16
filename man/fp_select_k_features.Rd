@@ -29,12 +29,10 @@ fp <- fp_select_k_features(num_site_to_use = 50)
 # This will cause the cross-validator to remove the 20 most selective sites
 fp <- fp_select_k_features(num_sites_to_exclude = 20)
 
-# This will cause the cross-validator to remove the 20 most selective sites 
-# and then use only the 50 most selective sites that remain after the 20 are 
-# eliminated 
+# This will cause the cross-validator to remove the 20 most selective sites
+# and then use only the 50 most selective sites that remain after the 20 are
+# eliminated
 fp <- fp_select_k_features(50, 20)
-
-
 }
 \seealso{
 Other feature_preprocessor: 
