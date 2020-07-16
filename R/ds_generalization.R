@@ -47,7 +47,7 @@
 #' @param site_IDs_to_use A vector of integers specifying which sites should be
 #'   used.
 #'
-#' @param site_IDs_to_exclude A vector of integers specfying which sites should
+#' @param site_IDs_to_exclude A vector of integers specifying which sites should
 #'   be excluded.
 #'
 #' @param randomly_shuffled_labels_before_running A boolean specifying whether

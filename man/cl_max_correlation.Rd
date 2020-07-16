@@ -7,7 +7,7 @@
 cl_max_correlation()
 }
 \description{
-An implementation of a maximum correlation coefficeint classifier.
+An implementation of a maximum correlation coefficient classifier.
 }
 \details{
 This CL object learns a mean population vector (template) for each

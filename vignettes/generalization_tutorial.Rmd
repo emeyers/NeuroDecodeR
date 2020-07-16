@@ -78,7 +78,7 @@ library(tidyr)
 
 For this tutorial we will use binned-format data that consists of the firing
 rate in a 400 ms window that starts 100 ms after the onset of the stimulus. The
-following code shows how to create this binned data. For more informaiton about
+following code shows how to create this binned data. For more information about
 binning the data see the [introduction tutorial](introduction_tutorial.html).
 
 
@@ -130,7 +130,7 @@ different location we will use the
 [`ds_generalization`](https://emeyers.github.io/NDTr/reference/ds_generalization.html)
 datasource. To use this datasource, we need to specify which label levels belong
 each training class and which label levels belong to each test class. We can do
-by setting the `train_label_levels` and `test_label_levels` arguemnts to lists
+by setting the `train_label_levels` and `test_label_levels` arguments to lists
 with the appropriate values. Each entry in these lists corresponds to the label
 levels for one class. For example, if we create a list train_levels[[1]]
 <- c('car_upper', 'car_middle'), and test_levels[[1]] = list('car_lower'),
@@ -207,7 +207,7 @@ training and test sets (if this mapping was done for all classes, one would end
 up getting the same results as using the ds_basic). Because there is not 'data
 leakage’, the following code allows for fair comparisons between results where
 the classifier was trained and tested with data from the same location vs. where
-the classifer was trained and tested with data that was that come from different
+the classifier was trained and tested with data that was that come from different
 locations.
 
 Note, the code below will take several minutes to run. 

@@ -8,7 +8,7 @@
 #'
 #' 1. Datasources (DS): Generate training and test splits of the data.
 #'
-#' 2. Feature preprofessors (FP): Learn parameters on the training set and apply
+#' 2. Feature preprocessors (FP): Learn parameters on the training set and apply
 #' transformations to the training and test sets.
 #'
 #' 3. Classifiers (CL): Learn the relationship between experimental conditions
@@ -27,7 +27,7 @@
 #'  Two data formats are used to do decoding analyses which are:
 #'
 #'  1. `raster format` contains high temporal precision data where neural
-#'  activity from each site is stored in a spearate file.
+#'  activity from each site is stored in a separate file.
 #'
 #'  2. `binned format` contains data from multiple sites where the data is more
 #'  coarsely binned across time.

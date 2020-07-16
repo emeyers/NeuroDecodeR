@@ -2,7 +2,7 @@
 #'
 #' This function takes the name of a directory that contains files in raster
 #' format and averages the data within a specified bin width at specified
-#' sampling inverval increments to create data in binned format used for
+#' sampling interval increments to create data in binned format used for
 #' decoding.
 #'
 #'

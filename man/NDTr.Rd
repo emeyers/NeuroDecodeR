@@ -13,7 +13,7 @@ modular way to allow a range of neural decoding analyses. These five object
 types are:
 \enumerate{
 \item Datasources (DS): Generate training and test splits of the data.
-\item Feature preprofessors (FP): Learn parameters on the training set and apply
+\item Feature preprocessors (FP): Learn parameters on the training set and apply
 transformations to the training and test sets.
 \item Classifiers (CL): Learn the relationship between experimental conditions
 (i.e., "labels") and neural data on a training set, and then predict
@@ -28,7 +28,7 @@ cross-validation decoding procedure.
 Two data formats are used to do decoding analyses which are:
 \enumerate{
 \item \verb{raster format} contains high temporal precision data where neural
-activity from each site is stored in a spearate file.
+activity from each site is stored in a separate file.
 \item \verb{binned format} contains data from multiple sites where the data is more
 coarsely binned across time.
 }

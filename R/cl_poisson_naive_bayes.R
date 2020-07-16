@@ -21,8 +21,8 @@
 #' values.
 #'
 #' **Note:** this classifier uses spike counts, so the binned data must be
-#' converted to use this classifier, for exmaple, if you are using the basic_DS
-#' data source, then use_count_data = TRUE should be set in the contructor.
+#' converted to use this classifier, for example, if you are using the basic_DS
+#' data source, then use_count_data = TRUE should be set in the constructor.
 #' Also, preprocessors that convert the data into values that are not integers
 #' should not be used, for example, the fp_zscore should not be used with this
 #' classifier.

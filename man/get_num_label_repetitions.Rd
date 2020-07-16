@@ -22,7 +22,7 @@ be useful for selecting sites that have a minimum number of repetitions of
 each stimulus or other experimental condition.
 }
 \note{
-The retured value is an S3 object that inherts from data.frame that
+The returned value is an S3 object that inherits from data.frame that
 has an associated plot() method.
 }
 \examples{

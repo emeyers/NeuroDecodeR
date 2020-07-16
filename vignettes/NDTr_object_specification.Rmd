@@ -16,7 +16,7 @@ types which are:
 
  1. Datasources (DS): Generate training and test splits of the data.
  
- 2. Feature preprofessors (FP): Learn parameters on the training set and apply
+ 2. Feature preprocessors (FP): Learn parameters on the training set and apply
  transformations to the training and test sets.
  
  3. Classifiers (CL): Learn the relationship between experimental conditions
@@ -40,7 +40,7 @@ populations of neurons code information (e.g., see Meyers, Borzello, Freiwald
 and Tsao, J Neurosci 2015). 
 
 The following document describes the methods and data formats that need to be
-implemented to create valid DS, FP, CL, RM, and CV objec types. By creating new
+implemented to create valid DS, FP, CL, RM, and CV object types. By creating new
 classes of objects that conform to these interfaces, one can easily extend the
 NDTr to try new analyses. 
 
@@ -126,12 +126,12 @@ variables:
 #### training_set
 
 1. `training_labels`: The labels used to train the classifier.
-2. `site_X`: a group of varaibles that has data from multiple sites.
+2. `site_X`: a group of variables that has data from multiple sites.
 
 
 #### test_set
 
-1. `test_labels`: The labels used to testthe classifier
+1. `test_labels`: The labels used to test the classifier
 2. `site_X`: a group of varaibles that has data from multiple sites
 3. `time_bin`: character strings listing which times different rows correspond to
 
@@ -222,7 +222,7 @@ two data frames called *training_set* and *test_set* have the following variable
 
 #### test_set
 
-1. `test_labels` The labels used to testthe classifier.
+1. `test_labels` The labels used to test the classifier.
 2. `site_X`: a group of varaibles that has data from multiple sites.
 3. `time_bin`: character strings listing which times different rows correspond to.
 
@@ -300,21 +300,21 @@ mean(predictions_at_100ms$actual_labels == predictions_at_100ms$predicted_labels
 # Result metrics (RM)
 
 Result metrics take the predictions made by a classifier and aggregate the
-results to that they can be interpreated.
+results so that they can be interpreted.
 
 
 ### Implementing an RM: required methods and data formats
 
 To create a result metric two methods must be implemented
 `aggregate_CV_split_results()` which aggregates the results after a set of
-cross-valiation sweeps have been completed and `aggregate_resample_run_results()`
+cross-validation sweeps have been completed and `aggregate_resample_run_results()`
 which aggregates the final results across all the resample runs. 
 
 
 #### aggregate_CV_split_results() method
 
 The `aggregate_CV_split_results()` method takes a data frame that is a
-contentation of the prediction data frames made by the classifier (CL) objects
+concatenation of the prediction data frames made by the classifier (CL) objects
 across all times and cross-validation splits in one resample run. Thus the input
 data frame to the `aggregate_CV_split_results()` method has similar variables as
 in the output of the CL `get_predictions()` method, namely:
@@ -335,7 +335,7 @@ particular class
 
 
 The output of the `aggregate_CV_split_results` is a RM object of the same type
-that contains inherts from a data frame so that the results can be can be
+that contains inherits from a data frame so that the results can be can be
 aggregated together (e.g., via rbind) across resample runs. The variables in the
 data frame can be anything that is useful to capture about the classification
 performance.

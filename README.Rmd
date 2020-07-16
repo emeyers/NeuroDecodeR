@@ -52,6 +52,6 @@ devtools::install_github("emeyers/NDTr")
 
 ## Documentation
 
-The documetnation for this package is available at: https://emeyers.github.io/NDTr/
+The documentation for this package is available at: https://emeyers.github.io/NDTr/
 
 

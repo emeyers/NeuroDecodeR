@@ -49,7 +49,7 @@ num_cv_splits * num_label_repeats_per_cv_split repeats.}
 \item{site_IDs_to_use}{A vector of integers specifying which sites should be
 used.}
 
-\item{site_IDs_to_exclude}{A vector of integers specfying which sites should
+\item{site_IDs_to_exclude}{A vector of integers specifying which sites should
 be excluded.}
 
 \item{randomly_shuffled_labels_before_running}{A boolean specifying whether
@@ -68,7 +68,7 @@ The standard datasource used to get training and test splits of data.
 \details{
 This 'basic' datasource is the datasource that will most commonly be used for
 most analyses. It can generate training and tests sets for data that has been
-recorded simultaneously or pseudo-populations for data that was not recoded
+recorded simultaneously or pseudo-populations for data that was not recorded
 simultaneously.
 
 Like all datasources, this datasource takes binned format data

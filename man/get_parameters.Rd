@@ -23,7 +23,7 @@ an NDTr object. All NDTr objects (i.e., DS, FP, CL, RM and CV) need to define
 a method that implements this generic function. The CV object's
 \code{get_parameters()} method usually will call all the DS, FP, CL, RM and CV
 \code{get_parameters()} methods and aggregate and return all the parameters
-aggregated from these objects. These aggregrated parameters can then be used
+aggregated from these objects. These aggregated parameters can then be used
 to save the results of a particular analysis based on the parameters using
 the \code{\link[=log_save_results]{log_save_results()}} function. This method is most frequently used
 privately by other NDTr objects to save all the parameters that were used in

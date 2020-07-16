@@ -59,7 +59,7 @@ num_cv_splits * num_label_repeats_per_cv_split repeats.}
 \item{site_IDs_to_use}{A vector of integers specifying which sites should be
 used.}
 
-\item{site_IDs_to_exclude}{A vector of integers specfying which sites should
+\item{site_IDs_to_exclude}{A vector of integers specifying which sites should
 be excluded.}
 
 \item{randomly_shuffled_labels_before_running}{A boolean specifying whether

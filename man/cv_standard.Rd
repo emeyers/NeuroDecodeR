@@ -32,7 +32,7 @@ rm_main_results(), rm_confusion_matrix() results metrics will be used.}
 \item{num_resample_runs}{The number of times the cross-validation should be
 run (i.e., "resample runs"), where on each run, new training and test sets
 are generated. If pseudo-populations are used (e.g., with the ds_basic),
-then new pseduo-populations will be generated on each resample run as well.}
+then new pseudo-populations will be generated on each resample run as well.}
 
 \item{test_only_at_training_time}{A boolean indicated whether the classifier
 should only be trained and tested at the same time point (i.e., if TRUE a
@@ -55,7 +55,7 @@ feature preprocessors (FP) and result metric (RM) objects, and runs
 multiple cross-validation cycles where:
 \enumerate{
 \item A datasource (DS) generates training and test data splits of the data
-\item Feature preprocessors (FPs) do preprcessing of the data
+\item Feature preprocessors (FPs) do preprocessing of the data
 \item A classifier (CL) is trained and predictions are generated on a test set
 \item Result metrics (RMs) assess the accuracy of the predictions and compile
 the results.

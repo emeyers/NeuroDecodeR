@@ -1,6 +1,6 @@
 #' A maximum correlation coefficient classifier (CL)
 #'
-#' An implementation of a maximum correlation coefficeint classifier.
+#' An implementation of a maximum correlation coefficient classifier.
 #'
 #' @details This CL object learns a mean population vector (template) for each
 #'   class from the training set (by averaging together the all training points

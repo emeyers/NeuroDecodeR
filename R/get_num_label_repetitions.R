@@ -14,7 +14,7 @@
 #' @param levels_to_use A character vector specifying which levels to include.
 #' If not set, all levels will be used.
 #'
-#' @note The retured value is an S3 object that inherts from data.frame that
+#' @note The returned value is an S3 object that inherits from data.frame that
 #' has an associated plot() method.
 #'
 #' @examples

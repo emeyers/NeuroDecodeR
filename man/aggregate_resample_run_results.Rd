@@ -16,7 +16,7 @@ by using the RM plot methods).
 }
 \description{
 This is a generic function that must be implemented by all RM objects. This
-function is called by the cross-validator to aggregrate results across all
+function is called by the cross-validator to aggregate results across all
 resample runs. This method should not be called directly but instead it is
 used internally by the cross-validator (CV) object.
 }

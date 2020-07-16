@@ -8,7 +8,7 @@ fp_zscore()
 }
 \description{
 This feature preprocessor object finds the mean and standard deviation using
-the training data. The proprocessor then z-score transforms the training and
+the training data. The preprocessor then z-score transforms the training and
 test data using this mean and standard deviation by subtracting the mean and
 dividing by the standard deviation.
 }

@@ -26,7 +26,7 @@ The package is based on 5 abstract object types:
 4.  result metrics (RM)
 5.  cross-validators (CV)
 
-By combing different versions of these 4 objecttypes together, it is
+By combing different versions of these 5 object types together, it is
 possible to run a range of different decoding analyses. See
 www.readout.info and <https://emeyers.github.io/NDTr/> for more
 information.
@@ -42,5 +42,5 @@ devtools::install_github("emeyers/NDTr")
 
 ## Documentation
 
-The documetnation for this package is available at:
+The documentation for this package is available at:
 <https://emeyers.github.io/NDTr/>

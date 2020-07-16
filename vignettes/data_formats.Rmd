@@ -12,7 +12,7 @@ vignette: >
 The NDTr uses two closely related data formats called `raster format` and
 `binned format`. For almost all analysis, one starts by saving data from each
 site in `raster format`. One then converts it to `binned format` using the
-`create_binned_data()` which has the data from all the sites at a coaser
+`create_binned_data()` which has the data from all the sites at a coarser
 temporal resolution. The `binned format` data is then used in all decoding
 analyses. More information about what is required to have data in these
 specified formats is described below.
@@ -99,13 +99,13 @@ used in subsequent decoding analyses.
 
 Binned format data must be in a data frame where the number of rows in the data
 frame correspond to the number of trial in all experimental recording sessions
-across all sites.  The binned format data frame must also containthe variables
+across all sites.  The binned format data frame must also contain the variables
 that start with the following prefixes:
 
 1. `siteID.XXX` A unique number indicating a site a given row of data corresponds to.
 
 2. `labels.XXX`  These variables contain labels of which experimental conditions
-occured on a given trial.
+occurred on a given trial.
 
 3. `time.X_Y`  These variables contain data in a time range from X to Y.
 

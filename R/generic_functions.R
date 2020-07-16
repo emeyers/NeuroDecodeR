@@ -16,7 +16,7 @@
 #' a method that implements this generic function. The CV object's
 #' `get_parameters()` method usually will call all the DS, FP, CL, RM and CV
 #' `get_parameters()` methods and aggregate and return all the parameters
-#' aggregated from these objects. These aggregrated parameters can then be used
+#' aggregated from these objects. These aggregated parameters can then be used
 #' to save the results of a particular analysis based on the parameters using
 #' the [log_save_results()] function. This method is most frequently used
 #' privately by other NDTr objects to save all the parameters that were used in
@@ -117,7 +117,7 @@ get_data <- function(ds_obj) {
 #'
 #' This is a generic function that must be implemented by all FP objects. This
 #' object learns a set of parameters from the training data (i.e., the data
-#' genereated from a datasource get_data() method). The `preprocess_data()`
+#' generated from a datasource get_data() method). The `preprocess_data()`
 #' method then uses these parameters do processing on the training and test data
 #' before the data is sent to the classifier. This method should not be called
 #' directly but instead it is used internally by the cross-validator (CV)
@@ -185,7 +185,7 @@ run_decoding <- function(cv_obj) {
 #' A result metric (RM) method to aggregate results over cross-validation splits
 #'
 #' This is a generic function that must be implemented by all RM objects. This
-#' function is called by the cross-validator to aggregrate results across all
+#' function is called by the cross-validator results aggregated across all
 #' cross-validation splits. This method should not be called directly but
 #' instead is used internally by the cross-validator (CV) object.
 #'
@@ -221,7 +221,7 @@ aggregate_CV_split_results <- function(rm_obj, prediction_results) {
 #' A result metric (RM) method to aggregate results over resample runs
 #'
 #' This is a generic function that must be implemented by all RM objects. This
-#' function is called by the cross-validator to aggregrate results across all
+#' function is called by the cross-validator to aggregate results across all
 #' resample runs. This method should not be called directly but instead it is
 #' used internally by the cross-validator (CV) object.
 #'

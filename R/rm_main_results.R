@@ -28,7 +28,7 @@
 #'  string "none", then the decision values will not be calculated. If this is a
 #'  string set to either "diag" or "only same train test time" then the decision
 #'  values will only be calculated when for results when training and testing
-#'  at the same time. Not returning the full results can grealy speed up the runtime
+#'  at the same time. Not returning the full results can greatly speed up the runtime
 #'  of the code and will use less memory so this can be useful for large data sets.
 #'
 #'

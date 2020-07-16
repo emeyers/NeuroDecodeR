@@ -4,7 +4,7 @@
 #'
 #' This 'basic' datasource is the datasource that will most commonly be used for
 #' most analyses. It can generate training and tests sets for data that has been
-#' recorded simultaneously or pseudo-populations for data that was not recoded
+#' recorded simultaneously or pseudo-populations for data that was not recorded
 #' simultaneously.
 #'
 #' Like all datasources, this datasource takes binned format data
@@ -42,7 +42,7 @@
 #' @param site_IDs_to_use A vector of integers specifying which sites should be
 #'   used.
 #'
-#' @param site_IDs_to_exclude A vector of integers specfying which sites should
+#' @param site_IDs_to_exclude A vector of integers specifying which sites should
 #'   be excluded.
 #'
 #' @param randomly_shuffled_labels_before_running A boolean specifying whether

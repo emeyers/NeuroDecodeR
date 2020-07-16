@@ -39,7 +39,7 @@ neural decoding in a flexible and robust way. The four types of objects are:
   experimental conditions on the test data.
  
   4. **Result Metrics (RM)** which take the output predictions of a classifier
-  and summerize the prediction accuracy.
+  and summarize the prediction accuracy.
 
   5. **Cross-validators (CV)** which take the DS, FP and CL objects and run a
   cross-validation decoding procedure.
@@ -178,7 +178,7 @@ has the fewest repetitions was presented. To do this we will use the function
 `get_num_label_repetitions()` which finds uses data that is in binned-format and
 calculates how many trials each label level was presented.
 
-Below we use the plot function assocated with the results that are returned to
+Below we use the plot function associated with the results that are returned to
 see how many times the labels were repeated.
 
 
@@ -310,12 +310,12 @@ cl <- cl_max_correlation()
 
 ### Creating result metrics (RM)
 
-Result metrics take the predictions made by a classifier, as well as the groud
+Result metrics take the predictions made by a classifier, as well as the ground
 truth (i.e., the actual label level values for what happened on each trial) and
 aggregate these predictions give a measure of the classifiers performance.
 
 Below we create two result metrics. The first result metric returns basic
-measures of decoding accuracy such as the proporition of predirctions that were
+measures of decoding accuracy such as the proportion of predictions that were
 correct (zero-one-loss). The second result metric create a confusion matrix
 showing the pattern of prediction mistakes that were made. Result metrics must
 also be put into a list to allow multiple result metrics to be used in an
@@ -338,8 +338,8 @@ rms <- list(rm_main_results(), rm_confusion_matrix())
 Cross-validator objects take a datasource, a classifier, result metrics and
 optionally feature-preprocessor objects and run a decoding procedure by
 generating training and test data from the datasource, preprocessing this data
-with the feature-preprocessors training and testing the classifier on the
-resulting data, and agregrated the results with the result metrics. This
+with the feature-preprocessors, training and testing the classifier on the
+resulting data, and aggregating the results with the result metrics. This
 procedure is run in two nested loops. The inner ‘cross-validation’ loop runs a
 cross-validation procedure where the classifier is trained and tested on
 different divisions of the data. The outer, ‘resample’ loop generates new splits
@@ -392,7 +392,7 @@ plot(DECODING_RESULTS$rm_main_results)
 ```
 
 
-We also create simplier line plots by setting the `plot_type = 'line'`.
+We also create simpler line plots by setting the `plot_type = 'line'`.
 Additionally, we can plot all three types of results that that rm_main_results
 object saves using the `type = 'all'` argument. Below we should the results for
 setting both these arguments.
@@ -406,7 +406,7 @@ plot(DECODING_RESULTS$rm_main_results, result_type = 'all', plot_type = 'line')
 
 ### Plotting confusion matrices
 
-We can also plot the confusion matrices aggregaged from the rm_confusion_matrix
+We can also plot the confusion matrices aggregated from the rm_confusion_matrix
 object which shows the pattern of classification mistakes at different points in
 time.
 
@@ -435,7 +435,7 @@ Finally, the NDTr has "log" function that help you save and manage your results.
 Below we show how to use the `log_save_results()` function which takes a
 `DECODING_RESULTS` object and the name of a directory. This function save the
 results to the specified directory and also logs the parameters used in the
-analysis so that they can later be retrived. For more information, see the
+analysis so that they can later be retrieved. For more information, see the
 tutorial on saving and managing results.
 
 
