@@ -8,28 +8,28 @@
 # binned format or an actual data frame in binned format. If the argument is a
 # string then the data is loaded from the file name. The binned data is checked
 # to make sure it is valid binned data format and then it is returned.
-check_and_load_binned_data <- function(binned_data){
-  
+check_and_load_binned_data <- function(binned_data) {
+
   # if a file name has been given load it
   if (is.character(binned_data)) {
     binned_data_object_name <- load(binned_data)
     eval(parse(text = paste0("binned_data <- ", binned_data_object_name)))
   }
-  
-  
+
+
   # check that the binned_data is in a valid format
-  result = tryCatch({
-    
-    test_valid_binned_format(binned_data)
-    
-  }, error = function(e) {
-    stop(paste("The argement binned_data must either be a data frame containing data in binned format,", 
-         "or a string listing a path to a file that has data in binned format.", 
-         "Use NDTr:::test_valid_binned_data_format(binned_data) for more information on",
-         "how the data is not conforming to the binned format."))
-  })
-  
-  
+  result <- tryCatch({
+      test_valid_binned_format(binned_data)
+    },
+    error = function(e) {
+      stop(paste(
+        "The argement binned_data must either be a data frame containing data in binned format,",
+        "or a string listing a path to a file that has data in binned format.",
+        "Use NDTr:::test_valid_binned_data_format(binned_data) for more information on",
+        "how the data is not conforming to the binned format."))
+   })
+
+
   binned_data
   
 }
@@ -43,15 +43,17 @@ check_and_load_binned_data <- function(binned_data){
 # plot() functions to label the time axes on plots.
 
 get_center_bin_time <- function(time_vector) {
-  center_bin_time <- NULL
   
-  for (i in 1:length(time_vector)) {
+  center_bin_time <- NULL
+
+  for (i in seq_along(time_vector)) {
     curr_parsed_names <- unlist(strsplit(as.character(time_vector[i]), ".", fixed = TRUE))
     curr_parsed_names <- unlist(strsplit(as.character(curr_parsed_names[2]), "_", fixed = TRUE))
-    center_bin_time[i] <- mean(as.numeric(curr_parsed_names[1:2]))  # length(curr.parsed_names[2]:curr.parsed_names[3])
+    center_bin_time[i] <- mean(as.numeric(curr_parsed_names[1:2])) # length(curr.parsed_names[2]:curr.parsed_names[3])
   }
-  
+
   return(center_bin_time)
+  
 }
 
 
@@ -64,14 +66,15 @@ get_center_bin_time <- function(time_vector) {
 get_time_range_strings <- function(time_vector) {
   
   time_range_strings <- NULL
-  
-  for (i in 1:length(time_vector)) {
+
+  for (i in seq_along(time_vector)) {
     curr_parsed_names <- unlist(strsplit(as.character(time_vector[i]), ".", fixed = TRUE))
     curr_parsed_names <- unlist(strsplit(as.character(curr_parsed_names[2]), "_", fixed = TRUE))
-    time_range_strings[i] <- paste(curr_parsed_names[1], 'to', curr_parsed_names[2])  
+    time_range_strings[i] <- paste(curr_parsed_names[1], "to", curr_parsed_names[2])
   }
-  
+
   return(time_range_strings)
+  
 }
 
 
@@ -89,15 +92,15 @@ convert_rates_to_counts <- function(binned_data) {
   all_dim_names <- names(binned_data)
   bin_widths <- get_bin_widths(names(the_data))
   data_counts <- sweep(the_data, 2, bin_widths, FUN = "*")
-  
+
   # make sure the conversion worked, and that no value is
   if (max(abs(round(data_counts) - data_counts)) > 10^-12) {
     stop("converting continuous activity to counts failed")
   }
-  
+
   data_counts <- cbind(data_counts, the_labels) # add back the labels
-  data_counts <- data_counts[, all_dim_names]   # put data back to the original order
-  
+  data_counts <- data_counts[, all_dim_names] # put data back to the original order
+
   return(data_counts)
 }
 
@@ -113,12 +116,12 @@ convert_rates_to_counts <- function(binned_data) {
 get_bin_widths <- function(time_vector) {
   
   bin_widths <- NULL
-  
-  for (i in 1:length(time_vector)) {
+
+  for (i in seq_along(time_vector)) {
     curr_parsed_names <- unlist(strsplit(as.character(time_vector[i]), "[._]"))
     bin_widths[i] <- as.numeric(curr_parsed_names[3]) - as.numeric(curr_parsed_names[2]) + 1
   }
-  
+
   return(bin_widths)
 }
 
@@ -132,12 +135,14 @@ get_bin_widths <- function(time_vector) {
 # the nnet package which had a fast implementation)
 
 rand_which_max <- function(x) {
+  
   y <- seq_along(x)[x == max(x)]
   if (length(y) > 1L) {
     sample(y, 1L)
   } else {
     y
-  } 
+  }
+  
 }
 
 
@@ -150,23 +155,16 @@ rand_which_max <- function(x) {
 # functions in the save_and_manage_decoding_results to save each result with an
 # unique ID.
 
-generate_analysis_ID <- function(){
-  
-  
+generate_analysis_ID <- function() {
+
   # create a name for the file that will hold the results
   curr_time <- as.character(Sys.time())
   curr_time <- gsub("-", "", curr_time)
   curr_time <- gsub(":", "", curr_time)
   curr_time <- gsub(" ", "_", curr_time)
   rand_suffix <- paste0(round(stats::runif(5, 0, 9)), collapse = "")
-  
-  analysis_ID <- paste(curr_time, rand_suffix, sep = "_")  
-  
+
+  analysis_ID <- paste(curr_time, rand_suffix, sep = "_")
+
   analysis_ID
-  
 }
-
-
-
-
-
