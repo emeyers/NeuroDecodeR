@@ -104,23 +104,20 @@
     
     
 <!-- README.md is generated from README.Rmd. Please edit that file -->
+<div id="ndtr-the-neural-decoding-toolbox-in-r" class="section level1">
+<div class="page-header"><h1 class="hasAnchor">
+<a href="#ndtr-the-neural-decoding-toolbox-in-r" class="anchor"></a>NDTr: The Neural Decoding Toolbox in R</h1></div>
 <!-- badges: start -->
 
+<p><a href="https://ci.appveyor.com/project/emeyers/NDTr"><img src="https://ci.appveyor.com/api/projects/status/github/emeyers/NDTr?branch=master&amp;svg=true" alt="AppVeyor build status"></a></p>
+<p><a href="https://coveralls.io/r/emeyers/NDTr?branch=master"><img src="https://coveralls.io/repos/github/emeyers/NDTr/badge.svg" alt="Coveralls test coverage"></a></p>
+<!-- badges: end -->
 <p>
 </p>
-<div id="description" class="section level2">
+<div id="overview" class="section level2">
 <h2 class="hasAnchor">
-<a href="#description" class="anchor"></a>Description</h2>
-<p>The Neural Decoding Toolbox in R (NDTr) package allows one to do a neural decoding analysis in R.</p>
-<p>The package is based on 5 abstract object types:</p>
-<ol style="list-style-type: decimal">
-<li>datasources (DS)</li>
-<li>features preprocessors (FP)</li>
-<li>classifiers (CL)</li>
-<li>result metrics (RM)</li>
-<li>cross-validators (CV)</li>
-</ol>
-<p>By combing different versions of these 5 object types together, it is possible to run a range of different decoding analyses. See www.readout.info and <a href="https://emeyers.github.io/NDTr/" class="uri">https://emeyers.github.io/NDTr/</a> for more information.</p>
+<a href="#overview" class="anchor"></a>Overview</h2>
+<p><em>Neural decoding</em> is a data analysis method that uses pattern classifiers to predict experimental conditions based on neural activity. The Neural Decoding Toolbox in R (NDTr) makes it easy to do neural decoding analyses in R.</p>
 </div>
 <div id="installation" class="section level2">
 <h2 class="hasAnchor">
@@ -129,10 +126,51 @@
 <div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" data-line-number="1"><span class="co"># install.packages("devtools")</span></a>
 <a class="sourceLine" id="cb1-2" data-line-number="2">devtools<span class="op">::</span><span class="kw"><a href="https://www.rdocumentation.org/packages/devtools/topics/reexports">install_github</a></span>(<span class="st">"emeyers/NDTr"</span>)</a></code></pre></div>
 </div>
+<div id="usage" class="section level2">
+<h2 class="hasAnchor">
+<a href="#usage" class="anchor"></a>Usage</h2>
+<p>The package is based on 5 abstract object types:</p>
+<ol style="list-style-type: decimal">
+<li>
+<code>Datasources (DS)</code>: generate training and test sets.</li>
+<li>
+<code>Feature preprocessors (FP)</code>: apply preprocessing to the training and test sets.</li>
+<li>
+<code>Classifiers (CL)</code>: learn relationships on the training set and make predictions on the test data.</li>
+<li>
+<code>Result Metrics (RM)</code>: summarize the prediction accuracies.</li>
+<li>
+<code>Cross-validators (CV)</code>: take the DS, FP and CL objects and run a cross-validation decoding procedure.</li>
+</ol>
+<p>By combing different versions of these 5 object types together, it is possible to run a range of different decoding analyses.</p>
+<p>Below is a brief illustration of how to use the NDTr to do a simple decoding analysis. To learn how to use the NDTr please see the <a href="https://emeyers.github.io/NDTr/">documentation website</a> and the package vignettes.</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" data-line-number="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(NDTr)</a>
+<a class="sourceLine" id="cb2-2" data-line-number="2"></a>
+<a class="sourceLine" id="cb2-3" data-line-number="3"><span class="co"># file to data in "binned format"</span></a>
+<a class="sourceLine" id="cb2-4" data-line-number="4">basedir_file_name &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/system.file">system.file</a></span>(<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/file.path">file.path</a></span>(<span class="st">"extdata"</span>, <span class="st">"ZD_150bins_50sampled.Rda"</span>), <span class="dt">package=</span><span class="st">"NDTr"</span>)</a>
+<a class="sourceLine" id="cb2-5" data-line-number="5"></a>
+<a class="sourceLine" id="cb2-6" data-line-number="6"><span class="co"># create the DS, FP, CL, RM, and CV objects</span></a>
+<a class="sourceLine" id="cb2-7" data-line-number="7">ds &lt;-<span class="st"> </span><span class="kw"><a href="reference/ds_basic.html">ds_basic</a></span>(basedir_file_name, <span class="st">'stimulus_ID'</span>, <span class="dv">5</span>, <span class="dt">num_label_repeats_per_cv_split =</span> <span class="dv">3</span>)</a>
+<a class="sourceLine" id="cb2-8" data-line-number="8">fps &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/list">list</a></span>(<span class="kw"><a href="reference/fp_zscore.html">fp_zscore</a></span>())</a>
+<a class="sourceLine" id="cb2-9" data-line-number="9">cl &lt;-<span class="st"> </span><span class="kw"><a href="reference/cl_max_correlation.html">cl_max_correlation</a></span>()</a>
+<a class="sourceLine" id="cb2-10" data-line-number="10">rms &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/list">list</a></span>(<span class="kw"><a href="reference/rm_main_results.html">rm_main_results</a></span>(<span class="dt">aggregate_normalized_rank =</span> <span class="st">"diag"</span>), <span class="kw"><a href="reference/rm_confusion_matrix.html">rm_confusion_matrix</a></span>())</a>
+<a class="sourceLine" id="cb2-11" data-line-number="11">cv &lt;-<span class="st"> </span><span class="kw"><a href="reference/cv_standard.html">cv_standard</a></span>(ds, cl, fps, rms, <span class="dv">3</span>) </a>
+<a class="sourceLine" id="cb2-12" data-line-number="12"></a>
+<a class="sourceLine" id="cb2-13" data-line-number="13"><span class="co"># run a decoding analysis (this takes a few minutes) </span></a>
+<a class="sourceLine" id="cb2-14" data-line-number="14">DECODING_RESULTS &lt;-<span class="st"> </span><span class="kw"><a href="reference/run_decoding.html">run_decoding</a></span>(cv)</a></code></pre></div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" data-line-number="1"><span class="co"># plot the results for three different result types</span></a>
+<a class="sourceLine" id="cb3-2" data-line-number="2"><span class="kw"><a href="https://www.rdocumentation.org/packages/graphics/topics/plot">plot</a></span>(DECODING_RESULTS<span class="op">$</span>rm_main_results, <span class="dt">result_type =</span> <span class="st">"all"</span>, <span class="dt">plot_type =</span> <span class="st">"line"</span>)</a></code></pre></div>
+<p><img src="reference/figures/README-line_plot-1.png" width="768" style="display: block; margin: auto;"></p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" data-line-number="1"><span class="co"># create a temporal cross decoding plot</span></a>
+<a class="sourceLine" id="cb4-2" data-line-number="2"><span class="kw"><a href="https://www.rdocumentation.org/packages/graphics/topics/plot">plot</a></span>(DECODING_RESULTS<span class="op">$</span>rm_main_results)</a></code></pre></div>
+<p><img src="reference/figures/README-TCD_plot-1.png" width="480" style="display: block; margin: auto;"></p>
+</div>
 <div id="documentation" class="section level2">
 <h2 class="hasAnchor">
 <a href="#documentation" class="anchor"></a>Documentation</h2>
 <p>The documentation for this package is available at: <a href="https://emeyers.github.io/NDTr/" class="uri">https://emeyers.github.io/NDTr/</a></p>
+<p>To get started we recommend you read the <a href="https://emeyers.github.io/NDTr/articles/introduction_tutorial.html">introductory tutorial</a></p>
+</div>
 </div>
   </div>
 
@@ -163,8 +201,6 @@
 <h2>Dev status</h2>
 <ul class="list-unstyled">
 <li><a href="https://travis-ci.com/emeyers/NDTr"><img src="https://travis-ci.com/emeyers/NDTr.svg?branch=master" alt="Travis build status"></a></li>
-<li><a href="https://ci.appveyor.com/project/emeyers/NDTr"><img src="https://ci.appveyor.com/api/projects/status/github/emeyers/NDTr?branch=master&amp;svg=true" alt="AppVeyor build status"></a></li>
-<li><a href="https://coveralls.io/r/emeyers/NDTr?branch=master"><img src="https://coveralls.io/repos/github/emeyers/NDTr/badge.svg" alt="Coveralls test coverage"></a></li>
 </ul>
 </div>
 </div>
