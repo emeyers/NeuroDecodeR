@@ -32,7 +32,7 @@
 
 <meta property="og:title" content="A maximum correlation coefficient classifier (CL) — cl_max_correlation" />
 
-<meta property="og:description" content="An implementation of a maximum correlation coefficeint classifier." />
+<meta property="og:description" content="An implementation of a maximum correlation coefficient classifier." />
 <meta name="twitter:card" content="summary" />
 
 
@@ -63,7 +63,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">The Neural Decoding Toolbox in R</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.0.9002</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.0.9003</span>
       </span>
     </div>
 
@@ -136,7 +136,7 @@
 
     <div class="ref-description">
     
-    <p>An implementation of a maximum correlation coefficeint classifier.</p>
+    <p>An implementation of a maximum correlation coefficient classifier.</p>
     
     </div>
 
@@ -148,9 +148,10 @@
 class from the training set (by averaging together the all training points
 within each class). The classifier is tested by calculated Pearson’s
 correlation coefficient between a test point and the templates learned from
-the training set, and the class with the highest correlation value is returned
-as the predicted label. The decision values returned by the classifier are the
-correlation coefficients between all test points and all templates.</p>
+the training set, and the class with the highest correlation value is
+returned as the predicted label. The decision values returned by the
+classifier are the correlation coefficients between all test points and all
+templates.</p>
 <p>Like all classifiers (CL) objects, this classifier has a get_predictions()
 method which learns a model based on training data and then makes predictions
 on the test data.</p>
@@ -164,9 +165,9 @@ on the test data.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='co'># running a basic decoding analysis using the cl_max_correlation</span>
-
-<span class='no'>data_file</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/system.file'>system.file</a></span>(<span class='st'>"extdata/ZD_150bins_50sampled.Rda"</span>, <span class='kw'>package</span> <span class='kw'>=</span> <span class='st'>"NDTr"</span>)
-<span class='no'>ds</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='ds_basic.html'>ds_basic</a></span>(<span class='no'>data_file</span>, <span class='st'>'stimulus_ID'</span>, <span class='fl'>18</span>)
+<span class='no'>data_file</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/system.file'>system.file</a></span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/file.path'>file.path</a></span>(<span class='st'>"extdata"</span>, <span class='st'>"ZD_150bins_50sampled.Rda"</span>),
+                         <span class='kw'>package</span> <span class='kw'>=</span> <span class='st'>"NDTr"</span>)
+<span class='no'>ds</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='ds_basic.html'>ds_basic</a></span>(<span class='no'>data_file</span>, <span class='st'>"stimulus_ID"</span>, <span class='fl'>18</span>)
 <span class='no'>fps</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/list'>list</a></span>(<span class='fu'><a href='fp_zscore.html'>fp_zscore</a></span>())
 
 <span class='no'>cl</span> <span class='kw'>&lt;-</span> <span class='fu'>cl_max_correlation</span>()

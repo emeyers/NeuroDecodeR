@@ -64,7 +64,7 @@ and tested using cross-validation." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">The Neural Decoding Toolbox in R</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.0.9002</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.0.9003</span>
       </span>
     </div>
 
@@ -181,8 +181,8 @@ rm_main_results(), rm_confusion_matrix() results metrics will be used.</p></td>
       <th>num_resample_runs</th>
       <td><p>The number of times the cross-validation should be
 run (i.e., "resample runs"), where on each run, new training and test sets
-are generated. If pseudo-populations are used (e.g., with the ds_basic), then
-new pseduo-populations will be generated on each resample run as well.</p></td>
+are generated. If pseudo-populations are used (e.g., with the ds_basic),
+then new pseudo-populations will be generated on each resample run as well.</p></td>
     </tr>
     <tr>
       <th>test_only_at_training_time</th>
@@ -207,7 +207,7 @@ of much concern.</p></td>
 feature preprocessors (FP) and result metric (RM) objects, and runs
 multiple cross-validation cycles where:</p><ol>
 <li><p>A datasource (DS) generates training and test data splits of the data</p></li>
-<li><p>Feature preprocessors (FPs) do preprcessing of the data</p></li>
+<li><p>Feature preprocessors (FPs) do preprocessing of the data</p></li>
 <li><p>A classifier (CL) is trained and predictions are generated on a test set</p></li>
 <li><p>Result metrics (RMs) assess the accuracy of the predictions and compile
 the results.</p></li>
@@ -216,9 +216,10 @@ the results.</p></li>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='no'>data_file</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/system.file'>system.file</a></span>(<span class='st'>"extdata/ZD_150bins_50sampled.Rda"</span>,
-                          <span class='kw'>package</span> <span class='kw'>=</span> <span class='st'>"NDTr"</span>)
+  <span class='kw'>package</span> <span class='kw'>=</span> <span class='st'>"NDTr"</span>
+)
 
-<span class='no'>ds</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='ds_basic.html'>ds_basic</a></span>(<span class='no'>data_file</span>, <span class='st'>'stimulus_ID'</span>, <span class='fl'>18</span>)
+<span class='no'>ds</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='ds_basic.html'>ds_basic</a></span>(<span class='no'>data_file</span>, <span class='st'>"stimulus_ID"</span>, <span class='fl'>18</span>)
 <span class='no'>fps</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/list'>list</a></span>(<span class='fu'><a href='fp_zscore.html'>fp_zscore</a></span>())
 <span class='no'>cl</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='cl_max_correlation.html'>cl_max_correlation</a></span>()
 

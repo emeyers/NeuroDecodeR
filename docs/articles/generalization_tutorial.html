@@ -30,7 +30,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">The Neural Decoding Toolbox in R</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.0.9002</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.0.9003</span>
       </span>
     </div>
 
@@ -125,7 +125,7 @@
 <div id="binning-the-data" class="section level3">
 <h3 class="hasAnchor">
 <a href="#binning-the-data" class="anchor"></a>Binning the data</h3>
-<p>For this tutorial we will use binned-format data that consists of the firing rate in a 400 ms window that starts 100 ms after the onset of the stimulus. The following code shows how to create this binned data. For more informaiton about binning the data see the <a href="introduction_tutorial.html">introduction tutorial</a>.</p>
+<p>For this tutorial we will use binned-format data that consists of the firing rate in a 400 ms window that starts 100 ms after the onset of the stimulus. The following code shows how to create this binned data. For more information about binning the data see the <a href="introduction_tutorial.html">introduction tutorial</a>.</p>
 <div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" data-line-number="1">raster_dir_name &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/file.path">file.path</a></span>(<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/system.file">system.file</a></span>(<span class="st">"extdata"</span>, <span class="dt">package =</span> <span class="st">"NDTr"</span>), </a>
 <a class="sourceLine" id="cb2-2" data-line-number="2">                             <span class="st">"Zhang_Desimone_7object_raster_data_rda"</span>)</a>
 <a class="sourceLine" id="cb2-3" data-line-number="3"></a>
@@ -148,7 +148,7 @@
 <div id="using-the-ds_generalization-to-train-and-test-at-different-locations" class="section level3">
 <h3 class="hasAnchor">
 <a href="#using-the-ds_generalization-to-train-and-test-at-different-locations" class="anchor"></a>Using the ds_generalization to train and test at different locations</h3>
-<p>In order to train with data from particular locations and test with data from a different location we will use the <a href="https://emeyers.github.io/NDTr/reference/ds_generalization.html"><code>ds_generalization</code></a> datasource. To use this datasource, we need to specify which label levels belong each training class and which label levels belong to each test class. We can do by setting the <code>train_label_levels</code> and <code>test_label_levels</code> arguemnts to lists with the appropriate values. Each entry in these lists corresponds to the label levels for one class. For example, if we create a list train_levels[[1]] &lt;- c(‘car_upper’, ‘car_middle’), and test_levels[[1]] = list(‘car_lower’), then this means that the first class will be trained with data from trials when the car was shown in the upper and middle positions, and the first class will have test data from trials in which cars where shown in the lower position.</p>
+<p>In order to train with data from particular locations and test with data from a different location we will use the <a href="https://emeyers.github.io/NDTr/reference/ds_generalization.html"><code>ds_generalization</code></a> datasource. To use this datasource, we need to specify which label levels belong each training class and which label levels belong to each test class. We can do by setting the <code>train_label_levels</code> and <code>test_label_levels</code> arguments to lists with the appropriate values. Each entry in these lists corresponds to the label levels for one class. For example, if we create a list train_levels[[1]] &lt;- c(‘car_upper’, ‘car_middle’), and test_levels[[1]] = list(‘car_lower’), then this means that the first class will be trained with data from trials when the car was shown in the upper and middle positions, and the first class will have test data from trials in which cars where shown in the lower position.</p>
 <p>To create training data for each object identity at upper and middle locations, and test data for each object at lower location, we can use the code below.</p>
 <div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" data-line-number="1">id_base_levels &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="st">"hand"</span>, <span class="st">"flower"</span>, <span class="st">"guitar"</span>, <span class="st">"face"</span>, <span class="st">"kiwi"</span>, <span class="st">"couch"</span>,  <span class="st">"car"</span>)   </a>
 <a class="sourceLine" id="cb4-2" data-line-number="2"></a>
@@ -175,16 +175,16 @@
 <a class="sourceLine" id="cb5-5" data-line-number="5">tictoc<span class="op">::</span><span class="kw"><a href="https://www.rdocumentation.org/packages/tictoc/topics/tic">tic</a></span>()</a>
 <a class="sourceLine" id="cb5-6" data-line-number="6">DECODING_RESULTS &lt;-<span class="st"> </span><span class="kw"><a href="../reference/run_decoding.html">run_decoding</a></span>(cv)</a>
 <a class="sourceLine" id="cb5-7" data-line-number="7">tictoc<span class="op">::</span><span class="kw"><a href="https://www.rdocumentation.org/packages/tictoc/topics/tic">toc</a></span>()</a></code></pre></div>
-<pre><code>## 17.442 sec elapsed</code></pre>
+<pre><code>## 17.209 sec elapsed</code></pre>
 <div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb7-1" data-line-number="1"><span class="co"># show the zero-one loss decoding accuracy (chance is 1/7)</span></a>
 <a class="sourceLine" id="cb7-2" data-line-number="2">DECODING_RESULTS<span class="op">$</span>rm_main_results<span class="op">$</span>zero_one_loss</a></code></pre></div>
-<pre><code>## [1] 0.847619</code></pre>
+<pre><code>## [1] 0.8444444</code></pre>
 </div>
 <div id="training-and-testing-at-all-locations" class="section level3">
 <h3 class="hasAnchor">
 <a href="#training-and-testing-at-all-locations" class="anchor"></a>Training and testing at all locations</h3>
 <p>We will now create a full set of 9 results that are based on training at <strong>one</strong> of the three locations and testing a different locations. This can be done by creating two loops, one for each training location, and one for each test location, and creating a new datasource each iteration.</p>
-<p>It should be noted that the <code>ds_generalization</code> is built in such a way that the if a particular original label is mapping into the same training and test class (e.g., if <code>training_levels[[1]] &lt;- list('car_upper')</code> and also <code>test_levels[[1]] &lt;- list('car_upper')</code>, the data used in the training set will still come from different trials then the data used for the test set. Thus the cross-validation splits will still be valid because there will not be any of the same data in the training and test sets (if this mapping was done for all classes, one would end up getting the same results as using the ds_basic). Because there is not ‘data leakage’, the following code allows for fair comparisons between results where the classifier was trained and tested with data from the same location vs. where the classifer was trained and tested with data that was that come from different locations.</p>
+<p>It should be noted that the <code>ds_generalization</code> is built in such a way that the if a particular original label is mapping into the same training and test class (e.g., if <code>training_levels[[1]] &lt;- list('car_upper')</code> and also <code>test_levels[[1]] &lt;- list('car_upper')</code>, the data used in the training set will still come from different trials then the data used for the test set. Thus the cross-validation splits will still be valid because there will not be any of the same data in the training and test sets (if this mapping was done for all classes, one would end up getting the same results as using the ds_basic). Because there is not ‘data leakage’, the following code allows for fair comparisons between results where the classifier was trained and tested with data from the same location vs. where the classifier was trained and tested with data that was that come from different locations.</p>
 <p>Note, the code below will take several minutes to run.</p>
 <div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb9-1" data-line-number="1">results_dir_name &lt;-<span class="st"> "position_invariance_results/"</span></a>
 <a class="sourceLine" id="cb9-2" data-line-number="2"></a>
@@ -237,17 +237,17 @@
 <a class="sourceLine" id="cb11-39" data-line-number="39"></a>
 <a class="sourceLine" id="cb11-40" data-line-number="40">  }</a>
 <a class="sourceLine" id="cb11-41" data-line-number="41">}</a></code></pre></div>
-<pre><code>## 16.365 sec elapsed</code></pre>
+<pre><code>## 16.178 sec elapsed</code></pre>
 <pre><code>## Warning in log_save_results(DECODING_RESULTS, results_dir_name, result_name): The manifest file does not exist.
 ##   Assuming this is the first result that is saved and creating manifest file</code></pre>
-<pre><code>## 16.838 sec elapsed
-## 16.972 sec elapsed
-## 16.825 sec elapsed
-## 16.38 sec elapsed
-## 16.84 sec elapsed
-## 17.033 sec elapsed
-## 16.291 sec elapsed
-## 16.151 sec elapsed</code></pre>
+<pre><code>## 16.608 sec elapsed
+## 16.737 sec elapsed
+## 16.652 sec elapsed
+## 16.376 sec elapsed
+## 16.804 sec elapsed
+## 16.564 sec elapsed
+## 16.449 sec elapsed
+## 16.369 sec elapsed</code></pre>
 </div>
 <div id="plotting-the-results" class="section level3">
 <h3 class="hasAnchor">

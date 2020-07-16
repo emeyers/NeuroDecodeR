@@ -30,7 +30,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">The Neural Decoding Toolbox in R</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.0.9002</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.0.9003</span>
       </span>
     </div>
 
@@ -109,14 +109,14 @@
 <p>The Neural Decoding Toolbox in R (NDTr) is designed around five abstract object types which are:</p>
 <ol style="list-style-type: decimal">
 <li><p>Datasources (DS): Generate training and test splits of the data.</p></li>
-<li><p>Feature preprofessors (FP): Learn parameters on the training set and apply transformations to the training and test sets.</p></li>
+<li><p>Feature preprocessors (FP): Learn parameters on the training set and apply transformations to the training and test sets.</p></li>
 <li><p>Classifiers (CL): Learn the relationship between experimental conditions (i.e., “labels”) and neural data on a training set, and then predict experimental conditions neural data in a test set.</p></li>
 <li><p>Result metrics (RM): Aggregate results across validation splits and over resampled runs and compute and plot final decoding accuracy metrics.</p></li>
 <li><p>Cross-validators (CV): Take the DS, FP, CL and RM objects and run a cross-validation decoding procedure.</p></li>
 </ol>
 <p>By having a standard set of object types, one can easily use different instances of these five object types to do different types of analyses.</p>
 <p>For most common analyses, one can use instances of these different object types that come with the NDTr. However, in some cases, one might want to extend the functionality of the NDTr to gain additional insights. For example, one might want to try a different classifier to gain a better understanding of how populations of neurons code information (e.g., see Meyers, Borzello, Freiwald and Tsao, J Neurosci 2015).</p>
-<p>The following document describes the methods and data formats that need to be implemented to create valid DS, FP, CL, RM, and CV objec types. By creating new classes of objects that conform to these interfaces, one can easily extend the NDTr to try new analyses.</p>
+<p>The following document describes the methods and data formats that need to be implemented to create valid DS, FP, CL, RM, and CV object types. By creating new classes of objects that conform to these interfaces, one can easily extend the NDTr to try new analyses.</p>
 <p><br></p>
 <p><br></p>
 <div id="datasources-ds" class="section level1">
@@ -204,7 +204,7 @@
 <li>
 <code>training_labels</code>: The labels used to train the classifier.</li>
 <li>
-<code>site_X</code>: a group of varaibles that has data from multiple sites.</li>
+<code>site_X</code>: a group of variables that has data from multiple sites.</li>
 </ol>
 </div>
 <div id="test_set" class="section level4">
@@ -212,7 +212,7 @@
 <a href="#test_set" class="anchor"></a>test_set</h4>
 <ol style="list-style-type: decimal">
 <li>
-<code>test_labels</code>: The labels used to testthe classifier</li>
+<code>test_labels</code>: The labels used to test the classifier</li>
 <li>
 <code>site_X</code>: a group of varaibles that has data from multiple sites</li>
 <li>
@@ -250,10 +250,10 @@
 <a class="sourceLine" id="cb3-22" data-line-number="22"></a>
 <a class="sourceLine" id="cb3-23" data-line-number="23"><span class="co"># prior to z-score normalizing the mean (e.g. for site 1) is not 0</span></a>
 <a class="sourceLine" id="cb3-24" data-line-number="24"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/mean">mean</a></span>(training_set<span class="op">$</span>site_<span class="dv">0001</span>)</a></code></pre></div>
-<pre><code>## [1] 0.002913165</code></pre>
+<pre><code>## [1] 0.003081232</code></pre>
 <div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" data-line-number="1"><span class="co"># after normalizing the data the mean is pretty much 0</span></a>
 <a class="sourceLine" id="cb5-2" data-line-number="2"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/mean">mean</a></span>(processed_data<span class="op">$</span>training_set<span class="op">$</span>site_<span class="dv">0001</span>)</a></code></pre></div>
-<pre><code>## [1] 4.288703e-17</code></pre>
+<pre><code>## [1] -4.94542e-17</code></pre>
 <p><br></p>
 <p><br></p>
 </div>
@@ -281,7 +281,7 @@
 <a href="#test_set-1" class="anchor"></a>test_set</h4>
 <ol style="list-style-type: decimal">
 <li>
-<code>test_labels</code> The labels used to testthe classifier.</li>
+<code>test_labels</code> The labels used to test the classifier.</li>
 <li>
 <code>site_X</code>: a group of varaibles that has data from multiple sites.</li>
 <li>
@@ -339,15 +339,15 @@
 <div id="result-metrics-rm" class="section level1">
 <h1 class="hasAnchor">
 <a href="#result-metrics-rm" class="anchor"></a>Result metrics (RM)</h1>
-<p>Result metrics take the predictions made by a classifier and aggregate the results to that they can be interpreated.</p>
+<p>Result metrics take the predictions made by a classifier and aggregate the results so that they can be interpreted.</p>
 <div id="implementing-an-rm-required-methods-and-data-formats" class="section level3">
 <h3 class="hasAnchor">
 <a href="#implementing-an-rm-required-methods-and-data-formats" class="anchor"></a>Implementing an RM: required methods and data formats</h3>
-<p>To create a result metric two methods must be implemented <code><a href="../reference/aggregate_CV_split_results.html">aggregate_CV_split_results()</a></code> which aggregates the results after a set of cross-valiation sweeps have been completed and <code><a href="../reference/aggregate_resample_run_results.html">aggregate_resample_run_results()</a></code> which aggregates the final results across all the resample runs.</p>
+<p>To create a result metric two methods must be implemented <code><a href="../reference/aggregate_CV_split_results.html">aggregate_CV_split_results()</a></code> which aggregates the results after a set of cross-validation sweeps have been completed and <code><a href="../reference/aggregate_resample_run_results.html">aggregate_resample_run_results()</a></code> which aggregates the final results across all the resample runs.</p>
 <div id="aggregate_cv_split_results-method" class="section level4">
 <h4 class="hasAnchor">
 <a href="#aggregate_cv_split_results-method" class="anchor"></a>aggregate_CV_split_results() method</h4>
-<p>The <code><a href="../reference/aggregate_CV_split_results.html">aggregate_CV_split_results()</a></code> method takes a data frame that is a contentation of the prediction data frames made by the classifier (CL) objects across all times and cross-validation splits in one resample run. Thus the input data frame to the <code><a href="../reference/aggregate_CV_split_results.html">aggregate_CV_split_results()</a></code> method has similar variables as in the output of the CL <code><a href="../reference/get_predictions.html">get_predictions()</a></code> method, namely:</p>
+<p>The <code><a href="../reference/aggregate_CV_split_results.html">aggregate_CV_split_results()</a></code> method takes a data frame that is a concatenation of the prediction data frames made by the classifier (CL) objects across all times and cross-validation splits in one resample run. Thus the input data frame to the <code><a href="../reference/aggregate_CV_split_results.html">aggregate_CV_split_results()</a></code> method has similar variables as in the output of the CL <code><a href="../reference/get_predictions.html">get_predictions()</a></code> method, namely:</p>
 <ol style="list-style-type: decimal">
 <li><p><code>CV</code>: a number indicating which cross-validation split the current row comes from</p></li>
 <li><p><code>train_time</code>: the train time that the current row comes from.</p></li>
@@ -356,7 +356,7 @@
 <li><p><code>predicted_labels</code>: the labels that the classifier predicted.</p></li>
 <li><p><code>decision_vals.X</code> (optional): a group of variables that has values that indicate how strongly the classifier rates a test point as coming from a particular class</p></li>
 </ol>
-<p>The output of the <code>aggregate_CV_split_results</code> is a RM object of the same type that contains inherts from a data frame so that the results can be can be aggregated together (e.g., via rbind) across resample runs. The variables in the data frame can be anything that is useful to capture about the classification performance.</p>
+<p>The output of the <code>aggregate_CV_split_results</code> is a RM object of the same type that contains inherits from a data frame so that the results can be can be aggregated together (e.g., via rbind) across resample runs. The variables in the data frame can be anything that is useful to capture about the classification performance.</p>
 </div>
 <div id="aggregate_resample_run_results-method" class="section level4">
 <h4 class="hasAnchor">

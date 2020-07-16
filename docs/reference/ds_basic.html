@@ -63,7 +63,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">The Neural Decoding Toolbox in R</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.0.9002</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.0.9003</span>
       </span>
     </div>
 
@@ -205,7 +205,7 @@ used.</p></td>
     </tr>
     <tr>
       <th>site_IDs_to_exclude</th>
-      <td><p>A vector of integers specfying which sites should
+      <td><p>A vector of integers specifying which sites should
 be excluded.</p></td>
     </tr>
     <tr>
@@ -228,7 +228,7 @@ pseudo-populations.</p></td>
 
     <p>This 'basic' datasource is the datasource that will most commonly be used for
 most analyses. It can generate training and tests sets for data that has been
-recorded simultaneously or pseudo-populations for data that was not recoded
+recorded simultaneously or pseudo-populations for data that was not recorded
 simultaneously.</p>
 <p>Like all datasources, this datasource takes binned format data
 and has a <code><a href='get_data.html'>get_data()</a></code> method that is called by a cross-validation object to
@@ -241,25 +241,27 @@ get training and testing splits of data that can be passed to a classifier.</p>
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'> <span class='co'># A typical example of creating a datasource to be passed cross-validation object</span>
- <span class='no'>data_file</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/system.file'>system.file</a></span>(<span class='st'>"extdata/ZD_150bins_50sampled.Rda"</span>, <span class='kw'>package</span> <span class='kw'>=</span> <span class='st'>"NDTr"</span>)
- <span class='no'>ds</span> <span class='kw'>&lt;-</span> <span class='fu'>ds_basic</span>(<span class='no'>data_file</span>, <span class='st'>'stimulus_ID'</span>, <span class='fl'>18</span>)
+    <pre class="examples"><div class='input'><span class='co'># A typical example of creating a datasource to be passed cross-validation object</span>
+<span class='no'>data_file</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/system.file'>system.file</a></span>(<span class='st'>"extdata/ZD_150bins_50sampled.Rda"</span>, <span class='kw'>package</span> <span class='kw'>=</span> <span class='st'>"NDTr"</span>)
+<span class='no'>ds</span> <span class='kw'>&lt;-</span> <span class='fu'>ds_basic</span>(<span class='no'>data_file</span>, <span class='st'>"stimulus_ID"</span>, <span class='fl'>18</span>)
 
- <span class='co'># If one has many repeats of each label, decoding can be faster if one</span>
- <span class='co'># uses fewer CV splits and repeats each label multiple times in each split.</span>
- <span class='no'>ds</span> <span class='kw'>&lt;-</span> <span class='fu'>ds_basic</span>(<span class='no'>data_file</span>, <span class='st'>'stimulus_ID'</span>, <span class='fl'>6</span>,
-                <span class='kw'>num_label_repeats_per_cv_split</span> <span class='kw'>=</span> <span class='fl'>3</span>)
+<span class='co'># If one has many repeats of each label, decoding can be faster if one</span>
+<span class='co'># uses fewer CV splits and repeats each label multiple times in each split.</span>
+<span class='no'>ds</span> <span class='kw'>&lt;-</span> <span class='fu'>ds_basic</span>(<span class='no'>data_file</span>, <span class='st'>"stimulus_ID"</span>, <span class='fl'>6</span>,
+  <span class='kw'>num_label_repeats_per_cv_split</span> <span class='kw'>=</span> <span class='fl'>3</span>
+)
 
- <span class='co'># One can specify a subset of labels levels to be used in decoding. Here</span>
- <span class='co'>#  we just do a three-way decoding analysis between "car", "hand" and "kiwi".</span>
- <span class='no'>ds</span> <span class='kw'>&lt;-</span> <span class='fu'>ds_basic</span>(<span class='no'>data_file</span>, <span class='st'>'stimulus_ID'</span>, <span class='fl'>18</span>,
-                <span class='kw'>label_levels_to_use</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>"car"</span>, <span class='st'>"hand"</span>, <span class='st'>"kiwi"</span>))
+<span class='co'># One can specify a subset of labels levels to be used in decoding. Here</span>
+<span class='co'>#  we just do a three-way decoding analysis between "car", "hand" and "kiwi".</span>
+<span class='no'>ds</span> <span class='kw'>&lt;-</span> <span class='fu'>ds_basic</span>(<span class='no'>data_file</span>, <span class='st'>"stimulus_ID"</span>, <span class='fl'>18</span>,
+  <span class='kw'>label_levels_to_use</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>"car"</span>, <span class='st'>"hand"</span>, <span class='st'>"kiwi"</span>)
+)
 
- <span class='co'># One never explicitely calls the get_data() function, but rather this is</span>
- <span class='co'># done by the cross-validator. However, to illustrate what this function</span>
- <span class='co'># does, we can call it explicitly here to get training and test data:</span>
- <span class='no'>all_cv_data</span> <span class='kw'>&lt;-</span> <span class='kw pkg'>NDTr</span><span class='kw ns'>:::</span><span class='fu'><a href='https://www.rdocumentation.org/packages/NDTr/topics/get_data'>get_data</a></span>(<span class='no'>ds</span>)
- <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/names'>names</a></span>(<span class='no'>all_cv_data</span>)</div><div class='output co'>#&gt;   [1] "train_labels" "test_labels"  "time_bin"     "site_0001"    "site_0002"   
+<span class='co'># One never explicitely calls the get_data() function, but rather this is</span>
+<span class='co'># done by the cross-validator. However, to illustrate what this function</span>
+<span class='co'># does, we can call it explicitly here to get training and test data:</span>
+<span class='no'>all_cv_data</span> <span class='kw'>&lt;-</span> <span class='kw pkg'>NDTr</span><span class='kw ns'>:::</span><span class='fu'><a href='https://www.rdocumentation.org/packages/NDTr/topics/get_data'>get_data</a></span>(<span class='no'>ds</span>)
+<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/names'>names</a></span>(<span class='no'>all_cv_data</span>)</div><div class='output co'>#&gt;   [1] "train_labels" "test_labels"  "time_bin"     "site_0001"    "site_0002"   
 #&gt;   [6] "site_0003"    "site_0004"    "site_0005"    "site_0006"    "site_0007"   
 #&gt;  [11] "site_0008"    "site_0009"    "site_0010"    "site_0011"    "site_0012"   
 #&gt;  [16] "site_0013"    "site_0014"    "site_0015"    "site_0016"    "site_0017"   
@@ -289,10 +291,7 @@ get training and testing splits of data that can be passed to a classifier.</p>
 #&gt; [136] "CV_1"         "CV_2"         "CV_3"         "CV_4"         "CV_5"        
 #&gt; [141] "CV_6"         "CV_7"         "CV_8"         "CV_9"         "CV_10"       
 #&gt; [146] "CV_11"        "CV_12"        "CV_13"        "CV_14"        "CV_15"       
-#&gt; [151] "CV_16"        "CV_17"        "CV_18"       </div><div class='input'>
- 
-
-</div></pre>
+#&gt; [151] "CV_16"        "CV_17"        "CV_18"       </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>

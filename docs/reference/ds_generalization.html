@@ -64,7 +64,7 @@ invariant/abstract to particular conditions." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">The Neural Decoding Toolbox in R</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.0.9002</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.0.9003</span>
       </span>
     </div>
 
@@ -219,7 +219,7 @@ used.</p></td>
     </tr>
     <tr>
       <th>site_IDs_to_exclude</th>
-      <td><p>A vector of integers specfying which sites should
+      <td><p>A vector of integers specifying which sites should
 be excluded.</p></td>
     </tr>
     <tr>
@@ -255,21 +255,25 @@ get training and testing splits of data that can be passed to a classifier.</p>
 <span class='co'># invariant by generating training data for objects presented at 'upper' and 'middle'</span>
 <span class='co'># locations, and generating test data at a 'lower' location.</span>
 
-<span class='no'>id_levels</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>"hand"</span>, <span class='st'>"flower"</span>, <span class='st'>"guitar"</span>, <span class='st'>"face"</span>, <span class='st'>"kiwi"</span>, <span class='st'>"couch"</span>,  <span class='st'>"car"</span>)
+<span class='no'>id_levels</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>"hand"</span>, <span class='st'>"flower"</span>, <span class='st'>"guitar"</span>, <span class='st'>"face"</span>, <span class='st'>"kiwi"</span>, <span class='st'>"couch"</span>, <span class='st'>"car"</span>)
 <span class='no'>train_label_levels</span> <span class='kw'>&lt;-</span> <span class='kw'>NULL</span>
 <span class='no'>test_label_levels</span> <span class='kw'>&lt;-</span> <span class='kw'>NULL</span>
-<span class='kw'>for</span> (<span class='no'>i</span> <span class='kw'>in</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/seq'>seq_along</a></span>(<span class='no'>id_levels</span>)){
-   <span class='no'>train_label_levels</span><span class='kw'>[[</span><span class='no'>i</span>]] <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/paste'>paste</a></span>(<span class='no'>id_levels</span>[<span class='no'>i</span>], <span class='st'>"upper"</span>,<span class='kw'>sep</span> <span class='kw'>=</span> <span class='st'>'_'</span>),
-                              <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/paste'>paste</a></span>(<span class='no'>id_levels</span>[<span class='no'>i</span>], <span class='st'>"middle"</span>,<span class='kw'>sep</span> <span class='kw'>=</span> <span class='st'>'_'</span>))
- <span class='no'>test_label_levels</span><span class='kw'>[[</span><span class='no'>i</span>]] <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/list'>list</a></span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/paste'>paste</a></span>(<span class='no'>id_levels</span>[<span class='no'>i</span>], <span class='st'>"lower"</span>,<span class='kw'>sep</span> <span class='kw'>=</span> <span class='st'>'_'</span>))
+<span class='kw'>for</span> (<span class='no'>i</span> <span class='kw'>in</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/seq'>seq_along</a></span>(<span class='no'>id_levels</span>)) {
+  <span class='no'>train_label_levels</span><span class='kw'>[[</span><span class='no'>i</span>]] <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(
+    <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/paste'>paste</a></span>(<span class='no'>id_levels</span>[<span class='no'>i</span>], <span class='st'>"upper"</span>, <span class='kw'>sep</span> <span class='kw'>=</span> <span class='st'>"_"</span>),
+    <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/paste'>paste</a></span>(<span class='no'>id_levels</span>[<span class='no'>i</span>], <span class='st'>"middle"</span>, <span class='kw'>sep</span> <span class='kw'>=</span> <span class='st'>"_"</span>)
+  )
+  <span class='no'>test_label_levels</span><span class='kw'>[[</span><span class='no'>i</span>]] <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/list'>list</a></span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/paste'>paste</a></span>(<span class='no'>id_levels</span>[<span class='no'>i</span>], <span class='st'>"lower"</span>, <span class='kw'>sep</span> <span class='kw'>=</span> <span class='st'>"_"</span>))
 }
 
 
 <span class='no'>data_file</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/system.file'>system.file</a></span>(<span class='st'>"extdata/ZD_150bins_50sampled.Rda"</span>, <span class='kw'>package</span> <span class='kw'>=</span> <span class='st'>"NDTr"</span>)
-<span class='no'>ds</span> <span class='kw'>&lt;-</span> <span class='fu'>ds_generalization</span>(<span class='no'>data_file</span>,
-                       <span class='st'>'combined_ID_position'</span>, <span class='fl'>18</span>,
-                       <span class='no'>train_label_levels</span>,
-                       <span class='no'>test_label_levels</span>)</div></pre>
+<span class='no'>ds</span> <span class='kw'>&lt;-</span> <span class='fu'>ds_generalization</span>(
+  <span class='no'>data_file</span>,
+  <span class='st'>"combined_ID_position"</span>, <span class='fl'>18</span>,
+  <span class='no'>train_label_levels</span>,
+  <span class='no'>test_label_levels</span>
+)</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>

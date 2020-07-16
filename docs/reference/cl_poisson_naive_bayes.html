@@ -63,7 +63,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">The Neural Decoding Toolbox in R</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.0.9002</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.0.9003</span>
       </span>
     </div>
 
@@ -158,11 +158,11 @@ is independent), or equivalently, adding the log of the probabilities for
 each feature together. The class with the highest likelihood value is chosen
 as the predicted label, and the decision values are the log likelihood
 values.</p>
-<p><strong>Note:</strong> this classifier uses spike counts, so the binned data must be converted
-to use this classifier, for exmaple, if you are using the basic_DS data
-source, then use_count_data = TRUE should be set in the contructor. Also,
-preprocessors that convert the data into values that are not integers should
-not be used, for example, the fp_zscore should not be used with this
+<p><strong>Note:</strong> this classifier uses spike counts, so the binned data must be
+converted to use this classifier, for example, if you are using the basic_DS
+data source, then use_count_data = TRUE should be set in the constructor.
+Also, preprocessors that convert the data into values that are not integers
+should not be used, for example, the fp_zscore should not be used with this
 classifier.</p>
 <p>Like all classifiers, this classifier learning a model based on training data
 and then makes predictions on new test data.</p>
@@ -177,12 +177,13 @@ and then makes predictions on new test data.</p>
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='co'># running a basic decoding analysis using the cl_max_correlation</span>
 
- <span class='no'>data_file</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/system.file'>system.file</a></span>(<span class='st'>"extdata/ZD_150bins_50sampled.Rda"</span>, <span class='kw'>package</span> <span class='kw'>=</span> <span class='st'>"NDTr"</span>)
- <span class='no'>ds</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='ds_basic.html'>ds_basic</a></span>(<span class='no'>data_file</span>, <span class='st'>'stimulus_ID'</span>, <span class='fl'>18</span>, <span class='kw'>use_count_data</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)
- <span class='no'>fps</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/list'>list</a></span>()
+<span class='no'>data_file</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/system.file'>system.file</a></span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/file.path'>file.path</a></span>(<span class='st'>"extdata"</span>, <span class='st'>"ZD_150bins_50sampled.Rda"</span>),
+                         <span class='kw'>package</span> <span class='kw'>=</span> <span class='st'>"NDTr"</span>)
+<span class='no'>ds</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='ds_basic.html'>ds_basic</a></span>(<span class='no'>data_file</span>, <span class='st'>"stimulus_ID"</span>, <span class='fl'>18</span>, <span class='kw'>use_count_data</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)
+<span class='no'>fps</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/list'>list</a></span>()
 
- <span class='no'>cl</span> <span class='kw'>&lt;-</span> <span class='fu'>cl_poisson_naive_bayes</span>()
- <span class='no'>cv</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='cv_standard.html'>cv_standard</a></span>(<span class='no'>ds</span>, <span class='no'>cl</span>, <span class='no'>fps</span>)</div><span class='co'># NOT RUN {</span>
+<span class='no'>cl</span> <span class='kw'>&lt;-</span> <span class='fu'>cl_poisson_naive_bayes</span>()
+<span class='no'>cv</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='cv_standard.html'>cv_standard</a></span>(<span class='no'>ds</span>, <span class='no'>cl</span>, <span class='no'>fps</span>)</div><span class='co'># NOT RUN {</span>
 <span class='no'>DECODING_RESULTS</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='run_decoding.html'>run_decoding</a></span>(<span class='no'>cv</span>)
 <span class='co'># }</span><div class='input'>
 </div></pre>

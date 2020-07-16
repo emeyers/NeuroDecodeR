@@ -63,7 +63,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">The Neural Decoding Toolbox in R</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.0.9002</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.0.9003</span>
       </span>
     </div>
 
@@ -147,7 +147,7 @@
 modular way to allow a range of neural decoding analyses. These five object
 types are:</p><ol>
 <li><p>Datasources (DS): Generate training and test splits of the data.</p></li>
-<li><p>Feature preprofessors (FP): Learn parameters on the training set and apply
+<li><p>Feature preprocessors (FP): Learn parameters on the training set and apply
 transformations to the training and test sets.</p></li>
 <li><p>Classifiers (CL): Learn the relationship between experimental conditions
 (i.e., "labels") and neural data on a training set, and then predict
@@ -162,7 +162,7 @@ cross-validation decoding procedure.</p></li>
 
     <p>Two data formats are used to do decoding analyses which are:</p><ol>
 <li><p><code>raster format</code> contains high temporal precision data where neural
-activity from each site is stored in a spearate file.</p></li>
+activity from each site is stored in a separate file.</p></li>
 <li><p><code>binned format</code> contains data from multiple sites where the data is more
 coarsely binned across time.</p></li>
 </ol>

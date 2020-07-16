@@ -30,7 +30,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">The Neural Decoding Toolbox in R</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.0.9002</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.0.9003</span>
       </span>
     </div>
 
@@ -115,7 +115,7 @@
 <li><p><strong>Datasources (DS)</strong> which generate training and test splits of the data.</p></li>
 <li><p><strong>Feature preprocessors (FP)</strong> which apply preprocessing to the training and test splits.</p></li>
 <li><p><strong>Classifiers (CL)</strong> which learn the relationship between experimental conditions and data on the training set, and then predict experimental conditions on the test data.</p></li>
-<li><p><strong>Result Metrics (RM)</strong> which take the output predictions of a classifier and summerize the prediction accuracy.</p></li>
+<li><p><strong>Result Metrics (RM)</strong> which take the output predictions of a classifier and summarize the prediction accuracy.</p></li>
 <li><p><strong>Cross-validators (CV)</strong> which take the DS, FP and CL objects and run a cross-validation decoding procedure.</p></li>
 </ol>
 <p>The NDTr comes with a few implementations of each of these objects, and defines interfaces that allow one to create new objects that extend the basic functionality of the five object classes. The following tutorial explains the data formats used by the Neural Decoding Toolbox, and how to run a decoding experiment using the basic versions of the four object classes.</p>
@@ -167,7 +167,7 @@
 <h3 class="hasAnchor">
 <a href="#determining-how-many-times-each-condition-was-repeated" class="anchor"></a>Determining how many times each condition was repeated</h3>
 <p>Before beginning the decoding analysis it is useful to know how many times each experimental condition (e.g., stimulus) was presented to each site (e.g., neuron). In particular, it is useful to know how many times the condition that has the fewest repetitions was presented. To do this we will use the function <code><a href="../reference/get_num_label_repetitions.html">get_num_label_repetitions()</a></code> which finds uses data that is in binned-format and calculates how many trials each label level was presented.</p>
-<p>Below we use the plot function assocated with the results that are returned to see how many times the labels were repeated.</p>
+<p>Below we use the plot function associated with the results that are returned to see how many times the labels were repeated.</p>
 <div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" data-line-number="1">binned_file_name &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/system.file">system.file</a></span>(<span class="st">"extdata/ZD_150bins_50sampled.Rda"</span>, <span class="dt">package=</span><span class="st">"NDTr"</span>)</a>
 <a class="sourceLine" id="cb4-2" data-line-number="2">label_rep_info &lt;-<span class="st"> </span><span class="kw"><a href="../reference/get_num_label_repetitions.html">get_num_label_repetitions</a></span>(binned_file_name, <span class="st">"stimulus_ID"</span>) </a>
 <a class="sourceLine" id="cb4-3" data-line-number="3"><span class="kw"><a href="https://www.rdocumentation.org/packages/graphics/topics/plot">plot</a></span>(label_rep_info)  </a></code></pre></div>
@@ -216,14 +216,14 @@
 <div id="creating-result-metrics-rm" class="section level3">
 <h3 class="hasAnchor">
 <a href="#creating-result-metrics-rm" class="anchor"></a>Creating result metrics (RM)</h3>
-<p>Result metrics take the predictions made by a classifier, as well as the groud truth (i.e., the actual label level values for what happened on each trial) and aggregate these predictions give a measure of the classifiers performance.</p>
-<p>Below we create two result metrics. The first result metric returns basic measures of decoding accuracy such as the proporition of predirctions that were correct (zero-one-loss). The second result metric create a confusion matrix showing the pattern of prediction mistakes that were made. Result metrics must also be put into a list to allow multiple result metrics to be used in an analysis.</p>
+<p>Result metrics take the predictions made by a classifier, as well as the ground truth (i.e., the actual label level values for what happened on each trial) and aggregate these predictions give a measure of the classifiers performance.</p>
+<p>Below we create two result metrics. The first result metric returns basic measures of decoding accuracy such as the proportion of predictions that were correct (zero-one-loss). The second result metric create a confusion matrix showing the pattern of prediction mistakes that were made. Result metrics must also be put into a list to allow multiple result metrics to be used in an analysis.</p>
 <div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb8-1" data-line-number="1">rms &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/list">list</a></span>(<span class="kw"><a href="../reference/rm_main_results.html">rm_main_results</a></span>(), <span class="kw"><a href="../reference/rm_confusion_matrix.html">rm_confusion_matrix</a></span>())</a></code></pre></div>
 </div>
 <div id="creating-a-cross-validator-cv" class="section level3">
 <h3 class="hasAnchor">
 <a href="#creating-a-cross-validator-cv" class="anchor"></a>Creating a cross-validator (CV)</h3>
-<p>Cross-validator objects take a datasource, a classifier, result metrics and optionally feature-preprocessor objects and run a decoding procedure by generating training and test data from the datasource, preprocessing this data with the feature-preprocessors training and testing the classifier on the resulting data, and agregrated the results with the result metrics. This procedure is run in two nested loops. The inner ‘cross-validation’ loop runs a cross-validation procedure where the classifier is trained and tested on different divisions of the data. The outer, ‘resample’ loop generates new splits (and also potentially pseudo-populations) of data, which are then run in a cross-validation procedure by the inner loop. The number of resample runs is thus a parameter for this analysis as well, which we have set to 2 to make the procedure run quickly, although in general more resample runs will yield smoother results (the default value is 50). Below we create a <code><a href="../reference/cv_standard.html">cv_standard()</a></code> object that runs this decoding procedure.</p>
+<p>Cross-validator objects take a datasource, a classifier, result metrics and optionally feature-preprocessor objects and run a decoding procedure by generating training and test data from the datasource, preprocessing this data with the feature-preprocessors, training and testing the classifier on the resulting data, and aggregating the results with the result metrics. This procedure is run in two nested loops. The inner ‘cross-validation’ loop runs a cross-validation procedure where the classifier is trained and tested on different divisions of the data. The outer, ‘resample’ loop generates new splits (and also potentially pseudo-populations) of data, which are then run in a cross-validation procedure by the inner loop. The number of resample runs is thus a parameter for this analysis as well, which we have set to 2 to make the procedure run quickly, although in general more resample runs will yield smoother results (the default value is 50). Below we create a <code><a href="../reference/cv_standard.html">cv_standard()</a></code> object that runs this decoding procedure.</p>
 <div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb9-1" data-line-number="1">cv &lt;-<span class="st"> </span><span class="kw"><a href="../reference/cv_standard.html">cv_standard</a></span>(ds, cl, fps, rms, <span class="dv">2</span>)</a></code></pre></div>
 </div>
 <div id="running-the-decoding-analysis" class="section level3">
@@ -243,14 +243,14 @@
 <p>The <code><a href="../reference/rm_main_results.html">rm_main_results()</a></code> plot function allows one to put plot temporal cross decoding results, where when training the classifier at one time and testing the classifier at a second time. This can be displayed by running the code below:</p>
 <div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb11-1" data-line-number="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/graphics/topics/plot">plot</a></span>(DECODING_RESULTS<span class="op">$</span>rm_main_results)</a></code></pre></div>
 <p><img src="introduction_tutorial_files/figure-html/plot_tcd-1.png" width="700"></p>
-<p>We also create simplier line plots by setting the <code>plot_type = 'line'</code>. Additionally, we can plot all three types of results that that rm_main_results object saves using the <code>type = 'all'</code> argument. Below we should the results for setting both these arguments.</p>
+<p>We also create simpler line plots by setting the <code>plot_type = 'line'</code>. Additionally, we can plot all three types of results that that rm_main_results object saves using the <code>type = 'all'</code> argument. Below we should the results for setting both these arguments.</p>
 <div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb12-1" data-line-number="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/graphics/topics/plot">plot</a></span>(DECODING_RESULTS<span class="op">$</span>rm_main_results, <span class="dt">result_type =</span> <span class="st">'all'</span>, <span class="dt">plot_type =</span> <span class="st">'line'</span>)</a></code></pre></div>
 <p><img src="introduction_tutorial_files/figure-html/plot_line-1.png" width="700"></p>
 </div>
 <div id="plotting-confusion-matrices" class="section level3">
 <h3 class="hasAnchor">
 <a href="#plotting-confusion-matrices" class="anchor"></a>Plotting confusion matrices</h3>
-<p>We can also plot the confusion matrices aggregaged from the rm_confusion_matrix object which shows the pattern of classification mistakes at different points in time.</p>
+<p>We can also plot the confusion matrices aggregated from the rm_confusion_matrix object which shows the pattern of classification mistakes at different points in time.</p>
 <div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb13-1" data-line-number="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/graphics/topics/plot">plot</a></span>(DECODING_RESULTS<span class="op">$</span>rm_confusion_matrix)</a></code></pre></div>
 <p><img src="introduction_tutorial_files/figure-html/plot_confusion_matrix-1.png" width="700"></p>
 <p>The <code><a href="../reference/rm_confusion_matrix.html">rm_confusion_matrix()</a></code> object also has a function <code>plot_MI()</code> which calculated mutual information from the confusion matrix and plots this as a function of time or as a TCD plot.</p>
@@ -261,7 +261,7 @@
 <div id="saving-the-results" class="section level2">
 <h2 class="hasAnchor">
 <a href="#saving-the-results" class="anchor"></a>Saving the results</h2>
-<p>Finally, the NDTr has “log” function that help you save and manage your results. Below we show how to use the <code><a href="../reference/log_save_results.html">log_save_results()</a></code> function which takes a <code>DECODING_RESULTS</code> object and the name of a directory. This function save the results to the specified directory and also logs the parameters used in the analysis so that they can later be retrived. For more information, see the tutorial on saving and managing results.</p>
+<p>Finally, the NDTr has “log” function that help you save and manage your results. Below we show how to use the <code><a href="../reference/log_save_results.html">log_save_results()</a></code> function which takes a <code>DECODING_RESULTS</code> object and the name of a directory. This function save the results to the specified directory and also logs the parameters used in the analysis so that they can later be retrieved. For more information, see the tutorial on saving and managing results.</p>
 <div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb15-1" data-line-number="1">results_dir_name &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/file.path">file.path</a></span>(<span class="st">"results"</span>, <span class="st">""</span>)</a>
 <a class="sourceLine" id="cb15-2" data-line-number="2"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/files2">dir.create</a></span>(results_dir_name)</a></code></pre></div>
 <pre><code>## Warning in dir.create(results_dir_name): 'results' already exists</code></pre>

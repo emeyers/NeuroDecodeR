@@ -30,7 +30,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">The Neural Decoding Toolbox in R</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.0.9002</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.0.9003</span>
       </span>
     </div>
 
@@ -105,7 +105,7 @@
 
     
     
-<p>The NDTr uses two closely related data formats called <code>raster format</code> and <code>binned format</code>. For almost all analysis, one starts by saving data from each site in <code>raster format</code>. One then converts it to <code>binned format</code> using the <code><a href="../reference/create_binned_data.html">create_binned_data()</a></code> which has the data from all the sites at a coaser temporal resolution. The <code>binned format</code> data is then used in all decoding analyses. More information about what is required to have data in these specified formats is described below.</p>
+<p>The NDTr uses two closely related data formats called <code>raster format</code> and <code>binned format</code>. For almost all analysis, one starts by saving data from each site in <code>raster format</code>. One then converts it to <code>binned format</code> using the <code><a href="../reference/create_binned_data.html">create_binned_data()</a></code> which has the data from all the sites at a coarser temporal resolution. The <code>binned format</code> data is then used in all decoding analyses. More information about what is required to have data in these specified formats is described below.</p>
 <div id="raster-format" class="section level2">
 <h2 class="hasAnchor">
 <a href="#raster-format" class="anchor"></a>Raster format</h2>
@@ -165,10 +165,10 @@
 <h2 class="hasAnchor">
 <a href="#binned-format" class="anchor"></a>Binned format</h2>
 <p>Binned format data contains data from multiple sites (e.g., data from many neurons, LFP channels, etc.). Data that is in binned format is very similar to data that is in raster format except that it contains information from multiple sites and often contains the information at a coarser resolution. For example, binned data would typically contain firing rates over some time interval sampled at a lower rate, as opposed to raster format data that would typically contain individual spikes sampled at a higher rate. Binned format data is typically created from raster format data using the function <code>create_binned_data</code> which converts a directory of raster format files into a binned-format file that is used in subsequent decoding analyses.</p>
-<p>Binned format data must be in a data frame where the number of rows in the data frame correspond to the number of trial in all experimental recording sessions across all sites. The binned format data frame must also containthe variables that start with the following prefixes:</p>
+<p>Binned format data must be in a data frame where the number of rows in the data frame correspond to the number of trial in all experimental recording sessions across all sites. The binned format data frame must also contain the variables that start with the following prefixes:</p>
 <ol style="list-style-type: decimal">
 <li><p><code>siteID.XXX</code> A unique number indicating a site a given row of data corresponds to.</p></li>
-<li><p><code>labels.XXX</code> These variables contain labels of which experimental conditions occured on a given trial.</p></li>
+<li><p><code>labels.XXX</code> These variables contain labels of which experimental conditions occurred on a given trial.</p></li>
 <li><p><code>time.X_Y</code> These variables contain data in a time range from X to Y.</p></li>
 </ol>
 <p>There can also be two additional optional variables in a binned format data frame which are:</p>

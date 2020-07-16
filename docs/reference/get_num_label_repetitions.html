@@ -32,8 +32,8 @@
 
 <meta property="og:title" content="Get the number of trial repetitions for a given label — get_num_label_repetitions" />
 
-<meta property="og:description" content="Calculates how many repeated trials there are for each label level. This can be
-useful for selecting sites that have a minimum number of repetitions of
+<meta property="og:description" content="Calculates how many repeated trials there are for each label level. This can
+be useful for selecting sites that have a minimum number of repetitions of
 each stimulus or other experimental condition." />
 <meta name="twitter:card" content="summary" />
 
@@ -65,7 +65,7 @@ each stimulus or other experimental condition." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">The Neural Decoding Toolbox in R</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.0.9002</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.0.9003</span>
       </span>
     </div>
 
@@ -138,8 +138,8 @@ each stimulus or other experimental condition." />
 
     <div class="ref-description">
     
-    <p>Calculates how many repeated trials there are for each label level. This can be
-useful for selecting sites that have a minimum number of repetitions of
+    <p>Calculates how many repeated trials there are for each label level. This can
+be useful for selecting sites that have a minimum number of repetitions of
 each stimulus or other experimental condition.</p>
     
     </div>
@@ -168,15 +168,15 @@ If not set, all levels will be used.</p></td>
     
     <h2 class="hasAnchor" id="note"><a class="anchor" href="#note"></a>Note</h2>
 
-    <p>The retured value is an S3 object that inherts from data.frame that
+    <p>The returned value is an S3 object that inherits from data.frame that
 has an associated plot() method.</p>
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'> <span class='no'>data_file</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/system.file'>system.file</a></span>(<span class='st'>"extdata/ZD_150bins_50sampled.Rda"</span>, <span class='kw'>package</span> <span class='kw'>=</span> <span class='st'>"NDTr"</span>)
- <span class='no'>label_rep_info</span> <span class='kw'>&lt;-</span> <span class='fu'>get_num_label_repetitions</span>(<span class='no'>data_file</span>, <span class='st'>"stimulus_ID"</span>)
- <span class='fu'><a href='https://www.rdocumentation.org/packages/graphics/topics/plot'>plot</a></span>(<span class='no'>label_rep_info</span>)</div><div class='img'><img src='get_num_label_repetitions-1.png' alt='' width='700' height='433' /></div><div class='input'> 
- 
+    <pre class="examples"><div class='input'><span class='no'>data_file</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/system.file'>system.file</a></span>(<span class='st'>"extdata/ZD_150bins_50sampled.Rda"</span>, <span class='kw'>package</span> <span class='kw'>=</span> <span class='st'>"NDTr"</span>)
+<span class='no'>label_rep_info</span> <span class='kw'>&lt;-</span> <span class='fu'>get_num_label_repetitions</span>(<span class='no'>data_file</span>, <span class='st'>"stimulus_ID"</span>)
+<span class='fu'><a href='https://www.rdocumentation.org/packages/graphics/topics/plot'>plot</a></span>(<span class='no'>label_rep_info</span>)</div><div class='img'><img src='get_num_label_repetitions-1.png' alt='' width='700' height='433' /></div><div class='input'>
+
 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
