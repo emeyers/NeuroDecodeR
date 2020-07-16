@@ -52,9 +52,8 @@ possible to run a range of different decoding analyses.
 
 Below is a brief illustration of how to use the NDTr to do a simple
 decoding analysis. To learn how to use the NDTr please see the
-[introduction tutorial](introduction_tutorial.html), the [generalization
-tutorial](generalization_tutorial.html) and the [documentation
-website](https://emeyers.github.io/NDTr/).
+[documentation website](https://emeyers.github.io/NDTr/) and the package
+vignettes.
 
 ``` r
 library(NDTr)
@@ -91,3 +90,6 @@ plot(DECODING_RESULTS$rm_main_results)
 
 The documentation for this package is available at:
 <https://emeyers.github.io/NDTr/>
+
+To get started we recommend you read the [introductory
+tutorial](https://emeyers.github.io/NDTr/articles/introduction_tutorial.html)
