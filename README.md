@@ -78,14 +78,14 @@ DECODING_RESULTS <- run_decoding(cv)
 plot(DECODING_RESULTS$rm_main_results, result_type = "all", plot_type = "line")
 ```
 
-<img src="README-line_plot-1.png" style="display: block; margin: auto;" />
+<img src="man/figures/README-line_plot-1.png" style="display: block; margin: auto;" />
 
 ``` r
 # create a temporal cross decoding plot
 plot(DECODING_RESULTS$rm_main_results)
 ```
 
-<img src="README-TCD_plot-1.png" style="display: block; margin: auto;" />
+<img src="man/figures/README-TCD_plot-1.png" style="display: block; margin: auto;" />
 
 ## Documentation
 
