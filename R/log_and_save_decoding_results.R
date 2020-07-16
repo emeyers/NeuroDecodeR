@@ -339,7 +339,7 @@ log_load_results_from_result_name <- function(result_name, results_directory_nam
 add_last_character_to_directory_name <- function(directory_name){
   
   # if the directory name does not end with a slash, add a slash to the directory name
-  directory_name <- file.path(paste0(dirname(directory_name), basename(directory_name)), "")
+  directory_name <- file.path(dirname(directory_name), basename(directory_name), "")
   
   directory_name
   

@@ -48,11 +48,7 @@ create_binned_data <- function(raster_dir_name,
 
 
   # if the directory name does not end with a slash, add a slash 
-  last_dir_char <- substr(raster_dir_name, nchar(raster_dir_name), nchar(raster_dir_name))
-  if (!(last_dir_char == "\\" || last_dir_char == "/")) {
-    raster_dir_name <- file.path(raster_dir_name, "")
-  }
-
+  raster_dir_name <- file.path(dirname(raster_dir_name), basename(raster_dir_name), "")
 
   file_names <- list.files(raster_dir_name, pattern = files_contain)
 
