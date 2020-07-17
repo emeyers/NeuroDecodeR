@@ -53,6 +53,8 @@
 #' cl <- cl_max_correlation()
 #'
 #' cv <- cv_standard(ds, cl, fps)
+#' 
+#' 
 #' @family cross-validator
 #'
 #'
@@ -86,8 +88,7 @@ cv_standard <- function(datasource,
     num_resample_runs = num_resample_runs,
     result_metrics = result_metrics,
     test_only_at_training_time = test_only_at_training_time,
-    run_parallel = run_parallel
-  )
+    run_parallel = run_parallel)
 
   attr(the_cv, "class") <- "cv_standard"
   the_cv
@@ -99,6 +100,7 @@ cv_standard <- function(datasource,
 
 #' @export
 run_decoding.cv_standard <- function(cv_obj) {
+  
   analysis_start_time <- Sys.time()
 
   # copy over the main objects
@@ -115,7 +117,7 @@ run_decoding.cv_standard <- function(cv_obj) {
 
     # register parallel resources
     cores <- parallel::detectCores()
-    the_cluster <- makeCluster(cores, type = "SOCK")
+    the_cluster <- parallel::makeCluster(cores, type = "SOCK")
     doSNOW::registerDoSNOW(the_cluster)
 
     "%do_type%" <- get("%dopar%")
@@ -229,7 +231,7 @@ run_decoding.cv_standard <- function(cv_obj) {
 
   # close parallel resources
   if (run_parallel) {
-    stopCluster(the_cluster)
+    parallel::stopCluster(the_cluster)
   }
 
 

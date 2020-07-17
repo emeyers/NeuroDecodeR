@@ -40,8 +40,6 @@
 #' @docType package
 #' @name NDTr
 #'
-#' @import parallel
-#' @import doParallel
 #' @import foreach
 #' @import dplyr
 #' @import ggplot2
