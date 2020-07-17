@@ -165,10 +165,13 @@ aggregate_CV_split_results.rm_main_results <- function(rm_obj, prediction_result
   }
 
 
+  options <- attr(rm_obj, "options")
+  options$zero_one_loss_chance_level <- 1/length(unique(prediction_results$actual_labels))
+  
   new_rm_main_results(
     the_results,
     "results combined over one cross-validation split",
-    attributes(rm_obj)$options)
+    options)
   
 }
 
@@ -255,7 +258,9 @@ plot.rm_main_results <- function(x, ..., result_type = "zero_one_loss", plot_typ
 
   # parse which type of results should be plotted
   if (result_type == "all") {
+    
     # do nothing
+    
   } else if (result_type == "zero_one_loss") {
     
     main_results <- dplyr::select(main_results, .data$train_time, .data$test_time, .data$zero_one_loss)
@@ -281,7 +286,6 @@ plot.rm_main_results <- function(x, ..., result_type = "zero_one_loss", plot_typ
     warning(paste0(
       "result_type must be set to either 'all', 'zero_one_loss', 'normalized_rank', or 'decision_vals'.",
       "Using the default value of all"))
-    
   }
 
 
@@ -306,7 +310,15 @@ plot.rm_main_results <- function(x, ..., result_type = "zero_one_loss", plot_typ
       result_type = replace(result_type, result_type == "normalized_rank", "Normalized rank"),
       result_type = replace(result_type, result_type == "decision_vals", "Decision values"))
 
-
+  
+  # data frame for plotting a horizontal line at chance decoding accuracy levels
+  zero_one_loss_chance <- 100 * attributes(DECODING_RESULTS$rm_main_results)$options$zero_one_loss_chance_level
+  chance_accuracy_df <- data.frame(
+    result_type = c("Zero-one loss", "Normalized rank", "Decision values"),
+    chance_level = c(zero_one_loss_chance, .5, NA)) %>%
+    dplyr::filter(.data$result_type %in% unique(main_results$result_type))
+  
+  
   # if only a single time, just plot a bar for the decoding accuracy
   if (length(unique(main_results$train_time)) == 1) {
     
@@ -324,16 +336,26 @@ plot.rm_main_results <- function(x, ..., result_type = "zero_one_loss", plot_typ
     main_results %>%
       dplyr::filter(.data$train_time == .data$test_time) %>%
       ggplot(aes(.data$test_time, .data$accuracy)) +
-      geom_line() +
       facet_wrap(~result_type, scales = "free") +
       xlab("Time") +
-      ylab("Accuracy")
+      ylab("Accuracy") +
+      geom_hline(data = chance_accuracy_df, 
+                 aes(yintercept = chance_level),
+                 color = "maroon") + 
+      geom_line() + 
+      theme_classic() + 
+      theme(
+        panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank(),
+        strip.background = element_rect(colour = "white", fill = "white"))
+      
     
   } else {
 
     # if trained and testing at all times, create a TCD plot
 
     if (result_type != "all") {
+      
       g <- main_results %>%
         ggplot(aes(.data$test_time, .data$train_time, fill = .data$accuracy)) +
         geom_tile() +
