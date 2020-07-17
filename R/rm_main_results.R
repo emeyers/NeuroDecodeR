@@ -340,7 +340,11 @@ plot.rm_main_results <- function(x, ..., result_type = "zero_one_loss", plot_typ
         facet_wrap(~result_type) +
         scale_fill_continuous(type = "viridis", name = "Prediction \n accuracy") +
         ylab("Train time") +
-        xlab("Test time")
+        xlab("Test time") +
+        theme(
+          panel.grid.major = element_blank(),
+          panel.grid.minor = element_blank(),
+          strip.background = element_rect(colour = "white", fill = "white"))
 
       g
       
@@ -370,7 +374,7 @@ plot.rm_main_results <- function(x, ..., result_type = "zero_one_loss", plot_typ
       })
 
       all_TCD_plots[["ncol"]] <- 3
-      do.call(grid.arrange, all_TCD_plots)
+      do.call(gridExtra::grid.arrange, all_TCD_plots)
     }
     
   }
