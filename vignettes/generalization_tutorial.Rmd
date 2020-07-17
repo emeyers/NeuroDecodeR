@@ -84,7 +84,7 @@ binning the data see the [introduction tutorial](introduction_tutorial.html).
 
 
 
-```{r bin_data, results = 'hide'}
+```{r bin_data, results = 'hide', message = FALSE}
 
 raster_dir_name <- file.path(system.file("extdata", package = "NDTr"), 
                              "Zhang_Desimone_7object_raster_data_rda")
