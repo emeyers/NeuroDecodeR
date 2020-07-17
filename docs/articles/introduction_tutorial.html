@@ -245,18 +245,16 @@
 <p><img src="introduction_tutorial_files/figure-html/plot_tcd-1.png" width="700"></p>
 <p>We also create simpler line plots by setting the <code>plot_type = 'line'</code>. Additionally, we can plot all three types of results that that rm_main_results object saves using the <code>type = 'all'</code> argument. Below we should the results for setting both these arguments.</p>
 <div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb12-1" data-line-number="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/graphics/topics/plot">plot</a></span>(DECODING_RESULTS<span class="op">$</span>rm_main_results, <span class="dt">result_type =</span> <span class="st">'all'</span>, <span class="dt">plot_type =</span> <span class="st">'line'</span>)</a></code></pre></div>
-<pre><code>## Warning: Use of `chance_accuracy_df$chance_level` is discouraged. Use
-## `chance_level` instead.</code></pre>
 <p><img src="introduction_tutorial_files/figure-html/plot_line-1.png" width="700"></p>
 </div>
 <div id="plotting-confusion-matrices" class="section level3">
 <h3 class="hasAnchor">
 <a href="#plotting-confusion-matrices" class="anchor"></a>Plotting confusion matrices</h3>
 <p>We can also plot the confusion matrices aggregated from the rm_confusion_matrix object which shows the pattern of classification mistakes at different points in time.</p>
-<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb14-1" data-line-number="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/graphics/topics/plot">plot</a></span>(DECODING_RESULTS<span class="op">$</span>rm_confusion_matrix)</a></code></pre></div>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb13-1" data-line-number="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/graphics/topics/plot">plot</a></span>(DECODING_RESULTS<span class="op">$</span>rm_confusion_matrix)</a></code></pre></div>
 <p><img src="introduction_tutorial_files/figure-html/plot_confusion_matrix-1.png" width="700"></p>
 <p>The <code><a href="../reference/rm_confusion_matrix.html">rm_confusion_matrix()</a></code> object also has a function <code>plot_MI()</code> which calculated mutual information from the confusion matrix and plots this as a function of time or as a TCD plot.</p>
-<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb15-1" data-line-number="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/graphics/topics/plot">plot</a></span>(DECODING_RESULTS<span class="op">$</span>rm_confusion_matrix, <span class="dt">result_type =</span> <span class="st">"mutual_information"</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb14-1" data-line-number="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/graphics/topics/plot">plot</a></span>(DECODING_RESULTS<span class="op">$</span>rm_confusion_matrix, <span class="dt">result_type =</span> <span class="st">"mutual_information"</span>)</a></code></pre></div>
 <p><img src="introduction_tutorial_files/figure-html/plot_MI-1.png" width="700"></p>
 </div>
 </div>
@@ -264,10 +262,10 @@
 <h2 class="hasAnchor">
 <a href="#saving-the-results" class="anchor"></a>Saving the results</h2>
 <p>Finally, the NDTr has “log” function that help you save and manage your results. Below we show how to use the <code><a href="../reference/log_save_results.html">log_save_results()</a></code> function which takes a <code>DECODING_RESULTS</code> object and the name of a directory. This function save the results to the specified directory and also logs the parameters used in the analysis so that they can later be retrieved. For more information, see the tutorial on saving and managing results.</p>
-<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb16-1" data-line-number="1">results_dir_name &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/file.path">file.path</a></span>(<span class="st">"results"</span>, <span class="st">""</span>)</a>
-<a class="sourceLine" id="cb16-2" data-line-number="2"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/files2">dir.create</a></span>(results_dir_name)</a>
-<a class="sourceLine" id="cb16-3" data-line-number="3"></a>
-<a class="sourceLine" id="cb16-4" data-line-number="4"><span class="kw"><a href="../reference/log_save_results.html">log_save_results</a></span>(DECODING_RESULTS, results_dir_name)</a></code></pre></div>
+<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb15-1" data-line-number="1">results_dir_name &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/file.path">file.path</a></span>(<span class="st">"results"</span>, <span class="st">""</span>)</a>
+<a class="sourceLine" id="cb15-2" data-line-number="2"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/files2">dir.create</a></span>(results_dir_name)</a>
+<a class="sourceLine" id="cb15-3" data-line-number="3"></a>
+<a class="sourceLine" id="cb15-4" data-line-number="4"><span class="kw"><a href="../reference/log_save_results.html">log_save_results</a></span>(DECODING_RESULTS, results_dir_name)</a></code></pre></div>
 <pre><code>## Warning in log_save_results(DECODING_RESULTS, results_dir_name): The manifest file does not exist.
 ##   Assuming this is the first result that is saved and creating manifest file</code></pre>
 </div>
