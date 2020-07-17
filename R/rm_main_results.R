@@ -342,7 +342,7 @@ plot.rm_main_results <- function(x, ..., result_type = "zero_one_loss", plot_typ
       xlab("Time") +
       ylab("Accuracy") +
       geom_hline(data = chance_accuracy_df, 
-                 aes(yintercept = chance_accuracy_df$chance_level),
+                 aes(yintercept = .data$chance_level),
                  color = "maroon", na.rm=TRUE) + 
       geom_line() + 
       theme_classic() + 
