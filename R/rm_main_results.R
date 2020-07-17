@@ -303,6 +303,7 @@ plot.rm_main_results <- function(x, ..., result_type = "zero_one_loss", plot_typ
   # main_results$train_time <- get_time_range_strings(main_results$train_time)
   # main_results$test_time <- get_time_range_strings(main_results$test_time)
 
+  
   main_results <- main_results %>%
     tidyr::gather("result_type", "accuracy", -.data$train_time, -.data$test_time) %>%
     dplyr::mutate(
@@ -312,7 +313,8 @@ plot.rm_main_results <- function(x, ..., result_type = "zero_one_loss", plot_typ
 
   
   # data frame for plotting a horizontal line at chance decoding accuracy levels
-  zero_one_loss_chance <- 100 * attributes(DECODING_RESULTS$rm_main_results)$options$zero_one_loss_chance_level
+  #  (chance level from the input x which is the rm_main_results object passed to plot)
+  zero_one_loss_chance <- 100 * attributes(x)$options$zero_one_loss_chance_level
   chance_accuracy_df <- data.frame(
     result_type = c("Zero-one loss", "Normalized rank", "Decision values"),
     chance_level = c(zero_one_loss_chance, .5, NA)) %>%
@@ -340,8 +342,8 @@ plot.rm_main_results <- function(x, ..., result_type = "zero_one_loss", plot_typ
       xlab("Time") +
       ylab("Accuracy") +
       geom_hline(data = chance_accuracy_df, 
-                 aes(yintercept = chance_level),
-                 color = "maroon") + 
+                 aes(yintercept = chance_accuracy_df$chance_level),
+                 color = "maroon", na.rm=TRUE) + 
       geom_line() + 
       theme_classic() + 
       theme(
