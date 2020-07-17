@@ -36,7 +36,9 @@
 #'
 #' # using a linear kernel
 #' cl <- cl_svm(kernel = "linear")
+#' 
 #' @seealso e1071
+#' 
 #' @family classifier
 
 
@@ -46,10 +48,12 @@
 # the constructor
 #' @export
 cl_svm <- function(...) {
+  
   options <- list(...)
   the_classifier <- list(svm_options = options)
   attr(the_classifier, "class") <- "cl_svm"
   the_classifier
+  
 }
 
 
@@ -76,10 +80,11 @@ get_predictions.cl_svm <- function(cl_obj, training_set, test_set) {
       unlist(cl_obj$svm_options))
 
     names(all_arguments) <- c("x", "y", names(cl_obj$svm_options))
+    
   }
 
 
-  trained_svm <- do.call(svm, all_arguments)
+  trained_svm <- do.call(e1071::svm, all_arguments)
 
 
   ### Test the classifier  ---------------------------------------------------
@@ -90,8 +95,7 @@ get_predictions.cl_svm <- function(cl_obj, training_set, test_set) {
   results <- data.frame(
     test_time = test_set$time_bin,
     actual_labels = test_set$test_labels,
-    predicted_labels = predicted_labels
-  )
+    predicted_labels = predicted_labels)
 
 
   # Parse the all-pairs decision values ---------------------------------------
@@ -114,9 +118,7 @@ get_predictions.cl_svm <- function(cl_obj, training_set, test_set) {
   decision_val_df <- full_join(pos_wins, neg_wins,
     by = c(
       "pos_class" = "neg_class",
-      "test_point_num" = "test_point_num"
-    )
-  ) %>%
+      "test_point_num" = "test_point_num")) %>%
     tidyr::replace_na(list(pos_wins = 0, neg_wins = 0)) %>%
     mutate(tot_wins = pos_wins + neg_wins) %>%
     select(.data$pos_class, .data$tot_wins, .data$test_point_num) %>%
@@ -129,6 +131,7 @@ get_predictions.cl_svm <- function(cl_obj, training_set, test_set) {
   results <- cbind(results, decision_val_df)
 
   results
+  
 }
 
 
@@ -151,8 +154,10 @@ get_parameters.cl_svm <- function(ndtr_obj) {
       dplyr::mutate(across(where(is.factor), as.character))
 
     names(parameter_df) <- paste0("cl_svm.", names(parameter_df))
+    
   }
 
 
   parameter_df
+  
 }

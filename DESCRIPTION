@@ -34,8 +34,7 @@ Imports:
     stringr,
     tibble,
     tictoc,
-    tidyr,
-    tidyselect
+    tidyr
 Suggests: 
     knitr,
     rmarkdown,

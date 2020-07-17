@@ -44,7 +44,6 @@
 #' @import doParallel
 #' @import foreach
 #' @import dplyr
-#' @import e1071
 #' @import ggplot2
 #' @import magrittr
 #' @importFrom stats cor pf predict

@@ -40,6 +40,7 @@ cl <- cl_svm()
 
 # using a linear kernel
 cl <- cl_svm(kernel = "linear")
+
 }
 \seealso{
 e1071
