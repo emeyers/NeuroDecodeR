@@ -6,16 +6,22 @@
 # load the test data
 load("example_DECODING_RESULTS.Rda")
 
-results_dir_name <- file.path("testing_save_results", "")
+results_dir_name <- trimws(file.path("testing_save_results", " "))
 
 
 # delete any saved results and manifest files that already exist
-if (file.exists(results_dir_name)){
+if (file.exists(basename(results_dir_name))) {
+  
   the_files <- paste0(results_dir_name, list.files(results_dir_name))
-  file.remove(the_files)
-} 
+  #file.remove(the_files)
+  unlink(basename(the_files), recursive = TRUE)
+  
+} else {
+  
+  dir.create(results_dir_name)
+  
+}
 
-dir.create(results_dir_name)
 
 
 
@@ -133,6 +139,7 @@ test_that("log_load_results_from_result_name() can load saved results based on t
 # clean up by deleting any saved results and manifest file
 the_files <- paste0(results_dir_name, list.files(results_dir_name))
 file.remove(the_files)
+unlink(basename(results_dir_name), recursive = TRUE, force = TRUE)
 
 
 

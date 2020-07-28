@@ -50,7 +50,7 @@ convert_matlab_raster_data <- function(matlab_raster_dir_name,
 
   # if matlab directory name ends with a slash, remove this slash
   matlab_raster_dir_name <- paste0(
-    file.path(dirname(matlab_raster_dir_name), ""),
+    trimws(file.path(dirname(matlab_raster_dir_name), " ")),
     basename(matlab_raster_dir_name)
   )
 

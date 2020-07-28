@@ -1,8 +1,8 @@
 
 
 
-raster_dir_name <- file.path(system.file("extdata", package = "NDTr"), 
-                             "Zhang_Desimone_7object_raster_data_rda")
+raster_dir_name <- trimws(file.path(system.file("extdata", package = "NDTr"), 
+                             "Zhang_Desimone_7object_raster_data_rda", " "))
 
 
 
@@ -42,14 +42,14 @@ test_that("convert_matlab_raster_data() convert MATLAB raster data to R raster d
                                    "Zhang_Desimone_7object_raster_data_small_mat")
   
   # create temporary directory to hold converted data
-  r_raster_dir_name <- file.path("test_convert_matlab_raster_data", "")
+  r_raster_dir_name <- trimws(file.path("test_convert_matlab_raster_data", " "))
   
   
   # delete any saved results and manifest files that already exist
-  if (file.exists(r_raster_dir_name)){
+  if (file.exists(basename(r_raster_dir_name))) {
     the_files <- paste0(r_raster_dir_name, list.files(r_raster_dir_name))
     file.remove(the_files)
-    file.remove(r_raster_dir_name)
+    unlink(basename(r_raster_dir_name), recursive = TRUE, force = TRUE)
   } 
   
   
@@ -74,8 +74,8 @@ test_that("convert_matlab_raster_data() convert MATLAB raster data to R raster d
 
   the_files <- paste0(r_raster_dir_name, list.files(r_raster_dir_name))
   file.remove(the_files)
-  file.remove(r_raster_dir_name)
-
+  unlink(basename(r_raster_dir_name), recursive = TRUE, force = TRUE)
+  
 })
 
 
