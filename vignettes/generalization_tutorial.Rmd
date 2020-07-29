@@ -10,12 +10,12 @@ vignette: >
  
 The following tutorial shows how to use the Neural Decoding Toolbox in R (NDTr)
 to conduct a generalization analysis which can test whether a population of
-neural activity contains information in a invariant/abstract representation. In
+neural activity contains information in an invariant/abstract representation. In
 particular, we will use the Zhang-Desimone 7 object dataset to examine how
 invariant neural representations in the Inferior Temporal cortex are to changes
 in the position of stimuli. This tutorial assumes that one is already familiar
-with the basics of the NDT as covered in the introductory tutorial.The NDTr is
-based on the MATLAB Neural Decoding Toolbox which you can learn more about at
+with the basics of the NDT as covered in the introductory tutorial. The NDTr is
+based on the MATLAB Neural Decoding Toolbox, which you can learn more about at
 [www.readout.info](www.readout.info).
 
 
@@ -24,11 +24,11 @@ based on the MATLAB Neural Decoding Toolbox which you can learn more about at
 
 An important step in solving many complex tasks involves creating
 abstract/invariant representations from widely varying input patterns. For
-example, in order to act appropriately in social settings it is important to be
-able to recognize individual people. However the images of a particular person
+example, in order to act appropriately in social settings, it is important to be
+able to recognize individual people. However, the images of a particular person
 that is projected on our retinas can be very different due to the fact that the
 person might be at different distances from us, in different lighting
-conditions, etc. Thus at some level in our brains, there must be a neural
+conditions, etc. Thus, at some level in our brains, there must be a neural
 representation that has abstracted away all the details present in particular
 images, in order to create abstract/invariant representations that are useful
 for behavior.
@@ -39,7 +39,7 @@ that are invariant to particular transformations. To do such a *generalization
 analysis*, one can train a classifier under one set of conditions, and then see
 if the classifier can generalize to a new related set of conditions in which a
 particular transformation has been applied. The datasource object
-`ds_generalization()` is designed for this purpose and we will explain how to
+`ds_generalization()` is designed for this purpose, and we will explain how to
 use it below.
 
 
@@ -47,12 +47,12 @@ use it below.
  
 ### Using the Zhang-Desimone 7 object dataset to test position invariance
 
-In this tutorial we will use the [Zhang-Desimone 7 object
+In this tutorial, we will use the [Zhang-Desimone 7 object
 dataset](datasets.html) to test how invariant neural
 representations in Inferior Temporal (IT) cortex are to changes in the retinal
 position of objects. The Zhang-Desimone 7 object dataset consists of neural
 responses to 7 different objects that were shown to a monkey at three different
-retinal locations. To test how invariant neural representations in IT are, we
+retinal locations. To test how invariant neural representations are in IT, we
 will train the classifier with data from one location, and then test the
 classifier either at the same location or at a different location. If the neural
 representation in IT are invariant to position, then training and testing a
@@ -76,10 +76,10 @@ library(tidyr)
 
 ### Binning the data
 
-For this tutorial we will use binned-format data that consists of the firing
+For this tutorial, we will use binned-format data that consists of the firing
 rate in a 400 ms window that starts 100 ms after the onset of the stimulus. The
 following code shows how to create this binned data. For more information about
-binning the data see the [introduction tutorial](introduction_tutorial.html).
+binning the data, see the [introduction tutorial](introduction_tutorial.html).
 
 
 
@@ -104,7 +104,7 @@ binned_file_name <- create_binned_data(raster_dir_name, "ZD", bin_width, step_si
 
 ### Creating a classifier and a preprocessor
 
-Next we will create a classifier object, a features preprocessor, and result
+Next, we will create a classifier object, a features preprocessor, and result
 metric objects that we will use in our analyses. We will use the same
 classifier, preprocessor and result metrics that were used in the basic
 tutorial.
@@ -126,15 +126,15 @@ rms <- list(rm_main_results(), rm_confusion_matrix())
 
 
 In order to train with data from particular locations and test with data from a
-different location we will use the
+different location, we will use the
 [`ds_generalization`](https://emeyers.github.io/NDTr/reference/ds_generalization.html)
 datasource. To use this datasource, we need to specify which label levels belong
-each training class and which label levels belong to each test class. We can do
+to each training class and which label levels belong to each test class. We can do
 by setting the `train_label_levels` and `test_label_levels` arguments to lists
 with the appropriate values. Each entry in these lists corresponds to the label
 levels for one class. For example, if we create a list train_levels[[1]]
 <- c('car_upper', 'car_middle'), and test_levels[[1]] = list('car_lower'),
-then this means that the first class will be trained with data from trials when
+this means that the first class will be trained with data from trials when
 the car was shown in the upper and middle positions, and the first class will
 have test data from trials in which cars where shown in the lower position.
 
@@ -165,9 +165,9 @@ ds <- ds_generalization(binned_file_name, 'combined_ID_position', num_cv_splits 
 ```
 
 
-Now that we have created this ds_generalization data source, can create a
+Now that we have created this ds_generalization data source, we can create a
 cross-validator as we did in the basic tutorial and get the results for training
-at upper and middle locations and testing at lower location.
+at upper and middle locations and testing at a lower location.
 
 
 ```{r ds_generalization_run}
@@ -195,22 +195,22 @@ DECODING_RESULTS$rm_main_results$zero_one_loss
 We will now create a full set of 9 results that are based on training at **one** of
 the three locations and testing a different locations. This can be done by
 creating two loops, one for each training location, and one for each test
-location, and creating a new datasource each iteration. 
+location, and by creating a new datasource each iteration. 
 
-It should be noted that the `ds_generalization` is built in such a way that the
-if a particular original label is mapping into the same training and test class
-(e.g., if `training_levels[[1]] <- list('car_upper')` and also `test_levels[[1]]
+It should be noted that the `ds_generalization` is built in such a way that
+if a particular original label is mapped to the same training and test class
+(e.g., if `training_levels[[1]] <- list('car_upper')` and `test_levels[[1]]
 <- list('car_upper')`, the data used in the training set will still come from
-different trials then the data used for the test set. Thus the cross-validation
+different trials than the data used for the test set. Thus, the cross-validation
 splits will still be valid because there will not be any of the same data in the
 training and test sets (if this mapping was done for all classes, one would end
-up getting the same results as using the ds_basic). Because there is not 'data
+up getting the same results as using the ds_basic). Because there is no 'data
 leakage’, the following code allows for fair comparisons between results where
 the classifier was trained and tested with data from the same location vs. where
-the classifier was trained and tested with data that was that come from different
+the classifier was trained and tested with data from different
 locations.
 
-Note, the code below will take several minutes to run. 
+Note that the code below will take several minutes to run. 
 
 
 ```{r generalization_analysis_all_locations}
@@ -279,7 +279,7 @@ for (iTrainPos in 1:3) {
 ### Plotting the results
 
 
-To plot all these results we will create some custom code. This code loads the
+To plot all these results, we will create some custom code. This code loads the
 results for each training and test location pair using the
 `log_load_results_from_result_name` function and save the results to a data
 frame. This data frame is then plotted using `ggplot2`.
@@ -327,10 +327,10 @@ all_results %>%
 
 
 
-From looking at the results we can see that the highest decoding accuracies are
+Looking at the results, we can see that the highest decoding accuracies are
 always obtained when training and testing the classifier at the same location. 
-However the results are well above chance when training the classifier at one
-location and testing the classifier at a different location showing there is a
+However, the results are well above chance when training the classifier at one
+location and testing the classifier at a different location, showing there is a
 large degree of position invariance in the Inferior Temporal Cortex.
 
 

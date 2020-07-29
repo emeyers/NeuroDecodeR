@@ -11,7 +11,7 @@ vignette: >
 The following tutorial gives a basic introduction to the data formats used by
 Neural Decoding Toolbox (NDTr) and shows how to run a simple decoding analysis.
 The tutorial is based on a dataset collected by Ying Zhang in Bob Desimone’s lab
-at MIT. The NDTr is based on the MATLAB Neural Decoding Toolbox which you can
+at MIT. The NDTr is based on the MATLAB Neural Decoding Toolbox, which you can
 learn more about at [www.readout.info](http://www.readout.info).
 
 
@@ -47,7 +47,7 @@ neural decoding in a flexible and robust way. The four types of objects are:
 The NDTr comes with a few implementations of each of these objects, and defines
 interfaces that allow one to create new objects that extend the basic
 functionality of the five object classes. The following tutorial explains the
-data formats used by the Neural Decoding Toolbox, and how to run a decoding
+data formats used by the Neural Decoding Toolbox and how to run a decoding
 experiment using the basic versions of the four object classes.
  
  
@@ -59,15 +59,15 @@ The data used in this tutorial was collected by Ying Zhang in Bob Desimone’s l
 at MIT and was used in the supplemental figures in the paper [Object decoding
 with attention in inferior temporal cortex, PNAS,
 2011](https://www.pnas.org/content/108/21/8850). The data consists of single
-unit recordings from the 132 neurons in inferior temporal cortex (IT). The
+unit recordings from 132 neurons in inferior temporal cortex (IT). The
 recordings were made while a monkey viewed 7 different objects that were
 presented at three different locations (the monkey was also shown images that
-consisted of three objects shown simultaneously and had to perform an attention
-task, however for the purposes of this tutorial we are only going to analyze
+consisted of three objects shown simultaneously and performed an attention
+task; however, for the purposes of this tutorial, we are only going to analyze
 data from trials when single objects were shown). Each object was presented
 approximately 20 times at each of the three locations.
 
-To start let us load some libraries we will use in this tutorial
+To start, let us load some libraries we will use in this tutorial.
 
 ```{r load_libraries, message=FALSE, warning=FALSE}
 
@@ -82,7 +82,7 @@ library(tidyr)
 
 ## Data formats
 
-In order to use the NDTr, the neural data must be in a usable format. Typically
+In order to use the NDTr, the neural data must be in a usable format. Typically,
 this involves putting the data in [raster format](data_formats.html) and then
 converting it to [binned format](data_formats.html) using the
 `create_binned_data()` function.
@@ -90,7 +90,7 @@ converting it to [binned format](data_formats.html) using the
 
 ### Raster format
 
-To run a decoding analysis using the NDTr you first need to have your data in a
+To run a decoding analysis using the NDTr, you first need to have your data in a
 usable format. In this tutorial we will use data collected by [Ying Zhang in Bob
 Desimone’s lab at MIT](datasets.hmtl). The directory
 extdata/Zhang_Desimone_7objects_raster_data_rda/ contains data in
@@ -114,7 +114,7 @@ test_valid_raster_format(file.path(raster_dir_name, file_name))
 ```
 
 
-Below we visualize the spiking pattern from this one neuron.
+Below, we visualize the spiking pattern for this one neuron.
 
 
 ```{r plot_raster_file, echo = FALSE}
@@ -137,8 +137,8 @@ ggplot(spikes_only_df, aes(x = time, y = trial_num)) +
 ```
 
 
-Here, the x-axis represents time in the experiment in milliseconds, and the
-y-axis represents different trials. Each black tick mark represents the time
+Here, the x-axis represents time in milliseconds, and the y-axis represents
+different trials. Each black tick mark represents a point in time
 when a neuron emitted an action potential.
 
 
@@ -146,16 +146,16 @@ when a neuron emitted an action potential.
 
 ### Binning the data
 
-The NDTr decoding objects operate on data that is in binned-format. To convert
-data in raster-format to binned-format, we can use the function
+The NDTr decoding objects operate on data in binned-format. To convert
+data from raster-format to binned-format, we can use the function
 `create_binned_data()`, which calculates the average firing rate of neurons over
-specified intervals and sampled with a specified frequency (i.e., a boxcar
+specified intervals sampled with a specified frequency (i.e., a boxcar
 filter is used). create_binned_data() takes in four arguments:
 
-1. the name of the directory where the raster-format data is stored 
-2. the name (potentially including a directory) that the binned data should be saved as
-3. a bin size that specifies how much time the firing rates should be calculated over
-4. a sampling interval that specifies how frequently to calculate these firing rates. 
+1. The name of the directory where the raster-format data is stored 
+2. The name (potentially including a directory) that the binned data should be saved as
+3. A bin size that specifies how much time the firing rates should be calculated over
+4. A sampling interval that specifies how frequently to calculate these firing rates. 
 
 To calculate the average firing rates in 150 ms bins sampled every 50 ms, the
 following commands can be used:
@@ -164,21 +164,21 @@ following commands can be used:
 
 library(NDTr)
 
-binned_file_name <- create_binned_data(raster_directory_name, "ZD", 150, 50)
+binned_file_name <- create_binned_data(raster_dir_name, "ZD", 150, 50)
 
 ```
 
 
 ### Determining how many times each condition was repeated
 
-Before beginning the decoding analysis it is useful to know how many times each
+Before beginning the decoding analysis, it is useful to know how many times each
 experimental condition (e.g., stimulus) was presented to each site (e.g.,
 neuron). In particular, it is useful to know how many times the condition that
-has the fewest repetitions was presented. To do this we will use the function
-`get_num_label_repetitions()` which finds uses data that is in binned-format and
+has the fewest repetitions was presented. To do this, we will use the function
+`get_num_label_repetitions()` which uses data in binned-format and
 calculates how many trials each label level was presented.
 
-Below we use the plot function associated with the results that are returned to
+Below, we use the plot function on the results to
 see how many times the labels were repeated.
 
 
@@ -190,38 +190,38 @@ plot(label_rep_info)
 
 ```
 
-Here we see that there are 132 neurons have 60 repetitions all of the labels,
-and that there are 6 neurons where the flower label was only presented 59 times.
-Thus if we want to use all the neurons in the decoding analysis the maximum
-number of cross-validation splits we could use would be 59. Alternatively, we
-could use 60 cross-validation splits and only use the 125 neurons that have 60
+Here, we see there are 132 neurons which have 60 repetitions of all the labels,
+and 6 neurons where the flower label was only presented 59 times.
+Thus, if we want to use all the neurons in the decoding analysis, the maximum
+number of cross-validation splits we could use is 59. Alternatively, we
+could use 60 cross-validation splits along with the 125 neurons that have 60
 repetitions.
 
 
 
 ## Performing a decoding analysis
 
-Performing a decoding analyses involves several steps:
+Performing a decoding analysis involves several steps:
 
-1. creating a datasource (DS) object that generates training and test splits of
+1. Creating a datasource (DS) object that generates training and test splits of
 the data.
 
-2. optionally creating feature-preprocessor (FP) objects that learn parameters
+2. Optionally creating feature-preprocessor (FP) objects that learn parameters
 from the training data, and preprocess the training and test data.
 
-3. creating a classifier (CL) object that learns the relationship between the
+3. Creating a classifier (CL) object that learns the relationship between the
 training data and training labels, and then evaluates the strength of this
 relationship on the test data.
 
-4. creating result metric (RM) objects that aggregate the predictions to create
-result summaries
+4. Creating result metric (RM) objects that aggregate the predictions to create
+result summaries.
 
-5. running a cross-validator object that using the datasource (DS), the
+5. Running a cross-validator object that using the datasource (DS), the
 feature-preprocessor (FP) and the classifier (CL) objects to do a
 cross-validation procedure that estimates the decoding accuracy.
 
 
-Below we describe how to create and run these objects on the Zhang-Desimone
+Below, we describe how to create and run these objects on the Zhang-Desimone
 dataset.
 
 
@@ -231,19 +231,19 @@ dataset.
 
 A datasource object is used by the cross-validator to generate training and test
 splits of the data. Below we create a `ds_basic()` object that takes binned-format
-data, name of the labels variable to be decoding, and a scalar that specifies
+data, name of the label variables to be decoded, and a scalar that specifies
 how many cross-validation splits to use. The default behavior of this datasource
 is to create test splits that have one example of each object in them and
 *num_cv_splits - 1* examples of each object in the training set.
 
 As calculated above, all 132 neurons have 59 repetitions of each stimulus, and
-125 neurons have 60 repetitions of each stimulus. Thus we can use up to 59
+125 neurons have 60 repetitions of each stimulus. Thus, we can use up to 59
 cross-validation splits using all neurons, or we could set the datasource to use
 only a subset of neurons and use 60 cross-validation splits. For the purpose of
 this tutorial, we will use all the neurons and only 20 cross-validation splits
-to make the code run a little faster. The `ds_basic()` datasource object also has
-many more properties that can be set, including specifying that only certain
-label levels or neurons should be used. 
+so the code runs a little faster. The `ds_basic()` datasource object also has
+many more properties that can be set, including specifying certain
+label levels or neurons to use.
 
 
 ```{r datasource}
@@ -264,8 +264,8 @@ ds <- ds_basic(binned_file_name, variable_to_decode, num_cv_splits)
 
 
 Feature preprocessors use the training set to learn particular parameters about
-the data, and then applying preprocessing to the training and test sets using
-these parameters. Below will we create a `fp_zscore()` preprocessor that zscore
+the data, and then apply preprocessing to the training and test sets using
+these parameters. Below, we will create a `fp_zscore()` preprocessor that zscore
 normalizes the data so that each neuron’s activity has approximately zero mean
 and a standard deviation of 1 over all trials. This feature-preprocessor is
 useful so that neurons with high firing rates do not end up contributing more to
@@ -291,7 +291,7 @@ Classifiers take a *training set* of data and learn the relationship between the
 neural responses and the experimental conditions (label levels) that were
 present on particular trials. The classifier is then used to make predictions
 about what experimental conditions are present on trials from a different *test
-set* of neural data. Below we create a `cl_max_correlation()` classifier which
+set* of neural data. Below, we create a `cl_max_correlation()` classifier which
 learns prototypes of each class k that consists of the mean of all training data
 from class k. The predicted class for a new test point x is the class that has
 the maximum correlation coefficient value between the x and each class
@@ -312,13 +312,13 @@ cl <- cl_max_correlation()
 
 Result metrics take the predictions made by a classifier, as well as the ground
 truth (i.e., the actual label level values for what happened on each trial) and
-aggregate these predictions give a measure of the classifiers performance.
+aggregate these predictions to give a measure of the classifier's performance.
 
-Below we create two result metrics. The first result metric returns basic
+Below, we create two result metrics. The first result metric returns basic
 measures of decoding accuracy such as the proportion of predictions that were
-correct (zero-one-loss). The second result metric create a confusion matrix
+correct (zero-one-loss). The second result metric creates a confusion matrix
 showing the pattern of prediction mistakes that were made. Result metrics must
-also be put into a list to allow multiple result metrics to be used in an
+also be put into a list so multiple result metrics can be used in an
 analysis.
 
 
@@ -336,18 +336,18 @@ rms <- list(rm_main_results(), rm_confusion_matrix())
 
 
 Cross-validator objects take a datasource, a classifier, result metrics and
-optionally feature-preprocessor objects and run a decoding procedure by
+optionally feature-preprocessor objects, and run a decoding procedure by
 generating training and test data from the datasource, preprocessing this data
 with the feature-preprocessors, training and testing the classifier on the
 resulting data, and aggregating the results with the result metrics. This
 procedure is run in two nested loops. The inner ‘cross-validation’ loop runs a
 cross-validation procedure where the classifier is trained and tested on
 different divisions of the data. The outer, ‘resample’ loop generates new splits
-(and also potentially pseudo-populations) of data, which are then run in a
+(and potentially pseudo-populations) of data, which are then run in a
 cross-validation procedure by the inner loop. The number of resample runs is
-thus a parameter for this analysis as well, which we have set to 2 to make the
-procedure run quickly, although in general more resample runs will yield
-smoother results (the default value is 50). Below we create a `cv_standard()`
+a parameter for this analysis as well, which we have set to 2 to make the
+procedure run quicker, although in general more resample runs will yield
+smoother results (the default value is 50). Below, we create a `cv_standard()`
 object that runs this decoding procedure.
 
 
@@ -361,8 +361,8 @@ cv <- cv_standard(ds, cl, fps, rms, 2)
 
 ### Running the decoding analysis 
 
-To run the decoding procedure we call the cross-validator’s run_cv_decoding
-method, and the results stored in an object DECODING_RESULTS.
+To run the decoding procedure, we call the cross-validator’s run_cv_decoding
+method, and the results are stored in an object DECODING_RESULTS.
 
 ```{r run_decoding}
  
@@ -373,15 +373,15 @@ DECODING_RESULTS <- run_decoding(cv)
 
 ## Plotting the results
 
-The DECODING_RESULTS object created is a list that has our result metrics that
-have aggregated the results over all the cross-validation splits. We can now use
-the result metrics plot functions to plot these aggregated results.
+The DECODING_RESULTS object created is a list that contains our result metrics, calculated
+by aggregating the results over all the cross-validation splits. We can now use
+the result metrics plot functions to visualize these aggregated results.
 
 
 ### Plotting the main results
 
-The `rm_main_results()` plot function allows one to put plot temporal cross decoding
-results, where when training the classifier at one time and testing the
+The `rm_main_results()` plot function allows one to plot temporal cross decoding
+results, where we are training the classifier at one time and testing the
 classifier at a second time. This can be displayed by running the code below:
 
 
@@ -392,9 +392,9 @@ plot(DECODING_RESULTS$rm_main_results)
 ```
 
 
-We also create simpler line plots by setting the `plot_type = 'line'`.
+We can also create simpler line plots by setting the `plot_type = 'line'`.
 Additionally, we can plot all three types of results that that rm_main_results
-object saves using the `type = 'all'` argument. Below we should the results for
+object saves using the `type = 'all'` argument. Below, we see the results by
 setting both these arguments.
 
 ```{r plot_line}
@@ -407,7 +407,7 @@ plot(DECODING_RESULTS$rm_main_results, result_type = 'all', plot_type = 'line')
 ### Plotting confusion matrices
 
 We can also plot the confusion matrices aggregated from the rm_confusion_matrix
-object which shows the pattern of classification mistakes at different points in
+object, which shows the pattern of classification mistakes at different points in
 time.
 
 ```{r plot_confusion_matrix}
@@ -417,9 +417,9 @@ plot(DECODING_RESULTS$rm_confusion_matrix)
 ```
 
 
-The `rm_confusion_matrix()` object also has a function `plot_MI()` which calculated
+The `rm_confusion_matrix()` object also has a function `plot_MI()` which calculates
 mutual information from the confusion matrix and plots this as a function of
-time or as a TCD plot.
+time or as a TCT plot.
 
 
 ```{r plot_MI}
@@ -431,10 +431,10 @@ plot(DECODING_RESULTS$rm_confusion_matrix, result_type = "mutual_information")
 
 ## Saving the results
 
-Finally, the NDTr has "log" function that help you save and manage your results.
-Below we show how to use the `log_save_results()` function which takes a
-`DECODING_RESULTS` object and the name of a directory. This function save the
-results to the specified directory and also logs the parameters used in the
+Finally, the NDTr has a "log" function that helps you save and manage your results.
+Below, we show how to use the `log_save_results()` function which takes a
+`DECODING_RESULTS` object and the name of a directory. This function saves the
+results to the specified directory and logs the parameters used in the
 analysis so that they can later be retrieved. For more information, see the
 tutorial on saving and managing results.
 
