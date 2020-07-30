@@ -5,21 +5,22 @@ raster_dir_name <- trimws(file.path(system.file("extdata", package = "NDTr"),
                              "Zhang_Desimone_7object_raster_data_rda", " "))
 
 
+temp_dir_name <- tempdir()
 
 
 # testing create_binned_data --------------------------------------------------
 
 test_that("create_binned_data() creates binned data from raster data in the correct format", {
 
-  name_of_file_that_should_be_created <- "ZD_150bins_50sampled.Rda" 
+  name_of_file_that_should_be_created <- file.path(temp_dir_name, "ZD_150bins_50sampled.Rda") 
 
   # deleting "ZD_150_samples_binned_every_50_samples.Rda" if it already exist
   if (file.exists(name_of_file_that_should_be_created)){
     file.remove(name_of_file_that_should_be_created)
   } 
   
-  binned_file_name <- create_binned_data(raster_dir_name, "ZD", 150, 50, 
-                                       files_contain = "bp1001spk")
+  binned_file_name <- create_binned_data(raster_dir_name, file.path(temp_dir_name, "ZD"), 
+                                         150, 50, files_contain = "bp1001spk")
 
   expect_equal(name_of_file_that_should_be_created, binned_file_name)
 
