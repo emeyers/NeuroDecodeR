@@ -90,7 +90,9 @@ test_that("get_num_label_repetitions() correctly assesses how many times a label
   expect_error(get_num_label_repetitions(file_name, "stimulus_ID", levels_to_use = c("kiwi", "dog")))
   
   label_rep_info <- get_num_label_repetitions(file_name, "stimulus_ID") 
-
+  
+  plot(label_rep_info)  # make sure the plot function does not give an error
+  
 })
 
 

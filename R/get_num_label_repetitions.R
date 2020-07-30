@@ -126,9 +126,10 @@ get_num_sites_with_k_label_repetitions <- function(label_rep_obj) {
       summarize(num_with_k_reps = sum(.data$num_reps >= k)) %>%
       select(.data$num_with_k_reps)
 
-    names(curr_count) <- k      # paste0("reps_", sprintf('%03d', k))
+    names(curr_count) <- as.character(k)      # paste0("reps_", sprintf('%03d', k))
 
     num_sites_with_k_repeats <- cbind(num_sites_with_k_repeats, curr_count)
+    
   }
 
 

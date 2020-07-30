@@ -34,9 +34,16 @@ test_that("cv_standard can run simple decoding analysis", {
   print(object.size(DECODING_RESULTS), units = "Mb")
   
   
+  # testing that there are no errors plotting the results
+  
   plot(DECODING_RESULTS$rm_main_results)
+  plot(DECODING_RESULTS$rm_main_results, result_type == "all")
+  plot(DECODING_RESULTS$rm_main_results, plot_type == "line")
+  
   plot(DECODING_RESULTS$rm_confusion_matrix)
-
+  plot(DECODING_RESULTS$rm_confusion_matrix, result_type = "mutual_information")
+  
+  
 })
 
 
