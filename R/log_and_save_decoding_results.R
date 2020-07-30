@@ -192,7 +192,7 @@ log_load_results_from_params <- function(decoding_params, results_directory_name
 
 
   # if the directory of results or manifest file doesn't exist, throw and error
-  if (!file.exists(basename(results_directory_name))) {
+  if (!file.exists(file.path(dirname(results_directory_name), basename(results_directory_name)))) {
     stop(paste("The specified results_directory_name,", results_directory_name, "does not exist."))
   }
 
@@ -270,7 +270,7 @@ log_load_results_from_result_name <- function(result_name, results_directory_nam
 
 
   # if the directory of results or manifest file doesn't exist, throw and error
-  if (!file.exists(basename(results_directory_name))) {
+  if (!file.exists(file.path(dirname(results_directory_name), basename(results_directory_name)))) {
     stop(paste("The specified results_directory_name,", results_directory_name, "does not exist."))
   }
 

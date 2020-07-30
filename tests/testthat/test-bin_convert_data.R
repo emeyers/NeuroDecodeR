@@ -42,11 +42,11 @@ test_that("convert_matlab_raster_data() convert MATLAB raster data to R raster d
                                    "Zhang_Desimone_7object_raster_data_small_mat")
   
   # create temporary directory to hold converted data
-  r_raster_dir_name <- trimws(file.path("test_convert_matlab_raster_data", " "))
+  r_raster_dir_name <- file.path(tempdir(), trimws(file.path("test_convert_matlab_raster_data", " ")))
   
   
   # delete any saved results and manifest files that already exist
-  if (file.exists(basename(r_raster_dir_name))) {
+  if (file.exists(file.path(dirname(r_raster_dir_name), basename(r_raster_dir_name)))) {
     the_files <- paste0(r_raster_dir_name, list.files(r_raster_dir_name))
     file.remove(the_files)
     unlink(basename(r_raster_dir_name), recursive = TRUE, force = TRUE)
@@ -97,3 +97,64 @@ test_that("get_num_label_repetitions() correctly assesses how many times a label
 
 
 
+
+
+# testing the function that checks if raster data is valid is working  ----------------
+
+test_that("test_valid_raster_format() correctly assesses if data is in valid raster format", {
+  
+  raster_file_name <- paste0(raster_dir_name, list.files(raster_dir_name)[1])
+
+  # valid raster file should be valid and return NULL
+  expect_null(test_valid_raster_format(raster_file_name))
+  
+  # raster_data file name should only have a single object in it
+  expect_error(test_valid_raster_format("example_DECODING_RESULTS.Rda"))
+  
+  # making sure test_valid_raster_format() correct tests that raster data has right variables 
+  load(raster_file_name)
+  expect_error(test_valid_raster_format(dplyr::select(raster_data, -.data$time)))
+  expect_error(test_valid_raster_format(dplyr::select(raster_data, -.data$labels)))
+  expect_error(test_valid_raster_format(dplyr::mutate(raster_data, blah = raster_data[, 1])))
+  
+})
+
+
+
+
+# testing the function that checks if binned data is valid is working  ----------------
+
+test_that("test_valid_binned_format() correctly assesses if data is in valid binned format", {
+  
+  raster_file_name <- paste0(raster_dir_name, list.files(raster_dir_name)[1])
+  binned_file_name <-  system.file(file.path("extdata", "ZD_150bins_50sampled.Rda"), package = "NDTr")
+  
+  # valid raster file should be valid and return NULL
+  expect_null(test_valid_binned_format(binned_file_name))
+  
+  # binned_data file name should only have a single object in it
+  expect_error(test_valid_binned_format("example_DECODING_RESULTS.Rda"))
+  
+  # making sure test_valid_binned_format() correct tests that raster data has right variables 
+  load(binned_file_name)
+  expect_error(test_valid_binned_format(dplyr::select(binned_data, -.data$siteID)))
+  expect_error(test_valid_binned_format(dplyr::select(binned_data, -.data$time)))
+  expect_error(test_valid_binned_format(dplyr::select(binned_data, -.data$labels)))
+  expect_error(test_valid_binned_format(dplyr::mutate(binned_data, blah = binned_data[, 1])))
+  
+})
+
+
+
+test_that("check_and_load_binned_data() priviate helper function is working", {
+  
+  raster_file_name <- paste0(raster_dir_name, list.files(raster_dir_name)[1])
+  binned_file_name <-  system.file(file.path("extdata", "ZD_150bins_50sampled.Rda"), package = "NDTr")
+  
+  # raster data is not in binned format so should produce an error
+  expect_error(check_and_load_binned_data(raster_file_name))
+  
+  # check_and_load_binned_data() should return a data frame of binned data
+  expect_true(is.data.frame(check_and_load_binned_data(binned_file_name)))  
+
+})
