@@ -6,7 +6,7 @@
 # load the test data
 load("example_DECODING_RESULTS.Rda")
 
-results_dir_name <- file.path(tempdir(), trimws(file.path("testing_save_results", " ")))
+results_dir_name <- trimws(file.path(tempdir(), "testing_save_results", " "))
 
 
 # delete any saved results and manifest files that already exist
@@ -14,7 +14,7 @@ if (file.exists(file.path(dirname(results_dir_name), basename(results_dir_name))
   
   the_files <- paste0(results_dir_name, list.files(results_dir_name))
   #file.remove(the_files)
-  unlink(the_files, recursive = TRUE)
+  unlink(file.path(dirname(the_files), basename(the_files)), recursive = TRUE)
   
 } else {
   
@@ -26,7 +26,7 @@ if (file.exists(file.path(dirname(results_dir_name), basename(results_dir_name))
 
 
 
-test_that("log_save_results() can save results and create a manifest file", {
+test_that("log_save_results can save results and create a manifest file", {
   
   # add an intial result to the manifest file and save it
   # should get a warning that the manifest file does not exist

@@ -15,11 +15,13 @@ test_that("create_binned_data() creates binned data from raster data in the corr
   name_of_file_that_should_be_created <- file.path(temp_dir_name, "ZD_150bins_50sampled.Rda") 
 
   # deleting "ZD_150_samples_binned_every_50_samples.Rda" if it already exist
-  if (file.exists(name_of_file_that_should_be_created)){
+  if (file.exists(name_of_file_that_should_be_created)) {
     file.remove(name_of_file_that_should_be_created)
   } 
   
-  binned_file_name <- create_binned_data(raster_dir_name, file.path(temp_dir_name, "ZD"), 
+  save_prefix <- file.path(temp_dir_name, "ZD")
+  
+  binned_file_name <- create_binned_data(raster_dir_name, save_prefix, 
                                          150, 50, files_contain = "bp1001spk")
 
   expect_equal(name_of_file_that_should_be_created, binned_file_name)
@@ -43,14 +45,14 @@ test_that("convert_matlab_raster_data() convert MATLAB raster data to R raster d
                                    "Zhang_Desimone_7object_raster_data_small_mat")
   
   # create temporary directory to hold converted data
-  r_raster_dir_name <- file.path(tempdir(), trimws(file.path("test_convert_matlab_raster_data", " ")))
+  r_raster_dir_name <- trimws(file.path(temp_dir_name, "test_convert_matlab_raster_data", " "))
   
   
   # delete any saved results and manifest files that already exist
   if (file.exists(file.path(dirname(r_raster_dir_name), basename(r_raster_dir_name)))) {
     the_files <- paste0(r_raster_dir_name, list.files(r_raster_dir_name))
     file.remove(the_files)
-    unlink(basename(r_raster_dir_name), recursive = TRUE, force = TRUE)
+    unlink(file.path(dirname(r_raster_dir_name), basename(r_raster_dir_name)), recursive = TRUE, force = TRUE)
   } 
   
   
@@ -75,7 +77,8 @@ test_that("convert_matlab_raster_data() convert MATLAB raster data to R raster d
 
   the_files <- paste0(r_raster_dir_name, list.files(r_raster_dir_name))
   file.remove(the_files)
-  unlink(basename(r_raster_dir_name), recursive = TRUE, force = TRUE)
+  unlink(file.path(dirname(r_raster_dir_name), basename(r_raster_dir_name)), 
+         recursive = TRUE, force = TRUE)
   
 })
 
