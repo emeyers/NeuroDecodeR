@@ -121,6 +121,9 @@ test_that("test_valid_raster_format() correctly assesses if data is in valid ras
   expect_error(test_valid_raster_format(dplyr::select(raster_data, -.data$labels)))
   expect_error(test_valid_raster_format(dplyr::mutate(raster_data, blah = raster_data[, 1])))
   
+  # make sure that one can plot the raster data
+  plot.raster_data(raster_file_name)
+  
 })
 
 

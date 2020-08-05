@@ -225,7 +225,11 @@ convert_matlab_raster_data <- function(matlab_raster_dir_name,
 
     }
 
-
+    
+    # change the class to be raster_data, data.frame
+    attr(raster_data, "class") <- c("raster_data", "data.frame")
+    
+    
     if (dir.exists(r_raster_dir_name) == FALSE) {
       dir.create(r_raster_dir_name)
     }
@@ -246,3 +250,129 @@ convert_dot_back_to_underscore <- function(oldnames) {
   newnames <- gsub(oldnames, pattern = "\\.", replacement = "_")
   return(newnames)
 }
+
+
+
+
+
+
+#' A plot function for data in raster format
+#'
+#' This function will plot data that is in raster format. If the data is
+#' a spike train consisting of only 0's and 1's then it will create a plot
+#' of spikes as black tick marks on a white background. If the raster data
+#' contains continuous data, then the plot will be color coded. 
+#'
+#' @param x Either data that is in raster format, or a string containing the 
+#' name of a file that has data in raster format. 
+#'
+#' @param ... This is needed to conform to the plot generic interface.
+#'
+#'
+#' @export
+plot.raster_data <- function(x, ..., facet_label = NULL) {
+  
+  
+  # if a string of a file name is given, load the raster data
+  if (is.character(x)) {
+    raster_data_object_name <- load(x)
+    eval(parse(text = paste0("raster_data <- ", raster_data_object_name)))
+  } else {
+    raster_data <- x
+  }
+  
+  
+  # check that indeed the data is in valid raster format
+  test_valid_raster_format(raster_data)
+  
+  activity_data_only_df <- raster_data %>%
+    dplyr::select(-starts_with("site_info"))
+  
+  # if there is not column called trial_number add it to the data
+  if (dim(dplyr::select(activity_data_only_df, starts_with("trial_number")))[2] == 0) {
+    activity_data_only_df <- activity_data_only_df %>%
+      dplyr::mutate(trial_number = 1:dim(.)[1])
+  }
+  
+
+  if (!(is.null(facet_label))) {
+    
+    activity_data_only_df <- activity_data_only_df %>%
+      dplyr::select(starts_with(paste0("labels.", facet_label)), 
+                    starts_with("time"), starts_with("trial_number")) %>%
+      dplyr::rename(label = paste0("labels.", facet_label))
+    
+    
+    # if faceting backed on a label, let's create new trial numbers 
+    #  to be 1 to number trials for each label
+    
+    # first arrange the data so that it is in order of the original trial number
+    activity_data_only_df <- activity_data_only_df %>%
+      dplyr::arrange(.data$trial_number)
+    
+    # overwrite the trial number with trial numbers for each label
+    activity_data_only_df <- activity_data_only_df %>%
+      group_by(label) %>%
+      mutate(trial_number = 1:n())
+    
+    
+  } else {
+    activity_data_only_df <- activity_data_only_df%>%
+      dplyr::select(-starts_with("label"))
+  }
+  
+  
+
+  # convert to long format for plotting and time as a numeric value
+  activity_data_only_df <- activity_data_only_df %>%
+    tidyr::pivot_longer(starts_with("time"), names_to = "time", values_to = "activity") %>%   
+    dplyr::mutate(time = as.numeric(substr(time, 6, 20)))  
+
+  
+  # if the data is a spike train of 0's and 1's
+  if ((length(unique(activity_data_only_df$activity)) == 2) &&
+    (sum(unique(activity_data_only_df$activity) %in% c(1, 0)) == 2)) {
+    
+    if (is.character(x)){
+      plot_title <- paste("Spiking pattern from neuron: ", x)
+    } else {
+      plot_title <- "Spiking activity"
+    }
+    
+    
+    g <- ggplot(activity_data_only_df, aes(x = time, y = trial_number)) +
+      geom_raster(aes(fill=factor(activity))) +
+      scale_fill_manual(values=c("0"="white", "1"="black")) +
+      guides(fill = FALSE) + 
+      labs(x="Time", y="Trial") +
+      theme_classic() + 
+      ggtitle(plot_title)
+    
+    
+  }  else {
+    
+    # if the data is real valued
+    
+    # need to add code here to plot real valued raster data...
+    
+  } 
+  
+  
+  
+  
+  if (!(is.null(facet_label))) {
+    g <- g + facet_wrap(~label) + 
+      theme_bw() + 
+      theme(panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank())
+  }
+  
+    
+  g
+
+
+}
+
+
+
+

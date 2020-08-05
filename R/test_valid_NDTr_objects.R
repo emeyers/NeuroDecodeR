@@ -83,6 +83,18 @@ test_valid_raster_format <- function(raster_data) {
       "names to have in data that is in raster format:", invalid_variable_names))
   }
   
+  
+  
+  # make sure the class of raster_data is c("raster_data", "data.frame")
+  if (!("raster_data" %in% class(raster_data))) {
+    
+    warning(paste("The class attribute of files raster_data format should be set to: \n",
+                  'attr(raster_data, "class") <- c("raster_data", "data.frame")',
+                  "\n otherwise the plot() function will not work correctly for raster data"))
+  }
+  
+  
+  
 }
 
 
