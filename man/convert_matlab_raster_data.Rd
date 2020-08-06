@@ -30,9 +30,9 @@ data, i.e., start at the beginning with start_ind = 1.}
 \item{end_ind}{A number specifying the end index for the data to be converted
 if one wants to convert the data from a shorter time window than the
 original MATLAB raster data. The default (NULL value) is to use all the
-data, i.e., end value is the last time point.
+data, i.e., end value is the last time point.}
 
-@param zero_time_bin A number specifying the time bin that should be marked
+\item{zero_time_bin}{A number specifying the time bin that should be marked
 as time 0. The default (NULL value) is to use the first bin as time 1.}
 
 \item{files_contain}{A string specifying that only a subset of the MATLAB

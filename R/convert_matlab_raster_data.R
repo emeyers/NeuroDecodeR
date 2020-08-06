@@ -22,7 +22,7 @@
 #'   original MATLAB raster data. The default (NULL value) is to use all the
 #'   data, i.e., end value is the last time point.
 #'   
-#'  @param zero_time_bin A number specifying the time bin that should be marked
+#' @param zero_time_bin A number specifying the time bin that should be marked
 #'    as time 0. The default (NULL value) is to use the first bin as time 1.
 #'   
 #' @param files_contain A string specifying that only a subset of the MATLAB
