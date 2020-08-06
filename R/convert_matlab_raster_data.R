@@ -21,7 +21,10 @@
 #'   if one wants to convert the data from a shorter time window than the
 #'   original MATLAB raster data. The default (NULL value) is to use all the
 #'   data, i.e., end value is the last time point.
-#'
+#'   
+#'  @param zero_time_bin A number specifying the time bin that should be marked
+#'    as time 0. The default (NULL value) is to use the first bin as time 1.
+#'   
 #' @param files_contain A string specifying that only a subset of the MATLAB
 #'   raster data should be converted based on .mat files that contain this
 #'   string.
@@ -45,6 +48,7 @@ convert_matlab_raster_data <- function(matlab_raster_dir_name,
                                        r_raster_dir_name = NULL,
                                        start_ind = NULL,
                                        end_ind = NULL,
+                                       zero_time_bin = NULL,
                                        files_contain = "") {
 
 
@@ -149,12 +153,21 @@ convert_matlab_raster_data <- function(matlab_raster_dir_name,
 
     # if there is an alignment time, subtract the start_ind offset from the
     # alignment and subtract alignment from the raster times
-    if (sum(names(raster_site_info) == "alignment.event.time")) {
+    if ( (sum(names(raster_site_info) == "alignment.event.time")) || (is.numeric(zero_time_bin)) ) {
       
-      data_times <- (data_times - rep.int(raster_site_info$alignment.event.time - (start_ind - 1), length(data_times)))
+      if (is.numeric(zero_time_bin)) {
+        
+        data_times <- (data_times - rep.int(zero_time_bin - (start_ind - 1), length(data_times)))
+        
+      } else {
+        
+        data_times <- (data_times - rep.int(raster_site_info$alignment.event.time - (start_ind - 1), length(data_times)))
+      }
 
+      
       # remove the alignment time from the site info since it is incorporated into the time bin names
       raster_site_info_df$site_info.alignment_event_time <- NULL
+      
 
       # update the names if start_ind or end_ind were given as arguments
       if (!(start_ind_save_dir_name == "")) {
