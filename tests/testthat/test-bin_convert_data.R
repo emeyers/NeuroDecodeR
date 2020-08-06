@@ -123,6 +123,7 @@ test_that("test_valid_raster_format() correctly assesses if data is in valid ras
   
   # make sure that one can plot the raster data
   plot.raster_data(raster_file_name)
+  plot.raster_data(raster_file_name, facet_label = "stimulus_ID")
   
 })
 

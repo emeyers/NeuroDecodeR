@@ -267,6 +267,10 @@ convert_dot_back_to_underscore <- function(oldnames) {
 #' name of a file that has data in raster format. 
 #'
 #' @param ... This is needed to conform to the plot generic interface.
+#' 
+#' @param facet_label If this is set to a string that is the name of one of the
+#' labels in the raster data, then the raster plots will be faceted by 
+#' this label. 
 #'
 #'
 #' @export
@@ -290,8 +294,7 @@ plot.raster_data <- function(x, ..., facet_label = NULL) {
   
   # if there is not column called trial_number add it to the data
   if (dim(dplyr::select(activity_data_only_df, starts_with("trial_number")))[2] == 0) {
-    activity_data_only_df <- activity_data_only_df %>%
-      dplyr::mutate(trial_number = 1:dim(.)[1])
+    activity_data_only_df$trial_number <- 1:dim(raster_data)[1]
   }
   
 
@@ -312,12 +315,12 @@ plot.raster_data <- function(x, ..., facet_label = NULL) {
     
     # overwrite the trial number with trial numbers for each label
     activity_data_only_df <- activity_data_only_df %>%
-      group_by(label) %>%
+      group_by(.data$label) %>%
       mutate(trial_number = 1:n())
     
     
   } else {
-    activity_data_only_df <- activity_data_only_df%>%
+    activity_data_only_df <- activity_data_only_df %>%
       dplyr::select(-starts_with("label"))
   }
   
@@ -326,7 +329,7 @@ plot.raster_data <- function(x, ..., facet_label = NULL) {
   # convert to long format for plotting and time as a numeric value
   activity_data_only_df <- activity_data_only_df %>%
     tidyr::pivot_longer(starts_with("time"), names_to = "time", values_to = "activity") %>%   
-    dplyr::mutate(time = as.numeric(substr(time, 6, 20)))  
+    dplyr::mutate(time = as.numeric(substr(.data$time, 6, 20)))  
 
   
   # if the data is a spike train of 0's and 1's
@@ -340,8 +343,8 @@ plot.raster_data <- function(x, ..., facet_label = NULL) {
     }
     
     
-    g <- ggplot(activity_data_only_df, aes(x = time, y = trial_number)) +
-      geom_raster(aes(fill=factor(activity))) +
+    g <- ggplot(activity_data_only_df, aes(x = .data$time, y = .data$trial_number)) +
+      geom_raster(aes(fill=factor(.data$activity))) +
       scale_fill_manual(values=c("0"="white", "1"="black")) +
       guides(fill = FALSE) + 
       labs(x="Time", y="Trial") +
@@ -361,7 +364,7 @@ plot.raster_data <- function(x, ..., facet_label = NULL) {
   
   
   if (!(is.null(facet_label))) {
-    g <- g + facet_wrap(~label) + 
+    g <- g + facet_wrap(~.data$label) + 
       theme_bw() + 
       theme(panel.grid.major = element_blank(),
         panel.grid.minor = element_blank())
