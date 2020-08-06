@@ -354,9 +354,23 @@ plot.raster_data <- function(x, ..., facet_label = NULL) {
     
   }  else {
     
+    
     # if the data is real valued
     
-    # need to add code here to plot real valued raster data...
+    if (is.character(x)){
+      plot_title <- paste("Activity from site: ", x)
+    } else {
+      plot_title <- ""
+    }
+    
+    g <- ggplot(activity_data_only_df, aes(x = .data$time, y = .data$trial_number)) +
+      geom_raster(aes(fill=.data$activity)) +
+      #scale_fill_continuous(trans = 'log') + 
+      labs(x="Time", y="Trial") +
+      theme_bw() + 
+      ggtitle(plot_title) + 
+        theme(panel.grid.major = element_blank(),
+              panel.grid.minor = element_blank())
     
   } 
   
