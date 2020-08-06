@@ -162,6 +162,14 @@ test_valid_binned_format <- function(binned_data) {
       "names to have in data that is in binned format:", invalid_variable_names))
   }
   
+  
+  # make sure the class of binned_data is c("binned_data", "data.frame")
+  # if (!("binned_data" %in% class(binned_data))) {
+  #  warning(paste("The class attribute of files binned_data format should be set to: \n",
+  #                'attr(binned_data, "class") <- c("binned_data", "data.frame")'))
+  # }
+  
+  
 }
 
 
