@@ -114,25 +114,13 @@ test_valid_raster_format(file.path(raster_dir_name, file_name))
 ```
 
 
-Below, we visualize the spiking pattern for this one neuron.
+Below, we visualize the spiking pattern for this one neuron by using the 
+raster data's `plot()` function. 
 
 
-```{r plot_raster_file, echo = FALSE}
+```{r plot_raster_file}
 
-
-spikes_only_df <- raster_data %>%
-  dplyr::select(starts_with("time")) %>%
-  dplyr::mutate(trial_num = 1:dim(.)[1]) %>%    # add trial number to the data frame
-  tidyr::gather(time, spikes, -trial_num) %>%   # convert to long format for plotting
-  dplyr::mutate(time = as.numeric(substr(time, 6, 9)))  # convert time to numeric values
-
-ggplot(spikes_only_df, aes(x = time, y = trial_num)) +
-  geom_raster(aes(fill=factor(spikes))) +
-  scale_fill_manual(values=c("0"="white", "1"="black")) +
-  guides(fill = FALSE) + 
-  labs(x="Time (ms)", y="Trial") +
-  theme_classic() + 
-  ggtitle(paste("Spiking pattern from neuron: ", file_name))
+plot(raster_data)
 
 ```
 

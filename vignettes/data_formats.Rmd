@@ -51,6 +51,10 @@ indicating which trial a given row of data came from. This is useful for data
 where all sites were recorded simultaneously in order to allow one to do the
 decoding on actual simultaneously recorded data (e.g., by using the `ds_basic()` `create_simultaneously_recorded_populations` argument).
 
+The class attribute for data in raster format should be set to
+`attr(raster_data, "class") <- c("raster_data", "data.frame")`. This will enable
+the plot() function to correctly plot data in raster format.
+
 
 ### Checking if data is in valid raster format
 
