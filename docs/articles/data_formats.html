@@ -120,6 +120,7 @@
 <li><p><code>site_info.XXX</code> These variables contain additional meta data out the site. For example, one could have a variable called <code>site_info.brain_area</code> which indicated which brain region a given site came from. All rows for a given <code>site_info.XXX</code> variables typically have the same value.</p></li>
 <li><p><code>trial_number</code> This is a variable that specifies a unique for each row indicating which trial a given row of data came from. This is useful for data where all sites were recorded simultaneously in order to allow one to do the decoding on actual simultaneously recorded data (e.g., by using the <code><a href="../reference/ds_basic.html">ds_basic()</a></code> <code>create_simultaneously_recorded_populations</code> argument).</p></li>
 </ol>
+<p>The class attribute for data in raster format should be set to <code>attr(raster_data, "class") &lt;- c("raster_data", "data.frame")</code>. This will enable the plot() function to correctly plot data in raster format.</p>
 <div id="checking-if-data-is-in-valid-raster-format" class="section level3">
 <h3 class="hasAnchor">
 <a href="#checking-if-data-is-in-valid-raster-format" class="anchor"></a>Checking if data is in valid raster format</h3>
@@ -138,27 +139,27 @@
 <a class="sourceLine" id="cb1-7" data-line-number="7"><span class="co"># load the data to see the variables in it</span></a>
 <a class="sourceLine" id="cb1-8" data-line-number="8"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/load">load</a></span>(full_file_name)</a>
 <a class="sourceLine" id="cb1-9" data-line-number="9"><span class="kw"><a href="https://www.rdocumentation.org/packages/utils/topics/head">head</a></span>(raster_data[, <span class="dv">1</span><span class="op">:</span><span class="dv">10</span>])</a></code></pre></div>
-<pre><code>##     site_info.session_ID site_info.recording_channel site_info.unit
-## 1                   1001                           1              A
-## 1.1                 1001                           1              A
-## 1.2                 1001                           1              A
-## 1.3                 1001                           1              A
-## 1.4                 1001                           1              A
-## 1.5                 1001                           1              A
-##     labels.combined_ID_position labels.stimulus_position
-## 1                    hand_upper                    upper
-## 1.1               flower_middle                   middle
-## 1.2               guitar_middle                   middle
-## 1.3                  face_upper                    upper
-## 1.4                 kiwi_middle                   middle
-## 1.5                 couch_upper                    upper
-##     labels.stimulus_ID time.-500 time.-499 time.-498 time.-497
-## 1                 hand         0         0         0         0
-## 1.1             flower         0         0         0         0
-## 1.2             guitar         0         0         0         0
-## 1.3               face         0         0         0         0
-## 1.4               kiwi         0         0         0         0
-## 1.5              couch         0         0         0         0</code></pre>
+<pre><code>##   site_info.session_ID site_info.recording_channel site_info.unit
+## 1                 1001                           1              A
+## 2                 1001                           1              A
+## 3                 1001                           1              A
+## 4                 1001                           1              A
+## 5                 1001                           1              A
+## 6                 1001                           1              A
+##   labels.combined_ID_position labels.stimulus_position labels.stimulus_ID
+## 1                  hand_upper                    upper               hand
+## 2               flower_middle                   middle             flower
+## 3               guitar_middle                   middle             guitar
+## 4                  face_upper                    upper               face
+## 5                 kiwi_middle                   middle               kiwi
+## 6                 couch_upper                    upper              couch
+##   time.-500 time.-499 time.-498 time.-497
+## 1         0         0         0         0
+## 2         0         0         0         0
+## 3         0         0         0         0
+## 4         0         0         0         0
+## 5         0         0         0         0
+## 6         0         0         0         0</code></pre>
 </div>
 </div>
 <div id="binned-format" class="section level2">
