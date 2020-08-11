@@ -1,6 +1,6 @@
 url: https://github.com/emeyers/NDTr
 
-title: The Neural Decoding Toolbox in R
+title: NeuroDecodeR
 
 template:
   params:
@@ -52,7 +52,7 @@ reference:
 
 
 navbar:
-  title: "The Neural Decoding Toolbox in R"
+  title: "NeuroDecodeR"
   type: inverse
   left:
     - text: "Home"
@@ -74,6 +74,6 @@ navbar:
             href: "articles/data_formats.html"
           - text: "Datasets"
             href: "articles/datasets.html"
-          - text: "NDTr object specification"
-            href: "articles/NDTr_object_specification.html"
+          - text: "NDR object specification"
+            href: "articles/NDR_object_specification.html"
             

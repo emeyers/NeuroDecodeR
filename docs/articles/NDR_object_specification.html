@@ -5,7 +5,7 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>NeuroDecodeR object specification • The Neural Decoding Toolbox in R</title>
+<title>NeuroDecodeR object specification • NeuroDecodeR</title>
 <!-- jquery --><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script><!-- Bootstrap --><link href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/3.3.7/sandstone/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha256-U5ZEeKfGNOja007MMD3YBI0A3OSZOQbeG6z2f2Y0hu8=" crossorigin="anonymous"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha256-eZrrJcwDc/3uDhsdt61sL2oOBY362qM3lon1gyExkL0=" crossorigin="anonymous">
 <!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.4/clipboard.min.js" integrity="sha256-FiZwavyI2V6+EXO1U+xzLG3IKldpiTFf3153ea9zikQ=" crossorigin="anonymous"></script><!-- sticky kit --><script src="https://cdnjs.cloudflare.com/ajax/libs/sticky-kit/1.1.3/sticky-kit.min.js" integrity="sha256-c4Rlo1ZozqTPE2RLuvbusY3+SU1pQaJC0TjuhygMipw=" crossorigin="anonymous"></script><!-- pkgdown --><link href="../pkgdown.css" rel="stylesheet">
@@ -29,7 +29,7 @@
         <span class="icon-bar"></span>
       </button>
       <span class="navbar-brand">
-        <a class="navbar-link" href="../index.html">The Neural Decoding Toolbox in R</a>
+        <a class="navbar-link" href="../index.html">NeuroDecodeR</a>
         <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.0.9003</span>
       </span>
     </div>
@@ -71,7 +71,7 @@
       <a href="../articles/datasets.html">Datasets</a>
     </li>
     <li>
-      <a href="../articles/NDTr_object_specification.html">NDTr object specification</a>
+      <a href="../articles/NDR_object_specification.html">NDR object specification</a>
     </li>
   </ul>
 </li>
@@ -250,10 +250,10 @@
 <a class="sourceLine" id="cb3-22" data-line-number="22"></a>
 <a class="sourceLine" id="cb3-23" data-line-number="23"><span class="co"># prior to z-score normalizing the mean (e.g. for site 1) is not 0</span></a>
 <a class="sourceLine" id="cb3-24" data-line-number="24"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/mean">mean</a></span>(training_set<span class="op">$</span>site_<span class="dv">0001</span>)</a></code></pre></div>
-<pre><code>## [1] 0.002464986</code></pre>
+<pre><code>## [1] 0.002969188</code></pre>
 <div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" data-line-number="1"><span class="co"># after normalizing the data the mean is pretty much 0</span></a>
 <a class="sourceLine" id="cb5-2" data-line-number="2"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/mean">mean</a></span>(processed_data<span class="op">$</span>training_set<span class="op">$</span>site_<span class="dv">0001</span>)</a></code></pre></div>
-<pre><code>## [1] -7.467329e-18</code></pre>
+<pre><code>## [1] -4.660794e-17</code></pre>
 <p><br></p>
 <p><br></p>
 </div>
@@ -331,7 +331,7 @@
 <div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb9-1" data-line-number="1"><span class="co"># see how accurate the predictions are (chance is 1/7)</span></a>
 <a class="sourceLine" id="cb9-2" data-line-number="2">predictions_at_100ms &lt;-<span class="st"> </span>dplyr<span class="op">::</span><span class="kw"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span>(predictions, test_time <span class="op">==</span><span class="st"> "time.100_249"</span>)</a>
 <a class="sourceLine" id="cb9-3" data-line-number="3"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/mean">mean</a></span>(predictions_at_100ms<span class="op">$</span>actual_labels <span class="op">==</span><span class="st"> </span>predictions_at_100ms<span class="op">$</span>predicted_labels)</a></code></pre></div>
-<pre><code>## [1] 0.7142857</code></pre>
+<pre><code>## [1] 0.8571429</code></pre>
 <p><br></p>
 <p><br></p>
 </div>
