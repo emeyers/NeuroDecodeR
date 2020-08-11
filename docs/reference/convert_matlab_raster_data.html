@@ -34,7 +34,7 @@
 
 <meta property="og:description" content="If one already has raster data created in MATLAB (.mat files), this function
 can be used to convert it to an R format (.rda files) that can be used with
-the NDTr." />
+the NDR." />
 <meta name="twitter:card" content="summary" />
 
 
@@ -114,7 +114,7 @@ the NDTr." />
       
       <ul class="nav navbar-nav navbar-right">
         <li>
-  <a href="https://github.com/emeyers/NDTr">
+  <a href="https://github.com/emeyers/NeuroDecodeR">
     <span class="fa fa-github fa-lg"></span>
      
   </a>
@@ -132,7 +132,7 @@ the NDTr." />
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Convert raster data in MATLAB to R</h1>
-    <small class="dont-index">Source: <a href='https://github.com/emeyers/NDTr/blob/master/R/convert_matlab_raster_data.R'><code>R/convert_matlab_raster_data.R</code></a></small>
+    <small class="dont-index">Source: <a href='https://github.com/emeyers/NeuroDecodeR/blob/master/R/convert_matlab_raster_data.R'><code>R/convert_matlab_raster_data.R</code></a></small>
     <div class="hidden name"><code>convert_matlab_raster_data.Rd</code></div>
     </div>
 
@@ -140,7 +140,7 @@ the NDTr." />
     
     <p>If one already has raster data created in MATLAB (.mat files), this function
 can be used to convert it to an R format (.rda files) that can be used with
-the NDTr.</p>
+the NDR.</p>
     
     </div>
 
@@ -180,8 +180,11 @@ data, i.e., start at the beginning with start_ind = 1.</p></td>
       <td><p>A number specifying the end index for the data to be converted
 if one wants to convert the data from a shorter time window than the
 original MATLAB raster data. The default (NULL value) is to use all the
-data, i.e., end value is the last time point.</p>
-<p>@param zero_time_bin A number specifying the time bin that should be marked
+data, i.e., end value is the last time point.</p></td>
+    </tr>
+    <tr>
+      <th>zero_time_bin</th>
+      <td><p>A number specifying the time bin that should be marked
 as time 0. The default (NULL value) is to use the first bin as time 1.</p></td>
     </tr>
     <tr>
@@ -195,7 +198,7 @@ string.</p></td>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='no'>matlab_raster_dir_name</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/file.path'>file.path</a></span>(
-  <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/system.file'>system.file</a></span>(<span class='st'>"extdata"</span>, <span class='kw'>package</span> <span class='kw'>=</span> <span class='st'>"NDTr"</span>),
+  <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/system.file'>system.file</a></span>(<span class='st'>"extdata"</span>, <span class='kw'>package</span> <span class='kw'>=</span> <span class='st'>"NeuroDecodeR"</span>),
   <span class='st'>"Zhang_Desimone_7object_raster_data_small_mat"</span>
 )
 

@@ -116,7 +116,7 @@ raster format." />
       
       <ul class="nav navbar-nav navbar-right">
         <li>
-  <a href="https://github.com/emeyers/NDTr">
+  <a href="https://github.com/emeyers/NeuroDecodeR">
     <span class="fa fa-github fa-lg"></span>
      
   </a>
@@ -134,7 +134,7 @@ raster format." />
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Tests if a data frame is in valid raster format</h1>
-    <small class="dont-index">Source: <a href='https://github.com/emeyers/NDTr/blob/master/R/test_valid_NDTr_objects.R'><code>R/test_valid_NDTr_objects.R</code></a></small>
+    <small class="dont-index">Source: <a href='https://github.com/emeyers/NeuroDecodeR/blob/master/R/test_valid_NDR_objects.R'><code>R/test_valid_NDR_objects.R</code></a></small>
     <div class="hidden name"><code>test_valid_raster_format.Rd</code></div>
     </div>
 
@@ -164,7 +164,7 @@ is in valid raster format.</p></td>
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='co'># This is valid raster data so the function will return no error message</span>
 <span class='no'>raster_dir_name</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/file.path'>file.path</a></span>(
-  <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/system.file'>system.file</a></span>(<span class='st'>"extdata"</span>, <span class='kw'>package</span> <span class='kw'>=</span> <span class='st'>"NDTr"</span>),
+  <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/system.file'>system.file</a></span>(<span class='st'>"extdata"</span>, <span class='kw'>package</span> <span class='kw'>=</span> <span class='st'>"NeuroDecodeR"</span>),
   <span class='st'>"Zhang_Desimone_7object_raster_data_rda"</span>
 )
 <span class='no'>file_name</span> <span class='kw'>&lt;-</span> <span class='st'>"bp1001spk_01A_raster_data.rda"</span>
@@ -176,7 +176,7 @@ is in valid raster format.</p></td>
 <span class='co'># Binned data is not in raster format (it has an extra column called siteID) so</span>
 <span class='co'># checking if it is in raster format should return an error.</span>
 
-<span class='no'>binned_file_name</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/system.file'>system.file</a></span>(<span class='st'>"extdata/ZD_150bins_50sampled.Rda"</span>, <span class='kw'>package</span> <span class='kw'>=</span> <span class='st'>"NDTr"</span>)
+<span class='no'>binned_file_name</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/system.file'>system.file</a></span>(<span class='st'>"extdata/ZD_150bins_50sampled.Rda"</span>, <span class='kw'>package</span> <span class='kw'>=</span> <span class='st'>"NeuroDecodeR"</span>)
 <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/try'>try</a></span>(<span class='fu'>test_valid_raster_format</span>(<span class='no'>binned_file_name</span>))</div><div class='output co'>#&gt; Error in test_valid_raster_format(binned_file_name) : 
 #&gt;   Data not in valid raster format: raster data must only contain variables names that start with 'labels.' 'time.', 'site_info.' or 'trial_number'. The following are not valid variable names to have in data that is in raster format: siteID</div><div class='input'>
 

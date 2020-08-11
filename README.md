@@ -27,11 +27,11 @@ decoding analyses in R.
 
 ## Installation
 
-You can install NDR from github using:
+You can install NeuroDecodeR package from github using:
 
 ``` r
 # install.packages("devtools")
-devtools::install_github("emeyers/NDR")
+devtools::install_github("emeyers/NeuroDecodeR")
 ```
 
 ## Usage
@@ -52,15 +52,14 @@ possible to run a range of different decoding analyses.
 
 Below is a brief illustration of how to use the NDR to do a simple
 decoding analysis. To learn how to use the NDR please see the
-[documentation website](https://emeyers.github.io/NeuroDecodeR/) and the package
-vignettes.
+[documentation website](https://emeyers.github.io/NeuroDecodeR/) and the
+package vignettes.
 
 ``` r
 library(NeuroDecodeR)
 
 # file to data in "binned format"
-basedir_file_name <- system.file(file.path("extdata", "ZD_150bins_50sampled.Rda"),
-                                 package="NeuroDecodeR")
+basedir_file_name <- system.file(file.path("extdata", "ZD_150bins_50sampled.Rda"), package="NeuroDecodeR")
 
 # create the DS, FP, CL, RM, and CV objects
 ds <- ds_basic(basedir_file_name, 'stimulus_ID', 5, num_label_repeats_per_cv_split = 3)

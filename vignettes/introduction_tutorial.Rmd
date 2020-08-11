@@ -1,5 +1,5 @@
 ---
-title: "Introduction to the NeuroDecode R package"
+title: "Introduction to the NeuroDecodeR package"
 output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{Introduction to the NDR}
@@ -17,7 +17,7 @@ learn more about at [www.readout.info](http://www.readout.info).
 
 
 
-## Overview of the NDT
+## Overview of the NDR
 
 Neural decoding is a process in which a pattern classifier learns the
 relationship between neural activity and experimental conditions using a

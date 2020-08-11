@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Get parameters of an NDTr object — get_parameters • The Neural Decoding Toolbox in R</title>
+<title>Get parameters of an NeuroDecodeR object — get_parameters • The Neural Decoding Toolbox in R</title>
 
 <!-- jquery -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
@@ -30,9 +30,9 @@
 
 
 
-<meta property="og:title" content="Get parameters of an NDTr object — get_parameters" />
+<meta property="og:title" content="Get parameters of an NeuroDecodeR object — get_parameters" />
 
-<meta property="og:description" content="Returns the parameters set in an NDTr object to enable reproducible analyses." />
+<meta property="og:description" content="Returns the parameters set in an NDR object to enable reproducible analyses." />
 <meta name="twitter:card" content="summary" />
 
 
@@ -112,7 +112,7 @@
       
       <ul class="nav navbar-nav navbar-right">
         <li>
-  <a href="https://github.com/emeyers/NDTr">
+  <a href="https://github.com/emeyers/NeuroDecodeR">
     <span class="fa fa-github fa-lg"></span>
      
   </a>
@@ -129,45 +129,45 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Get parameters of an NDTr object</h1>
-    <small class="dont-index">Source: <a href='https://github.com/emeyers/NDTr/blob/master/R/generic_functions.R'><code>R/generic_functions.R</code></a></small>
+    <h1>Get parameters of an NeuroDecodeR object</h1>
+    <small class="dont-index">Source: <a href='https://github.com/emeyers/NeuroDecodeR/blob/master/R/generic_functions.R'><code>R/generic_functions.R</code></a></small>
     <div class="hidden name"><code>get_parameters.Rd</code></div>
     </div>
 
     <div class="ref-description">
     
-    <p>Returns the parameters set in an NDTr object to enable reproducible analyses.</p>
+    <p>Returns the parameters set in an NDR object to enable reproducible analyses.</p>
     
     </div>
 
-    <pre class="usage"><span class='fu'>get_parameters</span>(<span class='no'>ndtr_obj</span>)</pre>
+    <pre class="usage"><span class='fu'>get_parameters</span>(<span class='no'>ndr_obj</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>ndtr_obj</th>
-      <td><p>An object from the NDTr package to get the parameters from.</p></td>
+      <th>ndr_obj</th>
+      <td><p>An object from the NeuroDecodeR package to get the parameters from.</p></td>
     </tr>
     </table>
     
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>Returns a data frame with a single row that contains all the NDTr
+    <p>Returns a data frame with a single row that contains all the NDR
 object's parameter values (e.g., values that were set in the object's
 constructor).</p>
     
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
     <p>This is a generic function that returns a data frame with the parameters of
-an NDTr object. All NDTr objects (i.e., DS, FP, CL, RM and CV) need to define
-a method that implements this generic function. The CV object's
-<code>get_parameters()</code> method usually will call all the DS, FP, CL, RM and CV
-<code>get_parameters()</code> methods and aggregate and return all the parameters
+an NeuroDecodeR (NDR) object. All NDR objects (i.e., DS, FP, CL, RM and CV)
+need to define a method that implements this generic function. The CV
+object's <code>get_parameters()</code> method usually will call all the DS, FP, CL, RM
+and CV <code>get_parameters()</code> methods and aggregate and return all the parameters
 aggregated from these objects. These aggregated parameters can then be used
 to save the results of a particular analysis based on the parameters using
 the <code><a href='log_save_results.html'>log_save_results()</a></code> function. This method is most frequently used
-privately by other NDTr objects to save all the parameters that were used in
+privately by other NDR objects to save all the parameters that were used in
 an analysis.</p>
     
 

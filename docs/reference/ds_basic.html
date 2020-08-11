@@ -112,7 +112,7 @@
       
       <ul class="nav navbar-nav navbar-right">
         <li>
-  <a href="https://github.com/emeyers/NDTr">
+  <a href="https://github.com/emeyers/NeuroDecodeR">
     <span class="fa fa-github fa-lg"></span>
      
   </a>
@@ -130,7 +130,7 @@
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>A basic datasource (DS)</h1>
-    <small class="dont-index">Source: <a href='https://github.com/emeyers/NDTr/blob/master/R/ds_basic.R'><code>R/ds_basic.R</code></a></small>
+    <small class="dont-index">Source: <a href='https://github.com/emeyers/NeuroDecodeR/blob/master/R/ds_basic.R'><code>R/ds_basic.R</code></a></small>
     <div class="hidden name"><code>ds_basic.Rd</code></div>
     </div>
 
@@ -242,7 +242,7 @@ get training and testing splits of data that can be passed to a classifier.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='co'># A typical example of creating a datasource to be passed cross-validation object</span>
-<span class='no'>data_file</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/system.file'>system.file</a></span>(<span class='st'>"extdata/ZD_150bins_50sampled.Rda"</span>, <span class='kw'>package</span> <span class='kw'>=</span> <span class='st'>"NDTr"</span>)
+<span class='no'>data_file</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/system.file'>system.file</a></span>(<span class='st'>"extdata/ZD_150bins_50sampled.Rda"</span>, <span class='kw'>package</span> <span class='kw'>=</span> <span class='st'>"NeuroDecodeR"</span>)
 <span class='no'>ds</span> <span class='kw'>&lt;-</span> <span class='fu'>ds_basic</span>(<span class='no'>data_file</span>, <span class='st'>"stimulus_ID"</span>, <span class='fl'>18</span>)
 
 <span class='co'># If one has many repeats of each label, decoding can be faster if one</span>
@@ -260,7 +260,7 @@ get training and testing splits of data that can be passed to a classifier.</p>
 <span class='co'># One never explicitely calls the get_data() function, but rather this is</span>
 <span class='co'># done by the cross-validator. However, to illustrate what this function</span>
 <span class='co'># does, we can call it explicitly here to get training and test data:</span>
-<span class='no'>all_cv_data</span> <span class='kw'>&lt;-</span> <span class='kw pkg'>NDTr</span><span class='kw ns'>:::</span><span class='fu'><a href='https://www.rdocumentation.org/packages/NDTr/topics/get_data'>get_data</a></span>(<span class='no'>ds</span>)
+<span class='no'>all_cv_data</span> <span class='kw'>&lt;-</span> <span class='kw pkg'>NeuroDecodeR</span><span class='kw ns'>:::</span><span class='fu'><a href='https://www.rdocumentation.org/packages/NeuroDecodeR/topics/get_data'>get_data</a></span>(<span class='no'>ds</span>)
 <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/names'>names</a></span>(<span class='no'>all_cv_data</span>)</div><div class='output co'>#&gt;   [1] "train_labels" "test_labels"  "time_bin"     "site_0001"    "site_0002"   
 #&gt;   [6] "site_0003"    "site_0004"    "site_0005"    "site_0006"    "site_0007"   
 #&gt;  [11] "site_0008"    "site_0009"    "site_0010"    "site_0011"    "site_0012"   

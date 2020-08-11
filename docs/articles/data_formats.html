@@ -78,7 +78,7 @@
       </ul>
 <ul class="nav navbar-nav navbar-right">
 <li>
-  <a href="https://github.com/emeyers/NDTr">
+  <a href="https://github.com/emeyers/NeuroDecodeR">
     <span class="fa fa-github fa-lg"></span>
      
   </a>
@@ -98,14 +98,14 @@
       <h1>Data formats</h1>
             
       
-      <small class="dont-index">Source: <a href="https://github.com/emeyers/NDTr/blob/master/vignettes/data_formats.Rmd"><code>vignettes/data_formats.Rmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/emeyers/NeuroDecodeR/blob/master/vignettes/data_formats.Rmd"><code>vignettes/data_formats.Rmd</code></a></small>
       <div class="hidden name"><code>data_formats.Rmd</code></div>
 
     </div>
 
     
     
-<p>The NDTr uses two closely related data formats called <code>raster format</code> and <code>binned format</code>. For almost all analysis, one starts by saving data from each site in <code>raster format</code>. One then converts it to <code>binned format</code> using the <code><a href="../reference/create_binned_data.html">create_binned_data()</a></code> which has the data from all the sites at a coarser temporal resolution. The <code>binned format</code> data is then used in all decoding analyses. More information about what is required to have data in these specified formats is described below.</p>
+<p>The NeuroDecodeR (NDR) uses two closely related data formats called <code>raster format</code> and <code>binned format</code>. For almost all analysis, one starts by saving data from each site in <code>raster format</code>. One then converts it to <code>binned format</code> using the <code><a href="../reference/create_binned_data.html">create_binned_data()</a></code> which has the data from all the sites at a coarser temporal resolution. The <code>binned format</code> data is then used in all decoding analyses. More information about what is required to have data in these specified formats is described below.</p>
 <div id="raster-format" class="section level2">
 <h2 class="hasAnchor">
 <a href="#raster-format" class="anchor"></a>Raster format</h2>
@@ -124,17 +124,17 @@
 <div id="checking-if-data-is-in-valid-raster-format" class="section level3">
 <h3 class="hasAnchor">
 <a href="#checking-if-data-is-in-valid-raster-format" class="anchor"></a>Checking if data is in valid raster format</h3>
-<p>To test whether data correctly conforms to the requirements of raster format, one can use the internal function <code>NDTr:::test_valid_raster_data_format()</code>.</p>
+<p>To test whether data correctly conforms to the requirements of raster format, one can use the internal function <code>NeuroDecodeR:::test_valid_raster_data_format()</code>.</p>
 </div>
 <div id="example-raster-format-data" class="section level3">
 <h3 class="hasAnchor">
 <a href="#example-raster-format-data" class="anchor"></a>Example raster-format data</h3>
 <p>Below is an example of raster format data file from the <a href="datasets.html">Zhang-Desimone 7 object data set</a>.</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" data-line-number="1">raster_dir_name &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/file.path">file.path</a></span>(<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/system.file">system.file</a></span>(<span class="st">"extdata"</span>, <span class="dt">package =</span> <span class="st">"NDTr"</span>), <span class="st">"Zhang_Desimone_7object_raster_data_rda"</span>)</a>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" data-line-number="1">raster_dir_name &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/file.path">file.path</a></span>(<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/system.file">system.file</a></span>(<span class="st">"extdata"</span>, <span class="dt">package =</span> <span class="st">"NeuroDecodeR"</span>), <span class="st">"Zhang_Desimone_7object_raster_data_rda"</span>)</a>
 <a class="sourceLine" id="cb1-2" data-line-number="2">full_file_name &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/file.path">file.path</a></span>(raster_dir_name, <span class="st">"bp1001spk_01A_raster_data.rda"</span>)</a>
 <a class="sourceLine" id="cb1-3" data-line-number="3"></a>
 <a class="sourceLine" id="cb1-4" data-line-number="4"><span class="co"># test the file is in valid raster format</span></a>
-<a class="sourceLine" id="cb1-5" data-line-number="5">NDTr<span class="op">::</span><span class="kw"><a href="https://www.rdocumentation.org/packages/NDTr/topics/test_valid_raster_format">test_valid_raster_format</a></span>(full_file_name)</a>
+<a class="sourceLine" id="cb1-5" data-line-number="5">NeuroDecodeR<span class="op">::</span><span class="kw"><a href="https://www.rdocumentation.org/packages/NeuroDecodeR/topics/test_valid_raster_format">test_valid_raster_format</a></span>(full_file_name)</a>
 <a class="sourceLine" id="cb1-6" data-line-number="6"></a>
 <a class="sourceLine" id="cb1-7" data-line-number="7"><span class="co"># load the data to see the variables in it</span></a>
 <a class="sourceLine" id="cb1-8" data-line-number="8"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/load">load</a></span>(full_file_name)</a>
@@ -180,43 +180,43 @@
 <div id="checking-if-data-is-in-valid-binned-format" class="section level3">
 <h3 class="hasAnchor">
 <a href="#checking-if-data-is-in-valid-binned-format" class="anchor"></a>Checking if data is in valid binned format</h3>
-<p>To test whether data correctly conforms to the requirements of binned format, one can use the internal function <code>NDTr:::test_valid_binned_data_format()</code>.</p>
+<p>To test whether data correctly conforms to the requirements of binned format, one can use the internal function <code>NeuroDecodeR:::test_valid_binned_data_format()</code>.</p>
 </div>
 <div id="example-binned-format-data" class="section level3">
 <h3 class="hasAnchor">
 <a href="#example-binned-format-data" class="anchor"></a>Example binned-format data</h3>
 <p>Below is an example of binned format data file from the <a href="datasets.html">Zhang-Desimone 7 object data set</a>.</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" data-line-number="1">binned_file_name &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/system.file">system.file</a></span>(<span class="st">"extdata/ZD_150bins_50sampled.Rda"</span>, <span class="dt">package=</span><span class="st">"NDTr"</span>)</a>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" data-line-number="1">binned_file_name &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/system.file">system.file</a></span>(<span class="st">"extdata/ZD_150bins_50sampled.Rda"</span>, <span class="dt">package=</span><span class="st">"NeuroDecodeR"</span>)</a>
 <a class="sourceLine" id="cb3-2" data-line-number="2"></a>
 <a class="sourceLine" id="cb3-3" data-line-number="3"></a>
 <a class="sourceLine" id="cb3-4" data-line-number="4"><span class="co"># test the file is in valid binned format using an internal function</span></a>
-<a class="sourceLine" id="cb3-5" data-line-number="5">NDTr<span class="op">:::</span><span class="kw">test_valid_binned_format</span>(binned_file_name)</a>
+<a class="sourceLine" id="cb3-5" data-line-number="5">NeuroDecodeR<span class="op">:::</span><span class="kw">test_valid_binned_format</span>(binned_file_name)</a>
 <a class="sourceLine" id="cb3-6" data-line-number="6"></a>
 <a class="sourceLine" id="cb3-7" data-line-number="7"></a>
 <a class="sourceLine" id="cb3-8" data-line-number="8"><span class="co"># load the data to see the variables in it</span></a>
 <a class="sourceLine" id="cb3-9" data-line-number="9"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/load">load</a></span>(binned_file_name)</a>
 <a class="sourceLine" id="cb3-10" data-line-number="10"><span class="kw"><a href="https://www.rdocumentation.org/packages/utils/topics/head">head</a></span>(binned_data[, <span class="dv">1</span><span class="op">:</span><span class="dv">10</span>])</a></code></pre></div>
-<pre><code>##     siteID site_info.session_ID site_info.recording_channel site_info.unit
-## 1        1                 1001                           1              A
-## 1.1      1                 1001                           1              A
-## 1.2      1                 1001                           1              A
-## 1.3      1                 1001                           1              A
-## 1.4      1                 1001                           1              A
-## 1.5      1                 1001                           1              A
-##     labels.combined_ID_position labels.stimulus_position
-## 1                    hand_upper                    upper
-## 1.1               flower_middle                   middle
-## 1.2               guitar_middle                   middle
-## 1.3                  face_upper                    upper
-## 1.4                 kiwi_middle                   middle
-## 1.5                 couch_upper                    upper
-##     labels.stimulus_ID time.-500_-351 time.-450_-301 time.-400_-251
-## 1                 hand    0.006666667    0.013333333    0.020000000
-## 1.1             flower    0.000000000    0.006666667    0.006666667
-## 1.2             guitar    0.000000000    0.000000000    0.000000000
-## 1.3               face    0.000000000    0.000000000    0.000000000
-## 1.4               kiwi    0.000000000    0.000000000    0.000000000
-## 1.5              couch    0.000000000    0.006666667    0.006666667</code></pre>
+<pre><code>##   siteID site_info.session_ID site_info.recording_channel site_info.unit
+## 1      1                 1001                           1              A
+## 2      1                 1001                           1              A
+## 3      1                 1001                           1              A
+## 4      1                 1001                           1              A
+## 5      1                 1001                           1              A
+## 6      1                 1001                           1              A
+##   labels.combined_ID_position labels.stimulus_position labels.stimulus_ID
+## 1                  hand_upper                    upper               hand
+## 2               flower_middle                   middle             flower
+## 3               guitar_middle                   middle             guitar
+## 4                  face_upper                    upper               face
+## 5                 kiwi_middle                   middle               kiwi
+## 6                 couch_upper                    upper              couch
+##   time.-500_-351 time.-450_-301 time.-400_-251
+## 1    0.006666667    0.013333333    0.020000000
+## 2    0.000000000    0.006666667    0.006666667
+## 3    0.000000000    0.000000000    0.000000000
+## 4    0.000000000    0.000000000    0.000000000
+## 5    0.000000000    0.000000000    0.000000000
+## 6    0.000000000    0.006666667    0.006666667</code></pre>
 </div>
 </div>
   </div>

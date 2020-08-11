@@ -4,7 +4,7 @@
     <loc>https://github.com/emeyers/NDTr/index.html</loc>
   </url>
   <url>
-    <loc>https://github.com/emeyers/NDTr/reference/NDTr.html</loc>
+    <loc>https://github.com/emeyers/NDTr/reference/NeuroDecodeR.html</loc>
   </url>
   <url>
     <loc>https://github.com/emeyers/NDTr/reference/aggregate_CV_split_results.html</loc>
@@ -91,7 +91,7 @@
     <loc>https://github.com/emeyers/NDTr/reference/test_valid_raster_format.html</loc>
   </url>
   <url>
-    <loc>https://github.com/emeyers/NDTr/articles/NDTr_object_specification.html</loc>
+    <loc>https://github.com/emeyers/NDTr/articles/NDR_object_specification.html</loc>
   </url>
   <url>
     <loc>https://github.com/emeyers/NDTr/articles/data_formats.html</loc>
