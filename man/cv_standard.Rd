@@ -63,7 +63,7 @@ the results.
 }
 \examples{
 data_file <- system.file("extdata/ZD_150bins_50sampled.Rda",
-  package = "NDTr"
+  package = "NeuroDecodeR"
 )
 
 ds <- ds_basic(data_file, "stimulus_ID", 18)

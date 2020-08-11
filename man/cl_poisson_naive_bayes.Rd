@@ -39,7 +39,7 @@ and then makes predictions on new test data.
 # running a basic decoding analysis using the cl_max_correlation
 
 data_file <- system.file(file.path("extdata", "ZD_150bins_50sampled.Rda"),
-                         package = "NDTr")
+                         package = "NeuroDecodeR")
 ds <- ds_basic(data_file, "stimulus_ID", 18, use_count_data = TRUE)
 fps <- list()
 

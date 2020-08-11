@@ -98,7 +98,7 @@ for (i in seq_along(id_levels)) {
 }
 
 
-data_file <- system.file("extdata/ZD_150bins_50sampled.Rda", package = "NDTr")
+data_file <- system.file("extdata/ZD_150bins_50sampled.Rda", package = "NeuroDecodeR")
 ds <- ds_generalization(
   data_file,
   "combined_ID_position", 18,
