@@ -1,35 +1,35 @@
 
-# This file defines all the NDTr generic functions. These functions are defined
-# in this file because several S3 objects in the NDTr use the same generic
+# This file defines all the NDR generic functions. These functions are defined
+# in this file because several S3 objects in the NDR use the same generic
 # function, (e.g., the get_predictions() method is used by all classifier (CL)
 # objects), so it makes the most sense to define them in a separate file rather
-# than in the files that define particular NDTr objects.
+# than in the files that define particular NDR objects.
 
 
 
-#' Get parameters of an NDTr object
+#' Get parameters of an NeuroDecodeR object
 #'
-#' Returns the parameters set in an NDTr object to enable reproducible analyses.
+#' Returns the parameters set in an NDR object to enable reproducible analyses.
 #'
 #' This is a generic function that returns a data frame with the parameters of
-#' an NDTr object. All NDTr objects (i.e., DS, FP, CL, RM and CV) need to define
-#' a method that implements this generic function. The CV object's
-#' `get_parameters()` method usually will call all the DS, FP, CL, RM and CV
-#' `get_parameters()` methods and aggregate and return all the parameters
+#' an NeuroDecodeR (NDR) object. All NDR objects (i.e., DS, FP, CL, RM and CV)
+#' need to define a method that implements this generic function. The CV
+#' object's `get_parameters()` method usually will call all the DS, FP, CL, RM
+#' and CV `get_parameters()` methods and aggregate and return all the parameters
 #' aggregated from these objects. These aggregated parameters can then be used
 #' to save the results of a particular analysis based on the parameters using
 #' the [log_save_results()] function. This method is most frequently used
-#' privately by other NDTr objects to save all the parameters that were used in
+#' privately by other NDR objects to save all the parameters that were used in
 #' an analysis.
 #'
-#' @param ndtr_obj An object from the NDTr package to get the parameters from.
+#' @param ndr_obj An object from the NeuroDecodeR package to get the parameters from.
 #'
-#' @return Returns a data frame with a single row that contains all the NDTr
+#' @return Returns a data frame with a single row that contains all the NDR
 #'   object's parameter values (e.g., values that were set in the object's
 #'   constructor).
 #'
 #' @export
-get_parameters <- function(ndtr_obj) {
+get_parameters <- function(ndr_obj) {
   UseMethod("get_parameters")
 }
 

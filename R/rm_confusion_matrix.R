@@ -62,7 +62,7 @@ new_rm_confusion_matrix <- function(the_data = data.frame(),
 
 
 # The aggregate_CV_split_results method needed to fulfill the results metric interface.
-# Not going to export this since it should never be directly called by users of the NDTr.
+# Not going to export this since it should never be directly called by users of the NDR.
 aggregate_CV_split_results.rm_confusion_matrix <- function(rm_obj, prediction_results) {
 
   # include a warning if the state is not intial
@@ -148,7 +148,7 @@ aggregate_CV_split_results.rm_confusion_matrix <- function(rm_obj, prediction_re
 
 
 # The aggregate_resample_run_results method needed to fulfill the results metric interface.
-# Not going to export this since it should never be directly called by users of the NDTr.
+# Not going to export this since it should never be directly called by users of the NDR.
 aggregate_resample_run_results.rm_confusion_matrix <- function(resample_run_results) {
   
   confusion_matrix <- resample_run_results
@@ -456,13 +456,13 @@ plot_MI <- function(rm_obj, plot_type = "TCD") {
 
 # Returns the parameters that were set in the rm_confusion_matrix object
 #' @export
-get_parameters.rm_confusion_matrix <- function(ndtr_obj) {
+get_parameters.rm_confusion_matrix <- function(ndr_obj) {
 
   # there is only one parameter option that can be set here so return it
   data.frame(
     rm_confusion_matrix.save_only_same_train_test_time =
-      attributes(ndtr_obj)$options$save_only_same_train_test_time,
+      attributes(ndr_obj)$options$save_only_same_train_test_time,
     rm_confusion_matrix.create_decision_vals_confusion_matrix =
-      attributes(ndtr_obj)$options$create_decision_vals_confusion_matrix)
+      attributes(ndr_obj)$options$create_decision_vals_confusion_matrix)
   
 }

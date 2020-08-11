@@ -35,7 +35,7 @@
 #' # running a basic decoding analysis using the cl_max_correlation
 #'
 #' data_file <- system.file(file.path("extdata", "ZD_150bins_50sampled.Rda"),
-#'                          package = "NDTr")
+#'                          package = "NeuroDecodeR")
 #' ds <- ds_basic(data_file, "stimulus_ID", 18, use_count_data = TRUE)
 #' fps <- list()
 #'
@@ -111,7 +111,7 @@ get_predictions.cl_poisson_naive_bayes <- function(cl_obj, training_set, test_se
   log_likelihoods <- t(sweep(log_likelihoods, 1, rowSums(lgamma(test_data + 1))))
 
   # get the predicted labels
-  predicted_inds <- apply(log_likelihoods, 2, rand_which_max) # NDTr helper rand_which_max()
+  predicted_inds <- apply(log_likelihoods, 2, rand_which_max) # NDR helper rand_which_max()
   predicted_labels <- lambdas_and_labels$train_labels[predicted_inds]
 
   # create a data frame that has all the results
@@ -137,6 +137,6 @@ get_predictions.cl_poisson_naive_bayes <- function(cl_obj, training_set, test_se
 # since there are no parameters for the cl_poisson_naive_bayes just return a data
 # frame with cl_poisson_naive_bayes.cl_poisson_naive_bayes saying no params...
 #' @export
-get_parameters.cl_poisson_naive_bayes <- function(ndtr_obj) {
+get_parameters.cl_poisson_naive_bayes <- function(ndr_obj) {
   data.frame(cl_poisson_naive_bayes.cl_poisson_naive_bayes = "does not have settable parameters")
 }

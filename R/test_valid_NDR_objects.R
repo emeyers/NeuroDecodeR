@@ -1,6 +1,6 @@
 
-# Functions to test that NDTr objects have appropriate methods
-# to implement the NDTr interfaces.
+# Functions to test that NDR objects have appropriate methods
+# to implement the NDR interfaces.
 
 
 
@@ -18,7 +18,7 @@
 #' @examples
 #' # This is valid raster data so the function will return no error message
 #' raster_dir_name <- file.path(
-#'   system.file("extdata", package = "NDTr"),
+#'   system.file("extdata", package = "NeuroDecodeR"),
 #'   "Zhang_Desimone_7object_raster_data_rda"
 #' )
 #' file_name <- "bp1001spk_01A_raster_data.rda"
@@ -30,7 +30,7 @@
 #' # Binned data is not in raster format (it has an extra column called siteID) so
 #' # checking if it is in raster format should return an error.
 #'
-#' binned_file_name <- system.file("extdata/ZD_150bins_50sampled.Rda", package = "NDTr")
+#' binned_file_name <- system.file("extdata/ZD_150bins_50sampled.Rda", package = "NeuroDecodeR")
 #' try(test_valid_raster_format(binned_file_name))
 #' 
 #' 
@@ -104,8 +104,8 @@ test_valid_raster_format <- function(raster_data) {
 
 
 # The following functions will not be exported for now. If users want to
-# create new NDTr objects they can still use these internal functions to check
-# that the objects they creatd conform to NDTr interfaces.
+# create new NDR objects they can still use these internal functions to check
+# that the objects they creatd conform to NDR interfaces.
 
 
 
@@ -178,7 +178,7 @@ test_valid_binned_format <- function(binned_data) {
 
 
 
-# A function that checks that a datasource conforms to the NDTr interface
+# A function that checks that a datasource conforms to the NDR interface
 test_valid_datasource <- function(the_datasource) {
 
   # make sure the data source has a get_data() method
@@ -203,7 +203,7 @@ test_valid_datasource <- function(the_datasource) {
 
 
 
-# A function that checks that a classifier conforms to the NDTr interface
+# A function that checks that a classifier conforms to the NDR interface
 test_valid_classifier <- function(the_classifier) {
 
 
@@ -235,7 +235,7 @@ test_valid_classifier <- function(the_classifier) {
 
 
 
-# A function that checks that a feature preprocessor conforms to the NDTr interface
+# A function that checks that a feature preprocessor conforms to the NDR interface
 test_valid_feature_preprocessor <- function(the_feature_preprocessor) {
 
 
@@ -267,7 +267,7 @@ test_valid_feature_preprocessor <- function(the_feature_preprocessor) {
 
 
 
-# A function that checks that a cross-validator conforms to the NDTr interface
+# A function that checks that a cross-validator conforms to the NDR interface
 test_valid_cross_validator <- function(the_cross_validator) {
 
 
@@ -295,7 +295,7 @@ test_valid_cross_validator <- function(the_cross_validator) {
 
 
 
-# A function that checks that a result metric conforms to the NDTr interface
+# A function that checks that a result metric conforms to the NDR interface
 test_valid_result_metric <- function(the_result_metric) {
 
   # Check these methods exist. No requirements that they do anything useful
@@ -313,17 +313,17 @@ test_valid_result_metric <- function(the_result_metric) {
 
 
 
-# Helper functions for testing if data is in valid NDTr format --------------
+# Helper functions for testing if data is in valid NDR format --------------
 
 
 # A helper function to test if a given class has a method. This is useful to
-# check that particular object types in the NDTr fulfill the interface.
-test_has_method <- function(ndtr_object, method_name) {
+# check that particular object types in the NDR fulfill the interface.
+test_has_method <- function(ndr_object, method_name) {
 
-  class_name <- class(ndtr_object)[1]
+  class_name <- class(ndr_object)[1]
 
   if (!(exists(paste(method_name, class_name, sep = "."), mode = "function"))) {
-    stop(paste(class(ndtr_object), "does not have a method called", method_name))
+    stop(paste(class(ndr_object), "does not have a method called", method_name))
   }
   
 }
@@ -334,21 +334,21 @@ test_has_method <- function(ndtr_object, method_name) {
 
 # A function that checks that a get_parameters() method exists and returns
 # a data frame with a single row.
-test_get_parameters_method <- function(ndtr_object) {
+test_get_parameters_method <- function(ndr_object) {
   
-  test_has_method(ndtr_object, "get_parameters")
+  test_has_method(ndr_object, "get_parameters")
 
-  the_parameters <- get_parameters(ndtr_object)
+  the_parameters <- get_parameters(ndr_object)
 
   if (!is.data.frame(the_parameters)) {
     stop(
-      paste("The get_parameters method for", class(ndtr_object)),
+      paste("The get_parameters method for", class(ndr_object)),
       "is not returning a data frame.")
   }
 
   if (dim(the_parameters)[1] != 1) {
     stop(
-      paste("The get_parameters method for", class(ndtr_object)),
+      paste("The get_parameters method for", class(ndr_object)),
       "must return a data frame with a *single* row.")
   }
   
@@ -398,7 +398,8 @@ check_df_contains_variable <- function(df, variable_name, error_message_method_n
 # A helper function that generates data to test datasources and feature-preprocessors
 get_example_training_and_test_data <- function() {
   
-  real_data_binned_file_name <- system.file(file.path("extdata", "ZD_150bins_50sampled.Rda"), package = "NDTr")
+  real_data_binned_file_name <- system.file(file.path("extdata", "ZD_150bins_50sampled.Rda"), 
+                                            package = "NeuroDecodeR")
 
   # generate shuffled count data...
   ds <- ds_basic(real_data_binned_file_name, "stimulus_ID",

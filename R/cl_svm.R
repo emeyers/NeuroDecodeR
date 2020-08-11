@@ -140,15 +140,15 @@ get_predictions.cl_svm <- function(cl_obj, training_set, test_set) {
 
 # Get the parameters that were used in the svm
 #' @export
-get_parameters.cl_svm <- function(ndtr_obj) {
+get_parameters.cl_svm <- function(ndr_obj) {
 
-  if (length(ndtr_obj$svm_options) == 0) {
+  if (length(ndr_obj$svm_options) == 0) {
 
     parameter_df <- data.frame(cl_svm.cl_svm = "default svm parameters")
 
   } else {
 
-    parameter_df <- data.frame(val = unlist(ndtr_obj$svm_options)) %>%
+    parameter_df <- data.frame(val = unlist(ndr_obj$svm_options)) %>%
       tibble::rownames_to_column("key") %>%
       tidyr::spread("key", "val") %>%
       dplyr::mutate(across(where(is.factor), as.character))

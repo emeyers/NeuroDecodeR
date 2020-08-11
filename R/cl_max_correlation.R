@@ -19,7 +19,7 @@
 #' @examples
 #' # running a basic decoding analysis using the cl_max_correlation
 #' data_file <- system.file(file.path("extdata", "ZD_150bins_50sampled.Rda"),
-#'                          package = "NDTr")
+#'                          package = "NeuroDecodeR")
 #' ds <- ds_basic(data_file, "stimulus_ID", 18)
 #' fps <- list(fp_zscore())
 #'
@@ -91,6 +91,6 @@ get_predictions.cl_max_correlation <- function(cl_obj,
 # since there are no parameters for the cl_max_correlation, just return a data
 # frame with one variable with a value that there are not settable parameters
 #' @export
-get_parameters.cl_max_correlation <- function(ndtr_obj) {
+get_parameters.cl_max_correlation <- function(ndr_obj) {
   data.frame(cl_max_correlation.cl_max_correlation = "does not have settable parameters")
 }

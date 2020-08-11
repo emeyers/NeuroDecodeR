@@ -409,11 +409,11 @@ plot.rm_main_results <- function(x, ..., result_type = "zero_one_loss", plot_typ
 
 # Get the parameters for the rm_main_results object
 #' @export
-get_parameters.rm_main_results <- function(ndtr_obj) {
+get_parameters.rm_main_results <- function(ndr_obj) {
 
   # get the options for now the normalized rank and decision values should be aggregated
-  aggregate_decision_values <- attr(ndtr_obj, "options")$aggregate_decision_values
-  aggregate_normalized_rank <- attr(ndtr_obj, "options")$aggregate_normalized_rank
+  aggregate_decision_values <- attr(ndr_obj, "options")$aggregate_decision_values
+  aggregate_normalized_rank <- attr(ndr_obj, "options")$aggregate_normalized_rank
 
   data.frame(
     rm_main_results.aggregate_decision_values = aggregate_decision_values,

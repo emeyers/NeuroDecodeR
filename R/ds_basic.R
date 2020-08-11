@@ -58,7 +58,7 @@
 #'
 #' @examples
 #' # A typical example of creating a datasource to be passed cross-validation object
-#' data_file <- system.file("extdata/ZD_150bins_50sampled.Rda", package = "NDTr")
+#' data_file <- system.file("extdata/ZD_150bins_50sampled.Rda", package = "NeuroDecodeR")
 #' ds <- ds_basic(data_file, "stimulus_ID", 18)
 #'
 #' # If one has many repeats of each label, decoding can be faster if one
@@ -76,7 +76,7 @@
 #' # One never explicitely calls the get_data() function, but rather this is
 #' # done by the cross-validator. However, to illustrate what this function
 #' # does, we can call it explicitly here to get training and test data:
-#' all_cv_data <- NDTr:::get_data(ds)
+#' all_cv_data <- NeuroDecodeR:::get_data(ds)
 #' names(all_cv_data)
 #' @family datasource
 #'
@@ -353,13 +353,13 @@ get_data.ds_basic <- function(ds_obj) {
 
 
 #' @export
-get_parameters.ds_basic <- function(ndtr_obj) {
+get_parameters.ds_basic <- function(ndr_obj) {
 
-  ndtr_obj$binned_data <- NULL
+  ndr_obj$binned_data <- NULL
 
-  variable_lengths <- sapply(ndtr_obj, length)
+  variable_lengths <- sapply(ndr_obj, length)
   length_one_variables <- variable_lengths[variable_lengths < 2]
-  length_one_variables <- ndtr_obj[names(length_one_variables)]
+  length_one_variables <- ndr_obj[names(length_one_variables)]
 
   # convert null values to NAs so that the variables are retained
   length_one_variables <- sapply(length_one_variables, function(x) ifelse(is.null(x), NA, x))
@@ -369,10 +369,10 @@ get_parameters.ds_basic <- function(ndtr_obj) {
     tidyr::spread("key", "val") %>%
     dplyr::mutate(dplyr::across(where(is.factor), as.character))
 
-  parameter_df$label_levels_to_use <- list(sort(unlist(ndtr_obj$label_levels_to_use)))
-  parameter_df$site_IDs_to_use <- list(ndtr_obj$site_IDs_to_use)
+  parameter_df$label_levels_to_use <- list(sort(unlist(ndr_obj$label_levels_to_use)))
+  parameter_df$site_IDs_to_use <- list(ndr_obj$site_IDs_to_use)
 
-  names(parameter_df) <- paste(class(ndtr_obj), names(parameter_df), sep = ".")
+  names(parameter_df) <- paste(class(ndr_obj), names(parameter_df), sep = ".")
 
   parameter_df
 

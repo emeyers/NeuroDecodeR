@@ -2,7 +2,7 @@
 #'
 #' If one already has raster data created in MATLAB (.mat files), this function
 #' can be used to convert it to an R format (.rda files) that can be used with
-#' the NDTr.
+#' the NDR.
 #'
 #' @param matlab_raster_dir_name A character string specifying the path to a
 #'   directory that contains raster data in MATLAB .mat files.
@@ -31,7 +31,7 @@
 #'
 #' @examples
 #' matlab_raster_dir_name <- file.path(
-#'   system.file("extdata", package = "NDTr"),
+#'   system.file("extdata", package = "NeuroDecodeR"),
 #'   "Zhang_Desimone_7object_raster_data_small_mat"
 #' )
 #'

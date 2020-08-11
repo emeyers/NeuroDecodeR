@@ -45,7 +45,7 @@
 #'
 #' @examples
 #' data_file <- system.file("extdata/ZD_150bins_50sampled.Rda",
-#'   package = "NDTr"
+#'   package = "NeuroDecodeR"
 #' )
 #'
 #' ds <- ds_basic(data_file, "stimulus_ID", 18)
@@ -285,21 +285,21 @@ run_decoding.cv_standard <- function(cv_obj) {
 
 # get parameters from all objects and save the in a data frame so that
 # which will be useful to tell if an analysis has already been run
-get_parameters.cv_standard <- function(ndtr_obj) {
+get_parameters.cv_standard <- function(ndr_obj) {
 
 
   # start by getting the parameters from the datasource
-  parameter_df <- get_parameters(ndtr_obj$datasource)
+  parameter_df <- get_parameters(ndr_obj$datasource)
 
   # add the parameters from the classifier
-  parameter_df <- cbind(parameter_df, get_parameters(ndtr_obj$classifier))
+  parameter_df <- cbind(parameter_df, get_parameters(ndr_obj$classifier))
 
 
   # if feature-processors have been specified, add their parameters to the data frame
-  if (length(ndtr_obj$feature_preprocessors) >= 1) {
+  if (length(ndr_obj$feature_preprocessors) >= 1) {
 
-    for (iFP in seq_along(ndtr_obj$feature_preprocessors)) {
-      curr_FP_parameters <- get_parameters(ndtr_obj$feature_preprocessors[[iFP]])
+    for (iFP in seq_along(ndr_obj$feature_preprocessors)) {
+      curr_FP_parameters <- get_parameters(ndr_obj$feature_preprocessors[[iFP]])
       parameter_df <- cbind(parameter_df, curr_FP_parameters)
     }
 
@@ -308,17 +308,17 @@ get_parameters.cv_standard <- function(ndtr_obj) {
 
 
   # go through each result metric and get their parameters
-  for (iMetric in seq_along(ndtr_obj$result_metrics)) {
-    curr_metric_parameters <- get_parameters(ndtr_obj$result_metrics[[iMetric]])
+  for (iMetric in seq_along(ndr_obj$result_metrics)) {
+    curr_metric_parameters <- get_parameters(ndr_obj$result_metrics[[iMetric]])
     parameter_df <- cbind(parameter_df, curr_metric_parameters)
   }
 
 
   # finally add the parameters from this cv_standard object as well
   cv_parameters <- data.frame(
-    analysis_ID = ndtr_obj$analysis_ID,
-    cv_standard.num_resample_runs = ndtr_obj$num_resample_runs,
-    cv_standard.test_only_at_training_time = ndtr_obj$test_only_at_training_time
+    analysis_ID = ndr_obj$analysis_ID,
+    cv_standard.num_resample_runs = ndr_obj$num_resample_runs,
+    cv_standard.test_only_at_training_time = ndr_obj$test_only_at_training_time
   )
 
 

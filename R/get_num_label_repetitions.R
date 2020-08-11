@@ -18,7 +18,7 @@
 #' has an associated plot() method.
 #'
 #' @examples
-#' data_file <- system.file("extdata/ZD_150bins_50sampled.Rda", package = "NDTr")
+#' data_file <- system.file("extdata/ZD_150bins_50sampled.Rda", package = "NeuroDecodeR")
 #' label_rep_info <- get_num_label_repetitions(data_file, "stimulus_ID")
 #' plot(label_rep_info)
 #'

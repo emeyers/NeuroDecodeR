@@ -131,9 +131,9 @@ preprocess_data.fp_select_k_features <- function(fp, training_set, test_set) {
 
 
 #' @export
-get_parameters.fp_select_k_features <- function(ndtr_obj) {
+get_parameters.fp_select_k_features <- function(ndr_obj) {
   data.frame(
-    fp_select_k_features.num_site_to_use = ndtr_obj$num_site_to_use,
-    fp_select_k_features.num_sites_to_exclude = ndtr_obj$num_sites_to_exclude
+    fp_select_k_features.num_site_to_use = ndr_obj$num_site_to_use,
+    fp_select_k_features.num_sites_to_exclude = ndr_obj$num_sites_to_exclude
   )
 }

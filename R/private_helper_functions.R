@@ -1,6 +1,6 @@
 
 # This file contains helper functions that will not be publicly visible, but
-#  instead are used internally by other functions in the NDTr
+#  instead are used internally by other functions in the NDR
 
 
 
@@ -25,7 +25,7 @@ check_and_load_binned_data <- function(binned_data) {
       stop(paste(
         "The argement binned_data must either be a data frame containing data in binned format,",
         "or a string listing a path to a file that has data in binned format.",
-        "Use NDTr:::test_valid_binned_data_format(binned_data) for more information on",
+        "Use NeuroDecodeR:::test_valid_binned_data_format(binned_data) for more information on",
         "how the data is not conforming to the binned format."))
    })
 
