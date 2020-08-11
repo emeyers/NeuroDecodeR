@@ -10,7 +10,7 @@ vignette: >
 
 
 
-The following datasets can be used with the NDTr to learn how to use the package.
+The following datasets can be used with the NeuroDecodeR to learn how to use the package.
 
 
 
@@ -42,24 +42,25 @@ monkey viewed one of the 7 different images.
 
 ### Accessing the dataset
 
-The Zhang-Desimone 7 object dataset comes with the NDTr. Individual raster files
-can be found in the directory `extdata/Zhang_Desimone_7object_raster_data_rda/`.
-Additionally, binned data using 150 ms bins and 50 ms sampling intervals can be
-found in the file `extdata/ZD_150bins_50sampled.Rda`. The code below shows how
-to load a single raster data file, and the binned data.
+The Zhang-Desimone 7 object dataset comes with the NeuroDecodeR package.
+Individual raster files can be found in the directory
+`extdata/Zhang_Desimone_7object_raster_data_rda/`. Additionally, binned data
+using 150 ms bins and 50 ms sampling intervals can be found in the file
+`extdata/ZD_150bins_50sampled.Rda`. The code below shows how to load a single
+raster data file, and the binned data.
 
 
 ```{r load_ZD_data}
 
 
 # load a raster format data file
-raster_dir_name <- file.path(system.file("extdata", package = "NDTr"), "Zhang_Desimone_7object_raster_data_rda")
+raster_dir_name <- file.path(system.file("extdata", package = "NeuroDecodeR"), "Zhang_Desimone_7object_raster_data_rda")
 file_name <- "bp1001spk_01A_raster_data.rda"
 load(file.path(raster_dir_name, file_name))
 
 
 # load the 150 ms binned data
-binned_file_name <- system.file("extdata/ZD_150bins_50sampled.Rda", package="NDTr")
+binned_file_name <- system.file("extdata/ZD_150bins_50sampled.Rda", package="NeuroDecodeR")
 load(binned_file_name)
 
 ```

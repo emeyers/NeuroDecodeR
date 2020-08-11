@@ -1,17 +1,17 @@
 ---
-title: "Introduction to the NDTr"
+title: "Introduction to the NeuroDecode R package"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Introduction to the NDTr}
+  %\VignetteIndexEntry{Introduction to the NDR}
   %\VignetteEngine{knitr::rmarkdown}
   \usepackage[utf8]{inputenc}
 ---
   
  
 The following tutorial gives a basic introduction to the data formats used by
-Neural Decoding Toolbox (NDTr) and shows how to run a simple decoding analysis.
+NeuroDecodeR (NDR) and shows how to run a simple decoding analysis.
 The tutorial is based on a dataset collected by Ying Zhang in Bob Desimone’s lab
-at MIT. The NDTr is based on the MATLAB Neural Decoding Toolbox, which you can
+at MIT. The NDR is based on the MATLAB Neural Decoding Toolbox, which you can
 learn more about at [www.readout.info](http://www.readout.info).
 
 
@@ -26,7 +26,7 @@ activity and experimental conditions is evaluated by having the classifier
 predict what experimental conditions were present on a second *test set* of
 data.
 
-The NDTr is built around 5 different object classes that allow users to apply
+The NDR is built around 5 different object classes that allow users to apply
 neural decoding in a flexible and robust way. The four types of objects are:
 
   1. **Datasources (DS)** which generate training and test
@@ -44,7 +44,7 @@ neural decoding in a flexible and robust way. The four types of objects are:
   5. **Cross-validators (CV)** which take the DS, FP and CL objects and run a
   cross-validation decoding procedure.
 
-The NDTr comes with a few implementations of each of these objects, and defines
+The NDR comes with a few implementations of each of these objects, and defines
 interfaces that allow one to create new objects that extend the basic
 functionality of the five object classes. The following tutorial explains the
 data formats used by the Neural Decoding Toolbox and how to run a decoding
@@ -71,7 +71,7 @@ To start, let us load some libraries we will use in this tutorial.
 
 ```{r load_libraries, message=FALSE, warning=FALSE}
 
-library(NDTr)
+library(NeuroDecodeR)
 library(ggplot2)
 library(dplyr)
 library(tidyr)
@@ -82,7 +82,7 @@ library(tidyr)
 
 ## Data formats
 
-In order to use the NDTr, the neural data must be in a usable format. Typically,
+In order to use the NDR, the neural data must be in a usable format. Typically,
 this involves putting the data in [raster format](data_formats.html) and then
 converting it to [binned format](data_formats.html) using the
 `create_binned_data()` function.
@@ -90,7 +90,7 @@ converting it to [binned format](data_formats.html) using the
 
 ### Raster format
 
-To run a decoding analysis using the NDTr, you first need to have your data in a
+To run a decoding analysis using the NDR, you first need to have your data in a
 usable format. In this tutorial we will use data collected by [Ying Zhang in Bob
 Desimone’s lab at MIT](datasets.hmtl). The directory
 extdata/Zhang_Desimone_7objects_raster_data_rda/ contains data in
@@ -105,7 +105,7 @@ raster data in the correct format.
 
 ```{r load_raster_file}
 
-raster_dir_name <- file.path(system.file("extdata", package = "NDTr"), "Zhang_Desimone_7object_raster_data_rda")
+raster_dir_name <- file.path(system.file("extdata", package = "NeuroDecodeR"), "Zhang_Desimone_7object_raster_data_rda")
 file_name <- "bp1001spk_01A_raster_data.rda"
 load(file.path(raster_dir_name, file_name))
 
@@ -134,7 +134,7 @@ when a neuron emitted an action potential.
 
 ### Binning the data
 
-The NDTr decoding objects operate on data in binned-format. To convert
+The NDR decoding objects operate on data in binned-format. To convert
 data from raster-format to binned-format, we can use the function
 `create_binned_data()`, which calculates the average firing rate of neurons over
 specified intervals sampled with a specified frequency (i.e., a boxcar
@@ -150,7 +150,7 @@ following commands can be used:
 
 ```{r bin_data, eval = FALSE}
 
-library(NDTr)
+library(NeuroDecodeR)
 
 binned_file_name <- create_binned_data(raster_dir_name, "ZD", 150, 50)
 
@@ -172,7 +172,7 @@ see how many times the labels were repeated.
 
 ```{r label_repetitions}
 
-binned_file_name <- system.file("extdata/ZD_150bins_50sampled.Rda", package="NDTr")
+binned_file_name <- system.file("extdata/ZD_150bins_50sampled.Rda", package="NeuroDecodeR")
 label_rep_info <- get_num_label_repetitions(binned_file_name, "stimulus_ID") 
 plot(label_rep_info)  
 
@@ -236,7 +236,8 @@ label levels or neurons to use.
 
 ```{r datasource}
 
-binned_file_name <- system.file(file.path("extdata", "ZD_150bins_50sampled.Rda"), package="NDTr")
+binned_file_name <- system.file(file.path("extdata", "ZD_150bins_50sampled.Rda"),
+                                package="NeuroDecodeR")
 variable_to_decode <- "stimulus_ID"
 num_cv_splits <- 20
   
@@ -419,7 +420,7 @@ plot(DECODING_RESULTS$rm_confusion_matrix, result_type = "mutual_information")
 
 ## Saving the results
 
-Finally, the NDTr has a "log" function that helps you save and manage your results.
+Finally, the NDR has a "log" function that helps you save and manage your results.
 Below, we show how to use the `log_save_results()` function which takes a
 `DECODING_RESULTS` object and the name of a directory. This function saves the
 results to the specified directory and logs the parameters used in the

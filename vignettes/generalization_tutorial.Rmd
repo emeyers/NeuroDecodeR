@@ -8,19 +8,19 @@ vignette: >
 ---
   
  
-The following tutorial shows how to use the Neural Decoding Toolbox in R (NDTr)
+The following tutorial shows how to use the NeuroDecodeR (NDR) package
 to conduct a generalization analysis which can test whether a population of
 neural activity contains information in an invariant/abstract representation. In
 particular, we will use the Zhang-Desimone 7 object dataset to examine how
 invariant neural representations in the Inferior Temporal cortex are to changes
 in the position of stimuli. This tutorial assumes that one is already familiar
-with the basics of the NDT as covered in the introductory tutorial. The NDTr is
+with the basics of the NDR as covered in the introductory tutorial. The NDR is
 based on the MATLAB Neural Decoding Toolbox, which you can learn more about at
 [www.readout.info](www.readout.info).
 
 
 
-### Testing invariant neural representations using the NDTr
+### Testing invariant neural representations using the NDR
 
 An important step in solving many complex tasks involves creating
 abstract/invariant representations from widely varying input patterns. For
@@ -64,7 +64,7 @@ To start let us by loading some libraries we will use in this tutorial
 
 ```{r attach_libraries, message=FALSE, warning=FALSE}
 
-library(NDTr)
+library(NeuroDecodeR)
 library(ggplot2)
 library(dplyr)
 library(tidyr)
@@ -86,7 +86,7 @@ binning the data, see the [introduction tutorial](introduction_tutorial.html).
 
 ```{r bin_data, results = 'hide', message = FALSE}
 
-raster_dir_name <- file.path(system.file("extdata", package = "NDTr"), 
+raster_dir_name <- file.path(system.file("extdata", package = "NeuroDecodeR"), 
                              "Zhang_Desimone_7object_raster_data_rda")
 
 bin_width <- 400
@@ -127,7 +127,7 @@ rms <- list(rm_main_results(), rm_confusion_matrix())
 
 In order to train with data from particular locations and test with data from a
 different location, we will use the
-[`ds_generalization`](https://emeyers.github.io/NDTr/reference/ds_generalization.html)
+[`ds_generalization`](https://emeyers.github.io/NeuroDecodeR/reference/ds_generalization.html)
 datasource. To use this datasource, we need to specify which label levels belong
 to each training class and which label levels belong to each test class. We can do
 by setting the `train_label_levels` and `test_label_levels` arguments to lists

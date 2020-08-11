@@ -1,8 +1,8 @@
 ---
-title: "NDTr object specification"
+title: "NeuroDecodeR object specification"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{NDTr object specification}
+  %\VignetteIndexEntry{NDR object specification}
   %\VignetteEngine{knitr::rmarkdown}
   \usepackage[utf8]{inputenc}
 ---
@@ -11,7 +11,7 @@ vignette: >
 <br>
 
 
-The Neural Decoding Toolbox in R (NDTr) is designed around five abstract object
+The NeuroDecodeR (NDR) package is designed around five abstract object
 types which are:
 
  1. Datasources (DS): Generate training and test splits of the data.
@@ -33,8 +33,8 @@ By having a standard set of object types, one can easily use different instances
 of these five object types to do different types of analyses.
 
 For most common analyses, one can use instances of these different object types
-that come with the NDTr. However, in some cases, one might want to extend the
-functionality of the NDTr to gain additional insights. For example, one might
+that come with the NDR. However, in some cases, one might want to extend the
+functionality of the NDR to gain additional insights. For example, one might
 want to try a different classifier to gain a better understanding of how
 populations of neurons code information (e.g., see Meyers, Borzello, Freiwald
 and Tsao, J Neurosci 2015). 
@@ -42,7 +42,7 @@ and Tsao, J Neurosci 2015).
 The following document describes the methods and data formats that need to be
 implemented to create valid DS, FP, CL, RM, and CV object types. By creating new
 classes of objects that conform to these interfaces, one can easily extend the
-NDTr to try new analyses. 
+NDR to try new analyses. 
 
 
 <br>
@@ -72,7 +72,7 @@ that has the following variables in it:
 5. `CV_XXX`: A list for each CV split whether a given row is in that train or test set
 
 
-Like all NDTr objects, DS objects must also implement a `get_properties()` method
+Like all NDR objects, DS objects must also implement a `get_properties()` method
 which returns a data frame with one row that lists all the properties that have
 been set to allow for reproducible research.
 
@@ -83,13 +83,13 @@ Here is an example the data returned by the `ds_basic()` datasource
 
 
 ```{r, echo = FALSE, warning=FALSE}
-library(NDTr)
+library(NeuroDecodeR)
 ```
 
 
 ```{r}
 
-data_file_name <- system.file("extdata/ZD_150bins_50sampled.Rda", package="NDTr")
+data_file_name <- system.file("extdata/ZD_150bins_50sampled.Rda", package="NeuroDecodeR")
 ds <- ds_basic(data_file_name, 'stimulus_ID', 18)
 
 all_cv_data <- get_data(ds)  
@@ -139,7 +139,7 @@ The `preprocess_data()` returns a list with the two data frames *training_set* a
 *test_set* but the data in these data frames has been preprocessed based on
 parameters learned from the training_set.
 
-Like all NDTr objects, FP objects must also implement a `get_properties()` method
+Like all NDR objects, FP objects must also implement a `get_properties()` method
 which returns a data frame with one row that lists all the properties that have
 been set to allow for reproducible research.
 
@@ -151,7 +151,7 @@ example of how the FP object gets and returns data.
 
 
 ```{r, echo = FALSE, message=FALSE, warning=FALSE}
-library(NDTr)
+library(NeuroDecodeR)
 library(dplyr)
 ```
 
@@ -159,7 +159,7 @@ library(dplyr)
 ```{r}
 
 # create a ds_basic to get the data
-data_file_name <- system.file("extdata/ZD_150bins_50sampled.Rda", package="NDTr")
+data_file_name <- system.file("extdata/ZD_150bins_50sampled.Rda", package="NeuroDecodeR")
 ds <- ds_basic(data_file_name, 'stimulus_ID', 18)
 cv_data <- get_data(ds)  
  
@@ -238,7 +238,7 @@ The `get_predictions()` returns a data frame that has the following variables:
 the classifier rates a test point as coming from a particular class
 
 
-Like all NDTr objects, CL objects must also implement a `get_properties()` method
+Like all NDR objects, CL objects must also implement a `get_properties()` method
 which returns a data frame with one row that lists all the properties that have
 been set to allow for reproducible research.
 
@@ -251,7 +251,7 @@ example of how the CL object gets and returns data.
 
 
 ```{r, echo = FALSE, message=FALSE, warning=FALSE}
-library(NDTr)
+library(NeuroDecodeR)
 library(dplyr)
 ```
 
@@ -259,7 +259,7 @@ library(dplyr)
 ```{r}
 
 # create a ds_basic to get the data
-data_file_name <- system.file("extdata/ZD_150bins_50sampled.Rda", package="NDTr")
+data_file_name <- system.file("extdata/ZD_150bins_50sampled.Rda", package="NeuroDecodeR")
 ds <- ds_basic(data_file_name, 'stimulus_ID', 18)
 cv_data <- get_data(ds)  
  
@@ -353,7 +353,7 @@ resample run each row comes from.
 The output of this method should be a RM object of the same type that is a data
 frame which most likely is of a smaller size.
 
-Like all NDTr objects, RM objects must also implement a `get_properties()` method
+Like all NDR objects, RM objects must also implement a `get_properties()` method
 which returns a data frame with one row that lists all the properties that have
 been set to allow for reproducible research.
 
@@ -396,9 +396,9 @@ The cross-validator returns a list `DECODING_RESULTS` which contains different R
 objects that can be used to assess how accurately the classifier made
 predictions at different points in time.
 
-Like all NDTr objects, CV objects must also implement a `get_properties()` method
+Like all NDR objects, CV objects must also implement a `get_properties()` method
 which returns a data frame with one row that lists all the properties that have
-been set and also pulls all properties from the other NDTr objects (e.g., from
+been set and also pulls all properties from the other NDR objects (e.g., from
 the DS, FP, CL and RM objects) to allow for reproducible research.
 
 
