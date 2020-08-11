@@ -1,10 +1,10 @@
-#' NDTr: A package for neural decoding analyses
+#' NeuroDecodeR: A package for neural decoding analyses
 #'
-#' The NDTr is a package that makes it easy to do neural decoding analyses.
+#' The NeuroDecodeR makes it easy to do neural decoding analyses in R!
 #'
-#' The NDTr is built around five abstract object types that work together in a
-#' modular way to allow a range of neural decoding analyses. These five object
-#' types are:
+#' The NeuroDecodeR (NDR) is built around five abstract object types that work
+#' together in a modular way to allow a range of neural decoding analyses. These
+#' five object types are:
 #'
 #' 1. Datasources (DS): Generate training and test splits of the data.
 #'
@@ -32,13 +32,13 @@
 #'  2. `binned format` contains data from multiple sites where the data is more
 #'  coarsely binned across time.
 #'
-#'  A user of the NDTr will typically store their data in `raster format` and
+#'  A user of the NDR will typically store their data in `raster format` and
 #'  then use the [create_binned_data()] to create a `binned format` data file
 #'  that will be used in the decoding analysis.
 #'
 #'
 #' @docType package
-#' @name NDTr
+#' @name NeuroDecodeR
 #'
 #' @import foreach
 #' @import dplyr

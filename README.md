@@ -1,18 +1,18 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-# NDTr: The Neural Decoding Toolbox in R
+# NeuroDecodeR: Neural Decoding in R
 
 <!-- badges: start -->
 
 [![Travis build
-status](https://travis-ci.com/emeyers/NDTr.svg?branch=master)](https://travis-ci.com/emeyers/NDTr)
+status](https://travis-ci.com/emeyers/NeuroDecodeR.svg?branch=master)](https://travis-ci.com/emeyers/NeuroDecodeR)
 
 [![AppVeyor build
-status](https://ci.appveyor.com/api/projects/status/github/emeyers/NDTr?branch=master&svg=true)](https://ci.appveyor.com/project/emeyers/NDTr)
+status](https://ci.appveyor.com/api/projects/status/github/emeyers/NeuroDecodeR?branch=master&svg=true)](https://ci.appveyor.com/project/emeyers/NeuroDecodeR)
 
 [![Coveralls test
-coverage](https://coveralls.io/repos/github/emeyers/NDTr/badge.svg)](https://coveralls.io/r/emeyers/NDTr?branch=master)
+coverage](https://coveralls.io/repos/github/emeyers/NeuroDecodeR/badge.svg)](https://coveralls.io/r/emeyers/NeuroDecodeR?branch=master)
 
 <!-- badges: end -->
 
@@ -22,16 +22,16 @@ coverage](https://coveralls.io/repos/github/emeyers/NDTr/badge.svg)](https://cov
 
 *Neural decoding* is a data analysis method that uses pattern
 classifiers to predict experimental conditions based on neural activity.
-The Neural Decoding Toolbox in R (NDTr) makes it easy to do neural
+The Neural Decoding in R (NDR) package makes it easy to do neural
 decoding analyses in R.
 
 ## Installation
 
-You can install NDTr from github using:
+You can install NDR from github using:
 
 ``` r
 # install.packages("devtools")
-devtools::install_github("emeyers/NDTr")
+devtools::install_github("emeyers/NDR")
 ```
 
 ## Usage
@@ -50,16 +50,17 @@ The package is based on 5 abstract object types:
 By combing different versions of these 5 object types together, it is
 possible to run a range of different decoding analyses.
 
-Below is a brief illustration of how to use the NDTr to do a simple
-decoding analysis. To learn how to use the NDTr please see the
-[documentation website](https://emeyers.github.io/NDTr/) and the package
+Below is a brief illustration of how to use the NDR to do a simple
+decoding analysis. To learn how to use the NDR please see the
+[documentation website](https://emeyers.github.io/NeuroDecodeR/) and the package
 vignettes.
 
 ``` r
-library(NDTr)
+library(NeuroDecodeR)
 
 # file to data in "binned format"
-basedir_file_name <- system.file(file.path("extdata", "ZD_150bins_50sampled.Rda"), package="NDTr")
+basedir_file_name <- system.file(file.path("extdata", "ZD_150bins_50sampled.Rda"),
+                                 package="NeuroDecodeR")
 
 # create the DS, FP, CL, RM, and CV objects
 ds <- ds_basic(basedir_file_name, 'stimulus_ID', 5, num_label_repeats_per_cv_split = 3)
@@ -89,7 +90,7 @@ plot(DECODING_RESULTS$rm_main_results)
 ## Documentation
 
 The documentation for this package is available at:
-<https://emeyers.github.io/NDTr/>
+<https://emeyers.github.io/NeuroDecodeR/>
 
 To get started we recommend you read the [introductory
-tutorial](https://emeyers.github.io/NDTr/articles/introduction_tutorial.html)
+tutorial](https://emeyers.github.io/NeuroDecodeR/articles/introduction_tutorial.html)
