@@ -1,7 +1,7 @@
 
 
 # if one needs to regenrate the test data this function can be used
-# source('generate_data_to_test_NDTr.R')
+# source('generate_data_to_test_NDR.R')
 
 
 

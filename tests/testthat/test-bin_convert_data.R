@@ -1,7 +1,7 @@
 
 
 
-raster_dir_name <- trimws(file.path(system.file("extdata", package = "NDTr"), 
+raster_dir_name <- trimws(file.path(system.file("extdata", package = "NeuroDecodeR"), 
                              "Zhang_Desimone_7object_raster_data_rda", " "))
 
 
@@ -41,7 +41,7 @@ test_that("create_binned_data() creates binned data from raster data in the corr
 test_that("convert_matlab_raster_data() convert MATLAB raster data to R raster data", {
   
 
-  matlab_raster_dir_name <- file.path(system.file("extdata", package = "NDTr"), 
+  matlab_raster_dir_name <- file.path(system.file("extdata", package = "NeuroDecodeR"), 
                                    "Zhang_Desimone_7object_raster_data_small_mat")
   
   # create temporary directory to hold converted data
@@ -89,7 +89,7 @@ test_that("convert_matlab_raster_data() convert MATLAB raster data to R raster d
 
 test_that("get_num_label_repetitions() correctly assesses how many times a label was repeated", {
 
-  file_name <-  system.file(file.path("extdata", "ZD_150bins_50sampled.Rda"), package = "NDTr")
+  file_name <-  system.file(file.path("extdata", "ZD_150bins_50sampled.Rda"), package = "NeuroDecodeR")
   
   expect_error(get_num_label_repetitions(file_name, "stimulus_ID", levels_to_use = c("kiwi", "dog")))
   
@@ -135,7 +135,7 @@ test_that("test_valid_raster_format() correctly assesses if data is in valid ras
 test_that("test_valid_binned_format() correctly assesses if data is in valid binned format", {
   
   raster_file_name <- paste0(raster_dir_name, list.files(raster_dir_name)[1])
-  binned_file_name <-  system.file(file.path("extdata", "ZD_150bins_50sampled.Rda"), package = "NDTr")
+  binned_file_name <-  system.file(file.path("extdata", "ZD_150bins_50sampled.Rda"), package = "NeuroDecodeR")
   
   # valid raster file should be valid and return NULL
   expect_null(test_valid_binned_format(binned_file_name))
@@ -157,7 +157,7 @@ test_that("test_valid_binned_format() correctly assesses if data is in valid bin
 test_that("check_and_load_binned_data() priviate helper function is working", {
   
   raster_file_name <- paste0(raster_dir_name, list.files(raster_dir_name)[1])
-  binned_file_name <-  system.file(file.path("extdata", "ZD_150bins_50sampled.Rda"), package = "NDTr")
+  binned_file_name <-  system.file(file.path("extdata", "ZD_150bins_50sampled.Rda"), package = "NeuroDecodeR")
   
   # raster data is not in binned format so should produce an error
   expect_error(check_and_load_binned_data(raster_file_name))

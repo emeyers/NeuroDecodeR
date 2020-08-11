@@ -6,7 +6,7 @@
 test_that("cv_standard can run simple decoding analysis", {
 
   
-  basedir_file_name <- system.file(file.path("extdata", "ZD_150bins_50sampled.Rda"), package="NDTr")
+  basedir_file_name <- system.file(file.path("extdata", "ZD_150bins_50sampled.Rda"), package="NeuroDecodeR")
 
   ds <- ds_basic(basedir_file_name, 'stimulus_ID', 6, num_label_repeats_per_cv_split = 3)
   fps <- list(fp_zscore(), fp_select_k_features(100))

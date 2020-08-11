@@ -3,14 +3,14 @@ library(testthat)
 
 
 
-real_data_binned_file_name <- system.file(file.path("extdata", "ZD_150bins_50sampled.Rda"), package = "NDTr")
+real_data_binned_file_name <- system.file(file.path("extdata", "ZD_150bins_50sampled.Rda"), package = "NeuroDecodeR")
 
 
 
 # test the ds_basic -----------------------------------------------------------
 
 
-test_that("ds_basic() conforms to the NDTr datasouce interface", {
+test_that("ds_basic() conforms to the NDR datasouce interface", {
   
   ds <- ds_basic(real_data_binned_file_name, 'stimulus_ID', 18, 0)
   expect_null(test_valid_datasource(ds))

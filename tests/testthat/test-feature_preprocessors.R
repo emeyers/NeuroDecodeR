@@ -9,7 +9,7 @@ rm(count_training_set, count_test_set, normalized_training_set, normalized_test_
 # tests for the fp_zscore -----------------------------------------------------
 
 
-test_that("fp_zscore() conforms to the NDTr datasouce interface", {
+test_that("fp_zscore() conforms to the NDR datasouce interface", {
   fp <- fp_zscore()
   expect_null(test_valid_feature_preprocessor(fp))
 })
@@ -36,7 +36,7 @@ test_that("fp_zscore normalized the training data so that it has a mean of 0 and
 
 # fp_select_k_features --------------------------------------------------------
 
-test_that("fp_select_k_features() conforms to the NDTr datasouce interface", {
+test_that("fp_select_k_features() conforms to the NDR datasouce interface", {
   fp <- fp_select_k_features(num_site_to_use = 100)
   expect_null(test_valid_feature_preprocessor(fp))
 })

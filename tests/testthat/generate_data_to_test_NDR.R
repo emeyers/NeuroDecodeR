@@ -1,5 +1,5 @@
 
-# This file contains code that generates data useful for testing the NDTr
+# This file contains code that generates data useful for testing the NDR
 
 
 
@@ -35,7 +35,7 @@ save(binned_data, file = "fake_simultaneous_binned_data.Rda")
 
 # data useful for testing classifiers and feature proprocessors ------------
 
-real_data_binned_file_name <- system.file(file.path("extdata", "ZD_150bins_50sampled.Rda"), package="NDTr")
+real_data_binned_file_name <- system.file(file.path("extdata", "ZD_150bins_50sampled.Rda"), package="NeuroDecodeR")
 
 
 # get firing rate data (just use data at 200-349 post stimulus onset for testing)
@@ -114,7 +114,7 @@ save(training_set, test_set,
 
 
 # generate data to get saving the results, this could will take a while to run...
-real_data_binned_file_name <- system.file(file.path("extdata", "ZD_150bins_50sampled.Rda"), package="NDTr")
+real_data_binned_file_name <- system.file(file.path("extdata", "ZD_150bins_50sampled.Rda"), package="NeuroDecodeR")
 
 
 # no z-score preprocessor
