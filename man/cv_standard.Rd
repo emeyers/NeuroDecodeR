@@ -84,6 +84,7 @@ cv <- cv_standard(datasource = ds,
 
 
 # alternatively, one can also use the magrittr pipe (\%>\%) to do an analysis
+library(magrittr)
 data_file2 <- system.file("extdata/ZD_500bins_500sampled.Rda",
   package = "NeuroDecodeR")
   
