@@ -9,6 +9,16 @@
 #' performance using the most selective 10 neurons to using the next 10 most
 #' selective neurons, etc.).
 #'
+#' @param ndr_container_or_object The purpose of this argument is to make the
+#'   constructor of the fp_select_k_features  feature preprocessor work with
+#'   magrittr. If this is set to the default value of NULL, then the constructor
+#'   will return a fp_select_k_features ndr object. If this is set to an ndr
+#'   container, then a fp_select_k_features  ndr object will be added to the
+#'   container and the container will be returned. If this argument is set to
+#'   another ndr object, then both that ndr object as well as a new
+#'   fp_select_k_features  will be added to a new container and the container
+#'   will be returned.
+#'
 #' @param num_site_to_use The number of features with the smallest p-values to use.
 #'
 #' @param num_sites_to_exclude The number of features with the smallest p-values
@@ -24,13 +34,14 @@
 #' # This will cause the cross-validator to remove the 20 most selective sites
 #' # and then use only the 50 most selective sites that remain after the 20 are
 #' # eliminated
-#' fp <- fp_select_k_features(50, 20)
+#' fp <- fp_select_k_features(num_site_to_use = 50, num_sites_to_exclude = 20)
 #' @family feature_preprocessor
 #'
 #'
 # the constructor
 #' @export
-fp_select_k_features <- function(num_site_to_use = NA,
+fp_select_k_features <- function(ndr_container_or_object = NULL, 
+                                 num_site_to_use = NA,
                                  num_sites_to_exclude = NA) {
   if (is.na(num_site_to_use) && is.na(num_sites_to_exclude)) {
     stop(paste0(
@@ -46,7 +57,12 @@ fp_select_k_features <- function(num_site_to_use = NA,
   )
 
   attr(the_fp, "class") <- "fp_select_k_features"
-  the_fp
+  
+  # if ndr_container_or_object is an ndr object or ndr container, return
+  #  an ndr container that has the feature preprocessor in it
+  put_ndr_object_in_container(ndr_container_or_object, the_fp)
+  
+  
 }
 
 

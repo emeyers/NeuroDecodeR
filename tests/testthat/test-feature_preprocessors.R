@@ -103,7 +103,8 @@ test_that("fp_select_k_features returns the correct number of features", {
 
   num_site_to_use <- 50
   num_sites_to_exclude <- 10
-  fp <- fp_select_k_features(num_site_to_use, num_sites_to_exclude)
+  fp <- fp_select_k_features(num_site_to_use = num_site_to_use, 
+                             num_sites_to_exclude = num_sites_to_exclude)
   processed_data <- preprocess_data(fp, training_set, test_set)
   expect_equal(dim(select(processed_data$training_set, starts_with("site")))[2], 50)  
   expect_equal(dim(select(processed_data$test_set, starts_with("site")))[2], 50)  
@@ -113,6 +114,32 @@ test_that("fp_select_k_features returns the correct number of features", {
   expect_equal(sum(ordered_sites$selected_site), num_site_to_use)
   
 })
+
+
+
+
+
+test_that("the fp_score constructor correctly adds objects to an ndr container", {
+  
+  raw_fp <- fp_select_k_features(num_site_to_use = 100)
+  expect_equal(class(raw_fp), "fp_select_k_features")
+  
+  fp_combined_with_an_cl <- raw_fp %>% cl_max_correlation()
+  expect_equal(class(fp_combined_with_an_cl), "ndr_container")
+  
+  an_ndr_container <- ndr_container()
+  fp_combined_with_container <- an_ndr_container %>% fp_select_k_features(num_site_to_use = 100)
+  expect_equal(class(fp_combined_with_container), "ndr_container")
+  expect_equal(class(fp_combined_with_container$fp), "list")
+  expect_equal(class(fp_combined_with_container$fp[[1]]), "fp_select_k_features")
+  
+  fp_combined_with_an_fp <- raw_fp %>% fp_select_k_features(num_site_to_use = 100)
+  expect_equal(class(fp_combined_with_an_fp), "ndr_container")
+  expect_equal(class(fp_combined_with_an_fp$fp), "list")
+  expect_equal(class(fp_combined_with_an_fp$fp[[1]]), "fp_select_k_features")
+  
+})
+
 
 
 
