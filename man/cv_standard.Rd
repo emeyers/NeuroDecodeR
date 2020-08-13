@@ -16,6 +16,14 @@ cv_standard(
 )
 }
 \arguments{
+\item{ndr_container}{The purpose of this argument is to make the
+constructor of the cv_standard cross-validator work with the magrittr
+pipe (\%>\%) operator. This argument would almost always be set at the
+end of a sequence of piping operators that include a datasource and a
+classifier. Alternatively, one can keep this set to NULL and directly use
+the datasource and classifier arguments (one would almost never use
+both types of arguments). See the examples.}
+
 \item{datasource}{A datasource (DS) object that will generate the training
 and test data.}
 
@@ -45,14 +53,6 @@ calculated the temporal cross decoding results.}
 parallel. It is useful to set this to FALSE for debugging purposes or
 if you are running a job that takes a lot of memory and runtime is not
 of much concern.}
-
-\item{ndr_container_or_object}{The purpose of this argument is to make the
-constructor of the cv_standard cross-validator work with the magrittr
-pipe (\%>\%) operator. This argument would almost always be set at the
-end of a sequence of piping operators that include a datasource and a
-classifier. Alternatively, one can keep this set to NULL and directly use
-the datasource and classifier arguments (one would almost never use
-both types of arguments). See the examples.}
 }
 \description{
 This object runs a decoding analysis where a classifier is repeatedly trained
