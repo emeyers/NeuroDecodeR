@@ -176,6 +176,61 @@ test_valid_binned_format <- function(binned_data) {
 
 
 
+### Functions for testing if objects are in valid NDR format --------------
+
+
+# calls the specific test_valid_XXX function below depending on the class of
+# the ndr object to test if the ndr object is valid
+test_valid_ndr_object <- function(ndr_object) {
+  
+  # get the first two characters of the class name
+  ndr_class_type <- get_ndr_object_type(ndr_object)
+  
+  # create a vector that can map the short ndr object names to their longer names 
+  # this will be used for error messages
+  ndr_object_full_names <- c("datasource", "feature_preprocessor", "classifier", 
+                             "result_metric", "cross_validator")
+  names(ndr_object_full_names) <- c("ds", "fp", "cl", "rm", "cv")
+  
+  eval(parse(text=paste0("test_valid_", ndr_object_full_names[ndr_class_type], "(ndr_object)")))
+
+  return(ndr_class_type)
+
+}
+
+
+
+
+get_ndr_object_type <- function(ndr_object) {
+  
+  #if (!inherits(ndr_object, "ndr_object")) {
+  #  stop("Not a valid ndr object. All ndr objects must inhert from the ndr_object class.")
+  #}
+
+  ndr_object_class_name <- class(ndr_object)[1]
+  
+  # get the first two characters of the class name
+  ndr_class_type <- substr(ndr_object_class_name, 1, 2)
+  
+  # make sure it is one of the valid ndr obhjec types
+  if (!(ndr_class_type %in% c("ds", "fp", "cl", "rm", "cv"))) {
+    stop("NDR objects must have a class name that starts with 'ds', 'fp', 'cl', 'rm' or 'cv'")
+  }
+  
+  # return the two letter abbreviation fo the ndr object type
+  ndr_class_type
+
+}
+
+
+
+
+
+
+
+
+### Functions for testing if objects each of the 5 ndr object tyapes are in
+### valid NDR format --------------
 
 
 # A function that checks that a datasource conforms to the NDR interface
@@ -310,10 +365,7 @@ test_valid_result_metric <- function(the_result_metric) {
 
 
 
-
-
-
-# Helper functions for testing if data is in valid NDR format --------------
+### Helper functions for testing if data is in valid NDR format --------------
 
 
 # A helper function to test if a given class has a method. This is useful to

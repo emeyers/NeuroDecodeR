@@ -5,9 +5,10 @@
 \title{The standard cross-validator (CV)}
 \usage{
 cv_standard(
-  datasource,
-  classifier,
-  feature_preprocessors,
+  ndr_container = NULL,
+  datasource = NULL,
+  classifier = NULL,
+  feature_preprocessors = NULL,
   result_metrics = NULL,
   num_resample_runs = 50,
   test_only_at_training_time = FALSE,
@@ -15,6 +16,14 @@ cv_standard(
 )
 }
 \arguments{
+\item{ndr_container}{The purpose of this argument is to make the
+constructor of the cv_standard cross-validator work with the magrittr
+pipe (\%>\%) operator. This argument would almost always be set at the
+end of a sequence of piping operators that include a datasource and a
+classifier. Alternatively, one can keep this set to NULL and directly use
+the datasource and classifier arguments (one would almost never use
+both types of arguments). See the examples.}
+
 \item{datasource}{A datasource (DS) object that will generate the training
 and test data.}
 
@@ -26,7 +35,7 @@ learn preprocessing parameters from the training data and apply
 preprocessing of both the training and test data based on these parameters.}
 
 \item{result_metrics}{A list of result metric (RM) objects that are used to
-evaluate the classification performance. If this is set to null then the
+evaluate the classification performance. If this is set to NULL then the
 rm_main_results(), rm_confusion_matrix() results metrics will be used.}
 
 \item{num_resample_runs}{The number of times the cross-validation should be
@@ -63,14 +72,30 @@ the results.
 }
 \examples{
 data_file <- system.file("extdata/ZD_150bins_50sampled.Rda",
-  package = "NeuroDecodeR"
-)
+  package = "NeuroDecodeR")
 
 ds <- ds_basic(data_file, "stimulus_ID", 18)
 fps <- list(fp_zscore())
 cl <- cl_max_correlation()
 
-cv <- cv_standard(ds, cl, fps)
+cv <- cv_standard(datasource = ds, 
+                 classifier = cl, 
+                 feature_preprocessors = fps)
+
+
+# alternatively, one can also use the magrittr pipe (\%>\%) to do an analysis
+library(magrittr)
+data_file2 <- system.file("extdata/ZD_500bins_500sampled.Rda",
+  package = "NeuroDecodeR")
+  
+DECODING_RESULTS <- data_file2 \%>\%
+    ds_basic('stimulus_ID', 6, num_label_repeats_per_cv_split = 3) \%>\%
+    cl_max_correlation() \%>\%
+    fp_zscore() \%>\%
+    rm_main_results() \%>\%
+    rm_confusion_matrix() \%>\%
+    cv_standard(num_resample_runs = 3) \%>\%
+    run_decoding()
 
 
 }

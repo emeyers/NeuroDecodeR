@@ -5,11 +5,23 @@
 \title{A result metric (RM) that calculates confusion matrices}
 \usage{
 rm_confusion_matrix(
+  ndr_container_or_object = NULL,
   save_only_same_train_test_time = TRUE,
   create_decision_vals_confusion_matrix = TRUE
 )
 }
 \arguments{
+\item{ndr_container_or_object}{The purpose of this argument is to make the
+constructor of the rm_confusion_matrix feature preprocessor work with the
+magrittr pipe (\%>\%) operator. This argument should almost never be directly
+set by the user to anything other than NULL. If this is set to the default
+value of NULL, then the constructor will return a rm_confusion_matrix
+object. If this is set to an ndr container, then a rm_confusion_matrix
+object will be added to the container and the container will be returned.
+If this argument is set to another ndr object, then both that ndr object as
+well as a new rm_confusion_matrix object will be added to a new container
+and the container will be returned.}
+
 \item{save_only_same_train_test_time}{A boolean specifying whether one wants
 to save results to allow one to create the confusion matrices when training
 at one point in time and testing a different point in time. Setting this to

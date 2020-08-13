@@ -4,6 +4,16 @@
 #' the training data. The preprocessor then z-score transforms the training and
 #' test data using this mean and standard deviation by subtracting the mean and
 #' dividing by the standard deviation.
+#' 
+#' @param ndr_container_or_object The purpose of this argument is to make the
+#'   constructor of the fp_zscore feature preprocessor work with the magrittr
+#'   pipe (%>%) operator. This argument should almost never be directly set by
+#'   the user to anything other than NULL. If this is set to the default value
+#'   of NULL, then the constructor will return a fp_zscore object. If this is
+#'   set to an ndr container, then a fp_zscore object will be added to the
+#'   container and the container will be returned. If this argument is set to
+#'   another ndr object, then both that ndr object as well as a new fp_zscore
+#'   object will be added to a new container and the container will be returned.
 #'
 #' @details This feature preprocessor object applies z-score normalization to
 #' each feature by calculating the mean and the standard deviation for each
@@ -23,10 +33,16 @@
 #'
 #'
 #' @export
-fp_zscore <- function() {
+fp_zscore <- function(ndr_container_or_object = NULL) {
+  
   the_fp <- list()
   attr(the_fp, "class") <- "fp_zscore"
-  the_fp
+  
+  
+  # if ndr_container_or_object is an ndr object or ndr container, return
+  #  an ndr container that has the feature preprocessor in it
+  put_ndr_object_in_container(ndr_container_or_object, the_fp)
+  
 }
 
 

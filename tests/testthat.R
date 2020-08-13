@@ -1,4 +1,4 @@
 library(testthat)
-library(NDTr)
+library(NeuroDecodeR)
 
-test_check("NDTr")
+test_check("NeuroDecodeR")

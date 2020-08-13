@@ -5,11 +5,23 @@
 \title{A result metric (RM) that calculates main decoding accuracy measures}
 \usage{
 rm_main_results(
+  ndr_container_or_object = NULL,
   aggregate_decision_values = TRUE,
   aggregate_normalized_rank = TRUE
 )
 }
 \arguments{
+\item{ndr_container_or_object}{The purpose of this argument is to make the
+constructor of the rm_main_results feature preprocessor work with the
+magrittr pipe (\%>\%) operator. This argument should almost never be directly
+set by the user to anything other than NULL. If this is set to the default
+value of NULL, then the constructor will return a rm_main_results object.
+If this is set to an ndr container, then a rm_main_results object will be
+added to the container and the container will be returned. If this argument
+is set to another ndr object, then both that ndr object as well as a new
+rm_main_results object will be added to a new container and the container
+will be returned.}
+
 \item{aggregate_decision_values}{A string or boolean specifying how the
 decision values should be aggregated. If this is a boolean set to TRUE or
 to the string "full", then the decision values for the correct category
