@@ -119,10 +119,10 @@ add_ndr_object <- function(ndr_container, ndr_object) {
     # that have already been set
     if (is.null(curr_ndr_container_contents)) {
       
-      ndr_container[[ndr_class_type]] <- ndr_object
+      ndr_container[[ndr_class_type]] <- list(ndr_object)
       
     } else {
-      ndr_container[[ndr_class_type]] <- list(curr_ndr_container_contents, ndr_object)
+      ndr_container[[ndr_class_type]] <- c(curr_ndr_container_contents, list(ndr_object))
     }
     
   }
