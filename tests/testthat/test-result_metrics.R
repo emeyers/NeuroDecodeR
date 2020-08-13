@@ -93,3 +93,28 @@ test_that("rm_confusion_matrix aggregate methods don't give errors", {
 
 
 
+
+test_that("the rm_confusion_matrix constructor correctly adds objects to an ndr container", {
+  
+  raw_rm <- rm_confusion_matrix()
+  expect_equal(class(raw_rm)[1], "rm_confusion_matrix")
+  
+  rm_combined_with_an_cl <- raw_rm %>% cl_max_correlation()
+  expect_equal(class(rm_combined_with_an_cl), "ndr_container")
+  
+  an_ndr_container <- ndr_container()
+  rm_combined_with_container <- an_ndr_container %>% rm_confusion_matrix()
+  expect_equal(class(rm_combined_with_container), "ndr_container")
+  expect_equal(class(rm_combined_with_container$rm), "list")
+  expect_equal(class(rm_combined_with_container$rm[[1]])[[1]], "rm_confusion_matrix")
+  
+  rm_combined_with_an_rm <- raw_rm %>% rm_confusion_matrix()
+  expect_equal(class(rm_combined_with_an_rm), "ndr_container")
+  expect_equal(class(rm_combined_with_an_rm$rm), "list")
+  expect_equal(class(rm_combined_with_an_rm$rm[[1]])[[1]], "rm_confusion_matrix")
+  
+})
+
+
+
+
