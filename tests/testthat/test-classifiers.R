@@ -53,7 +53,6 @@ test_shuffle_results_at_chance <- function(cl){
   
 
 
-
 # test cl_max_correlation -----------------------------------------------------
 
 test_that("the cl_max_correlation() classifier is working", {
@@ -65,6 +64,23 @@ test_that("the cl_max_correlation() classifier is working", {
   test_reasonable_classification_accuracy(cl)
   test_shuffle_results_at_chance(cl)
 
+})
+
+
+
+test_that("the cl_max_correlation classifier constructor correctly adds objects to an ndr container", {
+  
+  raw_cl <- cl_max_correlation()
+  expect_equal(class(raw_cl), "cl_max_correlation")
+  
+  fp <- fp_zscore()
+  cl_combined_with_an_fp <- fp %>% cl_max_correlation()
+  expect_equal(class(cl_combined_with_an_fp), "ndr_container")
+  
+  an_ndr_container <- ndr_container()
+  cl_combined_with_container <- an_ndr_container %>% cl_max_correlation()
+  expect_equal(class(cl_combined_with_container), "ndr_container")
+  
 })
 
 
@@ -83,6 +99,22 @@ test_that("the cl_poisson_naive_bayes() classifier is working", {
 
 })
 
+
+
+test_that("the cl_poisson_naive_bayes classifier constructor correctly adds objects to an ndr container", {
+  
+  raw_cl <- cl_poisson_naive_bayes()
+  expect_equal(class(raw_cl), "cl_poisson_naive_bayes")
+  
+  fp <- fp_zscore()
+  cl_combined_with_an_fp <- fp %>% cl_poisson_naive_bayes()
+  expect_equal(class(cl_combined_with_an_fp), "ndr_container")
+  
+  an_ndr_container <- ndr_container()
+  cl_combined_with_container <- an_ndr_container %>% cl_poisson_naive_bayes()
+  expect_equal(class(cl_combined_with_container), "ndr_container")
+  
+})
 
 
 
@@ -104,5 +136,21 @@ test_that("the cl_svm() claissifier is working", {
 
 })
 
+
+
+test_that("the cl_svm classifier constructor correctly adds objects to an ndr container", {
+  
+  raw_cl <- cl_svm()
+  expect_equal(class(raw_cl), "cl_svm")
+  
+  fp <- fp_zscore()
+  cl_combined_with_an_fp <- fp %>% cl_svm()
+  expect_equal(class(cl_combined_with_an_fp), "ndr_container")
+  
+  an_ndr_container <- ndr_container()
+  cl_combined_with_container <- an_ndr_container %>% cl_svm()
+  expect_equal(class(cl_combined_with_container), "ndr_container")
+  
+})
 
 

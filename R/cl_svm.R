@@ -25,6 +25,15 @@
 #' test point).
 #'
 #'
+#' @param ndr_container_or_object The purpose of this argument is to make the
+#'   constructor of the cl_svm classifier work with magrittr. If this is set to
+#'   the default value of NULL, then the constructor will return a cl_svm ndr
+#'   classifier object. If this is set to an ndr container, then a cl_svm ndr
+#'   classifier object will be added to the container and the container will be
+#'   returned. If this argument is set to another ndr object, then both that ndr
+#'   object as well as a new cl_svm classifier will be added to a new container
+#'   and the container will be returned.
+#'
 #' @param ... All parameters that are available in the e1071 package svm()
 #'   object should work with this CL object.
 #'
@@ -47,12 +56,16 @@
 
 # the constructor
 #' @export
-cl_svm <- function(...) {
+cl_svm <- function(ndr_container_or_object = NULL, ...) {
   
   options <- list(...)
   the_classifier <- list(svm_options = options)
   attr(the_classifier, "class") <- "cl_svm"
-  the_classifier
+  
+  # if ndr_container_or_object is an ndr object or ndr container, return
+  #  an ndr container that has the classifier in it
+  put_ndr_object_in_container(ndr_container_or_object, the_classifier)
+  
   
 }
 

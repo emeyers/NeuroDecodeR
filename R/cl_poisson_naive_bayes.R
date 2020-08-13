@@ -1,6 +1,16 @@
 #' A Poisson Naive Bayes classifier (CL)
 #'
 #' An implementation of a Poisson Naive Bayes classifier.
+#' 
+#' @param ndr_container_or_object The purpose of this argument is to make the
+#'   constructor of the cl_poisson_naive_bayes classifier work with magrittr. If
+#'   this is set to the default value of NULL, then the constructor will return
+#'   a cl_poisson_naive_bayes ndr classifier object. If this is set to an ndr
+#'   container, then a cl_poisson_naive_bayes ndr classifier object will be added to
+#'   the container and the container will be returned. If this argument is set
+#'   to another ndr object, then both that ndr object as well as a new
+#'   cl_poisson_naive_bayes classifier will be added to a new container and the
+#'   container will be returned.
 #'
 #'
 #' @details
@@ -52,10 +62,15 @@
 
 # the constructor
 #' @export
-cl_poisson_naive_bayes <- function() {
+cl_poisson_naive_bayes <- function(ndr_container_or_object = NULL) {
+  
   the_classifier <- list()
   attr(the_classifier, "class") <- "cl_poisson_naive_bayes"
-  the_classifier
+  
+  # if ndr_container_or_object is an ndr object or ndr container, return
+  #  an ndr container that has the classifier in it
+  put_ndr_object_in_container(ndr_container_or_object, the_classifier)
+  
 }
 
 

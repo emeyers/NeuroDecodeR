@@ -4,7 +4,18 @@
 \alias{cl_max_correlation}
 \title{A maximum correlation coefficient classifier (CL)}
 \usage{
-cl_max_correlation()
+cl_max_correlation(ndr_container_or_object = NULL)
+}
+\arguments{
+\item{ndr_container_or_object}{The purpose of this argument is to make the
+constructor of the cl_maximum_corrleation classifier work with magrittr. If
+this is set to the default value of NULL, then the constructor will return
+a cl_max_correlation ndr classifier object. If this is set to an ndr
+container, then a cl_max_correlation ndr classifier object will be added to
+the container and the container will be returned. If this argument is set
+to another ndr object, then both that ndr object as well as a new
+cl_maximum_corrleation classifier will be added to a new container and the
+container will be returned.}
 }
 \description{
 An implementation of a maximum correlation coefficient classifier.

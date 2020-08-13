@@ -99,9 +99,9 @@ add_ndr_object <- function(ndr_container, ndr_object) {
   curr_ndr_container_contents <- ndr_container[[ndr_class_type]]
   
   
-  # check that no DS/CL already exists in the container
+  # check that no DS/CL/CV already exists in the container
   # if they do already exist, give a warning that they exist 
-  if ((ndr_class_type == "ds") || (ndr_class_type == "cl")) {
+  if ((ndr_class_type == "ds") || (ndr_class_type == "cl") || (ndr_class_type == "cv")) {
     
     if (!is.null(curr_ndr_container_contents)) {
       warning(paste0("A ", ndr_object_full_names[ndr_class_type], " has already ",
@@ -109,7 +109,7 @@ add_ndr_object <- function(ndr_container, ndr_object) {
       ndr_object_full_names[ndr_class_type], "."))
     }
     
-    # add the DS/CL to the container and overwrite any DS/CL that already has been set
+    # add the DS/CL/CV to the container and overwrite any DS/CL/CV that already has been set
     ndr_container[[ndr_class_type]] <- ndr_object
     
   }  else if ((ndr_class_type == "fp") || (ndr_class_type == "rm"))  {

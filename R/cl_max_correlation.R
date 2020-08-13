@@ -1,6 +1,16 @@
 #' A maximum correlation coefficient classifier (CL)
 #'
 #' An implementation of a maximum correlation coefficient classifier.
+#' 
+#' @param ndr_container_or_object The purpose of this argument is to make the
+#'   constructor of the cl_maximum_corrleation classifier work with magrittr. If
+#'   this is set to the default value of NULL, then the constructor will return
+#'   a cl_max_correlation ndr classifier object. If this is set to an ndr
+#'   container, then a cl_max_correlation ndr classifier object will be added to
+#'   the container and the container will be returned. If this argument is set
+#'   to another ndr object, then both that ndr object as well as a new
+#'   cl_maximum_corrleation classifier will be added to a new container and the
+#'   container will be returned.
 #'
 #' @details This CL object learns a mean population vector (template) for each
 #'   class from the training set (by averaging together the all training points
@@ -34,11 +44,20 @@
 
 # the constructor
 #' @export
-cl_max_correlation <- function() {
+cl_max_correlation <- function(ndr_container_or_object = NULL) {
+  
   the_classifier <- list()
-  attr(the_classifier, "class") <- "cl_max_correlation"
-  the_classifier
-}
+  attr(the_classifier, "class") <- "cl_max_correlation"  # c("cl_max_correlation", "ndr_object")
+
+  # if ndr_container_or_object is an ndr object or ndr container, return
+  #  an ndr container that has the classifier in it
+  put_ndr_object_in_container(ndr_container_or_object, the_classifier)
+    
+}  # end the cl_max_correlation constructor
+
+
+
+
 
 
 # the get_predictions method
