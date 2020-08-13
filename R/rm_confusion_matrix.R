@@ -9,15 +9,15 @@
 #' available in the DECODING_RESULTS object returned by the cross-validator.
 #' 
 #' @param ndr_container_or_object The purpose of this argument is to make the
-#'   constructor of the rm_confusion_matrix feature preprocessor work with
+#'   constructor of the rm_confusion_matrix feature preprocessor works with the
 #'   magrittr pipe (%>%) operator. This argument should almost never be directly
 #'   set by the user to anything other than NULL. If this is set to the default
 #'   value of NULL, then the constructor will return a rm_confusion_matrix
-#'   object. If this is set to an ndr container, then a rm_confusion_matrix ndr
+#'   object. If this is set to an ndr container, then a rm_confusion_matrix
 #'   object will be added to the container and the container will be returned.
 #'   If this argument is set to another ndr object, then both that ndr object as
-#'   well as a new rm_confusion_matrix will be added to a new container and the
-#'   container will be returned.
+#'   well as a new rm_confusion_matrix object will be added to a new container
+#'   and the container will be returned.
 #'
 #' @param save_only_same_train_test_time A boolean specifying whether one wants
 #'   to save results to allow one to create the confusion matrices when training

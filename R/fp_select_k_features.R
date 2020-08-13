@@ -10,14 +10,15 @@
 #' selective neurons, etc.).
 #'
 #' @param ndr_container_or_object The purpose of this argument is to make the
-#'   constructor of the fp_select_k_features  feature preprocessor work with
-#'   magrittr. If this is set to the default value of NULL, then the constructor
-#'   will return a fp_select_k_features ndr object. If this is set to an ndr
-#'   container, then a fp_select_k_features  ndr object will be added to the
-#'   container and the container will be returned. If this argument is set to
-#'   another ndr object, then both that ndr object as well as a new
-#'   fp_select_k_features  will be added to a new container and the container
-#'   will be returned.
+#'   constructor of the fp_select_k_features feature preprocessor works with the
+#'   magrittr pipe (%>%) operator. This argument should almost never be directly
+#'   set by the user to anything other than NULL. If this is set to the default
+#'   value of NULL, then the constructor will return a fp_select_k_features
+#'   object. If this is set to an ndr container, then a fp_select_k_features
+#'   object will be added to the container and the container will be returned.
+#'   If this argument is set to another ndr object, then both that ndr object as
+#'   well as a new fp_select_k_features object will be added to a new container
+#'   and the container will be returned.
 #'
 #' @param num_site_to_use The number of features with the smallest p-values to use.
 #'
