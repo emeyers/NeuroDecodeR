@@ -13,7 +13,7 @@
 #'   4. Result metrics (RMs) assess the accuracy of the predictions and compile
 #'   the results.
 #'
-#' @param ndr_container_or_object The purpose of this argument is to make the
+#' @param ndr_container The purpose of this argument is to make the
 #'   constructor of the cv_standard cross-validator work with the magrittr
 #'   pipe (%>%) operator. This argument would almost always be set at the
 #'   end of a sequence of piping operators that include a datasource and a 
