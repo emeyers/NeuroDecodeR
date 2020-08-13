@@ -13,8 +13,16 @@
 #'   4. Result metrics (RMs) assess the accuracy of the predictions and compile
 #'   the results.
 #'
+#' @param ndr_container_or_object The purpose of this argument is to make the
+#'   constructor of the cv_standard cross-validator work with the magrittr
+#'   pipe (%>%) operator. This argument would almost always be set at the
+#'   end of a sequence of piping operators that include a datasource and a 
+#'   classifier. Alternatively, one can keep this set to NULL and directly use
+#'   the datasource and classifier arguments (one would almost never use
+#'   both types of arguments). See the examples. 
+#'
 #' @param datasource A datasource (DS) object that will generate the training
-#'   and test data.
+#'   and test data. 
 #'
 #' @param classifier A classifier (CS) object that will learn parameters based
 #'   on the training data and will generate predictions based on the test data.
@@ -24,7 +32,7 @@
 #'   preprocessing of both the training and test data based on these parameters.
 #'
 #' @param result_metrics A list of result metric (RM) objects that are used to
-#'   evaluate the classification performance. If this is set to null then the
+#'   evaluate the classification performance. If this is set to NULL then the
 #'   rm_main_results(), rm_confusion_matrix() results metrics will be used.
 #'
 #' @param num_resample_runs The number of times the cross-validation should be
@@ -45,14 +53,29 @@
 #'
 #' @examples
 #' data_file <- system.file("extdata/ZD_150bins_50sampled.Rda",
-#'   package = "NeuroDecodeR"
-#' )
+#'   package = "NeuroDecodeR")
 #'
 #' ds <- ds_basic(data_file, "stimulus_ID", 18)
 #' fps <- list(fp_zscore())
 #' cl <- cl_max_correlation()
 #'
-#' cv <- cv_standard(ds, cl, fps)
+#' cv <- cv_standard(datasource = ds, 
+#'                  classifier = cl, 
+#'                  feature_preprocessors = fps)
+#' 
+#' 
+#' # alternatively, one can also use the magrittr pipe (%>%) to do an analysis
+#' data_file2 <- system.file("extdata/ZD_500bins_500sampled.Rda",
+#'   package = "NeuroDecodeR")
+#'   
+#' DECODING_RESULTS <- data_file2 %>%
+#'     ds_basic('stimulus_ID', 6, num_label_repeats_per_cv_split = 3) %>%
+#'     cl_max_correlation() %>%
+#'     fp_zscore() %>%
+#'     rm_main_results() %>%
+#'     rm_confusion_matrix() %>%
+#'     cv_standard(num_resample_runs = 3) %>%
+#'     run_decoding()
 #' 
 #' 
 #' @family cross-validator
@@ -61,22 +84,122 @@
 #'
 # the constructor
 #' @export
-cv_standard <- function(datasource,
-                        classifier,
-                        feature_preprocessors,
+#' 
+cv_standard <- function(ndr_container = NULL,
+                        datasource = NULL,
+                        classifier = NULL,
+                        feature_preprocessors = NULL,
                         result_metrics = NULL,
                         num_resample_runs = 50,
                         test_only_at_training_time = FALSE,
                         run_parallel = TRUE) {
 
-  if (is.null(result_metrics)) {
+  
+  # Going to add any of the datasource, classifier, feature_preprocessor, and
+  # result_metric objects that were passed as arguments to this constructor to
+  # either an existing (if the ndr_container argument is not null) or new ndr
+  # container. Then will pull these objects out of the ndr container and create
+  # a new cv_standard object based on them. This will allow objects to be
+  # defined either by previously setting them in an ndr container or by setting
+  # them directly through cv_standard arguments.
+  
+  
+  if (is.null(ndr_container)) {
+    ndr_container <- ndr_container()
+  }
+  
+  if (class(ndr_container) != "ndr_container") {
+    stop("The argument ndr_container must be set to an ndr_container object.")
+  }
+  
+  
+  add_cv_objects_to_container <- function(ndr_container, cv_object, class_type) {
+    
+    if (!is.null(cv_object)) {
+      
+      # if a list of objects was passed (e.g., a list of FPs)
+      if (class(cv_object) == "list") {
+        
+        for (curr_obj in cv_object) {
+          
+          # check to make sure arguments of the write type were passed to the constructor
+          if (get_ndr_object_type(curr_obj) != class_type) {
+            stop(paste0("Some of the arguments that were passed as type ", toupper(class_type), 
+                        "are instead of type ", toupper(get_ndr_object_type(cv_object))))
+          }
+            
+          ndr_container <-  add_ndr_object(ndr_container, curr_obj)
+        }
+        
+        
+      } else {
+        
+        # if a single object was passed (e.g., a DS)
+        
+        if (get_ndr_object_type(cv_object) != class_type) {
+          stop(paste0("Some of the arguments that were passed as type ", toupper(class_type), 
+                      "are instead of type ", toupper(get_ndr_object_type(cv_object))))
+        }
+        ndr_container <- add_ndr_object(ndr_container, cv_object)
+      }
+    
+      
+    }
+    
+    ndr_container
+    
+  } 
 
+  
+  
+  ndr_container <- add_cv_objects_to_container(ndr_container, datasource, "ds")
+  ndr_container <- add_cv_objects_to_container(ndr_container, classifier, "cl")
+  ndr_container <- add_cv_objects_to_container(ndr_container, feature_preprocessors, "fp")
+  ndr_container <- add_cv_objects_to_container(ndr_container, result_metrics, "rm")
+  
+ 
+  the_cv <- new_cv_standard(ndr_container$ds,
+                            ndr_container$cl,
+                            ndr_container$fp,
+                            ndr_container$rm,
+                            num_resample_runs,
+                            test_only_at_training_time,
+                            run_parallel)
+  
+  the_cv
+  
+}
+
+
+
+
+
+
+new_cv_standard <- function(datasource,
+                        classifier,
+                        feature_preprocessors,
+                        result_metrics,
+                        num_resample_runs,
+                        test_only_at_training_time,
+                        run_parallel) {
+
+  if (is.null(datasource)) {
+    stop('A datasource must be set in the cv_standard constructor.')
+  }
+  
+  if (is.null(classifier)) {
+    stop('A classifier must be set in the cv_standard constructor.')
+  }
+  
+  
+  if (is.null(result_metrics)) {
     result_metrics <- list(
       rm_main_results(),
       rm_confusion_matrix())
-
   }
 
+  
+  
 
   analysis_ID <- generate_analysis_ID()
 

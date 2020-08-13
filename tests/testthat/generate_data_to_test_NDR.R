@@ -175,3 +175,11 @@ save(DECODING_RESULTS_1,
 
 
 
+# data for running the full decoding ------------------
+
+
+# raster_dir_name <- trimws(file.path(system.file("extdata", package = "NeuroDecodeR"), 
+#                                     "Zhang_Desimone_7object_raster_data_rda", " "))
+# 
+# binned_file_name <- create_binned_data(raster_dir_name, "ZD", 500, 500)
+

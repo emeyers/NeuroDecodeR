@@ -206,7 +206,7 @@ get_ndr_object_type <- function(ndr_object) {
   #if (!inherits(ndr_object, "ndr_object")) {
   #  stop("Not a valid ndr object. All ndr objects must inhert from the ndr_object class.")
   #}
-  
+
   ndr_object_class_name <- class(ndr_object)[1]
   
   # get the first two characters of the class name

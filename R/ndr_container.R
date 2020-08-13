@@ -80,7 +80,6 @@ put_ndr_object_in_container <- function(ndr_container_or_object, ndr_object) {
 # A helper method to add an ndr object to an ndr container
 add_ndr_object <- function(ndr_container, ndr_object) {
   
-  
   # get the first two characters of the class name
   ndr_class_type <- get_ndr_object_type(ndr_object)
   
