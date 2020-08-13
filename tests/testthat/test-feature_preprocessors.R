@@ -32,6 +32,29 @@ test_that("fp_zscore normalized the training data so that it has a mean of 0 and
 
 
 
+test_that("the fp_score constructor correctly adds objects to an ndr container", {
+  
+  raw_fp <- fp_zscore()
+  expect_equal(class(raw_fp), "fp_zscore")
+  
+  fp_combined_with_an_cl <- raw_fp %>% cl_max_correlation()
+  expect_equal(class(fp_combined_with_an_cl), "ndr_container")
+  
+  an_ndr_container <- ndr_container()
+  fp_combined_with_container <- an_ndr_container %>% fp_zscore()
+  expect_equal(class(fp_combined_with_container), "ndr_container")
+  expect_equal(class(fp_combined_with_container$fp), "list")
+  expect_equal(class(fp_combined_with_container$fp[[1]]), "fp_zscore")
+  
+  fp_combined_with_an_fp <- raw_fp %>% fp_zscore()
+  expect_equal(class(fp_combined_with_an_fp), "ndr_container")
+  expect_equal(class(fp_combined_with_an_fp$fp), "list")
+  expect_equal(class(fp_combined_with_an_fp$fp[[1]]), "fp_zscore")
+  
+})
+
+
+
 
 
 # fp_select_k_features --------------------------------------------------------

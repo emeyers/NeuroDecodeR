@@ -4,7 +4,17 @@
 \alias{fp_zscore}
 \title{A feature preprocessor (FP) that z-score normalizes the data}
 \usage{
-fp_zscore()
+fp_zscore(ndr_container_or_object = NULL)
+}
+\arguments{
+\item{ndr_container_or_object}{The purpose of this argument is to make the
+constructor of the fp_zscore feature preprocessor work with magrittr. If
+this is set to the default value of NULL, then the constructor will return
+a fp_zscore ndr object. If this is set to an ndr container, then a
+fp_zscore ndr object will be added to the container and the container will
+be returned. If this argument is set to another ndr object, then both that
+ndr object as well as a new fp_zscore will be added to a new container and
+the container will be returned.}
 }
 \description{
 This feature preprocessor object finds the mean and standard deviation using
