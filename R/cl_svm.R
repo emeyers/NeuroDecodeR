@@ -26,9 +26,6 @@
 #'
 #'
 #' @param ndr_container_or_object The purpose of this argument is to make the
-#'   constructor of the cl_svm classifier work with magrittr. 
-#'   
-#' @param ndr_container_or_object The purpose of this argument is to make the
 #'   constructor of the cl_svm classifier works with the magrittr pipe (%>%)
 #'   operator. This argument should almost never be directly set by the user to
 #'   anything other than NULL. If this is set to the default value of NULL, then

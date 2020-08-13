@@ -10,7 +10,7 @@
 #' selective neurons, etc.).
 #'
 #' @param ndr_container_or_object The purpose of this argument is to make the
-#'   constructor of the fp_select_k_features feature preprocessor works with the
+#'   constructor of the fp_select_k_features feature preprocessor work with the
 #'   magrittr pipe (%>%) operator. This argument should almost never be directly
 #'   set by the user to anything other than NULL. If this is set to the default
 #'   value of NULL, then the constructor will return a fp_select_k_features

@@ -3,7 +3,7 @@
 #' An implementation of a Poisson Naive Bayes classifier.
 #' 
 #' @param ndr_container_or_object The purpose of this argument is to make the
-#'   constructor of the cl_poisson_naive_bayes classifier works with magrittr
+#'   constructor of the cl_poisson_naive_bayes classifier work with magrittr
 #'   pipe (%>%) operator. This argument should almost never be directly set by
 #'   the user to anything other than NULL. If this is set to the default value
 #'   of NULL, then the constructor will return a cl_poisson_naive_bayes object.
@@ -51,7 +51,9 @@
 #' fps <- list()
 #'
 #' cl <- cl_poisson_naive_bayes()
-#' cv <- cv_standard(ds, cl, fps)
+#' cv <- cv_standard(datasource = ds, 
+#'                   classifier = cl, 
+#'                   feature_preprocessors = fps)
 #' \dontrun{
 #' DECODING_RESULTS <- run_decoding(cv)
 #' }
