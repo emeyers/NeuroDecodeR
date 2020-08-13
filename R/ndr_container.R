@@ -50,7 +50,7 @@ put_ndr_object_in_container <- function(ndr_container_or_object, ndr_object) {
     
     return(ndr_object)
     
-  } else if (class(ndr_container_or_object) == "ndr_container") {
+  } else if (class(ndr_container_or_object)[1] == "ndr_container") {
     
     # if a ndr container was passed as an argument, add the classifer to this container
     return(add_ndr_object(ndr_container_or_object, ndr_object))

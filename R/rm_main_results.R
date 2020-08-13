@@ -9,6 +9,15 @@
 #' results after completing each set of cross-validation classifications, and
 #' also after completing all the resample runs. The results should then be
 #' available in the DECODING_RESULTS object returned by the cross-validator.
+#' 
+#' @param ndr_container_or_object The purpose of this argument is to make the
+#'   constructor of the rm_main_results feature preprocessor work with magrittr.
+#'   If this is set to the default value of NULL, then the constructor will
+#'   return a rm_main_results ndr object. If this is set to an ndr container,
+#'   then a rm_main_results ndr object will be added to the container and the
+#'   container will be returned. If this argument is set to another ndr object,
+#'   then both that ndr object as well as a new rm_main_results will be added to
+#'   a new container and the container will be returned.
 #'
 #' @param aggregate_decision_values A string or boolean specifying how the
 #'   decision values should be aggregated. If this is a boolean set to TRUE or
@@ -43,15 +52,19 @@
 #'
 #'
 #' @export
-rm_main_results <- function(aggregate_decision_values = TRUE, aggregate_normalized_rank = TRUE) {
+rm_main_results <- function(ndr_container_or_object = NULL, 
+                            aggregate_decision_values = TRUE, 
+                            aggregate_normalized_rank = TRUE) {
   
   options <- list(
     aggregate_decision_values = aggregate_decision_values,
     aggregate_normalized_rank = aggregate_normalized_rank)
 
   rm_obj <- new_rm_main_results(options = options)
-
-  rm_obj
+  
+  # if ndr_container_or_object is an ndr object or ndr container, return
+  #  an ndr container that has the result metric in it
+  put_ndr_object_in_container(ndr_container_or_object, rm_obj)
   
 }
 

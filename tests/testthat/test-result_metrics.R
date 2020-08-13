@@ -35,6 +35,51 @@ test_aggregate_functions_work <- function(result_metric_obj){
 
 
 
+
+test_that("rm_main_results aggregate methods don't give errors", {
+  
+  main_rm <- rm_main_results()    #, save_only_same_train_test_time = TRUE)
+  
+  expect_null(test_valid_result_metric(main_rm))
+  
+  test_aggregate_functions_work(main_rm)
+  
+  main_rm_2 <- rm_main_results(NULL, "diag", "diag")  
+  test_aggregate_functions_work(main_rm_2)
+  
+  main_rm_3 <- rm_main_results(NULL, FALSE, FALSE)  
+  test_aggregate_functions_work(main_rm_3)
+  
+})
+
+
+
+test_that("the rm_main_results constructor correctly adds objects to an ndr container", {
+  
+  raw_rm <- rm_main_results()
+  expect_equal(class(raw_rm)[1], "rm_main_results")
+  
+  rm_combined_with_an_cl <- raw_rm %>% cl_max_correlation()
+  expect_equal(class(rm_combined_with_an_cl), "ndr_container")
+  
+  an_ndr_container <- ndr_container()
+  rm_combined_with_container <- an_ndr_container %>% rm_main_results()
+  expect_equal(class(rm_combined_with_container), "ndr_container")
+  expect_equal(class(rm_combined_with_container$rm), "list")
+  expect_equal(class(rm_combined_with_container$rm[[1]])[[1]], "rm_main_results")
+  
+  rm_combined_with_an_rm <- raw_rm %>% rm_main_results()
+  expect_equal(class(rm_combined_with_an_rm), "ndr_container")
+  expect_equal(class(rm_combined_with_an_rm$rm), "list")
+  expect_equal(class(rm_combined_with_an_rm$rm[[1]])[[1]], "rm_main_results")
+  
+})
+
+
+
+
+
+
 test_that("rm_confusion_matrix aggregate methods don't give errors", {
   
   cm_rm <- rm_confusion_matrix()    
@@ -45,25 +90,6 @@ test_that("rm_confusion_matrix aggregate methods don't give errors", {
   
 })
 
-
-
-
-
-test_that("rm_main_results aggregate methods don't give errors", {
-  
-  main_rm <- rm_main_results()    #, save_only_same_train_test_time = TRUE)
-  
-  expect_null(test_valid_result_metric(main_rm))
-  
-  test_aggregate_functions_work(main_rm)
-  
-  main_rm_2 <- rm_main_results("diag", "diag")  
-  test_aggregate_functions_work(main_rm_2)
-  
-  main_rm_3 <- rm_main_results(FALSE, FALSE)  
-  test_aggregate_functions_work(main_rm_3)
-  
-})
 
 
 
