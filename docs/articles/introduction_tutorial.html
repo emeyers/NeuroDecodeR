@@ -226,7 +226,11 @@
 <h3 class="hasAnchor">
 <a href="#creating-a-cross-validator-cv" class="anchor"></a>Creating a cross-validator (CV)</h3>
 <p>Cross-validator objects take a datasource, a classifier, result metrics and optionally feature-preprocessor objects, and run a decoding procedure by generating training and test data from the datasource, preprocessing this data with the feature-preprocessors, training and testing the classifier on the resulting data, and aggregating the results with the result metrics. This procedure is run in two nested loops. The inner ‘cross-validation’ loop runs a cross-validation procedure where the classifier is trained and tested on different divisions of the data. The outer, ‘resample’ loop generates new splits (and potentially pseudo-populations) of data, which are then run in a cross-validation procedure by the inner loop. The number of resample runs is a parameter for this analysis as well, which we have set to 2 to make the procedure run quicker, although in general more resample runs will yield smoother results (the default value is 50). Below, we create a <code><a href="../reference/cv_standard.html">cv_standard()</a></code> object that runs this decoding procedure.</p>
-<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb10-1" data-line-number="1">cv &lt;-<span class="st"> </span><span class="kw"><a href="../reference/cv_standard.html">cv_standard</a></span>(ds, cl, fps, rms, <span class="dv">2</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb10-1" data-line-number="1">cv &lt;-<span class="st"> </span><span class="kw"><a href="../reference/cv_standard.html">cv_standard</a></span>(<span class="dt">datasource =</span> ds, </a>
+<a class="sourceLine" id="cb10-2" data-line-number="2">                  <span class="dt">classifier =</span> cl, </a>
+<a class="sourceLine" id="cb10-3" data-line-number="3">                  <span class="dt">feature_preprocessors =</span> fps, </a>
+<a class="sourceLine" id="cb10-4" data-line-number="4">                  <span class="dt">result_metrics =</span> rms, </a>
+<a class="sourceLine" id="cb10-5" data-line-number="5">                  <span class="dt">num_resample_runs =</span> <span class="dv">2</span>)</a></code></pre></div>
 </div>
 <div id="running-the-decoding-analysis" class="section level3">
 <h3 class="hasAnchor">
@@ -272,6 +276,31 @@
 ## results with the same parameters already exist. Still going ahead and
 ## saving the results.</code></pre>
 </div>
+<div id="running-an-analysis-using-the-magrittr-pipe-operator" class="section level2">
+<h2 class="hasAnchor">
+<a href="#running-an-analysis-using-the-magrittr-pipe-operator" class="anchor"></a>Running an analysis using the magrittr pipe (%&gt;%) operator</h2>
+<p>It is also possible to run a decoding analysis by string together NDR objects using the magrittr pipe operator. One can do this with the following steps:</p>
+<ol style="list-style-type: decimal">
+<li>Start by piping data in binned format into a datasource.</li>
+<li>Pipe the datasource into a sequence that contains a classifier, and optionally feature preprocessors and result metrics.</li>
+<li>Pipe this sequence into a cross-validator and then call the run_decoding() method.</li>
+</ol>
+<p>The code below gives and example of how this can be done.</p>
+<div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb20-1" data-line-number="1">basedir_file_name &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/system.file">system.file</a></span>(<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/file.path">file.path</a></span>(<span class="st">"extdata"</span>, <span class="st">"ZD_500bins_500sampled.Rda"</span>), </a>
+<a class="sourceLine" id="cb20-2" data-line-number="2">                                   <span class="dt">package=</span><span class="st">"NeuroDecodeR"</span>)</a>
+<a class="sourceLine" id="cb20-3" data-line-number="3">  </a>
+<a class="sourceLine" id="cb20-4" data-line-number="4">  DECODING_RESULTS &lt;-<span class="st"> </span>basedir_file_name <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb20-5" data-line-number="5"><span class="st">    </span><span class="kw"><a href="../reference/ds_basic.html">ds_basic</a></span>(<span class="st">'stimulus_ID'</span>, <span class="dv">6</span>, <span class="dt">num_label_repeats_per_cv_split =</span> <span class="dv">3</span>) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb20-6" data-line-number="6"><span class="st">    </span><span class="kw"><a href="../reference/cl_max_correlation.html">cl_max_correlation</a></span>() <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb20-7" data-line-number="7"><span class="st">    </span><span class="kw"><a href="../reference/fp_zscore.html">fp_zscore</a></span>() <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb20-8" data-line-number="8"><span class="st">    </span><span class="kw"><a href="../reference/rm_main_results.html">rm_main_results</a></span>() <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb20-9" data-line-number="9"><span class="st">    </span><span class="kw"><a href="../reference/rm_confusion_matrix.html">rm_confusion_matrix</a></span>() <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb20-10" data-line-number="10"><span class="st">    </span><span class="kw"><a href="../reference/cv_standard.html">cv_standard</a></span>(<span class="dt">num_resample_runs =</span> <span class="dv">3</span>) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb20-11" data-line-number="11"><span class="st">    </span><span class="kw"><a href="../reference/run_decoding.html">run_decoding</a></span>()</a>
+<a class="sourceLine" id="cb20-12" data-line-number="12">  </a>
+<a class="sourceLine" id="cb20-13" data-line-number="13">  <span class="kw"><a href="https://www.rdocumentation.org/packages/graphics/topics/plot">plot</a></span>(DECODING_RESULTS<span class="op">$</span>rm_confusion_matrix)</a></code></pre></div>
+<p><img src="introduction_tutorial_files/figure-html/ndr_piping_example-1.png" width="700"></p>
+</div>
   </div>
 
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
@@ -284,6 +313,7 @@
       <li><a href="#performing-a-decoding-analysis">Performing a decoding analysis</a></li>
       <li><a href="#plotting-the-results">Plotting the results</a></li>
       <li><a href="#saving-the-results">Saving the results</a></li>
+      <li><a href="#running-an-analysis-using-the-magrittr-pipe-operator">Running an analysis using the magrittr pipe (%&gt;%) operator</a></li>
       </ul>
 </div>
       </div>

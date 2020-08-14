@@ -143,9 +143,10 @@ and tested using cross-validation.</p>
     </div>
 
     <pre class="usage"><span class='fu'>cv_standard</span>(
-  <span class='no'>datasource</span>,
-  <span class='no'>classifier</span>,
-  <span class='no'>feature_preprocessors</span>,
+  <span class='kw'>ndr_container</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>datasource</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>classifier</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>feature_preprocessors</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
   <span class='kw'>result_metrics</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
   <span class='kw'>num_resample_runs</span> <span class='kw'>=</span> <span class='fl'>50</span>,
   <span class='kw'>test_only_at_training_time</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
@@ -155,6 +156,16 @@ and tested using cross-validation.</p>
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
+    <tr>
+      <th>ndr_container</th>
+      <td><p>The purpose of this argument is to make the
+constructor of the cv_standard cross-validator work with the magrittr
+pipe (%&gt;%) operator. This argument would almost always be set at the
+end of a sequence of piping operators that include a datasource and a
+classifier. Alternatively, one can keep this set to NULL and directly use
+the datasource and classifier arguments (one would almost never use
+both types of arguments). See the examples.</p></td>
+    </tr>
     <tr>
       <th>datasource</th>
       <td><p>A datasource (DS) object that will generate the training
@@ -174,7 +185,7 @@ preprocessing of both the training and test data based on these parameters.</p><
     <tr>
       <th>result_metrics</th>
       <td><p>A list of result metric (RM) objects that are used to
-evaluate the classification performance. If this is set to null then the
+evaluate the classification performance. If this is set to NULL then the
 rm_main_results(), rm_confusion_matrix() results metrics will be used.</p></td>
     </tr>
     <tr>
@@ -216,14 +227,32 @@ the results.</p></li>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='no'>data_file</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/system.file'>system.file</a></span>(<span class='st'>"extdata/ZD_150bins_50sampled.Rda"</span>,
-  <span class='kw'>package</span> <span class='kw'>=</span> <span class='st'>"NeuroDecodeR"</span>
-)
+  <span class='kw'>package</span> <span class='kw'>=</span> <span class='st'>"NeuroDecodeR"</span>)
 
 <span class='no'>ds</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='ds_basic.html'>ds_basic</a></span>(<span class='no'>data_file</span>, <span class='st'>"stimulus_ID"</span>, <span class='fl'>18</span>)
 <span class='no'>fps</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/list'>list</a></span>(<span class='fu'><a href='fp_zscore.html'>fp_zscore</a></span>())
 <span class='no'>cl</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='cl_max_correlation.html'>cl_max_correlation</a></span>()
 
-<span class='no'>cv</span> <span class='kw'>&lt;-</span> <span class='fu'>cv_standard</span>(<span class='no'>ds</span>, <span class='no'>cl</span>, <span class='no'>fps</span>)</div></pre>
+<span class='no'>cv</span> <span class='kw'>&lt;-</span> <span class='fu'>cv_standard</span>(<span class='kw'>datasource</span> <span class='kw'>=</span> <span class='no'>ds</span>,
+                 <span class='kw'>classifier</span> <span class='kw'>=</span> <span class='no'>cl</span>,
+                 <span class='kw'>feature_preprocessors</span> <span class='kw'>=</span> <span class='no'>fps</span>)
+
+
+<span class='co'># alternatively, one can also use the magrittr pipe (%&gt;%) to do an analysis</span>
+<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/library'>library</a></span>(<span class='no'>magrittr</span>)</div><div class='output co'>#&gt; <span class='message'></span>
+#&gt; <span class='message'>Attaching package: ‘magrittr’</span></div><div class='output co'>#&gt; <span class='message'>The following objects are masked from ‘package:testthat’:</span>
+#&gt; <span class='message'></span>
+#&gt; <span class='message'>    equals, is_less_than, not</span></div><div class='input'><span class='no'>data_file2</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/system.file'>system.file</a></span>(<span class='st'>"extdata/ZD_500bins_500sampled.Rda"</span>,
+  <span class='kw'>package</span> <span class='kw'>=</span> <span class='st'>"NeuroDecodeR"</span>)
+
+<span class='no'>DECODING_RESULTS</span> <span class='kw'>&lt;-</span> <span class='no'>data_file2</span> <span class='kw'>%&gt;%</span>
+    <span class='fu'><a href='ds_basic.html'>ds_basic</a></span>(<span class='st'>'stimulus_ID'</span>, <span class='fl'>6</span>, <span class='kw'>num_label_repeats_per_cv_split</span> <span class='kw'>=</span> <span class='fl'>3</span>) <span class='kw'>%&gt;%</span>
+    <span class='fu'><a href='cl_max_correlation.html'>cl_max_correlation</a></span>() <span class='kw'>%&gt;%</span>
+    <span class='fu'><a href='fp_zscore.html'>fp_zscore</a></span>() <span class='kw'>%&gt;%</span>
+    <span class='fu'><a href='rm_main_results.html'>rm_main_results</a></span>() <span class='kw'>%&gt;%</span>
+    <span class='fu'><a href='rm_confusion_matrix.html'>rm_confusion_matrix</a></span>() <span class='kw'>%&gt;%</span>
+    <span class='fu'>cv_standard</span>(<span class='kw'>num_resample_runs</span> <span class='kw'>=</span> <span class='fl'>3</span>) <span class='kw'>%&gt;%</span>
+    <span class='fu'><a href='run_decoding.html'>run_decoding</a></span>()</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>

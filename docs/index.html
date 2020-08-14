@@ -126,6 +126,12 @@
 <div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" data-line-number="1"><span class="co"># install.packages("devtools")</span></a>
 <a class="sourceLine" id="cb1-2" data-line-number="2">devtools<span class="op">::</span><span class="kw"><a href="https://www.rdocumentation.org/packages/devtools/topics/reexports">install_github</a></span>(<span class="st">"emeyers/NeuroDecodeR"</span>)</a></code></pre></div>
 </div>
+<div id="documentation" class="section level2">
+<h2 class="hasAnchor">
+<a href="#documentation" class="anchor"></a>Documentation</h2>
+<p>The documentation for this package is available at: <a href="https://emeyers.github.io/NeuroDecodeR/" class="uri">https://emeyers.github.io/NeuroDecodeR/</a></p>
+<p>To get started we recommend you read the <a href="https://emeyers.github.io/NeuroDecodeR/articles/introduction_tutorial.html">introductory tutorial</a></p>
+</div>
 <div id="usage" class="section level2">
 <h2 class="hasAnchor">
 <a href="#usage" class="anchor"></a>Usage</h2>
@@ -154,10 +160,14 @@
 <a class="sourceLine" id="cb2-8" data-line-number="8">fps &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/list">list</a></span>(<span class="kw"><a href="reference/fp_zscore.html">fp_zscore</a></span>())</a>
 <a class="sourceLine" id="cb2-9" data-line-number="9">cl &lt;-<span class="st"> </span><span class="kw"><a href="reference/cl_max_correlation.html">cl_max_correlation</a></span>()</a>
 <a class="sourceLine" id="cb2-10" data-line-number="10">rms &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/list">list</a></span>(<span class="kw"><a href="reference/rm_main_results.html">rm_main_results</a></span>(<span class="dt">aggregate_normalized_rank =</span> <span class="st">"diag"</span>), <span class="kw"><a href="reference/rm_confusion_matrix.html">rm_confusion_matrix</a></span>())</a>
-<a class="sourceLine" id="cb2-11" data-line-number="11">cv &lt;-<span class="st"> </span><span class="kw"><a href="reference/cv_standard.html">cv_standard</a></span>(ds, cl, fps, rms, <span class="dv">3</span>) </a>
-<a class="sourceLine" id="cb2-12" data-line-number="12"></a>
-<a class="sourceLine" id="cb2-13" data-line-number="13"><span class="co"># run a decoding analysis (this takes a few minutes) </span></a>
-<a class="sourceLine" id="cb2-14" data-line-number="14">DECODING_RESULTS &lt;-<span class="st"> </span><span class="kw"><a href="reference/run_decoding.html">run_decoding</a></span>(cv)</a></code></pre></div>
+<a class="sourceLine" id="cb2-11" data-line-number="11">cv &lt;-<span class="st"> </span><span class="kw"><a href="reference/cv_standard.html">cv_standard</a></span>(<span class="dt">datasource =</span> ds, </a>
+<a class="sourceLine" id="cb2-12" data-line-number="12">                  <span class="dt">classifier =</span> cl, </a>
+<a class="sourceLine" id="cb2-13" data-line-number="13">                  <span class="dt">feature_preprocessors =</span> fps, </a>
+<a class="sourceLine" id="cb2-14" data-line-number="14">                  <span class="dt">result_metrics =</span> rms, </a>
+<a class="sourceLine" id="cb2-15" data-line-number="15">                  <span class="dt">num_resample_runs =</span> <span class="dv">3</span>)</a>
+<a class="sourceLine" id="cb2-16" data-line-number="16"></a>
+<a class="sourceLine" id="cb2-17" data-line-number="17"><span class="co"># run a decoding analysis (this takes a few minutes) </span></a>
+<a class="sourceLine" id="cb2-18" data-line-number="18">DECODING_RESULTS &lt;-<span class="st"> </span><span class="kw"><a href="reference/run_decoding.html">run_decoding</a></span>(cv)</a></code></pre></div>
 <div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" data-line-number="1"><span class="co"># plot the results for three different result types</span></a>
 <a class="sourceLine" id="cb3-2" data-line-number="2"><span class="kw"><a href="https://www.rdocumentation.org/packages/graphics/topics/plot">plot</a></span>(DECODING_RESULTS<span class="op">$</span>rm_main_results, <span class="dt">result_type =</span> <span class="st">"all"</span>, <span class="dt">plot_type =</span> <span class="st">"line"</span>)</a></code></pre></div>
 <p><img src="reference/figures/README-line_plot-1.png" width="768" style="display: block; margin: auto;"></p>
@@ -165,11 +175,25 @@
 <a class="sourceLine" id="cb4-2" data-line-number="2"><span class="kw"><a href="https://www.rdocumentation.org/packages/graphics/topics/plot">plot</a></span>(DECODING_RESULTS<span class="op">$</span>rm_main_results)</a></code></pre></div>
 <p><img src="reference/figures/README-TCD_plot-1.png" width="480" style="display: block; margin: auto;"></p>
 </div>
-<div id="documentation" class="section level2">
+<div id="running-an-analysis-using-the-magrittr-pipe" class="section level2">
 <h2 class="hasAnchor">
-<a href="#documentation" class="anchor"></a>Documentation</h2>
-<p>The documentation for this package is available at: <a href="https://emeyers.github.io/NeuroDecodeR/" class="uri">https://emeyers.github.io/NeuroDecodeR/</a></p>
-<p>To get started we recommend you read the <a href="https://emeyers.github.io/NeuroDecodeR/articles/introduction_tutorial.html">introductory tutorial</a></p>
+<a href="#running-an-analysis-using-the-magrittr-pipe" class="anchor"></a>Running an analysis using the magrittr pipe (%&gt;%)</h2>
+<p>One can also run a decoding analysis using the magrittr pipe (%&gt;%) operator to string together the different NDR objects as shown below.</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" data-line-number="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(magrittr)</a>
+<a class="sourceLine" id="cb5-2" data-line-number="2"></a>
+<a class="sourceLine" id="cb5-3" data-line-number="3">basedir_file_name &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/system.file">system.file</a></span>(<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/file.path">file.path</a></span>(<span class="st">"extdata"</span>, <span class="st">"ZD_500bins_500sampled.Rda"</span>), <span class="dt">package=</span><span class="st">"NeuroDecodeR"</span>)</a>
+<a class="sourceLine" id="cb5-4" data-line-number="4">  </a>
+<a class="sourceLine" id="cb5-5" data-line-number="5">  DECODING_RESULTS &lt;-<span class="st"> </span>basedir_file_name <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb5-6" data-line-number="6"><span class="st">    </span><span class="kw"><a href="reference/ds_basic.html">ds_basic</a></span>(<span class="st">'stimulus_ID'</span>, <span class="dv">6</span>, <span class="dt">num_label_repeats_per_cv_split =</span> <span class="dv">3</span>) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb5-7" data-line-number="7"><span class="st">    </span><span class="kw"><a href="reference/cl_max_correlation.html">cl_max_correlation</a></span>() <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb5-8" data-line-number="8"><span class="st">    </span><span class="kw"><a href="reference/fp_zscore.html">fp_zscore</a></span>() <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb5-9" data-line-number="9"><span class="st">    </span><span class="kw"><a href="reference/rm_main_results.html">rm_main_results</a></span>() <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb5-10" data-line-number="10"><span class="st">    </span><span class="kw"><a href="reference/rm_confusion_matrix.html">rm_confusion_matrix</a></span>() <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb5-11" data-line-number="11"><span class="st">    </span><span class="kw"><a href="reference/cv_standard.html">cv_standard</a></span>(<span class="dt">num_resample_runs =</span> <span class="dv">3</span>) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb5-12" data-line-number="12"><span class="st">    </span><span class="kw"><a href="reference/run_decoding.html">run_decoding</a></span>()</a>
+<a class="sourceLine" id="cb5-13" data-line-number="13">  </a>
+<a class="sourceLine" id="cb5-14" data-line-number="14">  <span class="kw"><a href="https://www.rdocumentation.org/packages/graphics/topics/plot">plot</a></span>(DECODING_RESULTS<span class="op">$</span>rm_confusion_matrix)</a></code></pre></div>
+<p><img src="reference/figures/README-pipe_example-1.png" width="672" style="display: block; margin: auto;"></p>
 </div>
 </div>
   </div>

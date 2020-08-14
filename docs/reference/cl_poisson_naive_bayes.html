@@ -140,8 +140,26 @@
     
     </div>
 
-    <pre class="usage"><span class='fu'>cl_poisson_naive_bayes</span>()</pre>
-        
+    <pre class="usage"><span class='fu'>cl_poisson_naive_bayes</span>(<span class='kw'>ndr_container_or_object</span> <span class='kw'>=</span> <span class='kw'>NULL</span>)</pre>
+    
+    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
+    <table class="ref-arguments">
+    <colgroup><col class="name" /><col class="desc" /></colgroup>
+    <tr>
+      <th>ndr_container_or_object</th>
+      <td><p>The purpose of this argument is to make the
+constructor of the cl_poisson_naive_bayes classifier work with magrittr
+pipe (%&gt;%) operator. This argument should almost never be directly set by
+the user to anything other than NULL. If this is set to the default value
+of NULL, then the constructor will return a cl_poisson_naive_bayes object.
+If this is set to an ndr container, then a cl_poisson_naive_bayes object
+will be added to the container and the container will be returned. If this
+argument is set to another ndr object, then both that ndr object as well as
+a new cl_poisson_naive_bayes object will be added to a new container and
+the container will be returned.</p></td>
+    </tr>
+    </table>
+    
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
     <p>This classifier object implements a Poisson Naive Bayes classifier. The
@@ -183,7 +201,9 @@ and then makes predictions on new test data.</p>
 <span class='no'>fps</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/list'>list</a></span>()
 
 <span class='no'>cl</span> <span class='kw'>&lt;-</span> <span class='fu'>cl_poisson_naive_bayes</span>()
-<span class='no'>cv</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='cv_standard.html'>cv_standard</a></span>(<span class='no'>ds</span>, <span class='no'>cl</span>, <span class='no'>fps</span>)</div><span class='co'># NOT RUN {</span>
+<span class='no'>cv</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='cv_standard.html'>cv_standard</a></span>(<span class='kw'>datasource</span> <span class='kw'>=</span> <span class='no'>ds</span>,
+                  <span class='kw'>classifier</span> <span class='kw'>=</span> <span class='no'>cl</span>,
+                  <span class='kw'>feature_preprocessors</span> <span class='kw'>=</span> <span class='no'>fps</span>)</div><span class='co'># NOT RUN {</span>
 <span class='no'>DECODING_RESULTS</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='run_decoding.html'>run_decoding</a></span>(<span class='no'>cv</span>)
 <span class='co'># }</span><div class='input'>
 </div></pre>
@@ -191,6 +211,7 @@ and then makes predictions on new test data.</p>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
+      <li><a href="#arguments">Arguments</a></li>
       
       <li><a href="#details">Details</a></li>
 

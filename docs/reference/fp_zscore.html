@@ -146,8 +146,25 @@ dividing by the standard deviation.</p>
     
     </div>
 
-    <pre class="usage"><span class='fu'>fp_zscore</span>()</pre>
-        
+    <pre class="usage"><span class='fu'>fp_zscore</span>(<span class='kw'>ndr_container_or_object</span> <span class='kw'>=</span> <span class='kw'>NULL</span>)</pre>
+    
+    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
+    <table class="ref-arguments">
+    <colgroup><col class="name" /><col class="desc" /></colgroup>
+    <tr>
+      <th>ndr_container_or_object</th>
+      <td><p>The purpose of this argument is to make the
+constructor of the fp_zscore feature preprocessor work with the magrittr
+pipe (%&gt;%) operator. This argument should almost never be directly set by
+the user to anything other than NULL. If this is set to the default value
+of NULL, then the constructor will return a fp_zscore object. If this is
+set to an ndr container, then a fp_zscore object will be added to the
+container and the container will be returned. If this argument is set to
+another ndr object, then both that ndr object as well as a new fp_zscore
+object will be added to a new container and the container will be returned.</p></td>
+    </tr>
+    </table>
+    
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
     <p>This feature preprocessor object applies z-score normalization to
@@ -173,6 +190,7 @@ data because different neurons can have different ranges of firing rates).</p>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
+      <li><a href="#arguments">Arguments</a></li>
       
       <li><a href="#details">Details</a></li>
 
