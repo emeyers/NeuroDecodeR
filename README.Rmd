@@ -111,8 +111,9 @@ plot(DECODING_RESULTS$rm_main_results)
 ## One can also run an analysis using the magrittr pipe (%>%) operator
 
 ```{r pipe_example, fig.height = 3, fig.width = 7, fig.align = "center"}
-basedir_file_name <- system.file(file.path("extdata", "ZD_500bins_500sampled.Rda"), 
-                                   package="NeuroDecodeR")
+library(magrittr)
+
+basedir_file_name <- system.file(file.path("extdata", "ZD_500bins_500sampled.Rda"), package="NeuroDecodeR")
   
   DECODING_RESULTS <- basedir_file_name %>%
     ds_basic('stimulus_ID', 6, num_label_repeats_per_cv_split = 3) %>%
