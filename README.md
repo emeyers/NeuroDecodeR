@@ -34,6 +34,14 @@ You can install NeuroDecodeR package from github using:
 devtools::install_github("emeyers/NeuroDecodeR")
 ```
 
+## Documentation
+
+The documentation for this package is available at:
+<https://emeyers.github.io/NeuroDecodeR/>
+
+To get started we recommend you read the [introductory
+tutorial](https://emeyers.github.io/NeuroDecodeR/articles/introduction_tutorial.html)
+
 ## Usage
 
 The package is based on 5 abstract object types:
@@ -66,7 +74,11 @@ ds <- ds_basic(basedir_file_name, 'stimulus_ID', 5, num_label_repeats_per_cv_spl
 fps <- list(fp_zscore())
 cl <- cl_max_correlation()
 rms <- list(rm_main_results(aggregate_normalized_rank = "diag"), rm_confusion_matrix())
-cv <- cv_standard(ds, cl, fps, rms, 3) 
+cv <- cv_standard(datasource = ds, 
+                  classifier = cl, 
+                  feature_preprocessors = fps, 
+                  result_metrics = rms, 
+                  num_resample_runs = 3)
 
 # run a decoding analysis (this takes a few minutes) 
 DECODING_RESULTS <- run_decoding(cv)
@@ -86,10 +98,26 @@ plot(DECODING_RESULTS$rm_main_results)
 
 <img src="man/figures/README-TCD_plot-1.png" style="display: block; margin: auto;" />
 
-## Documentation
+## Running an analysis using the magrittr pipe (%\>%)
 
-The documentation for this package is available at:
-<https://emeyers.github.io/NeuroDecodeR/>
+One can also run a decoding analysis using the magrittr pipe (%\>%)
+operator to string together the different NDR objects as shown below.
 
-To get started we recommend you read the [introductory
-tutorial](https://emeyers.github.io/NeuroDecodeR/articles/introduction_tutorial.html)
+``` r
+library(magrittr)
+
+basedir_file_name <- system.file(file.path("extdata", "ZD_500bins_500sampled.Rda"), package="NeuroDecodeR")
+  
+  DECODING_RESULTS <- basedir_file_name %>%
+    ds_basic('stimulus_ID', 6, num_label_repeats_per_cv_split = 3) %>%
+    cl_max_correlation() %>%
+    fp_zscore() %>%
+    rm_main_results() %>%
+    rm_confusion_matrix() %>%
+    cv_standard(num_resample_runs = 3) %>%
+    run_decoding()
+  
+  plot(DECODING_RESULTS$rm_confusion_matrix)
+```
+
+<img src="man/figures/README-pipe_example-1.png" style="display: block; margin: auto;" />
