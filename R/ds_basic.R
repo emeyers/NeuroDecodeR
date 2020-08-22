@@ -159,7 +159,7 @@ ds_basic <- function(binned_data,
     num_trials_for_each_label_for_each_site <- binned_data %>%
       dplyr::group_by(.data$siteID, labels) %>%
       dplyr::summarize(n = n()) %>% 
-      pivot_wider(names_from = .data$labels, values_from = .data$n) 
+      tidyr::pivot_wider(names_from = .data$labels, values_from = .data$n) 
 
     # for some reason select(-.data$siteID) isn't working
     num_trials_for_each_label_for_each_site$siteID <- NULL
