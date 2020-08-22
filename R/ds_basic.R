@@ -158,9 +158,13 @@ ds_basic <- function(binned_data,
     # for simultaneously recorded data there should be the same number of labels for each site
     num_trials_for_each_label_for_each_site <- binned_data %>%
       dplyr::group_by(.data$siteID, labels) %>%
-      dplyr::summarize(n = n())
+      dplyr::summarize(n = n()) %>% 
+      pivot_wider(names_from = .data$labels, values_from = .data$n) 
 
-    if (length(unique(num_trials_for_each_label_for_each_site$n)) != 1) {
+    # for some reason select(-.data$siteID) isn't working
+    num_trials_for_each_label_for_each_site$siteID <- NULL
+    
+    if (sum(sapply(lapply(num_trials_for_each_label_for_each_site, unique), length) != 1)) {
       stop(paste(
         "There are not the same number of repeated labels/trials for each site which",
         "which there should be for simultaneously recorded data."
