@@ -150,7 +150,7 @@ and tested using cross-validation.</p>
   <span class='kw'>result_metrics</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
   <span class='kw'>num_resample_runs</span> <span class='kw'>=</span> <span class='fl'>50</span>,
   <span class='kw'>test_only_at_training_time</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
-  <span class='kw'>run_parallel</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>
+  <span class='kw'>num_parallel_cores</span> <span class='kw'>=</span> <span class='kw'>NULL</span>
 )</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
@@ -204,11 +204,13 @@ potentially speed up the analysis and save memory at the cost of not
 calculated the temporal cross decoding results.</p></td>
     </tr>
     <tr>
-      <th>run_parallel</th>
-      <td><p>A boolean to indicate whether the code should be run in
-parallel. It is useful to set this to FALSE for debugging purposes or
-if you are running a job that takes a lot of memory and runtime is not
-of much concern.</p></td>
+      <th>num_parallel_cores</th>
+      <td><p>An integers specifying the number of parallel cores
+to use when executing the resample runs in the analysis. The default (NULL)
+value is to use half of the cores detected on the system. If this value is
+set to a value of less than 1, then the code will be run serially and
+messages will be printed showing how long each CV split took to run which
+is useful for debugging.</p></td>
     </tr>
     </table>
     
@@ -252,7 +254,9 @@ the results.</p></li>
     <span class='fu'><a href='rm_main_results.html'>rm_main_results</a></span>() <span class='kw'>%&gt;%</span>
     <span class='fu'><a href='rm_confusion_matrix.html'>rm_confusion_matrix</a></span>() <span class='kw'>%&gt;%</span>
     <span class='fu'>cv_standard</span>(<span class='kw'>num_resample_runs</span> <span class='kw'>=</span> <span class='fl'>3</span>) <span class='kw'>%&gt;%</span>
-    <span class='fu'><a href='run_decoding.html'>run_decoding</a></span>()</div></pre>
+    <span class='fu'><a href='run_decoding.html'>run_decoding</a></span>()</div><div class='output co'>#&gt; <span class='error'>Error in data.frame(analysis_ID = ndr_obj$analysis_ID, cv_standard.num_resample_runs = ndr_obj$num_resample_runs,     cv_standard.test_only_at_training_time = ndr_obj$test_only_at_training_time,     cv_standard.num_parallel_cores = ndr_obj$num_parallel_cores): arguments imply differing number of rows: 1, 0</span></div><div class='input'>
+
+</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
