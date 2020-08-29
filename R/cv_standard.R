@@ -46,10 +46,12 @@
 #'   potentially speed up the analysis and save memory at the cost of not
 #'   calculated the temporal cross decoding results.
 #'
-#' @param run_parallel A boolean to indicate whether the code should be run in
-#'    parallel. It is useful to set this to FALSE for debugging purposes or
-#'    if you are running a job that takes a lot of memory and runtime is not
-#'    of much concern.
+#' @param num_parallel_cores An integers specifying the number of parallel cores
+#'   to use when executing the resample runs in the analysis. The default (NULL)
+#'   value is to use half of the cores detected on the system. If this value is
+#'   set to a value of less than 1, then the code will be run serially and
+#'   messages will be printed showing how long each CV split took to run which
+#'   is useful for debugging.
 #'
 #' @examples
 #' data_file <- system.file("extdata/ZD_150bins_50sampled.Rda",
@@ -93,7 +95,7 @@ cv_standard <- function(ndr_container = NULL,
                         result_metrics = NULL,
                         num_resample_runs = 50,
                         test_only_at_training_time = FALSE,
-                        run_parallel = TRUE) {
+                        num_parallel_cores = NULL) {
 
   
   # Going to add any of the datasource, classifier, feature_preprocessor, and
@@ -165,7 +167,7 @@ cv_standard <- function(ndr_container = NULL,
                             ndr_container$rm,
                             num_resample_runs,
                             test_only_at_training_time,
-                            run_parallel)
+                            num_parallel_cores)
   
   the_cv
   
@@ -182,7 +184,7 @@ new_cv_standard <- function(datasource,
                         result_metrics,
                         num_resample_runs,
                         test_only_at_training_time,
-                        run_parallel) {
+                        num_parallel_cores) {
 
   if (is.null(datasource)) {
     stop('A datasource must be set in the cv_standard constructor.')
@@ -212,7 +214,7 @@ new_cv_standard <- function(datasource,
     num_resample_runs = num_resample_runs,
     result_metrics = result_metrics,
     test_only_at_training_time = test_only_at_training_time,
-    run_parallel = run_parallel)
+    num_parallel_cores = num_parallel_cores)
 
   attr(the_cv, "class") <- "cv_standard"
   the_cv
@@ -234,14 +236,19 @@ run_decoding.cv_standard <- function(cv_obj) {
   num_resample_runs <- cv_obj$num_resample_runs
   result_metrics <- cv_obj$result_metrics
   test_only_at_training_time <- cv_obj$test_only_at_training_time
-  run_parallel <- cv_obj$run_parallel
+  num_parallel_cores <- cv_obj$num_parallel_cores
 
+  
+  # if the num_parallel_cores is not set, use half the available cores
+  if (is.null(num_parallel_cores)) {
+    num_parallel_cores <- parallel::detectCores()/2
+  }
 
-  if (run_parallel) {
+  
+  if (num_parallel_cores > 0) {
 
     # register parallel resources
-    cores <- parallel::detectCores()
-    the_cluster <- parallel::makeCluster(cores, type = "SOCK")
+    the_cluster <- parallel::makeCluster(num_parallel_cores, type = "SOCK")
     doSNOW::registerDoSNOW(the_cluster)
 
     "%do_type%" <- get("%dopar%")
@@ -354,7 +361,7 @@ run_decoding.cv_standard <- function(cv_obj) {
 
 
   # close parallel resources
-  if (run_parallel) {
+  if (num_parallel_cores > 0) {
     parallel::stopCluster(the_cluster)
   }
 
@@ -442,7 +449,8 @@ get_parameters.cv_standard <- function(ndr_obj) {
   cv_parameters <- data.frame(
     analysis_ID = ndr_obj$analysis_ID,
     cv_standard.num_resample_runs = ndr_obj$num_resample_runs,
-    cv_standard.test_only_at_training_time = ndr_obj$test_only_at_training_time
+    cv_standard.test_only_at_training_time = ndr_obj$test_only_at_training_time,
+    cv_standard.num_parallel_cores = ndr_obj$num_parallel_cores
   )
 
 
