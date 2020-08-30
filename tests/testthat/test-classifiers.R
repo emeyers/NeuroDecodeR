@@ -18,13 +18,17 @@ test_reasonable_classification_accuracy <- function(cl){
   test_that("classification results are reasonably accurate", {
     
     # prediction_results <- get_predictions(cl, normalized_training_set, normalized_test_set)
-    prediction_results <- get_predictions(cl, count_training_set, count_test_set)
+    if (class(cl) == "cl_poisson_naive_bayes") {
+      prediction_results <- get_predictions(cl, count_training_set, count_test_set)
+    } else {
+      prediction_results <- get_predictions(cl, normalized_training_set, normalized_test_set)
+    }
     
     accuracies <- prediction_results %>%
       dplyr::group_by(test_time) %>%
       dplyr::summarize(mean_accuracy = mean(actual_labels == predicted_labels))
     
-    expect_gt(dplyr::filter(accuracies, test_time == "stimulus")$mean_accuracy, .51)
+    expect_gt(dplyr::filter(accuracies, test_time == "stimulus")$mean_accuracy, .7)
     expect_lt(dplyr::filter(accuracies, test_time == "baseline")$mean_accuracy, .31)
     
   })

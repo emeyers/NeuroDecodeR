@@ -202,8 +202,12 @@ new_cv_standard <- function(datasource,
   }
 
   
+  # if the num_parallel_cores is not set, use half the available cores
+  if (is.null(num_parallel_cores)) {
+    num_parallel_cores <- parallel::detectCores()/2
+  }
   
-
+  
   analysis_ID <- generate_analysis_ID()
 
   the_cv <- list(
@@ -236,19 +240,12 @@ run_decoding.cv_standard <- function(cv_obj) {
   num_resample_runs <- cv_obj$num_resample_runs
   result_metrics <- cv_obj$result_metrics
   test_only_at_training_time <- cv_obj$test_only_at_training_time
-  num_parallel_cores <- cv_obj$num_parallel_cores
-
   
-  # if the num_parallel_cores is not set, use half the available cores
-  if (is.null(num_parallel_cores)) {
-    num_parallel_cores <- parallel::detectCores()/2
-  }
 
-  
-  if (num_parallel_cores > 0) {
+  if (cv_obj$num_parallel_cores > 0) {
 
     # register parallel resources
-    the_cluster <- parallel::makeCluster(num_parallel_cores, type = "SOCK")
+    the_cluster <- parallel::makeCluster(cv_obj$num_parallel_cores, type = "SOCK")
     doSNOW::registerDoSNOW(the_cluster)
 
     "%do_type%" <- get("%dopar%")
@@ -258,7 +255,6 @@ run_decoding.cv_standard <- function(cv_obj) {
     "%do_type%" <- get("%do%")
 
   }
-
 
 
   # Do a parallel loop over resample runs
@@ -361,7 +357,7 @@ run_decoding.cv_standard <- function(cv_obj) {
 
 
   # close parallel resources
-  if (num_parallel_cores > 0) {
+  if (cv_obj$num_parallel_cores > 0) {
     parallel::stopCluster(the_cluster)
   }
 
@@ -444,7 +440,7 @@ get_parameters.cv_standard <- function(ndr_obj) {
     parameter_df <- cbind(parameter_df, curr_metric_parameters)
   }
 
-
+  
   # finally add the parameters from this cv_standard object as well
   cv_parameters <- data.frame(
     analysis_ID = ndr_obj$analysis_ID,
