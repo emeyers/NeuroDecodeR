@@ -208,7 +208,8 @@ new_cv_standard <- function(datasource,
   }
   
   
-  analysis_ID <- generate_analysis_ID()
+  # real analysis_ID is set when the run_decoding() method is called
+  analysis_ID <- "Decoding analysis has not yet been run"    # generate_analysis_ID()
 
   the_cv <- list(
     analysis_ID = analysis_ID,
@@ -233,6 +234,10 @@ run_decoding.cv_standard <- function(cv_obj) {
   
   analysis_start_time <- Sys.time()
 
+  # setting the analysis_ID at the start of running the analysis
+  # this way if run_decoding() is called twice a different ID will be generated
+  cv_obj$analysis_ID <- generate_analysis_ID()
+  
   # copy over the main objects
   datasource <- cv_obj$datasource
   classifier <- cv_obj$classifier
@@ -393,11 +398,12 @@ run_decoding.cv_standard <- function(cv_obj) {
   cv_obj$parameter_df <- get_parameters(cv_obj)
 
   analysis_end_time <- Sys.time()
-
-  # could save these in the cv_obj directly rather than in the cv_obj$parameters_df
+  
+# could save these in the cv_obj directly rather than in the cv_obj$parameters_df
   cv_obj$parameter_df$analysis_start_time <- analysis_start_time
   cv_obj$parameter_df$analysis_end_time <- analysis_end_time
-
+  cv_obj$parameter_df$analysis_run_time <- analysis_end_time - analysis_start_time
+  
   # saves all the CV parameters (DS, CL FPs etc)
   DECODING_RESULTS$cross_validation_paramaters <- cv_obj
 
