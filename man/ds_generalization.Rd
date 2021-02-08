@@ -108,6 +108,7 @@ ds <- ds_generalization(
 }
 \seealso{
 Other datasource: 
+\code{\link{ds_avg_basic}()},
 \code{\link{ds_basic}()}
 }
 \concept{datasource}
