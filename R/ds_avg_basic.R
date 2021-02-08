@@ -30,8 +30,6 @@
 #' @param num_label_repeats_per_cv_split A number specifying how many times each
 #'   label should be repeated in each cross-validation split.
 #'
-#' @param nAvg A number specifying how many repeats to average in each CV split. nAvg must be less than or equal to the num_times_to_repeat_each_label_per_cv_split. e.g., 10 num_label_repeats_per_cv_split can be paired with 5 nAvg
-#' 
 #' @param label_levels_to_use A vector of strings specifying specific label
 #'   levels that should be used. If this is set to NULL then all label levels
 #'   available will be used.
@@ -61,17 +59,17 @@
 #' @examples
 #' # A typical example of creating a datasource to be passed cross-validation object
 #' data_file <- system.file("extdata/ZD_150bins_50sampled.Rda", package = "NeuroDecodeR")
-#' ds <- ds_avg_basic(data_file, "stimulus_ID", 18)
+#' ds <- ds_basic(data_file, "stimulus_ID", 18)
 #'
 #' # If one has many repeats of each label, decoding can be faster if one
 #' # uses fewer CV splits and repeats each label multiple times in each split.
-#' ds <- ds_avg_basic(data_file, "stimulus_ID", 6,
+#' ds <- ds_basic(data_file, "stimulus_ID", 6,
 #'   num_label_repeats_per_cv_split = 3
 #' )
 #'
 #' # One can specify a subset of labels levels to be used in decoding. Here
 #' #  we just do a three-way decoding analysis between "car", "hand" and "kiwi".
-#' ds <- ds_avg_basic(data_file, "stimulus_ID", 18,
+#' ds <- ds_basic(data_file, "stimulus_ID", 18,
 #'   label_levels_to_use = c("car", "hand", "kiwi")
 #' )
 #'
@@ -86,12 +84,11 @@
 
 # the constructor
 #' @export
-ds_avg_basic <- function(binned_data,
+ds_basic <- function(binned_data,
                      var_to_decode,
                      num_cv_splits,
                      use_count_data = FALSE,
                      num_label_repeats_per_cv_split = 1,
-                     nAvg = 1, 
                      label_levels_to_use = NULL,
                      num_resample_sites = NULL,
                      site_IDs_to_use = NULL,
@@ -235,7 +232,6 @@ ds_avg_basic <- function(binned_data,
     var_to_decode = var_to_decode,
     num_cv_splits = num_cv_splits,
     num_label_repeats_per_cv_split = num_label_repeats_per_cv_split,
-    nAvg = nAvg,
     label_levels_to_use = label_levels_to_use,
     num_resample_sites = num_resample_sites,
     site_IDs_to_use = site_IDs_to_use,
@@ -245,7 +241,7 @@ ds_avg_basic <- function(binned_data,
   )
   
   
-  attr(the_ds, "class") <- "ds_avg_basic"
+  attr(the_ds, "class") <- "ds_basic"
   the_ds
   
 }
@@ -254,7 +250,7 @@ ds_avg_basic <- function(binned_data,
 
 
 #' @export
-get_data.ds_avg_basic <- function(ds_obj) {
+get_data.ds_basic <- function(ds_obj) {
   
   binned_data <- ds_obj$binned_data
   num_cv_splits <- ds_obj$num_cv_splits
@@ -267,7 +263,6 @@ get_data.ds_avg_basic <- function(ds_obj) {
   create_simultaneously_recorded_populations <- ds_obj$create_simultaneously_recorded_populations
   
   num_label_repeats_per_cv_split <- ds_obj$num_label_repeats_per_cv_split
-  nAvg <- ds_obj$nAvg
   
   
   
@@ -299,18 +294,6 @@ get_data.ds_avg_basic <- function(ds_obj) {
       group_by(labels, .data$siteID) %>%
       sample_n(size = num_trials_used_per_label)
   }
-  
-  print("start averaging")
-  # average every nAvg trials for each label, each site 
-  all_k_fold_data <- all_k_fold_data %>%
-    group_by(labels, .data$siteID) %>%
-    mutate(new_trial_id_after_avg = rep(1: (num_trials_used_per_label/nAvg), nAvg)) %>%
-    group_by(labels, .data$siteID, new_trial_id_after_avg) %>%
-    summarise_at(vars(starts_with("time.")), funs(mean(., na.rm=TRUE)))
-  num_trials_used_per_label = num_trials_used_per_label/nAvg
-  num_label_repeats_per_cv_split = num_label_repeats_per_cv_split/nAvg
-  print("end averaging")
-  
   
   
   # remove the variable trial_number if it exists in all_k_fold_data
@@ -374,7 +357,7 @@ get_data.ds_avg_basic <- function(ds_obj) {
 
 
 #' @export
-get_parameters.ds_avg_basic <- function(ndr_obj) {
+get_parameters.ds_basic <- function(ndr_obj) {
   
   ndr_obj$binned_data <- NULL
   
