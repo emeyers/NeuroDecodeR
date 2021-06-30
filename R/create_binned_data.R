@@ -13,16 +13,23 @@
 #' @param save_prefix_name A string with a prefix that will be used name of file
 #'   that contains the saved binned format data.
 #'
-#' @param bin_width A number that has the bin width that data should be averaged over.
+#' @param bin_width A number that has the number of data samples that data will
+#'   be averaged over.
 #'
 #' @param sampling_interval A number that has the specifies the sampling
 #'   interval between successive binned data points.
 #'
-#' @param start_time A number that specifies at which time should the binning
-#'   start. By default it starts at the first time in the raster data.
+#' @param start_time A number that specifies the time to start binning the data.
+#'   This needs to be set to one of the start times in the raster data; i.e., if
+#'   data columns are in the format time.XXX_YYY, then the start_time must be
+#'   one of the XXX values. By default, the start_time is the first
+#'   time in the raster data.
 #'
-#' @param end_time A number that specifies at which time should the binning
-#'   end. By default is to end at the last time in the raster data.
+#' @param end_time A number that specifies the time to end the binning of the data.
+#'   This needs to be set to one of the end times in the raster data; i.e., if
+#'   data columns are in the format time.XXX_YYY, then the start_time must be
+#'   one of the YYY values. By default, the end_time is the last
+#'   time in the raster data.
 #'
 #' @param files_contain A string that specifies that only raster files that
 #'   contain this string should be included in the binned format data.
@@ -76,7 +83,17 @@ create_binned_data <- function(raster_dir_name,
       raster_data <- NULL
     }
 
+    
+    
+    # If the end times in the raster data are not specified add them.
+    #  i.e., if data columns are specified as time.XXX rather than time.XXX_YYY 
+    #  add the YYY end time part to the time column names
+    if (!check_raster_data_contains_end_times(raster_data)){
+      raster_data <- add_raster_data_end_times(raster_data)
+    } 
+    
 
+    
     one_binned_site <- bin_saved_data_one_site(raster_data, bin_width, sampling_interval, start_time, end_time)
 
     # append siteID to raster data, which is then appended to binned data
@@ -130,33 +147,56 @@ bin_saved_data_one_site <- function(raster_data,
   labels_df <- dplyr::select(raster_data, -starts_with("time"))
   spike_df <- dplyr::select(raster_data, starts_with("time"))
 
+  
   # start_df_ind is the index of the time column in spike_df
   # start_df_ind and start_time are the same if the time starts at 1
 
+  # get vectors that have all the start times and end times of each rater time bin
+  start_time_values <- as.numeric(sapply(strsplit(gsub("time.", "", names(spike_df)), "_"), function(l) l[1]))
+  end_time_values <- as.numeric(sapply(strsplit(gsub("time.", "", names(spike_df)), "_"), function(l) l[2]))
+  
+  # specify default start_time as the first bin if no start_time has been specified
   if (is.null(start_time)) {
-    start_time <- as.numeric(gsub("time.", "", colnames(spike_df)[1]))
+    start_time <- start_time_values[1]  # alternatively could do min(start_time_values)
   }
-  start_df_ind <- match(paste0("time.", start_time), colnames(spike_df))
+  start_df_ind <- which(start_time_values == start_time)
 
-
+  # check that a valid start_time has been specified
+  if (length(start_df_ind) == 0) {
+    stop(c("The specified start_time = ", start_time ," is not one of the start times listed in the raster data. One
+           of the closest start time intervals is: ", names(spike_df)[which.min(abs(start_time_values - start_time))], 
+           ". Perhaps use start_time = ", start_time_values[which.min(abs(start_time_values - start_time))], " ?"))
+  }
+  
+  
+  # specify default end_time as the last bin if no end_time has been specified
   if (is.null(end_time)) {
-    temp_length <- dim(spike_df)[2]
-    end_time <- as.numeric(gsub("time.", "", colnames(spike_df)[temp_length]))
+    end_time <- end_time_values[dim(spike_df)[2]]
   }
-  end_df_ind <- match(paste0("time.", end_time), colnames(spike_df))
-
+  end_df_ind <- which(end_time_values == end_time)
+  
+  
+  # check that a valid end_time has been specified
+  # check that a valid start_time has been specified
+  if (length(end_df_ind) == 0) {
+    stop(c("The specified end_time = ", end_time ," is not one of the end times listed in the raster data. One
+           of the closest start time intervals is: ", names(spike_df)[which.min(abs(end_time_values - end_time))], 
+           ". Perhaps use end_time = ", end_time_values[which.min(abs(end_time_values - end_time))], " ?"))
+  }
+  
+  
+  # bin the data!
 
   all_start_df_inds <- seq(start_df_ind, end_df_ind - (bin_width - 1), by = sampling_interval)
   all_end_df_inds <- all_start_df_inds + (bin_width - 1)
   dfCurr_site_binned_data <- as.data.frame(matrix(nrow = dim(raster_data)[1], ncol = length(all_start_df_inds)))
-
 
   for (iBin in seq_along(all_start_df_inds)) {
 
     if (all_start_df_inds[iBin] == all_end_df_inds[iBin]) {
       
       # if binning at the same resolution as the original file, return original data
-      # add start_df_ind to offset the prestimlus time
+      # add start_df_ind to offset the pre-stimulus time
       dfCurr_site_binned_data[, iBin] <- spike_df[, all_start_df_inds[iBin]]
       
     } else {
@@ -167,8 +207,9 @@ bin_saved_data_one_site <- function(raster_data,
     }
   }
 
-  names(dfCurr_site_binned_data) <- paste0("time.", all_start_df_inds + (start_time - start_df_ind), "_", all_end_df_inds + (end_time - end_df_ind))
+  
+  names(dfCurr_site_binned_data) <- paste0("time.", start_time_values[all_start_df_inds], "_", end_time_values[all_end_df_inds])
   dfCurr_site_binned_data <- cbind(labels_df, dfCurr_site_binned_data)
-
+  
   dfCurr_site_binned_data
 }

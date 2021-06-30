@@ -22,16 +22,23 @@ data.}
 \item{save_prefix_name}{A string with a prefix that will be used name of file
 that contains the saved binned format data.}
 
-\item{bin_width}{A number that has the bin width that data should be averaged over.}
+\item{bin_width}{A number that has the number of data samples that data will
+be averaged over.}
 
 \item{sampling_interval}{A number that has the specifies the sampling
 interval between successive binned data points.}
 
-\item{start_time}{A number that specifies at which time should the binning
-start. By default it starts at the first time in the raster data.}
+\item{start_time}{A number that specifies the time to start binning the data.
+This needs to be set to one of the start times in the raster data; i.e., if
+data columns are in the format time.XXX_YYY, then the start_time must be
+one of the XXX values. By default, the start_time is the first
+time in the raster data.}
 
-\item{end_time}{A number that specifies at which time should the binning
-end. By default is to end at the last time in the raster data.}
+\item{end_time}{A number that specifies the time to end the binning of the data.
+This needs to be set to one of the end times in the raster data; i.e., if
+data columns are in the format time.XXX_YYY, then the start_time must be
+one of the YYY values. By default, the end_time is the last
+time in the raster data.}
 
 \item{files_contain}{A string that specifies that only raster files that
 contain this string should be included in the binned format data.}
