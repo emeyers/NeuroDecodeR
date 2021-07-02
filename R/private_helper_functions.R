@@ -74,8 +74,13 @@ add_raster_data_end_times <- function(raster_data) {
   new_time_interval_names <- paste0("time.", start_time_values, "_", new_end_time_values)
   names(spike_df) <- new_time_interval_names
   
-  cbind(labels_df, spike_df)
   
+  # bind the data back together, and the raster_data attribute, and return the data
+  new_raster_data <- cbind(labels_df, spike_df)
+  
+  attr(new_raster_data, "class") <- c("raster_data", "data.frame")
+  
+  new_raster_data
   
 }
 
@@ -126,18 +131,14 @@ check_and_load_binned_data <- function(binned_data) {
 
 get_center_bin_time <- function(time_vector) {
   
-  center_bin_time <- NULL
-
-  for (i in seq_along(time_vector)) {
-    curr_parsed_names <- unlist(strsplit(as.character(time_vector[i]), ".", fixed = TRUE))
-    curr_parsed_names <- unlist(strsplit(as.character(curr_parsed_names[2]), "_", fixed = TRUE))
-    center_bin_time[i] <- mean(as.numeric(curr_parsed_names[1:2])) # length(curr.parsed_names[2]:curr.parsed_names[3])
-  }
-
-  return(center_bin_time)
+  start_time_values <- as.numeric(sapply(strsplit(gsub("time.", "", time_vector), "_"), function(l) l[1]))
+  end_time_values <- as.numeric(sapply(strsplit(gsub("time.", "", time_vector), "_"), function(l) l[2]))
+  
+  (start_time_values + end_time_values)/2
   
 }
-
+  
+  
 
 
 
@@ -147,18 +148,13 @@ get_center_bin_time <- function(time_vector) {
 
 get_time_range_strings <- function(time_vector) {
   
-  time_range_strings <- NULL
-
-  for (i in seq_along(time_vector)) {
-    curr_parsed_names <- unlist(strsplit(as.character(time_vector[i]), ".", fixed = TRUE))
-    curr_parsed_names <- unlist(strsplit(as.character(curr_parsed_names[2]), "_", fixed = TRUE))
-    time_range_strings[i] <- paste(curr_parsed_names[1], "to", curr_parsed_names[2])
-  }
-
-  return(time_range_strings)
+  start_time_values <- as.numeric(sapply(strsplit(gsub("time.", "", time_vector), "_"), function(l) l[1]))
+  end_time_values <- as.numeric(sapply(strsplit(gsub("time.", "", time_vector), "_"), function(l) l[2]))
+  
+  #paste(start_time_values, "to", end_time_values)
+  paste0("[", start_time_values, ", ", end_time_values, ")")
   
 }
-
 
 
 
