@@ -200,7 +200,7 @@ get_bin_widths <- function(time_vector) {
 
   for (i in seq_along(time_vector)) {
     curr_parsed_names <- unlist(strsplit(as.character(time_vector[i]), "[._]"))
-    bin_widths[i] <- as.numeric(curr_parsed_names[3]) - as.numeric(curr_parsed_names[2]) + 1
+    bin_widths[i] <- as.numeric(curr_parsed_names[3]) - as.numeric(curr_parsed_names[2])  # + 1
   }
 
   return(bin_widths)
