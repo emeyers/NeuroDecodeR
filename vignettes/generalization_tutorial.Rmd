@@ -92,7 +92,7 @@ raster_dir_name <- file.path(system.file("extdata", package = "NeuroDecodeR"),
 bin_width <- 400
 step_size <- 400
 start_time <- 100
-end_time <- 499
+end_time <- 500
 
 binned_file_name <- create_binned_data(raster_dir_name, "ZD", bin_width, step_size, 
                                        start_time, end_time)
