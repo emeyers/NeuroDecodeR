@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>NeuroDecodeR: A package for neural decoding analyses — NeuroDecodeR • NeuroDecodeR</title>
+<title>Page not found (404) • NeuroDecodeR</title>
 
 
 <!-- jquery -->
@@ -18,8 +18,8 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha256-nuL8/2cJ5NDSSwnKD8VqreErSWHtnEP9E7AySL+1ev4=" crossorigin="anonymous"></script>
 
 <!-- bootstrap-toc -->
-<link rel="stylesheet" href="../bootstrap-toc.css">
-<script src="../bootstrap-toc.js"></script>
+<link rel="stylesheet" href="https://github.com/emeyers/NDTr/bootstrap-toc.css">
+<script src="https://github.com/emeyers/NDTr/bootstrap-toc.js"></script>
 
 <!-- Font Awesome icons -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous" />
@@ -33,14 +33,13 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script>
 
 <!-- pkgdown -->
-<link href="../pkgdown.css" rel="stylesheet">
-<script src="../pkgdown.js"></script>
+<link href="https://github.com/emeyers/NDTr/pkgdown.css" rel="stylesheet">
+<script src="https://github.com/emeyers/NDTr/pkgdown.js"></script>
 
 
 
 
-<meta property="og:title" content="NeuroDecodeR: A package for neural decoding analyses — NeuroDecodeR" />
-<meta property="og:description" content="The NeuroDecodeR makes it easy to do neural decoding analyses in R!" />
+<meta property="og:title" content="Page not found (404)" />
 
 
 
@@ -59,7 +58,7 @@
   </head>
 
   <body data-spy="scroll" data-target="#toc">
-    <div class="container template-reference-topic">
+    <div class="container template-title-body">
       <header>
       <div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
   <div class="container">
@@ -71,7 +70,7 @@
         <span class="icon-bar"></span>
       </button>
       <span class="navbar-brand">
-        <a class="navbar-link" href="../index.html">NeuroDecodeR</a>
+        <a class="navbar-link" href="https://github.com/emeyers/NDTr/index.html">NeuroDecodeR</a>
         <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.0.9005</span>
       </span>
     </div>
@@ -79,7 +78,7 @@
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
         <li>
-  <a href="../index.html">Home</a>
+  <a href="index.html">Home</a>
 </li>
 <li class="dropdown">
   <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
@@ -89,15 +88,15 @@
   </a>
   <ul class="dropdown-menu" role="menu">
     <li>
-      <a href="../articles/introduction_tutorial.html">Introductory tutorial</a>
+      <a href="articles/introduction_tutorial.html">Introductory tutorial</a>
     </li>
     <li>
-      <a href="../articles/generalization_tutorial.html">Generalization analysis tutorial</a>
+      <a href="articles/generalization_tutorial.html">Generalization analysis tutorial</a>
     </li>
   </ul>
 </li>
 <li>
-  <a href="../reference/index.html">Reference</a>
+  <a href="reference/index.html">Reference</a>
 </li>
 <li class="dropdown">
   <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
@@ -107,13 +106,13 @@
   </a>
   <ul class="dropdown-menu" role="menu">
     <li>
-      <a href="../articles/data_formats.html">Data formats</a>
+      <a href="articles/data_formats.html">Data formats</a>
     </li>
     <li>
-      <a href="../articles/datasets.html">Datasets</a>
+      <a href="articles/datasets.html">Datasets</a>
     </li>
     <li>
-      <a href="../articles/NDR_object_specification.html">NDR object specification</a>
+      <a href="articles/NDR_object_specification.html">NDR object specification</a>
     </li>
   </ul>
 </li>
@@ -136,56 +135,23 @@
       </header>
 
 <div class="row">
-  <div class="col-md-9 contents">
+  <div class="contents col-md-9">
     <div class="page-header">
-    <h1>NeuroDecodeR: A package for neural decoding analyses</h1>
-    <small class="dont-index">Source: <a href='https://github.com/emeyers/NeuroDecodeR/blob/master/R/NeuroDecodeR.R'><code>R/NeuroDecodeR.R</code></a></small>
-    <div class="hidden name"><code>NeuroDecodeR.Rd</code></div>
+      <h1>Page not found (404)</h1>
     </div>
 
-    <div class="ref-description">
-    <p>The NeuroDecodeR makes it easy to do neural decoding analyses in R!</p>
-    </div>
-
-
-
-    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
-
-    <p>The NeuroDecodeR (NDR) is built around five abstract object types that work
-together in a modular way to allow a range of neural decoding analyses. These
-five object types are:</p><ol>
-<li><p>Datasources (DS): Generate training and test splits of the data.</p></li>
-<li><p>Feature preprocessors (FP): Learn parameters on the training set and apply
-transformations to the training and test sets.</p></li>
-<li><p>Classifiers (CL): Learn the relationship between experimental conditions
-(i.e., "labels") and neural data on a training set, and then predict
-experimental conditions from neural data in a test set.</p></li>
-<li><p>Result metrics (RM): Aggregate results across validation splits and
-over resampled runs and compute and plot final decoding accuracy metrics.</p></li>
-<li><p>Cross-validators (CV): Take the DS, FP, CL and RM objects and run a
-cross-validation decoding procedure.</p></li>
-</ol>
-
-    <h2 class="hasAnchor" id="data-formats"><a class="anchor" href="#data-formats"></a>Data formats</h2>
-
-    <p>Two data formats are used to do decoding analyses which are:</p><ol>
-<li><p><code>raster format</code> contains high temporal precision data where neural
-activity from each site is stored in a separate file.</p></li>
-<li><p><code>binned format</code> contains data from multiple sites where the data is more
-coarsely binned across time.</p></li>
-</ol>
-
-<p>A user of the NDR will typically store their data in <code>raster format</code> and
-then use the <code><a href='create_binned_data.html'>create_binned_data()</a></code> to create a <code>binned format</code> data file
-that will be used in the decoding analysis.</p>
+Content not found. Please use links in the navbar.
 
   </div>
+
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
       <h2 data-toc-skip>Contents</h2>
     </nav>
   </div>
+
 </div>
+
 
 
       <footer>

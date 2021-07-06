@@ -8,21 +8,29 @@
 
 <title>The standard cross-validator (CV) — cv_standard • NeuroDecodeR</title>
 
-<!-- jquery -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
-<!-- Bootstrap -->
-<link href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/3.3.7/sandstone/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous" />
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha256-U5ZEeKfGNOja007MMD3YBI0A3OSZOQbeG6z2f2Y0hu8=" crossorigin="anonymous"></script>
+<!-- jquery -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
+<!-- Bootstrap -->
+<link href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/3.4.0/sandstone/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous" />
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha256-nuL8/2cJ5NDSSwnKD8VqreErSWHtnEP9E7AySL+1ev4=" crossorigin="anonymous"></script>
+
+<!-- bootstrap-toc -->
+<link rel="stylesheet" href="../bootstrap-toc.css">
+<script src="../bootstrap-toc.js"></script>
 
 <!-- Font Awesome icons -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha256-eZrrJcwDc/3uDhsdt61sL2oOBY362qM3lon1gyExkL0=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous" />
 
 <!-- clipboard.js -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.4/clipboard.min.js" integrity="sha256-FiZwavyI2V6+EXO1U+xzLG3IKldpiTFf3153ea9zikQ=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script>
 
-<!-- sticky kit -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/sticky-kit/1.1.3/sticky-kit.min.js" integrity="sha256-c4Rlo1ZozqTPE2RLuvbusY3+SU1pQaJC0TjuhygMipw=" crossorigin="anonymous"></script>
+<!-- headroom.js -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script>
 
 <!-- pkgdown -->
 <link href="../pkgdown.css" rel="stylesheet">
@@ -30,11 +38,11 @@
 
 
 
-<meta property="og:title" content="The standard cross-validator (CV) — cv_standard" />
 
+<meta property="og:title" content="The standard cross-validator (CV) — cv_standard" />
 <meta property="og:description" content="This object runs a decoding analysis where a classifier is repeatedly trained
 and tested using cross-validation." />
-<meta name="twitter:card" content="summary" />
+
 
 
 
@@ -48,9 +56,10 @@ and tested using cross-validation." />
 <![endif]-->
 
 
+
   </head>
 
-  <body>
+  <body data-spy="scroll" data-target="#toc">
     <div class="container template-reference-topic">
       <header>
       <div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
@@ -64,7 +73,7 @@ and tested using cross-validation." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">NeuroDecodeR</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.0.9003</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.0.9005</span>
       </span>
     </div>
 
@@ -110,11 +119,10 @@ and tested using cross-validation." />
   </ul>
 </li>
       </ul>
-      
       <ul class="nav navbar-nav navbar-right">
         <li>
-  <a href="https://github.com/emeyers/NeuroDecodeR">
-    <span class="fa fa-github fa-lg"></span>
+  <a href="https://github.com/emeyers/NeuroDecodeR/">
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -125,6 +133,7 @@ and tested using cross-validation." />
 </div><!--/.navbar -->
 
       
+
       </header>
 
 <div class="row">
@@ -136,23 +145,21 @@ and tested using cross-validation." />
     </div>
 
     <div class="ref-description">
-    
     <p>This object runs a decoding analysis where a classifier is repeatedly trained
 and tested using cross-validation.</p>
-    
     </div>
 
-    <pre class="usage"><span class='fu'>cv_standard</span>(
-  <span class='kw'>ndr_container</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>datasource</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>classifier</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>feature_preprocessors</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>result_metrics</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>num_resample_runs</span> <span class='kw'>=</span> <span class='fl'>50</span>,
-  <span class='kw'>test_only_at_training_time</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
-  <span class='kw'>num_parallel_cores</span> <span class='kw'>=</span> <span class='kw'>NULL</span>
-)</pre>
-    
+    <pre class="usage"><span class='fu'>cv_standard</span><span class='op'>(</span>
+  ndr_container <span class='op'>=</span> <span class='cn'>NULL</span>,
+  datasource <span class='op'>=</span> <span class='cn'>NULL</span>,
+  classifier <span class='op'>=</span> <span class='cn'>NULL</span>,
+  feature_preprocessors <span class='op'>=</span> <span class='cn'>NULL</span>,
+  result_metrics <span class='op'>=</span> <span class='cn'>NULL</span>,
+  num_resample_runs <span class='op'>=</span> <span class='fl'>50</span>,
+  test_only_at_training_time <span class='op'>=</span> <span class='cn'>FALSE</span>,
+  num_parallel_cores <span class='op'>=</span> <span class='cn'>NULL</span>
+<span class='op'>)</span></pre>
+
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
@@ -213,7 +220,7 @@ messages will be printed showing how long each CV split took to run which
 is useful for debugging.</p></td>
     </tr>
     </table>
-    
+
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
     <p>A cross-validator object takes a datasource (DS), a classifier (CL),
@@ -225,51 +232,45 @@ multiple cross-validation cycles where:</p><ol>
 <li><p>Result metrics (RMs) assess the accuracy of the predictions and compile
 the results.</p></li>
 </ol>
-    
+
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='no'>data_file</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/system.file'>system.file</a></span>(<span class='st'>"extdata/ZD_150bins_50sampled.Rda"</span>,
-  <span class='kw'>package</span> <span class='kw'>=</span> <span class='st'>"NeuroDecodeR"</span>)
+    <pre class="examples"><div class='input'><span class='va'>data_file</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/system.file.html'>system.file</a></span><span class='op'>(</span><span class='st'>"extdata/ZD_150bins_50sampled.Rda"</span>,
+  package <span class='op'>=</span> <span class='st'>"NeuroDecodeR"</span><span class='op'>)</span>
 
-<span class='no'>ds</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='ds_basic.html'>ds_basic</a></span>(<span class='no'>data_file</span>, <span class='st'>"stimulus_ID"</span>, <span class='fl'>18</span>)
-<span class='no'>fps</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/list'>list</a></span>(<span class='fu'><a href='fp_zscore.html'>fp_zscore</a></span>())
-<span class='no'>cl</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='cl_max_correlation.html'>cl_max_correlation</a></span>()
+<span class='va'>ds</span> <span class='op'>&lt;-</span> <span class='fu'><a href='ds_basic.html'>ds_basic</a></span><span class='op'>(</span><span class='va'>data_file</span>, <span class='st'>"stimulus_ID"</span>, <span class='fl'>18</span><span class='op'>)</span>
+<span class='va'>fps</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='fu'><a href='fp_zscore.html'>fp_zscore</a></span><span class='op'>(</span><span class='op'>)</span><span class='op'>)</span>
+<span class='va'>cl</span> <span class='op'>&lt;-</span> <span class='fu'><a href='cl_max_correlation.html'>cl_max_correlation</a></span><span class='op'>(</span><span class='op'>)</span>
 
-<span class='no'>cv</span> <span class='kw'>&lt;-</span> <span class='fu'>cv_standard</span>(<span class='kw'>datasource</span> <span class='kw'>=</span> <span class='no'>ds</span>,
-                 <span class='kw'>classifier</span> <span class='kw'>=</span> <span class='no'>cl</span>,
-                 <span class='kw'>feature_preprocessors</span> <span class='kw'>=</span> <span class='no'>fps</span>)
+<span class='va'>cv</span> <span class='op'>&lt;-</span> <span class='fu'>cv_standard</span><span class='op'>(</span>datasource <span class='op'>=</span> <span class='va'>ds</span>, 
+                 classifier <span class='op'>=</span> <span class='va'>cl</span>, 
+                 feature_preprocessors <span class='op'>=</span> <span class='va'>fps</span><span class='op'>)</span>
 
 
 <span class='co'># alternatively, one can also use the magrittr pipe (%&gt;%) to do an analysis</span>
-<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/library'>library</a></span>(<span class='no'>magrittr</span>)</div><div class='output co'>#&gt; <span class='message'></span>
-#&gt; <span class='message'>Attaching package: ‘magrittr’</span></div><div class='output co'>#&gt; <span class='message'>The following objects are masked from ‘package:testthat’:</span>
-#&gt; <span class='message'></span>
-#&gt; <span class='message'>    equals, is_less_than, not</span></div><div class='input'><span class='no'>data_file2</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/system.file'>system.file</a></span>(<span class='st'>"extdata/ZD_500bins_500sampled.Rda"</span>,
-  <span class='kw'>package</span> <span class='kw'>=</span> <span class='st'>"NeuroDecodeR"</span>)
+<span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://magrittr.tidyverse.org'>magrittr</a></span><span class='op'>)</span>
+<span class='va'>data_file2</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/system.file.html'>system.file</a></span><span class='op'>(</span><span class='st'>"extdata/ZD_500bins_500sampled.Rda"</span>,
+  package <span class='op'>=</span> <span class='st'>"NeuroDecodeR"</span><span class='op'>)</span>
+  
+<span class='va'>DECODING_RESULTS</span> <span class='op'>&lt;-</span> <span class='va'>data_file2</span> <span class='op'>%&gt;%</span>
+    <span class='fu'><a href='ds_basic.html'>ds_basic</a></span><span class='op'>(</span><span class='st'>'stimulus_ID'</span>, <span class='fl'>6</span>, num_label_repeats_per_cv_split <span class='op'>=</span> <span class='fl'>3</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
+    <span class='fu'><a href='cl_max_correlation.html'>cl_max_correlation</a></span><span class='op'>(</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
+    <span class='fu'><a href='fp_zscore.html'>fp_zscore</a></span><span class='op'>(</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
+    <span class='fu'><a href='rm_main_results.html'>rm_main_results</a></span><span class='op'>(</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
+    <span class='fu'><a href='rm_confusion_matrix.html'>rm_confusion_matrix</a></span><span class='op'>(</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
+    <span class='fu'>cv_standard</span><span class='op'>(</span>num_resample_runs <span class='op'>=</span> <span class='fl'>3</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
+    <span class='fu'><a href='run_decoding.html'>run_decoding</a></span><span class='op'>(</span><span class='op'>)</span>
 
-<span class='no'>DECODING_RESULTS</span> <span class='kw'>&lt;-</span> <span class='no'>data_file2</span> <span class='kw'>%&gt;%</span>
-    <span class='fu'><a href='ds_basic.html'>ds_basic</a></span>(<span class='st'>'stimulus_ID'</span>, <span class='fl'>6</span>, <span class='kw'>num_label_repeats_per_cv_split</span> <span class='kw'>=</span> <span class='fl'>3</span>) <span class='kw'>%&gt;%</span>
-    <span class='fu'><a href='cl_max_correlation.html'>cl_max_correlation</a></span>() <span class='kw'>%&gt;%</span>
-    <span class='fu'><a href='fp_zscore.html'>fp_zscore</a></span>() <span class='kw'>%&gt;%</span>
-    <span class='fu'><a href='rm_main_results.html'>rm_main_results</a></span>() <span class='kw'>%&gt;%</span>
-    <span class='fu'><a href='rm_confusion_matrix.html'>rm_confusion_matrix</a></span>() <span class='kw'>%&gt;%</span>
-    <span class='fu'>cv_standard</span>(<span class='kw'>num_resample_runs</span> <span class='kw'>=</span> <span class='fl'>3</span>) <span class='kw'>%&gt;%</span>
-    <span class='fu'><a href='run_decoding.html'>run_decoding</a></span>()</div><div class='output co'>#&gt; <span class='error'>Error in data.frame(analysis_ID = ndr_obj$analysis_ID, cv_standard.num_resample_runs = ndr_obj$num_resample_runs,     cv_standard.test_only_at_training_time = ndr_obj$test_only_at_training_time,     cv_standard.num_parallel_cores = ndr_obj$num_parallel_cores): arguments imply differing number of rows: 1, 0</span></div><div class='input'>
 
 </div></pre>
   </div>
-  <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
-    <h2>Contents</h2>
-    <ul class="nav nav-pills nav-stacked">
-      <li><a href="#arguments">Arguments</a></li>
-      
-      <li><a href="#details">Details</a></li>
-      
-      <li><a href="#examples">Examples</a></li>
-    </ul>
-
+  <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
+    <nav id="toc" data-toggle="toc" class="sticky-top">
+      <h2 data-toc-skip>Contents</h2>
+    </nav>
   </div>
 </div>
+
 
       <footer>
       <div class="copyright">
@@ -277,13 +278,16 @@ the results.</p></li>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.3.0.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
+
       </footer>
    </div>
 
   
 
+
   </body>
 </html>
+
 
