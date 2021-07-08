@@ -100,7 +100,7 @@
       <h1 data-toc-skip>Introduction to the NeuroDecodeR package</h1>
             
       
-      <small class="dont-index">Source: <a href="https://github.com/emeyers/NeuroDecodeR/blob/master/vignettes/introduction_tutorial.Rmd"><code>vignettes/introduction_tutorial.Rmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/emeyers/NeuroDecodeR/blob/master/inst/extdata/vignettes/introduction_tutorial.Rmd"><code>inst/extdata/vignettes/introduction_tutorial.Rmd</code></a></small>
       <div class="hidden name"><code>introduction_tutorial.Rmd</code></div>
 
     </div>
@@ -287,11 +287,10 @@
 <p>Finally, the NDR has a “log” function that helps you save and manage your results. Below, we show how to use the <code><a href="../reference/log_save_results.html">log_save_results()</a></code> function which takes a <code>DECODING_RESULTS</code> object and the name of a directory. This function saves the results to the specified directory and logs the parameters used in the analysis so that they can later be retrieved. For more information, see the tutorial on saving and managing results.</p>
 <div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">results_dir_name</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/file.path.html">file.path</a></span><span class="op">(</span><span class="st">"results"</span>, <span class="st">""</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/base/files2.html">dir.create</a></span><span class="op">(</span><span class="va">results_dir_name</span><span class="op">)</span>
-
-<span class="fu"><a href="../reference/log_save_results.html">log_save_results</a></span><span class="op">(</span><span class="va">DECODING_RESULTS</span>, <span class="va">results_dir_name</span><span class="op">)</span></code></pre></div>
-<pre><code>## Warning in log_save_results(DECODING_RESULTS, results_dir_name): The manifest file does not exist.
-##   Assuming this is the first result that is saved and creating manifest file</code></pre>
+<span class="fu"><a href="https://rdrr.io/r/base/files2.html">dir.create</a></span><span class="op">(</span><span class="va">results_dir_name</span><span class="op">)</span></code></pre></div>
+<pre><code>## Warning in dir.create(results_dir_name): 'results' already exists</code></pre>
+<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="../reference/log_save_results.html">log_save_results</a></span><span class="op">(</span><span class="va">DECODING_RESULTS</span>, <span class="va">results_dir_name</span><span class="op">)</span></code></pre></div>
 </div>
 <div id="running-an-analysis-using-the-magrittr-pipe-operator" class="section level2">
 <h2 class="hasAnchor">
@@ -303,7 +302,7 @@
 <li>Pipe this sequence into a cross-validator and then call the run_decoding() method.</li>
 </ol>
 <p>The code below gives and example of how this can be done.</p>
-<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">basedir_file_name</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html">system.file</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/file.path.html">file.path</a></span><span class="op">(</span><span class="st">"extdata"</span>, <span class="st">"ZD_500bins_500sampled.Rda"</span><span class="op">)</span>, 
                                    package<span class="op">=</span><span class="st">"NeuroDecodeR"</span><span class="op">)</span>
   

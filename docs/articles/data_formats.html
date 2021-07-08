@@ -100,27 +100,27 @@
       <h1 data-toc-skip>Data formats</h1>
             
       
-      <small class="dont-index">Source: <a href="https://github.com/emeyers/NeuroDecodeR/blob/master/vignettes/data_formats.Rmd"><code>vignettes/data_formats.Rmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/emeyers/NeuroDecodeR/blob/master/inst/extdata/vignettes/data_formats.Rmd"><code>inst/extdata/vignettes/data_formats.Rmd</code></a></small>
       <div class="hidden name"><code>data_formats.Rmd</code></div>
 
     </div>
 
     
     
-<p>The NeuroDecodeR (NDR) uses two closely related data formats called <code>raster format</code> and <code>binned format</code>. For almost all analysis, one starts by saving data from each site in <code>raster format</code>. One then converts it to <code>binned format</code> using the <code><a href="../reference/create_binned_data.html">create_binned_data()</a></code> which has the data from all the sites at a coarser temporal resolution. The <code>binned format</code> data is then used in all decoding analyses. More information about what is required to have data in these specified formats is described below.</p>
+<p>The NeuroDecodeR (NDR) uses two very similar data formats called <code>raster format</code> and <code>binned format</code>. For almost all analysis, one starts by saving data from each site in <code>raster format</code>. One then converts the data to <code>binned format</code> using the <code><a href="../reference/create_binned_data.html">create_binned_data()</a></code> which has the data from all the sites in a single data frame at a coarser temporal resolution that is stored in a single file. The <code>binned format</code> data is then used in all subsequent decoding analyses. More information about what is required to have data in these specified formats is described below.</p>
 <div id="raster-format" class="section level2">
 <h2 class="hasAnchor">
 <a href="#raster-format" class="anchor"></a>Raster format</h2>
-<p>Raster format data contains the data at the highest temporal resolution. For raster data, there is a separate file that contains a data frame of data each site (e.g., there is a separate file for each single neuron, each LFP channel, etc.). The reason for having data from each site in a separate file is to prevent memory one from running out of memory when trying to load data from many sites when the data is at a high temporal resolution.</p>
+<p>Raster format data contains the data at the highest temporal resolution. For raster data, there is a separate file that contains a data frame of data each site (e.g., for electrophysiology experiments there is a separate file for each single neuron, for EEG experiments there is a separate file for each EEG channel, etc.). The reason for having data from each site in a separate file is to prevent memory from running out of memory when trying to load data from many sites when the data is at a high temporal resolution.</p>
 <p>For raster format data, the number of rows in the data frame correspond to the number of trials in the experiment. Data that is in raster format is a data frame that must contain variables (columns) that start with the following prefixes:</p>
 <ol style="list-style-type: decimal">
 <li><p><code>labels.XXX</code> These variables contain labels of which experimental conditions were shown on a given trial.</p></li>
-<li><p><code>time.XXX</code> These variables contain the data for a given time.</p></li>
+<li><p><code>time.XXX_YYY</code> These variables contain the data for a given time, where where XXX is the start time of the data in a particular bin and YYY is the end time. The time interval should be specified such in the form [XXX, YYY), so that the start time is a closed interval and the end time is an open interval. Thus, for data that is recording continuously, the value YYY of one bin, would be equal to the value XXX for the next bin (e.g., <code>time.100_101</code>, <code>time.101_102</code>, <code>time.102_103</code>, etc.).</p></li>
 </ol>
 <p>There can also be two additional optional variables in a raster format data frame which are:</p>
 <ol start="3" style="list-style-type: decimal">
-<li><p><code>site_info.XXX</code> These variables contain additional meta data out the site. For example, one could have a variable called <code>site_info.brain_area</code> which indicated which brain region a given site came from. All rows for a given <code>site_info.XXX</code> variables typically have the same value.</p></li>
-<li><p><code>trial_number</code> This is a variable that specifies a unique for each row indicating which trial a given row of data came from. This is useful for data where all sites were recorded simultaneously in order to allow one to do the decoding on actual simultaneously recorded data (e.g., by using the <code><a href="../reference/ds_basic.html">ds_basic()</a></code> <code>create_simultaneously_recorded_populations</code> argument).</p></li>
+<li><p><code>site_info.XXX</code> These variables contain additional meta data about the site. For example, one could have a variable called <code>site_info.brain_area</code> which indicates which brain region a given site came from. All rows for a given <code>site_info.XXX</code> variable typically have the same value.</p></li>
+<li><p><code>trial_number</code> This variable specifies a unique number for each row indicating which trial a given row of data came from. This is useful for data where all sites were recorded simultaneously in order to allow one to do the decoding on actual simultaneously recorded data (e.g., by using the <code><a href="../reference/ds_basic.html">ds_basic()</a></code> <code>create_simultaneously_recorded_populations</code> argument).</p></li>
 </ol>
 <p>The class attribute for data in raster format should be set to <code>attr(raster_data, "class") &lt;- c("raster_data", "data.frame")</code>. This will enable the plot() function to correctly plot data in raster format.</p>
 <div id="checking-if-data-is-in-valid-raster-format" class="section level3">
@@ -168,16 +168,16 @@
 <div id="binned-format" class="section level2">
 <h2 class="hasAnchor">
 <a href="#binned-format" class="anchor"></a>Binned format</h2>
-<p>Binned format data contains data from multiple sites (e.g., data from many neurons, LFP channels, etc.). Data that is in binned format is very similar to data that is in raster format except that it contains information from multiple sites and often contains the information at a coarser resolution. For example, binned data would typically contain firing rates over some time interval sampled at a lower rate, as opposed to raster format data that would typically contain individual spikes sampled at a higher rate. Binned format data is typically created from raster format data using the function <code>create_binned_data</code> which converts a directory of raster format files into a binned-format file that is used in subsequent decoding analyses.</p>
+<p>Binned format data contains data from multiple sites (e.g., data from many neurons, EEG channels, etc.). Data that is in binned format is very similar to data that is in raster format except that it contains information from multiple sites and usually contains the information at a coarser temporal resolution. For example, binned data would typically contain firing rates over some time interval sampled at a lower rate, as opposed to raster format data that would typically contain individual spikes sampled at a higher rate. Binned format data is typically created from raster format data using the function <code><a href="../reference/create_binned_data.html">create_binned_data()</a></code> which converts a directory of raster format files into a binned-format file that is used in subsequent decoding analyses.</p>
 <p>Binned format data must be in a data frame where the number of rows in the data frame correspond to the number of trial in all experimental recording sessions across all sites. The binned format data frame must also contain the variables that start with the following prefixes:</p>
 <ol style="list-style-type: decimal">
-<li><p><code>siteID.XXX</code> A unique number indicating a site a given row of data corresponds to.</p></li>
-<li><p><code>labels.XXX</code> These variables contain labels of which experimental conditions occurred on a given trial.</p></li>
-<li><p><code>time.X_Y</code> These variables contain data in a time range from X to Y.</p></li>
+<li><p><code>siteID.XXX</code> A unique number indicating a site a given row of data corresponds to. These are typically automatically generated by the <code><a href="../reference/create_binned_data.html">create_binned_data()</a></code> function.</p></li>
+<li><p><code>labels.XXX</code> These variables contain labels of which experimental conditions occurred on a given trial. These are typically copied from the raster data when <code><a href="../reference/create_binned_data.html">create_binned_data()</a></code> is called.</p></li>
+<li><p><code>time.XXX_YYY</code> These variables contain data in a time range from [XXX, YYY). These values are typically derived from the raster data <code>time.XXX_YYY</code> values when the <code><a href="../reference/create_binned_data.html">create_binned_data()</a></code> is called.</p></li>
 </ol>
 <p>There can also be two additional optional variables in a binned format data frame which are:</p>
 <ol start="4" style="list-style-type: decimal">
-<li><p><code>site_info.XXX</code> These variables contain additional meta data out the site. For example, one could have a variable called <code>site_info.brain_area</code> which indicated which brain region a given site came from. All rows for a given <code>site_info.XXX</code> variables typically have the same value.</p></li>
+<li><p><code>site_info.XXX</code> These variables contain additional meta data out the site. For example, one could have a variable called <code>site_info.brain_area</code> which indicated which brain region a given site came from.</p></li>
 <li><p><code>trial_number</code> This is a variable that specifies a unique for each row indicating which trial a given row of data came from. This is useful for data where all sites were recorded simultaneously in order to allow one to do the decoding on actual simultaneously recorded data (e.g., by using the <code><a href="../reference/ds_basic.html">ds_basic()</a></code> <code>create_simultaneously_recorded_populations</code> argument).</p></li>
 </ol>
 <div id="checking-if-data-is-in-valid-binned-format" class="section level3">

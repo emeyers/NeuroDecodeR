@@ -100,7 +100,7 @@
       <h1 data-toc-skip>Tutorial on how to do a generalization analysis</h1>
             
       
-      <small class="dont-index">Source: <a href="https://github.com/emeyers/NeuroDecodeR/blob/master/vignettes/generalization_tutorial.Rmd"><code>vignettes/generalization_tutorial.Rmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/emeyers/NeuroDecodeR/blob/master/inst/extdata/vignettes/generalization_tutorial.Rmd"><code>inst/extdata/vignettes/generalization_tutorial.Rmd</code></a></small>
       <div class="hidden name"><code>generalization_tutorial.Rmd</code></div>
 
     </div>
@@ -186,11 +186,11 @@
 <span class="fu">tictoc</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/tictoc/man/tic.html">tic</a></span><span class="op">(</span><span class="op">)</span>
 <span class="va">DECODING_RESULTS</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/run_decoding.html">run_decoding</a></span><span class="op">(</span><span class="va">cv</span><span class="op">)</span>
 <span class="fu">tictoc</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/tictoc/man/tic.html">toc</a></span><span class="op">(</span><span class="op">)</span></code></pre></div>
-<pre><code>## 10.849 sec elapsed</code></pre>
+<pre><code>## 10.835 sec elapsed</code></pre>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># show the zero-one loss decoding accuracy (chance is 1/7)</span>
 <span class="va">DECODING_RESULTS</span><span class="op">$</span><span class="va">rm_main_results</span><span class="op">$</span><span class="va">zero_one_loss</span></code></pre></div>
-<pre><code>## [1] 0.8452381</code></pre>
+<pre><code>## [1] 0.8484127</code></pre>
 </div>
 <div id="training-and-testing-at-all-locations" class="section level3">
 <h3 class="hasAnchor">
@@ -207,10 +207,10 @@
   <span class="va">the_files</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste0</a></span><span class="op">(</span><span class="va">results_dir_name</span>, <span class="fu"><a href="https://rdrr.io/r/base/list.files.html">list.files</a></span><span class="op">(</span><span class="va">results_dir_name</span><span class="op">)</span><span class="op">)</span>
   <span class="fu"><a href="https://rdrr.io/r/base/files.html">file.remove</a></span><span class="op">(</span><span class="va">the_files</span><span class="op">)</span>
   <span class="fu"><a href="https://rdrr.io/r/base/files.html">file.remove</a></span><span class="op">(</span><span class="va">results_dir_name</span><span class="op">)</span>
-<span class="op">}</span> 
-
-
-<span class="fu"><a href="https://rdrr.io/r/base/files2.html">dir.create</a></span><span class="op">(</span><span class="va">results_dir_name</span><span class="op">)</span>
+<span class="op">}</span> </code></pre></div>
+<pre><code>## [1] TRUE</code></pre>
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/files2.html">dir.create</a></span><span class="op">(</span><span class="va">results_dir_name</span><span class="op">)</span>
 
 <span class="va">id_base_levels</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"hand"</span>, <span class="st">"flower"</span>, <span class="st">"guitar"</span>, <span class="st">"face"</span>, <span class="st">"kiwi"</span>, <span class="st">"couch"</span>,  <span class="st">"car"</span><span class="op">)</span>   
 <span class="va">pos_base_levels</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"upper"</span>, <span class="st">"middle"</span>, <span class="st">"lower"</span><span class="op">)</span>
@@ -255,23 +255,23 @@
 
   <span class="op">}</span>
 <span class="op">}</span></code></pre></div>
-<pre><code>## 10.497 sec elapsed</code></pre>
+<pre><code>## 10.335 sec elapsed</code></pre>
 <pre><code>## Warning in log_save_results(DECODING_RESULTS, results_dir_name, result_name): The manifest file does not exist.
 ##   Assuming this is the first result that is saved and creating manifest file</code></pre>
-<pre><code>## 10.598 sec elapsed
-## 10.429 sec elapsed
-## 10.541 sec elapsed
-## 10.475 sec elapsed
-## 10.66 sec elapsed
-## 10.583 sec elapsed
-## 10.497 sec elapsed
-## 10.362 sec elapsed</code></pre>
+<pre><code>## 10.791 sec elapsed
+## 10.812 sec elapsed
+## 10.748 sec elapsed
+## 10.432 sec elapsed
+## 10.664 sec elapsed
+## 10.769 sec elapsed
+## 10.627 sec elapsed
+## 10.514 sec elapsed</code></pre>
 </div>
 <div id="plotting-the-results" class="section level3">
 <h3 class="hasAnchor">
 <a href="#plotting-the-results" class="anchor"></a>Plotting the results</h3>
 <p>To plot all these results, we will create some custom code. This code loads the results for each training and test location pair using the <code>log_load_results_from_result_name</code> function and save the results to a data frame. This data frame is then plotted using <code>ggplot2</code>.</p>
-<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># compile all the results that were saved</span>
 
 <span class="va">all_results</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span><span class="op">(</span><span class="op">)</span>
