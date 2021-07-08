@@ -55,3 +55,5 @@ tests/testthat/testing_save_results/
 .Rproj.user
 doc
 Meta
+/doc/
+/Meta/
