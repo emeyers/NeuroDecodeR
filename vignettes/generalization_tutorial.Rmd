@@ -78,8 +78,11 @@ library(tidyr)
 
 For this tutorial, we will use binned-format data that consists of the firing
 rate in a 400 ms window that starts 100 ms after the onset of the stimulus. The
-following code shows how to create this binned data. For more information about
-binning the data, see the [introduction tutorial](introduction_tutorial.html).
+following code shows how to create this binned data using a small subset of the
+Zhang-Desimone 7 object data (later in the tutorial we will load binned data
+from a larger set of neurons for subsequent analyses to get better decoding
+results). For more information about binning the data, see the [introduction
+tutorial](introduction_tutorial.html).
 
 
 
@@ -87,7 +90,7 @@ binning the data, see the [introduction tutorial](introduction_tutorial.html).
 ```{r bin_data, results = 'hide', message = FALSE}
 
 raster_dir_name <- file.path(system.file("extdata", package = "NeuroDecodeR"), 
-                             "Zhang_Desimone_7object_raster_data_rda")
+                             "Zhang_Desimone_7object_raster_data_small_rda")
 
 bin_width <- 400
 step_size <- 400
@@ -96,6 +99,14 @@ end_time <- 500
 
 binned_file_name <- create_binned_data(raster_dir_name, "ZD", bin_width, step_size, 
                                        start_time, end_time)
+
+
+# The name of a binned file that has data from more neurons in it that will be
+# used for subsequent analyses. This raster data went into this binned format
+# data was excluded from the NeuroDecodeR package to keep the package size small.
+binned_file_name <- system.file(file.path("extdata", 
+                                          "ZD_400bins_400sampled_start100_end500.Rda"),
+                                package="NeuroDecodeR")
 
 
 ```

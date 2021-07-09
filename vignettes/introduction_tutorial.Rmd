@@ -9,10 +9,13 @@ vignette: >
   
  
 The following tutorial gives a basic introduction to the data formats used by
-NeuroDecodeR (NDR) and shows how to run a simple decoding analysis.
-The tutorial is based on a dataset collected by Ying Zhang in Bob Desimone’s lab
-at MIT. The NDR is based on the MATLAB Neural Decoding Toolbox, which you can
-learn more about at [www.readout.info](http://www.readout.info).
+NeuroDecodeR (NDR) and shows how to run a simple decoding analysis. The tutorial
+is based on a dataset collected by Ying Zhang in Bob Desimone’s lab at MIT (some
+of the code below uses just a small subset of this data, but a larger data set
+can be download from the NeuroDecodeR GitHub site).
+
+The NeuroDecodeR package is based on the MATLAB Neural Decoding Toolbox, which
+you can learn more about at [www.readout.info](http://www.readout.info).
 
 
 
@@ -105,7 +108,7 @@ raster data in the correct format.
 
 ```{r load_raster_file}
 
-raster_dir_name <- file.path(system.file("extdata", package = "NeuroDecodeR"), "Zhang_Desimone_7object_raster_data_rda")
+raster_dir_name <- file.path(system.file("extdata", package = "NeuroDecodeR"), "Zhang_Desimone_7object_raster_data_small_rda")
 file_name <- "bp1001spk_01A_raster_data.rda"
 load(file.path(raster_dir_name, file_name))
 

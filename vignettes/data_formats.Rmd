@@ -79,7 +79,7 @@ data set](datasets.html).
 
 ```{r load_raster_file}
 
-raster_dir_name <- file.path(system.file("extdata", package = "NeuroDecodeR"), "Zhang_Desimone_7object_raster_data_rda")
+raster_dir_name <- file.path(system.file("extdata", package = "NeuroDecodeR"), "Zhang_Desimone_7object_raster_data_small_rda")
 full_file_name <- file.path(raster_dir_name, "bp1001spk_01A_raster_data.rda")
 
 # test the file is in valid raster format

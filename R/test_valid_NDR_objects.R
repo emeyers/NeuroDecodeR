@@ -19,7 +19,7 @@
 #' # This is valid raster data so the function will return no error message
 #' raster_dir_name <- file.path(
 #'   system.file("extdata", package = "NeuroDecodeR"),
-#'   "Zhang_Desimone_7object_raster_data_rda"
+#'   "Zhang_Desimone_7object_raster_data_small_rda"
 #' )
 #' file_name <- "bp1001spk_01A_raster_data.rda"
 #' raster_full_path <- file.path(raster_dir_name, file_name)

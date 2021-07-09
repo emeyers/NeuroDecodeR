@@ -1,8 +1,11 @@
 
 
 
+# raster_dir_name <- trimws(file.path(system.file("extdata", package = "NeuroDecodeR"), 
+#                             "Zhang_Desimone_7object_raster_data_rda", " "))
+
 raster_dir_name <- trimws(file.path(system.file("extdata", package = "NeuroDecodeR"), 
-                             "Zhang_Desimone_7object_raster_data_rda", " "))
+                                    "Zhang_Desimone_7object_raster_data_small_rda", " "))
 
 
 temp_dir_name <- tempdir()
