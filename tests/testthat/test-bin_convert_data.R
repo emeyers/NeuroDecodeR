@@ -48,7 +48,7 @@ test_that("convert_matlab_raster_data() convert MATLAB raster data to R raster d
                                    "Zhang_Desimone_7object_raster_data_small_mat")
   
   # create temporary directory to hold converted data
-  r_raster_dir_name <- trimws(file.path(temp_dir_name, "test_convert_matlab_raster_data", " "))
+  r_raster_dir_name <- trimws(file.path(temp_dir_name, " "))
   
   
   # delete any saved results and manifest files that already exist
@@ -80,8 +80,8 @@ test_that("convert_matlab_raster_data() convert MATLAB raster data to R raster d
 
   the_files <- paste0(r_raster_dir_name, list.files(r_raster_dir_name))
   file.remove(the_files)
-  unlink(file.path(dirname(r_raster_dir_name), basename(r_raster_dir_name)), 
-         recursive = TRUE, force = TRUE)
+  #unlink(file.path(dirname(r_raster_dir_name), basename(r_raster_dir_name)), 
+  #       recursive = TRUE, force = TRUE)
   
 })
 
