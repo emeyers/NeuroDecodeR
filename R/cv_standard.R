@@ -250,7 +250,7 @@ run_decoding.cv_standard <- function(cv_obj) {
   if (cv_obj$num_parallel_cores > 0) {
 
     # register parallel resources
-    the_cluster <- parallel::makeCluster(cv_obj$num_parallel_cores, type = "SOCK")
+    the_cluster <- parallel::makeCluster(cv_obj$num_parallel_cores, type = "SOCK", outfile = "")
     doSNOW::registerDoSNOW(the_cluster)
 
     "%do_type%" <- get("%dopar%")
@@ -265,6 +265,9 @@ run_decoding.cv_standard <- function(cv_obj) {
   # Do a parallel loop over resample runs
   all_resample_run_decoding_results <- foreach(iResample = 1:num_resample_runs) %do_type% { 
 
+    
+    # message(paste0("Resample run: ", iResample))
+    
     
     # get the data from the current cross-validation run
     cv_data <- get_data(datasource)
@@ -288,9 +291,9 @@ run_decoding.cv_standard <- function(cv_obj) {
 
       # when the code is not run in parallel, the CV number will be printed
       tictoc::tic()
-      message(paste0("CV: ", iCV))
+      message(paste0("Resample run: ", strrep(" ", 3 - nchar(as.character(iResample))),  iResample,  "      CV: ", iCV))
 
-
+      
       for (iTrain in 1:num_time_bins) {
 
         training_set <- dplyr::filter(
@@ -346,8 +349,9 @@ run_decoding.cv_standard <- function(cv_obj) {
 
     # go through each Result Metric and aggregate the results from all CV splits using each metric
     for (iMetric in seq_along(result_metrics)) {
-      curr_metric_results <- aggregate_CV_split_results(result_metrics[[iMetric]], all_cv_results)
-      resample_run_decoding_results[[iMetric]] <- curr_metric_results ###  DECODING_RESULTS
+      ###  DECODING_RESULTS
+      resample_run_decoding_results[[iMetric]] <- aggregate_CV_split_results(result_metrics[[iMetric]], all_cv_results)
+      gc()
     }
 
 
