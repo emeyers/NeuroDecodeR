@@ -44,10 +44,10 @@ test_that("rm_main_results aggregate methods don't give errors", {
   
   test_aggregate_functions_work(main_rm)
   
-  main_rm_2 <- rm_main_results(NULL, "diag", "diag")  
+  main_rm_2 <- rm_main_results(NULL, "only_same_train_test_time")  
   test_aggregate_functions_work(main_rm_2)
   
-  main_rm_3 <- rm_main_results(NULL, FALSE, FALSE)  
+  main_rm_3 <- rm_main_results(NULL, FALSE)  
   test_aggregate_functions_work(main_rm_3)
   
 })
