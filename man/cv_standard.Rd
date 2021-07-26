@@ -12,7 +12,8 @@ cv_standard(
   result_metrics = NULL,
   num_resample_runs = 50,
   test_only_at_training_time = FALSE,
-  num_parallel_cores = NULL
+  num_parallel_cores = NULL,
+  parallel_outfile = NULL
 )
 }
 \arguments{
@@ -55,6 +56,14 @@ value is to use half of the cores detected on the system. If this value is
 set to a value of less than 1, then the code will be run serially and
 messages will be printed showing how long each CV split took to run which
 is useful for debugging.}
+
+\item{parallel_outfile}{A string specifying the name of a file where the
+output from running the code in parallel is written (this argument is
+ignored if num_parallel_cores < 1). By default the parallel output is
+written to dev/null so it is not accessible. If this is changed to an empty
+string the output will be written to the screen, otherwise it will be
+written to a file name specified. See parallel::makeCluster for more
+details.}
 }
 \description{
 This object runs a decoding analysis where a classifier is repeatedly trained
