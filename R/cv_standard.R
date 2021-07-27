@@ -287,7 +287,8 @@ run_decoding.cv_standard <- function(cv_obj) {
   all_resample_run_decoding_results <- foreach(iResample = 1:num_resample_runs) %do_type% { 
 
     
-    # message(paste0("Resample run: ", iResample))
+    message(paste0("Start resample run: ", strrep(" ", 3 - nchar(as.character(iResample))),  iResample, 
+                     "   Start time: ",  Sys.time()))
     
     
     # get the data from the current cross-validation run
@@ -312,8 +313,6 @@ run_decoding.cv_standard <- function(cv_obj) {
 
       # when the code is not run in parallel, the CV number will be printed
       tictoc::tic()
-      message(paste0("Resample run: ", strrep(" ", 3 - nchar(as.character(iResample))),  iResample,  "      CV: ", iCV))
-
       
       for (iTrain in 1:num_time_bins) {
 
@@ -354,8 +353,12 @@ run_decoding.cv_standard <- function(cv_obj) {
       } # end the for loop over time bins
 
 
-      tictoc::toc()
-
+      tictoc_time <- tictoc::toc(quiet = TRUE)
+      message(
+        paste0("Resample run: ", strrep(" ", 3 - nchar(as.character(iResample))),  iResample,  
+                     "      CV: ", iCV, 
+                     "      Time elapsed: ", round(tictoc_time$toc - tictoc_time$tic, 3), " seconds\n\n\n") )
+      
 
       # Aggregate results over all CV split runs
       all_cv_results[[iCV]] <- dplyr::bind_rows(all_time_results)
