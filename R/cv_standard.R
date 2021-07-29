@@ -282,7 +282,18 @@ run_decoding.cv_standard <- function(cv_obj) {
     #  format = "  progress [:bar] :percent      elapsed: :elapsedfull      eta: :eta",
     #  total = num_resample_runs * num_cv, clear = FALSE, width = 90)
     
-    progressr_processor <- progressr::progressor(steps = num_resample_runs * num_cv)
+    # progressr_processor <- progressr::progressor(steps = num_resample_runs * num_cv)
+    
+    # a pretty lame progress bar that only updates after completed resample runs
+    # so fairly useless since most of the computations are done by the time
+    # the resmaple runs are complete when on a computer with many cores
+    # might be more useful on a computer with fewer cores
+    
+    # better than nothing so add this to the master branch...
+    pb <- txtProgressBar(max = num_resample_runs, style=3)
+    progress <- function(n) setTxtProgressBar(pb, n)
+    opts <- list(progress=progress)
+    
     
   }
   
@@ -294,21 +305,24 @@ run_decoding.cv_standard <- function(cv_obj) {
   if (cv_obj$num_parallel_cores > 0) {
 
     # register parallel resources
-    #the_cluster <- parallel::makeCluster(cv_obj$num_parallel_cores, 
-    #                                     type = "SOCK", 
-    #                                     outfile = cv_obj$parallel_outfile)
-    #doSNOW::registerDoSNOW(the_cluster)
-
-    # parallelize via doFuture package!
-    #registerDoFuture()      
+    the_cluster <- parallel::makeCluster(cv_obj$num_parallel_cores, 
+                                         type = "SOCK", 
+                                         outfile = cv_obj$parallel_outfile)
+    doSNOW::registerDoSNOW(the_cluster)
+    
+    
+    # try 1: parallelize via doFuture package
+    #doFuture::registerDoFuture()      
     #plan(multisession, workers = cv_obj$num_parallel_cores)
     
-    doFuture::registerDoFuture()
-    the_cluster <- makeCluster(cv_obj$num_parallel_cores)
-    plan(cluster, workers=the_cluster)
+    # try 2: parallelize via doFuture package
+    #doFuture::registerDoFuture()
+    #the_cluster <- makeCluster(cv_obj$num_parallel_cores)
+    #plan(cluster, workers=the_cluster)
     
-    #"%do_type%" <- get("%dopar%")
-    "%do_type%" <- get("%dorng%")
+    
+    "%do_type%" <- get("%dopar%")
+    #"%do_type%" <- get("%dorng%")
 
   } else {
 
@@ -319,7 +333,8 @@ run_decoding.cv_standard <- function(cv_obj) {
 
   # Do a parallel loop over resample runs
   iResample <- 0  # to deal with an R check note
-  all_resample_run_decoding_results <- foreach(iResample = 1:num_resample_runs) %do_type% { 
+  all_resample_run_decoding_results <- foreach(iResample = 1:num_resample_runs, 
+                                               .options.snow=opts) %do_type% { 
 
     
     message(paste0("Start resample run: ", strrep(" ", 3 - nchar(as.character(iResample))),  iResample, 
@@ -396,7 +411,7 @@ run_decoding.cv_standard <- function(cv_obj) {
       
       
       # update the progress bar
-      progressr_processor(amount = 1)
+      #progressr_processor(amount = 1)
 
       # Aggregate results over all CV split runs
       all_cv_results[[iCV]] <- dplyr::bind_rows(all_time_results)
