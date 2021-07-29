@@ -281,10 +281,20 @@ run_decoding.cv_standard <- function(cv_obj) {
 
   }
 
+  
+  # Adding a pretty lame progress bar that only updates after resample runs.
+  # Unfortunately I couldn't get any of the cooler progress bars
+  # (e.g., from the progress and progressr packages) to work.
+  # On the plus side, the changes to the code are minimal.
+  pb <- txtProgressBar(max = num_resample_runs, style=3)
+  progress <- function(n) setTxtProgressBar(pb, n)
+  opts <- list(progress=progress)
+  
 
   # Do a parallel loop over resample runs
   iResample <- 0  # to deal with an R check note
-  all_resample_run_decoding_results <- foreach(iResample = 1:num_resample_runs) %do_type% { 
+  all_resample_run_decoding_results <- foreach(iResample = 1:num_resample_runs, 
+                                               .options.snow=opts) %do_type% { 
 
     
     message(paste0("Start resample run: ", strrep(" ", 3 - nchar(as.character(iResample))),  iResample, 
