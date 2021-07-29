@@ -21,6 +21,8 @@ RoxygenNote: 7.1.1
 Imports: 
     doParallel,
     dplyr,
+    doFuture,
+    doRNG,
     doSNOW,
     e1071,
     forcats,
@@ -28,6 +30,7 @@ Imports:
     ggplot2,
     gridExtra,
     magrittr,
+    progressr,
     purrr,
     R.matlab,
     stats,

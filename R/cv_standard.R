@@ -264,16 +264,47 @@ run_decoding.cv_standard <- function(cv_obj) {
   result_metrics <- cv_obj$result_metrics
   test_only_at_training_time <- cv_obj$test_only_at_training_time
   
+  
+  
+  # set up the progress bar
+  show_progress_bar <- TRUE
+  
+  if (show_progress_bar) {
+    
+    # get one extra training/test data set to estimate the number of cv splits used
+    cv_data <- get_data(datasource)
+    unique_times <- unique(cv_data$time_bin)
+    num_time_bins <- length(unique_times)
+    all_cv_train_test_inds <- select(cv_data, starts_with("CV"))
+    num_cv <- ncol(all_cv_train_test_inds)
+    
+    #pb <- progress_bar$new(
+    #  format = "  progress [:bar] :percent      elapsed: :elapsedfull      eta: :eta",
+    #  total = num_resample_runs * num_cv, clear = FALSE, width = 90)
+    
+    progressr_processor <- progressr::progressor(steps = num_resample_runs * num_cv)
+    
+  }
+  
+  
+  
+  
+  
 
   if (cv_obj$num_parallel_cores > 0) {
 
     # register parallel resources
-    the_cluster <- parallel::makeCluster(cv_obj$num_parallel_cores, 
-                                         type = "SOCK", 
-                                         outfile = cv_obj$parallel_outfile)
-    doSNOW::registerDoSNOW(the_cluster)
+    #the_cluster <- parallel::makeCluster(cv_obj$num_parallel_cores, 
+    #                                     type = "SOCK", 
+    #                                     outfile = cv_obj$parallel_outfile)
+    #doSNOW::registerDoSNOW(the_cluster)
 
-    "%do_type%" <- get("%dopar%")
+    # parallelize via doFuture package!
+    registerDoFuture()      
+    plan(multisession, workers = cv_obj$num_parallel_cores)
+    
+    #"%do_type%" <- get("%dopar%")
+    "%do_type%" <- get("%dorng%")
 
   } else {
 
@@ -284,7 +315,9 @@ run_decoding.cv_standard <- function(cv_obj) {
 
   # Do a parallel loop over resample runs
   iResample <- 0  # to deal with an R check note
-  all_resample_run_decoding_results <- foreach(iResample = 1:num_resample_runs) %do_type% { 
+  all_resample_run_decoding_results <- foreach(iResample = 1:num_resample_runs, 
+                                               .packages = "NeuroDecodeR",
+                                               .export = c("aggregate_CV_split_results.rm_main_results")) %do_type% { 
 
     
     message(paste0("Start resample run: ", strrep(" ", 3 - nchar(as.character(iResample))),  iResample, 
@@ -357,8 +390,11 @@ run_decoding.cv_standard <- function(cv_obj) {
       message(
         paste0("Resample run: ", strrep(" ", 3 - nchar(as.character(iResample))),  iResample,  
                      "      CV: ", iCV, 
-                     "      Time elapsed: ", round(tictoc_time$toc - tictoc_time$tic, 3), " seconds\n\n\n") )
+                     "      Time elapsed: ", round(tictoc_time$toc - tictoc_time$tic, 3), " seconds") )
       
+      
+      # update the progress bar
+      progressr_processor(amount = 1)
 
       # Aggregate results over all CV split runs
       all_cv_results[[iCV]] <- dplyr::bind_rows(all_time_results)
@@ -374,7 +410,7 @@ run_decoding.cv_standard <- function(cv_obj) {
     # go through each Result Metric and aggregate the results from all CV splits using each metric
     for (iMetric in seq_along(result_metrics)) {
       ###  DECODING_RESULTS
-      resample_run_decoding_results[[iMetric]] <- aggregate_CV_split_results(result_metrics[[iMetric]], all_cv_results)
+      resample_run_decoding_results[[iMetric]] <- NeuroDecodeR:::aggregate_CV_split_results(result_metrics[[iMetric]], all_cv_results)
       gc()
     }
 
