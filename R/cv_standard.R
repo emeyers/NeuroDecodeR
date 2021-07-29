@@ -300,8 +300,12 @@ run_decoding.cv_standard <- function(cv_obj) {
     #doSNOW::registerDoSNOW(the_cluster)
 
     # parallelize via doFuture package!
-    registerDoFuture()      
-    plan(multisession, workers = cv_obj$num_parallel_cores)
+    #registerDoFuture()      
+    #plan(multisession, workers = cv_obj$num_parallel_cores)
+    
+    doFuture::registerDoFuture()
+    the_cluster <- makeCluster(cv_obj$num_parallel_cores)
+    plan(cluster, workers=the_cluster)
     
     #"%do_type%" <- get("%dopar%")
     "%do_type%" <- get("%dorng%")
@@ -315,9 +319,7 @@ run_decoding.cv_standard <- function(cv_obj) {
 
   # Do a parallel loop over resample runs
   iResample <- 0  # to deal with an R check note
-  all_resample_run_decoding_results <- foreach(iResample = 1:num_resample_runs, 
-                                               .packages = "NeuroDecodeR",
-                                               .export = c("aggregate_CV_split_results.rm_main_results")) %do_type% { 
+  all_resample_run_decoding_results <- foreach(iResample = 1:num_resample_runs) %do_type% { 
 
     
     message(paste0("Start resample run: ", strrep(" ", 3 - nchar(as.character(iResample))),  iResample, 
