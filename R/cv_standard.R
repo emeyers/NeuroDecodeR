@@ -367,7 +367,7 @@ run_decoding.cv_standard <- function(cv_obj) {
       message(
         paste0("Resample run: ", strrep(" ", 3 - nchar(as.character(iResample))),  iResample,  
                      "      CV: ", iCV, 
-                     "      Time elapsed: ", round(tictoc_time$toc - tictoc_time$tic, 3), " seconds\n\n\n") )
+                     "      Time elapsed: ", round(tictoc_time$toc - tictoc_time$tic, 3), " seconds") )
       
 
       # Aggregate results over all CV split runs
