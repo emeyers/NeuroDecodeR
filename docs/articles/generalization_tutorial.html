@@ -100,7 +100,7 @@
       <h1 data-toc-skip>Tutorial on how to do a generalization analysis</h1>
             
       
-      <small class="dont-index">Source: <a href="https://github.com/emeyers/NeuroDecodeR/blob/master/inst/extdata/vignettes/generalization_tutorial.Rmd"><code>inst/extdata/vignettes/generalization_tutorial.Rmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/emeyers/NeuroDecodeR/blob/master/vignettes/generalization_tutorial.Rmd"><code>vignettes/generalization_tutorial.Rmd</code></a></small>
       <div class="hidden name"><code>generalization_tutorial.Rmd</code></div>
 
     </div>
@@ -128,10 +128,10 @@
 <div id="binning-the-data" class="section level3">
 <h3 class="hasAnchor">
 <a href="#binning-the-data" class="anchor"></a>Binning the data</h3>
-<p>For this tutorial, we will use binned-format data that consists of the firing rate in a 400 ms window that starts 100 ms after the onset of the stimulus. The following code shows how to create this binned data. For more information about binning the data, see the <a href="introduction_tutorial.html">introduction tutorial</a>.</p>
+<p>For this tutorial, we will use binned-format data that consists of the firing rate in a 400 ms window that starts 100 ms after the onset of the stimulus. The following code shows how to create this binned data using a small subset of the Zhang-Desimone 7 object data (later in the tutorial we will load binned data from a larger set of neurons for subsequent analyses to get better decoding results). For more information about binning the data, see the <a href="introduction_tutorial.html">introduction tutorial</a>.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">raster_dir_name</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/file.path.html">file.path</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/system.file.html">system.file</a></span><span class="op">(</span><span class="st">"extdata"</span>, package <span class="op">=</span> <span class="st">"NeuroDecodeR"</span><span class="op">)</span>, 
-                             <span class="st">"Zhang_Desimone_7object_raster_data_rda"</span><span class="op">)</span>
+                             <span class="st">"Zhang_Desimone_7object_raster_data_small_rda"</span><span class="op">)</span>
 
 <span class="va">bin_width</span> <span class="op">&lt;-</span> <span class="fl">400</span>
 <span class="va">step_size</span> <span class="op">&lt;-</span> <span class="fl">400</span>
@@ -139,7 +139,15 @@
 <span class="va">end_time</span> <span class="op">&lt;-</span> <span class="fl">500</span>
 
 <span class="va">binned_file_name</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/create_binned_data.html">create_binned_data</a></span><span class="op">(</span><span class="va">raster_dir_name</span>, <span class="st">"ZD"</span>, <span class="va">bin_width</span>, <span class="va">step_size</span>, 
-                                       <span class="va">start_time</span>, <span class="va">end_time</span><span class="op">)</span></code></pre></div>
+                                       <span class="va">start_time</span>, <span class="va">end_time</span><span class="op">)</span>
+
+
+<span class="co"># The name of a binned file that has data from more neurons in it that will be</span>
+<span class="co"># used for subsequent analyses. This raster data went into this binned format</span>
+<span class="co"># data was excluded from the NeuroDecodeR package to keep the package size small.</span>
+<span class="va">binned_file_name</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html">system.file</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/file.path.html">file.path</a></span><span class="op">(</span><span class="st">"extdata"</span>, 
+                                          <span class="st">"ZD_400bins_400sampled_start100_end500.Rda"</span><span class="op">)</span>,
+                                package<span class="op">=</span><span class="st">"NeuroDecodeR"</span><span class="op">)</span></code></pre></div>
 </div>
 <div id="creating-a-classifier-and-a-preprocessor" class="section level3">
 <h3 class="hasAnchor">
@@ -184,13 +192,37 @@
 
 <span class="co"># run the decoding analysis (and time how long it takes to run)</span>
 <span class="fu">tictoc</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/tictoc/man/tic.html">tic</a></span><span class="op">(</span><span class="op">)</span>
-<span class="va">DECODING_RESULTS</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/run_decoding.html">run_decoding</a></span><span class="op">(</span><span class="va">cv</span><span class="op">)</span>
-<span class="fu">tictoc</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/tictoc/man/tic.html">toc</a></span><span class="op">(</span><span class="op">)</span></code></pre></div>
-<pre><code>## 10.835 sec elapsed</code></pre>
+<span class="va">DECODING_RESULTS</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/run_decoding.html">run_decoding</a></span><span class="op">(</span><span class="va">cv</span><span class="op">)</span></code></pre></div>
+<pre><code>## 
+  |                                                                            
+  |                                                                      |   0%
+  |                                                                            
+  |=======                                                               |  10%
+  |                                                                            
+  |==============                                                        |  20%
+  |                                                                            
+  |=====================                                                 |  30%
+  |                                                                            
+  |============================                                          |  40%
+  |                                                                            
+  |===================================                                   |  50%
+  |                                                                            
+  |==========================================                            |  60%
+  |                                                                            
+  |=================================================                     |  70%
+  |                                                                            
+  |========================================================              |  80%
+  |                                                                            
+  |===============================================================       |  90%
+  |                                                                            
+  |======================================================================| 100%</code></pre>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu">tictoc</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/tictoc/man/tic.html">toc</a></span><span class="op">(</span><span class="op">)</span></code></pre></div>
+<pre><code>## 8.85 sec elapsed</code></pre>
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># show the zero-one loss decoding accuracy (chance is 1/7)</span>
 <span class="va">DECODING_RESULTS</span><span class="op">$</span><span class="va">rm_main_results</span><span class="op">$</span><span class="va">zero_one_loss</span></code></pre></div>
-<pre><code>## [1] 0.8484127</code></pre>
+<pre><code>## [1] 0.8531746</code></pre>
 </div>
 <div id="training-and-testing-at-all-locations" class="section level3">
 <h3 class="hasAnchor">
@@ -198,7 +230,7 @@
 <p>We will now create a full set of 9 results that are based on training at <strong>one</strong> of the three locations and testing a different locations. This can be done by creating two loops, one for each training location, and one for each test location, and by creating a new datasource each iteration.</p>
 <p>It should be noted that the <code>ds_generalization</code> is built in such a way that if a particular original label is mapped to the same training and test class (e.g., if <code>training_levels[[1]] &lt;- list('car_upper')</code> and <code>test_levels[[1]] &lt;- list('car_upper')</code>, the data used in the training set will still come from different trials than the data used for the test set. Thus, the cross-validation splits will still be valid because there will not be any of the same data in the training and test sets (if this mapping was done for all classes, one would end up getting the same results as using the ds_basic). Because there is no ‘data leakage’, the following code allows for fair comparisons between results where the classifier was trained and tested with data from the same location vs. where the classifier was trained and tested with data from different locations.</p>
 <p>Note that the code below will take several minutes to run.</p>
-<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">results_dir_name</span> <span class="op">&lt;-</span> <span class="st">"position_invariance_results/"</span>
 
 
@@ -209,7 +241,7 @@
   <span class="fu"><a href="https://rdrr.io/r/base/files.html">file.remove</a></span><span class="op">(</span><span class="va">results_dir_name</span><span class="op">)</span>
 <span class="op">}</span> </code></pre></div>
 <pre><code>## [1] TRUE</code></pre>
-<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/files2.html">dir.create</a></span><span class="op">(</span><span class="va">results_dir_name</span><span class="op">)</span>
 
 <span class="va">id_base_levels</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"hand"</span>, <span class="st">"flower"</span>, <span class="st">"guitar"</span>, <span class="st">"face"</span>, <span class="st">"kiwi"</span>, <span class="st">"couch"</span>,  <span class="st">"car"</span><span class="op">)</span>   
@@ -255,23 +287,221 @@
 
   <span class="op">}</span>
 <span class="op">}</span></code></pre></div>
-<pre><code>## 10.335 sec elapsed</code></pre>
+<pre><code>## 
+  |                                                                            
+  |                                                                      |   0%
+  |                                                                            
+  |=======                                                               |  10%
+  |                                                                            
+  |==============                                                        |  20%
+  |                                                                            
+  |=====================                                                 |  30%
+  |                                                                            
+  |============================                                          |  40%
+  |                                                                            
+  |===================================                                   |  50%
+  |                                                                            
+  |==========================================                            |  60%
+  |                                                                            
+  |=================================================                     |  70%
+  |                                                                            
+  |========================================================              |  80%
+  |                                                                            
+  |===============================================================       |  90%
+  |                                                                            
+  |======================================================================| 100%8.154 sec elapsed</code></pre>
 <pre><code>## Warning in log_save_results(DECODING_RESULTS, results_dir_name, result_name): The manifest file does not exist.
 ##   Assuming this is the first result that is saved and creating manifest file</code></pre>
-<pre><code>## 10.791 sec elapsed
-## 10.812 sec elapsed
-## 10.748 sec elapsed
-## 10.432 sec elapsed
-## 10.664 sec elapsed
-## 10.769 sec elapsed
-## 10.627 sec elapsed
-## 10.514 sec elapsed</code></pre>
+<pre><code>## 
+  |                                                                            
+  |                                                                      |   0%
+  |                                                                            
+  |=======                                                               |  10%
+  |                                                                            
+  |==============                                                        |  20%
+  |                                                                            
+  |=====================                                                 |  30%
+  |                                                                            
+  |============================                                          |  40%
+  |                                                                            
+  |===================================                                   |  50%
+  |                                                                            
+  |==========================================                            |  60%
+  |                                                                            
+  |=================================================                     |  70%
+  |                                                                            
+  |========================================================              |  80%
+  |                                                                            
+  |===============================================================       |  90%
+  |                                                                            
+  |======================================================================| 100%8.479 sec elapsed
+## 
+  |                                                                            
+  |                                                                      |   0%
+  |                                                                            
+  |=======                                                               |  10%
+  |                                                                            
+  |==============                                                        |  20%
+  |                                                                            
+  |=====================                                                 |  30%
+  |                                                                            
+  |============================                                          |  40%
+  |                                                                            
+  |===================================                                   |  50%
+  |                                                                            
+  |==========================================                            |  60%
+  |                                                                            
+  |=================================================                     |  70%
+  |                                                                            
+  |========================================================              |  80%
+  |                                                                            
+  |===============================================================       |  90%
+  |                                                                            
+  |======================================================================| 100%8.654 sec elapsed
+## 
+  |                                                                            
+  |                                                                      |   0%
+  |                                                                            
+  |=======                                                               |  10%
+  |                                                                            
+  |==============                                                        |  20%
+  |                                                                            
+  |=====================                                                 |  30%
+  |                                                                            
+  |============================                                          |  40%
+  |                                                                            
+  |===================================                                   |  50%
+  |                                                                            
+  |==========================================                            |  60%
+  |                                                                            
+  |=================================================                     |  70%
+  |                                                                            
+  |========================================================              |  80%
+  |                                                                            
+  |===============================================================       |  90%
+  |                                                                            
+  |======================================================================| 100%8.167 sec elapsed
+## 
+  |                                                                            
+  |                                                                      |   0%
+  |                                                                            
+  |=======                                                               |  10%
+  |                                                                            
+  |==============                                                        |  20%
+  |                                                                            
+  |=====================                                                 |  30%
+  |                                                                            
+  |============================                                          |  40%
+  |                                                                            
+  |===================================                                   |  50%
+  |                                                                            
+  |==========================================                            |  60%
+  |                                                                            
+  |=================================================                     |  70%
+  |                                                                            
+  |========================================================              |  80%
+  |                                                                            
+  |===============================================================       |  90%
+  |                                                                            
+  |======================================================================| 100%7.965 sec elapsed
+## 
+  |                                                                            
+  |                                                                      |   0%
+  |                                                                            
+  |=======                                                               |  10%
+  |                                                                            
+  |==============                                                        |  20%
+  |                                                                            
+  |=====================                                                 |  30%
+  |                                                                            
+  |============================                                          |  40%
+  |                                                                            
+  |===================================                                   |  50%
+  |                                                                            
+  |==========================================                            |  60%
+  |                                                                            
+  |=================================================                     |  70%
+  |                                                                            
+  |========================================================              |  80%
+  |                                                                            
+  |===============================================================       |  90%
+  |                                                                            
+  |======================================================================| 100%8.319 sec elapsed
+## 
+  |                                                                            
+  |                                                                      |   0%
+  |                                                                            
+  |=======                                                               |  10%
+  |                                                                            
+  |==============                                                        |  20%
+  |                                                                            
+  |=====================                                                 |  30%
+  |                                                                            
+  |============================                                          |  40%
+  |                                                                            
+  |===================================                                   |  50%
+  |                                                                            
+  |==========================================                            |  60%
+  |                                                                            
+  |=================================================                     |  70%
+  |                                                                            
+  |========================================================              |  80%
+  |                                                                            
+  |===============================================================       |  90%
+  |                                                                            
+  |======================================================================| 100%8.232 sec elapsed
+## 
+  |                                                                            
+  |                                                                      |   0%
+  |                                                                            
+  |=======                                                               |  10%
+  |                                                                            
+  |==============                                                        |  20%
+  |                                                                            
+  |=====================                                                 |  30%
+  |                                                                            
+  |============================                                          |  40%
+  |                                                                            
+  |===================================                                   |  50%
+  |                                                                            
+  |==========================================                            |  60%
+  |                                                                            
+  |=================================================                     |  70%
+  |                                                                            
+  |========================================================              |  80%
+  |                                                                            
+  |===============================================================       |  90%
+  |                                                                            
+  |======================================================================| 100%8.208 sec elapsed
+## 
+  |                                                                            
+  |                                                                      |   0%
+  |                                                                            
+  |=======                                                               |  10%
+  |                                                                            
+  |==============                                                        |  20%
+  |                                                                            
+  |=====================                                                 |  30%
+  |                                                                            
+  |============================                                          |  40%
+  |                                                                            
+  |===================================                                   |  50%
+  |                                                                            
+  |==========================================                            |  60%
+  |                                                                            
+  |=================================================                     |  70%
+  |                                                                            
+  |========================================================              |  80%
+  |                                                                            
+  |===============================================================       |  90%
+  |                                                                            
+  |======================================================================| 100%8.15 sec elapsed</code></pre>
 </div>
 <div id="plotting-the-results" class="section level3">
 <h3 class="hasAnchor">
 <a href="#plotting-the-results" class="anchor"></a>Plotting the results</h3>
 <p>To plot all these results, we will create some custom code. This code loads the results for each training and test location pair using the <code>log_load_results_from_result_name</code> function and save the results to a data frame. This data frame is then plotted using <code>ggplot2</code>.</p>
-<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># compile all the results that were saved</span>
 
 <span class="va">all_results</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span><span class="op">(</span><span class="op">)</span>

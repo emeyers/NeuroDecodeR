@@ -100,7 +100,7 @@
       <h1 data-toc-skip>Datasets</h1>
             
       
-      <small class="dont-index">Source: <a href="https://github.com/emeyers/NeuroDecodeR/blob/master/inst/extdata/vignettes/datasets.Rmd"><code>inst/extdata/vignettes/datasets.Rmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/emeyers/NeuroDecodeR/blob/master/vignettes/datasets.Rmd"><code>vignettes/datasets.Rmd</code></a></small>
       <div class="hidden name"><code>datasets.Rmd</code></div>
 
     </div>
@@ -120,7 +120,7 @@
 <p>The Zhang-Desimone 7 object dataset comes with the NeuroDecodeR package. Individual raster files can be found in the directory <code>extdata/Zhang_Desimone_7object_raster_data_rda/</code>. Additionally, binned data using 150 ms bins and 50 ms sampling intervals can be found in the file <code>extdata/ZD_150bins_50sampled.Rda</code>. The code below shows how to load a single raster data file, and the binned data.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># load a raster format data file</span>
-<span class="va">raster_dir_name</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/file.path.html">file.path</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/system.file.html">system.file</a></span><span class="op">(</span><span class="st">"extdata"</span>, package <span class="op">=</span> <span class="st">"NeuroDecodeR"</span><span class="op">)</span>, <span class="st">"Zhang_Desimone_7object_raster_data_rda"</span><span class="op">)</span>
+<span class="va">raster_dir_name</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/file.path.html">file.path</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/system.file.html">system.file</a></span><span class="op">(</span><span class="st">"extdata"</span>, package <span class="op">=</span> <span class="st">"NeuroDecodeR"</span><span class="op">)</span>, <span class="st">"Zhang_Desimone_7object_raster_data_small_rda"</span><span class="op">)</span>
 <span class="va">file_name</span> <span class="op">&lt;-</span> <span class="st">"bp1001spk_01A_raster_data.rda"</span>
 <span class="fu"><a href="https://rdrr.io/r/base/load.html">load</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/file.path.html">file.path</a></span><span class="op">(</span><span class="va">raster_dir_name</span>, <span class="va">file_name</span><span class="op">)</span><span class="op">)</span>
 

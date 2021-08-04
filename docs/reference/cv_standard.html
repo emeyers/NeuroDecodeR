@@ -157,7 +157,8 @@ and tested using cross-validation.</p>
   result_metrics <span class='op'>=</span> <span class='cn'>NULL</span>,
   num_resample_runs <span class='op'>=</span> <span class='fl'>50</span>,
   test_only_at_training_time <span class='op'>=</span> <span class='cn'>FALSE</span>,
-  num_parallel_cores <span class='op'>=</span> <span class='cn'>NULL</span>
+  num_parallel_cores <span class='op'>=</span> <span class='cn'>NULL</span>,
+  parallel_outfile <span class='op'>=</span> <span class='cn'>NULL</span>
 <span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
@@ -219,6 +220,16 @@ set to a value of less than 1, then the code will be run serially and
 messages will be printed showing how long each CV split took to run which
 is useful for debugging.</p></td>
     </tr>
+    <tr>
+      <th>parallel_outfile</th>
+      <td><p>A string specifying the name of a file where the
+output from running the code in parallel is written (this argument is
+ignored if num_parallel_cores &lt; 1). By default the parallel output is
+written to dev/null so it is not accessible. If this is changed to an empty
+string the output will be written to the screen, otherwise it will be
+written to a file name specified. See parallel::makeCluster for more
+details.</p></td>
+    </tr>
     </table>
 
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
@@ -260,7 +271,7 @@ the results.</p></li>
     <span class='fu'><a href='rm_confusion_matrix.html'>rm_confusion_matrix</a></span><span class='op'>(</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
     <span class='fu'>cv_standard</span><span class='op'>(</span>num_resample_runs <span class='op'>=</span> <span class='fl'>3</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
     <span class='fu'><a href='run_decoding.html'>run_decoding</a></span><span class='op'>(</span><span class='op'>)</span>
-
+</div><div class='output co'>#&gt;   |                                                                              |                                                                      |   0%  |                                                                              |=======================                                               |  33%  |                                                                              |===============================================                       |  67%  |                                                                              |======================================================================| 100%</div><div class='input'>
 
 </div></pre>
   </div>
