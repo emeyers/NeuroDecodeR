@@ -246,11 +246,11 @@
 
 <span class="co"># prior to z-score normalizing the mean (e.g. for site 1) is not 0</span>
 <span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span><span class="op">(</span><span class="va">training_set</span><span class="op">$</span><span class="va">site_0001</span><span class="op">)</span></code></pre></div>
-<pre><code>## [1] 0.002969188</code></pre>
+<pre><code>## [1] 0.003305322</code></pre>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># after normalizing the data the mean is pretty much 0</span>
 <span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span><span class="op">(</span><span class="va">processed_data</span><span class="op">$</span><span class="va">training_set</span><span class="op">$</span><span class="va">site_0001</span><span class="op">)</span></code></pre></div>
-<pre><code>## [1] -5.132832e-17</code></pre>
+<pre><code>## [1] -2.423602e-17</code></pre>
 <p><br></p>
 <p><br></p>
 </div>

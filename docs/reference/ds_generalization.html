@@ -160,8 +160,8 @@ invariant/abstract to particular conditions.</p>
   num_resample_sites <span class='op'>=</span> <span class='cn'>NULL</span>,
   site_IDs_to_use <span class='op'>=</span> <span class='cn'>NULL</span>,
   site_IDs_to_exclude <span class='op'>=</span> <span class='cn'>NULL</span>,
-  randomly_shuffled_labels_before_running <span class='op'>=</span> <span class='cn'>FALSE</span>,
-  create_simultaneously_recorded_populations <span class='op'>=</span> <span class='fl'>0</span>
+  randomly_shuffled_labels <span class='op'>=</span> <span class='cn'>FALSE</span>,
+  create_simultaneous_populations <span class='op'>=</span> <span class='fl'>0</span>
 <span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
@@ -230,14 +230,14 @@ used.</p></td>
 be excluded.</p></td>
     </tr>
     <tr>
-      <th>randomly_shuffled_labels_before_running</th>
-      <td><p>A boolean specifying whether
-the labels should be shuffled prior to the get_data() function being
-called. This is used when one wants to create a null distribution for
-comparing when decoding results are above chance.</p></td>
+      <th>randomly_shuffled_labels</th>
+      <td><p>A Boolean specifying whether the labels
+should be shuffled prior to running an analysis (i.e., prior to the first
+call to the the get_data() method). This is used when one wants to create a
+null distribution for comparing when decoding results are above chance.</p></td>
     </tr>
     <tr>
-      <th>create_simultaneously_recorded_populations</th>
+      <th>create_simultaneous_populations</th>
       <td><p>If the data from all sites
 were recorded simultaneously, then setting this variable to 1 will cause the
 get_data() function to return simultaneous populations rather than
