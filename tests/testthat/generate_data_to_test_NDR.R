@@ -68,7 +68,7 @@ normalized_test_set <- processed_data$test_set
 
 # generate shuffled data...
 ds <- ds_basic(real_data_binned_file_name, "stimulus_ID", site_IDs_to_exclude = 63,
-               num_cv_splits = 3, num_label_repeats_per_cv_split = 6, randomly_shuffled_labels_before_running = TRUE)
+               num_cv_splits = 3, num_label_repeats_per_cv_split = 6, randomly_shuffled_labels = TRUE)
 cv_data <- get_data(ds)
 training_set <- filter(cv_data, time_bin == "time.200_350", CV_1 == "train") %>% select(starts_with("site"), train_labels)
 test_set <- filter(cv_data, time_bin %in% c("time.-350_-200", "time.200_350"), CV_1 == "test") %>% 
@@ -85,7 +85,7 @@ shuffled_normalized_test_set <- processed_data$test_set
 # generate shuffled count data...
 ds <- ds_basic(real_data_binned_file_name, "stimulus_ID", site_IDs_to_exclude = 63,
                num_cv_splits = 3, num_label_repeats_per_cv_split = 6, 
-               randomly_shuffled_labels_before_running = TRUE, 
+               randomly_shuffled_labels = TRUE, 
                use_count_data = TRUE)
 cv_data <- get_data(ds)
 training_set <- filter(cv_data, time_bin == "time.200_350", CV_1 == "train") %>% select(starts_with("site"), train_labels)

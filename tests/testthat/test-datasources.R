@@ -143,7 +143,7 @@ test_that("basic_ds: simultaneously recorded data is returned correctly", {
   
   # all whole numbers on each row should be the same this data when gotten simultaneously 
   ds <- ds_basic("fake_simultaneous_binned_data.Rda", "stim_names", 10,
-                 create_simultaneously_recorded_populations = TRUE)
+                 create_simultaneous_populations = TRUE)
   
   the_data <- get_data(ds)
   
@@ -168,7 +168,7 @@ test_that("basic_ds: simultaneously recorded data is returned correctly", {
   
   # all whole numbers on each row should NOT be the same this data when data is NOT gotten simultaneously 
   ds <- ds_basic("fake_simultaneous_binned_data.Rda", "stim_names", 10,
-                 create_simultaneously_recorded_populations = FALSE)
+                 create_simultaneous_populations = FALSE)
   the_data <- get_data(ds)
   
   the_site_data <- the_data %>%
@@ -184,7 +184,7 @@ test_that("basic_ds: simultaneously recorded data is returned correctly", {
     dplyr::select(-trial_number)
   
   expect_warning(ds_basic(binned_data, "stim_names", 10,
-                          create_simultaneously_recorded_populations = TRUE))
+                          create_simultaneous_populations = TRUE))
   
 })
 
@@ -226,7 +226,7 @@ test_that("basic_ds: shuffling labels works", {
   
   ds1 <- ds_basic("fake_simultaneous_binned_data.Rda", "stim_names", num_CV,
                  num_label_repeats_per_cv_split = num_reps,
-                      randomly_shuffled_labels_before_running = TRUE)
+                      randomly_shuffled_labels = TRUE)
   
   shuffled_data1 <- get_data(ds1) %>% 
     select(site_0001, train_labels, test_labels) %>%
@@ -234,7 +234,7 @@ test_that("basic_ds: shuffling labels works", {
   
   ds2 <- ds_basic("fake_simultaneous_binned_data.Rda", "stim_names", num_CV,
                   num_label_repeats_per_cv_split = num_reps,
-                  randomly_shuffled_labels_before_running = TRUE)
+                  randomly_shuffled_labels = TRUE)
   
   shuffled_data2 <- get_data(ds2) %>% 
     select(site_0001, train_labels, test_labels) %>%
@@ -259,8 +259,8 @@ test_that("basic_ds: shuffling labels works", {
   
   ds_simul1 <- ds_basic("fake_simultaneous_binned_data.Rda", "stim_names", num_CV,
                   num_label_repeats_per_cv_split = num_reps,
-                  randomly_shuffled_labels_before_running = TRUE,
-                  create_simultaneously_recorded_populations = TRUE)
+                  randomly_shuffled_labels = TRUE,
+                  create_simultaneous_populations = TRUE)
   
   simul_shuffled_data1 <- get_data(ds_simul1) %>% 
     mutate(site_0001 = round(site_0001), site_0002 = round(site_0002)) %>%
@@ -278,8 +278,8 @@ test_that("basic_ds: shuffling labels works", {
   
   ds_simul2 <- ds_basic("fake_simultaneous_binned_data.Rda", "stim_names", num_CV,
                         num_label_repeats_per_cv_split = num_reps,
-                        randomly_shuffled_labels_before_running = TRUE,
-                        create_simultaneously_recorded_populations = TRUE)
+                        randomly_shuffled_labels = TRUE,
+                        create_simultaneous_populations = TRUE)
   
   simul_shuffled_data2 <- get_data(ds_simul2) %>% 
     mutate(site_0001 = round(site_0001), site_0002 = round(site_0002)) %>%

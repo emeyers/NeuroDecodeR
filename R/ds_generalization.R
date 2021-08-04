@@ -50,12 +50,12 @@
 #' @param site_IDs_to_exclude A vector of integers specifying which sites should
 #'   be excluded.
 #'
-#' @param randomly_shuffled_labels_before_running A boolean specifying whether
-#'   the labels should be shuffled prior to the get_data() function being
-#'   called. This is used when one wants to create a null distribution for
-#'   comparing when decoding results are above chance.
+#' @param randomly_shuffled_labels A Boolean specifying whether the labels
+#'   should be shuffled prior to running an analysis (i.e., prior to the first
+#'   call to the the get_data() method). This is used when one wants to create a
+#'   null distribution for comparing when decoding results are above chance.
 #'
-#' @param create_simultaneously_recorded_populations If the data from all sites
+#' @param create_simultaneous_populations If the data from all sites
 #'   were recorded simultaneously, then setting this variable to 1 will cause the
 #'   get_data() function to return simultaneous populations rather than
 #'   pseudo-populations.
@@ -102,8 +102,8 @@ ds_generalization <- function(binned_data,
                               num_resample_sites = NULL,
                               site_IDs_to_use = NULL,
                               site_IDs_to_exclude = NULL,
-                              randomly_shuffled_labels_before_running = FALSE,
-                              create_simultaneously_recorded_populations = 0) {
+                              randomly_shuffled_labels = FALSE,
+                              create_simultaneous_populations = 0) {
 
 
   # check the same number of classes in the training and test set
@@ -158,8 +158,8 @@ ds_generalization <- function(binned_data,
     num_resample_sites,
     site_IDs_to_use,
     site_IDs_to_exclude,
-    randomly_shuffled_labels_before_running,
-    create_simultaneously_recorded_populations)
+    randomly_shuffled_labels,
+    create_simultaneous_populations)
 
 
   # create the main data structure which just consists of the ds_basic
