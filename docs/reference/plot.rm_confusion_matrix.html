@@ -155,7 +155,7 @@ mutual information calculated from the confusion matrix.</p>
 <span class='fu'><a href='https://rdrr.io/r/graphics/plot.default.html'>plot</a></span><span class='op'>(</span>
   <span class='va'>x</span>,
   <span class='va'>...</span>,
-  result_type <span class='op'>=</span> <span class='st'>"zero_one_loss"</span>,
+  results_to_show <span class='op'>=</span> <span class='st'>"zero_one_loss"</span>,
   plot_only_same_train_test_time <span class='op'>=</span> <span class='cn'>TRUE</span>
 <span class='op'>)</span></pre>
 
@@ -174,7 +174,7 @@ run_decoding(cv) then this argument should be
       <td><p>This is needed to conform to the plot generic interface.</p></td>
     </tr>
     <tr>
-      <th>result_type</th>
+      <th>results_to_show</th>
       <td><p>A string specifying the type of result to plot that can
 take the following values:</p><ul>
 <li><p>"zero_one_loss": plot a regular confusion matrix.</p></li>
@@ -187,7 +187,7 @@ zero-one loss confusion matrix.</p></li>
       <th>plot_only_same_train_test_time</th>
       <td><p>A boolean indicating whether the
 confusion matrices should only be plotted at the same training and test
-times. If the <code>result_type == "mutual_information"</code> setting this to TRUE
+times. If the <code>results_to_show == "mutual_information"</code> setting this to TRUE
 will plot a TCD plot of the mutual information otherwise it will plot a
 line plot of the mutual information for training and testing at the same
 time.</p></td>

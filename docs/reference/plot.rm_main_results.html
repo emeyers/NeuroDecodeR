@@ -154,7 +154,7 @@ have been aggregated).</p>
     </div>
 
     <pre class="usage"><span class='co'># S3 method for rm_main_results</span>
-<span class='fu'><a href='https://rdrr.io/r/graphics/plot.default.html'>plot</a></span><span class='op'>(</span><span class='va'>x</span>, <span class='va'>...</span>, result_type <span class='op'>=</span> <span class='st'>"zero_one_loss"</span>, plot_type <span class='op'>=</span> <span class='st'>"TCD"</span><span class='op'>)</span></pre>
+<span class='fu'><a href='https://rdrr.io/r/graphics/plot.default.html'>plot</a></span><span class='op'>(</span><span class='va'>x</span>, <span class='va'>...</span>, results_to_show <span class='op'>=</span> <span class='st'>"zero_one_loss"</span>, type <span class='op'>=</span> <span class='st'>"TCD"</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -171,12 +171,12 @@ run_decoding(cv) then this argument should be
       <td><p>This is needed to conform to the plot generic interface.</p></td>
     </tr>
     <tr>
-      <th>result_type</th>
+      <th>results_to_show</th>
       <td><p>A string specifying the types of results to plot. Options
 are: 'zero_one_loss', 'normalized_rank', 'decision_values', or 'all'.</p></td>
     </tr>
     <tr>
-      <th>plot_type</th>
+      <th>type</th>
       <td><p>A string specifying the type of results to plot. Options are
 'TCD' to plot a temporal cross decoding matrix or 'line' to create a line
 plot of the decoding results as a function of time</p></td>

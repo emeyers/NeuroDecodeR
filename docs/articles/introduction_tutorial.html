@@ -271,9 +271,9 @@
 <div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span><span class="va">DECODING_RESULTS</span><span class="op">$</span><span class="va">rm_main_results</span><span class="op">)</span></code></pre></div>
 <p><img src="introduction_tutorial_files/figure-html/plot_tcd-1.png" width="700"></p>
-<p>We can also create simpler line plots by setting the <code>plot_type = 'line'</code>. Additionally, we can plot all three types of results that that rm_main_results object saves using the <code>type = 'all'</code> argument. Below, we see the results by setting both these arguments.</p>
+<p>We can also create simpler line plots by setting the <code>type = 'line'</code>. Additionally, we can plot all three types of results that that rm_main_results object saves using the <code>type = 'all'</code> argument. Below, we see the results by setting both these arguments.</p>
 <div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span><span class="va">DECODING_RESULTS</span><span class="op">$</span><span class="va">rm_main_results</span>, result_type <span class="op">=</span> <span class="st">'all'</span>, plot_type <span class="op">=</span> <span class="st">'line'</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span><span class="va">DECODING_RESULTS</span><span class="op">$</span><span class="va">rm_main_results</span>, results_to_show <span class="op">=</span> <span class="st">'all'</span>, type <span class="op">=</span> <span class="st">'line'</span><span class="op">)</span></code></pre></div>
 <p><img src="introduction_tutorial_files/figure-html/plot_line-1.png" width="700"></p>
 </div>
 <div id="plotting-confusion-matrices" class="section level3">
@@ -285,7 +285,7 @@
 <p><img src="introduction_tutorial_files/figure-html/plot_confusion_matrix-1.png" width="700"></p>
 <p>The <code><a href="../reference/rm_confusion_matrix.html">rm_confusion_matrix()</a></code> object also has a function <code>plot_MI()</code> which calculates mutual information from the confusion matrix and plots this as a function of time or as a TCT plot.</p>
 <div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span><span class="va">DECODING_RESULTS</span><span class="op">$</span><span class="va">rm_confusion_matrix</span>, result_type <span class="op">=</span> <span class="st">"mutual_information"</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span><span class="va">DECODING_RESULTS</span><span class="op">$</span><span class="va">rm_confusion_matrix</span>, results_to_show <span class="op">=</span> <span class="st">"mutual_information"</span><span class="op">)</span></code></pre></div>
 <p><img src="introduction_tutorial_files/figure-html/plot_MI-1.png" width="700"></p>
 </div>
 </div>
