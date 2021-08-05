@@ -4,7 +4,7 @@
 \alias{plot.label_repetition}
 \title{A plot function for label_repetition object}
 \usage{
-\method{plot}{label_repetition}(x, ..., show_legend = TRUE)
+\method{plot}{label_repetition}(x, ..., show_legend = TRUE, site_info_facet_name = NULL)
 }
 \arguments{
 \item{x}{A label_repetition object that was generated from calling the
@@ -14,10 +14,16 @@ get_num_label_repetitions() function.}
 
 \item{show_legend}{A Boolean specifying whether to show a legend
 that list which label each color in the plot corresponds to.}
+
+\item{site_info_facet_name}{Setting this to a string that is the name of one of the site_info
+variable names will make a plot that is faceted by this variable name; i.e., it will
+show the number of number of sites have at least k label repetitions separately for each level
+in the site_info variable name specified.}
 }
 \description{
-This function plots how many label repetitions there are for each stimulus.
-It is useful for assessing how to set the number of cross-validation splits
-(and repeats of labels per cross-validation split) in a datasource. This
-function returns a ggplot2 object which can be further modified as needed.
+This function plots the number of sites have at least k label repetitions.
+Creating this plot is useful for assessing how to set the number of
+cross-validation splits (and repeats of labels per cross-validation split) to
+use in a datasource. This function returns a ggplot2 object which can be
+further modified as needed.
 }
