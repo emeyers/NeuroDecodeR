@@ -263,10 +263,10 @@ aggregate_resample_run_results.rm_main_results <- function(resample_run_results)
 #'
 #' @param ... This is needed to conform to the plot generic interface.
 #'
-#' @param result_type A string specifying the types of results to plot. Options
+#' @param results_to_show A string specifying the types of results to plot. Options
 #'   are: 'zero_one_loss', 'normalized_rank', 'decision_values', or 'all'.
 #'
-#' @param plot_type A string specifying the type of results to plot. Options are
+#' @param type A string specifying the type of results to plot. Options are
 #'   'TCD' to plot a temporal cross decoding matrix or 'line' to create a line
 #'   plot of the decoding results as a function of time
 #'
@@ -275,7 +275,7 @@ aggregate_resample_run_results.rm_main_results <- function(resample_run_results)
 #'
 #'
 #' @export
-plot.rm_main_results <- function(x, ..., result_type = "zero_one_loss", plot_type = "TCD") {
+plot.rm_main_results <- function(x, ..., results_to_show = "zero_one_loss", type = "TCD") {
   
   main_results <- x
 
@@ -289,26 +289,26 @@ plot.rm_main_results <- function(x, ..., result_type = "zero_one_loss", plot_typ
 
 
   # parse which type of results should be plotted
-  if (result_type == "all") {
+  if (results_to_show == "all") {
     
     # do nothing
     
-  } else if (result_type == "zero_one_loss") {
+  } else if (results_to_show == "zero_one_loss") {
     
     main_results <- dplyr::select(main_results, .data$train_time, .data$test_time, .data$zero_one_loss)
     
-  } else if (result_type == "normalized_rank") {
+  } else if (results_to_show == "normalized_rank") {
     
-    if (!(result_type %in% names(main_results))) {
-      stop(paste("Can't plot", result_type, "results because this type of result was not saved."))
+    if (!(results_to_show %in% names(main_results))) {
+      stop(paste("Can't plot", results_to_show, "results because this type of result was not saved."))
     }
 
     main_results <- dplyr::select(main_results, .data$train_time, .data$test_time, .data$normalized_rank)
     
-  } else if (result_type == "decision_vals") {
+  } else if (results_to_show == "decision_vals") {
     
-    if (!(result_type %in% names(main_results))) {
-      stop(paste("Can't plot", result_type, "results because this type of result was not saved."))
+    if (!(results_to_show %in% names(main_results))) {
+      stop(paste("Can't plot", results_to_show, "results because this type of result was not saved."))
     }
 
     main_results <- dplyr::select(main_results, .data$train_time, .data$test_time, .data$decision_vals)
@@ -316,14 +316,14 @@ plot.rm_main_results <- function(x, ..., result_type = "zero_one_loss", plot_typ
   } else {
     
     warning(paste0(
-      "result_type must be set to either 'all', 'zero_one_loss', 'normalized_rank', or 'decision_vals'.",
+      "results_to_show must be set to either 'all', 'zero_one_loss', 'normalized_rank', or 'decision_vals'.",
       "Using the default value of all"))
   }
 
 
 
-  if (!(plot_type == "TCD" || plot_type == "line")) {
-    warning("plot_type must be set to 'TCD' or 'line'. Using the default value of 'TCD'")
+  if (!(type == "TCD" || type == "line")) {
+    warning("type must be set to 'TCD' or 'line'. Using the default value of 'TCD'")
   }
 
 
@@ -337,20 +337,20 @@ plot.rm_main_results <- function(x, ..., result_type = "zero_one_loss", plot_typ
 
   
   main_results <- main_results %>%
-    tidyr::gather("result_type", "accuracy", -.data$train_time, -.data$test_time) %>%
+    tidyr::gather("results_to_show", "accuracy", -.data$train_time, -.data$test_time) %>%
     dplyr::mutate(
-      result_type = replace(result_type, result_type == "zero_one_loss", "Zero-one loss"),
-      result_type = replace(result_type, result_type == "normalized_rank", "Normalized rank"),
-      result_type = replace(result_type, result_type == "decision_vals", "Decision values"))
+      results_to_show = replace(results_to_show, results_to_show == "zero_one_loss", "Zero-one loss"),
+      results_to_show = replace(results_to_show, results_to_show == "normalized_rank", "Normalized rank"),
+      results_to_show = replace(results_to_show, results_to_show == "decision_vals", "Decision values"))
 
   
   # data frame for plotting a horizontal line at chance decoding accuracy levels
   #  (chance level from the input x which is the rm_main_results object passed to plot)
   zero_one_loss_chance <- 100 * attributes(x)$options$zero_one_loss_chance_level
   chance_accuracy_df <- data.frame(
-    result_type = c("Zero-one loss", "Normalized rank", "Decision values"),
+    results_to_show = c("Zero-one loss", "Normalized rank", "Decision values"),
     chance_level = c(zero_one_loss_chance, .5, NA)) %>%
-    dplyr::filter(.data$result_type %in% unique(main_results$result_type))
+    dplyr::filter(.data$results_to_show %in% unique(main_results$results_to_show))
   
   
   # if only a single time, just plot a bar for the decoding accuracy
@@ -359,18 +359,18 @@ plot.rm_main_results <- function(x, ..., result_type = "zero_one_loss", plot_typ
     main_results %>%
       ggplot(aes(.data$test_time, .data$accuracy)) +
       geom_col() +
-      facet_wrap(~result_type, scales = "free") +
+      facet_wrap(~results_to_show, scales = "free") +
       xlab("Time") +
       ylab("Accuracy")
     
   } else if ((sum(main_results$train_time == main_results$test_time) == dim(main_results)[1]) ||
-    plot_type == "line") {
+    type == "line") {
 
     # if only trained and tested at the same time, create line plot
     main_results %>%
       dplyr::filter(.data$train_time == .data$test_time) %>%
       ggplot(aes(.data$test_time, .data$accuracy)) +
-      facet_wrap(~result_type, scales = "free") +
+      facet_wrap(~results_to_show, scales = "free") +
       xlab("Time") +
       ylab("Accuracy") +
       geom_hline(data = chance_accuracy_df, 
@@ -388,12 +388,12 @@ plot.rm_main_results <- function(x, ..., result_type = "zero_one_loss", plot_typ
 
     # if trained and testing at all times, create a TCD plot
 
-    if (result_type != "all") {
+    if (results_to_show != "all") {
       
       g <- main_results %>%
         ggplot(aes(.data$test_time, .data$train_time, fill = .data$accuracy)) +
         geom_tile() +
-        facet_wrap(~result_type) +
+        facet_wrap(~results_to_show) +
         scale_fill_continuous(type = "viridis", name = "Prediction \n accuracy") +
         ylab("Train time") +
         xlab("Test time") +
@@ -404,18 +404,18 @@ plot.rm_main_results <- function(x, ..., result_type = "zero_one_loss", plot_typ
 
       g
       
-    } else if (result_type == "all") {
+    } else if (results_to_show == "all") {
 
       # plotting multiple TCD subplots on the same figure
 
-      all_TCD_plots <- lapply(unique(main_results$result_type), function(curr_result_name) {
-        curr_results <- filter(main_results, .data$result_type == curr_result_name)
+      all_TCD_plots <- lapply(unique(main_results$results_to_show), function(curr_result_name) {
+        curr_results <- filter(main_results, .data$results_to_show == curr_result_name)
 
         g <- curr_results %>%
           ggplot(aes(.data$test_time, .data$train_time, fill = .data$accuracy)) +
           geom_tile() +
-          facet_wrap(~result_type, scales = "free") +
-          # scale_fill_continuous(type = "viridis", name = curr_results$result_type[1]) +
+          facet_wrap(~results_to_show, scales = "free") +
+          # scale_fill_continuous(type = "viridis", name = curr_results$results_to_show[1]) +
           scale_fill_continuous(type = "viridis", name = "") +
           ylab("Train time") +
           xlab("Test time") +

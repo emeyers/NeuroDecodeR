@@ -7,7 +7,7 @@
 \method{plot}{rm_confusion_matrix}(
   x,
   ...,
-  result_type = "zero_one_loss",
+  results_to_show = "zero_one_loss",
   plot_only_same_train_test_time = TRUE
 )
 }
@@ -19,7 +19,7 @@ run_decoding(cv) then this argument should be
 
 \item{...}{This is needed to conform to the plot generic interface.}
 
-\item{result_type}{A string specifying the type of result to plot that can
+\item{results_to_show}{A string specifying the type of result to plot that can
 take the following values:
 \itemize{
 \item "zero_one_loss": plot a regular confusion matrix.
@@ -30,7 +30,7 @@ zero-one loss confusion matrix.
 
 \item{plot_only_same_train_test_time}{A boolean indicating whether the
 confusion matrices should only be plotted at the same training and test
-times. If the \code{result_type == "mutual_information"} setting this to TRUE
+times. If the \code{results_to_show == "mutual_information"} setting this to TRUE
 will plot a TCD plot of the mutual information otherwise it will plot a
 line plot of the mutual information for training and testing at the same
 time.}

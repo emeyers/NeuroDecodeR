@@ -38,11 +38,11 @@ test_that("cv_standard can run simple decoding analysis", {
   # testing that there are no errors plotting the results
   
   plot(DECODING_RESULTS$rm_main_results)
-  plot(DECODING_RESULTS$rm_main_results, result_type = "all")
-  plot(DECODING_RESULTS$rm_main_results, plot_type = 'line')
+  plot(DECODING_RESULTS$rm_main_results, results_to_show = "all")
+  plot(DECODING_RESULTS$rm_main_results, type = 'line')
 
   plot(DECODING_RESULTS$rm_confusion_matrix)
-  plot(DECODING_RESULTS$rm_confusion_matrix, result_type = "mutual_information")
+  plot(DECODING_RESULTS$rm_confusion_matrix, results_to_show = "mutual_information")
   
   
 })

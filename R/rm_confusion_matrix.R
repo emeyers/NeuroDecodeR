@@ -265,7 +265,7 @@ aggregate_resample_run_results.rm_confusion_matrix <- function(resample_run_resu
 #'
 #' @param ... This is needed to conform to the plot generic interface.
 #'
-#' @param result_type A string specifying the type of result to plot that can
+#' @param results_to_show A string specifying the type of result to plot that can
 #'   take the following values:
 #'   * "zero_one_loss": plot a regular confusion matrix.
 #'   * "decision_vals": plot a confusion matrix with the average decision values.
@@ -274,7 +274,7 @@ aggregate_resample_run_results.rm_confusion_matrix <- function(resample_run_resu
 #'
 #' @param plot_only_same_train_test_time A boolean indicating whether the
 #'   confusion matrices should only be plotted at the same training and test
-#'   times. If the `result_type == "mutual_information"` setting this to TRUE
+#'   times. If the `results_to_show == "mutual_information"` setting this to TRUE
 #'   will plot a TCD plot of the mutual information otherwise it will plot a
 #'   line plot of the mutual information for training and testing at the same
 #'   time.
@@ -284,7 +284,7 @@ aggregate_resample_run_results.rm_confusion_matrix <- function(resample_run_resu
 #'
 #'
 #' @export
-plot.rm_confusion_matrix <- function(x, ..., result_type = "zero_one_loss",
+plot.rm_confusion_matrix <- function(x, ..., results_to_show = "zero_one_loss",
                                      plot_only_same_train_test_time = TRUE) {
   
   
@@ -302,14 +302,14 @@ plot.rm_confusion_matrix <- function(x, ..., result_type = "zero_one_loss",
   }
 
 
-  # if result_type is "zero_one_loss" or "decision_vals" plot a confusion matrix
-  if ((result_type == "zero_one_loss") || (result_type == "decision_vals")) {
+  # if results_to_show is "zero_one_loss" or "decision_vals" plot a confusion matrix
+  if ((results_to_show == "zero_one_loss") || (results_to_show == "decision_vals")) {
     
-    should_decision_vals_cm <- result_type == "decision_vals"
+    should_decision_vals_cm <- results_to_show == "decision_vals"
     plot_confusion_matrix(x, plot_only_same_train_test_time, should_decision_vals_cm)
 
     # otherwise plot mutual information calculated from zero-one loss confusion matrix
-  } else if (result_type == "mutual_information") {
+  } else if (results_to_show == "mutual_information") {
     
     if (plot_only_same_train_test_time) {
       plot_type <- "line"
@@ -321,7 +321,7 @@ plot.rm_confusion_matrix <- function(x, ..., result_type = "zero_one_loss",
     
   } else {
     
-    stop("result_type must be set to the value of 'zero_one_loss', 'decision_vals' or
+    stop("results_to_show must be set to the value of 'zero_one_loss', 'decision_vals' or
          'mutual_information'")
   }
   

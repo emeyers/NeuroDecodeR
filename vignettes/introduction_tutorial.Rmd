@@ -388,14 +388,14 @@ plot(DECODING_RESULTS$rm_main_results)
 ```
 
 
-We can also create simpler line plots by setting the `plot_type = 'line'`.
+We can also create simpler line plots by setting the `type = 'line'`.
 Additionally, we can plot all three types of results that that rm_main_results
 object saves using the `type = 'all'` argument. Below, we see the results by
 setting both these arguments.
 
 ```{r plot_line}
 
-plot(DECODING_RESULTS$rm_main_results, result_type = 'all', plot_type = 'line')
+plot(DECODING_RESULTS$rm_main_results, results_to_show = 'all', type = 'line')
 
 ```
 
@@ -420,7 +420,7 @@ time or as a TCT plot.
 
 ```{r plot_MI}
 
-plot(DECODING_RESULTS$rm_confusion_matrix, result_type = "mutual_information")
+plot(DECODING_RESULTS$rm_confusion_matrix, results_to_show = "mutual_information")
 
 ```
 
