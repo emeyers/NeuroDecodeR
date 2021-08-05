@@ -78,9 +78,26 @@ get_num_label_repetitions <- function(binned_data,
 
 
 
-
+#' A plot function for label_repetition object
+#'
+#' This function plots how many label repetitions there are for each stimulus.
+#' It is useful for assessing how to set the number of cross-validation splits
+#' (and repeats of labels per cross-validation split) in a datasource. This
+#' function returns a ggplot2 object which can be further modified as needed.
+#'
+#'
+#' @param x A label_repetition object that was generated from calling the
+#'   get_num_label_repetitions() function.
+#' 
+#'
+#' @param ... This is needed to conform to the plot generic interface.
+#'
+#' @param show_legend A Boolean specifying whether to show a legend 
+#' that list which label each color in the plot corresponds to. 
+#' 
+#'
 #' @export
-plot.label_repetition <- function(x, ...) {
+plot.label_repetition <- function(x, ..., show_legend = TRUE) {
 
   label_rep_obj <- x
 
@@ -90,7 +107,13 @@ plot.label_repetition <- function(x, ...) {
     tidyr::gather("min_reps", "num_sites", -.data$label) %>%
     mutate(min_reps = as.numeric(.data$min_reps))
 
-
+  
+  # set breaks at integer increments 
+  # if more than 20 labels, x-axis lines at every other value, etc.
+  break_increments <- max(round(max(label_rep_info$min_repeats)/20), 1)
+  break_lines <- seq(0, max(label_rep_info$min_repeats), by = break_increments)
+  
+  
   # just plot the minimum number of repeats
   g <- num_sites_with_k_repeats_long %>%
     dplyr::filter(.data$label != "min_repeats") %>%
@@ -99,8 +122,19 @@ plot.label_repetition <- function(x, ...) {
     geom_point() +
     xlab("Number of repeated conditions") +
     ylab("Number of sites") +
-    ggtitle(paste("Label:", attr(label_rep_obj, "variable_used")))
+    ggtitle(paste("Label:", attr(label_rep_obj, "variable_used"))) + 
+    scale_x_continuous(breaks= break_lines) + 
+    theme(panel.grid.minor.x = element_blank())   # put break lines at integer values
 
+  
+  # argument to turn off the legends
+  # could make this the default if there are too many labels...
+  if (show_legend == FALSE) {
+    g <- g + 
+      theme(legend.position = "none")
+  }
+  
+  
   g
 
 }
