@@ -11,7 +11,8 @@ convert_matlab_raster_data(
   start_ind = NULL,
   end_ind = NULL,
   zero_time_bin = NULL,
-  files_contain = ""
+  files_contain = "",
+  add_sequential_trial_numbers = FALSE
 )
 }
 \arguments{
@@ -49,6 +50,11 @@ as time 0. The default (NULL value) is to use the first bin as time 1.}
 \item{files_contain}{A string specifying that only a subset of the MATLAB
 raster data should be converted based on .mat files that contain this
 string.}
+
+\item{add_sequential_trial_numbers}{A Boolean specifying one should add a
+variable to the data called 'trial_number' that has sequential trial. These
+trials numbers are needed for data that was recorded simultaneously so that
+trials can be aligned across different sites.}
 }
 \description{
 If one already has raster data created in MATLAB (.mat files), this function

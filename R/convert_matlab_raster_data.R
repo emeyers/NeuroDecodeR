@@ -39,6 +39,11 @@
 #'   raster data should be converted based on .mat files that contain this
 #'   string.
 #'
+#' @param add_sequential_trial_numbers A Boolean specifying one should add a
+#'   variable to the data called 'trial_number' that has sequential trial. These
+#'   trials numbers are needed for data that was recorded simultaneously so that
+#'   trials can be aligned across different sites.
+#'
 #' @examples
 #' matlab_raster_dir_name <- file.path(
 #'   system.file("extdata", package = "NeuroDecodeR"),
@@ -60,7 +65,8 @@ convert_matlab_raster_data <- function(matlab_raster_dir_name,
                                        start_ind = NULL,
                                        end_ind = NULL,
                                        zero_time_bin = NULL,
-                                       files_contain = "") {
+                                       files_contain = "",
+                                       add_sequential_trial_numbers = FALSE) {
 
 
   # if matlab directory name ends with a slash, remove this slash
@@ -231,11 +237,16 @@ convert_matlab_raster_data <- function(matlab_raster_dir_name,
 
     }
 
-
     # add the site_info to the raster_data with the same values in each row (trial)
     raster_data <- cbind(raster_site_info_df[rep(1, nrow(raster_data)), ], raster_data)
     rownames(raster_data) <- NULL # remove any row names if they exist
 
+    
+    # if specified, add a variable trial_number (useful for simultaneously recorded data)
+    if (add_sequential_trial_numbers) {
+      raster_data$trial_number <- 1:nrow(raster_data)
+      raster_data <- dplyr::select(raster_data, .data$trial_number, everything())
+    }
 
     # finally, save the raster data in the file
     if (is.null(r_raster_dir_name)) {
