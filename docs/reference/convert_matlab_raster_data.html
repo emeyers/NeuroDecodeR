@@ -158,7 +158,8 @@ the NDR.</p>
   start_ind <span class='op'>=</span> <span class='cn'>NULL</span>,
   end_ind <span class='op'>=</span> <span class='cn'>NULL</span>,
   zero_time_bin <span class='op'>=</span> <span class='cn'>NULL</span>,
-  files_contain <span class='op'>=</span> <span class='st'>""</span>
+  files_contain <span class='op'>=</span> <span class='st'>""</span>,
+  add_sequential_trial_numbers <span class='op'>=</span> <span class='cn'>FALSE</span>
 <span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
@@ -212,6 +213,13 @@ as time 0. The default (NULL value) is to use the first bin as time 1.</p></td>
       <td><p>A string specifying that only a subset of the MATLAB
 raster data should be converted based on .mat files that contain this
 string.</p></td>
+    </tr>
+    <tr>
+      <th>add_sequential_trial_numbers</th>
+      <td><p>A Boolean specifying one should add a
+variable to the data called 'trial_number' that has sequential trial. These
+trials numbers are needed for data that was recorded simultaneously so that
+trials can be aligned across different sites.</p></td>
     </tr>
     </table>
 
