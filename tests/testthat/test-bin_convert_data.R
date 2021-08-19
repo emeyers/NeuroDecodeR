@@ -100,6 +100,8 @@ test_that("get_num_label_repetitions() correctly assesses how many times a label
   
   plot(label_rep_info)  # make sure the plot function does not give an error
   
+  expect_equal(length(get_siteIDs_with_k_label_repetitions(file_name, "stimulus_ID",  20)), 132)
+  
 })
 
 

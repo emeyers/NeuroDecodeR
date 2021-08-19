@@ -30,6 +30,7 @@ Imports:
     magrittr,
     purrr,
     R.matlab,
+    scales,
     stats,
     stringr,
     tibble,
