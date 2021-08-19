@@ -49,10 +49,16 @@
     <loc>https://github.com/emeyers/NDTr/reference/get_num_label_repetitions.html</loc>
   </url>
   <url>
+    <loc>https://github.com/emeyers/NDTr/reference/get_num_label_repetitions_each_site.html</loc>
+  </url>
+  <url>
     <loc>https://github.com/emeyers/NDTr/reference/get_parameters.html</loc>
   </url>
   <url>
     <loc>https://github.com/emeyers/NDTr/reference/get_predictions.html</loc>
+  </url>
+  <url>
+    <loc>https://github.com/emeyers/NDTr/reference/get_siteIDs_with_k_label_repetitions.html</loc>
   </url>
   <url>
     <loc>https://github.com/emeyers/NDTr/reference/log_check_results_already_exist.html</loc>
