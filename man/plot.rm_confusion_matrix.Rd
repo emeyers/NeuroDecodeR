@@ -43,6 +43,7 @@ mutual information calculated from the confusion matrix.
 \seealso{
 Other result_metrics: 
 \code{\link{plot.rm_main_results}()},
+\code{\link{plot_multiple_main_results}()},
 \code{\link{rm_confusion_matrix}()},
 \code{\link{rm_main_results}()}
 }

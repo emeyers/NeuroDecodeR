@@ -30,6 +30,7 @@ have been aggregated).
 \seealso{
 Other result_metrics: 
 \code{\link{plot.rm_confusion_matrix}()},
+\code{\link{plot_multiple_main_results}()},
 \code{\link{rm_confusion_matrix}()},
 \code{\link{rm_main_results}()}
 }

@@ -299,10 +299,210 @@ get_parameters.rm_main_results <- function(ndr_obj) {
 
 
 
-# Add code to compare multiple results 
-#  Just add the result_name variable to the main_results data frame and call the helper plot function...
 
 
+
+
+#' A plot function to plot multiple rm_main_results 
+#'
+#' This function can create a line plot of the results or temporal
+#' cross-decoding results for the the zero-one loss, normalized rank and/or
+#' decision values after the decoding analysis has been run (and all results
+#' have been aggregated).
+#'
+#' @param result_dir_name A string specifying the directory name that contains
+#'  files with DECODING_RESULTS that have rm_main_results as one of the result
+#'  metrics. 
+#'
+#' @param results_to_plot This can be set to a vector of strings specifying file names for
+#'   the results to plot, or a vector of numbers that contain the rows in the
+#'   results_manifest file of the results that should be compared. The
+#'   results_manifest file should be created from saving results using the
+#'   log_save_results() function. Finally, if this is set to a single string that is a
+#'   regular expression, all results in the results_manifest file result_name variable
+#'   that match the regular expression will be plotted.
+#'
+#' @param results_to_show A string specifying the types of results to plot. Options
+#'   are: 'zero_one_loss', 'normalized_rank', 'decision_values', or 'all'.
+#'
+#' @param type A string specifying the type of results to plot. Options are
+#'   'TCD' to plot a temporal cross decoding matrix or 'line' to create a line
+#'   plot of the decoding results as a function of time.
+#'   
+#' @param result_names A vector of strings specifying what the labels on the
+#'   plots should say for each result. If this is NULL, the result names will be
+#'   the names from the manifest file's result_name column, or if these are set
+#'   to "No result name set" then the analysisID will be the label. If this is
+#'   set to a single string that is a regular expression (and if result_name
+#'   column is not set to "No result name set), the regular expression will be
+#'   applied to the result_name column of the manifest file and the returned
+#'   value will be the result name in the plot.
+#'
+#' @family result_metrics
+#'
+#'
+#'
+#' @export
+plot_multiple_main_results <- function(result_dir_name, 
+                                       results_to_plot, 
+                                       results_to_show = "zero_one_loss", 
+                                       type = "line",
+                                       result_names = NULL) {
+  
+  
+  
+  # adding these so that the code passes R CMD checks
+  DECODING_RESULTS <- NULL
+  manifest_df <- NULL
+
+  
+  # a helper function to check if the manifest file exists and give an error message if it should
+  check_manifest_exists <- function(argument_name) {
+    
+    if(!("results_manifest.rda" %in% list.files(result_dir_name))) {
+      stop(paste("A manifest file does not exist in the result_dir_name name specified. 
+        If the results_to_plot argument is set to", argument_name, "then the results to be plotted are loaded
+             based from a manifest file that needs to be in the result_dir_name directory."))
+    }
+  }
+    
+
+
+  
+  
+  if (is.character(results_to_plot)) {
+    
+    
+    # a single character string is treated like a regular expression
+    # all manifest_file
+    if (length(results_to_plot) == 1) {
+      
+      check_manifest_exists("a single string,")
+
+      # use the log_load_results_from_result_name to get a list of DECODING_RESULTS
+      all_results_list <- log_load_results_from_result_name(results_to_plot, result_dir_name)
+      
+      
+    } else {
+      
+      # a vector of character strings is treated like file names that should be plotted
+      
+      all_results_list <- list()
+      for (iFile in seq_along(results_to_plot)) {
+        curr_file_name <- file.path(result_dir_name, results_to_plot[iFile])
+        load(curr_file_name)  # could check if file name ends in ".rda" and if not could add it...
+        all_results_list[[iFile]] <- DECODING_RESULTS
+        rm(DECODING_RESULTS)
+      }
+
+    }
+    
+    
+    
+   } else if (is.numeric(results_to_plot)) {
+    
+     # if results_to_plot is a numeric vector, treat it as rows in the manifest file to use
+     
+     check_manifest_exists("a numeric vector,")
+     
+    load(file.path(result_dir_name, "results_manifest.rda"))
+  
+    all_results_list <- list()
+    for (iFile in seq_along(results_to_plot)) {
+      load(file.path(result_dir_name, paste0(manifest_df$analysis_ID[results_to_plot[iFile]], ".rda")))
+      all_results_list[[iFile]] <- DECODING_RESULTS
+      rm(DECODING_RESULTS)
+    }
+    
+    
+      
+  }
+  
+  
+  
+  # helper function to try to load an analysis name if it exists in a manifest file
+  #  otherwise it returns the analysisID
+  get_result_name <- function(result_dir_name, analysis_ID) {
+    
+    if(!("results_manifest.rda" %in% list.files(result_dir_name))) {
+      return(analysis_ID)
+    } 
+    
+    load(file.path(result_dir_name, "results_manifest.rda"))
+    
+    result_name <- manifest_df %>% 
+      dplyr::filter(.data$analysis_ID == {{analysis_ID}}) %>%
+      pull(result_name)
+    
+    if ((result_name == "No result name set") || (length(result_name) == 0))  {
+      return(analysis_ID)
+    }
+    
+    return(result_name)
+      
+  }
+  
+  
+
+  
+  # bind all the decoding results in the list together into a single data frame
+  all_main_results <- data.frame()
+  for (iResult in seq_along(all_results_list)) {
+    
+    curr_decoding_results <- all_results_list[[iResult]]
+    
+    # check that rm_main_results exist in the current DECODING_RESULTS file
+    if (!("rm_main_results" %in% names(curr_decoding_results))) {
+      stop(paste("The DECODING_RESULTS corresponding to analysis",  
+                 all_results_list[[iResult]]$cross_validation_paramaters$analysis_ID,
+                 "does not contain rm_main_results"))
+    }
+    
+    
+    curr_rm_main_results <- curr_decoding_results$rm_main_results
+    
+    # get the appropriate name for the current result add the result_name variable to the current results
+  
+    if (is.null(result_names)) {
+      
+      curr_result_name <- get_result_name(result_dir_name, curr_decoding_results$cross_validation_paramaters$analysis_ID)
+    
+    } else if (is.character(result_names)) {
+      
+      if (length(result_names) == length(all_results_list)) {
+        
+        curr_result_name <- result_names[iResult]  # all the result_names given as a vector of strings
+        
+      } else if (length(result_names) == 1) {  # all the result_names given as a regular expression
+       
+        
+        curr_result_name <- get_result_name(result_dir_name, curr_decoding_results$cross_validation_paramaters$analysis_ID)
+        
+        curr_result_name <- regmatches(curr_result_name, regexpr(result_names, curr_result_name))  # I see the value in the stringr library :/
+        
+        
+      } else {
+        
+        stop("The result_names argument must be set to NULL, a vector of strings the same length as the 
+              number of results to be plotted or to a regular expression.")
+      }
+      
+    }
+     
+
+    curr_rm_main_results$result_name <- curr_result_name
+
+    all_main_results <- rbind(all_main_results, curr_rm_main_results)
+    
+  }  # end the for loop over results
+  
+  
+
+  # plot the results using the plot_rm_main_results() helper function
+  plot_rm_main_results(all_main_results, results_to_show, type)
+  
+  
+}
 
 
 
