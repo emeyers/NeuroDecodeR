@@ -277,184 +277,12 @@ aggregate_resample_run_results.rm_main_results <- function(resample_run_results)
 #' @export
 plot.rm_main_results <- function(x, ..., results_to_show = "zero_one_loss", type = "TCD") {
 
-  
-  main_results <- x
+  # call the helper function to do all the hard work
+  plot_rm_main_results(x, results_to_show, type)
 
-  
-  plot_rm_main_results <- function(main_results, results_to_show = "zero_one_loss", type = "line") {   #  type = "TCD") {
-    
-    
-    # sanity check that only trying to plot final aggregated results
-    if (attributes(main_results)$state != "final results") {
-      stop("The results can only be plotted *after* the decoding analysis has been run")
-    }  
-    
-    
-    # check arguments are valid
-    if (!(type == "TCD" || type == "line")) {
-      stop("type must be set to 'TCD' or 'line'. Using the default value of 'TCD'")
-    }
-    
-    
-    valid_result_names <- c('all', 'zero_one_loss', 'normalized_rank', 'decision_vals')
-    if (!(sum(results_to_show %in% valid_result_names) == length(results_to_show))) {
-      stop(paste0(
-        "results_to_show must be set to either 'all', 'zero_one_loss', 'normalized_rank', or 'decision_vals'.",
-        "Using the default value of all"))
-    }
-    
-    
-    # expand to result names if "all" was passed as an argument
-    if (results_to_show[1] == "all") {
-      results_to_show <- c("zero_one_loss",  "normalized_rank", "decision_vals")
-    }
-    
-    # normalized rank and decision values are not always saved so check that they exist if plotted them  
-    if (!(sum(results_to_show %in% names(main_results)) == length(results_to_show))) {
-      stop(paste("Can't plot", results_to_show, "results because this type of result was not saved."))
-    }
-    
-    
-    # get the chance level for the zero one loss results
-    zero_one_loss_chance <- 100 * attributes(main_results)$options$zero_one_loss_chance_level
-    
-    # convert the zero-one loss results to percentages
-    main_results <- dplyr::mutate(main_results, zero_one_loss = .data$zero_one_loss * 100)
-    
-    
-    main_results$train_time <- round(get_center_bin_time(main_results$train_time))
-    main_results$test_time <- round(get_center_bin_time(main_results$test_time))
-    
-    # an alternative way to display the labels (not used)
-    # main_results$train_time <- get_time_range_strings(main_results$train_time)
-    # main_results$test_time <- get_time_range_strings(main_results$test_time)
-    
-    
-    
-    # remove result types that are not being used
-    result_types_to_remove <- setdiff(c("zero_one_loss",  "normalized_rank", "decision_vals"), results_to_show)
-    main_results <- dplyr::select(main_results, -{{result_types_to_remove}})
-    
-    
-    main_results <- main_results %>%
-      tidyr::pivot_longer(all_of(results_to_show), 
-                          names_to = "results_to_show",
-                          values_to = "accuracy") 
-    
-    
-    # rename results for better printing on plots and order according to the order given
-    plot_result_names <- c("Zero-one loss", "Normalized rank", "Decision values")
-    names(plot_result_names) <- c("zero_one_loss", "normalized_rank", "decision_vals")
-    main_results$results_to_show <- factor(main_results$results_to_show, 
-                                           levels = results_to_show, 
-                                           labels = plot_result_names[results_to_show],
-                                           ordered = TRUE)
-    
-    
-    # create data frame for chance decoding levels
-    chance_accuracy_df <- data.frame( 
-      results_to_show = c("zero_one_loss", "normalized_rank", "decision_vals"), 
-      chance_level = c(zero_one_loss_chance, .5, NA)) %>%
-      dplyr::mutate(results_to_show = factor(.data$results_to_show, 
-                                             levels = results_to_show, 
-                                             labels = plot_result_names[results_to_show],
-                                             ordered = TRUE)) %>%
-      dplyr::filter(.data$results_to_show %in% unique(main_results$results_to_show)) 
-    
-    
-    
-    
-    # if only a single time, just plot a bar for the decoding accuracy
-    if (length(unique(main_results$train_time)) == 1) {
-      
-      main_results %>%
-        ggplot(aes(.data$test_time, .data$accuracy)) +
-        geom_col() +
-        facet_wrap(~results_to_show, scales = "free") +
-        xlab("Time") +
-        ylab("Accuracy")
-      
-    } else if ((sum(main_results$train_time == main_results$test_time) == dim(main_results)[1]) ||
-               type == "line") {
-      
-      # if only trained and tested at the same time, create line plot
-      main_results %>%
-        dplyr::filter(.data$train_time == .data$test_time) %>%
-        ggplot(aes(.data$test_time, .data$accuracy))  +  #, color = result_name)) +
-        facet_wrap(~results_to_show, scales = "free") +
-        xlab("Time") +
-        ylab("Accuracy") +
-        geom_hline(data = chance_accuracy_df, 
-                   aes(yintercept = .data$chance_level),
-                   color = "maroon", na.rm=TRUE) + 
-        geom_line() + 
-        theme_classic() + 
-        theme(
-          panel.grid.major = element_blank(),
-          panel.grid.minor = element_blank(),
-          strip.background = element_rect(colour = "white", fill = "white"))
-      
-      
-    } else {
-      
-      # if trained and testing at all times, create a TCD plot
-      
-      
-      if (length(results_to_show) == 1) {
-        
-        g <- main_results %>%
-          ggplot(aes(.data$test_time, .data$train_time, fill = .data$accuracy)) +
-          geom_tile() +
-          facet_wrap(~results_to_show) +
-          scale_fill_continuous(type = "viridis", name = "Prediction \n accuracy") +
-          ylab("Train time") +
-          xlab("Test time") +
-          theme(
-            panel.grid.major = element_blank(),
-            panel.grid.minor = element_blank(),
-            strip.background = element_rect(colour = "white", fill = "white"))
-        
-        g
-        
-      } else if (length(results_to_show) > 1)  {
-        
-        # plotting multiple TCD subplots on the same figure
-        
-        all_TCD_plots <- lapply(unique(main_results$results_to_show), function(curr_result_name) {
-          curr_results <- filter(main_results, .data$results_to_show == curr_result_name)
-          
-          g <- curr_results %>%
-            ggplot(aes(.data$test_time, .data$train_time, fill = .data$accuracy)) +
-            geom_tile() +
-            facet_wrap(~results_to_show, scales = "free") +
-            # scale_fill_continuous(type = "viridis", name = curr_results$results_to_show[1]) +
-            scale_fill_continuous(type = "viridis", name = "") +
-            ylab("Train time") +
-            xlab("Test time") +
-            theme(legend.position = "bottom") +
-            theme(
-              panel.grid.major = element_blank(),
-              panel.grid.minor = element_blank(),
-              strip.background = element_rect(colour = "white", fill = "white"))
-          
-          g
-          
-        })
-        
-        all_TCD_plots[["ncol"]] <- length(results_to_show)
-        do.call(gridExtra::grid.arrange, all_TCD_plots)
-      }
-      
-    }
-  }
-  
-  
 }
-
-
-
-
-
+  
+ 
 
 
 # Get the parameters for the rm_main_results object
@@ -468,5 +296,248 @@ get_parameters.rm_main_results <- function(ndr_obj) {
   
 }
 
+
+
+
+# Add code to compare multiple results 
+#  Just add the result_name variable to the main_results data frame and call the helper plot function...
+
+
+
+
+
+
+
+
+
+
+
+# A private helper function that does all the hard work of plotting the results
+plot_rm_main_results <- function(main_results, results_to_show = "zero_one_loss", type = "TCD") {  
+  
+  
+  # sanity check that only trying to plot final aggregated results
+  if (attributes(main_results)$state != "final results") {
+    stop("The results can only be plotted *after* the decoding analysis has been run")
+  }  
+  
+  
+  # check arguments are valid
+  if (!(type == "TCD" || type == "line")) {
+    stop("type must be set to 'TCD' or 'line'. Using the default value of 'TCD'")
+  }
+  
+  
+  valid_result_names <- c('all', 'zero_one_loss', 'normalized_rank', 'decision_vals')
+  if (!(sum(results_to_show %in% valid_result_names) == length(results_to_show))) {
+    stop(paste0(
+      "results_to_show must be set to either 'all', 'zero_one_loss', 'normalized_rank', or 'decision_vals'.",
+      "Using the default value of all"))
+  }
+  
+  
+  # expand to result names if "all" was passed as an argument
+  if (results_to_show[1] == "all") {
+    results_to_show <- c("zero_one_loss",  "normalized_rank", "decision_vals")
+  }
+  
+  # normalized rank and decision values are not always saved so check that they exist if plotted them  
+  if (!(sum(results_to_show %in% names(main_results)) == length(results_to_show))) {
+    stop(paste("Can't plot", results_to_show, "results because this type of result was not saved."))
+  }
+  
+  
+  # get the chance level for the zero one loss results
+  zero_one_loss_chance <- 100 * attributes(main_results)$options$zero_one_loss_chance_level
+  
+  # convert the zero-one loss results to percentages
+  main_results <- dplyr::mutate(main_results, zero_one_loss = .data$zero_one_loss * 100)
+  
+  
+  main_results$train_time <- round(get_center_bin_time(main_results$train_time))
+  main_results$test_time <- round(get_center_bin_time(main_results$test_time))
+  
+  # an alternative way to display the labels (not used)
+  # main_results$train_time <- get_time_range_strings(main_results$train_time)
+  # main_results$test_time <- get_time_range_strings(main_results$test_time)
+  
+  
+  # remove result types that are not being used
+  result_types_to_remove <- setdiff(c("zero_one_loss",  "normalized_rank", "decision_vals"), results_to_show)
+  main_results <- dplyr::select(main_results, -{{result_types_to_remove}})
+  
+  
+  main_results <- main_results %>%
+    tidyr::pivot_longer(all_of(results_to_show), 
+                        names_to = "results_to_show",
+                        values_to = "accuracy") 
+  
+  
+  # rename results for better printing on plots and order according to the order given
+  plot_result_names <- c("Zero-one loss", "Normalized rank", "Decision values")
+  names(plot_result_names) <- c("zero_one_loss", "normalized_rank", "decision_vals")
+  main_results$results_to_show <- factor(main_results$results_to_show, 
+                                         levels = results_to_show, 
+                                         labels = plot_result_names[results_to_show],
+                                         ordered = TRUE)
+  
+  
+  # create data frame for chance decoding levels
+  chance_accuracy_df <- data.frame( 
+    results_to_show = c("zero_one_loss", "normalized_rank", "decision_vals"), 
+    chance_level = c(zero_one_loss_chance, .5, NA)) %>%
+    dplyr::mutate(results_to_show = factor(.data$results_to_show, 
+                                           levels = results_to_show, 
+                                           labels = plot_result_names[results_to_show],
+                                           ordered = TRUE)) %>%
+    dplyr::filter(.data$results_to_show %in% unique(main_results$results_to_show)) 
+  
+  
+  
+  # actually plot the data...
+  
+  
+  # if only a single time, just plot a bar for the decoding accuracy
+  if (length(unique(main_results$train_time)) == 1) {
+    
+    # the "result_name" variable indicates there are multiple results 
+    # so plot them in different colors...
+    if ("result_name" %in% names(main_results)) {
+      g <- main_results %>%
+        ggplot(aes(.data$result_name, .data$accuracy, fill = .data$result_name)) 
+      
+    } else {
+      g <- main_results %>%
+        ggplot(aes(.data$test_time, .data$accuracy))
+    }
+    
+    
+    g <- g  +
+      geom_col() + 
+      facet_wrap(~results_to_show, scales = "free") +
+      xlab("Time") +
+      ylab("Accuracy")
+    
+    g
+    
+    
+  } else if ((sum(main_results$train_time == main_results$test_time) == dim(main_results)[1]) ||
+             type == "line") {
+    
+    # if only trained and tested at the same time, create line plot
+    
+    
+    # the "result_name" variable indicates there are multiple results to compare
+    # so plot them in different colors...
+    if ("result_name" %in% names(main_results)) {
+      
+      g <- main_results %>%
+        dplyr::filter(.data$train_time == .data$test_time) %>%
+        ggplot(aes(.data$test_time, .data$accuracy, color = .data$result_name)) 
+      
+    } else {   # only a single result being plotted
+      
+      g <- main_results %>%
+        dplyr::filter(.data$train_time == .data$test_time) %>%
+        ggplot(aes(.data$test_time, .data$accuracy)) 
+    }
+    
+    
+    
+    g <- g +
+      facet_wrap(~results_to_show, scales = "free") +
+      xlab("Time") +
+      ylab("Accuracy") +
+      geom_hline(data = chance_accuracy_df, 
+                 aes(yintercept = .data$chance_level),
+                 color = "maroon", na.rm=TRUE) + 
+      geom_line() + 
+      theme_classic() + 
+      theme(
+        panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank(),
+        strip.background = element_rect(colour = "white", fill = "white"))
+    
+    g
+    
+    
+  } else {
+    
+    # if trained and testing at all times, create a TCD plot
+    
+    if (length(results_to_show) == 1) {
+      
+      g <- main_results %>%
+        ggplot(aes(.data$test_time, .data$train_time, fill = .data$accuracy)) +
+        geom_tile() +
+        scale_fill_continuous(type = "viridis", name = "Prediction \n accuracy") +
+        ylab("Train time") +
+        xlab("Test time") +
+        theme(
+          panel.grid.major = element_blank(),
+          panel.grid.minor = element_blank(),
+          strip.background = element_rect(colour = "white", fill = "white"))
+      
+      
+      # the "result_name" variable exists there are multiple results to compare
+      # so facet on these different results
+      if ("result_name" %in% names(main_results)) {
+        
+        g  <- g + facet_wrap(~result_name)
+        
+      } else {  # otherwise if only a single result, facet on the results_to_show 
+        # that so the result_to_show is subtitle
+        
+        g  <- g + facet_wrap(~results_to_show)
+        
+      }
+      
+      
+      g
+      
+      
+      
+    } else if (length(results_to_show) > 1)  {   # comparing multiple decoding result types with TCD plots
+      
+      
+      # creating TCD plots of multiple result types comparing multiple results is not supported
+      #  send a message saying this is not supported
+      if ("result_name" %in% names(main_results)) { 
+        
+        stop(paste("Creating TCD plots comparing multiple results for multiple measures of decoding accuracy is not supported.",
+                   "Please set the 'results_to_show' argument to a single string to plot only one result type;", 
+                   "e.g., set results_to_show = 'zero_one_loss'."))
+      }
+      
+      
+      # plotting multiple TCD subplots on the same figure
+      
+      all_TCD_plots <- lapply(unique(main_results$results_to_show), function(curr_result_name) {
+        curr_results <- filter(main_results, .data$results_to_show == curr_result_name)
+        
+        g <- curr_results %>%
+          ggplot(aes(.data$test_time, .data$train_time, fill = .data$accuracy)) +
+          geom_tile() +
+          facet_wrap(~results_to_show, scales = "free") +
+          # scale_fill_continuous(type = "viridis", name = curr_results$results_to_show[1]) +
+          scale_fill_continuous(type = "viridis", name = "") +
+          ylab("Train time") +
+          xlab("Test time") +
+          theme(legend.position = "bottom") +
+          theme(
+            panel.grid.major = element_blank(),
+            panel.grid.minor = element_blank(),
+            strip.background = element_rect(colour = "white", fill = "white"))
+        
+        g
+        
+      })
+      
+      all_TCD_plots[["ncol"]] <- length(results_to_show)
+      do.call(gridExtra::grid.arrange, all_TCD_plots)
+    }
+    
+  }
+}
 
 
