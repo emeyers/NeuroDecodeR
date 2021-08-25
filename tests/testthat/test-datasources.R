@@ -296,6 +296,39 @@ test_that("basic_ds: shuffling labels works", {
 
 
 
+test_that("basic_ds: different cross-validation arrangements of data are returned each time get_data() is called", {
+  
+  
+  num_CV <- 5
+  num_reps <- 2
+  
+  ds_pseudo <- ds_basic("fake_simultaneous_binned_data.Rda", "stim_names", num_CV,
+                  num_label_repeats_per_cv_split = num_reps)
+  
+  data1 <- get_data(ds_pseudo)
+  data2 <- get_data(ds_pseudo)
+  
+  expect_false(identical(data1, data2))
+  
+  
+  ds_simul <- ds_basic("fake_simultaneous_binned_data.Rda", "stim_names", num_CV,
+                  num_label_repeats_per_cv_split = num_reps, 
+                  create_simultaneous_populations = TRUE)
+  
+  
+  data1 <- get_data(ds_simul)
+  data2 <- get_data(ds_simul)
+  
+  expect_false(identical(data1, data2))
+  
+  
+})
+
+
+
+
+
+
 
 
 # test the ds_generalization  -------------------------------------------------

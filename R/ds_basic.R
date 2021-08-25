@@ -285,7 +285,22 @@ get_data.ds_basic <- function(ds_obj) {
     # apply specific simultaneous trials selected to all sites
     all_k_fold_data <- binned_data %>%
       dplyr::filter(.data$label_trial_combo %in% curr_label_trials_to_use) %>%
-      select(-.data$label_trial_combo)
+      dplyr::mutate(label_trial_siteID_combo = paste0(.data$label_trial_combo, '_', .data$siteID))
+
+    
+    # Arrange rows for each site of all_k_fold_data to be in the random order
+    # specified by curr_label_trials_to_use. This ensures a different random
+    # ordering of data each time get_data() is called.
+    curr_label_trials_to_use_siteID <- paste0(curr_label_trials_to_use, '_', 
+                                              all_k_fold_data$siteID)
+    
+    all_k_fold_data <- all_k_fold_data[match(curr_label_trials_to_use_siteID, 
+                                             all_k_fold_data$label_trial_siteID_combo), ]
+   
+    all_k_fold_data <- all_k_fold_data %>% 
+      dplyr::select(-.data$label_trial_combo, -.data$label_trial_siteID_combo)
+    
+                                              
 
   } else {
 
