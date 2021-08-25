@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>A result metric (RM) that calculates main decoding accuracy measures — rm_main_results • NeuroDecodeR</title>
+<title>A plot function to plot multiple rm_main_results — plot_main_results • NeuroDecodeR</title>
 
 
 <!-- jquery -->
@@ -39,10 +39,11 @@
 
 
 
-<meta property="og:title" content="A result metric (RM) that calculates main decoding accuracy measures — rm_main_results" />
-<meta property="og:description" content="This result metric calculate the zero-one loss, the normalized rank, and the
-mean of the decision values. This is also an S3 object which has an
-associated plot function to display the results." />
+<meta property="og:title" content="A plot function to plot multiple rm_main_results — plot_main_results" />
+<meta property="og:description" content="This function can create a line plot of the results or temporal
+cross-decoding results for the the zero-one loss, normalized rank and/or
+decision values after the decoding analysis has been run (and all results
+have been aggregated)." />
 
 
 
@@ -140,74 +141,77 @@ associated plot function to display the results." />
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>A result metric (RM) that calculates main decoding accuracy measures</h1>
+    <h1>A plot function to plot multiple rm_main_results</h1>
     <small class="dont-index">Source: <a href='https://github.com/emeyers/NeuroDecodeR/blob/master/R/rm_main_results.R'><code>R/rm_main_results.R</code></a></small>
-    <div class="hidden name"><code>rm_main_results.Rd</code></div>
+    <div class="hidden name"><code>plot_main_results.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>This result metric calculate the zero-one loss, the normalized rank, and the
-mean of the decision values. This is also an S3 object which has an
-associated plot function to display the results.</p>
+    <p>This function can create a line plot of the results or temporal
+cross-decoding results for the the zero-one loss, normalized rank and/or
+decision values after the decoding analysis has been run (and all results
+have been aggregated).</p>
     </div>
 
-    <pre class="usage"><span class='fu'>rm_main_results</span><span class='op'>(</span>
-  ndr_container_or_object <span class='op'>=</span> <span class='cn'>NULL</span>,
-  include_norm_rank_results <span class='op'>=</span> <span class='cn'>TRUE</span>
+    <pre class="usage"><span class='fu'>plot_main_results</span><span class='op'>(</span>
+  <span class='va'>result_dir_name</span>,
+  <span class='va'>results_to_plot</span>,
+  results_to_show <span class='op'>=</span> <span class='st'>"zero_one_loss"</span>,
+  type <span class='op'>=</span> <span class='st'>"line"</span>,
+  result_names <span class='op'>=</span> <span class='cn'>NULL</span>
 <span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>ndr_container_or_object</th>
-      <td><p>The purpose of this argument is to make the
-constructor of the rm_main_results feature preprocessor work with the
-magrittr pipe (%&gt;%) operator. This argument should almost never be directly
-set by the user to anything other than NULL. If this is set to the default
-value of NULL, then the constructor will return a rm_main_results object.
-If this is set to an ndr container, then a rm_main_results object will be
-added to the container and the container will be returned. If this argument
-is set to another ndr object, then both that ndr object as well as a new
-rm_main_results object will be added to a new container and the container
-will be returned.</p></td>
+      <th>result_dir_name</th>
+      <td><p>A string specifying the directory name that contains
+files with DECODING_RESULTS that have rm_main_results as one of the result
+metrics.</p></td>
     </tr>
     <tr>
-      <th>include_norm_rank_results</th>
-      <td><p>An argument specifying if the normalized
-rank and decision value results should be saved. If this is a Boolean set
-to TRUE, then the normalized rank and decision values for the correct
-category will be calculated. If this is a Boolean set to FALSE then the
-normalized rank and decision values will not be calculated. If this is a
-string set to "only_same_train_test_time", then the normalized rank and decision
-values will only be calculated when for results when training and testing
-at the same time. Not returning the full results can speed up the run-time
-of the code and will use less memory so this can be useful for large data
-sets.</p></td>
+      <th>results_to_plot</th>
+      <td><p>This can be set to a vector of strings specifying file names for
+the results to plot, or a vector of numbers that contain the rows in the
+results_manifest file of the results that should be compared. The
+results_manifest file should be created from saving results using the
+log_save_results() function. Finally, if this is set to a single string that is a
+regular expression, all results in the results_manifest file result_name variable
+that match the regular expression will be plotted.</p></td>
+    </tr>
+    <tr>
+      <th>results_to_show</th>
+      <td><p>A string specifying the types of results to plot. Options
+are: 'zero_one_loss', 'normalized_rank', 'decision_values', or 'all'.</p></td>
+    </tr>
+    <tr>
+      <th>type</th>
+      <td><p>A string specifying the type of results to plot. Options are
+'TCD' to plot a temporal cross decoding matrix or 'line' to create a line
+plot of the decoding results as a function of time.</p></td>
+    </tr>
+    <tr>
+      <th>result_names</th>
+      <td><p>A vector of strings specifying what the labels on the
+plots should say for each result. If this is NULL, the result names will be
+the names from the manifest file's result_name column, or if these are set
+to "No result name set" then the analysisID will be the label. If this is
+set to a single string that is a regular expression (and if result_name
+column is not set to "No result name set), the regular expression will be
+applied to the result_name column of the manifest file and the returned
+value will be the result name in the plot.</p></td>
     </tr>
     </table>
 
-    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
-
-    <p>Like all result metrics, this result metric has functions to aggregregate
-results after completing each set of cross-validation classifications, and
-also after completing all the resample runs. The results should then be
-available in the DECODING_RESULTS object returned by the cross-validator.</p>
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
     <div class='dont-index'><p>Other result_metrics: 
 <code><a href='plot.rm_confusion_matrix.html'>plot.rm_confusion_matrix</a>()</code>,
 <code><a href='plot.rm_main_results.html'>plot.rm_main_results</a>()</code>,
-<code><a href='plot_main_results.html'>plot_main_results</a>()</code>,
-<code><a href='rm_confusion_matrix.html'>rm_confusion_matrix</a>()</code></p></div>
+<code><a href='rm_confusion_matrix.html'>rm_confusion_matrix</a>()</code>,
+<code><a href='rm_main_results.html'>rm_main_results</a>()</code></p></div>
 
-    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='co'># If you only want to use the rm_main_results(), then you can put it in a</span>
-<span class='co'># list by itself and pass it to the cross-validator.</span>
-<span class='va'>the_rms</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='fu'>rm_main_results</span><span class='op'>(</span><span class='op'>)</span><span class='op'>)</span>
-
-
-</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

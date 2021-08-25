@@ -246,11 +246,11 @@
 
 <span class="co"># prior to z-score normalizing the mean (e.g. for site 1) is not 0</span>
 <span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span><span class="op">(</span><span class="va">training_set</span><span class="op">$</span><span class="va">site_0001</span><span class="op">)</span></code></pre></div>
-<pre><code>## [1] 0.00302521</code></pre>
+<pre><code>## [1] 0.002913165</code></pre>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># after normalizing the data the mean is pretty much 0</span>
 <span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span><span class="op">(</span><span class="va">processed_data</span><span class="op">$</span><span class="va">training_set</span><span class="op">$</span><span class="va">site_0001</span><span class="op">)</span></code></pre></div>
-<pre><code>## [1] -2.984107e-17</code></pre>
+<pre><code>## [1] 8.482379e-17</code></pre>
 <p><br></p>
 <p><br></p>
 </div>
@@ -330,7 +330,7 @@
 <code class="sourceCode R"><span class="co"># see how accurate the predictions are (chance is 1/7)</span>
 <span class="va">predictions_at_100ms</span> <span class="op">&lt;-</span> <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="va">predictions</span>, <span class="va">test_time</span> <span class="op">==</span> <span class="st">"time.100_250"</span><span class="op">)</span>
 <span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span><span class="op">(</span><span class="va">predictions_at_100ms</span><span class="op">$</span><span class="va">actual_labels</span> <span class="op">==</span> <span class="va">predictions_at_100ms</span><span class="op">$</span><span class="va">predicted_labels</span><span class="op">)</span></code></pre></div>
-<pre><code>## [1] 0.7142857</code></pre>
+<pre><code>## [1] 0.5714286</code></pre>
 <p><br></p>
 <p><br></p>
 </div>
