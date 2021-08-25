@@ -278,7 +278,7 @@ aggregate_resample_run_results.rm_main_results <- function(resample_run_results)
 plot.rm_main_results <- function(x, ..., results_to_show = "zero_one_loss", type = "TCD") {
 
   # call the helper function to do all the hard work
-  plot_rm_main_results(x, results_to_show, type)
+  helper_plot_rm_main_results(x, results_to_show, type)
 
 }
   
@@ -343,11 +343,11 @@ get_parameters.rm_main_results <- function(ndr_obj) {
 #'
 #'
 #' @export
-plot_multiple_main_results <- function(result_dir_name, 
-                                       results_to_plot, 
-                                       results_to_show = "zero_one_loss", 
-                                       type = "line",
-                                       result_names = NULL) {
+plot_main_results <- function(result_dir_name, 
+                              results_to_plot, 
+                              results_to_show = "zero_one_loss", 
+                              type = "line",
+                              result_names = NULL) {
   
   
   
@@ -498,8 +498,8 @@ plot_multiple_main_results <- function(result_dir_name,
   
   
 
-  # plot the results using the plot_rm_main_results() helper function
-  plot_rm_main_results(all_main_results, results_to_show, type)
+  # plot the results using the helper_plot_rm_main_results() helper function
+  helper_plot_rm_main_results(all_main_results, results_to_show, type)
   
   
 }
@@ -513,7 +513,7 @@ plot_multiple_main_results <- function(result_dir_name,
 
 
 # A private helper function that does all the hard work of plotting the results
-plot_rm_main_results <- function(main_results, results_to_show = "zero_one_loss", type = "TCD") {  
+helper_plot_rm_main_results <- function(main_results, results_to_show = "zero_one_loss", type = "TCD") {  
   
   
   # sanity check that only trying to plot final aggregated results
