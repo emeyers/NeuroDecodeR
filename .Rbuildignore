@@ -9,3 +9,5 @@
 ^Meta$
 ^data-raw$
 ^vignettes/pkgdown_documentation/*.Rmd$
+^test_convert_matlab_raster_data$
+^inst/extdata/Zhang_Desimone_7object_raster_data_rda$

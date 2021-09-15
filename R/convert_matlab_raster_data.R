@@ -11,7 +11,17 @@
 #'   directory where the converted raster data in R .rda files will be saved. If
 #'   this is not specified then the saved directory will have the same name as
 #'   the matlab directory with _rda appended to the end of the directory name.
-#'
+#'   
+#' @param sampling_interval_width A number specifying how successive time bins
+#'   will be labeled The default value of 1 means that points will be labeled as
+#'   successive integers; i.e., time.1_2, time.2_3, etc. If this value was set
+#'   to a larger number, then time points will be specified at the given
+#'   sampling width. From example, if sampling_width is set to 10, then the time
+#'   labels would be time.1_10, time.10_20, etc. This is useful if the data is
+#'   sampled at a particular rate (e.g., if the data is sampled at 500Hz, one
+#'   might want to use sampling_interval_width = 2, so that the times listed on
+#'   the raster column names are in milliseconds).
+#' 
 #' @param start_ind A number specifying the start index for the data to be
 #'   converted if one wants to convert the data from a shorter time window than
 #'   the original MATLAB raster data. The default (NULL value) is to use all the
@@ -29,6 +39,11 @@
 #'   raster data should be converted based on .mat files that contain this
 #'   string.
 #'
+#' @param add_sequential_trial_numbers A Boolean specifying one should add a
+#'   variable to the data called 'trial_number' that has sequential trial. These
+#'   trials numbers are needed for data that was recorded simultaneously so that
+#'   trials can be aligned across different sites.
+#'
 #' @examples
 #' matlab_raster_dir_name <- file.path(
 #'   system.file("extdata", package = "NeuroDecodeR"),
@@ -36,7 +51,7 @@
 #' )
 #'
 #' # create temporary directory to hold converted data
-#' r_raster_dir_name <- file.path("test_convert_matlab_raster_data", "")
+#' r_raster_dir_name <- tempdir()
 #' r_raster_dir_name <- convert_matlab_raster_data(matlab_raster_dir_name,
 #'   r_raster_dir_name,
 #'   files_contain = "bp1001spk"
@@ -46,10 +61,12 @@
 #' @export
 convert_matlab_raster_data <- function(matlab_raster_dir_name,
                                        r_raster_dir_name = NULL,
+                                       sampling_interval_width = 1,
                                        start_ind = NULL,
                                        end_ind = NULL,
                                        zero_time_bin = NULL,
-                                       files_contain = "") {
+                                       files_contain = "",
+                                       add_sequential_trial_numbers = FALSE) {
 
 
   # if matlab directory name ends with a slash, remove this slash
@@ -116,7 +133,7 @@ convert_matlab_raster_data <- function(matlab_raster_dir_name,
     }
 
 
-    # create the appropriave site_info.X prefix variables names
+    # create the appropriate site_info.X prefix variables names
     raster_site_info_names <- convert_dot_back_to_underscore(names(raster_site_info_df))
     names(raster_site_info_df) <- raster_site_info_names
     names(raster_site_info_df) <- paste0("site_info.", names(raster_site_info_df))
@@ -147,9 +164,11 @@ convert_matlab_raster_data <- function(matlab_raster_dir_name,
     raster_data <- raster_data[, start_ind:end_ind]
 
 
-    # Add column names to the raster data in the form of: time.1, time.2 etc.
-    data_times <- 1:dim(raster_data)[2]
-
+    # Add column names to the raster data in the form of: time.1_2, time.2_3 etc.
+    data_start_times <- seq(from = 1, 
+                            by = sampling_interval_width,
+                            length.out = dim(raster_data)[2])
+                              
 
     # if there is an alignment time, subtract the start_ind offset from the
     # alignment and subtract alignment from the raster times
@@ -157,11 +176,11 @@ convert_matlab_raster_data <- function(matlab_raster_dir_name,
       
       if (is.numeric(zero_time_bin)) {
         
-        data_times <- (data_times - rep.int(zero_time_bin - (start_ind - 1), length(data_times)))
+        data_start_times <- (data_start_times - sampling_interval_width * (rep.int(zero_time_bin - (start_ind - 1), length(data_start_times)))  )
         
       } else {
         
-        data_times <- (data_times - rep.int(raster_site_info$alignment.event.time - (start_ind - 1), length(data_times)))
+        data_start_times <- (data_start_times - sampling_interval_width * (rep.int(raster_site_info$alignment.event.time - (start_ind - 1), length(data_start_times))))
       }
 
       
@@ -171,18 +190,21 @@ convert_matlab_raster_data <- function(matlab_raster_dir_name,
 
       # update the names if start_ind or end_ind were given as arguments
       if (!(start_ind_save_dir_name == "")) {
-        start_ind_save_dir_name <- paste0("_start_", start_ind - raster_site_info$alignment_event_time)
+        start_ind_save_dir_name <- paste0("_start_", sampling_interval_width * (start_ind - raster_site_info$alignment_event_time))
       }
 
       if (!(end_ind_save_dir_name == "")) {
-        end_ind_save_dir_name <- paste0("_end_", end_ind - raster_site_info$alignment_event_time)
+        end_ind_save_dir_name <- paste0("_end_", sampling_interval_width * (end_ind - raster_site_info$alignment_event_time))
       }
 
     }
 
-    names(raster_data) <- paste0("time.", data_times)
+    
+    data_end_times <- data_start_times + sampling_interval_width
+    
+    names(raster_data) <- paste0("time.", data_start_times, "_", data_end_times)
 
-
+    
 
     # forth, add the labels to raster_data
     # Get the labels for what happened on each trial and add them to the raster_data data frame
@@ -215,11 +237,16 @@ convert_matlab_raster_data <- function(matlab_raster_dir_name,
 
     }
 
-
     # add the site_info to the raster_data with the same values in each row (trial)
     raster_data <- cbind(raster_site_info_df[rep(1, nrow(raster_data)), ], raster_data)
     rownames(raster_data) <- NULL # remove any row names if they exist
 
+    
+    # if specified, add a variable trial_number (useful for simultaneously recorded data)
+    if (add_sequential_trial_numbers) {
+      raster_data$trial_number <- 1:nrow(raster_data)
+      raster_data <- dplyr::select(raster_data, .data$trial_number, everything())
+    }
 
     # finally, save the raster data in the file
     if (is.null(r_raster_dir_name)) {
@@ -342,7 +369,7 @@ plot.raster_data <- function(x, ..., facet_label = NULL) {
   # convert to long format for plotting and time as a numeric value
   activity_data_only_df <- activity_data_only_df %>%
     tidyr::pivot_longer(starts_with("time"), names_to = "time", values_to = "activity") %>%   
-    dplyr::mutate(time = as.numeric(substr(.data$time, 6, 20)))  
+    dplyr::mutate(time = floor(get_center_bin_time(.data$time)))  
 
   
   # if the data is a spike train of 0's and 1's
@@ -359,7 +386,7 @@ plot.raster_data <- function(x, ..., facet_label = NULL) {
     g <- ggplot(activity_data_only_df, aes(x = .data$time, y = .data$trial_number)) +
       geom_raster(aes(fill=factor(.data$activity))) +
       scale_fill_manual(values=c("0"="white", "1"="black")) +
-      guides(fill = FALSE) + 
+      guides(fill = "none") + 
       labs(x="Time", y="Trial") +
       theme_classic() + 
       ggtitle(plot_title)

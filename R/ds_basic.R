@@ -45,12 +45,12 @@
 #' @param site_IDs_to_exclude A vector of integers specifying which sites should
 #'   be excluded.
 #'
-#' @param randomly_shuffled_labels_before_running A boolean specifying whether
-#'   the labels should be shuffled prior to the get_data() function being
-#'   called. This is used when one wants to create a null distribution for
-#'   comparing when decoding results are above chance.
+#' @param randomly_shuffled_labels A Boolean specifying whether the labels
+#'   should be shuffled prior to running an analysis (i.e., prior to the first
+#'   call to the the get_data() method). This is used when one wants to create a
+#'   null distribution for comparing when decoding results are above chance.
 #'
-#' @param create_simultaneously_recorded_populations If the data from all sites
+#' @param create_simultaneous_populations If the data from all sites
 #'   was recorded simultaneously, then setting this variable to 1 will cause the
 #'   get_data() function to return simultaneous populations rather than
 #'   pseudo-populations.
@@ -93,8 +93,8 @@ ds_basic <- function(binned_data,
                      num_resample_sites = NULL,
                      site_IDs_to_use = NULL,
                      site_IDs_to_exclude = NULL,
-                     randomly_shuffled_labels_before_running = FALSE,
-                     create_simultaneously_recorded_populations = 0) {
+                     randomly_shuffled_labels = FALSE,
+                     create_simultaneous_populations = 0) {
 
   if (is.character(binned_data)) {
     binned_file_name <- binned_data
@@ -147,13 +147,13 @@ ds_basic <- function(binned_data,
     num_resample_sites <- length(site_IDs_to_use)
   }
 
-  if (create_simultaneously_recorded_populations > 2 || create_simultaneously_recorded_populations < 0) {
-    stop("create_simultaneously_recorded_populations must be set to 0 or 1.")
+  if (create_simultaneous_populations > 2 || create_simultaneous_populations < 0) {
+    stop("create_simultaneous_populations must be set to 0 or 1.")
   }
 
 
   # check if data is valid to get simultaneously recorded data
-  if (create_simultaneously_recorded_populations == 1 || create_simultaneously_recorded_populations == TRUE) {
+  if (create_simultaneous_populations == 1 || create_simultaneous_populations == TRUE) {
 
     # for simultaneously recorded data there should be the same number of labels for each site
     num_trials_for_each_label_for_each_site <- binned_data %>%
@@ -196,7 +196,7 @@ ds_basic <- function(binned_data,
 
 
     # shuffle the labels if specified (shuffle labels the same way for each site)
-    if (randomly_shuffled_labels_before_running == TRUE) {
+    if (randomly_shuffled_labels == TRUE) {
 
       min_site_ID <- min(binned_data$siteID)
       first_site_data <- dplyr::filter(binned_data, .data$siteID == min_site_ID)
@@ -215,7 +215,7 @@ ds_basic <- function(binned_data,
   } else {
 
     # shuffle the labels if specified
-    if (randomly_shuffled_labels_before_running == TRUE) {
+    if (randomly_shuffled_labels == TRUE) {
       binned_data <- binned_data %>%
         ungroup() %>%
         group_by(.data$siteID) %>%
@@ -236,8 +236,8 @@ ds_basic <- function(binned_data,
     num_resample_sites = num_resample_sites,
     site_IDs_to_use = site_IDs_to_use,
     site_IDs_to_exclude = site_IDs_to_exclude,
-    randomly_shuffled_labels_before_running = randomly_shuffled_labels_before_running,
-    create_simultaneously_recorded_populations = create_simultaneously_recorded_populations
+    randomly_shuffled_labels = randomly_shuffled_labels,
+    create_simultaneous_populations = create_simultaneous_populations
   )
 
 
@@ -256,11 +256,11 @@ get_data.ds_basic <- function(ds_obj) {
   num_cv_splits <- ds_obj$num_cv_splits
   num_trials_used_per_label <- ds_obj$num_cv_splits * ds_obj$num_label_repeats_per_cv_split
 
-  create_simultaneously_recorded_populations <- ds_obj$create_simultaneously_recorded_populations
+  create_simultaneous_populations <- ds_obj$create_simultaneous_populations
   num_resample_sites <- ds_obj$num_resample_sites
   site_IDs_to_use <- ds_obj$site_IDs_to_use
 
-  create_simultaneously_recorded_populations <- ds_obj$create_simultaneously_recorded_populations
+  create_simultaneous_populations <- ds_obj$create_simultaneous_populations
 
   num_label_repeats_per_cv_split <- ds_obj$num_label_repeats_per_cv_split
 
@@ -272,7 +272,7 @@ get_data.ds_basic <- function(ds_obj) {
   binned_data <- dplyr::filter(binned_data, .data$siteID %in% curr_sites_to_use)
 
 
-  if (create_simultaneously_recorded_populations == 1) {
+  if (create_simultaneous_populations == 1) {
 
     # use one site to select the trials to use and then apply to all sites
     curr_label_trials_to_use <- binned_data %>%
@@ -285,7 +285,22 @@ get_data.ds_basic <- function(ds_obj) {
     # apply specific simultaneous trials selected to all sites
     all_k_fold_data <- binned_data %>%
       dplyr::filter(.data$label_trial_combo %in% curr_label_trials_to_use) %>%
-      select(-.data$label_trial_combo)
+      dplyr::mutate(label_trial_siteID_combo = paste0(.data$label_trial_combo, '_', .data$siteID))
+
+    
+    # Arrange rows for each site of all_k_fold_data to be in the random order
+    # specified by curr_label_trials_to_use. This ensures a different random
+    # ordering of data each time get_data() is called.
+    curr_label_trials_to_use_siteID <- paste0(curr_label_trials_to_use, '_', 
+                                              all_k_fold_data$siteID)
+    
+    all_k_fold_data <- all_k_fold_data[match(curr_label_trials_to_use_siteID, 
+                                             all_k_fold_data$label_trial_siteID_combo), ]
+   
+    all_k_fold_data <- all_k_fold_data %>% 
+      dplyr::select(-.data$label_trial_combo, -.data$label_trial_siteID_combo)
+    
+                                              
 
   } else {
 

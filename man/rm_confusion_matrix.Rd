@@ -53,6 +53,7 @@ the_rms <- list(rm_confusion_matrix())
 Other result_metrics: 
 \code{\link{plot.rm_confusion_matrix}()},
 \code{\link{plot.rm_main_results}()},
+\code{\link{plot_main_results}()},
 \code{\link{rm_main_results}()}
 }
 \concept{result_metrics}

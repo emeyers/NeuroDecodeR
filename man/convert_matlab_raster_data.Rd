@@ -7,10 +7,12 @@
 convert_matlab_raster_data(
   matlab_raster_dir_name,
   r_raster_dir_name = NULL,
+  sampling_interval_width = 1,
   start_ind = NULL,
   end_ind = NULL,
   zero_time_bin = NULL,
-  files_contain = ""
+  files_contain = "",
+  add_sequential_trial_numbers = FALSE
 )
 }
 \arguments{
@@ -21,6 +23,16 @@ directory that contains raster data in MATLAB .mat files.}
 directory where the converted raster data in R .rda files will be saved. If
 this is not specified then the saved directory will have the same name as
 the matlab directory with _rda appended to the end of the directory name.}
+
+\item{sampling_interval_width}{A number specifying how successive time bins
+will be labeled The default value of 1 means that points will be labeled as
+successive integers; i.e., time.1_2, time.2_3, etc. If this value was set
+to a larger number, then time points will be specified at the given
+sampling width. From example, if sampling_width is set to 10, then the time
+labels would be time.1_10, time.10_20, etc. This is useful if the data is
+sampled at a particular rate (e.g., if the data is sampled at 500Hz, one
+might want to use sampling_interval_width = 2, so that the times listed on
+the raster column names are in milliseconds).}
 
 \item{start_ind}{A number specifying the start index for the data to be
 converted if one wants to convert the data from a shorter time window than
@@ -38,6 +50,11 @@ as time 0. The default (NULL value) is to use the first bin as time 1.}
 \item{files_contain}{A string specifying that only a subset of the MATLAB
 raster data should be converted based on .mat files that contain this
 string.}
+
+\item{add_sequential_trial_numbers}{A Boolean specifying one should add a
+variable to the data called 'trial_number' that has sequential trial. These
+trials numbers are needed for data that was recorded simultaneously so that
+trials can be aligned across different sites.}
 }
 \description{
 If one already has raster data created in MATLAB (.mat files), this function
@@ -51,7 +68,7 @@ matlab_raster_dir_name <- file.path(
 )
 
 # create temporary directory to hold converted data
-r_raster_dir_name <- file.path("test_convert_matlab_raster_data", "")
+r_raster_dir_name <- tempdir()
 r_raster_dir_name <- convert_matlab_raster_data(matlab_raster_dir_name,
   r_raster_dir_name,
   files_contain = "bp1001spk"

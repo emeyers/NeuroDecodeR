@@ -6,8 +6,7 @@
 \usage{
 rm_main_results(
   ndr_container_or_object = NULL,
-  aggregate_decision_values = TRUE,
-  aggregate_normalized_rank = TRUE
+  include_norm_rank_results = TRUE
 )
 }
 \arguments{
@@ -22,26 +21,16 @@ is set to another ndr object, then both that ndr object as well as a new
 rm_main_results object will be added to a new container and the container
 will be returned.}
 
-\item{aggregate_decision_values}{A string or boolean specifying how the
-decision values should be aggregated. If this is a boolean set to TRUE or
-to the string "full", then the decision values for the correct category
-will be calculated. If this is a boolean set to FALSE or to the string
-"none", then the decision values will not be calculated. If this is a
-string set to either "diag" or "only same train test time" then the
-decision values will only be calculated when for results when training and
-testing at the same time. Not returning the full results can speed up the
-runtime of the code and will use less memory so this can be useful for
-large data sets.}
-
-\item{aggregate_normalized_rank}{A string or boolean specifying how the
-normalized rank results should be aggregated. If this is a boolean
-set to TRUE or to the string "full", then the decision values for the correct
-category will be calculated. If this is a boolean set to FALSE or to the
-string "none", then the decision values will not be calculated. If this is a
-string set to either "diag" or "only same train test time" then the decision
+\item{include_norm_rank_results}{An argument specifying if the normalized
+rank and decision value results should be saved. If this is a Boolean set
+to TRUE, then the normalized rank and decision values for the correct
+category will be calculated. If this is a Boolean set to FALSE then the
+normalized rank and decision values will not be calculated. If this is a
+string set to "only_same_train_test_time", then the normalized rank and decision
 values will only be calculated when for results when training and testing
-at the same time. Not returning the full results can greatly speed up the runtime
-of the code and will use less memory so this can be useful for large data sets.}
+at the same time. Not returning the full results can speed up the run-time
+of the code and will use less memory so this can be useful for large data
+sets.}
 }
 \description{
 This result metric calculate the zero-one loss, the normalized rank, and the
@@ -65,6 +54,7 @@ the_rms <- list(rm_main_results())
 Other result_metrics: 
 \code{\link{plot.rm_confusion_matrix}()},
 \code{\link{plot.rm_main_results}()},
+\code{\link{plot_main_results}()},
 \code{\link{rm_confusion_matrix}()}
 }
 \concept{result_metrics}

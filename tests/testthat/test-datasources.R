@@ -143,7 +143,7 @@ test_that("basic_ds: simultaneously recorded data is returned correctly", {
   
   # all whole numbers on each row should be the same this data when gotten simultaneously 
   ds <- ds_basic("fake_simultaneous_binned_data.Rda", "stim_names", 10,
-                 create_simultaneously_recorded_populations = TRUE)
+                 create_simultaneous_populations = TRUE)
   
   the_data <- get_data(ds)
   
@@ -168,7 +168,7 @@ test_that("basic_ds: simultaneously recorded data is returned correctly", {
   
   # all whole numbers on each row should NOT be the same this data when data is NOT gotten simultaneously 
   ds <- ds_basic("fake_simultaneous_binned_data.Rda", "stim_names", 10,
-                 create_simultaneously_recorded_populations = FALSE)
+                 create_simultaneous_populations = FALSE)
   the_data <- get_data(ds)
   
   the_site_data <- the_data %>%
@@ -184,7 +184,7 @@ test_that("basic_ds: simultaneously recorded data is returned correctly", {
     dplyr::select(-trial_number)
   
   expect_warning(ds_basic(binned_data, "stim_names", 10,
-                          create_simultaneously_recorded_populations = TRUE))
+                          create_simultaneous_populations = TRUE))
   
 })
 
@@ -226,7 +226,7 @@ test_that("basic_ds: shuffling labels works", {
   
   ds1 <- ds_basic("fake_simultaneous_binned_data.Rda", "stim_names", num_CV,
                  num_label_repeats_per_cv_split = num_reps,
-                      randomly_shuffled_labels_before_running = TRUE)
+                      randomly_shuffled_labels = TRUE)
   
   shuffled_data1 <- get_data(ds1) %>% 
     select(site_0001, train_labels, test_labels) %>%
@@ -234,7 +234,7 @@ test_that("basic_ds: shuffling labels works", {
   
   ds2 <- ds_basic("fake_simultaneous_binned_data.Rda", "stim_names", num_CV,
                   num_label_repeats_per_cv_split = num_reps,
-                  randomly_shuffled_labels_before_running = TRUE)
+                  randomly_shuffled_labels = TRUE)
   
   shuffled_data2 <- get_data(ds2) %>% 
     select(site_0001, train_labels, test_labels) %>%
@@ -259,8 +259,8 @@ test_that("basic_ds: shuffling labels works", {
   
   ds_simul1 <- ds_basic("fake_simultaneous_binned_data.Rda", "stim_names", num_CV,
                   num_label_repeats_per_cv_split = num_reps,
-                  randomly_shuffled_labels_before_running = TRUE,
-                  create_simultaneously_recorded_populations = TRUE)
+                  randomly_shuffled_labels = TRUE,
+                  create_simultaneous_populations = TRUE)
   
   simul_shuffled_data1 <- get_data(ds_simul1) %>% 
     mutate(site_0001 = round(site_0001), site_0002 = round(site_0002)) %>%
@@ -278,8 +278,8 @@ test_that("basic_ds: shuffling labels works", {
   
   ds_simul2 <- ds_basic("fake_simultaneous_binned_data.Rda", "stim_names", num_CV,
                         num_label_repeats_per_cv_split = num_reps,
-                        randomly_shuffled_labels_before_running = TRUE,
-                        create_simultaneously_recorded_populations = TRUE)
+                        randomly_shuffled_labels = TRUE,
+                        create_simultaneous_populations = TRUE)
   
   simul_shuffled_data2 <- get_data(ds_simul2) %>% 
     mutate(site_0001 = round(site_0001), site_0002 = round(site_0002)) %>%
@@ -291,6 +291,39 @@ test_that("basic_ds: shuffling labels works", {
   
   
 })
+
+
+
+
+
+test_that("basic_ds: different cross-validation arrangements of data are returned each time get_data() is called", {
+  
+  
+  num_CV <- 5
+  num_reps <- 2
+  
+  ds_pseudo <- ds_basic("fake_simultaneous_binned_data.Rda", "stim_names", num_CV,
+                  num_label_repeats_per_cv_split = num_reps)
+  
+  data1 <- get_data(ds_pseudo)
+  data2 <- get_data(ds_pseudo)
+  
+  expect_false(identical(data1, data2))
+  
+  
+  ds_simul <- ds_basic("fake_simultaneous_binned_data.Rda", "stim_names", num_CV,
+                  num_label_repeats_per_cv_split = num_reps, 
+                  create_simultaneous_populations = TRUE)
+  
+  
+  data1 <- get_data(ds_simul)
+  data2 <- get_data(ds_simul)
+  
+  expect_false(identical(data1, data2))
+  
+  
+})
+
 
 
 
@@ -361,14 +394,14 @@ test_that("generalization_ds classification accuracy seem reasonable", {
   
   cv_data <- get_data(ds)
   
-  training_set <- dplyr::filter(cv_data, time_bin == "time.200_349", CV_1 == "train") %>% 
+  training_set <- dplyr::filter(cv_data, time_bin == "time.200_350", CV_1 == "train") %>% 
     select(starts_with("site"), train_labels = train_labels)
   
-  test_set <- dplyr::filter(cv_data, time_bin %in% c("time.-350_-201", "time.200_349"), CV_1 == "test") %>% 
+  test_set <- dplyr::filter(cv_data, time_bin %in% c("time.-350_-200", "time.200_350"), CV_1 == "test") %>% 
     select(starts_with("site"), test_labels = test_labels, time_bin)
   
-  levels(test_set$time_bin)[levels(test_set$time_bin)=="time.-350_-201"] <- "baseline"
-  levels(test_set$time_bin)[levels(test_set$time_bin)=="time.200_349"] <- "stimulus"
+  levels(test_set$time_bin)[levels(test_set$time_bin)=="time.-350_-200"] <- "baseline"
+  levels(test_set$time_bin)[levels(test_set$time_bin)=="time.200_350"] <- "stimulus"
   
   cl <- cl_max_correlation()
   

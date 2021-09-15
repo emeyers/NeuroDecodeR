@@ -1,6 +1,6 @@
 Package: NeuroDecodeR
 Title: Neural Population Decoding in R
-Version: 0.0.0.9003
+Version: 0.0.0.9005
 Authors@R: c(
   person("Ethan", "Meyers", email = "ethan.meyers@gmail.com", 
   role = c("aut", "cre"))
@@ -30,6 +30,7 @@ Imports:
     magrittr,
     purrr,
     R.matlab,
+    scales,
     stats,
     stringr,
     tibble,

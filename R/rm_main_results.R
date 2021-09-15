@@ -21,26 +21,16 @@
 #'   rm_main_results object will be added to a new container and the container
 #'   will be returned.
 #'
-#' @param aggregate_decision_values A string or boolean specifying how the
-#'   decision values should be aggregated. If this is a boolean set to TRUE or
-#'   to the string "full", then the decision values for the correct category
-#'   will be calculated. If this is a boolean set to FALSE or to the string
-#'   "none", then the decision values will not be calculated. If this is a
-#'   string set to either "diag" or "only same train test time" then the
-#'   decision values will only be calculated when for results when training and
-#'   testing at the same time. Not returning the full results can speed up the
-#'   runtime of the code and will use less memory so this can be useful for
-#'   large data sets.
-#'
-#' @param aggregate_normalized_rank A string or boolean specifying how the
-#'  normalized rank results should be aggregated. If this is a boolean
-#'  set to TRUE or to the string "full", then the decision values for the correct
-#'  category will be calculated. If this is a boolean set to FALSE or to the
-#'  string "none", then the decision values will not be calculated. If this is a
-#'  string set to either "diag" or "only same train test time" then the decision
-#'  values will only be calculated when for results when training and testing
-#'  at the same time. Not returning the full results can greatly speed up the runtime
-#'  of the code and will use less memory so this can be useful for large data sets.
+#' @param include_norm_rank_results An argument specifying if the normalized
+#'   rank and decision value results should be saved. If this is a Boolean set
+#'   to TRUE, then the normalized rank and decision values for the correct
+#'   category will be calculated. If this is a Boolean set to FALSE then the
+#'   normalized rank and decision values will not be calculated. If this is a
+#'   string set to "only_same_train_test_time", then the normalized rank and decision
+#'   values will only be calculated when for results when training and testing
+#'   at the same time. Not returning the full results can speed up the run-time
+#'   of the code and will use less memory so this can be useful for large data
+#'   sets.
 #'
 #'
 #' @examples
@@ -55,12 +45,9 @@
 #'
 #' @export
 rm_main_results <- function(ndr_container_or_object = NULL, 
-                            aggregate_decision_values = TRUE, 
-                            aggregate_normalized_rank = TRUE) {
+                            include_norm_rank_results = TRUE) {
   
-  options <- list(
-    aggregate_decision_values = aggregate_decision_values,
-    aggregate_normalized_rank = aggregate_normalized_rank)
+  options <- list(include_norm_rank_results = include_norm_rank_results)
 
   rm_obj <- new_rm_main_results(options = options)
   
@@ -90,12 +77,11 @@ new_rm_main_results <- function(the_data = data.frame(), state = "initial", opti
 
 
 
-
 # The aggregate_CV_split_results method needed to fulfill the results metric interface.
 aggregate_CV_split_results.rm_main_results <- function(rm_obj, prediction_results) {
 
 
-  # return a warning if the state is not intial
+  # return a warning if the state is not initial
   if (attr(rm_obj, "state") != "initial") {
     
     warning(paste0(
@@ -107,8 +93,7 @@ aggregate_CV_split_results.rm_main_results <- function(rm_obj, prediction_result
 
 
   # get the options for how the normalized rank and decision values should be aggregated
-  aggregate_decision_values <- attr(rm_obj, "options")$aggregate_decision_values
-  aggregate_normalized_rank <- attr(rm_obj, "options")$aggregate_normalized_rank
+  include_norm_rank_results <- attr(rm_obj, "options")$include_norm_rank_results
 
 
   # get the zero-one loss loss results
@@ -117,78 +102,110 @@ aggregate_CV_split_results.rm_main_results <- function(rm_obj, prediction_result
     dplyr::group_by(.data$CV, .data$train_time, .data$test_time) %>%
     summarize(zero_one_loss = mean(.data$correct, na.rm = TRUE))
 
-
-  # get the normalized rank decision values
-  if (aggregate_normalized_rank != FALSE && aggregate_normalized_rank != "none") {
-
-    # data slightly augmented version of that has actual_labels with decision_vals. appended
-    prediction_results_aug <- get_augmented_prediction_results(prediction_results, aggregate_normalized_rank)
-    decision_vals_aug <- select(prediction_results_aug, starts_with("decision"))
-    decision_vals_rest <- select(prediction_results_aug, -starts_with("decision"))
-
-    # get the normalized rank decision values
-    get_rank_one_row <- function(decision_vals_aug_row) {
-      actual_label <- decision_vals_aug_row[1]
-      decision_vals_row <- decision_vals_aug_row[2:length(decision_vals_aug_row)]
-      the_names <- names(decision_vals_row)
-      the_order <- order(as.numeric(decision_vals_row), decreasing = TRUE)
-      which(the_names[the_order] == actual_label)
+  
+  # calculate the chance level for the zero one loss results
+  zero_one_loss_chance_level <- 1/length(unique(prediction_results$actual_labels))
+  
+  
+  # newly added code to speed things up
+  if (include_norm_rank_results != FALSE) {
+      
+    
+    # check for invalid include_norm_rank_results argument values
+    if (!((include_norm_rank_results == TRUE) || (include_norm_rank_results == 'only_same_train_test_time'))) {
+    
+      stop(paste0("'include_norm_rank_results' argument was set to ", include_norm_rank_results, ". ", 
+                  "'include_norm_rank_results' must be set to one of the following: TRUE, FALSE, or 'only_same_train_test_time'"))
     }
 
-
-    num_classes <- prediction_results %>%
-      select(starts_with("decision_vals")) %>%
-      ncol()
-
-    normalized_rank_results <- 1 - ((apply(decision_vals_aug, 1, get_rank_one_row) - 1) / (num_classes - 1))
-
-    summarized_normalized_rank_results <- decision_vals_rest %>%
-      mutate(normalized_rank = normalized_rank_results) %>%
-      dplyr::group_by(.data$CV, .data$train_time, .data$test_time) %>%
-      summarize(normalized_rank = mean(.data$normalized_rank, na.rm = TRUE))
-
-    the_results <- left_join(the_results, summarized_normalized_rank_results,
-      by = c("CV", "train_time", "test_time"))
-    
-  }
-
-
-
-
-
-  # get the decision values for the correct label
-  if (aggregate_decision_values != FALSE && aggregate_decision_values != "none") {
-    
-    prediction_results_aug <- get_augmented_prediction_results(prediction_results, aggregate_decision_values)
-    decision_vals_aug <- select(prediction_results_aug, starts_with("decision"))
-    decision_vals_rest <- select(prediction_results_aug, -starts_with("decision"))
-
-    get_decision_vals_one_row <- function(decision_vals_aug_row) {
-      decision_vals_aug_row[which(as.character(as.matrix(decision_vals_aug_row[1])) == names(decision_vals_aug_row[2:length(decision_vals_aug_row)])) + 1]
+  
+    # if "only_same_train_test_time" option is selected only use data for training and testing at the same time
+    if (include_norm_rank_results == "only_same_train_test_time") {
+      prediction_results <- prediction_results %>%
+        dplyr::filter(.data$train_time == .data$test_time)
     }
+    
+    
+    actual_labels <- paste0("decision_vals.", prediction_results$actual_labels)  
+    data_matrix <- dplyr::select(prediction_results, starts_with('decision_vals'))
+    col_names <- names(data_matrix)
+    data_matrix <- as.matrix(data_matrix)
+    
+    
+    # Why are there NAs in the decision values? 
+    # Perhaps because all values were the same when doing the correlation? 
+    # Could use the below code to remove them, but better to remove them at the classification stage.
+    # data_matrix[is.na(data_matrix)] <- 0
+    
 
-    correct_class_decision_val <- as.numeric(apply(decision_vals_aug, 1, get_decision_vals_one_row))
-
-    summarized_correct_decision_val_results <- decision_vals_rest %>%
+    # get the indices of the column that each actual label corresponds to
+    get_actual_label_ind <- function(actual_label) {
+      which(actual_label == col_names)
+    }
+    actual_label_inds <- sapply(actual_labels, get_actual_label_ind)
+    
+    
+    correct_class_decision_val <- data_matrix[matrix(c(seq_along(actual_label_inds), actual_label_inds), 
+                                                     nrow = length(actual_label_inds))]
+    
+    
+    
+    # add the decision values to the results
+    summarized_correct_decision_val_results <- prediction_results %>%
+      select(-starts_with("decision")) %>%
       mutate(decision_vals = correct_class_decision_val) %>%
       dplyr::group_by(.data$CV, .data$train_time, .data$test_time) %>%
       summarize(decision_vals = mean(.data$decision_vals, na.rm = TRUE))
+      
+      the_results <- left_join(the_results, summarized_correct_decision_val_results,
+                               by = c("CV", "train_time", "test_time"))
+      
 
-    the_results <- left_join(the_results, summarized_correct_decision_val_results,
-      by = c("CV", "train_time", "test_time"))
+
+
+    # get the normalized rank results...
+      diff_decision_vals <- sweep(data_matrix, 1, correct_class_decision_val)
+      
+      
+      # not dealing with tied ranks which perhaps I should
+      the_ranks <- rowSums(diff_decision_vals < 0)
+      normalized_rank_results <- the_ranks/(dim(data_matrix)[2] - 1)
+      
+      
+      summarized_normalized_rank_results <- prediction_results %>%
+        select(-starts_with("decision")) %>%
+        mutate(normalized_rank = normalized_rank_results) %>%
+        dplyr::group_by(.data$CV, .data$train_time, .data$test_time) %>%
+        summarize(normalized_rank = mean(.data$normalized_rank, na.rm = TRUE))
+      
+      
+      the_results <- left_join(the_results, summarized_normalized_rank_results,
+                               by = c("CV", "train_time", "test_time"))
+      
+
+      # clean up memory
+      rm(data_matrix)
+      rm(diff_decision_vals)
+      gc()
     
-  }
-
+  }  # end for decision values and normalized rank results
+  
+  
 
   options <- attr(rm_obj, "options")
-  options$zero_one_loss_chance_level <- 1/length(unique(prediction_results$actual_labels))
+  options$zero_one_loss_chance_level <- zero_one_loss_chance_level 
   
   new_rm_main_results(
     the_results,
     "results combined over one cross-validation split",
     options)
   
+
 }
+  
+  
+
+
 
 
 
@@ -246,10 +263,10 @@ aggregate_resample_run_results.rm_main_results <- function(resample_run_results)
 #'
 #' @param ... This is needed to conform to the plot generic interface.
 #'
-#' @param result_type A string specifying the types of results to plot. Options
+#' @param results_to_show A string specifying the types of results to plot. Options
 #'   are: 'zero_one_loss', 'normalized_rank', 'decision_values', or 'all'.
 #'
-#' @param plot_type A string specifying the type of results to plot. Options are
+#' @param type A string specifying the type of results to plot. Options are
 #'   'TCD' to plot a temporal cross decoding matrix or 'line' to create a line
 #'   plot of the decoding results as a function of time
 #'
@@ -258,102 +275,377 @@ aggregate_resample_run_results.rm_main_results <- function(resample_run_results)
 #'
 #'
 #' @export
-plot.rm_main_results <- function(x, ..., result_type = "zero_one_loss", plot_type = "TCD") {
-  
-  main_results <- x
+plot.rm_main_results <- function(x, ..., results_to_show = "zero_one_loss", type = "TCD") {
 
+  # call the helper function to do all the hard work
+  helper_plot_rm_main_results(x, results_to_show, type)
+
+}
+  
+ 
+
+
+# Get the parameters for the rm_main_results object
+#' @export
+get_parameters.rm_main_results <- function(ndr_obj) {
+
+  # get the options for now the normalized rank and decision values should be aggregated
+  include_norm_rank_results <- attr(ndr_obj, "options")$include_norm_rank_results
+
+  data.frame(rm_main_results.include_norm_rank_results = include_norm_rank_results)
+  
+}
+
+
+
+
+
+
+
+
+#' A plot function to plot multiple rm_main_results 
+#'
+#' This function can create a line plot of the results or temporal
+#' cross-decoding results for the the zero-one loss, normalized rank and/or
+#' decision values after the decoding analysis has been run (and all results
+#' have been aggregated).
+#'
+#' @param result_dir_name A string specifying the directory name that contains
+#'  files with DECODING_RESULTS that have rm_main_results as one of the result
+#'  metrics. 
+#'
+#' @param results_to_plot This can be set to a vector of strings specifying file names for
+#'   the results to plot, or a vector of numbers that contain the rows in the
+#'   results_manifest file of the results that should be compared. The
+#'   results_manifest file should be created from saving results using the
+#'   log_save_results() function. Finally, if this is set to a single string that is a
+#'   regular expression, all results in the results_manifest file result_name variable
+#'   that match the regular expression will be plotted.
+#'
+#' @param results_to_show A string specifying the types of results to plot. Options
+#'   are: 'zero_one_loss', 'normalized_rank', 'decision_values', or 'all'.
+#'
+#' @param type A string specifying the type of results to plot. Options are
+#'   'TCD' to plot a temporal cross decoding matrix or 'line' to create a line
+#'   plot of the decoding results as a function of time.
+#'   
+#' @param result_names A vector of strings specifying what the labels on the
+#'   plots should say for each result. If this is NULL, the result names will be
+#'   the names from the manifest file's result_name column, or if these are set
+#'   to "No result name set" then the analysisID will be the label. If this is
+#'   set to a single string that is a regular expression (and if result_name
+#'   column is not set to "No result name set), the regular expression will be
+#'   applied to the result_name column of the manifest file and the returned
+#'   value will be the result name in the plot.
+#'
+#' @family result_metrics
+#'
+#'
+#'
+#' @export
+plot_main_results <- function(result_dir_name, 
+                              results_to_plot, 
+                              results_to_show = "zero_one_loss", 
+                              type = "line",
+                              result_names = NULL) {
+  
+  
+  
+  # adding these so that the code passes R CMD checks
+  DECODING_RESULTS <- NULL
+  manifest_df <- NULL
+
+  
+  # a helper function to check if the manifest file exists and give an error message if it should
+  check_manifest_exists <- function(argument_name) {
+    
+    if(!("results_manifest.rda" %in% list.files(result_dir_name))) {
+      stop(paste("A manifest file does not exist in the result_dir_name name specified. 
+        If the results_to_plot argument is set to", argument_name, "then the results to be plotted are loaded
+             based from a manifest file that needs to be in the result_dir_name directory."))
+    }
+  }
+    
+
+
+  
+  
+  if (is.character(results_to_plot)) {
+    
+    
+    # a single character string is treated like a regular expression
+    # all manifest_file
+    if (length(results_to_plot) == 1) {
+      
+      check_manifest_exists("a single string,")
+
+      # use the log_load_results_from_result_name to get a list of DECODING_RESULTS
+      all_results_list <- log_load_results_from_result_name(results_to_plot, result_dir_name)
+      
+      
+    } else {
+      
+      # a vector of character strings is treated like file names that should be plotted
+      
+      all_results_list <- list()
+      for (iFile in seq_along(results_to_plot)) {
+        curr_file_name <- file.path(result_dir_name, results_to_plot[iFile])
+        load(curr_file_name)  # could check if file name ends in ".rda" and if not could add it...
+        all_results_list[[iFile]] <- DECODING_RESULTS
+        rm(DECODING_RESULTS)
+      }
+
+    }
+    
+    
+    
+   } else if (is.numeric(results_to_plot)) {
+    
+     # if results_to_plot is a numeric vector, treat it as rows in the manifest file to use
+     
+     check_manifest_exists("a numeric vector,")
+     
+    load(file.path(result_dir_name, "results_manifest.rda"))
+  
+    all_results_list <- list()
+    for (iFile in seq_along(results_to_plot)) {
+      load(file.path(result_dir_name, paste0(manifest_df$analysis_ID[results_to_plot[iFile]], ".rda")))
+      all_results_list[[iFile]] <- DECODING_RESULTS
+      rm(DECODING_RESULTS)
+    }
+    
+    
+      
+  }
+  
+  
+  
+  # helper function to try to load an analysis name if it exists in a manifest file
+  #  otherwise it returns the analysisID
+  get_result_name <- function(result_dir_name, analysis_ID) {
+    
+    if(!("results_manifest.rda" %in% list.files(result_dir_name))) {
+      return(analysis_ID)
+    } 
+    
+    load(file.path(result_dir_name, "results_manifest.rda"))
+    
+    result_name <- manifest_df %>% 
+      dplyr::filter(.data$analysis_ID == {{analysis_ID}}) %>%
+      pull(result_name)
+    
+    if ((result_name == "No result name set") || (length(result_name) == 0))  {
+      return(analysis_ID)
+    }
+    
+    return(result_name)
+      
+  }
+  
+  
+
+  
+  # bind all the decoding results in the list together into a single data frame
+  all_main_results <- data.frame()
+  for (iResult in seq_along(all_results_list)) {
+    
+    curr_decoding_results <- all_results_list[[iResult]]
+    
+    # check that rm_main_results exist in the current DECODING_RESULTS file
+    if (!("rm_main_results" %in% names(curr_decoding_results))) {
+      stop(paste("The DECODING_RESULTS corresponding to analysis",  
+                 all_results_list[[iResult]]$cross_validation_paramaters$analysis_ID,
+                 "does not contain rm_main_results"))
+    }
+    
+    
+    curr_rm_main_results <- curr_decoding_results$rm_main_results
+    
+    # get the appropriate name for the current result add the result_name variable to the current results
+  
+    if (is.null(result_names)) {
+      
+      curr_result_name <- get_result_name(result_dir_name, curr_decoding_results$cross_validation_paramaters$analysis_ID)
+    
+    } else if (is.character(result_names)) {
+      
+      if (length(result_names) == length(all_results_list)) {
+        
+        curr_result_name <- result_names[iResult]  # all the result_names given as a vector of strings
+        
+      } else if (length(result_names) == 1) {  # all the result_names given as a regular expression
+       
+        
+        curr_result_name <- get_result_name(result_dir_name, curr_decoding_results$cross_validation_paramaters$analysis_ID)
+        
+        curr_result_name <- regmatches(curr_result_name, regexpr(result_names, curr_result_name))  # I see the value in the stringr library :/
+        
+        
+      } else {
+        
+        stop("The result_names argument must be set to NULL, a vector of strings the same length as the 
+              number of results to be plotted or to a regular expression.")
+      }
+      
+    }
+     
+
+    curr_rm_main_results$result_name <- curr_result_name
+
+    all_main_results <- rbind(all_main_results, curr_rm_main_results)
+    
+  }  # end the for loop over results
+  
+  
+
+  # plot the results using the helper_plot_rm_main_results() helper function
+  helper_plot_rm_main_results(all_main_results, results_to_show, type)
+  
+  
+}
+
+
+
+
+
+
+
+
+
+# A private helper function that does all the hard work of plotting the results
+helper_plot_rm_main_results <- function(main_results, results_to_show = "zero_one_loss", type = "TCD") {  
+  
+  
+  # sanity check that only trying to plot final aggregated results
   if (attributes(main_results)$state != "final results") {
     stop("The results can only be plotted *after* the decoding analysis has been run")
+  }  
+  
+  
+  # check arguments are valid
+  if (!(type == "TCD" || type == "line")) {
+    stop("type must be set to 'TCD' or 'line'. Using the default value of 'TCD'")
   }
-
-
-  # convert the zero-one loss results to percentages
-  main_results <- dplyr::mutate(main_results, zero_one_loss = .data$zero_one_loss * 100)
-
-
-  # parse which type of results should be plotted
-  if (result_type == "all") {
-    
-    # do nothing
-    
-  } else if (result_type == "zero_one_loss") {
-    
-    main_results <- dplyr::select(main_results, .data$train_time, .data$test_time, .data$zero_one_loss)
-    
-  } else if (result_type == "normalized_rank") {
-    
-    if (!(result_type %in% names(main_results))) {
-      stop(paste("Can't plot", result_type, "results because this type of result was not saved."))
-    }
-
-    main_results <- dplyr::select(main_results, .data$train_time, .data$test_time, .data$normalized_rank)
-    
-  } else if (result_type == "decision_vals") {
-    
-    if (!(result_type %in% names(main_results))) {
-      stop(paste("Can't plot", result_type, "results because this type of result was not saved."))
-    }
-
-    main_results <- dplyr::select(main_results, .data$train_time, .data$test_time, .data$decision_vals)
-    
-  } else {
-    
-    warning(paste0(
-      "result_type must be set to either 'all', 'zero_one_loss', 'normalized_rank', or 'decision_vals'.",
+  
+  
+  valid_result_names <- c('all', 'zero_one_loss', 'normalized_rank', 'decision_vals')
+  if (!(sum(results_to_show %in% valid_result_names) == length(results_to_show))) {
+    stop(paste0(
+      "results_to_show must be set to either 'all', 'zero_one_loss', 'normalized_rank', or 'decision_vals'.",
       "Using the default value of all"))
   }
-
-
-
-  if (!(plot_type == "TCD" || plot_type == "line")) {
-    warning("plot_type must be set to 'TCD' or 'line'. Using the default value of 'TCD'")
+  
+  
+  # expand to result names if "all" was passed as an argument
+  if (results_to_show[1] == "all") {
+    results_to_show <- c("zero_one_loss",  "normalized_rank", "decision_vals")
   }
-
-
-
+  
+  # normalized rank and decision values are not always saved so check that they exist if plotted them  
+  if (!(sum(results_to_show %in% names(main_results)) == length(results_to_show))) {
+    stop(paste("Can't plot", results_to_show, "results because this type of result was not saved."))
+  }
+  
+  
+  # get the chance level for the zero one loss results
+  zero_one_loss_chance <- 100 * attributes(main_results)$options$zero_one_loss_chance_level
+  
+  # convert the zero-one loss results to percentages
+  main_results <- dplyr::mutate(main_results, zero_one_loss = .data$zero_one_loss * 100)
+  
+  
   main_results$train_time <- round(get_center_bin_time(main_results$train_time))
   main_results$test_time <- round(get_center_bin_time(main_results$test_time))
-
+  
   # an alternative way to display the labels (not used)
   # main_results$train_time <- get_time_range_strings(main_results$train_time)
   # main_results$test_time <- get_time_range_strings(main_results$test_time)
-
+  
+  
+  # remove result types that are not being used
+  result_types_to_remove <- setdiff(c("zero_one_loss",  "normalized_rank", "decision_vals"), results_to_show)
+  main_results <- dplyr::select(main_results, -{{result_types_to_remove}})
+  
   
   main_results <- main_results %>%
-    tidyr::gather("result_type", "accuracy", -.data$train_time, -.data$test_time) %>%
-    dplyr::mutate(
-      result_type = replace(result_type, result_type == "zero_one_loss", "Zero-one loss"),
-      result_type = replace(result_type, result_type == "normalized_rank", "Normalized rank"),
-      result_type = replace(result_type, result_type == "decision_vals", "Decision values"))
-
+    tidyr::pivot_longer(all_of(results_to_show), 
+                        names_to = "results_to_show",
+                        values_to = "accuracy") 
   
-  # data frame for plotting a horizontal line at chance decoding accuracy levels
-  #  (chance level from the input x which is the rm_main_results object passed to plot)
-  zero_one_loss_chance <- 100 * attributes(x)$options$zero_one_loss_chance_level
-  chance_accuracy_df <- data.frame(
-    result_type = c("Zero-one loss", "Normalized rank", "Decision values"),
+  
+  # rename results for better printing on plots and order according to the order given
+  plot_result_names <- c("Zero-one loss", "Normalized rank", "Decision values")
+  names(plot_result_names) <- c("zero_one_loss", "normalized_rank", "decision_vals")
+  main_results$results_to_show <- factor(main_results$results_to_show, 
+                                         levels = results_to_show, 
+                                         labels = plot_result_names[results_to_show],
+                                         ordered = TRUE)
+  
+  
+  # create data frame for chance decoding levels
+  chance_accuracy_df <- data.frame( 
+    results_to_show = c("zero_one_loss", "normalized_rank", "decision_vals"), 
     chance_level = c(zero_one_loss_chance, .5, NA)) %>%
-    dplyr::filter(.data$result_type %in% unique(main_results$result_type))
+    dplyr::mutate(results_to_show = factor(.data$results_to_show, 
+                                           levels = results_to_show, 
+                                           labels = plot_result_names[results_to_show],
+                                           ordered = TRUE)) %>%
+    dplyr::filter(.data$results_to_show %in% unique(main_results$results_to_show)) 
+  
+  
+  
+  # actually plot the data...
   
   
   # if only a single time, just plot a bar for the decoding accuracy
   if (length(unique(main_results$train_time)) == 1) {
     
-    main_results %>%
-      ggplot(aes(.data$test_time, .data$accuracy)) +
-      geom_col() +
-      facet_wrap(~result_type, scales = "free") +
+    # the "result_name" variable indicates there are multiple results 
+    # so plot them in different colors...
+    if ("result_name" %in% names(main_results)) {
+      g <- main_results %>%
+        ggplot(aes(.data$result_name, .data$accuracy, fill = .data$result_name)) 
+      
+    } else {
+      g <- main_results %>%
+        ggplot(aes(.data$test_time, .data$accuracy))
+    }
+    
+    
+    g <- g  +
+      geom_col() + 
+      facet_wrap(~results_to_show, scales = "free") +
       xlab("Time") +
       ylab("Accuracy")
     
+    g
+    
+    
   } else if ((sum(main_results$train_time == main_results$test_time) == dim(main_results)[1]) ||
-    plot_type == "line") {
-
+             type == "line") {
+    
     # if only trained and tested at the same time, create line plot
-    main_results %>%
-      dplyr::filter(.data$train_time == .data$test_time) %>%
-      ggplot(aes(.data$test_time, .data$accuracy)) +
-      facet_wrap(~result_type, scales = "free") +
+    
+    
+    # the "result_name" variable indicates there are multiple results to compare
+    # so plot them in different colors...
+    if ("result_name" %in% names(main_results)) {
+      
+      g <- main_results %>%
+        dplyr::filter(.data$train_time == .data$test_time) %>%
+        ggplot(aes(.data$test_time, .data$accuracy, color = .data$result_name)) 
+      
+    } else {   # only a single result being plotted
+      
+      g <- main_results %>%
+        dplyr::filter(.data$train_time == .data$test_time) %>%
+        ggplot(aes(.data$test_time, .data$accuracy)) 
+    }
+    
+    
+    
+    g <- g +
+      facet_wrap(~results_to_show, scales = "free") +
       xlab("Time") +
       ylab("Accuracy") +
       geom_hline(data = chance_accuracy_df, 
@@ -365,18 +657,19 @@ plot.rm_main_results <- function(x, ..., result_type = "zero_one_loss", plot_typ
         panel.grid.major = element_blank(),
         panel.grid.minor = element_blank(),
         strip.background = element_rect(colour = "white", fill = "white"))
-      
+    
+    g
+    
     
   } else {
-
+    
     # if trained and testing at all times, create a TCD plot
-
-    if (result_type != "all") {
+    
+    if (length(results_to_show) == 1) {
       
       g <- main_results %>%
         ggplot(aes(.data$test_time, .data$train_time, fill = .data$accuracy)) +
         geom_tile() +
-        facet_wrap(~result_type) +
         scale_fill_continuous(type = "viridis", name = "Prediction \n accuracy") +
         ylab("Train time") +
         xlab("Test time") +
@@ -384,21 +677,49 @@ plot.rm_main_results <- function(x, ..., result_type = "zero_one_loss", plot_typ
           panel.grid.major = element_blank(),
           panel.grid.minor = element_blank(),
           strip.background = element_rect(colour = "white", fill = "white"))
-
+      
+      
+      # the "result_name" variable exists there are multiple results to compare
+      # so facet on these different results
+      if ("result_name" %in% names(main_results)) {
+        
+        g  <- g + facet_wrap(~result_name)
+        
+      } else {  # otherwise if only a single result, facet on the results_to_show 
+        # that so the result_to_show is subtitle
+        
+        g  <- g + facet_wrap(~results_to_show)
+        
+      }
+      
+      
       g
       
-    } else if (result_type == "all") {
-
+      
+      
+    } else if (length(results_to_show) > 1)  {   # comparing multiple decoding result types with TCD plots
+      
+      
+      # creating TCD plots of multiple result types comparing multiple results is not supported
+      #  send a message saying this is not supported
+      if ("result_name" %in% names(main_results)) { 
+        
+        stop(paste("Creating TCD plots comparing multiple results for multiple measures of decoding accuracy is not supported.",
+                   "Please set the 'results_to_show' argument to a single string to plot only one result type;", 
+                   "e.g., set results_to_show = 'zero_one_loss'."))
+      }
+      
+      
       # plotting multiple TCD subplots on the same figure
-
-      all_TCD_plots <- lapply(unique(main_results$result_type), function(curr_result_name) {
-        curr_results <- filter(main_results, .data$result_type == curr_result_name)
-
+      
+      all_TCD_plots <- lapply(unique(main_results$results_to_show), function(curr_result_name) {
+        curr_results <- filter(main_results, .data$results_to_show == curr_result_name)
+        
         g <- curr_results %>%
           ggplot(aes(.data$test_time, .data$train_time, fill = .data$accuracy)) +
           geom_tile() +
-          facet_wrap(~result_type, scales = "free") +
-          # scale_fill_continuous(type = "viridis", name = curr_results$result_type[1]) +
+          facet_wrap(~results_to_show, scales = "free") +
+          # scale_fill_continuous(type = "viridis", name = curr_results$results_to_show[1]) +
           scale_fill_continuous(type = "viridis", name = "") +
           ylab("Train time") +
           xlab("Test time") +
@@ -411,8 +732,8 @@ plot.rm_main_results <- function(x, ..., result_type = "zero_one_loss", plot_typ
         g
         
       })
-
-      all_TCD_plots[["ncol"]] <- 3
+      
+      all_TCD_plots[["ncol"]] <- length(results_to_show)
       do.call(gridExtra::grid.arrange, all_TCD_plots)
     }
     
@@ -420,57 +741,3 @@ plot.rm_main_results <- function(x, ..., result_type = "zero_one_loss", plot_typ
 }
 
 
-
-
-# Get the parameters for the rm_main_results object
-#' @export
-get_parameters.rm_main_results <- function(ndr_obj) {
-
-  # get the options for now the normalized rank and decision values should be aggregated
-  aggregate_decision_values <- attr(ndr_obj, "options")$aggregate_decision_values
-  aggregate_normalized_rank <- attr(ndr_obj, "options")$aggregate_normalized_rank
-
-  data.frame(
-    rm_main_results.aggregate_decision_values = aggregate_decision_values,
-    rm_main_results.aggregate_normalized_rank = aggregate_normalized_rank)
-  
-}
-
-
-
-
-
-# A private helper function to get data needed to create the normalized rank
-#  and decision value results
-get_augmented_prediction_results <- function(prediction_results, aggregate_options) {
-
-  # if only getting the decision values when training and testing at the same time
-  if (aggregate_options == "diag" || aggregate_options == "only same train test time") {
-    
-    prediction_results <- prediction_results %>%
-      dplyr::filter(.data$train_time == .data$test_time)
-
-    # if getting the decision values for all time points
-  } else if (aggregate_options == TRUE || aggregate_options == "full") {
-
-    # if getting data from all times do nothing
-  } else {
-    
-    argument_name <- deparse(substitute(aggregate_options))
-    stop(paste0(
-      argument_name, " was set to ", aggregate_options, ". ", argument_name,
-      " must be set to one of the following: ",
-      "TRUE, 'all', FALSE, 'none', 'diag', or 'only same train test time'"))
-    
-  }
-
-
-  # add decision_vals. to the actual label names to allow a comparion
-  #  of the actual labels to column names
-  prediction_results <- prediction_results %>%
-    mutate(decision_actual_labels = paste0("decision_vals.", .data$actual_labels)) %>%
-    select(.data$decision_actual_labels, starts_with("decision"), everything())
-
-  prediction_results
-  
-}

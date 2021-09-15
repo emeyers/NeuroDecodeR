@@ -2,9 +2,14 @@
 % Please edit documentation in R/get_num_label_repetitions.R
 \name{get_num_label_repetitions}
 \alias{get_num_label_repetitions}
-\title{Get the number of trial repetitions for a given label}
+\title{Get the number of sites have at least k trials of each label level}
 \usage{
-get_num_label_repetitions(binned_data, variable_to_use, levels_to_use = NULL)
+get_num_label_repetitions(
+  binned_data,
+  variable_to_use,
+  site_info_grouping_name = NULL,
+  levels_to_use = NULL
+)
 }
 \arguments{
 \item{binned_data}{A string that list a path to a file that has data in
@@ -13,13 +18,23 @@ binned format, or a data frame of binned_data that is in binned format.}
 \item{variable_to_use}{A string specifying whether label variable should be
 used for calculating the minimum number of level repetitions.}
 
+\item{site_info_grouping_name}{A character string that specifies if the
+number of sites that have k repetitions should be computed separately
+based on the levels of a site_info variable.}
+
 \item{levels_to_use}{A character vector specifying which levels to include.
 If not set, all levels will be used.}
 }
 \description{
-Calculates how many repeated trials there are for each label level. This can
-be useful for selecting sites that have a minimum number of repetitions of
-each stimulus or other experimental condition.
+Calculates number of sites that have at least k label level
+repetitions for all values k. This information is useful for assessing how to
+set the number of cross-validation splits (and repeats of labels per
+cross-validation split) to use in a datasource. One can also assess the
+number of label level repetitions separately conditioned on another site_info
+variable. For example, if one has recordings from different brain regions,
+and the brain region information is contained in a site_info variable, then
+one could calculate how many sites have at least k repetitions for each
+stimulus in each brain region.
 }
 \note{
 The returned value is an S3 object that inherits from data.frame that

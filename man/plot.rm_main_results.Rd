@@ -4,7 +4,7 @@
 \alias{plot.rm_main_results}
 \title{A plot function for the rm_main_results object}
 \usage{
-\method{plot}{rm_main_results}(x, ..., result_type = "zero_one_loss", plot_type = "TCD")
+\method{plot}{rm_main_results}(x, ..., results_to_show = "zero_one_loss", type = "TCD")
 }
 \arguments{
 \item{x}{A rm_main_result object that has aggregated runs from a
@@ -14,10 +14,10 @@ run_decoding(cv) then this argument should be
 
 \item{...}{This is needed to conform to the plot generic interface.}
 
-\item{result_type}{A string specifying the types of results to plot. Options
+\item{results_to_show}{A string specifying the types of results to plot. Options
 are: 'zero_one_loss', 'normalized_rank', 'decision_values', or 'all'.}
 
-\item{plot_type}{A string specifying the type of results to plot. Options are
+\item{type}{A string specifying the type of results to plot. Options are
 'TCD' to plot a temporal cross decoding matrix or 'line' to create a line
 plot of the decoding results as a function of time}
 }
@@ -30,6 +30,7 @@ have been aggregated).
 \seealso{
 Other result_metrics: 
 \code{\link{plot.rm_confusion_matrix}()},
+\code{\link{plot_main_results}()},
 \code{\link{rm_confusion_matrix}()},
 \code{\link{rm_main_results}()}
 }

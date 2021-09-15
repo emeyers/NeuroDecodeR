@@ -45,6 +45,7 @@
 #' @import ggplot2
 #' @import magrittr
 #' @importFrom stats cor pf predict
+#' @importFrom utils setTxtProgressBar txtProgressBar
 
 
 NULL

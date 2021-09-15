@@ -19,7 +19,7 @@
 #' # This is valid raster data so the function will return no error message
 #' raster_dir_name <- file.path(
 #'   system.file("extdata", package = "NeuroDecodeR"),
-#'   "Zhang_Desimone_7object_raster_data_rda"
+#'   "Zhang_Desimone_7object_raster_data_small_rda"
 #' )
 #' file_name <- "bp1001spk_01A_raster_data.rda"
 #' raster_full_path <- file.path(raster_dir_name, file_name)
@@ -271,7 +271,6 @@ test_valid_classifier <- function(the_classifier) {
   training_set <- example_data$training_set
   test_set <- example_data$test_set
 
-
   predictions_df <- get_predictions(the_classifier, training_set, test_set)
 
   # should have exactly one column name that matches exactly these variable names
@@ -460,14 +459,14 @@ get_example_training_and_test_data <- function() {
 
   cv_data <- get_data(ds)
 
-  training_set <- filter(cv_data, .data$time_bin == "time.200_349", .data$CV_1 == "train") %>%
+  training_set <- filter(cv_data, .data$time_bin == "time.200_350", .data$CV_1 == "train") %>%
     select(starts_with("site"), .data$train_labels)
 
-  test_set <- filter(cv_data, .data$time_bin %in% c("time.-350_-201", "time.200_349"), .data$CV_1 == "test") %>%
+  test_set <- filter(cv_data, .data$time_bin %in% c("time.-350_-200", "time.200_349"), .data$CV_1 == "test") %>%
     dplyr::select(starts_with("site"), .data$test_labels, .data$time_bin)
 
-  levels(test_set$time_bin)[levels(test_set$time_bin) == "time.-350_-201"] <- "baseline"
-  levels(test_set$time_bin)[levels(test_set$time_bin) == "time.200_349"] <- "stimulus"
+  levels(test_set$time_bin)[levels(test_set$time_bin) == "time.-350_-200"] <- "baseline"
+  levels(test_set$time_bin)[levels(test_set$time_bin) == "time.200_350"] <- "stimulus"
 
   example_training_test_data <- list(training_set = training_set, test_set = test_set)
 

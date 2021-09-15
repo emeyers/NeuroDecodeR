@@ -52,6 +52,14 @@
 #'   set to a value of less than 1, then the code will be run serially and
 #'   messages will be printed showing how long each CV split took to run which
 #'   is useful for debugging.
+#'   
+#' @param parallel_outfile A string specifying the name of a file where the
+#'   output from running the code in parallel is written (this argument is
+#'   ignored if num_parallel_cores < 1). By default the parallel output is
+#'   written to dev/null so it is not accessible. If this is changed to an empty
+#'   string the output will be written to the screen, otherwise it will be
+#'   written to a file name specified. See parallel::makeCluster for more
+#'   details.
 #'
 #' @examples
 #' data_file <- system.file("extdata/ZD_150bins_50sampled.Rda",
@@ -95,7 +103,8 @@ cv_standard <- function(ndr_container = NULL,
                         result_metrics = NULL,
                         num_resample_runs = 50,
                         test_only_at_training_time = FALSE,
-                        num_parallel_cores = NULL) {
+                        num_parallel_cores = NULL,
+                        parallel_outfile = NULL) {
 
   
   # Going to add any of the datasource, classifier, feature_preprocessor, and
@@ -167,7 +176,8 @@ cv_standard <- function(ndr_container = NULL,
                             ndr_container$rm,
                             num_resample_runs,
                             test_only_at_training_time,
-                            num_parallel_cores)
+                            num_parallel_cores,
+                            parallel_outfile)
   
   the_cv
   
@@ -184,7 +194,8 @@ new_cv_standard <- function(datasource,
                         result_metrics,
                         num_resample_runs,
                         test_only_at_training_time,
-                        num_parallel_cores) {
+                        num_parallel_cores, 
+                        parallel_outfile) {
 
   if (is.null(datasource)) {
     stop('A datasource must be set in the cv_standard constructor.')
@@ -203,8 +214,14 @@ new_cv_standard <- function(datasource,
 
   
   # if the num_parallel_cores is not set, use half the available cores
+  #  or if that is more than the num_resample_runs, just use num_resample_runs cores
   if (is.null(num_parallel_cores)) {
-    num_parallel_cores <- parallel::detectCores()/2
+    num_parallel_cores <- min(parallel::detectCores()/2, num_resample_runs)
+  }
+  
+  
+  if (is.null(parallel_outfile)) {
+    parallel_outfile <- nullfile()
   }
   
   
@@ -219,7 +236,8 @@ new_cv_standard <- function(datasource,
     num_resample_runs = num_resample_runs,
     result_metrics = result_metrics,
     test_only_at_training_time = test_only_at_training_time,
-    num_parallel_cores = num_parallel_cores)
+    num_parallel_cores = num_parallel_cores, 
+    parallel_outfile = parallel_outfile)
 
   attr(the_cv, "class") <- "cv_standard"
   the_cv
@@ -250,7 +268,9 @@ run_decoding.cv_standard <- function(cv_obj) {
   if (cv_obj$num_parallel_cores > 0) {
 
     # register parallel resources
-    the_cluster <- parallel::makeCluster(cv_obj$num_parallel_cores, type = "SOCK")
+    the_cluster <- parallel::makeCluster(cv_obj$num_parallel_cores, 
+                                         type = "SOCK", 
+                                         outfile = cv_obj$parallel_outfile)
     doSNOW::registerDoSNOW(the_cluster)
 
     "%do_type%" <- get("%dopar%")
@@ -261,10 +281,25 @@ run_decoding.cv_standard <- function(cv_obj) {
 
   }
 
+  
+  # Adding a pretty lame progress bar that only updates after resample runs.
+  # Unfortunately I couldn't get any of the cooler progress bars
+  # (e.g., from the progress and progressr packages) to work.
+  # On the plus side, the changes to the code are minimal.
+  pb <- txtProgressBar(max = num_resample_runs, style=3)
+  progress <- function(n) setTxtProgressBar(pb, n)
+  opts <- list(progress=progress)
+  
 
   # Do a parallel loop over resample runs
-  all_resample_run_decoding_results <- foreach(iResample = 1:num_resample_runs) %do_type% { 
+  iResample <- 0  # to deal with an R check note
+  all_resample_run_decoding_results <- foreach(iResample = 1:num_resample_runs, 
+                                               .options.snow=opts) %do_type% { 
 
+    
+    message(paste0("Start resample run: ", strrep(" ", 3 - nchar(as.character(iResample))),  iResample, 
+                     "   Start time: ",  Sys.time()))
+    
     
     # get the data from the current cross-validation run
     cv_data <- get_data(datasource)
@@ -288,9 +323,7 @@ run_decoding.cv_standard <- function(cv_obj) {
 
       # when the code is not run in parallel, the CV number will be printed
       tictoc::tic()
-      message(paste0("CV: ", iCV))
-
-
+      
       for (iTrain in 1:num_time_bins) {
 
         training_set <- dplyr::filter(
@@ -330,8 +363,12 @@ run_decoding.cv_standard <- function(cv_obj) {
       } # end the for loop over time bins
 
 
-      tictoc::toc()
-
+      tictoc_time <- tictoc::toc(quiet = TRUE)
+      message(
+        paste0("Resample run: ", strrep(" ", 3 - nchar(as.character(iResample))),  iResample,  
+                     "      CV: ", iCV, 
+                     "      Time elapsed: ", round(tictoc_time$toc - tictoc_time$tic, 3), " seconds") )
+      
 
       # Aggregate results over all CV split runs
       all_cv_results[[iCV]] <- dplyr::bind_rows(all_time_results)
@@ -346,8 +383,9 @@ run_decoding.cv_standard <- function(cv_obj) {
 
     # go through each Result Metric and aggregate the results from all CV splits using each metric
     for (iMetric in seq_along(result_metrics)) {
-      curr_metric_results <- aggregate_CV_split_results(result_metrics[[iMetric]], all_cv_results)
-      resample_run_decoding_results[[iMetric]] <- curr_metric_results ###  DECODING_RESULTS
+      ###  DECODING_RESULTS
+      resample_run_decoding_results[[iMetric]] <- aggregate_CV_split_results(result_metrics[[iMetric]], all_cv_results)
+      gc()
     }
 
 
@@ -452,7 +490,8 @@ get_parameters.cv_standard <- function(ndr_obj) {
     analysis_ID = ndr_obj$analysis_ID,
     cv_standard.num_resample_runs = ndr_obj$num_resample_runs,
     cv_standard.test_only_at_training_time = ndr_obj$test_only_at_training_time,
-    cv_standard.num_parallel_cores = ndr_obj$num_parallel_cores
+    cv_standard.num_parallel_cores = ndr_obj$num_parallel_cores,
+    cv_standard.parallel_outfile = ndr_obj$parallel_outfile
   )
 
 

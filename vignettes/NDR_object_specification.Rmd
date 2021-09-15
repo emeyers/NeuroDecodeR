@@ -167,7 +167,7 @@ cv_data <- get_data(ds)
 # an example of spliting the data into a training and test set, 
 # this is done in the cross-validator
 training_set <- dplyr::filter(cv_data, 
-                              time_bin == "time.100_249", 
+                              time_bin == "time.100_250", 
                               CV_1 == "train") %>%       # get data from the first CV split
   dplyr::select(starts_with("site"), train_labels)
         
@@ -267,7 +267,7 @@ cv_data <- get_data(ds)
 # an example of spliting the data into a training and test set, 
 # this is done in the cross-validator
 training_set <- dplyr::filter(cv_data, 
-                              time_bin == "time.100_249", 
+                              time_bin == "time.100_250", 
                               CV_1 == "train") %>%       # get data from the first CV split
   dplyr::select(starts_with("site"), train_labels)
         
@@ -284,7 +284,7 @@ names(predictions)
 
 
 # see how accurate the predictions are (chance is 1/7)
-predictions_at_100ms <- dplyr::filter(predictions, test_time == "time.100_249")
+predictions_at_100ms <- dplyr::filter(predictions, test_time == "time.100_250")
 mean(predictions_at_100ms$actual_labels == predictions_at_100ms$predicted_labels)
 
 
