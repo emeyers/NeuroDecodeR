@@ -35,6 +35,7 @@ reference:
 - title: "Plot functions"
   contents:
   - "`plot.rm_main_results`"
+  - "`plot_main_results`"
   - "`plot.rm_confusion_matrix`"
 
 - title: "Save and log results"
