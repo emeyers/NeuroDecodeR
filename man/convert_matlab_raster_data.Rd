@@ -62,6 +62,9 @@ can be used to convert it to an R format (.rda files) that can be used with
 the NDR.
 }
 \examples{
+
+\dontrun{
+
 matlab_raster_dir_name <- file.path(
   system.file("extdata", package = "NeuroDecodeR"),
   "Zhang_Desimone_7object_raster_data_small_mat"
@@ -74,5 +77,6 @@ r_raster_dir_name <- convert_matlab_raster_data(matlab_raster_dir_name,
   files_contain = "bp1001spk"
 )
 
+}
 
 }

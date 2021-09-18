@@ -45,6 +45,9 @@
 #'   trials can be aligned across different sites.
 #'
 #' @examples
+#' 
+#' \dontrun{
+#' 
 #' matlab_raster_dir_name <- file.path(
 #'   system.file("extdata", package = "NeuroDecodeR"),
 #'   "Zhang_Desimone_7object_raster_data_small_mat"
@@ -57,6 +60,7 @@
 #'   files_contain = "bp1001spk"
 #' )
 #'
+#'}
 #'
 #' @export
 convert_matlab_raster_data <- function(matlab_raster_dir_name,
