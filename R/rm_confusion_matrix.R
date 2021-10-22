@@ -82,17 +82,17 @@ new_rm_confusion_matrix <- function(the_data = data.frame(),
 # Not going to export this since it should never be directly called by users of the NDR.
 aggregate_CV_split_results.rm_confusion_matrix <- function(rm_obj, prediction_results) {
 
-  # include a warning if the state is not intial
+  # include a warning if the state is not initial
   if (attr(rm_obj, "state") != "initial") {
     warning(paste0(
       "The method aggregate_CV_split_results() should only be called on",
-      "normalized_rank_and_decision_values_RM that are in the intial state.",
-      "Any data that was already stored in this object will be overwritten"))
+      "rm_confusion_matrix that is in the intial state.",
+      "Any data that was already stored in this object will be overwritten."))
   }
 
 
 
-  # If specied in the constructor, save the confusion matrix only for training and testing
+  # If specified in the constructor, save the confusion matrix only for training and testing
   # the same times. This will save memory, and the off diagonal element confusion matrices
   # won't generally be of too much interest - however they could be of interest for
   # computing a TCD plot of mutual information.

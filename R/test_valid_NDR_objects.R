@@ -278,8 +278,8 @@ test_valid_classifier <- function(the_classifier) {
   check_df_contains_variable(predictions_df, "actual_labels", "get_predictions()")
   check_df_contains_variable(predictions_df, "predicted_labels", "get_predictions()")
 
-  # should have one or more column names that start with this variable name
-  check_df_contains_variable(predictions_df, "decision_vals", "get_predictions()", FALSE, FALSE)
+  # optional: can have one or more column names that start with "decision_vals"
+  # # check_df_contains_variable(predictions_df, "decision_vals", "get_predictions()", FALSE, FALSE)
 
   test_get_parameters_method(the_classifier)
   

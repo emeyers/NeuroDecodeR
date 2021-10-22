@@ -95,17 +95,36 @@ aggregate_CV_split_results.rm_main_results <- function(rm_obj, prediction_result
   # get the options for how the normalized rank and decision values should be aggregated
   include_norm_rank_results <- attr(rm_obj, "options")$include_norm_rank_results
 
-
+  
+if ((sum(grepl("decision", names(prediction_results))) == 0) & (include_norm_rank_results != FALSE)) {
+  
+  # Perhaps this should be an error instead of just resetting the argument value which in general
+  #  is a pretty bad thing to do. However, likely 
+  error_message <- paste("The classifier selected did not returned decision values.", 
+                         "Setting argument 'include_norm_rank_results' to FALSE.")
+  
+  warning(error_message)
+  
+  # change the parameter value to the warning message to let the user know this
+  # parameter was reset when they look at the cross-validation parameters
+  attr(rm_obj, "options")$include_norm_rank_results <- error_message
+  
+  include_norm_rank_results <- FALSE
+  
+}
+ 
+ 
   # get the zero-one loss loss results
   the_results <- prediction_results %>%
     dplyr::mutate(correct = .data$actual_labels == .data$predicted_labels) %>%
-    dplyr::group_by(.data$CV, .data$train_time, .data$test_time) %>%
+    #dplyr::group_by(.data$CV, .data$train_time, .data$test_time) %>%
+    dplyr::group_by(.data$train_time, .data$test_time) %>%           # also aggregating over CV splits here
     summarize(zero_one_loss = mean(.data$correct, na.rm = TRUE))
 
   
   # calculate the chance level for the zero one loss results
   zero_one_loss_chance_level <- 1/length(unique(prediction_results$actual_labels))
-  
+
   
   # newly added code to speed things up
   if (include_norm_rank_results != FALSE) {
@@ -143,24 +162,25 @@ aggregate_CV_split_results.rm_main_results <- function(rm_obj, prediction_result
       which(actual_label == col_names)
     }
     actual_label_inds <- sapply(actual_labels, get_actual_label_ind)
-    
-    
+ 
+       
     correct_class_decision_val <- data_matrix[matrix(c(seq_along(actual_label_inds), actual_label_inds), 
                                                      nrow = length(actual_label_inds))]
-    
-    
+ 
     
     # add the decision values to the results
     summarized_correct_decision_val_results <- prediction_results %>%
       select(-starts_with("decision")) %>%
       mutate(decision_vals = correct_class_decision_val) %>%
-      dplyr::group_by(.data$CV, .data$train_time, .data$test_time) %>%
+      # dplyr::group_by(.data$CV, .data$train_time, .data$test_time) %>%    
+      dplyr::group_by(.data$train_time, .data$test_time) %>%     # also aggregating over CV splits here
       summarize(decision_vals = mean(.data$decision_vals, na.rm = TRUE))
       
-      the_results <- left_join(the_results, summarized_correct_decision_val_results,
-                               by = c("CV", "train_time", "test_time"))
+      # the_results <- left_join(the_results, summarized_correct_decision_val_results,
+      #                         by = c("CV", "train_time", "test_time"))
       
-
+      the_results <- left_join(the_results, summarized_correct_decision_val_results,
+                               by = c("train_time", "test_time"))
 
 
     # get the normalized rank results...
@@ -175,12 +195,16 @@ aggregate_CV_split_results.rm_main_results <- function(rm_obj, prediction_result
       summarized_normalized_rank_results <- prediction_results %>%
         select(-starts_with("decision")) %>%
         mutate(normalized_rank = normalized_rank_results) %>%
-        dplyr::group_by(.data$CV, .data$train_time, .data$test_time) %>%
+        # dplyr::group_by(.data$CV, .data$train_time, .data$test_time) %>%
+        dplyr::group_by(.data$train_time, .data$test_time) %>%    # also aggregating over CV splits here
         summarize(normalized_rank = mean(.data$normalized_rank, na.rm = TRUE))
       
       
+      # the_results <- left_join(the_results, summarized_normalized_rank_results,
+      #                          by = c("CV", "train_time", "test_time"))
+      
       the_results <- left_join(the_results, summarized_normalized_rank_results,
-                               by = c("CV", "train_time", "test_time"))
+                               by = c("train_time", "test_time"))
       
 
       # clean up memory
@@ -191,7 +215,9 @@ aggregate_CV_split_results.rm_main_results <- function(rm_obj, prediction_result
   }  # end for decision values and normalized rank results
   
   
-
+  # try to clear up even more memory (does this do anything?)
+  rm(prediction_results)
+  
   options <- attr(rm_obj, "options")
   options$zero_one_loss_chance_level <- zero_one_loss_chance_level 
   
@@ -200,7 +226,6 @@ aggregate_CV_split_results.rm_main_results <- function(rm_obj, prediction_result
     "results combined over one cross-validation split",
     options)
   
-
 }
   
   
@@ -540,12 +565,12 @@ helper_plot_rm_main_results <- function(main_results, results_to_show = "zero_on
   if (results_to_show[1] == "all") {
     results_to_show <- c("zero_one_loss",  "normalized_rank", "decision_vals")
   }
-  
+ 
   # normalized rank and decision values are not always saved so check that they exist if plotted them  
   if (!(sum(results_to_show %in% names(main_results)) == length(results_to_show))) {
-    stop(paste("Can't plot", results_to_show, "results because this type of result was not saved."))
+    stop(paste("Can't plot", setdiff(results_to_show, names(main_results)), 
+               "results because this type of result was not saved. \n  "))
   }
-  
   
   # get the chance level for the zero one loss results
   zero_one_loss_chance <- 100 * attributes(main_results)$options$zero_one_loss_chance_level
@@ -564,6 +589,7 @@ helper_plot_rm_main_results <- function(main_results, results_to_show = "zero_on
   
   # remove result types that are not being used
   result_types_to_remove <- setdiff(c("zero_one_loss",  "normalized_rank", "decision_vals"), results_to_show)
+  result_types_to_remove <- intersect(names(main_results), result_types_to_remove) # in case "normalized_rank", "decision_vals" are not in the results
   main_results <- dplyr::select(main_results, -{{result_types_to_remove}})
   
   

@@ -12,6 +12,14 @@
 #'   If this argument is set to another ndr object, then both that ndr object as
 #'   well as a new cl_maximum_corrleation object will be added to a new
 #'   container and the container will be returned.
+#'   
+#' @param return_decision_values A Boolean specifying whether the prediction
+#'   function should return columns that have the decision values. Setting this
+#'   to FALSE will save memory so can be useful when analyzing very large high
+#'   temporal resolution data sets. However if this is set to FALSE< metrics
+#'   won't be able to compute decoding accuracy measures that are based on the
+#'   decision values; e.g., the rm_main_results object won't be able to
+#'   calculate normalized rank decision values.
 #'
 #' @details This CL object learns a mean population vector (template) for each
 #'   class from the training set (by averaging together the all training points
@@ -47,9 +55,15 @@
 
 # the constructor
 #' @export
-cl_max_correlation <- function(ndr_container_or_object = NULL) {
+cl_max_correlation <- function(ndr_container_or_object = NULL,
+                               return_decision_values = TRUE) {
   
-  the_classifier <- list()
+  if (!is.logical(return_decision_values)) {
+    stop("return_decision_values must be set to either TRUE or FALSE")
+  }
+  
+  
+  the_classifier <- list(return_decision_values = return_decision_values)
   attr(the_classifier, "class") <- "cl_max_correlation"  # c("cl_max_correlation", "ndr_object")
 
   # if ndr_container_or_object is an ndr object or ndr container, return
@@ -99,14 +113,19 @@ get_predictions.cl_max_correlation <- function(cl_obj,
     actual_labels = test_set$test_labels,
     predicted_labels = predicted_labels)
 
-  # get the decision values
-  decision_values <- data.frame(t(train_test_cor))
-  names(decision_values) <- paste0("decision_vals.", prototypes$train_labels)
+  
+  # return the decision values along with the zero-one loss results
+  if (cl_obj$return_decision_values) {
+    
+    decision_values <- data.frame(t(train_test_cor))
+    names(decision_values) <- paste0("decision_vals.", prototypes$train_labels)
+    
+    results <- cbind(results, decision_values)
+  }
 
-  # return the results
-  results <- cbind(results, decision_values)
 
   return(results)
+  
 }
 
 

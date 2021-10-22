@@ -293,6 +293,7 @@ run_decoding.cv_standard <- function(cv_obj) {
 
   # Do a parallel loop over resample runs
   iResample <- 0  # to deal with an R check note
+  all_resample_run_decoding_results <- list() 
   all_resample_run_decoding_results <- foreach(iResample = 1:num_resample_runs, 
                                                .options.snow=opts) %do_type% { 
 
@@ -388,14 +389,14 @@ run_decoding.cv_standard <- function(cv_obj) {
       gc()
     }
 
-
+    
     return(resample_run_decoding_results)
 
   } # end loop over resample runs
 
 
-
-
+  
+  
   # aggregate results over all resample runs  ---------------------------------
 
 
@@ -408,23 +409,30 @@ run_decoding.cv_standard <- function(cv_obj) {
   # go through each Result Metric and aggregate the final results from all resample runs using each metric
   DECODING_RESULTS <- NULL
   result_metric_names <- NULL
-  grouped_results <- purrr::transpose(all_resample_run_decoding_results)
+  all_resample_run_decoding_results <- purrr::transpose(all_resample_run_decoding_results) # overwrite to save RAM
 
   for (iMetric in seq_along(result_metrics)) {
 
     # bind the list of all the resample result RM objects together and preserve the RM's options attribute
-    curr_options <- attributes(grouped_results[[iMetric]][[1]])$options
-    curr_resample_run_results <- dplyr::bind_rows(grouped_results[[iMetric]], .id = "resample_run")
-    attr(curr_resample_run_results, "options") <- curr_options
+    curr_options <- attributes(all_resample_run_decoding_results[[iMetric]][[1]])$options
+    curr_metric_resample_run_results <- dplyr::bind_rows(all_resample_run_decoding_results[[iMetric]], .id = "resample_run")
+    attr(curr_metric_resample_run_results, "options") <- curr_options
 
-    DECODING_RESULTS[[iMetric]] <- aggregate_resample_run_results(curr_resample_run_results)
+    DECODING_RESULTS[[iMetric]] <- aggregate_resample_run_results(curr_metric_resample_run_results)
     result_metric_names[iMetric] <- class(DECODING_RESULTS[[iMetric]])[1]
 
+    # A hack: Since result_metric parameters can change as the aggregating
+    #  functions are called (i.e., they have state), I am resetting their options
+    #  to the final state after all the aggregating functions have been called.
+    #  This is particularly important because the rm_main_result
+    #  include_norm_rank_results option is ignored when a classifier does not
+    #  return decision values.
+    attributes(cv_obj$result_metrics[[iMetric]])$options <- curr_options
+    
   }
 
   # add names to the final results list so easy to extract elements
   names(DECODING_RESULTS) <- result_metric_names
-
 
 
   # save the decoding parameters to make results reproducible -----------------
@@ -437,7 +445,7 @@ run_decoding.cv_standard <- function(cv_obj) {
 
   analysis_end_time <- Sys.time()
   
-# could save these in the cv_obj directly rather than in the cv_obj$parameters_df
+  # could save these in the cv_obj directly rather than in the cv_obj$parameters_df
   cv_obj$parameter_df$analysis_start_time <- analysis_start_time
   cv_obj$parameter_df$analysis_end_time <- analysis_end_time
   cv_obj$parameter_df$analysis_run_time <- analysis_end_time - analysis_start_time

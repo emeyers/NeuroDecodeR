@@ -12,6 +12,14 @@
 #'   argument is set to another ndr object, then both that ndr object as well as
 #'   a new cl_poisson_naive_bayes object will be added to a new container and
 #'   the container will be returned.
+#'   
+#' @param return_decision_values A Boolean specifying whether the prediction
+#'   function should return columns that have the decision values. Setting this
+#'   to FALSE will save memory so can be useful when analyzing very large high
+#'   temporal resolution data sets. However if this is set to FALSE< metrics
+#'   won't be able to compute decoding accuracy measures that are based on the
+#'   decision values; e.g., the rm_main_results object won't be able to
+#'   calculate normalized rank decision values.
 #'
 #'
 #' @details
@@ -65,9 +73,10 @@
 
 # the constructor
 #' @export
-cl_poisson_naive_bayes <- function(ndr_container_or_object = NULL) {
+cl_poisson_naive_bayes <- function(ndr_container_or_object = NULL,
+                                   return_decision_values = TRUE) {
   
-  the_classifier <- list()
+  the_classifier <- list(return_decision_values = return_decision_values)
   attr(the_classifier, "class") <- "cl_poisson_naive_bayes"
   
   # if ndr_container_or_object is an ndr object or ndr container, return
@@ -139,14 +148,19 @@ get_predictions.cl_poisson_naive_bayes <- function(cl_obj, training_set, test_se
     predicted_labels = predicted_labels
   )
 
+  
   # get the decision values
-  decision_values <- data.frame(t(log_likelihoods))
-  names(decision_values) <- paste0("decision_vals.", lambdas_and_labels$train_labels)
+  if (cl_obj$return_decision_values) {
+    
+    decision_values <- data.frame(t(log_likelihoods))
+    names(decision_values) <- paste0("decision_vals.", lambdas_and_labels$train_labels)
+    
+    results <- cbind(results, decision_values)
+ }
 
-  # return the results
-  results <- cbind(results, decision_values)
-
+      
   results
+  
 }
 
 

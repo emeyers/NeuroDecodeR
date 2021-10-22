@@ -4,7 +4,7 @@
 \alias{cl_svm}
 \title{A support vector machine classifier (CL)}
 \usage{
-cl_svm(ndr_container_or_object = NULL, ...)
+cl_svm(ndr_container_or_object = NULL, return_decision_values = TRUE, ...)
 }
 \arguments{
 \item{ndr_container_or_object}{The purpose of this argument is to make the
@@ -16,6 +16,14 @@ container, then a cl_svm object will be added to the container and the
 container will be returned. If this argument is set to another ndr object,
 then both that ndr object as well as a new cl_svm object will be added to a
 new container and the container will be returned.}
+
+\item{return_decision_values}{A Boolean specifying whether the prediction
+function should return columns that have the decision values. Setting this
+to FALSE will save memory so can be useful when analyzing very large high
+temporal resolution data sets. However if this is set to FALSE< metrics
+won't be able to compute decoding accuracy measures that are based on the
+decision values; e.g., the rm_main_results object won't be able to
+calculate normalized rank decision values.}
 
 \item{...}{All parameters that are available in the e1071 package svm()
 object should work with this CL object.}

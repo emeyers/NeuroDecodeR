@@ -67,7 +67,11 @@ test_that("the cl_max_correlation() classifier is working", {
 
   test_reasonable_classification_accuracy(cl)
   test_shuffle_results_at_chance(cl)
-
+  
+  # test the classifier works when no decision values are returned
+  cl <- cl_max_correlation(return_decision_values = FALSE)
+  test_reasonable_classification_accuracy(cl)
+  
 })
 
 
@@ -100,6 +104,10 @@ test_that("the cl_poisson_naive_bayes() classifier is working", {
 
   test_reasonable_classification_accuracy(cl)
   test_shuffle_results_at_chance(cl)
+  
+  # test the classifier works when no decision values are returned
+  cl <- cl_poisson_naive_bayes(return_decision_values = FALSE)
+  test_reasonable_classification_accuracy(cl)
 
 })
 
@@ -132,6 +140,10 @@ test_that("the cl_svm() claissifier is working", {
   test_reasonable_classification_accuracy(cl)
   test_shuffle_results_at_chance(cl)
 
+  # test the classifier works when no decision values are returned
+  cl <- cl_svm(return_decision_values = FALSE)
+  test_reasonable_classification_accuracy(cl)
+  
   
   cl <- cl_svm(kernel = "linear")
   expect_null(test_valid_classifier(cl))

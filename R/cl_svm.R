@@ -34,6 +34,15 @@
 #'   container will be returned. If this argument is set to another ndr object,
 #'   then both that ndr object as well as a new cl_svm object will be added to a
 #'   new container and the container will be returned.
+#'   
+#' @param return_decision_values A Boolean specifying whether the prediction
+#'   function should return columns that have the decision values. Setting this
+#'   to FALSE will save memory so can be useful when analyzing very large high
+#'   temporal resolution data sets. However if this is set to FALSE< metrics
+#'   won't be able to compute decoding accuracy measures that are based on the
+#'   decision values; e.g., the rm_main_results object won't be able to
+#'   calculate normalized rank decision values.
+#'
 #'
 #' @param ... All parameters that are available in the e1071 package svm()
 #'   object should work with this CL object.
@@ -57,10 +66,14 @@
 
 # the constructor
 #' @export
-cl_svm <- function(ndr_container_or_object = NULL, ...) {
+cl_svm <- function(ndr_container_or_object = NULL, 
+                   return_decision_values = TRUE, 
+                   ...) {
+  
   
   options <- list(...)
-  the_classifier <- list(svm_options = options)
+  the_classifier <- list(return_decision_values = return_decision_values, 
+                         svm_options = options)
   attr(the_classifier, "class") <- "cl_svm"
   
   # if ndr_container_or_object is an ndr object or ndr container, return
@@ -113,38 +126,44 @@ get_predictions.cl_svm <- function(cl_obj, training_set, test_set) {
 
 
   # Parse the all-pairs decision values ---------------------------------------
-  all_pairs_results <- data.frame(attr(predicted_labels, "decision.values"))
-  names(all_pairs_results) <- colnames(attr(predicted_labels, "decision.values"))
+  if (cl_obj$return_decision_values) {
+    
+    all_pairs_results <- data.frame(attr(predicted_labels, "decision.values"))
+    names(all_pairs_results) <- colnames(attr(predicted_labels, "decision.values"))
+  
+    all_pairs_results <- cbind(test_point_num = 1:dim(results)[1], all_pairs_results) %>%
+      tidyr::gather("class_pair", "val", -.data$test_point_num) %>%
+      mutate(sign_prediction = sign(.data$val)) %>%
+      tidyr::separate(.data$class_pair, c("pos_class", "neg_class"), sep = "/")
+  
+    pos_wins <- all_pairs_results %>%
+      group_by(.data$pos_class, .data$test_point_num) %>%
+      summarize(pos_wins = sum(.data$sign_prediction))
+  
+    neg_wins <- all_pairs_results %>%
+      group_by(.data$neg_class, .data$test_point_num) %>%
+      summarize(neg_wins = sum(-1 * .data$sign_prediction))
+  
+    decision_val_df <- full_join(pos_wins, neg_wins,
+      by = c(
+        "pos_class" = "neg_class",
+        "test_point_num" = "test_point_num")) %>%
+      tidyr::replace_na(list(pos_wins = 0, neg_wins = 0)) %>%
+      mutate(tot_wins = pos_wins + neg_wins) %>%
+      select(.data$pos_class, .data$tot_wins, .data$test_point_num) %>%
+      tidyr::spread(.data$pos_class, .data$tot_wins) %>%
+      arrange(.data$test_point_num) %>%
+      select(-.data$test_point_num)
+  
+    names(decision_val_df) <- paste0("decision_vals.", names(decision_val_df))
+  
+    results <- cbind(results, decision_val_df)
 
-  all_pairs_results <- cbind(test_point_num = 1:dim(results)[1], all_pairs_results) %>%
-    tidyr::gather("class_pair", "val", -.data$test_point_num) %>%
-    mutate(sign_prediction = sign(.data$val)) %>%
-    tidyr::separate(.data$class_pair, c("pos_class", "neg_class"), sep = "/")
-
-  pos_wins <- all_pairs_results %>%
-    group_by(.data$pos_class, .data$test_point_num) %>%
-    summarize(pos_wins = sum(.data$sign_prediction))
-
-  neg_wins <- all_pairs_results %>%
-    group_by(.data$neg_class, .data$test_point_num) %>%
-    summarize(neg_wins = sum(-1 * .data$sign_prediction))
-
-  decision_val_df <- full_join(pos_wins, neg_wins,
-    by = c(
-      "pos_class" = "neg_class",
-      "test_point_num" = "test_point_num")) %>%
-    tidyr::replace_na(list(pos_wins = 0, neg_wins = 0)) %>%
-    mutate(tot_wins = pos_wins + neg_wins) %>%
-    select(.data$pos_class, .data$tot_wins, .data$test_point_num) %>%
-    tidyr::spread(.data$pos_class, .data$tot_wins) %>%
-    arrange(.data$test_point_num) %>%
-    select(-.data$test_point_num)
-
-  names(decision_val_df) <- paste0("decision_vals.", names(decision_val_df))
-
-  results <- cbind(results, decision_val_df)
-
+  }
+  
+  
   results
+  
   
 }
 
