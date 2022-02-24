@@ -60,7 +60,7 @@ create_binned_data <- function(raster_dir_name,
   file_names <- list.files(raster_dir_name, pattern = files_contain)
 
 
-  binned_data <- NULL
+  binned_data_list <- list()
 
 
   # loop through all raster data files and bin them
@@ -98,10 +98,16 @@ create_binned_data <- function(raster_dir_name,
 
     # append siteID to raster data, which is then appended to binned data
     one_binned_site$siteID <- rep(iSite, dim(one_binned_site)[1])
-    binned_data <- rbind(binned_data, one_binned_site)
+    binned_data_list[[iSite]] <- one_binned_site
     
   }
 
+  
+  # initial way to combine list of data frames into a single data frame
+  # binned_data <- do.call(rbind.data.frame, binned_data_list)
+  
+  # a more efficient way to combine a list of data frames into a single data frame 
+  binned_data <- dplyr::bind_rows(binned_data_list)
 
 
   # make the siteID be in the first column of binned dataa
