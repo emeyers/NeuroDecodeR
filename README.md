@@ -15,7 +15,6 @@ status](https://ci.appveyor.com/api/projects/status/github/emeyers/NeuroDecodeR?
 coverage](https://coveralls.io/repos/github/emeyers/NeuroDecodeR/badge.svg)](https://coveralls.io/r/emeyers/NeuroDecodeR?branch=master)
 
 <!-- badges: end -->
-
 <p>
 
 ## Overview
@@ -73,7 +72,7 @@ basedir_file_name <- system.file(file.path("extdata", "ZD_150bins_50sampled.Rda"
 ds <- ds_basic(basedir_file_name, 'stimulus_ID', 5, num_label_repeats_per_cv_split = 3)
 fps <- list(fp_zscore())
 cl <- cl_max_correlation()
-rms <- list(rm_main_results(aggregate_normalized_rank = "diag"), rm_confusion_matrix())
+rms <- list(rm_main_results(), rm_confusion_matrix())
 cv <- cv_standard(datasource = ds, 
                   classifier = cl, 
                   feature_preprocessors = fps, 
@@ -82,11 +81,12 @@ cv <- cv_standard(datasource = ds,
 
 # run a decoding analysis (this takes a few minutes) 
 DECODING_RESULTS <- run_decoding(cv)
+#>   |                                                                              |                                                                      |   0%  |                                                                              |=======================                                               |  33%  |                                                                              |===============================================                       |  67%  |                                                                              |======================================================================| 100%
 ```
 
 ``` r
 # plot the results for three different result types
-plot(DECODING_RESULTS$rm_main_results, result_type = "all", plot_type = "line")
+plot(DECODING_RESULTS$rm_main_results, results_to_show = 'all', type = 'line')
 ```
 
 <img src="man/figures/README-line_plot-1.png" style="display: block; margin: auto;" />
@@ -98,9 +98,9 @@ plot(DECODING_RESULTS$rm_main_results)
 
 <img src="man/figures/README-TCD_plot-1.png" style="display: block; margin: auto;" />
 
-## Running an analysis using the magrittr pipe (%\>%)
+## Running an analysis using the magrittr pipe (%&gt;%)
 
-One can also run a decoding analysis using the magrittr pipe (%\>%)
+One can also run a decoding analysis using the magrittr pipe (%&gt;%)
 operator to string together the different NDR objects as shown below.
 
 ``` r
@@ -116,6 +116,7 @@ basedir_file_name <- system.file(file.path("extdata", "ZD_500bins_500sampled.Rda
     rm_confusion_matrix() %>%
     cv_standard(num_resample_runs = 3) %>%
     run_decoding()
+#>   |                                                                              |                                                                      |   0%  |                                                                              |=======================                                               |  33%  |                                                                              |===============================================                       |  67%  |                                                                              |======================================================================| 100%
   
   plot(DECODING_RESULTS$rm_confusion_matrix)
 ```
