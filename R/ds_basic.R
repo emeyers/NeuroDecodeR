@@ -40,7 +40,9 @@
 #'   num_cv_splits * num_label_repeats_per_cv_split repeats.
 #'
 #' @param site_IDs_to_use A vector of integers specifying which sites should be
-#'   used.
+#'   used. If this is NULL (default value), then all sites that have 
+#'   num_cv_splits * num_label_repeats_per_cv_split repeats will be used, and 
+#'   a message about how many sites are used will be displayed.
 #'
 #' @param site_IDs_to_exclude A vector of integers specifying which sites should
 #'   be excluded.
@@ -73,7 +75,7 @@
 #'   label_levels_to_use = c("car", "hand", "kiwi")
 #' )
 #'
-#' # One never explicitely calls the get_data() function, but rather this is
+#' # One never explicitly calls the get_data() function, but rather this is
 #' # done by the cross-validator. However, to illustrate what this function
 #' # does, we can call it explicitly here to get training and test data:
 #' all_cv_data <- NeuroDecodeR:::get_data(ds)
@@ -109,6 +111,10 @@ ds_basic <- function(binned_data,
     binned_data <- convert_rates_to_counts(binned_data)
   }
 
+  # store the original binned data in order to get the site_IDs_to_use if it is null
+  #  (a bit hacky and not memory efficient but should be ok)
+  binned_data_org <- binned_data
+  
 
   # remove all labels that aren't being used, and rename the labels that are being used to "labels"
   label_col_ind <- match(paste0("labels.", var_to_decode), names(binned_data))
@@ -127,14 +133,54 @@ ds_basic <- function(binned_data,
   if (!is.null(label_levels_to_use)) {
     binned_data <- dplyr::filter(binned_data, labels %in% label_levels_to_use)
   } else {
-    label_levels_to_use <- as.list(levels(binned_data$labels))
+    label_levels_to_use <- as.list(levels(binned_data$labels))  # why is this a list? (b/c of ds_generalization???)
   }
 
+
+  # if (is.null(site_IDs_to_use)) {
+  #  site_IDs_to_use <- unique(binned_data$siteID)
+  #}
 
   if (is.null(site_IDs_to_use)) {
-    site_IDs_to_use <- unique(binned_data$siteID)
+    
+    # if site_IDs_to_use is not specified, use all sites that have enough label repetitions
+    site_IDs_to_use <- get_siteIDs_with_k_label_repetitions(binned_data_org, 
+                                                            var_to_decode,
+                                                            k = num_cv_splits * num_label_repeats_per_cv_split,
+                                                            levels_to_use = unlist(label_levels_to_use))
+    # print message about which sites are used
+    message(
+      paste0("Automatically selecting sites_IDs_to_use.",
+             " Since num_cv_splits = ", num_cv_splits, 
+             " and num_label_repeats_per_cv_split = ", num_label_repeats_per_cv_split,
+             ", all sites that have ", num_cv_splits * num_label_repeats_per_cv_split, 
+             " repetitions have been selected. This yields ", length(site_IDs_to_use),
+             " sites that will be used for decoding (out of ", length(unique(binned_data$siteID)),
+             " total).")
+      )
+    
+    
+    # Give an error message if no sites are available for decoding
+    # Could give an error if there are not at least 2 sites available, but will allow one site for now
+    if (length(site_IDs_to_use) < 1) {
+      
+      stop(
+        paste("\nNo sites are available that enough trial repetitions based on",
+              "the num_cv_splits, num_label_repeats_per_cv_split, and levels_to_use that were specified.", 
+              "Please use different values for these parameters, and/or manually specify the site_IDs_to_use.")
+        )
+      
+    }
+    
+    
+    # message(site_IDs_to_use)
+    
+    # free up some memory since this is not used elsewhere
+    rm(binned_data_org)
+    
   }
-
+  
+  
   if (!is.null(site_IDs_to_exclude)) {
     site_IDs_to_use <- setdiff(site_IDs_to_use, site_IDs_to_exclude)
   }

@@ -47,7 +47,9 @@ be less than or equal to the number of sites available that have
 num_cv_splits * num_label_repeats_per_cv_split repeats.}
 
 \item{site_IDs_to_use}{A vector of integers specifying which sites should be
-used.}
+used. If this is NULL (default value), then all sites that have
+num_cv_splits * num_label_repeats_per_cv_split repeats will be used, and
+a message about how many sites are used will be displayed.}
 
 \item{site_IDs_to_exclude}{A vector of integers specifying which sites should
 be excluded.}
@@ -92,7 +94,7 @@ ds <- ds_basic(data_file, "stimulus_ID", 18,
   label_levels_to_use = c("car", "hand", "kiwi")
 )
 
-# One never explicitely calls the get_data() function, but rather this is
+# One never explicitly calls the get_data() function, but rather this is
 # done by the cross-validator. However, to illustrate what this function
 # does, we can call it explicitly here to get training and test data:
 all_cv_data <- NeuroDecodeR:::get_data(ds)
