@@ -33,7 +33,7 @@ to only get data from sites that have enough repetitions of each stimulus.
 }
 \examples{
 data_file <- system.file("extdata/ZD_150bins_50sampled.Rda", package = "NeuroDecodeR")
-get_siteIDs_with_k_label_repetitions(data_file, "stimulus_ID")
+get_siteIDs_with_k_label_repetitions(data_file, "stimulus_ID", 5)
 
 
 }

@@ -332,7 +332,7 @@ plot.label_repetition <- function(x, ..., show_legend = TRUE) {
 #'
 #' @examples
 #' data_file <- system.file("extdata/ZD_150bins_50sampled.Rda", package = "NeuroDecodeR")
-#' get_siteIDs_with_k_label_repetitions(data_file, "stimulus_ID")
+#' get_siteIDs_with_k_label_repetitions(data_file, "stimulus_ID", 5)
 #'
 #'
 #' @export
@@ -343,7 +343,7 @@ get_siteIDs_with_k_label_repetitions <- function(binned_data,
   
   
   siteIDs <- get_num_label_repetitions_each_site(binned_data, variable_to_use, levels_to_use) %>%
-    dplyr::filter(.data$min_repeats > 5) %>%
+    dplyr::filter(.data$min_repeats >= k) %>%
     dplyr::pull(.data$siteID)
   
   
@@ -396,6 +396,11 @@ get_num_label_repetitions_each_site <- function(binned_data,
   # select only the siteID and labels we want to count number of repetitions
   binned_data <- select(binned_data, .data$siteID, label = paste0("labels.", variable_to_use))
   
+
+    # make sure that the labels are a factors
+  binned_data <- binned_data %>%
+    mutate(label = as.factor(.data$label))
+  
   
   if (is.null(levels_to_use)) {
     levels_to_use <- levels(binned_data$label)
@@ -405,7 +410,7 @@ get_num_label_repetitions_each_site <- function(binned_data,
   invalid_levels_specified <- setdiff(levels_to_use, levels(binned_data$label))
   if (length(invalid_levels_specified) != 0) {
     stop(paste(
-      "The level(s)", paste0("'", invalid_levels_specified, "'"),
+      "The level(s)", paste0("'", paste(invalid_levels_specified, collapse = ", "), "'"),
       "do not exist in the variable", variable_to_use))
   }
   
@@ -417,7 +422,6 @@ get_num_label_repetitions_each_site <- function(binned_data,
     dplyr::group_by(.data$siteID, .data$label) %>%
     count() %>%
     dplyr::mutate(label = paste0("level.", .data$label))
-  
   
   min_num_repeats_per_level <- num_repeats_per_level %>%
     dplyr::group_by(.data$siteID) %>%
@@ -433,51 +437,54 @@ get_num_label_repetitions_each_site <- function(binned_data,
   
   
   
-  # add the site_info to the label_rep_each_site_df
+  # add the site_info to the label_rep_each_site_df if site_info variables exist
   
-  
-  max_unique_site_info_vals <- site_info %>%
-    dplyr::group_by(.data$siteID) %>%
-    dplyr::summarize(across(everything(), n_distinct)) %>%
-    dplyr::summarize(across(everything(), max)) %>%
-    dplyr::select(-.data$siteID) %>%
-    tidyr::pivot_longer(everything()) 
-  
-  
-  # include site_info variables that only have a single value for each site
-  site_info_variables_names_to_include <- max_unique_site_info_vals %>%
-    dplyr::filter(.data$value == 1) %>%
-    dplyr::pull(.data$name)
-  
-  
-  # if for a given site_info. variable, if the value is not unique for each site on all trials
-  #  send a message that these site_info variables are not available to filter a site on
-  if (length(site_info_variables_names_to_include) != nrow(max_unique_site_info_vals)) {
-    
-    site_info_variables_names_not_to_include <- max_unique_site_info_vals %>%
-      dplyr::filter(.data$value != 1) %>%
-      dplyr::pull(.data$name) 
-    
-    # print out that particular site_info variables different values in
-    # different rows a single for a given site so can't uniquely select a site
-    # based on the value of a given variable
-    paste("The following site_info variables have more than one value in a row for a specific site", 
-          "so one cannot select sites based on the value of these variables:\n", 
-          paste(site_info_variables_names_not_to_include, collapse = ", "))
-  }   
-  
-  
-  # add the site info variables to the label_rep_info so that one can filter particular sites
-  #  based on site_info values
-  site_info_to_use <- site_info %>%
-    dplyr::select("siteID", all_of(site_info_variables_names_to_include)) %>%
-    dplyr::group_by(.data$siteID) %>%
-    dplyr::summarize(across(everything(), dplyr::first))
-  
-  
-  label_rep_each_site_df <- left_join(label_rep_each_site_df, site_info_to_use, "siteID")
-  
+  if ((site_info %>% select(-.data$siteID) %>% ncol()) != 0) {
 
+    max_unique_site_info_vals <- site_info %>%
+      dplyr::group_by(.data$siteID) %>%
+      dplyr::summarize(across(everything(), n_distinct)) %>%
+      dplyr::summarize(across(everything(), max)) %>%
+      dplyr::select(-.data$siteID) %>%
+      tidyr::pivot_longer(everything()) 
+    
+    
+    # include site_info variables that only have a single value for each site
+    site_info_variables_names_to_include <- max_unique_site_info_vals %>%
+      dplyr::filter(.data$value == 1) %>%
+      dplyr::pull(.data$name)
+    
+    
+    # if for a given site_info. variable, if the value is not unique for each site on all trials
+    #  send a message that these site_info variables are not available to filter a site on
+    if (length(site_info_variables_names_to_include) != nrow(max_unique_site_info_vals)) {
+      
+      site_info_variables_names_not_to_include <- max_unique_site_info_vals %>%
+        dplyr::filter(.data$value != 1) %>%
+        dplyr::pull(.data$name) 
+      
+      # print out that particular site_info variables different values in
+      # different rows a single for a given site so can't uniquely select a site
+      # based on the value of a given variable
+      paste("The following site_info variables have more than one value in a row for a specific site", 
+            "so one cannot select sites based on the value of these variables:\n", 
+            paste(site_info_variables_names_not_to_include, collapse = ", "))
+    }   
+    
+    
+    # add the site info variables to the label_rep_info so that one can filter particular sites
+    #  based on site_info values
+    site_info_to_use <- site_info %>%
+      dplyr::select("siteID", all_of(site_info_variables_names_to_include)) %>%
+      dplyr::group_by(.data$siteID) %>%
+      dplyr::summarize(across(everything(), dplyr::first))
+    
+    
+    label_rep_each_site_df <- left_join(label_rep_each_site_df, site_info_to_use, "siteID")
+    
+  }
+
+  
   label_rep_each_site_df
   
 }
