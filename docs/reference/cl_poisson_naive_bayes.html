@@ -216,13 +216,13 @@ and then makes predictions on new test data.</p>
 <span class='va'>data_file</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/system.file.html'>system.file</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/file.path.html'>file.path</a></span><span class='op'>(</span><span class='st'>"extdata"</span>, <span class='st'>"ZD_150bins_50sampled.Rda"</span><span class='op'>)</span>,
                          package <span class='op'>=</span> <span class='st'>"NeuroDecodeR"</span><span class='op'>)</span>
 <span class='va'>ds</span> <span class='op'>&lt;-</span> <span class='fu'><a href='ds_basic.html'>ds_basic</a></span><span class='op'>(</span><span class='va'>data_file</span>, <span class='st'>"stimulus_ID"</span>, <span class='fl'>18</span>, use_count_data <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>
-<span class='va'>fps</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; <span class='message'>Automatically selecting sites_IDs_to_use. Since num_cv_splits = 18 and num_label_repeats_per_cv_split = 1, all sites that have 18 repetitions have been selected. This yields 132 sites that will be used for decoding (out of 132 total).</span></div><div class='input'><span class='va'>fps</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='op'>)</span>
 
 <span class='va'>cl</span> <span class='op'>&lt;-</span> <span class='fu'>cl_poisson_naive_bayes</span><span class='op'>(</span><span class='op'>)</span>
 <span class='va'>cv</span> <span class='op'>&lt;-</span> <span class='fu'><a href='cv_standard.html'>cv_standard</a></span><span class='op'>(</span>datasource <span class='op'>=</span> <span class='va'>ds</span>, 
                   classifier <span class='op'>=</span> <span class='va'>cl</span>, 
                   feature_preprocessors <span class='op'>=</span> <span class='va'>fps</span><span class='op'>)</span>
-<span class='kw'>if</span> <span class='op'>(</span><span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'>{</span>
+</div><div class='output co'>#&gt; <span class='message'>Automatically selecting sites_IDs_to_use. Since num_cv_splits = 3 and num_label_repeats_per_cv_split = 6, all sites that have 18 repetitions have been selected. This yields 132 sites that will be used for decoding (out of 132 total).</span></div><div class='input'><span class='kw'>if</span> <span class='op'>(</span><span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'>{</span>
 <span class='va'>DECODING_RESULTS</span> <span class='op'>&lt;-</span> <span class='fu'><a href='run_decoding.html'>run_decoding</a></span><span class='op'>(</span><span class='va'>cv</span><span class='op'>)</span>
 <span class='op'>}</span>
 
