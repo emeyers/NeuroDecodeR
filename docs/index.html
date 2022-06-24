@@ -122,7 +122,7 @@
 <p>You can install NeuroDecodeR package from github using:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># install.packages("devtools")</span>
-<span class="fu">devtools</span><span class="fu">::</span><span class="fu"><a href="https://devtools.r-lib.org//reference/remote-reexports.html">install_github</a></span><span class="op">(</span><span class="st">"emeyers/NeuroDecodeR"</span><span class="op">)</span></code></pre></div>
+<span class="fu">devtools</span><span class="fu">::</span><span class="fu"><a href="https://devtools.r-lib.org/reference/remote-reexports.html">install_github</a></span><span class="op">(</span><span class="st">"emeyers/NeuroDecodeR"</span><span class="op">)</span></code></pre></div>
 </div>
 <div id="documentation" class="section level2">
 <h2 class="hasAnchor">
@@ -158,7 +158,7 @@
 <span class="va">ds</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/ds_basic.html">ds_basic</a></span><span class="op">(</span><span class="va">basedir_file_name</span>, <span class="st">'stimulus_ID'</span>, <span class="fl">5</span>, num_label_repeats_per_cv_split <span class="op">=</span> <span class="fl">3</span><span class="op">)</span>
 <span class="va">fps</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span><span class="fu"><a href="reference/fp_zscore.html">fp_zscore</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span>
 <span class="va">cl</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/cl_max_correlation.html">cl_max_correlation</a></span><span class="op">(</span><span class="op">)</span>
-<span class="va">rms</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span><span class="fu"><a href="reference/rm_main_results.html">rm_main_results</a></span><span class="op">(</span>aggregate_normalized_rank <span class="op">=</span> <span class="st">"diag"</span><span class="op">)</span>, <span class="fu"><a href="reference/rm_confusion_matrix.html">rm_confusion_matrix</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span>
+<span class="va">rms</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span><span class="fu"><a href="reference/rm_main_results.html">rm_main_results</a></span><span class="op">(</span><span class="op">)</span>, <span class="fu"><a href="reference/rm_confusion_matrix.html">rm_confusion_matrix</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span>
 <span class="va">cv</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/cv_standard.html">cv_standard</a></span><span class="op">(</span>datasource <span class="op">=</span> <span class="va">ds</span>, 
                   classifier <span class="op">=</span> <span class="va">cl</span>, 
                   feature_preprocessors <span class="op">=</span> <span class="va">fps</span>, 
@@ -166,10 +166,11 @@
                   num_resample_runs <span class="op">=</span> <span class="fl">3</span><span class="op">)</span>
 
 <span class="co"># run a decoding analysis (this takes a few minutes) </span>
-<span class="va">DECODING_RESULTS</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/run_decoding.html">run_decoding</a></span><span class="op">(</span><span class="va">cv</span><span class="op">)</span></code></pre></div>
+<span class="va">DECODING_RESULTS</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/run_decoding.html">run_decoding</a></span><span class="op">(</span><span class="va">cv</span><span class="op">)</span>
+<span class="co">#&gt;   |                                                                              |                                                                      |   0%  |                                                                              |=======================                                               |  33%  |                                                                              |===============================================                       |  67%  |                                                                              |======================================================================| 100%</span></code></pre></div>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># plot the results for three different result types</span>
-<span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span><span class="va">DECODING_RESULTS</span><span class="op">$</span><span class="va">rm_main_results</span>, result_type <span class="op">=</span> <span class="st">"all"</span>, plot_type <span class="op">=</span> <span class="st">"line"</span><span class="op">)</span></code></pre></div>
+<span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span><span class="va">DECODING_RESULTS</span><span class="op">$</span><span class="va">rm_main_results</span>, results_to_show <span class="op">=</span> <span class="st">'all'</span>, type <span class="op">=</span> <span class="st">'line'</span><span class="op">)</span></code></pre></div>
 <p><img src="reference/figures/README-line_plot-1.png" style="display: block; margin: auto;"></p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># create a temporal cross decoding plot</span>
@@ -193,6 +194,7 @@
     <span class="fu"><a href="reference/rm_confusion_matrix.html">rm_confusion_matrix</a></span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span>
     <span class="fu"><a href="reference/cv_standard.html">cv_standard</a></span><span class="op">(</span>num_resample_runs <span class="op">=</span> <span class="fl">3</span><span class="op">)</span> <span class="op">%&gt;%</span>
     <span class="fu"><a href="reference/run_decoding.html">run_decoding</a></span><span class="op">(</span><span class="op">)</span>
+<span class="co">#&gt;   |                                                                              |                                                                      |   0%  |                                                                              |=======================                                               |  33%  |                                                                              |===============================================                       |  67%  |                                                                              |======================================================================| 100%</span>
   
   <span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span><span class="va">DECODING_RESULTS</span><span class="op">$</span><span class="va">rm_confusion_matrix</span><span class="op">)</span></code></pre></div>
 <p><img src="reference/figures/README-pipe_example-1.png" style="display: block; margin: auto;"></p>
