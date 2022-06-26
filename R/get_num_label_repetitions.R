@@ -405,7 +405,7 @@ get_num_label_repetitions_each_site <- function(binned_data,
   if (is.null(levels_to_use)) {
     levels_to_use <- levels(binned_data$label)
   }
-  
+ 
   # test levels_to_use specified are all levels that exist
   invalid_levels_specified <- setdiff(levels_to_use, levels(binned_data$label))
   if (length(invalid_levels_specified) != 0) {
@@ -423,6 +423,17 @@ get_num_label_repetitions_each_site <- function(binned_data,
     count() %>%
     dplyr::mutate(label = paste0("level.", .data$label))
   
+  # if some label levels don't exist in the data, add them with a value of n = 0
+  zero_n_repeats_df <- data.frame(siteID = rep(unique(num_repeats_per_level$siteID), each = length(levels_to_use)),
+                                  label = rep(paste0("level.", levels_to_use), length(unique(num_repeats_per_level$siteID))),
+                                  n = 0)
+  
+  num_repeats_per_level <- rbind(num_repeats_per_level, zero_n_repeats_df) %>%
+    group_by(.data$siteID, .data$label) %>%
+    summarize(n = max(n))
+    
+  
+  # get the value of the level that has the minimum repetitions
   min_num_repeats_per_level <- num_repeats_per_level %>%
     dplyr::group_by(.data$siteID) %>%
     dplyr::summarize(min_repeats = min(n)) 

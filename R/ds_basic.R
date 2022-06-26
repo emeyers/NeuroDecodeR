@@ -371,12 +371,12 @@ get_data.ds_basic <- function(ds_obj) {
   # arrange the data by siteID and labels before adding on the CV_slide_ID
   all_k_fold_data <- dplyr::arrange(all_k_fold_data, .data$siteID, labels)
 
-
+  
   # CV_slice_ID is a groups of data that have one example for each label
   #  - these groups are mapped into CV blocks where blocks contain num_label_repeats_per_cv_split of each label
   CV_slice_ID <- rep(1:num_trials_used_per_label, num_labels * num_sites)
 
-  # add the number of the cross-validitation split to the data
+  # add the number of the cross-validation split to the data
   all_k_fold_data$CV_slice_ID <- CV_slice_ID
 
   # paste the site.000 in front of the siteID so that is is listed as site_0001, site_0002, etc
