@@ -454,8 +454,8 @@ get_example_training_and_test_data <- function() {
 
   # generate shuffled count data...
   ds <- ds_basic(real_data_binned_file_name, "stimulus_ID",
-    site_IDs_to_exclude = c(39, 63),
-    num_cv_splits = 3, num_label_repeats_per_cv_split = 6, use_count_data = TRUE)
+                 site_IDs_to_use = 1:132, site_IDs_to_exclude = c(39, 63),
+                 num_cv_splits = 3, num_label_repeats_per_cv_split = 6, use_count_data = TRUE)
 
   cv_data <- get_data(ds)
 
