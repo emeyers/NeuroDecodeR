@@ -485,10 +485,15 @@ get_num_label_repetitions_each_site <- function(binned_data,
     
     # add the site info variables to the label_rep_info so that one can filter particular sites
     #  based on site_info values
+    get_first <- function(df) df[1]
     site_info_to_use <- site_info %>%
       dplyr::select("siteID", all_of(site_info_variables_names_to_include)) %>%
       dplyr::group_by(.data$siteID) %>%
-      dplyr::summarize(across(everything(), dplyr::first))
+      summarize(across(everything(), get_first))
+    
+    # dplyr::first() doesn't work when vectors are nested in data frames, 
+    # so using get_first() function instead
+    ##  dplyr::summarize(across(everything(), dplyr::first)) 
     
     
     label_rep_each_site_df <- left_join(label_rep_each_site_df, site_info_to_use, "siteID")
