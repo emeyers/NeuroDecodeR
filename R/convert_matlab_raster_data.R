@@ -428,6 +428,9 @@ plot.raster_data <- function(x, ..., facet_label = NULL) {
         panel.grid.minor = element_blank())
   }
   
+  
+  # make it so that first trial is on the top and later trials are below
+  g <- g + scale_y_reverse()
     
   g
 
