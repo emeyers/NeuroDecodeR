@@ -77,7 +77,7 @@ create_binned_data <- function(raster_dir_name,
     
     if (tolower(tools::file_ext(curr_file)) == "csv") {
       
-      raster_data <- load_csv_raster_data(file.path(raster_dir_name, curr_file))
+      raster_data <- read_raster_data(file.path(raster_dir_name, curr_file))
       
     } else if (tolower(tools::file_ext(curr_file)) == "rda") {
       

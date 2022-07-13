@@ -14,17 +14,18 @@ csv_raster_dir_name <- trimws(file.path(system.file("extdata", package = "NeuroD
 temp_dir_name <- tempdir()
 
 
-# testing loading and binning csv files in raster_data format  --------------------
 
-test_that("load_csv_raster_data() can load data into raster format", {
+# testing reading raster_data format data from different raster data types  ---------------
+
+test_that("read_raster_data() can read csv data into raster format", {
   
   csv_raster_file_name <- file.path(
      system.file("extdata", package = "NeuroDecodeR"),
      "Zhang_Desimone_7object_raster_data_small_csv",
      "bp1001spk_01A_raster_data.csv")
   
-  # load the csv file into a raster_data data frame
-  raster_data <- load_csv_raster_data(csv_raster_file_name)
+  # read the csv file into a raster_data data frame
+  raster_data <- read_raster_data(csv_raster_file_name)
   
   expect_equal(class(raster_data)[1], "raster_data")
   
@@ -32,27 +33,53 @@ test_that("load_csv_raster_data() can load data into raster format", {
 
 
 
-test_that("create_binned_data() creates binned data from csv raster data in the correct format", {
+test_that("read_matlab_raster_data() can read matlab data into raster format", {
   
-  name_of_file_that_should_be_created <- file.path(temp_dir_name, "csv_ZD_150bins_50sampled.Rda") 
+  matlab_raster_file_name <- file.path(
+     system.file("extdata", package = "NeuroDecodeR"),
+     "Zhang_Desimone_7object_raster_data_small_mat",
+     "bp1001spk_01A_raster_data.mat")
   
-  # deleting "csv_ZD_150_samples_binned_every_50_samples.Rda" if it already exist
-  if (file.exists(name_of_file_that_should_be_created)) {
-    file.remove(name_of_file_that_should_be_created)
-  } 
+  # read the csv file into a raster_data data frame
+  raster_data <- read_matlab_raster_data(matlab_raster_file_name)
   
-  save_prefix <- file.path(temp_dir_name, "csv_ZD")
-  
-  binned_file_name <- create_binned_data(csv_raster_dir_name, save_prefix, 
-                                         150, 50, files_contain = "bp1001spk")
-  
-  expect_equal(name_of_file_that_should_be_created, binned_file_name)
-  
-  test_valid_binned_format(binned_file_name)
-  
-  file.remove(name_of_file_that_should_be_created)
+  expect_equal(class(raster_data)[1], "raster_data")
   
 })
+
+
+
+
+test_that("read_raster_data() can read rda data into raster format", {
+  
+  rda_raster_file_name <- file.path(
+    system.file("extdata", package = "NeuroDecodeR"),
+    "Zhang_Desimone_7object_raster_data_small_rda",
+    "bp1001spk_01A_raster_data.rda")
+  
+  # read the csv file into a raster_data data frame
+  raster_data <- read_raster_data(rda_raster_file_name)
+  
+  expect_equal(class(raster_data)[1], "raster_data")
+  
+})
+
+
+
+test_that("read_raster_data() can read rds data into raster format", {
+  
+  rds_raster_file_name <- file.path(
+    system.file("extdata", package = "NeuroDecodeR"),
+    "Zhang_Desimone_7object_raster_data_small_rds",
+    "bp1001spk_01A_raster_data.rds")
+  
+  # read the csv file into a raster_data data frame
+  raster_data <- read_raster_data(rds_raster_file_name)
+  
+  expect_equal(class(raster_data)[1], "raster_data")
+  
+})
+
 
 
 
@@ -80,6 +107,32 @@ test_that("create_binned_data() creates binned data from raster data in the corr
   file.remove(name_of_file_that_should_be_created)
 
 })
+
+
+
+test_that("create_binned_data() creates binned data from csv raster data in the correct format", {
+  
+  name_of_file_that_should_be_created <- file.path(temp_dir_name, "csv_ZD_150bins_50sampled.Rda") 
+  
+  # deleting "csv_ZD_150_samples_binned_every_50_samples.Rda" if it already exist
+  if (file.exists(name_of_file_that_should_be_created)) {
+    file.remove(name_of_file_that_should_be_created)
+  } 
+  
+  save_prefix <- file.path(temp_dir_name, "csv_ZD")
+  
+  binned_file_name <- create_binned_data(csv_raster_dir_name, save_prefix, 
+                                         150, 50, files_contain = "bp1001spk")
+  
+  expect_equal(name_of_file_that_should_be_created, binned_file_name)
+  
+  test_valid_binned_format(binned_file_name)
+  
+  file.remove(name_of_file_that_should_be_created)
+  
+})
+
+
 
 
 
@@ -119,15 +172,52 @@ test_that("convert_matlab_raster_data() convert MATLAB raster data to R raster d
 
 
 
-  a_converted_file <- paste0(r_raster_dir_name, list.files(r_raster_dir_name)[1])
+  rda_converted_file <- paste0(r_raster_dir_name, list.files(r_raster_dir_name)[1])
   
   # will return NULL if the converted data is correctly in raster format
-  expect_null(test_valid_raster_format(a_converted_file))
+  expect_null(test_valid_raster_format(rda_converted_file))
+  
+  
+  
+  # test saving converting files to csv 
+  convert_matlab_raster_data(matlab_raster_dir_name,
+                             r_raster_dir_name, 
+                             save_file_type = "csv",
+                             files_contain = "bp1001spk_01A")
+  
+  csv_converted_file <- paste0(r_raster_dir_name, 
+                             list.files(r_raster_dir_name, pattern = "csv"))
+  
+  # will return NULL if the converted data is correctly in raster format
+  expect_null(test_valid_raster_format(csv_converted_file))
+  
+  
+  
+  # test saving converting files to rds
+  convert_matlab_raster_data(matlab_raster_dir_name,
+                             r_raster_dir_name, 
+                             save_file_type = "rds",
+                             files_contain = "bp1001spk_01A")
+  
+  rds_converted_file <- paste0(r_raster_dir_name, 
+                               list.files(r_raster_dir_name, pattern = "rds"))
+  
+  # will return NULL if the converted data is correctly in raster format
+  expect_null(test_valid_raster_format(rds_converted_file))
+  
+  
 
+  # remove all files that were created
+  
   the_files <- paste0(r_raster_dir_name, list.files(r_raster_dir_name))
   file.remove(the_files)
   #unlink(file.path(dirname(r_raster_dir_name), basename(r_raster_dir_name)), 
   #       recursive = TRUE, force = TRUE)
+  
+  
+  
+  
+  
   
 })
 

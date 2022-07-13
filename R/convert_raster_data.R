@@ -1,39 +1,89 @@
-#' Load a csv file into raster_data format
+#' Read a csv, rda, rds or mat file in raster format
 #'
-#' Loads csv (comma separated value) files that has the appropriate raster_data
+#' Reads a csv, rda, rds or mat file that has the appropriate raster_data
 #' column names (i.e., columns that start with site.info, labels. and time.),
 #' and returns data in raster_data format (i.e., a data frame with the raster.data
 #' class attribute).
 #'
-#' @param raster_file_name A string specifying the name (and path) to a csv that
-#'   has the appropriate raster data column names (i.e., columns that start with
-#'   site.info, labels. and time.)
+#' @param raster_file_name A string specifying the name (and path) to a csv,
+#'   rda, rds or mat raster data file that has the appropriate raster data
+#'   column names (i.e., columns that start with site.info, labels. and time.)
 #'
 #' @examples
 #' 
 #' \dontrun{
 #' 
+#' # reading in a csv file in raster format
 #' csv_raster_file_name <- file.path(
 #'   system.file("extdata", package = "NeuroDecodeR"),
 #'   "Zhang_Desimone_7object_raster_data_small_csv",
 #'   "bp1001spk_01A_raster_data.csv"
 #' )
 #' 
-#' # load the csv file into a raster_data data frame
-#' raster_data <- load_csv_raster_data(csv_raster_file_name)
+#' # read the csv file into a raster_data data frame
+#' raster_data <- read_raster_data(csv_raster_file_name)
 #'
 #'}
 #'
 #' @export
-load_csv_raster_data <- function(raster_file_name) {
+read_raster_data <- function(raster_file_name) {
   
-  # read in the csv 
-  raster_data <- read.csv(raster_file_name, check.names = FALSE)
+  if (!(is.character(raster_file_name))) {
+    stop("raster_file_name must be a character string specifying a file name.")
+  }
   
-  # set the appropriate class attribute
-  attr(raster_data, "class") <- c("raster_data", "data.frame") 
+  file_type <-  tools::file_ext(raster_file_name)
   
-  # should all label. be converted to factors?
+  if (!(file_type %in% c("csv", "rda", "rds", "mat"))) {
+    stop("The raster data must be either a csv, rda, rds or mat file and have these
+         corresponding file extensions")
+  }
+    
+  if (file_type == "csv") {
+    
+    # read in the csv 
+    raster_data <- read.csv(raster_file_name, check.names = FALSE)
+    
+    # set the appropriate class attribute
+    attr(raster_data, "class") <- c("raster_data", "data.frame") 
+    
+    # should all label. be converted to factors?
+    
+    
+  } else if (file_type == "rda") {
+   
+
+    raster_data_object_name <- load(raster_file_name)
+    
+    # there should be only 1 object in the raster_file_name
+    if (length(raster_data_object_name) != 1) {
+      stop(paste(
+        "Data not in valid raster format:",
+        "raster data files must contain a single object that has the raster data."))
+    }
+    
+    eval(parse(text = paste0("raster_data <- ", raster_data_object_name)))
+     
+  } else if (file_type == "rds") {
+    
+    raster_data <- readRDS(raster_file_name)
+    
+  } else if (file_type == "mat") {
+    
+    # add message about it using read_matlab_raster_data for additional arguments...
+    message("reading MATLAB raster data using the read_raster_data() function. 
+            For additional features reading MATLAB raster data please use the 
+            read_matlab_raster_data() function.")
+    
+    raster_data <- read_matlab_raster_data(raster_file_name)
+    
+  } else {
+    
+    # redundant but putting the error message here again...
+    #stop("The raster data must be either a csv, rda, rds or mat file and have these
+    #     corresponding file extensions")
+    
+  }
   
   
   # test that it is now in valid format
@@ -42,6 +92,233 @@ load_csv_raster_data <- function(raster_file_name) {
   raster_data
   
 } 
+
+
+
+
+
+
+
+#' Reads MATLAB raster data
+#'
+#' Reads MATLAB data in raster format into an R raster_data format data frame. This
+#' is similar to the general read_raster_data() function but it contains addtional
+#' arguments specific to MALTAB raster data.
+#'
+#' @param matlab_raster_file_name A character string specifying the file name, 
+#' including the full path to a raster data in MATLAB .mat files.
+#'   
+#' @param sampling_interval_width A number specifying how successive time bins
+#'   will be labeled The default value of 1 means that points will be labeled as
+#'   successive integers; i.e., time.1_2, time.2_3, etc. If this value was set
+#'   to a larger number, then time points will be specified at the given
+#'   sampling width. From example, if sampling_width is set to 10, then the time
+#'   labels would be time.1_10, time.10_20, etc. This is useful if the data is
+#'   sampled at a particular rate (e.g., if the data is sampled at 500Hz, one
+#'   might want to use sampling_interval_width = 2, so that the times listed on
+#'   the raster column names are in milliseconds).
+#' 
+#' @param start_ind A number specifying the start index for the data to be
+#'   converted if one wants to convert the data from a shorter time window than
+#'   the original MATLAB raster data. The default (NULL value) is to use all the
+#'   data, i.e., start at the beginning with start_ind = 1.
+#'
+#' @param end_ind A number specifying the end index for the data to be converted
+#'   if one wants to convert the data from a shorter time window than the
+#'   original MATLAB raster data. The default (NULL value) is to use all the
+#'   data, i.e., end value is the last time point.
+#'   
+#' @param zero_time_bin A number specifying the time bin that should be marked
+#'    as time 0. The default (NULL value) is to use the first bin as time 1.
+#'
+#' @param add_sequential_trial_numbers A Boolean specifying one should add a
+#'   variable to the data called 'trial_number' that has sequential trial. These
+#'   trials numbers are needed for data that was recorded simultaneously so that
+#'   trials can be aligned across different sites.
+#'
+#' @examples
+#' 
+#' 
+#' matlab_raster_file_name <- file.path(
+#'   system.file("extdata", package = "NeuroDecodeR"),
+#'   "Zhang_Desimone_7object_raster_data_small_mat",
+#'   "bp1001spk_01A_raster_data.mat")
+#'
+#' raster_data <- read_matlab_raster_data(matlab_raster_file_name)
+#'
+#'
+#'
+#' @export
+read_matlab_raster_data <- function(matlab_raster_file_name,
+                                    sampling_interval_width = 1,
+                                    start_ind = NULL,
+                                    end_ind = NULL,
+                                    zero_time_bin = NULL,
+                                    add_sequential_trial_numbers = FALSE) {
+  
+  
+  
+  raster <- R.matlab::readMat(matlab_raster_file_name)
+  
+  
+  # second, create the raster_site_info list
+  raster_site_info <- raster$raster.site.info[, , 1]
+  
+  
+  # find if any of the site_info is missing values and add them as NAs
+  if (sum(sapply(lapply(raster_site_info, dim), function(x) x[[1]]) == 0)) {
+    raster_site_info[sapply(lapply(raster_site_info, dim), function(x) x[[1]]) == 0][[1]] <- matrix(NA)
+  }
+  
+  # convert the raster site info to a data frame and add it to the raster data
+  raster_site_info_df <- as.data.frame(raster_site_info)
+  
+  
+  # if there are more then one row to site_info_df, flatten it to a single row
+  if (dim(raster_site_info_df)[1] > 1) {
+    
+    all_rows_same_vals <- sapply(raster_site_info_df, n_distinct)
+    raster_site_info_df_diff_row_vals <- dplyr::select(raster_site_info_df, which(all_rows_same_vals > 1))
+    
+    # reduce to a single row all columns that have all of the same values
+    raster_site_info_df <- dplyr::select(raster_site_info_df, which(all_rows_same_vals <= 1))
+    raster_site_info_df <- raster_site_info_df[1, ]
+    
+    # deal with rows that don't have the same value in each row
+    for (iDupSiteInfo in 1:dim(raster_site_info_df_diff_row_vals)[2]) {
+      
+      curr_dup_col_df <- dplyr::select(raster_site_info_df_diff_row_vals, iDupSiteInfo)
+      curr_dup_col_df <- distinct(curr_dup_col_df) # remove duplicated rows (keep nested df)
+      curr_dup_col_df <- as.data.frame(t(as.matrix(curr_dup_col_df))) # a bit of a hack
+      
+      raster_site_info_df <- cbind(raster_site_info_df, curr_dup_col_df)
+    }
+  }
+  
+  
+  # create the appropriate site_info.X prefix variables names
+  raster_site_info_names <- convert_dot_back_to_underscore(names(raster_site_info_df))
+  names(raster_site_info_df) <- raster_site_info_names
+  names(raster_site_info_df) <- paste0("site_info.", names(raster_site_info_df))
+  
+  
+  # third, create the raster_data df
+  raster_data <- data.frame(raster$raster.data)
+  
+  
+  # if start or end inds are not specified used the full data set
+  # also create save names if start and end inds are specified
+  if (is.null(start_ind)) {
+    start_ind <- 1
+    start_ind_save_dir_name <- ""
+  } else {
+    start_ind_save_dir_name <- paste0("_start_", start_ind)
+  }
+  
+  
+  if (is.null(end_ind)) {
+    end_ind <- dim(raster_data)[2]
+    end_ind_save_dir_name <- ""
+  } else {
+    end_ind_save_dir_name <- paste0("_end_", end_ind)
+  }
+  
+  
+  raster_data <- raster_data[, start_ind:end_ind]
+  
+  
+  # Add column names to the raster data in the form of: time.1_2, time.2_3 etc.
+  data_start_times <- seq(from = 1, 
+                          by = sampling_interval_width,
+                          length.out = dim(raster_data)[2])
+  
+  
+  # if there is an alignment time, subtract the start_ind offset from the
+  # alignment and subtract alignment from the raster times
+  if ( (sum(names(raster_site_info) == "alignment.event.time")) || (is.numeric(zero_time_bin)) ) {
+    
+    if (is.numeric(zero_time_bin)) {
+      
+      data_start_times <- (data_start_times - sampling_interval_width * (rep.int(zero_time_bin - (start_ind - 1), length(data_start_times)))  )
+      
+    } else {
+      
+      data_start_times <- (data_start_times - sampling_interval_width * (rep.int(raster_site_info$alignment.event.time - (start_ind - 1), length(data_start_times))))
+    }
+    
+    
+    # remove the alignment time from the site info since it is incorporated into the time bin names
+    raster_site_info_df$site_info.alignment_event_time <- NULL
+    
+    
+    # update the names if start_ind or end_ind were given as arguments
+    if (!(start_ind_save_dir_name == "")) {
+      start_ind_save_dir_name <- paste0("_start_", sampling_interval_width * (start_ind - raster_site_info$alignment_event_time))
+    }
+    
+    if (!(end_ind_save_dir_name == "")) {
+      end_ind_save_dir_name <- paste0("_end_", sampling_interval_width * (end_ind - raster_site_info$alignment_event_time))
+    }
+    
+  }
+  
+  
+  data_end_times <- data_start_times + sampling_interval_width
+  
+  names(raster_data) <- paste0("time.", data_start_times, "_", data_end_times)
+  
+  
+  
+  # forth, add the labels to raster_data
+  # Get the labels for what happened on each trial and add them to the raster_data data frame
+  raster_labels <- raster$raster.labels
+  
+  
+  # loop over label names and parse them
+  all_labels <- convert_dot_back_to_underscore(row.names(raster_labels))
+  
+  for (iLabel in seq_along(all_labels)) {
+    
+    # get the name for the current raster_labels
+    curr_var_name <- all_labels[iLabel]
+    
+    # add the prefix labels. to the curr label name...
+    curr_var_name <- paste0("labels.", curr_var_name)
+    
+    # levels are contained in an extra list - remove this extra list to get the vector of names
+    curr_levels <- raster_labels[iLabel, , ][[1]]
+    curr_levels <- sapply(curr_levels, function(x) x[[1]])
+    
+    # convert to a factor
+    curr_levels <- as.factor(curr_levels)
+    
+    # put into a data frame with the appropriate column name
+    curr_var_column <- eval(parse(text = paste0("curr_var_column <- data.frame(", curr_var_name, " = curr_levels)")))
+    
+    # add to the raster_data
+    raster_data <- cbind(curr_var_column, raster_data)
+    
+  }
+  
+  # add the site_info to the raster_data with the same values in each row (trial)
+  raster_data <- cbind(raster_site_info_df[rep(1, nrow(raster_data)), ], raster_data)
+  rownames(raster_data) <- NULL # remove any row names if they exist
+  
+  
+  # if specified, add a variable trial_number (useful for simultaneously recorded data)
+  if (add_sequential_trial_numbers) {
+    raster_data$trial_number <- 1:nrow(raster_data)
+    raster_data <- dplyr::select(raster_data, .data$trial_number, everything())
+  }  
+  
+  
+  # change the class to be raster_data, data.frame
+  attr(raster_data, "class") <- c("raster_data", "data.frame")
+  
+  
+  raster_data
+  
+}
 
 
 
@@ -57,9 +334,14 @@ load_csv_raster_data <- function(raster_file_name) {
 #'   directory that contains raster data in MATLAB .mat files.
 #'
 #' @param r_raster_dir_name A character string specifying the path to a
-#'   directory where the converted raster data in R .rda files will be saved. If
+#'   directory where the converted raster data in R files will be saved. If
 #'   this is not specified then the saved directory will have the same name as
 #'   the matlab directory with _rda appended to the end of the directory name.
+#'   
+#' @param save_file_type A character string specifying the format that the
+#'   raster data should be saved as. This must be set to a string that is either
+#'   "rda", "rds", or "csv", and files will be saved to the corresponding
+#'   format.
 #'   
 #' @param sampling_interval_width A number specifying how successive time bins
 #'   will be labeled The default value of 1 means that points will be labeled as
@@ -114,6 +396,7 @@ load_csv_raster_data <- function(raster_file_name) {
 #' @export
 convert_matlab_raster_data <- function(matlab_raster_dir_name,
                                        r_raster_dir_name = NULL,
+                                       save_file_type = "rda",
                                        sampling_interval_width = 1,
                                        start_ind = NULL,
                                        end_ind = NULL,
@@ -121,6 +404,12 @@ convert_matlab_raster_data <- function(matlab_raster_dir_name,
                                        files_contain = "",
                                        add_sequential_trial_numbers = FALSE) {
 
+  
+  
+  if (!(save_file_type %in% c("rda", "csv", "rds"))) {
+    stop('save_file_type argument must be set to either "rda", "csv", or "rds"')
+  }
+  
 
   # if matlab directory name ends with a slash, remove this slash
   matlab_raster_dir_name <- paste0(
@@ -129,8 +418,9 @@ convert_matlab_raster_data <- function(matlab_raster_dir_name,
   )
 
 
-  matlab_file_names <- list.files(matlab_raster_dir_name, pattern = files_contain)
 
+
+  matlab_file_names <- list.files(matlab_raster_dir_name, pattern = files_contain)
 
 
   for (iSite in seq_along(matlab_file_names)) {
@@ -146,56 +436,18 @@ convert_matlab_raster_data <- function(matlab_raster_dir_name,
     curr_matlab_file_name <- matlab_file_names[iSite]
 
     # replace .mat with .rda for matlab_raster_directory_name
-    curr_r_file_name <- paste0(substr(curr_matlab_file_name, 1, nchar(curr_matlab_file_name) - 3), "rda")
+    curr_r_file_name <- paste0(substr(curr_matlab_file_name, 1, nchar(curr_matlab_file_name) - 3), save_file_type)
 
-    raster <- R.matlab::readMat(file.path(matlab_raster_dir_name, curr_matlab_file_name))
-
-
-    # second, create the raster_site_info list
-    raster_site_info <- raster$raster.site.info[, , 1]
-
-
-    # find if any of the site_info is missing values and add them as NAs
-    if (sum(sapply(lapply(raster_site_info, dim), function(x) x[[1]]) == 0)) {
-      raster_site_info[sapply(lapply(raster_site_info, dim), function(x) x[[1]]) == 0][[1]] <- matrix(NA)
-    }
-
-    # convert the raster site info to a data frame and add it to the raster data
-    raster_site_info_df <- as.data.frame(raster_site_info)
-
-
-    # if there are more then one row to site_info_df, flatten it to a single row
-    if (dim(raster_site_info_df)[1] > 1) {
-
-      all_rows_same_vals <- sapply(raster_site_info_df, n_distinct)
-      raster_site_info_df_diff_row_vals <- dplyr::select(raster_site_info_df, which(all_rows_same_vals > 1))
-
-      # reduce to a single row all columns that have all of the same values
-      raster_site_info_df <- dplyr::select(raster_site_info_df, which(all_rows_same_vals <= 1))
-      raster_site_info_df <- raster_site_info_df[1, ]
-
-      # deal with rows that don't have the same value in each row
-      for (iDupSiteInfo in 1:dim(raster_site_info_df_diff_row_vals)[2]) {
-        
-        curr_dup_col_df <- dplyr::select(raster_site_info_df_diff_row_vals, iDupSiteInfo)
-        curr_dup_col_df <- distinct(curr_dup_col_df) # remove duplicated rows (keep nested df)
-        curr_dup_col_df <- as.data.frame(t(as.matrix(curr_dup_col_df))) # a bit of a hack
-
-        raster_site_info_df <- cbind(raster_site_info_df, curr_dup_col_df)
-      }
-    }
-
-
-    # create the appropriate site_info.X prefix variables names
-    raster_site_info_names <- convert_dot_back_to_underscore(names(raster_site_info_df))
-    names(raster_site_info_df) <- raster_site_info_names
-    names(raster_site_info_df) <- paste0("site_info.", names(raster_site_info_df))
-
-
-    # third, create the raster_data df
-    raster_data <- data.frame(raster$raster.data)
-
-
+    
+    # call the read_matlab_raster_data here...
+    raster_data <- read_matlab_raster_data(file.path(matlab_raster_dir_name, curr_matlab_file_name),
+                                        sampling_interval_width,
+                                        start_ind,
+                                        end_ind,
+                                        zero_time_bin,
+                                        add_sequential_trial_numbers) 
+    
+    
     # if start or end inds are not specified used the full data set
     # also create save names if start and end inds are specified
     if (is.null(start_ind)) {
@@ -204,104 +456,17 @@ convert_matlab_raster_data <- function(matlab_raster_dir_name,
     } else {
       start_ind_save_dir_name <- paste0("_start_", start_ind)
     }
-
-
+    
+    
     if (is.null(end_ind)) {
       end_ind <- dim(raster_data)[2]
       end_ind_save_dir_name <- ""
     } else {
       end_ind_save_dir_name <- paste0("_end_", end_ind)
     }
-
-
-    raster_data <- raster_data[, start_ind:end_ind]
-
-
-    # Add column names to the raster data in the form of: time.1_2, time.2_3 etc.
-    data_start_times <- seq(from = 1, 
-                            by = sampling_interval_width,
-                            length.out = dim(raster_data)[2])
-                              
-
-    # if there is an alignment time, subtract the start_ind offset from the
-    # alignment and subtract alignment from the raster times
-    if ( (sum(names(raster_site_info) == "alignment.event.time")) || (is.numeric(zero_time_bin)) ) {
-      
-      if (is.numeric(zero_time_bin)) {
-        
-        data_start_times <- (data_start_times - sampling_interval_width * (rep.int(zero_time_bin - (start_ind - 1), length(data_start_times)))  )
-        
-      } else {
-        
-        data_start_times <- (data_start_times - sampling_interval_width * (rep.int(raster_site_info$alignment.event.time - (start_ind - 1), length(data_start_times))))
-      }
-
-      
-      # remove the alignment time from the site info since it is incorporated into the time bin names
-      raster_site_info_df$site_info.alignment_event_time <- NULL
-      
-
-      # update the names if start_ind or end_ind were given as arguments
-      if (!(start_ind_save_dir_name == "")) {
-        start_ind_save_dir_name <- paste0("_start_", sampling_interval_width * (start_ind - raster_site_info$alignment_event_time))
-      }
-
-      if (!(end_ind_save_dir_name == "")) {
-        end_ind_save_dir_name <- paste0("_end_", sampling_interval_width * (end_ind - raster_site_info$alignment_event_time))
-      }
-
-    }
-
     
-    data_end_times <- data_start_times + sampling_interval_width
     
-    names(raster_data) <- paste0("time.", data_start_times, "_", data_end_times)
-
-    
-
-    # forth, add the labels to raster_data
-    # Get the labels for what happened on each trial and add them to the raster_data data frame
-    raster_labels <- raster$raster.labels
-
-
-    # loop over label names and parse them
-    all_labels <- convert_dot_back_to_underscore(row.names(raster_labels))
-
-    for (iLabel in seq_along(all_labels)) {
-
-      # get the name for the current raster_labels
-      curr_var_name <- all_labels[iLabel]
-
-      # add the prefix labels. to the curr label name...
-      curr_var_name <- paste0("labels.", curr_var_name)
-
-      # levels are contained in an extra list - remove this extra list to get the vector of names
-      curr_levels <- raster_labels[iLabel, , ][[1]]
-      curr_levels <- sapply(curr_levels, function(x) x[[1]])
-
-      # convert to a factor
-      curr_levels <- as.factor(curr_levels)
-
-      # put into a data frame with the appropriate column name
-      curr_var_column <- eval(parse(text = paste0("curr_var_column <- data.frame(", curr_var_name, " = curr_levels)")))
-
-      # add to the raster_data
-      raster_data <- cbind(curr_var_column, raster_data)
-
-    }
-
-    # add the site_info to the raster_data with the same values in each row (trial)
-    raster_data <- cbind(raster_site_info_df[rep(1, nrow(raster_data)), ], raster_data)
-    rownames(raster_data) <- NULL # remove any row names if they exist
-
-    
-    # if specified, add a variable trial_number (useful for simultaneously recorded data)
-    if (add_sequential_trial_numbers) {
-      raster_data$trial_number <- 1:nrow(raster_data)
-      raster_data <- dplyr::select(raster_data, .data$trial_number, everything())
-    }
-
-    # finally, save the raster data in the file
+    #  save the raster data in the file
     if (is.null(r_raster_dir_name)) {
 
       # if the directory name ends with "_mat", remove "_mat"
@@ -311,29 +476,36 @@ convert_matlab_raster_data <- function(matlab_raster_dir_name,
       }
 
 
-      # append start and end index if applicable and append "_rda/"
+      # append start and end index if applicable and append "_rda/", "_rds", or "_csv"
       r_raster_dir_name <- file.path(paste0(
         r_raster_dir_name, start_ind_save_dir_name,
-        end_ind_save_dir_name, "_rda"), "")
+        end_ind_save_dir_name, "_", save_file_type), "")
 
     }
 
-    
-    # change the class to be raster_data, data.frame
-    attr(raster_data, "class") <- c("raster_data", "data.frame")
-    
     
     if (dir.exists(r_raster_dir_name) == FALSE) {
       dir.create(r_raster_dir_name)
     }
 
-    save(raster_data, file = paste0(r_raster_dir_name, curr_r_file_name), compress = TRUE)
+    if (save_file_type == "rda") {
+      save(raster_data, file = paste0(r_raster_dir_name, curr_r_file_name), compress = TRUE)
+    } else if (save_file_type == "csv") {
+      write.csv(raster_data, file = paste0(r_raster_dir_name, curr_r_file_name), row.names = FALSE)
+    } else if (save_file_type == "rds") {
+      saveRDS(raster_data, file = paste0(r_raster_dir_name, curr_r_file_name), compress = TRUE)
+    } else {
+      stop('save_file_type argument must be set to either "rda", "csv", or "rds"')
+    }
+      
     
   }
 
   r_raster_dir_name
   
 }
+
+
 
 
 
@@ -370,7 +542,7 @@ convert_dot_back_to_underscore <- function(oldnames) {
 plot.raster_data <- function(x, ..., facet_label = NULL) {
   
   
-  # if a string of a file name is given, load the raster data
+  # if a string of a file name is given, read the raster data
   if (is.character(x)) {
     raster_data_object_name <- load(x)
     eval(parse(text = paste0("raster_data <- ", raster_data_object_name)))

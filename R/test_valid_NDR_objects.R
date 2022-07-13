@@ -40,16 +40,8 @@ test_valid_raster_format <- function(raster_data) {
   if (is.character(raster_data)) {
 
     # if a file name is given, load the raster data
-    raster_data_object_name <- load(raster_data)
+    raster_data <- read_raster_data(raster_data)
 
-    # there should be only 1 object in the raster_file_name
-    if (length(raster_data_object_name) != 1) {
-      stop(paste(
-        "Data not in valid raster format:",
-        "raster data files must contain a single object that has the raster data."))
-    }
-
-    eval(parse(text = paste0("raster_data <- ", raster_data_object_name)))
   }
 
 
