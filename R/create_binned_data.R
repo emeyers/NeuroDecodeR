@@ -73,18 +73,31 @@ create_binned_data <- function(raster_dir_name,
       message(paste0(rep("\b", 19), collapse = ""), sprintf("binning site %-5s", iSite))
     }
 
-    binned_data_object_name <- load(paste0(raster_dir_name, file_names[iSite]))
-
-    if (binned_data_object_name != "raster_data") {
+    curr_file <- file_names[iSite]
+    
+    if (tolower(tools::file_ext(curr_file)) == "csv") {
       
-      stop('Data stored in raster files must contain an object called "raster_data"')
-
-      # added this line to get rid of R CMD check note: no visible binding for global variable 'raster_data'
-      raster_data <- NULL
+      raster_data <- load_csv_raster_data(file.path(raster_dir_name, curr_file))
+      
+    } else if (tolower(tools::file_ext(curr_file)) == "rda") {
+      
+      binned_data_object_name <- load(paste0(raster_dir_name, curr_file))
+      
+      if (binned_data_object_name != "raster_data") {
+        
+        stop('Data stored in raster files must contain an object called "raster_data"')
+        
+        # added this line to get rid of R CMD check note: no visible binding for global variable 'raster_data'
+        raster_data <- NULL
+      }
+      
+    } else {
+      
+      stop("Raster data files must have the extension .rda or .csv")
+      
     }
+    
 
-    
-    
     # If the end times in the raster data are not specified add them.
     #  i.e., if data columns are specified as time.XXX rather than time.XXX_YYY 
     #  add the YYY end time part to the time column names
@@ -192,7 +205,6 @@ bin_saved_data_one_site <- function(raster_data,
   
   
   # bin the data!
-
   all_start_df_inds <- seq(start_df_ind, end_df_ind - (bin_width - 1), by = sampling_interval)
   all_end_df_inds <- all_start_df_inds + (bin_width - 1)
   dfCurr_site_binned_data <- as.data.frame(matrix(nrow = dim(raster_data)[1], ncol = length(all_start_df_inds)))

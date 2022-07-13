@@ -1,3 +1,52 @@
+#' Load a csv file into raster_data format
+#'
+#' Loads csv (comma separated value) files that has the appropriate raster_data
+#' column names (i.e., columns that start with site.info, labels. and time.),
+#' and returns data in raster_data format (i.e., a data frame with the raster.data
+#' class attribute).
+#'
+#' @param raster_file_name A string specifying the name (and path) to a csv that
+#'   has the appropriate raster data column names (i.e., columns that start with
+#'   site.info, labels. and time.)
+#'
+#' @examples
+#' 
+#' \dontrun{
+#' 
+#' csv_raster_file_name <- file.path(
+#'   system.file("extdata", package = "NeuroDecodeR"),
+#'   "Zhang_Desimone_7object_raster_data_small_csv",
+#'   "bp1001spk_01A_raster_data.csv"
+#' )
+#' 
+#' # load the csv file into a raster_data data frame
+#' raster_data <- load_csv_raster_data(csv_raster_file_name)
+#'
+#'}
+#'
+#' @export
+load_csv_raster_data <- function(raster_file_name) {
+  
+  # read in the csv 
+  raster_data <- read.csv(raster_file_name, check.names = FALSE)
+  
+  # set the appropriate class attribute
+  attr(raster_data, "class") <- c("raster_data", "data.frame") 
+  
+  # should all label. be converted to factors?
+  
+  
+  # test that it is now in valid format
+  test_valid_raster_format(raster_data)
+  
+  raster_data
+  
+} 
+
+
+
+
+
 #' Convert raster data in MATLAB to R
 #'
 #' If one already has raster data created in MATLAB (.mat files), this function

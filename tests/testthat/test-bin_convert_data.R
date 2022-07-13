@@ -7,8 +7,54 @@
 raster_dir_name <- trimws(file.path(system.file("extdata", package = "NeuroDecodeR"), 
                                     "Zhang_Desimone_7object_raster_data_small_rda", " "))
 
+csv_raster_dir_name <- trimws(file.path(system.file("extdata", package = "NeuroDecodeR"), 
+                                    "Zhang_Desimone_7object_raster_data_small_csv", " "))
+
 
 temp_dir_name <- tempdir()
+
+
+# testing loading and binning csv files in raster_data format  --------------------
+
+test_that("load_csv_raster_data() can load data into raster format", {
+  
+  csv_raster_file_name <- file.path(
+     system.file("extdata", package = "NeuroDecodeR"),
+     "Zhang_Desimone_7object_raster_data_small_csv",
+     "bp1001spk_01A_raster_data.csv")
+  
+  # load the csv file into a raster_data data frame
+  raster_data <- load_csv_raster_data(csv_raster_file_name)
+  
+  expect_equal(class(raster_data)[1], "raster_data")
+  
+})
+
+
+
+test_that("create_binned_data() creates binned data from csv raster data in the correct format", {
+  
+  name_of_file_that_should_be_created <- file.path(temp_dir_name, "csv_ZD_150bins_50sampled.Rda") 
+  
+  # deleting "csv_ZD_150_samples_binned_every_50_samples.Rda" if it already exist
+  if (file.exists(name_of_file_that_should_be_created)) {
+    file.remove(name_of_file_that_should_be_created)
+  } 
+  
+  save_prefix <- file.path(temp_dir_name, "csv_ZD")
+  
+  binned_file_name <- create_binned_data(csv_raster_dir_name, save_prefix, 
+                                         150, 50, files_contain = "bp1001spk")
+  
+  expect_equal(name_of_file_that_should_be_created, binned_file_name)
+  
+  test_valid_binned_format(binned_file_name)
+  
+  file.remove(name_of_file_that_should_be_created)
+  
+})
+
+
 
 
 # testing create_binned_data --------------------------------------------------
