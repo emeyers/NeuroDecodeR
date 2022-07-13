@@ -9,8 +9,6 @@ convert_matlab_raster_data(
   r_raster_dir_name = NULL,
   save_file_type = "rda",
   sampling_interval_width = 1,
-  start_ind = NULL,
-  end_ind = NULL,
   zero_time_bin = NULL,
   files_contain = "",
   add_sequential_trial_numbers = FALSE
@@ -39,16 +37,6 @@ labels would be time.1_10, time.10_20, etc. This is useful if the data is
 sampled at a particular rate (e.g., if the data is sampled at 500Hz, one
 might want to use sampling_interval_width = 2, so that the times listed on
 the raster column names are in milliseconds).}
-
-\item{start_ind}{A number specifying the start index for the data to be
-converted if one wants to convert the data from a shorter time window than
-the original MATLAB raster data. The default (NULL value) is to use all the
-data, i.e., start at the beginning with start_ind = 1.}
-
-\item{end_ind}{A number specifying the end index for the data to be converted
-if one wants to convert the data from a shorter time window than the
-original MATLAB raster data. The default (NULL value) is to use all the
-data, i.e., end value is the last time point.}
 
 \item{zero_time_bin}{A number specifying the time bin that should be marked
 as time 0. The default (NULL value) is to use the first bin as time 1.}

@@ -117,16 +117,6 @@ read_raster_data <- function(raster_file_name) {
 #'   sampled at a particular rate (e.g., if the data is sampled at 500Hz, one
 #'   might want to use sampling_interval_width = 2, so that the times listed on
 #'   the raster column names are in milliseconds).
-#' 
-#' @param start_ind A number specifying the start index for the data to be
-#'   converted if one wants to convert the data from a shorter time window than
-#'   the original MATLAB raster data. The default (NULL value) is to use all the
-#'   data, i.e., start at the beginning with start_ind = 1.
-#'
-#' @param end_ind A number specifying the end index for the data to be converted
-#'   if one wants to convert the data from a shorter time window than the
-#'   original MATLAB raster data. The default (NULL value) is to use all the
-#'   data, i.e., end value is the last time point.
 #'   
 #' @param zero_time_bin A number specifying the time bin that should be marked
 #'    as time 0. The default (NULL value) is to use the first bin as time 1.
@@ -151,8 +141,6 @@ read_raster_data <- function(raster_file_name) {
 #' @export
 read_matlab_raster_data <- function(matlab_raster_file_name,
                                     sampling_interval_width = 1,
-                                    start_ind = NULL,
-                                    end_ind = NULL,
                                     zero_time_bin = NULL,
                                     add_sequential_trial_numbers = FALSE) {
   
@@ -206,27 +194,6 @@ read_matlab_raster_data <- function(matlab_raster_file_name,
   raster_data <- data.frame(raster$raster.data)
   
   
-  # if start or end inds are not specified used the full data set
-  # also create save names if start and end inds are specified
-  if (is.null(start_ind)) {
-    start_ind <- 1
-    start_ind_save_dir_name <- ""
-  } else {
-    start_ind_save_dir_name <- paste0("_start_", start_ind)
-  }
-  
-  
-  if (is.null(end_ind)) {
-    end_ind <- dim(raster_data)[2]
-    end_ind_save_dir_name <- ""
-  } else {
-    end_ind_save_dir_name <- paste0("_end_", end_ind)
-  }
-  
-  
-  raster_data <- raster_data[, start_ind:end_ind]
-  
-  
   # Add column names to the raster data in the form of: time.1_2, time.2_3 etc.
   data_start_times <- seq(from = 1, 
                           by = sampling_interval_width,
@@ -236,6 +203,8 @@ read_matlab_raster_data <- function(matlab_raster_file_name,
   # if there is an alignment time, subtract the start_ind offset from the
   # alignment and subtract alignment from the raster times
   if ( (sum(names(raster_site_info) == "alignment.event.time")) || (is.numeric(zero_time_bin)) ) {
+    
+    start_ind <- 1  # no longer an option to set this
     
     if (is.numeric(zero_time_bin)) {
       
@@ -250,15 +219,6 @@ read_matlab_raster_data <- function(matlab_raster_file_name,
     # remove the alignment time from the site info since it is incorporated into the time bin names
     raster_site_info_df$site_info.alignment_event_time <- NULL
     
-    
-    # update the names if start_ind or end_ind were given as arguments
-    if (!(start_ind_save_dir_name == "")) {
-      start_ind_save_dir_name <- paste0("_start_", sampling_interval_width * (start_ind - raster_site_info$alignment_event_time))
-    }
-    
-    if (!(end_ind_save_dir_name == "")) {
-      end_ind_save_dir_name <- paste0("_end_", sampling_interval_width * (end_ind - raster_site_info$alignment_event_time))
-    }
     
   }
   
@@ -352,16 +312,6 @@ read_matlab_raster_data <- function(matlab_raster_file_name,
 #'   sampled at a particular rate (e.g., if the data is sampled at 500Hz, one
 #'   might want to use sampling_interval_width = 2, so that the times listed on
 #'   the raster column names are in milliseconds).
-#' 
-#' @param start_ind A number specifying the start index for the data to be
-#'   converted if one wants to convert the data from a shorter time window than
-#'   the original MATLAB raster data. The default (NULL value) is to use all the
-#'   data, i.e., start at the beginning with start_ind = 1.
-#'
-#' @param end_ind A number specifying the end index for the data to be converted
-#'   if one wants to convert the data from a shorter time window than the
-#'   original MATLAB raster data. The default (NULL value) is to use all the
-#'   data, i.e., end value is the last time point.
 #'   
 #' @param zero_time_bin A number specifying the time bin that should be marked
 #'    as time 0. The default (NULL value) is to use the first bin as time 1.
@@ -398,8 +348,6 @@ convert_matlab_raster_data <- function(matlab_raster_dir_name,
                                        r_raster_dir_name = NULL,
                                        save_file_type = "rda",
                                        sampling_interval_width = 1,
-                                       start_ind = NULL,
-                                       end_ind = NULL,
                                        zero_time_bin = NULL,
                                        files_contain = "",
                                        add_sequential_trial_numbers = FALSE) {
@@ -442,29 +390,8 @@ convert_matlab_raster_data <- function(matlab_raster_dir_name,
     # call the read_matlab_raster_data here...
     raster_data <- read_matlab_raster_data(file.path(matlab_raster_dir_name, curr_matlab_file_name),
                                         sampling_interval_width,
-                                        start_ind,
-                                        end_ind,
                                         zero_time_bin,
                                         add_sequential_trial_numbers) 
-    
-    
-    # if start or end inds are not specified used the full data set
-    # also create save names if start and end inds are specified
-    if (is.null(start_ind)) {
-      start_ind <- 1
-      start_ind_save_dir_name <- ""
-    } else {
-      start_ind_save_dir_name <- paste0("_start_", start_ind)
-    }
-    
-    
-    if (is.null(end_ind)) {
-      end_ind <- dim(raster_data)[2]
-      end_ind_save_dir_name <- ""
-    } else {
-      end_ind_save_dir_name <- paste0("_end_", end_ind)
-    }
-    
     
     #  save the raster data in the file
     if (is.null(r_raster_dir_name)) {
@@ -478,8 +405,7 @@ convert_matlab_raster_data <- function(matlab_raster_dir_name,
 
       # append start and end index if applicable and append "_rda/", "_rds", or "_csv"
       r_raster_dir_name <- file.path(paste0(
-        r_raster_dir_name, start_ind_save_dir_name,
-        end_ind_save_dir_name, "_", save_file_type), "")
+        r_raster_dir_name,  save_file_type), "")
 
     }
 
