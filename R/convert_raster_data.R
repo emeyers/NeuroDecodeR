@@ -272,6 +272,38 @@ read_matlab_raster_data <- function(matlab_raster_file_name,
   }  
   
   
+  
+  # If there are site_info. columns that contain nested vectors such that:
+  #  1. all the nested vectors are identical
+  #  2. the number of values in the vectors are the same as the number of 
+  #     rows in the raster_data, so that it is likely that each value
+  #     in the nested vectors correspond to one row in the raster_data. 
+  #  Then unnest the site_info variable to make it so there is one value 
+  #  for each row of the raster_data.
+  
+  all_same <- function(x) length(unique(x)) == 1
+  
+  nested_inds <- which(sapply(select(raster_data, starts_with("site_info")), 
+                              class) == "list")
+  for (curr_ind in nested_inds) {
+    
+    nested_var_data <- raster_data[, curr_ind]
+    
+    if (all_same(nested_var_data)) {
+      
+      nested_var_data_vector <- as.vector(nested_var_data[[1]])
+      
+      if (length(nested_var_data_vector) == nrow(raster_data)) {
+        raster_data[, curr_ind] <- nested_var_data_vector
+      } 
+      
+    }
+  }
+  
+  
+  
+  
+  
   # change the class to be raster_data, data.frame
   attr(raster_data, "class") <- c("raster_data", "data.frame")
   
