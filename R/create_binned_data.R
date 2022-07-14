@@ -145,6 +145,14 @@ create_binned_data <- function(raster_dir_name,
     end_time_name <- paste0("_end", end_time)
   }
 
+  # if the file prefix includes a directory path that does not exist, create the directory 
+  the_dir_name <- dirname(saved_binned_data_file_name)
+  if (((!file.exists(the_dir_name)) && (the_dir_name != ""))) {
+    message(paste0("The folder where the binned file should be saved does not exist. ",
+            "Creating a new folder at ", the_dir_name , " to save the binned results."))
+    dir.create(the_dir_name, recursive = TRUE) 
+  }
+  
   saved_binned_data_file_name <- paste0(saved_binned_data_file_name, start_time_name, end_time_name, ".Rda")
   save("binned_data", file = saved_binned_data_file_name, compress = TRUE)
 
