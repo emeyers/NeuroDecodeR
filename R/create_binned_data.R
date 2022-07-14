@@ -75,27 +75,13 @@ create_binned_data <- function(raster_dir_name,
 
     curr_file <- file_names[iSite]
     
-    if (tolower(tools::file_ext(curr_file)) == "csv") {
-      
-      raster_data <- read_raster_data(file.path(raster_dir_name, curr_file))
-      
-    } else if (tolower(tools::file_ext(curr_file)) == "rda") {
-      
-      binned_data_object_name <- load(paste0(raster_dir_name, curr_file))
-      
-      if (binned_data_object_name != "raster_data") {
-        
-        stop('Data stored in raster files must contain an object called "raster_data"')
-        
-        # added this line to get rid of R CMD check note: no visible binding for global variable 'raster_data'
-        raster_data <- NULL
-      }
-      
+    if (tolower(tools::file_ext(curr_file)) == "mat") {
+      # doing this to avoid a message being printed that the read_matlab_raster_data() function should be used
+      raster_data <- read_matlab_raster_data(file.path(raster_dir_name, curr_file))
     } else {
-      
-      stop("Raster data files must have the extension .rda or .csv")
-      
+      raster_data <- read_raster_data(file.path(raster_dir_name, curr_file))
     }
+
     
 
     # If the end times in the raster data are not specified add them.

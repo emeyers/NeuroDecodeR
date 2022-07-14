@@ -71,9 +71,9 @@ read_raster_data <- function(raster_file_name) {
   } else if (file_type == "mat") {
     
     # add message about it using read_matlab_raster_data for additional arguments...
-    message("reading MATLAB raster data using the read_raster_data() function. 
+    message("Reading MATLAB raster data using the read_raster_data() function.  
             For additional features reading MATLAB raster data please use the 
-            read_matlab_raster_data() function.")
+            NeuroDecodeR:::read_matlab_raster_data() function.")
     
     raster_data <- read_matlab_raster_data(raster_file_name)
     
