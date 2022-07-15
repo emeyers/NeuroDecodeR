@@ -443,7 +443,7 @@ convert_matlab_raster_data <- function(matlab_raster_dir_name,
 
     
     if (dir.exists(r_raster_dir_name) == FALSE) {
-      dir.create(r_raster_dir_name)
+      dir.create(r_raster_dir_name, recursive = TRUE)
     }
 
     if (save_file_type == "rda") {
