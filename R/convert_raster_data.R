@@ -441,17 +441,17 @@ convert_matlab_raster_data <- function(matlab_raster_dir_name,
 
     }
 
-    
+
     if (dir.exists(r_raster_dir_name) == FALSE) {
       dir.create(r_raster_dir_name, recursive = TRUE)
     }
 
     if (save_file_type == "rda") {
-      save(raster_data, file = paste0(r_raster_dir_name, curr_r_file_name), compress = TRUE)
+      save(raster_data, file = file.path(r_raster_dir_name, curr_r_file_name), compress = TRUE)
     } else if (save_file_type == "csv") {
-      write.csv(raster_data, file = paste0(r_raster_dir_name, curr_r_file_name), row.names = FALSE)
+      write.csv(raster_data, file = file.path(r_raster_dir_name, curr_r_file_name), row.names = FALSE)
     } else if (save_file_type == "rds") {
-      saveRDS(raster_data, file = paste0(r_raster_dir_name, curr_r_file_name), compress = TRUE)
+      saveRDS(raster_data, file = file.path(r_raster_dir_name, curr_r_file_name), compress = TRUE)
     } else {
       stop('save_file_type argument must be set to either "rda", "csv", or "rds"')
     }
