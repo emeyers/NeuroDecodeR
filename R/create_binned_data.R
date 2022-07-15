@@ -33,6 +33,11 @@
 #'
 #' @param files_contain A string that specifies that only raster files that
 #'   contain this string should be included in the binned format data.
+#'   
+#' @param num_parallel_cores An integers specifying the number of parallel cores
+#'   to use. The default (NULL) value is to use half of the cores detected on
+#'   the system. If this value is set to a value of less than 1, then the code
+#'   will be run serially.
 #'
 #' @examples
 #' # create binned data with 150 ms bin sizes sampled at 10 ms intervals
@@ -51,7 +56,8 @@ create_binned_data <- function(raster_dir_name,
                                sampling_interval,
                                start_time = NULL,
                                end_time = NULL,
-                               files_contain = "") {
+                               files_contain = "",
+                               num_parallel_cores = NULL) {
 
 
   # if the directory name does not end with a slash, add a slash 
@@ -60,12 +66,42 @@ create_binned_data <- function(raster_dir_name,
   file_names <- list.files(raster_dir_name, pattern = files_contain)
 
 
+  # if the num_parallel_cores is not set, use half the available cores
+  #  or if that is more than the num_resample_runs, just use num_resample_runs cores
+  
+  if (is.null(num_parallel_cores)) {
+    num_parallel_cores <- min(parallel::detectCores()/2, length(file_names))
+  }
+  
+  
+  if (num_parallel_cores > 0) {
+    
+    # register parallel resources
+    the_cluster <- parallel::makeCluster(num_parallel_cores, 
+                                         type = "SOCK")  # , parallel_outfile)
+    doSNOW::registerDoSNOW(the_cluster)
+    
+    "%do_type%" <- get("%dopar%")
+    
+  } else {
+    "%do_type%" <- get("%do%")
+  }
+  
+
+  # Adding a pretty lame progress bar since unfortunately I couldn't get any of
+  # the cooler progress bars (e.g., from the progress and progressr packages) to
+  # work. On the plus side, the changes to the code are minimal.
+  pb <- txtProgressBar(max = length(file_names), style=3)
+  progress <- function(n) setTxtProgressBar(pb, n)
+  opts <- list(progress=progress)
+
+
+  
+  # Do a parallel loop through all raster data files and bin them
+  iSite <- 0  # to deal with an R check note
   binned_data_list <- list()
-
-
-  # loop through all raster data files and bin them
-  for (iSite in seq_along(file_names)) {
-
+  binned_data_list <- foreach(iSite = seq_along(file_names), .options.snow=opts) %do_type% { 
+                                                 
     # print message to show progress the number of sites that have been binned    
     if (iSite == 1) {
       message(sprintf("binning site %-5s", iSite))
@@ -79,7 +115,7 @@ create_binned_data <- function(raster_dir_name,
       # doing this to avoid a message being printed that the read_matlab_raster_data() function should be used
       raster_data <- read_matlab_raster_data(file.path(raster_dir_name, curr_file))
     } else {
-      raster_data <- read_raster_data(file.path(raster_dir_name, curr_file))
+      raster_data <- NeuroDecodeR::read_raster_data(file.path(raster_dir_name, curr_file))
     }
 
     
@@ -101,6 +137,12 @@ create_binned_data <- function(raster_dir_name,
     
   }
 
+  
+  # close parallel resources
+  if (num_parallel_cores > 0) {
+    parallel::stopCluster(the_cluster)
+  }
+  
   
   # initial way to combine list of data frames into a single data frame
   # binned_data <- do.call(rbind.data.frame, binned_data_list)

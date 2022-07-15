@@ -11,7 +11,8 @@ create_binned_data(
   sampling_interval,
   start_time = NULL,
   end_time = NULL,
-  files_contain = ""
+  files_contain = "",
+  num_parallel_cores = NULL
 )
 }
 \arguments{
@@ -42,6 +43,11 @@ time in the raster data.}
 
 \item{files_contain}{A string that specifies that only raster files that
 contain this string should be included in the binned format data.}
+
+\item{num_parallel_cores}{An integers specifying the number of parallel cores
+to use. The default (NULL) value is to use half of the cores detected on
+the system. If this value is set to a value of less than 1, then the code
+will be run serially.}
 }
 \description{
 This function takes the name of a directory that contains files in raster
