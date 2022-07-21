@@ -23,7 +23,7 @@ log_save_results <- function(DECODING_RESULTS, save_directory_name, result_name 
   save_directory_name <- add_last_character_to_directory_name(save_directory_name)
 
   if (!dir.exists(save_directory_name)) {
-    dir.create(save_directory_name)
+    dir.create(save_directory_name, recursive = TRUE)
     message("The directory to save the results does not exist so it is being created now.")
   }
   
