@@ -382,12 +382,29 @@ get_data.ds_basic <- function(ds_obj) {
   # paste the site.000 in front of the siteID so that is is listed as site_0001, site_0002, etc
   all_k_fold_data$siteID <- paste0("site_", stringr::str_pad(all_k_fold_data$siteID, 4, pad = "0"))
 
+  
   # convert so that there are one column for each site
-  melted_data <- tidyr::gather(all_k_fold_data, "time_bin", "activity", -.data$siteID, -labels, -CV_slice_ID)
-  all_cv_data <- tidyr::spread(melted_data, .data$siteID, .data$activity) %>%
+  
+  # older version that uses gather/spread
+  #melted_data <- tidyr::gather(all_k_fold_data, "time_bin", "activity", -.data$siteID, -labels, -CV_slice_ID)
+  #all_cv_data_old <- tidyr::spread(melted_data, .data$siteID, .data$activity) %>%
+  #  select(labels, .data$time_bin, CV_slice_ID, everything()) %>%
+  #  mutate(time_bin = as.factor(.data$time_bin)) #  %>%  arrange(labels, time_bin)
+
+  
+  long_data <- tidyr::pivot_longer(all_k_fold_data, 
+                                   -c(.data$siteID, .data$labels, .data$CV_slice_ID),
+                                   names_to = "time_bin", 
+                                   values_to = "activity")
+
+   all_cv_data <- tidyr::pivot_wider(long_data, 
+                                    names_from = .data$siteID, 
+                                    values_from = .data$activity) %>%
     select(labels, .data$time_bin, CV_slice_ID, everything()) %>%
     mutate(time_bin = as.factor(.data$time_bin)) #  %>%  arrange(labels, time_bin)
+  
 
+   
   # create different CV_1, CV_2 which list which points are training points and which points are test points
   for (iCV in 1:num_cv_splits) {
     start_ind <- (((iCV - 1) * num_label_repeats_per_cv_split) + 1)
