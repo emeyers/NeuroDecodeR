@@ -45,6 +45,10 @@ test_that("cv_standard can run simple decoding analysis", {
   plot(DECODING_RESULTS$rm_confusion_matrix, results_to_show = "mutual_information")
   
   
+  expect_message(plot(DECODING_RESULTS$rm_confusion_matrix, plot_only_one_train_time = 200))
+  plot(DECODING_RESULTS$rm_confusion_matrix, plot_only_one_train_time = 175)
+  
+  
 })
 
 

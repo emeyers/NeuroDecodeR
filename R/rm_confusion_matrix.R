@@ -278,14 +278,20 @@ aggregate_resample_run_results.rm_confusion_matrix <- function(resample_run_resu
 #'   will plot a TCD plot of the mutual information otherwise it will plot a
 #'   line plot of the mutual information for training and testing at the same
 #'   time.
-#'
-#'
+#'   
+#' @param plot_only_one_train_time If this is set to a numeric value the the
+#'   confusion matrix will only be plotted for the training time *start time*
+#'   that is specified. If the number passed is not equal to an exact start
+#'   training time, then the closest training time will be used and a message
+#'   saying that the time specified does not exist will be printed.
+#'   
 #' @family result_metrics
 #'
 #'
 #' @export
 plot.rm_confusion_matrix <- function(x, ..., results_to_show = "zero_one_loss",
-                                     plot_only_same_train_test_time = TRUE) {
+                                     plot_only_same_train_test_time = TRUE,
+                                     plot_only_one_train_time = NULL) {
   
   
   saved_only_at_same_train_test_time <- attr(x, "options")$save_only_same_train_test_time
@@ -306,7 +312,10 @@ plot.rm_confusion_matrix <- function(x, ..., results_to_show = "zero_one_loss",
   if ((results_to_show == "zero_one_loss") || (results_to_show == "decision_vals")) {
     
     should_decision_vals_cm <- results_to_show == "decision_vals"
-    plot_confusion_matrix(x, plot_only_same_train_test_time, should_decision_vals_cm)
+    plot_confusion_matrix(x, 
+                          plot_only_same_train_test_time, 
+                          plot_only_one_train_time, 
+                          should_decision_vals_cm)
 
     # otherwise plot mutual information calculated from zero-one loss confusion matrix
   } else if (results_to_show == "mutual_information") {
@@ -331,9 +340,10 @@ plot.rm_confusion_matrix <- function(x, ..., results_to_show = "zero_one_loss",
 
 
 
-# a priviate function to plot the confusion matrix
+# a private function to plot the confusion matrix
 plot_confusion_matrix <- function(confusion_matrix_obj,
                                   plot_only_same_train_test_time = FALSE,
+                                  plot_only_one_train_time = NULL,
                                   plot_decision_vals_confusion_matrix = FALSE) {
 
 
@@ -356,6 +366,39 @@ plot_confusion_matrix <- function(confusion_matrix_obj,
     confusion_matrix_obj <- confusion_matrix_obj %>%
       filter(.data$train_time == .data$test_time)
   }
+  
+  
+  if (!is.null(plot_only_one_train_time)) {
+    
+   if (!is.numeric(plot_only_one_train_time)) {
+     stop("The plot_only_one_train_time argument must be NULL or set to a numeric value.")
+   }
+    
+    
+    the_train_times <- unique(confusion_matrix_obj$train_time)
+    
+    if (sum(plot_only_one_train_time == the_train_times) == 0) {
+      
+      closest_time <- the_train_times[which.min(abs(plot_only_one_train_time - the_train_times))]
+      
+      
+      message(paste0("The plot_only_one_train_time argument value of ", plot_only_one_train_time,
+                     " does not match any of the rm_confusion_matrix train times. ",
+                     "Selecting the closest starting training time available which is ", closest_time, "."))
+      
+      plot_only_one_train_time <- closest_time
+      
+    }
+    
+    
+    confusion_matrix_obj <- confusion_matrix_obj %>%
+      filter(.data$train_time == plot_only_one_train_time)
+    
+     
+  }
+  
+  
+  
 
 
   if (FALSE) { # (only_has_same_train_test_time_results) {

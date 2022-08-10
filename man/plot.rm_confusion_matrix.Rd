@@ -8,7 +8,8 @@
   x,
   ...,
   results_to_show = "zero_one_loss",
-  plot_only_same_train_test_time = TRUE
+  plot_only_same_train_test_time = TRUE,
+  plot_only_one_train_time = NULL
 )
 }
 \arguments{
@@ -34,6 +35,12 @@ times. If the \code{results_to_show == "mutual_information"} setting this to TRU
 will plot a TCD plot of the mutual information otherwise it will plot a
 line plot of the mutual information for training and testing at the same
 time.}
+
+\item{plot_only_one_train_time}{If this is set to a numeric value the the
+confusion matrix will only be plotted for the training time \emph{start time}
+that is specified. If the number passed is not equal to an exact start
+training time, then the closest training time will be used and a message
+saying that the time specified does not exist will be printed.}
 }
 \description{
 This function plots confusion matrices after the decoding analysis has been
