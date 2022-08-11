@@ -9,7 +9,7 @@ plot_main_results(
   results_to_plot,
   results_to_show = "zero_one_loss",
   type = "line",
-  result_names = NULL
+  display_names = NULL
 )
 }
 \arguments{
@@ -17,13 +17,14 @@ plot_main_results(
 files with DECODING_RESULTS that have rm_main_results as one of the result
 metrics.}
 
-\item{results_to_plot}{This can be set to a vector of strings specifying file names for
-the results to plot, or a vector of numbers that contain the rows in the
-results_manifest file of the results that should be compared. The
-results_manifest file should be created from saving results using the
-log_save_results() function. Finally, if this is set to a single string that is a
-regular expression, all results in the results_manifest file result_name variable
-that match the regular expression will be plotted.}
+\item{results_to_plot}{This can be set to a vector of strings specifying
+result_names for the results to plot, or a vector of numbers that contain
+the rows in the results_manifest file of the results that should be
+compared. The results_manifest file should be created from saving results
+using the log_save_results() function. Finally, if this is set to a single
+string that is a regular expression, all results in the results_manifest
+file result_name variable that match the regular expression will be
+plotted.}
 
 \item{results_to_show}{A string specifying the types of results to plot. Options
 are: 'zero_one_loss', 'normalized_rank', 'decision_values', or 'all'.}
@@ -32,14 +33,10 @@ are: 'zero_one_loss', 'normalized_rank', 'decision_values', or 'all'.}
 'TCD' to plot a temporal cross decoding matrix or 'line' to create a line
 plot of the decoding results as a function of time.}
 
-\item{result_names}{A vector of strings specifying what the labels on the
+\item{display_names}{A vector of strings specifying what the labels on the
 plots should say for each result. If this is NULL, the result names will be
 the names from the manifest file's result_name column, or if these are set
-to "No result name set" then the analysisID will be the label. If this is
-set to a single string that is a regular expression (and if result_name
-column is not set to "No result name set), the regular expression will be
-applied to the result_name column of the manifest file and the returned
-value will be the result name in the plot.}
+to "No result name set" then the analysisID will be the label.}
 }
 \description{
 This function can create a line plot of the results or temporal

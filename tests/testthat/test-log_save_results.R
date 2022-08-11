@@ -135,6 +135,17 @@ test_that("log_load_results_from_result_name() can load saved results based on t
 
 
 
+# doing this test here since I have multiple results saved
+test_that("Test that can plot several results using plot_main_results (doing this in test-log_save_results", {
+  
+  expect_visible(plot_main_results(results_dir_name, 1:2, display_names = c("first result", "second result")))
+  
+  expect_visible(plot_main_results(results_dir_name, c("results 1", "results 2 again")))
+  
+})
+
+
+
 
 # clean up by deleting any saved results and manifest file
 the_files <- paste0(results_dir_name, list.files(results_dir_name))

@@ -38,7 +38,7 @@ mean of the decision values. This is also an S3 object which has an
 associated plot function to display the results.
 }
 \details{
-Like all result metrics, this result metric has functions to aggregregate
+Like all result metrics, this result metric has functions to aggregate
 results after completing each set of cross-validation classifications, and
 also after completing all the resample runs. The results should then be
 available in the DECODING_RESULTS object returned by the cross-validator.

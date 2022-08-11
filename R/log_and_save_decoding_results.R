@@ -271,6 +271,7 @@ log_load_results_from_params <- function(decoding_params, results_directory_name
 #'
 #' @export
 log_load_results_from_result_name <- function(result_name, results_directory_name) {
+  
   results_directory_name <- add_last_character_to_directory_name(results_directory_name)
   manifest_file_name <- paste0(results_directory_name, "results_manifest.rda")
 
@@ -298,7 +299,7 @@ log_load_results_from_result_name <- function(result_name, results_directory_nam
 
 
   if (dim(matching_results)[1] == 0) {
-    
+
     stop(paste("There is no saved result_name that matches the specified result name of: ", result_name))
 
     # added this line to get rid of R CMD check note: no visible binding for global variable 'DECODING_RESULTS'
