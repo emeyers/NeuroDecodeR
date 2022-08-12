@@ -11,7 +11,7 @@ cv_standard(
   feature_preprocessors = NULL,
   result_metrics = NULL,
   num_resample_runs = 50,
-  test_only_at_training_time = FALSE,
+  run_temporal_cross_decoding = TRUE,
   num_parallel_cores = NULL,
   parallel_outfile = NULL
 )
@@ -44,11 +44,11 @@ run (i.e., "resample runs"), where on each run, new training and test sets
 are generated. If pseudo-populations are used (e.g., with the ds_basic),
 then new pseudo-populations will be generated on each resample run as well.}
 
-\item{test_only_at_training_time}{A boolean indicated whether the classifier
-should only be trained and tested at the same time point (i.e., if TRUE a
-temporal cross-decoding analysis will NOT be run). Setting this to true can
-potentially speed up the analysis and save memory at the cost of not
-calculated the temporal cross decoding results.}
+\item{run_temporal_cross_decoding}{A Boolean indicating whether the classifier
+should only be trained and tested at the same time point; i.e., whether
+temporal cross-decoding will be run). Setting this to FALSE can potentially
+speed up the analysis and save memory at the cost of not calculated the
+temporal cross decoding results.}
 
 \item{num_parallel_cores}{An integers specifying the number of parallel cores
 to use when executing the resample runs in the analysis. The default (NULL)

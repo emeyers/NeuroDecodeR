@@ -16,7 +16,7 @@ test_that("cv_standard can run simple decoding analysis", {
   rms <- list(rm_main_results(), rm_confusion_matrix(save_TCD_results = TRUE))
   
   
-  cv <- cv_standard(NULL, ds, cl, fps, rms, 3, test_only_at_training_time = FALSE) 
+  cv <- cv_standard(NULL, ds, cl, fps, rms, 3, run_temporal_cross_decoding = TRUE) 
 
   
   expect_null(test_valid_cross_validator(cv))
