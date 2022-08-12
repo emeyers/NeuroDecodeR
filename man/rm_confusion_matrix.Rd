@@ -6,7 +6,7 @@
 \usage{
 rm_confusion_matrix(
   ndr_container_or_object = NULL,
-  save_only_same_train_test_time = TRUE,
+  save_only_same_train_test_times = TRUE,
   create_decision_vals_confusion_matrix = TRUE
 )
 }
@@ -22,7 +22,7 @@ If this argument is set to another ndr object, then both that ndr object as
 well as a new rm_confusion_matrix object will be added to a new container
 and the container will be returned.}
 
-\item{save_only_same_train_test_time}{A boolean specifying whether one wants
+\item{save_only_same_train_test_times}{A boolean specifying whether one wants
 to save results to allow one to create the confusion matrices when training
 at one point in time and testing a different point in time. Setting this to
 FALSE can save memory.}
