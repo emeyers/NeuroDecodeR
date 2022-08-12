@@ -74,7 +74,7 @@ mutual information calculated from the confusion matrix." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">NeuroDecodeR</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.0.9005</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.0.9007</span>
       </span>
     </div>
 
@@ -156,7 +156,8 @@ mutual information calculated from the confusion matrix.</p>
   <span class='va'>x</span>,
   <span class='va'>...</span>,
   results_to_show <span class='op'>=</span> <span class='st'>"zero_one_loss"</span>,
-  plot_only_same_train_test_time <span class='op'>=</span> <span class='cn'>TRUE</span>
+  plot_TCD_results <span class='op'>=</span> <span class='cn'>FALSE</span>,
+  plot_only_one_train_time <span class='op'>=</span> <span class='cn'>NULL</span>
 <span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
@@ -184,13 +185,21 @@ zero-one loss confusion matrix.</p></li>
 </ul></td>
     </tr>
     <tr>
-      <th>plot_only_same_train_test_time</th>
-      <td><p>A boolean indicating whether the
-confusion matrices should only be plotted at the same training and test
-times. If the <code>results_to_show == "mutual_information"</code> setting this to TRUE
+      <th>plot_TCD_results</th>
+      <td><p>A Boolean indicating whether the
+a cross-temporal decoding of the confusion matrices should only be plotted.
+If the <code>results_to_show == "mutual_information"</code> setting this to TRUE
 will plot a TCD plot of the mutual information otherwise it will plot a
 line plot of the mutual information for training and testing at the same
 time.</p></td>
+    </tr>
+    <tr>
+      <th>plot_only_one_train_time</th>
+      <td><p>If this is set to a numeric value the the
+confusion matrix will only be plotted for the training time <em>start time</em>
+that is specified. If the number passed is not equal to an exact start
+training time, then the closest training time will be used and a message
+saying that the time specified does not exist will be printed.</p></td>
     </tr>
     </table>
 

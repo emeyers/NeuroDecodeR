@@ -75,7 +75,7 @@ decoding." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">NeuroDecodeR</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.0.9005</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.0.9007</span>
       </span>
     </div>
 
@@ -160,7 +160,8 @@ decoding.</p>
   <span class='va'>sampling_interval</span>,
   start_time <span class='op'>=</span> <span class='cn'>NULL</span>,
   end_time <span class='op'>=</span> <span class='cn'>NULL</span>,
-  files_contain <span class='op'>=</span> <span class='st'>""</span>
+  files_contain <span class='op'>=</span> <span class='st'>""</span>,
+  num_parallel_cores <span class='op'>=</span> <span class='cn'>NULL</span>
 <span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
@@ -207,6 +208,13 @@ time in the raster data.</p></td>
       <th>files_contain</th>
       <td><p>A string that specifies that only raster files that
 contain this string should be included in the binned format data.</p></td>
+    </tr>
+    <tr>
+      <th>num_parallel_cores</th>
+      <td><p>An integers specifying the number of parallel cores
+to use. The default (NULL) value is to use half of the cores detected on
+the system. If this value is set to a value of less than 1, then the code
+will be run serially.</p></td>
     </tr>
     </table>
 

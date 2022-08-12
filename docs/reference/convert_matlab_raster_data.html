@@ -74,7 +74,7 @@ the NDR." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">NeuroDecodeR</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.0.9005</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.0.9007</span>
       </span>
     </div>
 
@@ -141,7 +141,7 @@ the NDR." />
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Convert raster data in MATLAB to R</h1>
-    <small class="dont-index">Source: <a href='https://github.com/emeyers/NeuroDecodeR/blob/master/R/convert_matlab_raster_data.R'><code>R/convert_matlab_raster_data.R</code></a></small>
+    <small class="dont-index">Source: <a href='https://github.com/emeyers/NeuroDecodeR/blob/master/R/raster_data_functions.R'><code>R/raster_data_functions.R</code></a></small>
     <div class="hidden name"><code>convert_matlab_raster_data.Rd</code></div>
     </div>
 
@@ -154,9 +154,8 @@ the NDR.</p>
     <pre class="usage"><span class='fu'>convert_matlab_raster_data</span><span class='op'>(</span>
   <span class='va'>matlab_raster_dir_name</span>,
   r_raster_dir_name <span class='op'>=</span> <span class='cn'>NULL</span>,
+  save_file_type <span class='op'>=</span> <span class='st'>"rda"</span>,
   sampling_interval_width <span class='op'>=</span> <span class='fl'>1</span>,
-  start_ind <span class='op'>=</span> <span class='cn'>NULL</span>,
-  end_ind <span class='op'>=</span> <span class='cn'>NULL</span>,
   zero_time_bin <span class='op'>=</span> <span class='cn'>NULL</span>,
   files_contain <span class='op'>=</span> <span class='st'>""</span>,
   add_sequential_trial_numbers <span class='op'>=</span> <span class='cn'>FALSE</span>
@@ -173,9 +172,16 @@ directory that contains raster data in MATLAB .mat files.</p></td>
     <tr>
       <th>r_raster_dir_name</th>
       <td><p>A character string specifying the path to a
-directory where the converted raster data in R .rda files will be saved. If
+directory where the converted raster data in R files will be saved. If
 this is not specified then the saved directory will have the same name as
 the matlab directory with _rda appended to the end of the directory name.</p></td>
+    </tr>
+    <tr>
+      <th>save_file_type</th>
+      <td><p>A character string specifying the format that the
+raster data should be saved as. This must be set to a string that is either
+"rda", "rds", or "csv", and files will be saved to the corresponding
+format.</p></td>
     </tr>
     <tr>
       <th>sampling_interval_width</th>
@@ -188,20 +194,6 @@ labels would be time.1_10, time.10_20, etc. This is useful if the data is
 sampled at a particular rate (e.g., if the data is sampled at 500Hz, one
 might want to use sampling_interval_width = 2, so that the times listed on
 the raster column names are in milliseconds).</p></td>
-    </tr>
-    <tr>
-      <th>start_ind</th>
-      <td><p>A number specifying the start index for the data to be
-converted if one wants to convert the data from a shorter time window than
-the original MATLAB raster data. The default (NULL value) is to use all the
-data, i.e., start at the beginning with start_ind = 1.</p></td>
-    </tr>
-    <tr>
-      <th>end_ind</th>
-      <td><p>A number specifying the end index for the data to be converted
-if one wants to convert the data from a shorter time window than the
-original MATLAB raster data. The default (NULL value) is to use all the
-data, i.e., end value is the last time point.</p></td>
     </tr>
     <tr>
       <th>zero_time_bin</th>

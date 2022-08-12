@@ -73,7 +73,7 @@ invariant/abstract to particular conditions." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">NeuroDecodeR</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.0.9005</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.0.9007</span>
       </span>
     </div>
 
@@ -151,7 +151,7 @@ invariant/abstract to particular conditions.</p>
 
     <pre class="usage"><span class='fu'>ds_generalization</span><span class='op'>(</span>
   <span class='va'>binned_data</span>,
-  <span class='va'>var_to_decode</span>,
+  <span class='va'>label_to_decode</span>,
   <span class='va'>num_cv_splits</span>,
   <span class='va'>train_label_levels</span>,
   <span class='va'>test_label_levels</span>,
@@ -173,7 +173,7 @@ invariant/abstract to particular conditions.</p>
 binned format, or a data frame of binned_data that is in binned format.</p></td>
     </tr>
     <tr>
-      <th>var_to_decode</th>
+      <th>label_to_decode</th>
       <td><p>A string specifying the name of the labels that
 should be decoded. This label must be one of the columns in the binned
 data that starts with 'label.'</p></td>

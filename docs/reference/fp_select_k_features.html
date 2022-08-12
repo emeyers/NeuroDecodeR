@@ -79,7 +79,7 @@ selective neurons, etc.)." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">NeuroDecodeR</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.0.9005</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.0.9007</span>
       </span>
     </div>
 
@@ -163,7 +163,7 @@ selective neurons, etc.).</p>
 
     <pre class="usage"><span class='fu'>fp_select_k_features</span><span class='op'>(</span>
   ndr_container_or_object <span class='op'>=</span> <span class='cn'>NULL</span>,
-  num_site_to_use <span class='op'>=</span> <span class='cn'>NA</span>,
+  num_sites_to_use <span class='op'>=</span> <span class='cn'>NA</span>,
   num_sites_to_exclude <span class='op'>=</span> <span class='cn'>NA</span>
 <span class='op'>)</span></pre>
 
@@ -184,7 +184,7 @@ well as a new fp_select_k_features object will be added to a new container
 and the container will be returned.</p></td>
     </tr>
     <tr>
-      <th>num_site_to_use</th>
+      <th>num_sites_to_use</th>
       <td><p>The number of features with the smallest p-values to use.</p></td>
     </tr>
     <tr>
@@ -201,7 +201,7 @@ that should be excluded.</p></td>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='co'># This will cause the cross-validator use only the 50 most selective sites</span>
-<span class='va'>fp</span> <span class='op'>&lt;-</span> <span class='fu'>fp_select_k_features</span><span class='op'>(</span>num_site_to_use <span class='op'>=</span> <span class='fl'>50</span><span class='op'>)</span>
+<span class='va'>fp</span> <span class='op'>&lt;-</span> <span class='fu'>fp_select_k_features</span><span class='op'>(</span>num_sites_to_use <span class='op'>=</span> <span class='fl'>50</span><span class='op'>)</span>
 
 <span class='co'># This will cause the cross-validator to remove the 20 most selective sites</span>
 <span class='va'>fp</span> <span class='op'>&lt;-</span> <span class='fu'>fp_select_k_features</span><span class='op'>(</span>num_sites_to_exclude <span class='op'>=</span> <span class='fl'>20</span><span class='op'>)</span>
@@ -209,7 +209,7 @@ that should be excluded.</p></td>
 <span class='co'># This will cause the cross-validator to remove the 20 most selective sites</span>
 <span class='co'># and then use only the 50 most selective sites that remain after the 20 are</span>
 <span class='co'># eliminated</span>
-<span class='va'>fp</span> <span class='op'>&lt;-</span> <span class='fu'>fp_select_k_features</span><span class='op'>(</span>num_site_to_use <span class='op'>=</span> <span class='fl'>50</span>, num_sites_to_exclude <span class='op'>=</span> <span class='fl'>20</span><span class='op'>)</span>
+<span class='va'>fp</span> <span class='op'>&lt;-</span> <span class='fu'>fp_select_k_features</span><span class='op'>(</span>num_sites_to_use <span class='op'>=</span> <span class='fl'>50</span>, num_sites_to_exclude <span class='op'>=</span> <span class='fl'>20</span><span class='op'>)</span>
 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">

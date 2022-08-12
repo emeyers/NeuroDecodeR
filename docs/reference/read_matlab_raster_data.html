@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>A maximum correlation coefficient classifier (CL) — cl_max_correlation • NeuroDecodeR</title>
+<title>Reads MATLAB raster data — read_matlab_raster_data • NeuroDecodeR</title>
 
 
 <!-- jquery -->
@@ -39,8 +39,10 @@
 
 
 
-<meta property="og:title" content="A maximum correlation coefficient classifier (CL) — cl_max_correlation" />
-<meta property="og:description" content="An implementation of a maximum correlation coefficient classifier." />
+<meta property="og:title" content="Reads MATLAB raster data — read_matlab_raster_data" />
+<meta property="og:description" content="Reads MATLAB data in raster format into an R raster_data format data frame. This
+is similar to the general read_raster_data() function but it contains addtional
+arguments specific to MALTAB raster data." />
 
 
 
@@ -138,81 +140,70 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>A maximum correlation coefficient classifier (CL)</h1>
-    <small class="dont-index">Source: <a href='https://github.com/emeyers/NeuroDecodeR/blob/master/R/cl_max_correlation.R'><code>R/cl_max_correlation.R</code></a></small>
-    <div class="hidden name"><code>cl_max_correlation.Rd</code></div>
+    <h1>Reads MATLAB raster data</h1>
+    <small class="dont-index">Source: <a href='https://github.com/emeyers/NeuroDecodeR/blob/master/R/raster_data_functions.R'><code>R/raster_data_functions.R</code></a></small>
+    <div class="hidden name"><code>read_matlab_raster_data.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>An implementation of a maximum correlation coefficient classifier.</p>
+    <p>Reads MATLAB data in raster format into an R raster_data format data frame. This
+is similar to the general read_raster_data() function but it contains addtional
+arguments specific to MALTAB raster data.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>cl_max_correlation</span><span class='op'>(</span>
-  ndr_container_or_object <span class='op'>=</span> <span class='cn'>NULL</span>,
-  return_decision_values <span class='op'>=</span> <span class='cn'>TRUE</span>
+    <pre class="usage"><span class='fu'>read_matlab_raster_data</span><span class='op'>(</span>
+  <span class='va'>matlab_raster_file_name</span>,
+  sampling_interval_width <span class='op'>=</span> <span class='fl'>1</span>,
+  zero_time_bin <span class='op'>=</span> <span class='cn'>NULL</span>,
+  add_sequential_trial_numbers <span class='op'>=</span> <span class='cn'>FALSE</span>
 <span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>ndr_container_or_object</th>
-      <td><p>The purpose of this argument is to make the
-constructor of the cl_maximum_corrleation classifier work with the
-magrittr pipe (%&gt;%) operator. This argument should almost never be directly
-set by the user to anything other than NULL. If this is set to the default
-value of NULL, then the constructor will return a cl_max_correlation
-object. If this is set to an ndr container, then a cl_max_correlation
-object will be added to the container and the container will be returned.
-If this argument is set to another ndr object, then both that ndr object as
-well as a new cl_maximum_corrleation object will be added to a new
-container and the container will be returned.</p></td>
+      <th>matlab_raster_file_name</th>
+      <td><p>A character string specifying the file name,
+including the full path to a raster data in MATLAB .mat files.</p></td>
     </tr>
     <tr>
-      <th>return_decision_values</th>
-      <td><p>A Boolean specifying whether the prediction
-function should return columns that have the decision values. Setting this
-to FALSE will save memory so can be useful when analyzing very large high
-temporal resolution data sets. However if this is set to FALSE&lt; metrics
-won't be able to compute decoding accuracy measures that are based on the
-decision values; e.g., the rm_main_results object won't be able to
-calculate normalized rank decision values.</p></td>
+      <th>sampling_interval_width</th>
+      <td><p>A number specifying how successive time bins
+will be labeled The default value of 1 means that points will be labeled as
+successive integers; i.e., time.1_2, time.2_3, etc. If this value was set
+to a larger number, then time points will be specified at the given
+sampling width. From example, if sampling_width is set to 10, then the time
+labels would be time.1_10, time.10_20, etc. This is useful if the data is
+sampled at a particular rate (e.g., if the data is sampled at 500Hz, one
+might want to use sampling_interval_width = 2, so that the times listed on
+the raster column names are in milliseconds).</p></td>
+    </tr>
+    <tr>
+      <th>zero_time_bin</th>
+      <td><p>A number specifying the time bin that should be marked
+as time 0. The default (NULL value) is to use the first bin as time 1.</p></td>
+    </tr>
+    <tr>
+      <th>add_sequential_trial_numbers</th>
+      <td><p>A Boolean specifying one should add a
+variable to the data called 'trial_number' that has sequential trial. These
+trials numbers are needed for data that was recorded simultaneously so that
+trials can be aligned across different sites.</p></td>
     </tr>
     </table>
 
-    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
-
-    <p>This CL object learns a mean population vector (template) for each
-class from the training set (by averaging together the all training points
-within each class). The classifier is tested by calculated Pearson’s
-correlation coefficient between a test point and the templates learned from
-the training set, and the class with the highest correlation value is
-returned as the predicted label. The decision values returned by the
-classifier are the correlation coefficients between all test points and all
-templates.</p>
-<p>Like all classifiers (CL) objects, this classifier has a get_predictions()
-method which learns a model based on training data and then makes predictions
-on the test data.</p>
-    <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
-
-    <div class='dont-index'><p>Other classifier: 
-<code><a href='cl_poisson_naive_bayes.html'>cl_poisson_naive_bayes</a>()</code>,
-<code><a href='cl_svm.html'>cl_svm</a>()</code></p></div>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='co'># running a basic decoding analysis using the cl_max_correlation</span>
-<span class='va'>data_file</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/system.file.html'>system.file</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/file.path.html'>file.path</a></span><span class='op'>(</span><span class='st'>"extdata"</span>, <span class='st'>"ZD_150bins_50sampled.Rda"</span><span class='op'>)</span>,
-                         package <span class='op'>=</span> <span class='st'>"NeuroDecodeR"</span><span class='op'>)</span>
-<span class='va'>ds</span> <span class='op'>&lt;-</span> <span class='fu'><a href='ds_basic.html'>ds_basic</a></span><span class='op'>(</span><span class='va'>data_file</span>, <span class='st'>"stimulus_ID"</span>, <span class='fl'>18</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; <span class='message'>Automatically selecting sites_IDs_to_use. Since num_cv_splits = 18 and num_label_repeats_per_cv_split = 1, all sites that have 18 repetitions have been selected. This yields 132 sites that will be used for decoding (out of 132 total).</span></div><div class='input'><span class='va'>fps</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='fu'><a href='fp_zscore.html'>fp_zscore</a></span><span class='op'>(</span><span class='op'>)</span><span class='op'>)</span>
+    <pre class="examples"><div class='input'>
 
-<span class='va'>cl</span> <span class='op'>&lt;-</span> <span class='fu'>cl_max_correlation</span><span class='op'>(</span><span class='op'>)</span>
-<span class='va'>cv</span> <span class='op'>&lt;-</span> <span class='fu'><a href='cv_standard.html'>cv_standard</a></span><span class='op'>(</span>datasource <span class='op'>=</span> <span class='va'>ds</span>, 
-                  classifier <span class='op'>=</span> <span class='va'>cl</span>, 
-                  feature_preprocessors <span class='op'>=</span> <span class='va'>fps</span><span class='op'>)</span>
-<span class='kw'>if</span> <span class='op'>(</span><span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'>{</span>
-<span class='va'>DECODING_RESULTS</span> <span class='op'>&lt;-</span> <span class='fu'><a href='run_decoding.html'>run_decoding</a></span><span class='op'>(</span><span class='va'>cv</span><span class='op'>)</span>
-<span class='op'>}</span>
+<span class='va'>matlab_raster_file_name</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/file.path.html'>file.path</a></span><span class='op'>(</span>
+  <span class='fu'><a href='https://rdrr.io/r/base/system.file.html'>system.file</a></span><span class='op'>(</span><span class='st'>"extdata"</span>, package <span class='op'>=</span> <span class='st'>"NeuroDecodeR"</span><span class='op'>)</span>,
+  <span class='st'>"Zhang_Desimone_7object_raster_data_small_mat"</span>,
+  <span class='st'>"bp1001spk_01A_raster_data.mat"</span><span class='op'>)</span>
+
+<span class='va'>raster_data</span> <span class='op'>&lt;-</span> <span class='fu'>read_matlab_raster_data</span><span class='op'>(</span><span class='va'>matlab_raster_file_name</span><span class='op'>)</span>
+
+
 
 </div></pre>
   </div>

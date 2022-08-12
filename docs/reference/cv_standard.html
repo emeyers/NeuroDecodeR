@@ -73,7 +73,7 @@ and tested using cross-validation." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">NeuroDecodeR</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.0.9005</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.0.9007</span>
       </span>
     </div>
 
@@ -156,7 +156,7 @@ and tested using cross-validation.</p>
   feature_preprocessors <span class='op'>=</span> <span class='cn'>NULL</span>,
   result_metrics <span class='op'>=</span> <span class='cn'>NULL</span>,
   num_resample_runs <span class='op'>=</span> <span class='fl'>50</span>,
-  test_only_at_training_time <span class='op'>=</span> <span class='cn'>FALSE</span>,
+  run_temporal_cross_decoding <span class='op'>=</span> <span class='cn'>TRUE</span>,
   num_parallel_cores <span class='op'>=</span> <span class='cn'>NULL</span>,
   parallel_outfile <span class='op'>=</span> <span class='cn'>NULL</span>
 <span class='op'>)</span></pre>
@@ -204,12 +204,12 @@ are generated. If pseudo-populations are used (e.g., with the ds_basic),
 then new pseudo-populations will be generated on each resample run as well.</p></td>
     </tr>
     <tr>
-      <th>test_only_at_training_time</th>
-      <td><p>A boolean indicated whether the classifier
-should only be trained and tested at the same time point (i.e., if TRUE a
-temporal cross-decoding analysis will NOT be run). Setting this to true can
-potentially speed up the analysis and save memory at the cost of not
-calculated the temporal cross decoding results.</p></td>
+      <th>run_temporal_cross_decoding</th>
+      <td><p>A Boolean indicating whether the classifier
+should only be trained and tested at the same time point; i.e., whether
+temporal cross-decoding will be run). Setting this to FALSE can potentially
+speed up the analysis and save memory at the cost of not calculated the
+temporal cross decoding results.</p></td>
     </tr>
     <tr>
       <th>num_parallel_cores</th>
@@ -256,7 +256,7 @@ the results.</p></li>
 <span class='va'>cv</span> <span class='op'>&lt;-</span> <span class='fu'>cv_standard</span><span class='op'>(</span>datasource <span class='op'>=</span> <span class='va'>ds</span>, 
                  classifier <span class='op'>=</span> <span class='va'>cl</span>, 
                  feature_preprocessors <span class='op'>=</span> <span class='va'>fps</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; <span class='message'>Automatically selecting sites_IDs_to_use. Since num_cv_splits = 3 and num_label_repeats_per_cv_split = 6, all sites that have 18 repetitions have been selected. This yields 132 sites that will be used for decoding (out of 132 total).</span></div><div class='output co'>#&gt; <span class='message'>Automatically selecting sites_IDs_to_use. Since num_cv_splits = 3 and num_label_repeats_per_cv_split = 6, all sites that have 18 repetitions have been selected. This yields 132 sites that will be used for decoding (out of 132 total).</span></div><div class='input'>
+
 
 <span class='co'># alternatively, one can also use the magrittr pipe (%&gt;%) to do an analysis</span>
 <span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://magrittr.tidyverse.org'>magrittr</a></span><span class='op'>)</span>
@@ -271,7 +271,7 @@ the results.</p></li>
     <span class='fu'><a href='rm_confusion_matrix.html'>rm_confusion_matrix</a></span><span class='op'>(</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
     <span class='fu'>cv_standard</span><span class='op'>(</span>num_resample_runs <span class='op'>=</span> <span class='fl'>3</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
     <span class='fu'><a href='run_decoding.html'>run_decoding</a></span><span class='op'>(</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; <span class='message'>Automatically selecting sites_IDs_to_use. Since num_cv_splits = 6 and num_label_repeats_per_cv_split = 3, all sites that have 18 repetitions have been selected. This yields 132 sites that will be used for decoding (out of 132 total).</span></div><div class='output co'>#&gt; <span class='message'>Automatically selecting sites_IDs_to_use. Since num_cv_splits = 3 and num_label_repeats_per_cv_split = 6, all sites that have 18 repetitions have been selected. This yields 132 sites that will be used for decoding (out of 132 total).</span></div><div class='output co'>#&gt; <span class='message'>Automatically selecting sites_IDs_to_use. Since num_cv_splits = 3 and num_label_repeats_per_cv_split = 6, all sites that have 18 repetitions have been selected. This yields 132 sites that will be used for decoding (out of 132 total).</span></div><div class='output co'>#&gt;   |                                                                              |                                                                      |   0%  |                                                                              |=======================                                               |  33%  |                                                                              |===============================================                       |  67%  |                                                                              |======================================================================| 100%</div><div class='input'>
+</div><div class='output co'>#&gt; <span class='message'>Automatically selecting sites_IDs_to_use. Since num_cv_splits = 6 and num_label_repeats_per_cv_split = 3, all sites that have 18 repetitions have been selected. This yields 132 sites that will be used for decoding (out of 132 total).</span></div><div class='output co'>#&gt;   |                                                                              |                                                                      |   0%  |                                                                              |=======================                                               |  33%  |                                                                              |===============================================                       |  67%  |                                                                              |======================================================================| 100%</div><div class='input'>
 
 </div></pre>
   </div>

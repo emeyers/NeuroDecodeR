@@ -72,7 +72,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">NeuroDecodeR</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.0.9005</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.0.9007</span>
       </span>
     </div>
 
@@ -149,11 +149,11 @@
 
     <pre class="usage"><span class='fu'>ds_basic</span><span class='op'>(</span>
   <span class='va'>binned_data</span>,
-  <span class='va'>var_to_decode</span>,
+  <span class='va'>label_to_decode</span>,
   <span class='va'>num_cv_splits</span>,
   use_count_data <span class='op'>=</span> <span class='cn'>FALSE</span>,
   num_label_repeats_per_cv_split <span class='op'>=</span> <span class='fl'>1</span>,
-  label_levels_to_use <span class='op'>=</span> <span class='cn'>NULL</span>,
+  label_levels <span class='op'>=</span> <span class='cn'>NULL</span>,
   num_resample_sites <span class='op'>=</span> <span class='cn'>NULL</span>,
   site_IDs_to_use <span class='op'>=</span> <span class='cn'>NULL</span>,
   site_IDs_to_exclude <span class='op'>=</span> <span class='cn'>NULL</span>,
@@ -170,7 +170,7 @@
 binned format, or a data frame of binned_data that is in binned format.</p></td>
     </tr>
     <tr>
-      <th>var_to_decode</th>
+      <th>label_to_decode</th>
       <td><p>A string specifying the name of the labels that
 should be decoded. This label must be one of the columns in the binned
 data that starts with 'label.'</p></td>
@@ -193,7 +193,7 @@ poisson_naive_bayes_CL.</p></td>
 label should be repeated in each cross-validation split.</p></td>
     </tr>
     <tr>
-      <th>label_levels_to_use</th>
+      <th>label_levels</th>
       <td><p>A vector of strings specifying specific label
 levels that should be used. If this is set to NULL then all label levels
 available will be used.</p></td>
@@ -261,7 +261,7 @@ get training and testing splits of data that can be passed to a classifier.</p>
 <span class='co'># One can specify a subset of labels levels to be used in decoding. Here</span>
 <span class='co'>#  we just do a three-way decoding analysis between "car", "hand" and "kiwi".</span>
 <span class='va'>ds</span> <span class='op'>&lt;-</span> <span class='fu'>ds_basic</span><span class='op'>(</span><span class='va'>data_file</span>, <span class='st'>"stimulus_ID"</span>, <span class='fl'>18</span>,
-  label_levels_to_use <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"car"</span>, <span class='st'>"hand"</span>, <span class='st'>"kiwi"</span><span class='op'>)</span>
+  label_levels <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"car"</span>, <span class='st'>"hand"</span>, <span class='st'>"kiwi"</span><span class='op'>)</span>
 <span class='op'>)</span>
 </div><div class='output co'>#&gt; <span class='message'>Automatically selecting sites_IDs_to_use. Since num_cv_splits = 18 and num_label_repeats_per_cv_split = 1, all sites that have 18 repetitions have been selected. This yields 132 sites that will be used for decoding (out of 132 total).</span></div><div class='input'>
 <span class='co'># One never explicitly calls the get_data() function, but rather this is</span>

@@ -75,7 +75,7 @@ have been aggregated)." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">NeuroDecodeR</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.0.9005</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.0.9007</span>
       </span>
     </div>
 
@@ -158,7 +158,7 @@ have been aggregated).</p>
   <span class='va'>results_to_plot</span>,
   results_to_show <span class='op'>=</span> <span class='st'>"zero_one_loss"</span>,
   type <span class='op'>=</span> <span class='st'>"line"</span>,
-  result_names <span class='op'>=</span> <span class='cn'>NULL</span>
+  display_names <span class='op'>=</span> <span class='cn'>NULL</span>
 <span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
@@ -172,13 +172,14 @@ metrics.</p></td>
     </tr>
     <tr>
       <th>results_to_plot</th>
-      <td><p>This can be set to a vector of strings specifying file names for
-the results to plot, or a vector of numbers that contain the rows in the
-results_manifest file of the results that should be compared. The
-results_manifest file should be created from saving results using the
-log_save_results() function. Finally, if this is set to a single string that is a
-regular expression, all results in the results_manifest file result_name variable
-that match the regular expression will be plotted.</p></td>
+      <td><p>This can be set to a vector of strings specifying
+result_names for the results to plot, or a vector of numbers that contain
+the rows in the results_manifest file of the results that should be
+compared. The results_manifest file should be created from saving results
+using the log_save_results() function. Finally, if this is set to a single
+string that is a regular expression, all results in the results_manifest
+file result_name variable that match the regular expression will be
+plotted.</p></td>
     </tr>
     <tr>
       <th>results_to_show</th>
@@ -192,15 +193,11 @@ are: 'zero_one_loss', 'normalized_rank', 'decision_values', or 'all'.</p></td>
 plot of the decoding results as a function of time.</p></td>
     </tr>
     <tr>
-      <th>result_names</th>
+      <th>display_names</th>
       <td><p>A vector of strings specifying what the labels on the
 plots should say for each result. If this is NULL, the result names will be
 the names from the manifest file's result_name column, or if these are set
-to "No result name set" then the analysisID will be the label. If this is
-set to a single string that is a regular expression (and if result_name
-column is not set to "No result name set), the regular expression will be
-applied to the result_name column of the manifest file and the returned
-value will be the result name in the plot.</p></td>
+to "No result name set" then the analysisID will be the label.</p></td>
     </tr>
     </table>
 

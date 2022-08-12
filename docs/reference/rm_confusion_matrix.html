@@ -72,7 +72,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">NeuroDecodeR</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.0.9005</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.0.9007</span>
       </span>
     </div>
 
@@ -149,7 +149,7 @@
 
     <pre class="usage"><span class='fu'>rm_confusion_matrix</span><span class='op'>(</span>
   ndr_container_or_object <span class='op'>=</span> <span class='cn'>NULL</span>,
-  save_only_same_train_test_time <span class='op'>=</span> <span class='cn'>TRUE</span>,
+  save_TCD_results <span class='op'>=</span> <span class='cn'>FALSE</span>,
   create_decision_vals_confusion_matrix <span class='op'>=</span> <span class='cn'>TRUE</span>
 <span class='op'>)</span></pre>
 
@@ -170,11 +170,11 @@ well as a new rm_confusion_matrix object will be added to a new container
 and the container will be returned.</p></td>
     </tr>
     <tr>
-      <th>save_only_same_train_test_time</th>
-      <td><p>A boolean specifying whether one wants
-to save results to allow one to create the confusion matrices when training
-at one point in time and testing a different point in time. Setting this to
-FALSE can save memory.</p></td>
+      <th>save_TCD_results</th>
+      <td><p>A Boolean specifying whether one wants
+to save results to allow one to create temporal cross decoding confusion
+matrices; i.e., confusion matrices when training at one point in time and
+testing a different point in time. Setting this to FALSE can save memory.</p></td>
     </tr>
     <tr>
       <th>create_decision_vals_confusion_matrix</th>

@@ -72,7 +72,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">NeuroDecodeR</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.0.9005</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.0.9007</span>
       </span>
     </div>
 
@@ -222,7 +222,7 @@ and then makes predictions on new test data.</p>
 <span class='va'>cv</span> <span class='op'>&lt;-</span> <span class='fu'><a href='cv_standard.html'>cv_standard</a></span><span class='op'>(</span>datasource <span class='op'>=</span> <span class='va'>ds</span>, 
                   classifier <span class='op'>=</span> <span class='va'>cl</span>, 
                   feature_preprocessors <span class='op'>=</span> <span class='va'>fps</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; <span class='message'>Automatically selecting sites_IDs_to_use. Since num_cv_splits = 3 and num_label_repeats_per_cv_split = 6, all sites that have 18 repetitions have been selected. This yields 132 sites that will be used for decoding (out of 132 total).</span></div><div class='input'><span class='kw'>if</span> <span class='op'>(</span><span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'>{</span>
+<span class='kw'>if</span> <span class='op'>(</span><span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'>{</span>
 <span class='va'>DECODING_RESULTS</span> <span class='op'>&lt;-</span> <span class='fu'><a href='run_decoding.html'>run_decoding</a></span><span class='op'>(</span><span class='va'>cv</span><span class='op'>)</span>
 <span class='op'>}</span>
 
