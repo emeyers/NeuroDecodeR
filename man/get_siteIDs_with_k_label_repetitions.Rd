@@ -6,22 +6,22 @@
 \usage{
 get_siteIDs_with_k_label_repetitions(
   binned_data,
-  variable_to_use,
+  label_to_assess,
   k,
-  levels_to_use = NULL
+  label_levels = NULL
 )
 }
 \arguments{
 \item{binned_data}{A string that list a path to a file that has data in
 binned format, or a data frame of binned_data that is in binned format.}
 
-\item{variable_to_use}{A string specifying whether label variable should be
-used for calculating the minimum number of level repetitions.}
+\item{label_to_assess}{A string specifying which label variable should be
+used when calculating the minimum number of level repetitions.}
 
 \item{k}{A number specifying that all sitesIDs returned should have at least k
 repetitions of all label levels.}
 
-\item{levels_to_use}{A character vector specifying which levels to include.
+\item{label_levels}{A character vector specifying which levels to include.
 If not set, all levels will be used.}
 }
 \description{

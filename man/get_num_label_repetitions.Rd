@@ -6,23 +6,23 @@
 \usage{
 get_num_label_repetitions(
   binned_data,
-  variable_to_use,
+  label_to_assess,
   site_info_grouping_name = NULL,
-  levels_to_use = NULL
+  label_levels = NULL
 )
 }
 \arguments{
 \item{binned_data}{A string that list a path to a file that has data in
 binned format, or a data frame of binned_data that is in binned format.}
 
-\item{variable_to_use}{A string specifying whether label variable should be
+\item{label_to_assess}{A string specifying which label variable should be
 used for calculating the minimum number of level repetitions.}
 
 \item{site_info_grouping_name}{A character string that specifies if the
 number of sites that have k repetitions should be computed separately
 based on the levels of a site_info variable.}
 
-\item{levels_to_use}{A character vector specifying which levels to include.
+\item{label_levels}{A character vector specifying which levels to include.
 If not set, all levels will be used.}
 }
 \description{

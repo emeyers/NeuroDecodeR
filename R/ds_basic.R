@@ -147,7 +147,7 @@ ds_basic <- function(binned_data,
     site_IDs_to_use <- get_siteIDs_with_k_label_repetitions(binned_data_org, 
                                                             label_to_decode,
                                                             k = num_cv_splits * num_label_repeats_per_cv_split,
-                                                            levels_to_use = unlist(label_levels))
+                                                            label_levels = unlist(label_levels))
     # print message about which sites are used
     message(
       paste0("Automatically selecting sites_IDs_to_use.",
@@ -166,7 +166,7 @@ ds_basic <- function(binned_data,
       
       stop(
         paste("\nNo sites are available that enough trial repetitions based on",
-              "the num_cv_splits, num_label_repeats_per_cv_split, and levels_to_use that were specified.", 
+              "the num_cv_splits, num_label_repeats_per_cv_split, and label_levels that were specified.", 
               "Please use different values for these parameters, and/or manually specify the site_IDs_to_use.")
         )
       
