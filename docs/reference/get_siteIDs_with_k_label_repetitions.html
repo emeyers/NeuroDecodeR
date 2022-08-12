@@ -157,9 +157,9 @@ to only get data from sites that have enough repetitions of each stimulus.</p>
 
     <pre class="usage"><span class='fu'>get_siteIDs_with_k_label_repetitions</span><span class='op'>(</span>
   <span class='va'>binned_data</span>,
-  <span class='va'>variable_to_use</span>,
+  <span class='va'>label_to_assess</span>,
   <span class='va'>k</span>,
-  levels_to_use <span class='op'>=</span> <span class='cn'>NULL</span>
+  label_levels <span class='op'>=</span> <span class='cn'>NULL</span>
 <span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
@@ -171,9 +171,9 @@ to only get data from sites that have enough repetitions of each stimulus.</p>
 binned format, or a data frame of binned_data that is in binned format.</p></td>
     </tr>
     <tr>
-      <th>variable_to_use</th>
-      <td><p>A string specifying whether label variable should be
-used for calculating the minimum number of level repetitions.</p></td>
+      <th>label_to_assess</th>
+      <td><p>A string specifying which label variable should be
+used when calculating the minimum number of level repetitions.</p></td>
     </tr>
     <tr>
       <th>k</th>
@@ -181,7 +181,7 @@ used for calculating the minimum number of level repetitions.</p></td>
 repetitions of all label levels.</p></td>
     </tr>
     <tr>
-      <th>levels_to_use</th>
+      <th>label_levels</th>
       <td><p>A character vector specifying which levels to include.
 If not set, all levels will be used.</p></td>
     </tr>
