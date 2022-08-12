@@ -19,10 +19,10 @@
 #'   well as a new rm_confusion_matrix object will be added to a new container
 #'   and the container will be returned.
 #'
-#' @param save_only_same_train_test_times A boolean specifying whether one wants
-#'   to save results to allow one to create the confusion matrices when training
-#'   at one point in time and testing a different point in time. Setting this to
-#'   FALSE can save memory.
+#' @param save_TCD_results A Boolean specifying whether one wants
+#'   to save results to allow one to create temporal cross decoding confusion
+#'   matrices; i.e., confusion matrices when training at one point in time and
+#'   testing a different point in time. Setting this to FALSE can save memory.
 #'
 #' @param create_decision_vals_confusion_matrix A boolean specifying whether one
 #'   wants to create a confusion matrix of the decision values. In this
@@ -42,10 +42,10 @@
 #'
 #' @export
 rm_confusion_matrix <- function(ndr_container_or_object = NULL, 
-                                save_only_same_train_test_times = TRUE,
+                                save_TCD_results = FALSE,
                                 create_decision_vals_confusion_matrix = TRUE) {
   options <- list(
-    save_only_same_train_test_times = save_only_same_train_test_times,
+    save_TCD_results = save_TCD_results,
     create_decision_vals_confusion_matrix = create_decision_vals_confusion_matrix)
 
   rm_obj <- new_rm_confusion_matrix(data.frame(), "initial", options)
@@ -99,7 +99,7 @@ aggregate_CV_split_results.rm_confusion_matrix <- function(rm_obj, prediction_re
 
   options <- attr(rm_obj, "options")
 
-  if (options$save_only_same_train_test_times) {
+  if (!options$save_TCD_results) {
     prediction_results <- prediction_results %>%
       dplyr::filter(.data$train_time == .data$test_time)
   }
@@ -179,7 +179,7 @@ aggregate_resample_run_results.rm_confusion_matrix <- function(resample_run_resu
   only_has_same_train_test_time_results <-
     (sum(resample_run_results$train_time == resample_run_results$test_time) == dim(resample_run_results)[1])
 
-  if (options$save_only_same_train_test_times || only_has_same_train_test_time_results) {
+  if (!options$save_TCD_results || only_has_same_train_test_time_results) {
 
     # create smaller matrix of 0's if only saving results of training and testing at the same time
     cm_label_matrix <- expand.grid(
@@ -272,7 +272,7 @@ aggregate_resample_run_results.rm_confusion_matrix <- function(resample_run_resu
 #'   * "mutual_information": plot the mutual information calculated from the
 #'   zero-one loss confusion matrix.
 #'
-#' @param plot_only_same_train_test_time A boolean indicating whether the
+#' @param plot_only_same_train_test_times A boolean indicating whether the
 #'   confusion matrices should only be plotted at the same training and test
 #'   times. If the `results_to_show == "mutual_information"` setting this to TRUE
 #'   will plot a TCD plot of the mutual information otherwise it will plot a
@@ -290,20 +290,20 @@ aggregate_resample_run_results.rm_confusion_matrix <- function(resample_run_resu
 #'
 #' @export
 plot.rm_confusion_matrix <- function(x, ..., results_to_show = "zero_one_loss",
-                                     plot_only_same_train_test_time = TRUE,
+                                     plot_only_same_train_test_times = TRUE,
                                      plot_only_one_train_time = NULL) {
   
   
-  saved_only_at_same_train_test_time <- attr(x, "options")$save_only_same_train_test_times
+  saved_only_at_same_train_test_time <- !attr(x, "options")$save_TCD_results
 
 
-  if ((saved_only_at_same_train_test_time) && plot_only_same_train_test_time == FALSE) {
+  if ((saved_only_at_same_train_test_time) && plot_only_same_train_test_times == FALSE) {
     
     warning(paste(
-      "Options are set to plot at all times (plot_only_same_train_test_time = FALSE)",
+      "Options are set to plot at all times (plot_only_same_train_test_times = FALSE)",
       "but the results were only saved for training and testing at the same time.",
       "To plot the results for training and testing at all times you need to set",
-      "rm_confusion_matrix(save_only_same_train_test_times = FALSE) in the",
+      "rm_confusion_matrix(save_TCD_results = TRUE) in the",
       "rm_confusion_matrix constructor prior to running the decoding analysis."))
   }
 
@@ -313,14 +313,14 @@ plot.rm_confusion_matrix <- function(x, ..., results_to_show = "zero_one_loss",
     
     should_decision_vals_cm <- results_to_show == "decision_vals"
     plot_confusion_matrix(x, 
-                          plot_only_same_train_test_time, 
+                          plot_only_same_train_test_times, 
                           plot_only_one_train_time, 
                           should_decision_vals_cm)
 
     # otherwise plot mutual information calculated from zero-one loss confusion matrix
   } else if (results_to_show == "mutual_information") {
     
-    if (plot_only_same_train_test_time) {
+    if (plot_only_same_train_test_times) {
       plot_type <- "line"
     } else {
       plot_type <- "TCD"
@@ -342,7 +342,7 @@ plot.rm_confusion_matrix <- function(x, ..., results_to_show = "zero_one_loss",
 
 # a private function to plot the confusion matrix
 plot_confusion_matrix <- function(confusion_matrix_obj,
-                                  plot_only_same_train_test_time = FALSE,
+                                  plot_only_same_train_test_times = FALSE,
                                   plot_only_one_train_time = NULL,
                                   plot_decision_vals_confusion_matrix = FALSE) {
 
@@ -362,7 +362,7 @@ plot_confusion_matrix <- function(confusion_matrix_obj,
   # confusion_matrix_obj$test_time <- get_time_range_strings(confusion_matrix_obj$test_time)
 
   # if only want the results plotted for the same training and test times
-  if (!only_has_same_train_test_time_results && plot_only_same_train_test_time) {
+  if (!only_has_same_train_test_time_results && plot_only_same_train_test_times) {
     confusion_matrix_obj <- confusion_matrix_obj %>%
       filter(.data$train_time == .data$test_time)
   }
@@ -520,8 +520,8 @@ get_parameters.rm_confusion_matrix <- function(ndr_obj) {
 
   # there is only one parameter option that can be set here so return it
   data.frame(
-    rm_confusion_matrix.save_only_same_train_test_times =
-      attributes(ndr_obj)$options$save_only_same_train_test_times,
+    rm_confusion_matrix.save_TCD_results =
+      attributes(ndr_obj)$options$save_TCD_results,
     rm_confusion_matrix.create_decision_vals_confusion_matrix =
       attributes(ndr_obj)$options$create_decision_vals_confusion_matrix)
   

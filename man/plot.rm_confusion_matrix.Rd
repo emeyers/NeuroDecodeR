@@ -8,7 +8,7 @@
   x,
   ...,
   results_to_show = "zero_one_loss",
-  plot_only_same_train_test_time = TRUE,
+  plot_only_same_train_test_times = TRUE,
   plot_only_one_train_time = NULL
 )
 }
@@ -29,7 +29,7 @@ take the following values:
 zero-one loss confusion matrix.
 }}
 
-\item{plot_only_same_train_test_time}{A boolean indicating whether the
+\item{plot_only_same_train_test_times}{A boolean indicating whether the
 confusion matrices should only be plotted at the same training and test
 times. If the \code{results_to_show == "mutual_information"} setting this to TRUE
 will plot a TCD plot of the mutual information otherwise it will plot a
