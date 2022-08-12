@@ -11,7 +11,7 @@
 #' @param binned_data A string that list a path to a file that has data in
 #'   binned format, or a data frame of binned_data that is in binned format.
 #'
-#' @param var_to_decode A string specifying the name of the labels that
+#' @param label_to_decode A string specifying the name of the labels that
 #'  should be decoded. This label must be one of the columns in the binned
 #'  data that starts with 'label.'
 #'
@@ -93,7 +93,7 @@
 # the constructor
 #' @export
 ds_generalization <- function(binned_data,
-                              var_to_decode,
+                              label_to_decode,
                               num_cv_splits,
                               train_label_levels,
                               test_label_levels,
@@ -150,11 +150,11 @@ ds_generalization <- function(binned_data,
   all_label_levels_to_use <- unique(c(unlist(train_label_levels), unlist(test_label_levels)))
 
   the_basic_ds <- ds_basic(binned_data,
-    var_to_decode,
+    label_to_decode,
     num_cv_splits,
     use_count_data,
     num_label_repeats_per_cv_split,
-    label_levels_to_use = all_label_levels_to_use,
+    label_levels = all_label_levels_to_use,
     num_resample_sites,
     site_IDs_to_use,
     site_IDs_to_exclude,
@@ -267,7 +267,7 @@ get_parameters.ds_generalization <- function(ndr_obj) {
 
   # get most of the parameters from the ds_basic
   parameter_df <- get_parameters(ndr_obj$the_basic_ds) %>%
-    select(-.data$ds_basic.label_levels_to_use)
+    select(-.data$ds_basic.label_levels)
 
   # rename them to ds_generalization
   the_names <- names(parameter_df)

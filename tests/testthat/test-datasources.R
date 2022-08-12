@@ -35,13 +35,13 @@ test_that("ds_basic: the get_data() functions returns unique points in training 
 
 test_that("ds_basic: if the labels_levels_to_use is set, only those label levels are returned", {
   
-  labels_levels_to_use <- c("flower", "guitar", "kiwi")
+  label_levels_to_use <- c("flower", "guitar", "kiwi")
   
-  ds <- ds_basic("fake_binned_data.Rda", "stim_names", 10, label_levels_to_use = labels_levels_to_use)
+  ds <- ds_basic("fake_binned_data.Rda", "stim_names", 10, label_levels = label_levels_to_use)
   the_data <- get_data(ds)
   
-  expect_equal(as.character(unique(the_data$train_labels)), labels_levels_to_use)
-  expect_equal(as.character(unique(the_data$test_labels)), labels_levels_to_use)
+  expect_equal(as.character(unique(the_data$train_labels)), label_levels_to_use)
+  expect_equal(as.character(unique(the_data$test_labels)), label_levels_to_use)
   
 })
 

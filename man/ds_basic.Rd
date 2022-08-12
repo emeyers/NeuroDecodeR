@@ -6,11 +6,11 @@
 \usage{
 ds_basic(
   binned_data,
-  var_to_decode,
+  label_to_decode,
   num_cv_splits,
   use_count_data = FALSE,
   num_label_repeats_per_cv_split = 1,
-  label_levels_to_use = NULL,
+  label_levels = NULL,
   num_resample_sites = NULL,
   site_IDs_to_use = NULL,
   site_IDs_to_exclude = NULL,
@@ -22,7 +22,7 @@ ds_basic(
 \item{binned_data}{A string that list a path to a file that has data in
 binned format, or a data frame of binned_data that is in binned format.}
 
-\item{var_to_decode}{A string specifying the name of the labels that
+\item{label_to_decode}{A string specifying the name of the labels that
 should be decoded. This label must be one of the columns in the binned
 data that starts with 'label.'}
 
@@ -37,7 +37,7 @@ poisson_naive_bayes_CL.}
 \item{num_label_repeats_per_cv_split}{A number specifying how many times each
 label should be repeated in each cross-validation split.}
 
-\item{label_levels_to_use}{A vector of strings specifying specific label
+\item{label_levels}{A vector of strings specifying specific label
 levels that should be used. If this is set to NULL then all label levels
 available will be used.}
 
@@ -91,7 +91,7 @@ ds <- ds_basic(data_file, "stimulus_ID", 6,
 # One can specify a subset of labels levels to be used in decoding. Here
 #  we just do a three-way decoding analysis between "car", "hand" and "kiwi".
 ds <- ds_basic(data_file, "stimulus_ID", 18,
-  label_levels_to_use = c("car", "hand", "kiwi")
+  label_levels = c("car", "hand", "kiwi")
 )
 
 # One never explicitly calls the get_data() function, but rather this is

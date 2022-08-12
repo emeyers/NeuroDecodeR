@@ -15,7 +15,7 @@
 #' @param binned_data A string that list a path to a file that has data in
 #'   binned format, or a data frame of binned_data that is in binned format.
 #'
-#' @param var_to_decode A string specifying the name of the labels that
+#' @param label_to_decode A string specifying the name of the labels that
 #'  should be decoded. This label must be one of the columns in the binned
 #'  data that starts with 'label.'
 #'
@@ -30,7 +30,7 @@
 #' @param num_label_repeats_per_cv_split A number specifying how many times each
 #'   label should be repeated in each cross-validation split.
 #'
-#' @param label_levels_to_use A vector of strings specifying specific label
+#' @param label_levels A vector of strings specifying specific label
 #'   levels that should be used. If this is set to NULL then all label levels
 #'   available will be used.
 #'
@@ -72,7 +72,7 @@
 #' # One can specify a subset of labels levels to be used in decoding. Here
 #' #  we just do a three-way decoding analysis between "car", "hand" and "kiwi".
 #' ds <- ds_basic(data_file, "stimulus_ID", 18,
-#'   label_levels_to_use = c("car", "hand", "kiwi")
+#'   label_levels = c("car", "hand", "kiwi")
 #' )
 #'
 #' # One never explicitly calls the get_data() function, but rather this is
@@ -87,11 +87,11 @@
 # the constructor
 #' @export
 ds_basic <- function(binned_data,
-                     var_to_decode,
+                     label_to_decode,
                      num_cv_splits,
                      use_count_data = FALSE,
                      num_label_repeats_per_cv_split = 1,
-                     label_levels_to_use = NULL,
+                     label_levels = NULL,
                      num_resample_sites = NULL,
                      site_IDs_to_use = NULL,
                      site_IDs_to_exclude = NULL,
@@ -117,7 +117,7 @@ ds_basic <- function(binned_data,
   
 
   # remove all labels that aren't being used, and rename the labels that are being used to "labels"
-  label_col_ind <- match(paste0("labels.", var_to_decode), names(binned_data))
+  label_col_ind <- match(paste0("labels.", label_to_decode), names(binned_data))
 
   # also keep the variable trial_number if it exists
   if (("trial_number" %in% colnames(binned_data))) {
@@ -130,10 +130,10 @@ ds_basic <- function(binned_data,
 
 
   # only use specified label_levels
-  if (!is.null(label_levels_to_use)) {
-    binned_data <- dplyr::filter(binned_data, labels %in% label_levels_to_use)
+  if (!is.null(label_levels)) {
+    binned_data <- dplyr::filter(binned_data, labels %in% label_levels)
   } else {
-    label_levels_to_use <- as.list(levels(binned_data$labels))  # why is this a list? (b/c of ds_generalization???)
+    label_levels <- as.list(levels(binned_data$labels))  # why is this a list? (b/c of ds_generalization???)
   }
 
 
@@ -145,9 +145,9 @@ ds_basic <- function(binned_data,
     
     # if site_IDs_to_use is not specified, use all sites that have enough label repetitions
     site_IDs_to_use <- get_siteIDs_with_k_label_repetitions(binned_data_org, 
-                                                            var_to_decode,
+                                                            label_to_decode,
                                                             k = num_cv_splits * num_label_repeats_per_cv_split,
-                                                            levels_to_use = unlist(label_levels_to_use))
+                                                            levels_to_use = unlist(label_levels))
     # print message about which sites are used
     message(
       paste0("Automatically selecting sites_IDs_to_use.",
@@ -185,7 +185,7 @@ ds_basic <- function(binned_data,
     site_IDs_to_use <- setdiff(site_IDs_to_use, site_IDs_to_exclude)
   }
 
-  if (length(label_levels_to_use) != length(unique(label_levels_to_use))) {
+  if (length(label_levels) != length(unique(label_levels))) {
     warning("Some labels were listed twice. Duplication will be ignored.")
   }
 
@@ -275,10 +275,10 @@ ds_basic <- function(binned_data,
   the_ds <- list(
     binned_file_name = binned_file_name,
     binned_data = binned_data,
-    var_to_decode = var_to_decode,
+    label_to_decode = label_to_decode,
     num_cv_splits = num_cv_splits,
     num_label_repeats_per_cv_split = num_label_repeats_per_cv_split,
-    label_levels_to_use = label_levels_to_use,
+    label_levels = label_levels,
     num_resample_sites = num_resample_sites,
     site_IDs_to_use = site_IDs_to_use,
     site_IDs_to_exclude = site_IDs_to_exclude,
@@ -451,7 +451,7 @@ get_parameters.ds_basic <- function(ndr_obj) {
     tidyr::spread("key", "val") %>%
     dplyr::mutate(dplyr::across(where(is.factor), as.character))
 
-  parameter_df$label_levels_to_use <- list(sort(unlist(ndr_obj$label_levels_to_use)))
+  parameter_df$label_levels <- list(sort(unlist(ndr_obj$label_levels)))
   parameter_df$site_IDs_to_use <- list(ndr_obj$site_IDs_to_use)
 
   names(parameter_df) <- paste(class(ndr_obj), names(parameter_df), sep = ".")
