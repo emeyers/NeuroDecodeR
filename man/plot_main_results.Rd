@@ -5,7 +5,7 @@
 \title{A plot function to plot multiple rm_main_results}
 \usage{
 plot_main_results(
-  result_dir_name,
+  results_dir_name,
   results_to_plot,
   results_to_show = "zero_one_loss",
   type = "line",
@@ -13,7 +13,7 @@ plot_main_results(
 )
 }
 \arguments{
-\item{result_dir_name}{A string specifying the directory name that contains
+\item{results_dir_name}{A string specifying the directory name that contains
 files with DECODING_RESULTS that have rm_main_results as one of the result
 metrics.}
 

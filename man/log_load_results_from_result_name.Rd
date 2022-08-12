@@ -4,7 +4,7 @@
 \alias{log_load_results_from_result_name}
 \title{A function that loads DECODING_RESULTS based on the result_name}
 \usage{
-log_load_results_from_result_name(result_name, results_directory_name)
+log_load_results_from_result_name(result_name, results_dir_name)
 }
 \arguments{
 \item{result_name}{A string a specifying the result that should be loaded
@@ -12,7 +12,7 @@ based on the name given. This result_name can be a regular expression in
 which all result_name values that match the regular expression will be
 returned as a list.}
 
-\item{results_directory_name}{A string containing the path to a directory
+\item{results_dir_name}{A string containing the path to a directory
 that contains all the decoding results.}
 }
 \description{

@@ -26,11 +26,11 @@
 #'   to TRUE, then the normalized rank and decision values for the correct
 #'   category will be calculated. If this is a Boolean set to FALSE then the
 #'   normalized rank and decision values will not be calculated. If this is a
-#'   string set to "only_same_train_test_time", then the normalized rank and decision
-#'   values will only be calculated when for results when training and testing
-#'   at the same time. Not returning the full results can speed up the run-time
-#'   of the code and will use less memory so this can be useful for large data
-#'   sets.
+#'   string set to "only_same_train_test_time", then the normalized rank and
+#'   decision values will only be calculated when for results when training and
+#'   testing at the same time. Not returning the full results can speed up the
+#'   run-time of the code and will use less memory so this can be useful for
+#'   large data sets.
 #'
 #'
 #' @examples
@@ -335,7 +335,7 @@ get_parameters.rm_main_results <- function(ndr_obj) {
 #' decision values after the decoding analysis has been run (and all results
 #' have been aggregated).
 #'
-#' @param result_dir_name A string specifying the directory name that contains
+#' @param results_dir_name A string specifying the directory name that contains
 #'  files with DECODING_RESULTS that have rm_main_results as one of the result
 #'  metrics. 
 #'
@@ -365,7 +365,7 @@ get_parameters.rm_main_results <- function(ndr_obj) {
 #'
 #'
 #' @export
-plot_main_results <- function(result_dir_name, 
+plot_main_results <- function(results_dir_name, 
                               results_to_plot, 
                               results_to_show = "zero_one_loss", 
                               type = "line",
@@ -377,8 +377,8 @@ plot_main_results <- function(result_dir_name,
   manifest_df <- NULL
 
   
-  if(!("results_manifest.rda" %in% list.files(result_dir_name))) {
-      stop("A manifest file does not exist in the result_dir_name name specified.")
+  if(!("results_manifest.rda" %in% list.files(results_dir_name))) {
+      stop("A manifest file does not exist in the results_dir_name name specified.")
   }
 
   
@@ -415,7 +415,7 @@ plot_main_results <- function(result_dir_name,
     if (is.character(results_to_plot)) {
       
       # load all results based on their result_names
-      DECODING_RESULTS <- log_load_results_from_result_name(results_to_plot[iResult], result_dir_name)
+      DECODING_RESULTS <- log_load_results_from_result_name(results_to_plot[iResult], results_dir_name)
       
       # use the display_names if they are not null
       if (!is.null(display_names)) {
@@ -428,8 +428,8 @@ plot_main_results <- function(result_dir_name,
       
       # if results_to_plot is a numeric vector, treat it as rows in the manifest file to use
       
-      load(file.path(result_dir_name, "results_manifest.rda"))
-      load(file.path(result_dir_name, paste0(manifest_df$analysis_ID[results_to_plot[iResult]], ".rda")))
+      load(file.path(results_dir_name, "results_manifest.rda"))
+      load(file.path(results_dir_name, paste0(manifest_df$analysis_ID[results_to_plot[iResult]], ".rda")))
         
       
       

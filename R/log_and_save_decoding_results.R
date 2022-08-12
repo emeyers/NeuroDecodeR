@@ -183,23 +183,23 @@ add_current_parameters_to_manifest <- function(decoding_params, manifest_df) {
 #' @param decoding_params A data frame of decoding parameters that can
 #'  be created by calling the cross-validator's get_parameters() method.
 #'
-#' @param results_directory_name A string containing the path to a directory
+#' @param results_dir_name A string containing the path to a directory
 #'   that contains all the decoding results.
 #'
 #'
 #' @export
-log_load_results_from_params <- function(decoding_params, results_directory_name) {
+log_load_results_from_params <- function(decoding_params, results_dir_name) {
 
 
   # if the directory name does not end with a slash, add a slash to the directory name
-  results_directory_name <- add_last_character_to_directory_name(results_directory_name)
+  results_dir_name <- add_last_character_to_directory_name(results_dir_name)
 
-  manifest_file_name <- paste0(results_directory_name, "results_manifest.rda")
+  manifest_file_name <- paste0(results_dir_name, "results_manifest.rda")
 
 
   # if the directory of results or manifest file doesn't exist, throw and error
-  if (!file.exists(file.path(dirname(results_directory_name), basename(results_directory_name)))) {
-    stop(paste("The specified results_directory_name,", results_directory_name, "does not exist."))
+  if (!file.exists(file.path(dirname(results_dir_name), basename(results_dir_name)))) {
+    stop(paste("The specified results_dir_name,", results_dir_name, "does not exist."))
   }
 
   if (!file.exists(manifest_file_name)) {
@@ -235,7 +235,7 @@ log_load_results_from_params <- function(decoding_params, results_directory_name
   for (i in 1:num_manifest_rows) {
     
     if (duplicated(manifest_with_results_added[c(i, num_manifest_rows + 1), ])[2]) {
-      load(paste0(results_directory_name, manifest_df[i, ]$analysis_ID, ".rda"))
+      load(paste0(results_dir_name, manifest_df[i, ]$analysis_ID, ".rda"))
       all_decoding_results[[c]] <- DECODING_RESULTS
       c <- c + 1
     }
@@ -265,20 +265,20 @@ log_load_results_from_params <- function(decoding_params, results_directory_name
 #'   which all result_name values that match the regular expression will be
 #'   returned as a list.
 #'
-#' @param results_directory_name A string containing the path to a directory
+#' @param results_dir_name A string containing the path to a directory
 #'   that contains all the decoding results.
 #'
 #'
 #' @export
-log_load_results_from_result_name <- function(result_name, results_directory_name) {
+log_load_results_from_result_name <- function(result_name, results_dir_name) {
   
-  results_directory_name <- add_last_character_to_directory_name(results_directory_name)
-  manifest_file_name <- paste0(results_directory_name, "results_manifest.rda")
+  results_dir_name <- add_last_character_to_directory_name(results_dir_name)
+  manifest_file_name <- paste0(results_dir_name, "results_manifest.rda")
 
 
   # if the directory of results or manifest file doesn't exist, throw and error
-  if (!file.exists(file.path(dirname(results_directory_name), basename(results_directory_name)))) {
-    stop(paste("The specified results_directory_name,", results_directory_name, "does not exist."))
+  if (!file.exists(file.path(dirname(results_dir_name), basename(results_dir_name)))) {
+    stop(paste("The specified results_dir_name,", results_dir_name, "does not exist."))
   }
 
   if (!file.exists(manifest_file_name)) {
@@ -308,7 +308,7 @@ log_load_results_from_result_name <- function(result_name, results_directory_nam
   } else if (dim(matching_results)[1] == 1) {
 
     # only one result exists so load it and return it
-    load(paste0(results_directory_name, matching_results$analysis_ID[1], ".rda"))
+    load(paste0(results_dir_name, matching_results$analysis_ID[1], ".rda"))
     DECODING_RESULTS
     
   } else {
@@ -319,7 +319,7 @@ log_load_results_from_result_name <- function(result_name, results_directory_nam
     all_decoding_results <- list()
 
     for (i in 1:num_matching_results) {
-      load(paste0(results_directory_name, matching_results$analysis_ID[i], ".rda"))
+      load(paste0(results_dir_name, matching_results$analysis_ID[i], ".rda"))
       all_decoding_results[[i]] <- DECODING_RESULTS
     }
 
