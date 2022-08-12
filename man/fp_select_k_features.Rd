@@ -6,7 +6,7 @@
 \usage{
 fp_select_k_features(
   ndr_container_or_object = NULL,
-  num_site_to_use = NA,
+  num_sites_to_use = NA,
   num_sites_to_exclude = NA
 )
 }
@@ -22,7 +22,7 @@ If this argument is set to another ndr object, then both that ndr object as
 well as a new fp_select_k_features object will be added to a new container
 and the container will be returned.}
 
-\item{num_site_to_use}{The number of features with the smallest p-values to use.}
+\item{num_sites_to_use}{The number of features with the smallest p-values to use.}
 
 \item{num_sites_to_exclude}{The number of features with the smallest p-values
 that should be excluded.}
@@ -39,7 +39,7 @@ selective neurons, etc.).
 }
 \examples{
 # This will cause the cross-validator use only the 50 most selective sites
-fp <- fp_select_k_features(num_site_to_use = 50)
+fp <- fp_select_k_features(num_sites_to_use = 50)
 
 # This will cause the cross-validator to remove the 20 most selective sites
 fp <- fp_select_k_features(num_sites_to_exclude = 20)
@@ -47,7 +47,7 @@ fp <- fp_select_k_features(num_sites_to_exclude = 20)
 # This will cause the cross-validator to remove the 20 most selective sites
 # and then use only the 50 most selective sites that remain after the 20 are
 # eliminated
-fp <- fp_select_k_features(num_site_to_use = 50, num_sites_to_exclude = 20)
+fp <- fp_select_k_features(num_sites_to_use = 50, num_sites_to_exclude = 20)
 }
 \seealso{
 Other feature_preprocessor: 

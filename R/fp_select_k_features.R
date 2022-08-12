@@ -20,14 +20,14 @@
 #'   well as a new fp_select_k_features object will be added to a new container
 #'   and the container will be returned.
 #'
-#' @param num_site_to_use The number of features with the smallest p-values to use.
+#' @param num_sites_to_use The number of features with the smallest p-values to use.
 #'
 #' @param num_sites_to_exclude The number of features with the smallest p-values
 #'   that should be excluded.
 #'
 #' @examples
 #' # This will cause the cross-validator use only the 50 most selective sites
-#' fp <- fp_select_k_features(num_site_to_use = 50)
+#' fp <- fp_select_k_features(num_sites_to_use = 50)
 #'
 #' # This will cause the cross-validator to remove the 20 most selective sites
 #' fp <- fp_select_k_features(num_sites_to_exclude = 20)
@@ -35,25 +35,25 @@
 #' # This will cause the cross-validator to remove the 20 most selective sites
 #' # and then use only the 50 most selective sites that remain after the 20 are
 #' # eliminated
-#' fp <- fp_select_k_features(num_site_to_use = 50, num_sites_to_exclude = 20)
+#' fp <- fp_select_k_features(num_sites_to_use = 50, num_sites_to_exclude = 20)
 #' @family feature_preprocessor
 #'
 #'
 # the constructor
 #' @export
 fp_select_k_features <- function(ndr_container_or_object = NULL, 
-                                 num_site_to_use = NA,
+                                 num_sites_to_use = NA,
                                  num_sites_to_exclude = NA) {
-  if (is.na(num_site_to_use) && is.na(num_sites_to_exclude)) {
+  if (is.na(num_sites_to_use) && is.na(num_sites_to_exclude)) {
     stop(paste0(
-      "Either num_site_to_use or num_sites_to_exclude must be set",
+      "Either num_sites_to_use or num_sites_to_exclude must be set",
       "prior to calling the preprocess_data method"
     ))
   }
 
 
   the_fp <- list(
-    num_site_to_use = num_site_to_use,
+    num_sites_to_use = num_sites_to_use,
     num_sites_to_exclude = num_sites_to_exclude
   )
 
@@ -109,9 +109,9 @@ preprocess_data.fp_select_k_features <- function(fp, training_set, test_set) {
     sites_to_use <- sites_to_use[(fp$num_sites_to_exclude + 1):num_sites]
   }
 
-  # use only the num_site_to_use most selective sites
-  if (!is.na(fp$num_site_to_use)) {
-    sites_to_use <- sites_to_use[1:fp$num_site_to_use]
+  # use only the num_sites_to_use most selective sites
+  if (!is.na(fp$num_sites_to_use)) {
+    sites_to_use <- sites_to_use[1:fp$num_sites_to_use]
   }
 
 
@@ -150,7 +150,7 @@ preprocess_data.fp_select_k_features <- function(fp, training_set, test_set) {
 #' @export
 get_parameters.fp_select_k_features <- function(ndr_obj) {
   data.frame(
-    fp_select_k_features.num_site_to_use = ndr_obj$num_site_to_use,
+    fp_select_k_features.num_sites_to_use = ndr_obj$num_sites_to_use,
     fp_select_k_features.num_sites_to_exclude = ndr_obj$num_sites_to_exclude
   )
 }
