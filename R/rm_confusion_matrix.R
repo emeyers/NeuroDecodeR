@@ -272,9 +272,9 @@ aggregate_resample_run_results.rm_confusion_matrix <- function(resample_run_resu
 #'   * "mutual_information": plot the mutual information calculated from the
 #'   zero-one loss confusion matrix.
 #'
-#' @param plot_only_same_train_test_times A boolean indicating whether the
-#'   confusion matrices should only be plotted at the same training and test
-#'   times. If the `results_to_show == "mutual_information"` setting this to TRUE
+#' @param plot_TCD_results A Boolean indicating whether the
+#'   a cross-temporal decoding of the confusion matrices should only be plotted. 
+#'   If the `results_to_show == "mutual_information"` setting this to TRUE
 #'   will plot a TCD plot of the mutual information otherwise it will plot a
 #'   line plot of the mutual information for training and testing at the same
 #'   time.
@@ -290,18 +290,18 @@ aggregate_resample_run_results.rm_confusion_matrix <- function(resample_run_resu
 #'
 #' @export
 plot.rm_confusion_matrix <- function(x, ..., results_to_show = "zero_one_loss",
-                                     plot_only_same_train_test_times = TRUE,
+                                     plot_TCD_results = FALSE,
                                      plot_only_one_train_time = NULL) {
   
   
   saved_only_at_same_train_test_time <- !attr(x, "options")$save_TCD_results
 
 
-  if ((saved_only_at_same_train_test_time) && plot_only_same_train_test_times == FALSE) {
+  if ((saved_only_at_same_train_test_time) && plot_TCD_results == TRUE) {
     
     warning(paste(
-      "Options are set to plot at all times (plot_only_same_train_test_times = FALSE)",
-      "but the results were only saved for training and testing at the same time.",
+      "Options are set to plot at all times (plot_TCD_results = TRUE)",
+      "but the cross temporal decoding results were not saved.",
       "To plot the results for training and testing at all times you need to set",
       "rm_confusion_matrix(save_TCD_results = TRUE) in the",
       "rm_confusion_matrix constructor prior to running the decoding analysis."))
@@ -313,14 +313,14 @@ plot.rm_confusion_matrix <- function(x, ..., results_to_show = "zero_one_loss",
     
     should_decision_vals_cm <- results_to_show == "decision_vals"
     plot_confusion_matrix(x, 
-                          plot_only_same_train_test_times, 
+                          plot_TCD_results, 
                           plot_only_one_train_time, 
                           should_decision_vals_cm)
 
     # otherwise plot mutual information calculated from zero-one loss confusion matrix
   } else if (results_to_show == "mutual_information") {
     
-    if (plot_only_same_train_test_times) {
+    if (!plot_TCD_results) {
       plot_type <- "line"
     } else {
       plot_type <- "TCD"
@@ -342,7 +342,7 @@ plot.rm_confusion_matrix <- function(x, ..., results_to_show = "zero_one_loss",
 
 # a private function to plot the confusion matrix
 plot_confusion_matrix <- function(confusion_matrix_obj,
-                                  plot_only_same_train_test_times = FALSE,
+                                  plot_TCD_results = FALSE,
                                   plot_only_one_train_time = NULL,
                                   plot_decision_vals_confusion_matrix = FALSE) {
 
@@ -362,7 +362,7 @@ plot_confusion_matrix <- function(confusion_matrix_obj,
   # confusion_matrix_obj$test_time <- get_time_range_strings(confusion_matrix_obj$test_time)
 
   # if only want the results plotted for the same training and test times
-  if (!only_has_same_train_test_time_results && plot_only_same_train_test_times) {
+  if (!only_has_same_train_test_time_results && !plot_TCD_results) {
     confusion_matrix_obj <- confusion_matrix_obj %>%
       filter(.data$train_time == .data$test_time)
   }
