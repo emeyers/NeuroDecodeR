@@ -15,7 +15,7 @@
 #' @param binned_data A string that list a path to a file that has data in
 #'   binned format, or a data frame of binned_data that is in binned format.
 #'
-#' @param label_to_assess A string specifying which label variable should be
+#' @param labels A string specifying which label variable should be
 #'   used for calculating the minimum number of level repetitions.
 #'   
 #' @param site_info_grouping_name A character string that specifies if the
@@ -36,12 +36,12 @@
 #'
 #' @export
 get_num_label_repetitions <- function(binned_data,
-                                      label_to_assess,
+                                      labels,
                                       site_info_grouping_name = NULL,
                                       label_levels = NULL) {
   
   
-  label_rep_each_site_df <- get_num_label_repetitions_each_site(binned_data, label_to_assess, label_levels)
+  label_rep_each_site_df <- get_num_label_repetitions_each_site(binned_data, labels, label_levels)
   
   
   
@@ -178,7 +178,7 @@ get_num_label_repetitions <- function(binned_data,
   
   # replace the column named "label" with the actual label name
   col_names <- names(num_label_repeats_obj)
-  col_names[which(col_names == "label")] <- paste0("labels.", label_to_assess)
+  col_names[which(col_names == "label")] <- paste0("labels.", labels)
   names(num_label_repeats_obj) <- col_names
   
   
@@ -187,7 +187,7 @@ get_num_label_repetitions <- function(binned_data,
   
   # making this an S3 object so that it can have an associated plot() function
   attr(num_label_repeats_obj, "class") <- c("label_repetition", "data.frame")
-  attr(num_label_repeats_obj, "variable_used") <- label_to_assess
+  attr(num_label_repeats_obj, "variable_used") <- labels
   
   num_label_repeats_obj
   
@@ -321,7 +321,7 @@ plot.label_repetition <- function(x, ..., show_legend = TRUE) {
 #' @param binned_data A string that list a path to a file that has data in
 #'   binned format, or a data frame of binned_data that is in binned format.
 #'
-#' @param label_to_assess A string specifying which label variable should be
+#' @param labels A string specifying which label variable should be
 #'   used when calculating the minimum number of level repetitions.
 #'   
 #' @param k A number specifying that all sitesIDs returned should have at least k
@@ -337,12 +337,12 @@ plot.label_repetition <- function(x, ..., show_legend = TRUE) {
 #'
 #' @export
 get_siteIDs_with_k_label_repetitions <- function(binned_data,
-                                                 label_to_assess,
+                                                 labels,
                                                  k,
                                                  label_levels = NULL) {
   
   
-  siteIDs <- get_num_label_repetitions_each_site(binned_data, label_to_assess, label_levels) %>%
+  siteIDs <- get_num_label_repetitions_each_site(binned_data, labels, label_levels) %>%
     dplyr::filter(.data$min_repeats >= k) %>%
     dplyr::pull(.data$siteID)
   
@@ -368,7 +368,7 @@ get_siteIDs_with_k_label_repetitions <- function(binned_data,
 #' @param binned_data A string that list a path to a file that has data in
 #'   binned format, or a data frame of binned_data that is in binned format.
 #'
-#' @param label_to_assess A string specifying which label variable should be
+#' @param labels A string specifying which label variable should be
 #'   used for calculating the minimum number of level repetitions.
 #'
 #' @param label_levels A character vector specifying which levels to include.
@@ -379,7 +379,7 @@ get_siteIDs_with_k_label_repetitions <- function(binned_data,
 #'
 #'
 get_num_label_repetitions_each_site <- function(binned_data,
-                                      label_to_assess,
+                                      labels,
                                       label_levels = NULL) {
   
   
@@ -394,7 +394,7 @@ get_num_label_repetitions_each_site <- function(binned_data,
   
   
   # select only the siteID and labels we want to count number of repetitions
-  binned_data <- select(binned_data, .data$siteID, label = paste0("labels.", label_to_assess))
+  binned_data <- select(binned_data, .data$siteID, label = paste0("labels.", labels))
   
 
     # make sure that the labels are a factors
@@ -411,7 +411,7 @@ get_num_label_repetitions_each_site <- function(binned_data,
   if (length(invalid_levels_specified) != 0) {
     stop(paste(
       "The level(s)", paste0("'", paste(invalid_levels_specified, collapse = ", "), "'"),
-      "do not exist in the variable", label_to_assess))
+      "do not exist in the variable", labels))
   }
   
   

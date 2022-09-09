@@ -6,7 +6,7 @@
 \usage{
 get_siteIDs_with_k_label_repetitions(
   binned_data,
-  label_to_assess,
+  labels,
   k,
   label_levels = NULL
 )
@@ -15,7 +15,7 @@ get_siteIDs_with_k_label_repetitions(
 \item{binned_data}{A string that list a path to a file that has data in
 binned format, or a data frame of binned_data that is in binned format.}
 
-\item{label_to_assess}{A string specifying which label variable should be
+\item{labels}{A string specifying which label variable should be
 used when calculating the minimum number of level repetitions.}
 
 \item{k}{A number specifying that all sitesIDs returned should have at least k

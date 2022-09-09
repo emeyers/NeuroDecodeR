@@ -15,9 +15,11 @@
 #' @param binned_data A string that list a path to a file that has data in
 #'   binned format, or a data frame of binned_data that is in binned format.
 #'
-#' @param label_to_decode A string specifying the name of the labels that
-#'  should be decoded. This label must be one of the columns in the binned
-#'  data that starts with 'label.'
+#' @param labels A string specifying the name of the labels that should
+#'   be decoded. This label must be one of the columns in the binned data that
+#'   starts with 'label.'. For example, if there was a column name in a binned
+#'   data file called labels.stimulus_ID that you wanted to decode, then you
+#'   would set this argument to be "stimulus_ID".
 #'
 #' @param num_cv_splits A number specifying how many cross-validation splits
 #'  should be used.
@@ -87,7 +89,7 @@
 # the constructor
 #' @export
 ds_basic <- function(binned_data,
-                     label_to_decode,
+                     labels,
                      num_cv_splits,
                      use_count_data = FALSE,
                      num_label_repeats_per_cv_split = 1,
@@ -117,7 +119,7 @@ ds_basic <- function(binned_data,
   
 
   # remove all labels that aren't being used, and rename the labels that are being used to "labels"
-  label_col_ind <- match(paste0("labels.", label_to_decode), names(binned_data))
+  label_col_ind <- match(paste0("labels.", labels), names(binned_data))
 
   # also keep the variable trial_number if it exists
   if (("trial_number" %in% colnames(binned_data))) {
@@ -145,7 +147,7 @@ ds_basic <- function(binned_data,
     
     # if site_IDs_to_use is not specified, use all sites that have enough label repetitions
     site_IDs_to_use <- get_siteIDs_with_k_label_repetitions(binned_data_org, 
-                                                            label_to_decode,
+                                                            labels,
                                                             k = num_cv_splits * num_label_repeats_per_cv_split,
                                                             label_levels = unlist(label_levels))
     # print message about which sites are used
@@ -275,7 +277,7 @@ ds_basic <- function(binned_data,
   the_ds <- list(
     binned_file_name = binned_file_name,
     binned_data = binned_data,
-    label_to_decode = label_to_decode,
+    labels = labels,
     num_cv_splits = num_cv_splits,
     num_label_repeats_per_cv_split = num_label_repeats_per_cv_split,
     label_levels = label_levels,

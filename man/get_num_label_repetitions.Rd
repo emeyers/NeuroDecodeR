@@ -6,7 +6,7 @@
 \usage{
 get_num_label_repetitions(
   binned_data,
-  label_to_assess,
+  labels,
   site_info_grouping_name = NULL,
   label_levels = NULL
 )
@@ -15,7 +15,7 @@ get_num_label_repetitions(
 \item{binned_data}{A string that list a path to a file that has data in
 binned format, or a data frame of binned_data that is in binned format.}
 
-\item{label_to_assess}{A string specifying which label variable should be
+\item{labels}{A string specifying which label variable should be
 used for calculating the minimum number of level repetitions.}
 
 \item{site_info_grouping_name}{A character string that specifies if the

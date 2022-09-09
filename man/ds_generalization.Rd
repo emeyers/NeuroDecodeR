@@ -6,7 +6,7 @@
 \usage{
 ds_generalization(
   binned_data,
-  label_to_decode,
+  labels,
   num_cv_splits,
   train_label_levels,
   test_label_levels,
@@ -23,7 +23,7 @@ ds_generalization(
 \item{binned_data}{A string that list a path to a file that has data in
 binned format, or a data frame of binned_data that is in binned format.}
 
-\item{label_to_decode}{A string specifying the name of the labels that
+\item{labels}{A string specifying the name of the labels that
 should be decoded. This label must be one of the columns in the binned
 data that starts with 'label.'}
 

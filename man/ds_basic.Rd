@@ -6,7 +6,7 @@
 \usage{
 ds_basic(
   binned_data,
-  label_to_decode,
+  labels,
   num_cv_splits,
   use_count_data = FALSE,
   num_label_repeats_per_cv_split = 1,
@@ -22,9 +22,11 @@ ds_basic(
 \item{binned_data}{A string that list a path to a file that has data in
 binned format, or a data frame of binned_data that is in binned format.}
 
-\item{label_to_decode}{A string specifying the name of the labels that
-should be decoded. This label must be one of the columns in the binned
-data that starts with 'label.'}
+\item{labels}{A string specifying the name of the labels that should
+be decoded. This label must be one of the columns in the binned data that
+starts with 'label.'. For example, if there was a column name in a binned
+data file called labels.stimulus_ID that you wanted to decode, then you
+would set this argument to be "stimulus_ID".}
 
 \item{num_cv_splits}{A number specifying how many cross-validation splits
 should be used.}

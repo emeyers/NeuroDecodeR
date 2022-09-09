@@ -11,7 +11,7 @@
 #' @param binned_data A string that list a path to a file that has data in
 #'   binned format, or a data frame of binned_data that is in binned format.
 #'
-#' @param label_to_decode A string specifying the name of the labels that
+#' @param labels A string specifying the name of the labels that
 #'  should be decoded. This label must be one of the columns in the binned
 #'  data that starts with 'label.'
 #'
@@ -93,7 +93,7 @@
 # the constructor
 #' @export
 ds_generalization <- function(binned_data,
-                              label_to_decode,
+                              labels,
                               num_cv_splits,
                               train_label_levels,
                               test_label_levels,
@@ -150,7 +150,7 @@ ds_generalization <- function(binned_data,
   all_label_levels_to_use <- unique(c(unlist(train_label_levels), unlist(test_label_levels)))
 
   the_basic_ds <- ds_basic(binned_data,
-    label_to_decode,
+    labels,
     num_cv_splits,
     use_count_data,
     num_label_repeats_per_cv_split,

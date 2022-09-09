@@ -4,17 +4,13 @@
 \alias{get_num_label_repetitions_each_site}
 \title{Get the number of trial repetitions for a given label for each site}
 \usage{
-get_num_label_repetitions_each_site(
-  binned_data,
-  label_to_assess,
-  label_levels = NULL
-)
+get_num_label_repetitions_each_site(binned_data, labels, label_levels = NULL)
 }
 \arguments{
 \item{binned_data}{A string that list a path to a file that has data in
 binned format, or a data frame of binned_data that is in binned format.}
 
-\item{label_to_assess}{A string specifying which label variable should be
+\item{labels}{A string specifying which label variable should be
 used for calculating the minimum number of level repetitions.}
 
 \item{label_levels}{A character vector specifying which levels to include.
