@@ -17,9 +17,8 @@ Depends: R (>= 3.5.0)
 License: GPL-3
 LazyData: true
 Roxygen: list(markdown = TRUE)
-RoxygenNote: 7.1.1
+RoxygenNote: 7.2.1
 Imports: 
-    doParallel,
     dplyr,
     doSNOW,
     e1071,
@@ -28,6 +27,7 @@ Imports:
     ggplot2,
     gridExtra,
     magrittr,
+    methods,
     purrr,
     R.matlab,
     scales,
@@ -40,7 +40,6 @@ Imports:
 Suggests: 
     knitr,
     rmarkdown,
-    covr,
     testthat
 Encoding: UTF-8
 VignetteBuilder: knitr

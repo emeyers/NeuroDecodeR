@@ -44,6 +44,7 @@
 #' @import dplyr
 #' @import ggplot2
 #' @import magrittr
+#' @importFrom methods is
 #' @importFrom stats cor pf predict
 #' @importFrom utils read.csv write.csv setTxtProgressBar txtProgressBar
 

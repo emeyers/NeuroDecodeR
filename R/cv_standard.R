@@ -120,7 +120,7 @@ cv_standard <- function(ndr_container = NULL,
     ndr_container <- ndr_container()
   }
   
-  if (class(ndr_container) != "ndr_container") {
+  if (!is(ndr_container, "ndr_container")) {
     stop("The argument ndr_container must be set to an ndr_container object.")
   }
   
@@ -130,7 +130,7 @@ cv_standard <- function(ndr_container = NULL,
     if (!is.null(cv_object)) {
       
       # if a list of objects was passed (e.g., a list of FPs)
-      if (class(cv_object) == "list") {
+      if (is(cv_object, "list")) {
         
         for (curr_obj in cv_object) {
           
