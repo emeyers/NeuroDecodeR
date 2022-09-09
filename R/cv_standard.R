@@ -40,12 +40,13 @@
 #'   are generated. If pseudo-populations are used (e.g., with the ds_basic),
 #'   then new pseudo-populations will be generated on each resample run as well.
 #'
-#' @param run_temporal_cross_decoding A Boolean indicating whether the classifier
-#'   should only be trained and tested at the same time point; i.e., whether
-#'   temporal cross-decoding will be run). Setting this to FALSE can potentially
-#'   speed up the analysis and save memory at the cost of not calculated the
-#'   temporal cross decoding results.
-#'
+#' @param run_TCD A Boolean indicating whether a Temporal Cross-Decoding (TCD)
+#'   analysis should be run where the the classifier is trained and tested at
+#'   all points in time. Setting this to FALSE causes the classifier to only be
+#'   tested at same time it is trained on which can speed up the analysis trun
+#'   time and save memory at the cost of not calculated the temporal cross
+#'   decoding results.
+#'   
 #' @param num_parallel_cores An integers specifying the number of parallel cores
 #'   to use when executing the resample runs in the analysis. The default (NULL)
 #'   value is to use half of the cores detected on the system. If this value is
@@ -102,7 +103,7 @@ cv_standard <- function(ndr_container = NULL,
                         feature_preprocessors = NULL,
                         result_metrics = NULL,
                         num_resample_runs = 50,
-                        run_temporal_cross_decoding = TRUE,
+                        run_TCD = TRUE,
                         num_parallel_cores = NULL,
                         parallel_outfile = NULL) {
 
@@ -175,7 +176,7 @@ cv_standard <- function(ndr_container = NULL,
                             ndr_container$fp,
                             ndr_container$rm,
                             num_resample_runs,
-                            run_temporal_cross_decoding,
+                            run_TCD,
                             num_parallel_cores,
                             parallel_outfile)
   
@@ -193,7 +194,7 @@ new_cv_standard <- function(datasource,
                         feature_preprocessors,
                         result_metrics,
                         num_resample_runs,
-                        run_temporal_cross_decoding,
+                        run_TCD,
                         num_parallel_cores, 
                         parallel_outfile) {
 
@@ -235,7 +236,7 @@ new_cv_standard <- function(datasource,
     feature_preprocessors = feature_preprocessors,
     num_resample_runs = num_resample_runs,
     result_metrics = result_metrics,
-    run_temporal_cross_decoding = run_temporal_cross_decoding,
+    run_TCD = run_TCD,
     num_parallel_cores = num_parallel_cores, 
     parallel_outfile = parallel_outfile)
 
@@ -262,7 +263,7 @@ run_decoding.cv_standard <- function(cv_obj) {
   feature_preprocessors <- cv_obj$feature_preprocessors
   num_resample_runs <- cv_obj$num_resample_runs
   result_metrics <- cv_obj$result_metrics
-  run_temporal_cross_decoding <- cv_obj$run_temporal_cross_decoding
+  run_TCD <- cv_obj$run_TCD
   
 
   if (cv_obj$num_parallel_cores > 0) {
@@ -335,7 +336,7 @@ run_decoding.cv_standard <- function(cv_obj) {
         test_set <- dplyr::filter(cv_data, all_cv_train_test_inds[iCV] == "test") %>%
           dplyr::select(starts_with("site"), .data$test_labels, .data$time_bin)
 
-        if (!run_temporal_cross_decoding) {
+        if (!run_TCD) {
           test_set <- dplyr::filter(test_set, .data$time_bin == unique_times[iTrain])
         }
 
@@ -497,7 +498,7 @@ get_parameters.cv_standard <- function(ndr_obj) {
   cv_parameters <- data.frame(
     analysis_ID = ndr_obj$analysis_ID,
     cv_standard.num_resample_runs = ndr_obj$num_resample_runs,
-    cv_standard.run_temporal_cross_decoding = ndr_obj$run_temporal_cross_decoding,
+    cv_standard.run_TCD = ndr_obj$run_TCD,
     cv_standard.num_parallel_cores = ndr_obj$num_parallel_cores,
     cv_standard.parallel_outfile = ndr_obj$parallel_outfile
   )
