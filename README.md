@@ -21,8 +21,8 @@ coverage](https://coveralls.io/repos/github/emeyers/NeuroDecodeR/badge.svg)](htt
 
 *Neural decoding* is a data analysis method that uses pattern
 classifiers to predict experimental conditions based on neural activity.
-The Neural Decoding in R (NDR) package makes it easy to do neural
-decoding analyses in R.
+The NeuroDecodeR package makes it easy to do neural decoding analyses in
+R.
 
 ## Installation
 
@@ -70,6 +70,7 @@ basedir_file_name <- system.file(file.path("extdata", "ZD_150bins_50sampled.Rda"
 
 # create the DS, FP, CL, RM, and CV objects
 ds <- ds_basic(basedir_file_name, 'stimulus_ID', 5, num_label_repeats_per_cv_split = 3)
+#> Automatically selecting sites_IDs_to_use. Since num_cv_splits = 5 and num_label_repeats_per_cv_split = 3, all sites that have 15 repetitions have been selected. This yields 132 sites that will be used for decoding (out of 132 total).
 fps <- list(fp_zscore())
 cl <- cl_max_correlation()
 rms <- list(rm_main_results(), rm_confusion_matrix())
@@ -98,9 +99,9 @@ plot(DECODING_RESULTS$rm_main_results)
 
 <img src="man/figures/README-TCD_plot-1.png" style="display: block; margin: auto;" />
 
-## Running an analysis using the magrittr pipe (%&gt;%)
+## Running an analysis using the magrittr pipe (%\>%)
 
-One can also run a decoding analysis using the magrittr pipe (%&gt;%)
+One can also run a decoding analysis using the magrittr pipe (%\>%)
 operator to string together the different NDR objects as shown below.
 
 ``` r
@@ -116,6 +117,7 @@ basedir_file_name <- system.file(file.path("extdata", "ZD_500bins_500sampled.Rda
     rm_confusion_matrix() %>%
     cv_standard(num_resample_runs = 3) %>%
     run_decoding()
+#> Automatically selecting sites_IDs_to_use. Since num_cv_splits = 6 and num_label_repeats_per_cv_split = 3, all sites that have 18 repetitions have been selected. This yields 132 sites that will be used for decoding (out of 132 total).
 #>   |                                                                              |                                                                      |   0%  |                                                                              |=======================                                               |  33%  |                                                                              |===============================================                       |  67%  |                                                                              |======================================================================| 100%
   
   plot(DECODING_RESULTS$rm_confusion_matrix)

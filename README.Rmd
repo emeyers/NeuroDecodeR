@@ -35,8 +35,8 @@ coverage](https://coveralls.io/repos/github/emeyers/NeuroDecodeR/badge.svg)](htt
 ## Overview
 
 *Neural decoding* is a data analysis method that uses pattern classifiers to
-predict experimental conditions based on neural activity. The Neural Decoding in
-R (NDR) package makes it easy to do neural decoding analyses in R.
+predict experimental conditions based on neural activity. The NeuroDecodeR
+package makes it easy to do neural decoding analyses in R.
 
 
 ## Installation

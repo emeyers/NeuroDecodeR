@@ -5,8 +5,8 @@ This is the first submission of the package to CRAN
 
 ## Test environments
 
- * local macOS Monterey 12.5.1, R 4.1.0
- * local Windows 10.0.19043, R 4.2.0
+ * local macOS Monterey 12.5.1, R 4.2.1
+ * local Windows 10.0.19043, R 4.2.1
  * local Ubuntu 18.04, R 4.2.1
 
 
