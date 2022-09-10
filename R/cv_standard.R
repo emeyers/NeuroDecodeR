@@ -75,18 +75,17 @@
 #'                  feature_preprocessors = fps)
 #' 
 #' 
-#' # alternatively, one can also use the magrittr pipe (%>%) to do an analysis
-#' library(magrittr)
+#' # alternatively, one can also use the pipe (|>) to do an analysis
 #' data_file2 <- system.file("extdata/ZD_500bins_500sampled.Rda",
 #'   package = "NeuroDecodeR")
 #'   
-#' DECODING_RESULTS <- data_file2 %>%
-#'     ds_basic('stimulus_ID', 6, num_label_repeats_per_cv_split = 3) %>%
-#'     cl_max_correlation() %>%
-#'     fp_zscore() %>%
-#'     rm_main_results() %>%
-#'     rm_confusion_matrix() %>%
-#'     cv_standard(num_resample_runs = 3) %>%
+#' DECODING_RESULTS <- data_file2 |>
+#'     ds_basic('stimulus_ID', 6, num_label_repeats_per_cv_split = 3) |>
+#'     cl_max_correlation() |>
+#'     fp_zscore() |>
+#'     rm_main_results() |>
+#'     rm_confusion_matrix() |>
+#'     cv_standard(num_resample_runs = 3) |>
 #'     run_decoding()
 #' 
 #' 
