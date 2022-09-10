@@ -1,8 +1,8 @@
 ---
-title: "Introduction to the NeuroDecodeR package"
+title: "Introductory tutorial"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Introduction to the NDR}
+  %\VignetteIndexEntry{Introductory tutorial}
   %\VignetteEngine{knitr::rmarkdown}
   \usepackage[utf8]{inputenc}
 ---

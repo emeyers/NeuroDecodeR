@@ -1,5 +1,5 @@
 ---
-title: "Tutorial on how to do a generalization analysis"
+title: "Generalization analysis tutorial"
 output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{Generalization analysis tutorial}

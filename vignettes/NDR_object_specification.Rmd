@@ -2,7 +2,7 @@
 title: "NeuroDecodeR object specification"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{NDR object specification}
+  %\VignetteIndexEntry{NeuroDecodeR object specification}
   %\VignetteEngine{knitr::rmarkdown}
   \usepackage[utf8]{inputenc}
 ---
