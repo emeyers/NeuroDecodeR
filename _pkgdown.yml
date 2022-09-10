@@ -34,6 +34,8 @@ reference:
   
 - title: "Plot functions"
   contents:
+  - "`plot.raster_data`"
+  - "`plot.label_repetition`"
   - "`plot.rm_main_results`"
   - "`plot_main_results`"
   - "`plot.rm_confusion_matrix`"
@@ -50,6 +52,10 @@ reference:
   - "`create_binned_data`"
   - "`convert_matlab_raster_data`"
   - "`get_num_label_repetitions`"
+  - "`get_siteIDs_with_k_label_repetitions`"
+  - "`get_num_label_repetitions_each_site`"
+  - "`read_raster_data`"
+  - "`test_valid_raster_format`"
 
 
 navbar:
@@ -77,4 +83,5 @@ navbar:
             href: "articles/datasets.html"
           - text: "NDR object specification"
             href: "articles/NDR_object_specification.html"
-            
+
+

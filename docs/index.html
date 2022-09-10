@@ -24,6 +24,8 @@
 <![endif]-->
 </head>
 <body data-spy="scroll" data-target="#toc">
+    
+
     <div class="container template-home">
       <header><div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
   <div class="container">
@@ -36,7 +38,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="index.html">NeuroDecodeR</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.0.9007</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.1.0</span>
       </span>
     </div>
 
@@ -46,7 +48,7 @@
   <a href="index.html">Home</a>
 </li>
 <li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     Tutorials
      
     <span class="caret"></span>
@@ -64,7 +66,7 @@
   <a href="reference/index.html">Reference</a>
 </li>
 <li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     Documentation
      
     <span class="caret"></span>
@@ -84,7 +86,7 @@
       </ul>
 <ul class="nav navbar-nav navbar-right">
 <li>
-  <a href="https://github.com/emeyers/NeuroDecodeR/">
+  <a href="https://github.com/emeyers/NeuroDecodeR/" class="external-link">
     <span class="fab fa-github fa-lg"></span>
      
   </a>
@@ -101,9 +103,9 @@
 
       </header><div class="row">
   <div class="contents col-md-9">
-<div id="neurodecoder-neural-decoding-in-r" class="section level1">
-<div class="page-header"><h1 class="hasAnchor">
-<a href="#neurodecoder-neural-decoding-in-r" class="anchor"></a>NeuroDecodeR: Neural Decoding in R</h1></div>
+<div class="section level1">
+<div class="page-header"><h1 id="neurodecoder-neural-decoding-in-r">NeuroDecodeR: Neural Decoding in R<a class="anchor" aria-label="anchor" href="#neurodecoder-neural-decoding-in-r"></a>
+</h1></div>
 <!-- badges: start -->
 
 
@@ -111,30 +113,30 @@
 <!-- badges: end -->
 <p>
 </p>
-<div id="overview" class="section level2">
-<h2 class="hasAnchor">
-<a href="#overview" class="anchor"></a>Overview</h2>
-<p><em>Neural decoding</em> is a data analysis method that uses pattern classifiers to predict experimental conditions based on neural activity. The Neural Decoding in R (NDR) package makes it easy to do neural decoding analyses in R.</p>
+<div class="section level2">
+<h2 id="overview">Overview<a class="anchor" aria-label="anchor" href="#overview"></a>
+</h2>
+<p><em>Neural decoding</em> is a data analysis method that uses pattern classifiers to predict experimental conditions based on neural activity. The NeuroDecodeR package makes it easy to do neural decoding analyses in R.</p>
 </div>
-<div id="installation" class="section level2">
-<h2 class="hasAnchor">
-<a href="#installation" class="anchor"></a>Installation</h2>
+<div class="section level2">
+<h2 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
+</h2>
 <p>You can install NeuroDecodeR package from github using:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="co"># install.packages("devtools")</span>
-<span class="fu">devtools</span><span class="fu">::</span><span class="fu"><a href="https://devtools.r-lib.org/reference/remote-reexports.html">install_github</a></span><span class="op">(</span><span class="st">"emeyers/NeuroDecodeR"</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="co"># install.packages("devtools")</span></span>
+<span><span class="fu">devtools</span><span class="fu">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html" class="external-link">install_github</a></span><span class="op">(</span><span class="st">"emeyers/NeuroDecodeR"</span><span class="op">)</span></span></code></pre></div>
 </div>
-<div id="documentation" class="section level2">
-<h2 class="hasAnchor">
-<a href="#documentation" class="anchor"></a>Documentation</h2>
-<p>The documentation for this package is available at: <a href="https://emeyers.github.io/NeuroDecodeR/" class="uri">https://emeyers.github.io/NeuroDecodeR/</a></p>
-<p>To get started we recommend you read the <a href="https://emeyers.github.io/NeuroDecodeR/articles/introduction_tutorial.html">introductory tutorial</a></p>
+<div class="section level2">
+<h2 id="documentation">Documentation<a class="anchor" aria-label="anchor" href="#documentation"></a>
+</h2>
+<p>The documentation for this package is available at: <a href="https://emeyers.github.io/NeuroDecodeR/" class="external-link uri">https://emeyers.github.io/NeuroDecodeR/</a></p>
+<p>To get started we recommend you read the <a href="https://emeyers.github.io/NeuroDecodeR/articles/introduction_tutorial.html" class="external-link">introductory tutorial</a></p>
 </div>
-<div id="usage" class="section level2">
-<h2 class="hasAnchor">
-<a href="#usage" class="anchor"></a>Usage</h2>
+<div class="section level2">
+<h2 id="usage">Usage<a class="anchor" aria-label="anchor" href="#usage"></a>
+</h2>
 <p>The package is based on 5 abstract object types:</p>
-<ol>
+<ol style="list-style-type: decimal">
 <li>
 <code>Datasources (DS)</code>: generate training and test sets.</li>
 <li>
@@ -147,56 +149,58 @@
 <code>Cross-validators (CV)</code>: take the DS, FP and CL objects and run a cross-validation decoding procedure.</li>
 </ol>
 <p>By combing different versions of these 5 object types together, it is possible to run a range of different decoding analyses.</p>
-<p>Below is a brief illustration of how to use the NDR to do a simple decoding analysis. To learn how to use the NDR please see the <a href="https://emeyers.github.io/NeuroDecodeR/">documentation website</a> and the package vignettes.</p>
+<p>Below is a brief illustration of how to use the NDR to do a simple decoding analysis. To learn how to use the NDR please see the <a href="https://emeyers.github.io/NeuroDecodeR/" class="external-link">documentation website</a> and the package vignettes.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/emeyers/NeuroDecodeR">NeuroDecodeR</a></span><span class="op">)</span>
-
-<span class="co"># file to data in "binned format"</span>
-<span class="va">basedir_file_name</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html">system.file</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/file.path.html">file.path</a></span><span class="op">(</span><span class="st">"extdata"</span>, <span class="st">"ZD_150bins_50sampled.Rda"</span><span class="op">)</span>, package<span class="op">=</span><span class="st">"NeuroDecodeR"</span><span class="op">)</span>
-
-<span class="co"># create the DS, FP, CL, RM, and CV objects</span>
-<span class="va">ds</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/ds_basic.html">ds_basic</a></span><span class="op">(</span><span class="va">basedir_file_name</span>, <span class="st">'stimulus_ID'</span>, <span class="fl">5</span>, num_label_repeats_per_cv_split <span class="op">=</span> <span class="fl">3</span><span class="op">)</span>
-<span class="va">fps</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span><span class="fu"><a href="reference/fp_zscore.html">fp_zscore</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span>
-<span class="va">cl</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/cl_max_correlation.html">cl_max_correlation</a></span><span class="op">(</span><span class="op">)</span>
-<span class="va">rms</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span><span class="fu"><a href="reference/rm_main_results.html">rm_main_results</a></span><span class="op">(</span><span class="op">)</span>, <span class="fu"><a href="reference/rm_confusion_matrix.html">rm_confusion_matrix</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span>
-<span class="va">cv</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/cv_standard.html">cv_standard</a></span><span class="op">(</span>datasource <span class="op">=</span> <span class="va">ds</span>, 
-                  classifier <span class="op">=</span> <span class="va">cl</span>, 
-                  feature_preprocessors <span class="op">=</span> <span class="va">fps</span>, 
-                  result_metrics <span class="op">=</span> <span class="va">rms</span>, 
-                  num_resample_runs <span class="op">=</span> <span class="fl">3</span><span class="op">)</span>
-
-<span class="co"># run a decoding analysis (this takes a few minutes) </span>
-<span class="va">DECODING_RESULTS</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/run_decoding.html">run_decoding</a></span><span class="op">(</span><span class="va">cv</span><span class="op">)</span>
-<span class="co">#&gt;   |                                                                              |                                                                      |   0%  |                                                                              |=======================                                               |  33%  |                                                                              |===============================================                       |  67%  |                                                                              |======================================================================| 100%</span></code></pre></div>
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/emeyers/NeuroDecodeR" class="external-link">NeuroDecodeR</a></span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># file to data in "binned format"</span></span>
+<span><span class="va">basedir_file_name</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="st">"extdata"</span>, <span class="st">"ZD_150bins_50sampled.Rda"</span><span class="op">)</span>, package<span class="op">=</span><span class="st">"NeuroDecodeR"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># create the DS, FP, CL, RM, and CV objects</span></span>
+<span><span class="va">ds</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/ds_basic.html">ds_basic</a></span><span class="op">(</span><span class="va">basedir_file_name</span>, <span class="st">'stimulus_ID'</span>, <span class="fl">5</span>, num_label_repeats_per_cv_split <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Automatically selecting sites_IDs_to_use. Since num_cv_splits = 5 and num_label_repeats_per_cv_split = 3, all sites that have 15 repetitions have been selected. This yields 132 sites that will be used for decoding (out of 132 total).</span></span>
+<span><span class="va">fps</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="fu"><a href="reference/fp_zscore.html">fp_zscore</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">cl</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/cl_max_correlation.html">cl_max_correlation</a></span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="va">rms</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="fu"><a href="reference/rm_main_results.html">rm_main_results</a></span><span class="op">(</span><span class="op">)</span>, <span class="fu"><a href="reference/rm_confusion_matrix.html">rm_confusion_matrix</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">cv</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/cv_standard.html">cv_standard</a></span><span class="op">(</span>datasource <span class="op">=</span> <span class="va">ds</span>, </span>
+<span>                  classifier <span class="op">=</span> <span class="va">cl</span>, </span>
+<span>                  feature_preprocessors <span class="op">=</span> <span class="va">fps</span>, </span>
+<span>                  result_metrics <span class="op">=</span> <span class="va">rms</span>, </span>
+<span>                  num_resample_runs <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># run a decoding analysis (this takes a few minutes) </span></span>
+<span><span class="va">DECODING_RESULTS</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/run_decoding.html">run_decoding</a></span><span class="op">(</span><span class="va">cv</span><span class="op">)</span></span>
+<span><span class="co">#&gt;   |                                                                              |                                                                      |   0%  |                                                                              |=======================                                               |  33%  |                                                                              |===============================================                       |  67%  |                                                                              |======================================================================| 100%</span></span></code></pre></div>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="co"># plot the results for three different result types</span>
-<span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span><span class="va">DECODING_RESULTS</span><span class="op">$</span><span class="va">rm_main_results</span>, results_to_show <span class="op">=</span> <span class="st">'all'</span>, type <span class="op">=</span> <span class="st">'line'</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="co"># plot the results for three different result types</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">DECODING_RESULTS</span><span class="op">$</span><span class="va">rm_main_results</span>, results_to_show <span class="op">=</span> <span class="st">'all'</span>, type <span class="op">=</span> <span class="st">'line'</span><span class="op">)</span></span></code></pre></div>
 <p><img src="reference/figures/README-line_plot-1.png" style="display: block; margin: auto;"></p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="co"># create a temporal cross decoding plot</span>
-<span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span><span class="va">DECODING_RESULTS</span><span class="op">$</span><span class="va">rm_main_results</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="co"># create a temporal cross decoding plot</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">DECODING_RESULTS</span><span class="op">$</span><span class="va">rm_main_results</span><span class="op">)</span></span></code></pre></div>
 <p><img src="reference/figures/README-TCD_plot-1.png" style="display: block; margin: auto;"></p>
 </div>
-<div id="running-an-analysis-using-the-magrittr-pipe-" class="section level2">
-<h2 class="hasAnchor">
-<a href="#running-an-analysis-using-the-magrittr-pipe-" class="anchor"></a>Running an analysis using the magrittr pipe (%&gt;%)</h2>
-<p>One can also run a decoding analysis using the magrittr pipe (%&gt;%) operator to string together the different NDR objects as shown below.</p>
+<div class="section level2">
+<h2 id="running-an-analysis-using-pipes-">Running an analysis using pipes (|&gt;)<a class="anchor" aria-label="anchor" href="#running-an-analysis-using-pipes-"></a>
+</h2>
+<p>One can also run a decoding analysis using the pipe (|&gt;) operator to string together the different NDR objects as shown below.</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://magrittr.tidyverse.org">magrittr</a></span><span class="op">)</span>
-
-<span class="va">basedir_file_name</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html">system.file</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/file.path.html">file.path</a></span><span class="op">(</span><span class="st">"extdata"</span>, <span class="st">"ZD_500bins_500sampled.Rda"</span><span class="op">)</span>, package<span class="op">=</span><span class="st">"NeuroDecodeR"</span><span class="op">)</span>
-  
-  <span class="va">DECODING_RESULTS</span> <span class="op">&lt;-</span> <span class="va">basedir_file_name</span> <span class="op">%&gt;%</span>
-    <span class="fu"><a href="reference/ds_basic.html">ds_basic</a></span><span class="op">(</span><span class="st">'stimulus_ID'</span>, <span class="fl">6</span>, num_label_repeats_per_cv_split <span class="op">=</span> <span class="fl">3</span><span class="op">)</span> <span class="op">%&gt;%</span>
-    <span class="fu"><a href="reference/cl_max_correlation.html">cl_max_correlation</a></span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span>
-    <span class="fu"><a href="reference/fp_zscore.html">fp_zscore</a></span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span>
-    <span class="fu"><a href="reference/rm_main_results.html">rm_main_results</a></span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span>
-    <span class="fu"><a href="reference/rm_confusion_matrix.html">rm_confusion_matrix</a></span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span>
-    <span class="fu"><a href="reference/cv_standard.html">cv_standard</a></span><span class="op">(</span>num_resample_runs <span class="op">=</span> <span class="fl">3</span><span class="op">)</span> <span class="op">%&gt;%</span>
-    <span class="fu"><a href="reference/run_decoding.html">run_decoding</a></span><span class="op">(</span><span class="op">)</span>
-<span class="co">#&gt;   |                                                                              |                                                                      |   0%  |                                                                              |=======================                                               |  33%  |                                                                              |===============================================                       |  67%  |                                                                              |======================================================================| 100%</span>
-  
-  <span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span><span class="va">DECODING_RESULTS</span><span class="op">$</span><span class="va">rm_confusion_matrix</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://magrittr.tidyverse.org" class="external-link">magrittr</a></span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">basedir_file_name</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="st">"extdata"</span>, <span class="st">"ZD_500bins_500sampled.Rda"</span><span class="op">)</span>, package<span class="op">=</span><span class="st">"NeuroDecodeR"</span><span class="op">)</span></span>
+<span>  </span>
+<span>  <span class="va">DECODING_RESULTS</span> <span class="op">&lt;-</span> <span class="va">basedir_file_name</span> <span class="op">|&gt;</span></span>
+<span>    <span class="fu"><a href="reference/ds_basic.html">ds_basic</a></span><span class="op">(</span><span class="st">'stimulus_ID'</span>, <span class="fl">6</span>, num_label_repeats_per_cv_split <span class="op">=</span> <span class="fl">3</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>    <span class="fu"><a href="reference/cl_max_correlation.html">cl_max_correlation</a></span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>    <span class="fu"><a href="reference/fp_zscore.html">fp_zscore</a></span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>    <span class="fu"><a href="reference/rm_main_results.html">rm_main_results</a></span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>    <span class="fu"><a href="reference/rm_confusion_matrix.html">rm_confusion_matrix</a></span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>    <span class="fu"><a href="reference/cv_standard.html">cv_standard</a></span><span class="op">(</span>num_resample_runs <span class="op">=</span> <span class="fl">3</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>    <span class="fu"><a href="reference/run_decoding.html">run_decoding</a></span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Automatically selecting sites_IDs_to_use. Since num_cv_splits = 6 and num_label_repeats_per_cv_split = 3, all sites that have 18 repetitions have been selected. This yields 132 sites that will be used for decoding (out of 132 total).</span></span>
+<span><span class="co">#&gt;   |                                                                              |                                                                      |   0%  |                                                                              |=======================                                               |  33%  |                                                                              |===============================================                       |  67%  |                                                                              |======================================================================| 100%</span></span>
+<span>  </span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">DECODING_RESULTS</span><span class="op">$</span><span class="va">rm_confusion_matrix</span><span class="op">)</span></span></code></pre></div>
 <p><img src="reference/figures/README-pipe_example-1.png" style="display: block; margin: auto;"></p>
 </div>
 </div>
@@ -204,45 +208,56 @@
 
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <div class="links">
-<h2>Links</h2>
+<h2 data-toc-skip>Links</h2>
 <ul class="list-unstyled">
-<li>Browse source code at <br><a href="https://github.com/emeyers/NeuroDecodeR/">https://​github.com/​emeyers/​NeuroDecodeR/​</a>
-</li>
-<li>Report a bug at <br><a href="https://github.com/emeyers/NeuroDecodeR/issues">https://​github.com/​emeyers/​NeuroDecodeR/​issues</a>
-</li>
+<li><a href="https://github.com/emeyers/NeuroDecodeR/" class="external-link">Browse source code</a></li>
+<li><a href="https://github.com/emeyers/NeuroDecodeR/issues" class="external-link">Report a bug</a></li>
 </ul>
 </div>
+
 <div class="license">
-<h2>License</h2>
+<h2 data-toc-skip>License</h2>
 <ul class="list-unstyled">
-<li><a href="https://www.r-project.org/Licenses/GPL-3">GPL-3</a></li>
+<li><a href="https://www.r-project.org/Licenses/GPL-3" class="external-link">GPL-3</a></li>
 </ul>
 </div>
+
+
+<div class="citation">
+<h2 data-toc-skip>Citation</h2>
+<ul class="list-unstyled">
+<li><a href="authors.html#citation">Citing NeuroDecodeR</a></li>
+</ul>
+</div>
+
 <div class="developers">
-<h2>Developers</h2>
+<h2 data-toc-skip>Developers</h2>
 <ul class="list-unstyled">
 <li>Ethan Meyers <br><small class="roles"> Author, maintainer </small>  </li>
 </ul>
 </div>
 
-  <div class="dev-status">
-<h2>Dev status</h2>
+<div class="dev-status">
+<h2 data-toc-skip>Dev status</h2>
 <ul class="list-unstyled">
-<li><a href="https://travis-ci.com/emeyers/NeuroDecodeR"><img src="https://travis-ci.com/emeyers/NeuroDecodeR.svg?branch=master" alt="Travis build status"></a></li>
-<li><a href="https://ci.appveyor.com/project/emeyers/NeuroDecodeR"><img src="https://ci.appveyor.com/api/projects/status/github/emeyers/NeuroDecodeR?branch=master&amp;svg=true" alt="AppVeyor build status"></a></li>
-<li><a href="https://coveralls.io/r/emeyers/NeuroDecodeR?branch=master"><img src="https://coveralls.io/repos/github/emeyers/NeuroDecodeR/badge.svg" alt="Coveralls test coverage"></a></li>
+<li><a href="https://travis-ci.com/emeyers/NeuroDecodeR" class="external-link"><img src="https://travis-ci.com/emeyers/NeuroDecodeR.svg?branch=master" alt="Travis build status"></a></li>
+<li><a href="https://ci.appveyor.com/project/emeyers/NeuroDecodeR" class="external-link"><img src="https://ci.appveyor.com/api/projects/status/github/emeyers/NeuroDecodeR?branch=master&amp;svg=true" alt="AppVeyor build status"></a></li>
+<li><a href="https://coveralls.io/r/emeyers/NeuroDecodeR?branch=master" class="external-link"><img src="https://coveralls.io/repos/github/emeyers/NeuroDecodeR/badge.svg" alt="Coveralls test coverage"></a></li>
 </ul>
 </div>
-</div>
+
+  </div>
 </div>
 
 
       <footer><div class="copyright">
-  <p>Developed by Ethan Meyers.</p>
+  <p></p>
+<p>Developed by Ethan Meyers.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
+  <p></p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
 </div>
 
       </footer>
@@ -250,6 +265,8 @@
 
   
 
+
+  
 
   </body>
 </html>

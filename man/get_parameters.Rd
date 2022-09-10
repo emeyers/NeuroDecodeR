@@ -29,3 +29,4 @@ the \code{\link[=log_save_results]{log_save_results()}} function. This method is
 privately by other NDR objects to save all the parameters that were used in
 an analysis.
 }
+\keyword{internal}

@@ -126,6 +126,7 @@ read_raster_data <- function(raster_file_name) {
 #'   trials numbers are needed for data that was recorded simultaneously so that
 #'   trials can be aligned across different sites.
 #'
+#' 
 #' @examples
 #' 
 #' 
@@ -137,7 +138,8 @@ read_raster_data <- function(raster_file_name) {
 #' raster_data <- read_matlab_raster_data(matlab_raster_file_name)
 #'
 #'
-#'
+#' @keywords internal
+#' 
 #' @export
 read_matlab_raster_data <- function(matlab_raster_file_name,
                                     sampling_interval_width = 1,

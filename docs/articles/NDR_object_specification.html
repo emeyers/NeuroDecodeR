@@ -19,6 +19,8 @@
 <![endif]-->
 </head>
 <body data-spy="scroll" data-target="#toc">
+    
+
     <div class="container template-article">
       <header><div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
   <div class="container">
@@ -31,7 +33,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">NeuroDecodeR</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.0.9007</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.1.0</span>
       </span>
     </div>
 
@@ -41,7 +43,7 @@
   <a href="../index.html">Home</a>
 </li>
 <li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     Tutorials
      
     <span class="caret"></span>
@@ -59,7 +61,7 @@
   <a href="../reference/index.html">Reference</a>
 </li>
 <li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     Documentation
      
     <span class="caret"></span>
@@ -79,7 +81,7 @@
       </ul>
 <ul class="nav navbar-nav navbar-right">
 <li>
-  <a href="https://github.com/emeyers/NeuroDecodeR/">
+  <a href="https://github.com/emeyers/NeuroDecodeR/" class="external-link">
     <span class="fab fa-github fa-lg"></span>
      
   </a>
@@ -94,13 +96,13 @@
 
       
 
-      </header><script src="NDR_object_specification_files/header-attrs-2.9/header-attrs.js"></script><div class="row">
+      </header><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>NeuroDecodeR object specification</h1>
             
       
-      <small class="dont-index">Source: <a href="https://github.com/emeyers/NeuroDecodeR/blob/master/vignettes/NDR_object_specification.Rmd"><code>vignettes/NDR_object_specification.Rmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/emeyers/NeuroDecodeR/blob/HEAD/vignettes/NDR_object_specification.Rmd" class="external-link"><code>vignettes/NDR_object_specification.Rmd</code></a></small>
       <div class="hidden name"><code>NDR_object_specification.Rmd</code></div>
 
     </div>
@@ -108,292 +110,411 @@
     
     
 <p><br></p>
-<p>The NeuroDecodeR (NDR) package is designed around five abstract object types which are:</p>
+<p>The NeuroDecodeR (NDR) package is designed around five abstract
+object types which are:</p>
 <ol style="list-style-type: decimal">
-<li><p>Datasources (DS): Generate training and test splits of the data.</p></li>
-<li><p>Feature preprocessors (FP): Learn parameters on the training set and apply transformations to the training and test sets.</p></li>
-<li><p>Classifiers (CL): Learn the relationship between experimental conditions (i.e., “labels”) and neural data on a training set, and then predict experimental conditions neural data in a test set.</p></li>
-<li><p>Result metrics (RM): Aggregate results across validation splits and over resampled runs and compute and plot final decoding accuracy metrics.</p></li>
-<li><p>Cross-validators (CV): Take the DS, FP, CL and RM objects and run a cross-validation decoding procedure.</p></li>
+<li><p>Datasources (DS): Generate training and test splits of the
+data.</p></li>
+<li><p>Feature preprocessors (FP): Learn parameters on the training set
+and apply transformations to the training and test sets.</p></li>
+<li><p>Classifiers (CL): Learn the relationship between experimental
+conditions (i.e., “labels”) and neural data on a training set, and then
+predict experimental conditions neural data in a test set.</p></li>
+<li><p>Result metrics (RM): Aggregate results across validation splits
+and over resampled runs and compute and plot final decoding accuracy
+metrics.</p></li>
+<li><p>Cross-validators (CV): Take the DS, FP, CL and RM objects and run
+a cross-validation decoding procedure.</p></li>
 </ol>
-<p>By having a standard set of object types, one can easily use different instances of these five object types to do different types of analyses.</p>
-<p>For most common analyses, one can use instances of these different object types that come with the NDR. However, in some cases, one might want to extend the functionality of the NDR to gain additional insights. For example, one might want to try a different classifier to gain a better understanding of how populations of neurons code information (e.g., see Meyers, Borzello, Freiwald and Tsao, J Neurosci 2015).</p>
-<p>The following document describes the methods and data formats that need to be implemented to create valid DS, FP, CL, RM, and CV object types. By creating new classes of objects that conform to these interfaces, one can easily extend the NDR to try new analyses.</p>
+<p>By having a standard set of object types, one can easily use
+different instances of these five object types to do different types of
+analyses.</p>
+<p>For most common analyses, one can use instances of these different
+object types that come with the NDR. However, in some cases, one might
+want to extend the functionality of the NDR to gain additional insights.
+For example, one might want to try a different classifier to gain a
+better understanding of how populations of neurons code information
+(e.g., see Meyers, Borzello, Freiwald and Tsao, J Neurosci 2015).</p>
+<p>The following document describes the methods and data formats that
+need to be implemented to create valid DS, FP, CL, RM, and CV object
+types. By creating new classes of objects that conform to these
+interfaces, one can easily extend the NDR to try new analyses.</p>
 <p><br></p>
 <p><br></p>
-<div id="datasources-ds" class="section level1">
-<h1 class="hasAnchor">
-<a href="#datasources-ds" class="anchor"></a>Datasources (DS)</h1>
-<p>Datasources are used to generate training and tests splits of data.</p>
-<div id="implementing-an-ds-methods-and-data-formats" class="section level3">
-<h3 class="hasAnchor">
-<a href="#implementing-an-ds-methods-and-data-formats" class="anchor"></a>Implementing an DS: methods and data formats</h3>
-<p>All datasources must implement a <code><a href="../reference/get_data.html">get_data()</a></code> method that returns a data frame that has the following variables in it:</p>
+<div class="section level2">
+<h2 id="datasources-ds">Datasources (DS)<a class="anchor" aria-label="anchor" href="#datasources-ds"></a>
+</h2>
+<p>Datasources are used to generate training and tests splits of
+data.</p>
+<div class="section level4">
+<h4 id="implementing-an-ds-methods-and-data-formats">Implementing an DS: methods and data formats<a class="anchor" aria-label="anchor" href="#implementing-an-ds-methods-and-data-formats"></a>
+</h4>
+<p>All datasources must implement a <code><a href="../reference/get_data.html">get_data()</a></code> method that
+returns a data frame that has the following variables in it:</p>
 <ol style="list-style-type: decimal">
-<li><p><code>train_labels</code>: The label levels that occur on each trial in the training data set</p></li>
-<li><p><code>test_labels</code>: The label levels that occur on each trial in the test data set</p></li>
-<li><p><code>time_bin</code>: The time in the experiment where the <em>test</em> data comes from</p></li>
-<li><p><code>site_XXX</code>: A collection of variables that each has data from one site (e.g., neuron, EEG channel etc.)</p></li>
-<li><p><code>CV_XXX</code>: A list for each CV split whether a given row is in that train or test set</p></li>
+<li><p><code>train_labels</code>: The label levels that occur on each
+trial in the training data set</p></li>
+<li><p><code>test_labels</code>: The label levels that occur on each
+trial in the test data set</p></li>
+<li><p><code>time_bin</code>: The time in the experiment where the
+<em>test</em> data comes from</p></li>
+<li><p><code>site_XXX</code>: A collection of variables that each has
+data from one site (e.g., neuron, EEG channel etc.)</p></li>
+<li><p><code>CV_XXX</code>: A list for each CV split whether a given row
+is in that train or test set</p></li>
 </ol>
-<p>Like all NDR objects, DS objects must also implement a <code>get_properties()</code> method which returns a data frame with one row that lists all the properties that have been set to allow for reproducible research.</p>
+<p>Like all NDR objects, DS objects must also implement a
+<code>get_properties()</code> method which returns a data frame with one
+row that lists all the properties that have been set to allow for
+reproducible research.</p>
 </div>
-<div id="example-of-internals-of-ds-objects-using-the-ds_basic-object" class="section level3">
-<h3 class="hasAnchor">
-<a href="#example-of-internals-of-ds-objects-using-the-ds_basic-object" class="anchor"></a>Example of internals of DS objects using the ds_basic object</h3>
-<p>Here is an example the data returned by the <code><a href="../reference/ds_basic.html">ds_basic()</a></code> datasource</p>
+<div class="section level4">
+<h4 id="example-of-internals-of-ds-objects-using-the-ds_basic-object">Example of internals of DS objects using the ds_basic object<a class="anchor" aria-label="anchor" href="#example-of-internals-of-ds-objects-using-the-ds_basic-object"></a>
+</h4>
+<p>Here is an example the data returned by the <code><a href="../reference/ds_basic.html">ds_basic()</a></code>
+datasource</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">data_file_name</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html">system.file</a></span><span class="op">(</span><span class="st">"extdata/ZD_150bins_50sampled.Rda"</span>, package<span class="op">=</span><span class="st">"NeuroDecodeR"</span><span class="op">)</span>
-<span class="va">ds</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/ds_basic.html">ds_basic</a></span><span class="op">(</span><span class="va">data_file_name</span>, <span class="st">'stimulus_ID'</span>, <span class="fl">18</span><span class="op">)</span></code></pre></div>
-<pre><code>## Automatically selecting sites_IDs_to_use. Since num_cv_splits = 18 and num_label_repeats_per_cv_split = 1, all sites that have 18 repetitions have been selected. This yields 132 sites that will be used for decoding (out of 132 total).</code></pre>
+<code class="sourceCode R"><span><span class="va">data_file_name</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"extdata/ZD_150bins_50sampled.Rda"</span>, package<span class="op">=</span><span class="st">"NeuroDecodeR"</span><span class="op">)</span></span>
+<span><span class="va">ds</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/ds_basic.html">ds_basic</a></span><span class="op">(</span><span class="va">data_file_name</span>, <span class="st">'stimulus_ID'</span>, <span class="fl">18</span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">## Automatically selecting sites_IDs_to_use. Since num_cv_splits = 18 and num_label_repeats_per_cv_split = 1, all sites that have 18 repetitions have been selected. This yields 132 sites that will be used for decoding (out of 132 total).</span></span></code></pre>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">all_cv_data</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_data.html">get_data</a></span><span class="op">(</span><span class="va">ds</span><span class="op">)</span>  
- 
-<span class="fu"><a href="https://rdrr.io/r/base/names.html">names</a></span><span class="op">(</span><span class="va">all_cv_data</span><span class="op">)</span></code></pre></div>
-<pre><code>##   [1] "train_labels" "test_labels"  "time_bin"     "site_0001"    "site_0002"   
-##   [6] "site_0003"    "site_0004"    "site_0005"    "site_0006"    "site_0007"   
-##  [11] "site_0008"    "site_0009"    "site_0010"    "site_0011"    "site_0012"   
-##  [16] "site_0013"    "site_0014"    "site_0015"    "site_0016"    "site_0017"   
-##  [21] "site_0018"    "site_0019"    "site_0020"    "site_0021"    "site_0022"   
-##  [26] "site_0023"    "site_0024"    "site_0025"    "site_0026"    "site_0027"   
-##  [31] "site_0028"    "site_0029"    "site_0030"    "site_0031"    "site_0032"   
-##  [36] "site_0033"    "site_0034"    "site_0035"    "site_0036"    "site_0037"   
-##  [41] "site_0038"    "site_0039"    "site_0040"    "site_0041"    "site_0042"   
-##  [46] "site_0043"    "site_0044"    "site_0045"    "site_0046"    "site_0047"   
-##  [51] "site_0048"    "site_0049"    "site_0050"    "site_0051"    "site_0052"   
-##  [56] "site_0053"    "site_0054"    "site_0055"    "site_0056"    "site_0057"   
-##  [61] "site_0058"    "site_0059"    "site_0060"    "site_0061"    "site_0062"   
-##  [66] "site_0063"    "site_0064"    "site_0065"    "site_0066"    "site_0067"   
-##  [71] "site_0068"    "site_0069"    "site_0070"    "site_0071"    "site_0072"   
-##  [76] "site_0073"    "site_0074"    "site_0075"    "site_0076"    "site_0077"   
-##  [81] "site_0078"    "site_0079"    "site_0080"    "site_0081"    "site_0082"   
-##  [86] "site_0083"    "site_0084"    "site_0085"    "site_0086"    "site_0087"   
-##  [91] "site_0088"    "site_0089"    "site_0090"    "site_0091"    "site_0092"   
-##  [96] "site_0093"    "site_0094"    "site_0095"    "site_0096"    "site_0097"   
-## [101] "site_0098"    "site_0099"    "site_0100"    "site_0101"    "site_0102"   
-## [106] "site_0103"    "site_0104"    "site_0105"    "site_0106"    "site_0107"   
-## [111] "site_0108"    "site_0109"    "site_0110"    "site_0111"    "site_0112"   
-## [116] "site_0113"    "site_0114"    "site_0115"    "site_0116"    "site_0117"   
-## [121] "site_0118"    "site_0119"    "site_0120"    "site_0121"    "site_0122"   
-## [126] "site_0123"    "site_0124"    "site_0125"    "site_0126"    "site_0127"   
-## [131] "site_0128"    "site_0129"    "site_0130"    "site_0131"    "site_0132"   
-## [136] "CV_1"         "CV_2"         "CV_3"         "CV_4"         "CV_5"        
-## [141] "CV_6"         "CV_7"         "CV_8"         "CV_9"         "CV_10"       
-## [146] "CV_11"        "CV_12"        "CV_13"        "CV_14"        "CV_15"       
-## [151] "CV_16"        "CV_17"        "CV_18"</code></pre>
+<code class="sourceCode R"><span><span class="va">all_cv_data</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_data.html">get_data</a></span><span class="op">(</span><span class="va">ds</span><span class="op">)</span>  </span>
+<span> </span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">all_cv_data</span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">##   [1] "train_labels" "test_labels"  "time_bin"     "site_0001"    "site_0002"   </span></span>
+<span><span class="co">##   [6] "site_0003"    "site_0004"    "site_0005"    "site_0006"    "site_0007"   </span></span>
+<span><span class="co">##  [11] "site_0008"    "site_0009"    "site_0010"    "site_0011"    "site_0012"   </span></span>
+<span><span class="co">##  [16] "site_0013"    "site_0014"    "site_0015"    "site_0016"    "site_0017"   </span></span>
+<span><span class="co">##  [21] "site_0018"    "site_0019"    "site_0020"    "site_0021"    "site_0022"   </span></span>
+<span><span class="co">##  [26] "site_0023"    "site_0024"    "site_0025"    "site_0026"    "site_0027"   </span></span>
+<span><span class="co">##  [31] "site_0028"    "site_0029"    "site_0030"    "site_0031"    "site_0032"   </span></span>
+<span><span class="co">##  [36] "site_0033"    "site_0034"    "site_0035"    "site_0036"    "site_0037"   </span></span>
+<span><span class="co">##  [41] "site_0038"    "site_0039"    "site_0040"    "site_0041"    "site_0042"   </span></span>
+<span><span class="co">##  [46] "site_0043"    "site_0044"    "site_0045"    "site_0046"    "site_0047"   </span></span>
+<span><span class="co">##  [51] "site_0048"    "site_0049"    "site_0050"    "site_0051"    "site_0052"   </span></span>
+<span><span class="co">##  [56] "site_0053"    "site_0054"    "site_0055"    "site_0056"    "site_0057"   </span></span>
+<span><span class="co">##  [61] "site_0058"    "site_0059"    "site_0060"    "site_0061"    "site_0062"   </span></span>
+<span><span class="co">##  [66] "site_0063"    "site_0064"    "site_0065"    "site_0066"    "site_0067"   </span></span>
+<span><span class="co">##  [71] "site_0068"    "site_0069"    "site_0070"    "site_0071"    "site_0072"   </span></span>
+<span><span class="co">##  [76] "site_0073"    "site_0074"    "site_0075"    "site_0076"    "site_0077"   </span></span>
+<span><span class="co">##  [81] "site_0078"    "site_0079"    "site_0080"    "site_0081"    "site_0082"   </span></span>
+<span><span class="co">##  [86] "site_0083"    "site_0084"    "site_0085"    "site_0086"    "site_0087"   </span></span>
+<span><span class="co">##  [91] "site_0088"    "site_0089"    "site_0090"    "site_0091"    "site_0092"   </span></span>
+<span><span class="co">##  [96] "site_0093"    "site_0094"    "site_0095"    "site_0096"    "site_0097"   </span></span>
+<span><span class="co">## [101] "site_0098"    "site_0099"    "site_0100"    "site_0101"    "site_0102"   </span></span>
+<span><span class="co">## [106] "site_0103"    "site_0104"    "site_0105"    "site_0106"    "site_0107"   </span></span>
+<span><span class="co">## [111] "site_0108"    "site_0109"    "site_0110"    "site_0111"    "site_0112"   </span></span>
+<span><span class="co">## [116] "site_0113"    "site_0114"    "site_0115"    "site_0116"    "site_0117"   </span></span>
+<span><span class="co">## [121] "site_0118"    "site_0119"    "site_0120"    "site_0121"    "site_0122"   </span></span>
+<span><span class="co">## [126] "site_0123"    "site_0124"    "site_0125"    "site_0126"    "site_0127"   </span></span>
+<span><span class="co">## [131] "site_0128"    "site_0129"    "site_0130"    "site_0131"    "site_0132"   </span></span>
+<span><span class="co">## [136] "CV_1"         "CV_2"         "CV_3"         "CV_4"         "CV_5"        </span></span>
+<span><span class="co">## [141] "CV_6"         "CV_7"         "CV_8"         "CV_9"         "CV_10"       </span></span>
+<span><span class="co">## [146] "CV_11"        "CV_12"        "CV_13"        "CV_14"        "CV_15"       </span></span>
+<span><span class="co">## [151] "CV_16"        "CV_17"        "CV_18"</span></span></code></pre>
 <p><br></p>
 <p><br></p>
 </div>
 </div>
-<div id="feature-preprocessors-fp" class="section level1">
-<h1 class="hasAnchor">
-<a href="#feature-preprocessors-fp" class="anchor"></a>Feature preprocessors (FP)</h1>
-<p>Feature preprocessors learn a set of parameters from the training data and modify both the training and the test data based on these parameters, prior to the data being sent to the classifier. The features preprocessor objects must only use the training data to learn the preprocessing parameters in order to prevent contamination between the training and test data which could bias the results.</p>
-<div id="implementing-an-fp-required-methods-and-data-formats" class="section level3">
-<h3 class="hasAnchor">
-<a href="#implementing-an-fp-required-methods-and-data-formats" class="anchor"></a>Implementing an FP: required methods and data formats</h3>
-<p>All feature preprocessors must implement <code><a href="../reference/preprocess_data.html">preprocess_data()</a></code>. This method takes two data frames called <em>training_set</em> and <em>test_set</em> have the following variables:</p>
-<div id="training_set" class="section level4">
-<h4 class="hasAnchor">
-<a href="#training_set" class="anchor"></a>training_set</h4>
+<div class="section level2">
+<h2 id="feature-preprocessors-fp">Feature preprocessors (FP)<a class="anchor" aria-label="anchor" href="#feature-preprocessors-fp"></a>
+</h2>
+<p>Feature preprocessors learn a set of parameters from the training
+data and modify both the training and the test data based on these
+parameters, prior to the data being sent to the classifier. The features
+preprocessor objects must only use the training data to learn the
+preprocessing parameters in order to prevent contamination between the
+training and test data which could bias the results.</p>
+<div class="section level4">
+<h4 id="implementing-an-fp-required-methods-and-data-formats">Implementing an FP: required methods and data formats<a class="anchor" aria-label="anchor" href="#implementing-an-fp-required-methods-and-data-formats"></a>
+</h4>
+<p>All feature preprocessors must implement
+<code><a href="../reference/preprocess_data.html">preprocess_data()</a></code>. This method takes two data frames called
+<em>training_set</em> and <em>test_set</em> have the following
+variables:</p>
+<div class="section level5">
+<h5 id="training_set">training_set<a class="anchor" aria-label="anchor" href="#training_set"></a>
+</h5>
 <ol style="list-style-type: decimal">
 <li>
-<code>training_labels</code>: The labels used to train the classifier.</li>
+<code>training_labels</code>: The labels used to train the
+classifier.</li>
 <li>
-<code>site_X</code>: a group of variables that has data from multiple sites.</li>
+<code>site_X</code>: a group of variables that has data from
+multiple sites.</li>
 </ol>
 </div>
-<div id="test_set" class="section level4">
-<h4 class="hasAnchor">
-<a href="#test_set" class="anchor"></a>test_set</h4>
+<div class="section level5">
+<h5 id="test_set">test_set<a class="anchor" aria-label="anchor" href="#test_set"></a>
+</h5>
 <ol style="list-style-type: decimal">
 <li>
-<code>test_labels</code>: The labels used to test the classifier</li>
+<code>test_labels</code>: The labels used to test the
+classifier</li>
 <li>
-<code>site_X</code>: a group of varaibles that has data from multiple sites</li>
+<code>site_X</code>: a group of varaibles that has data from
+multiple sites</li>
 <li>
-<code>time_bin</code>: character strings listing which times different rows correspond to</li>
+<code>time_bin</code>: character strings listing which times
+different rows correspond to</li>
 </ol>
-<p>The <code><a href="../reference/preprocess_data.html">preprocess_data()</a></code> returns a list with the two data frames <em>training_set</em> and <em>test_set</em> but the data in these data frames has been preprocessed based on parameters learned from the training_set.</p>
-<p>Like all NDR objects, FP objects must also implement a <code>get_properties()</code> method which returns a data frame with one row that lists all the properties that have been set to allow for reproducible research.</p>
+<p>The <code><a href="../reference/preprocess_data.html">preprocess_data()</a></code> returns a list with the two data
+frames <em>training_set</em> and <em>test_set</em> but the data in these
+data frames has been preprocessed based on parameters learned from the
+training_set.</p>
+<p>Like all NDR objects, FP objects must also implement a
+<code>get_properties()</code> method which returns a data frame with one
+row that lists all the properties that have been set to allow for
+reproducible research.</p>
 </div>
 </div>
-<div id="example-of-internals-of-fp-objects-using-the-fp_zscore" class="section level3">
-<h3 class="hasAnchor">
-<a href="#example-of-internals-of-fp-objects-using-the-fp_zscore" class="anchor"></a>Example of internals of FP objects using the fp_zscore</h3>
-<p>If you want to implement a new FP object yourself, below is an example of how the FP object gets and returns data.</p>
+<div class="section level4">
+<h4 id="example-of-internals-of-fp-objects-using-the-fp_zscore">Example of internals of FP objects using the fp_zscore<a class="anchor" aria-label="anchor" href="#example-of-internals-of-fp-objects-using-the-fp_zscore"></a>
+</h4>
+<p>If you want to implement a new FP object yourself, below is an
+example of how the FP object gets and returns data.</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="co"># create a ds_basic to get the data</span>
-<span class="va">data_file_name</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html">system.file</a></span><span class="op">(</span><span class="st">"extdata/ZD_150bins_50sampled.Rda"</span>, package<span class="op">=</span><span class="st">"NeuroDecodeR"</span><span class="op">)</span>
-<span class="va">ds</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/ds_basic.html">ds_basic</a></span><span class="op">(</span><span class="va">data_file_name</span>, <span class="st">'stimulus_ID'</span>, <span class="fl">18</span><span class="op">)</span></code></pre></div>
-<pre><code>## Automatically selecting sites_IDs_to_use. Since num_cv_splits = 18 and num_label_repeats_per_cv_split = 1, all sites that have 18 repetitions have been selected. This yields 132 sites that will be used for decoding (out of 132 total).</code></pre>
+<code class="sourceCode R"><span><span class="co"># create a ds_basic to get the data</span></span>
+<span><span class="va">data_file_name</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"extdata/ZD_150bins_50sampled.Rda"</span>, package<span class="op">=</span><span class="st">"NeuroDecodeR"</span><span class="op">)</span></span>
+<span><span class="va">ds</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/ds_basic.html">ds_basic</a></span><span class="op">(</span><span class="va">data_file_name</span>, <span class="st">'stimulus_ID'</span>, <span class="fl">18</span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">## Automatically selecting sites_IDs_to_use. Since num_cv_splits = 18 and num_label_repeats_per_cv_split = 1, all sites that have 18 repetitions have been selected. This yields 132 sites that will be used for decoding (out of 132 total).</span></span></code></pre>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">cv_data</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_data.html">get_data</a></span><span class="op">(</span><span class="va">ds</span><span class="op">)</span>  
- 
-
-<span class="co"># an example of spliting the data into a training and test set, </span>
-<span class="co"># this is done in the cross-validator</span>
-<span class="va">training_set</span> <span class="op">&lt;-</span> <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="va">cv_data</span>, 
-                              <span class="va">time_bin</span> <span class="op">==</span> <span class="st">"time.100_250"</span>, 
-                              <span class="va">CV_1</span> <span class="op">==</span> <span class="st">"train"</span><span class="op">)</span> <span class="op">%&gt;%</span>       <span class="co"># get data from the first CV split</span>
-  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="fu">starts_with</span><span class="op">(</span><span class="st">"site"</span><span class="op">)</span>, <span class="va">train_labels</span><span class="op">)</span>
-        
-<span class="va">test_set</span> <span class="op">&lt;-</span> <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="va">cv_data</span>, <span class="va">CV_1</span> <span class="op">==</span> <span class="st">"test"</span><span class="op">)</span> <span class="op">%&gt;%</span>   <span class="co"># get data from the first CV split</span>
-  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="fu">starts_with</span><span class="op">(</span><span class="st">"site"</span><span class="op">)</span>, <span class="va">test_labels</span>, <span class="va">time_bin</span><span class="op">)</span> 
-
-
-
-<span class="co"># use the fp object to normalize the data </span>
-<span class="va">fp</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/fp_zscore.html">fp_zscore</a></span><span class="op">(</span><span class="op">)</span>
-<span class="va">processed_data</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/preprocess_data.html">preprocess_data</a></span><span class="op">(</span><span class="va">fp</span>, <span class="va">training_set</span>, <span class="va">test_set</span><span class="op">)</span>
-
-<span class="co"># prior to z-score normalizing the mean (e.g. for site 1) is not 0</span>
-<span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span><span class="op">(</span><span class="va">training_set</span><span class="op">$</span><span class="va">site_0001</span><span class="op">)</span></code></pre></div>
-<pre><code>## [1] 0.003529412</code></pre>
+<code class="sourceCode R"><span><span class="va">cv_data</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_data.html">get_data</a></span><span class="op">(</span><span class="va">ds</span><span class="op">)</span>  </span>
+<span> </span>
+<span></span>
+<span><span class="co"># an example of spliting the data into a training and test set, </span></span>
+<span><span class="co"># this is done in the cross-validator</span></span>
+<span><span class="va">training_set</span> <span class="op">&lt;-</span> <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">cv_data</span>, </span>
+<span>                              <span class="va">time_bin</span> <span class="op">==</span> <span class="st">"time.100_250"</span>, </span>
+<span>                              <span class="va">CV_1</span> <span class="op">==</span> <span class="st">"train"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span>       <span class="co"># get data from the first CV split</span></span>
+<span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="fu">starts_with</span><span class="op">(</span><span class="st">"site"</span><span class="op">)</span>, <span class="va">train_labels</span><span class="op">)</span></span>
+<span>        </span>
+<span><span class="va">test_set</span> <span class="op">&lt;-</span> <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">cv_data</span>, <span class="va">CV_1</span> <span class="op">==</span> <span class="st">"test"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span>   <span class="co"># get data from the first CV split</span></span>
+<span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="fu">starts_with</span><span class="op">(</span><span class="st">"site"</span><span class="op">)</span>, <span class="va">test_labels</span>, <span class="va">time_bin</span><span class="op">)</span> </span>
+<span></span>
+<span></span>
+<span></span>
+<span><span class="co"># use the fp object to normalize the data </span></span>
+<span><span class="va">fp</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/fp_zscore.html">fp_zscore</a></span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="va">processed_data</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/preprocess_data.html">preprocess_data</a></span><span class="op">(</span><span class="va">fp</span>, <span class="va">training_set</span>, <span class="va">test_set</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># prior to z-score normalizing the mean (e.g. for site 1) is not 0</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">training_set</span><span class="op">$</span><span class="va">site_0001</span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">## [1] 0.003081232</span></span></code></pre>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="co"># after normalizing the data the mean is pretty much 0</span>
-<span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span><span class="op">(</span><span class="va">processed_data</span><span class="op">$</span><span class="va">training_set</span><span class="op">$</span><span class="va">site_0001</span><span class="op">)</span></code></pre></div>
-<pre><code>## [1] 2.423055e-17</code></pre>
+<code class="sourceCode R"><span><span class="co"># after normalizing the data the mean is pretty much 0</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">processed_data</span><span class="op">$</span><span class="va">training_set</span><span class="op">$</span><span class="va">site_0001</span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">## [1] -1.304778e-17</span></span></code></pre>
 <p><br></p>
 <p><br></p>
 </div>
 </div>
-<div id="classifiers-cl" class="section level1">
-<h1 class="hasAnchor">
-<a href="#classifiers-cl" class="anchor"></a>Classifiers (CL)</h1>
-<p>Classifiers take a set of training data and training labels, and learn a model of the relationship between the training data and the labels from the different classes. Once this model has been learned (i.e., once the classifier has been trained), the classifier is then used to make predictions about what labels were present in a new set of test data.</p>
-<div id="implementing-a-cl-required-methods-and-data-formats" class="section level3">
-<h3 class="hasAnchor">
-<a href="#implementing-a-cl-required-methods-and-data-formats" class="anchor"></a>Implementing a CL: required methods and data formats</h3>
-<p>Objects that are classifiers must implement the <code><a href="../reference/get_predictions.html">get_predictions()</a></code> method. This method takes two data frames called <em>training_set</em> and <em>test_set</em> have the following variables:</p>
-<div id="training_set-1" class="section level4">
-<h4 class="hasAnchor">
-<a href="#training_set-1" class="anchor"></a>training_set</h4>
+<div class="section level2">
+<h2 id="classifiers-cl">Classifiers (CL)<a class="anchor" aria-label="anchor" href="#classifiers-cl"></a>
+</h2>
+<p>Classifiers take a set of training data and training labels, and
+learn a model of the relationship between the training data and the
+labels from the different classes. Once this model has been learned
+(i.e., once the classifier has been trained), the classifier is then
+used to make predictions about what labels were present in a new set of
+test data.</p>
+<div class="section level4">
+<h4 id="implementing-a-cl-required-methods-and-data-formats">Implementing a CL: required methods and data formats<a class="anchor" aria-label="anchor" href="#implementing-a-cl-required-methods-and-data-formats"></a>
+</h4>
+<p>Objects that are classifiers must implement the
+<code><a href="../reference/get_predictions.html">get_predictions()</a></code> method. This method takes two data frames
+called <em>training_set</em> and <em>test_set</em> have the following
+variables:</p>
+<div class="section level5">
+<h5 id="training_set-1">training_set<a class="anchor" aria-label="anchor" href="#training_set-1"></a>
+</h5>
 <ol style="list-style-type: decimal">
 <li>
-<code>training_labels</code>: The labels used to train the classifier.</li>
+<code>training_labels</code>: The labels used to train the
+classifier.</li>
 <li>
-<code>site_X</code>: a group of varaibles that has data from multiple sites.</li>
+<code>site_X</code>: a group of varaibles that has data from
+multiple sites.</li>
 </ol>
 </div>
-<div id="test_set-1" class="section level4">
-<h4 class="hasAnchor">
-<a href="#test_set-1" class="anchor"></a>test_set</h4>
+<div class="section level5">
+<h5 id="test_set-1">test_set<a class="anchor" aria-label="anchor" href="#test_set-1"></a>
+</h5>
 <ol style="list-style-type: decimal">
 <li>
-<code>test_labels</code> The labels used to test the classifier.</li>
+<code>test_labels</code> The labels used to test the
+classifier.</li>
 <li>
-<code>site_X</code>: a group of varaibles that has data from multiple sites.</li>
+<code>site_X</code>: a group of varaibles that has data from
+multiple sites.</li>
 <li>
-<code>time_bin</code>: character strings listing which times different rows correspond to.</li>
+<code>time_bin</code>: character strings listing which times
+different rows correspond to.</li>
 </ol>
-<p>The <code><a href="../reference/get_predictions.html">get_predictions()</a></code> returns a data frame that has the following variables:</p>
+<p>The <code><a href="../reference/get_predictions.html">get_predictions()</a></code> returns a data frame that has the
+following variables:</p>
 <ol style="list-style-type: decimal">
-<li><p><code>test_time</code>: a character vector indicating the times which the rows come from</p></li>
-<li><p><code>actual_labels</code>: the labels that were actually present on each trial</p></li>
-<li><p><code>predicted_labels</code>: the labels that the classifier predicted</p></li>
-<li><p><code>decision_vals.X</code> (optional): a group of variables that has values that indicate how strongly the classifier rates a test point as coming from a particular class</p></li>
+<li><p><code>test_time</code>: a character vector indicating the times
+which the rows come from</p></li>
+<li><p><code>actual_labels</code>: the labels that were actually present
+on each trial</p></li>
+<li><p><code>predicted_labels</code>: the labels that the classifier
+predicted</p></li>
+<li><p><code>decision_vals.X</code> (optional): a group of variables
+that has values that indicate how strongly the classifier rates a test
+point as coming from a particular class</p></li>
 </ol>
-<p>Like all NDR objects, CL objects must also implement a <code>get_properties()</code> method which returns a data frame with one row that lists all the properties that have been set to allow for reproducible research.</p>
+<p>Like all NDR objects, CL objects must also implement a
+<code>get_properties()</code> method which returns a data frame with one
+row that lists all the properties that have been set to allow for
+reproducible research.</p>
 </div>
 </div>
-<div id="example-of-internals-of-cl-object-using-the-cl_max_correlation" class="section level3">
-<h3 class="hasAnchor">
-<a href="#example-of-internals-of-cl-object-using-the-cl_max_correlation" class="anchor"></a>Example of internals of CL object using the cl_max_correlation</h3>
-<p>If you want to implement a new CL object yourself, below is an example of how the CL object gets and returns data.</p>
+<div class="section level4">
+<h4 id="example-of-internals-of-cl-object-using-the-cl_max_correlation">Example of internals of CL object using the cl_max_correlation<a class="anchor" aria-label="anchor" href="#example-of-internals-of-cl-object-using-the-cl_max_correlation"></a>
+</h4>
+<p>If you want to implement a new CL object yourself, below is an
+example of how the CL object gets and returns data.</p>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="co"># create a ds_basic to get the data</span>
-<span class="va">data_file_name</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html">system.file</a></span><span class="op">(</span><span class="st">"extdata/ZD_150bins_50sampled.Rda"</span>, package<span class="op">=</span><span class="st">"NeuroDecodeR"</span><span class="op">)</span>
-<span class="va">ds</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/ds_basic.html">ds_basic</a></span><span class="op">(</span><span class="va">data_file_name</span>, <span class="st">'stimulus_ID'</span>, <span class="fl">18</span><span class="op">)</span></code></pre></div>
-<pre><code>## Automatically selecting sites_IDs_to_use. Since num_cv_splits = 18 and num_label_repeats_per_cv_split = 1, all sites that have 18 repetitions have been selected. This yields 132 sites that will be used for decoding (out of 132 total).</code></pre>
+<code class="sourceCode R"><span><span class="co"># create a ds_basic to get the data</span></span>
+<span><span class="va">data_file_name</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"extdata/ZD_150bins_50sampled.Rda"</span>, package<span class="op">=</span><span class="st">"NeuroDecodeR"</span><span class="op">)</span></span>
+<span><span class="va">ds</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/ds_basic.html">ds_basic</a></span><span class="op">(</span><span class="va">data_file_name</span>, <span class="st">'stimulus_ID'</span>, <span class="fl">18</span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">## Automatically selecting sites_IDs_to_use. Since num_cv_splits = 18 and num_label_repeats_per_cv_split = 1, all sites that have 18 repetitions have been selected. This yields 132 sites that will be used for decoding (out of 132 total).</span></span></code></pre>
 <div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">cv_data</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_data.html">get_data</a></span><span class="op">(</span><span class="va">ds</span><span class="op">)</span>  
- 
-
-<span class="co"># an example of spliting the data into a training and test set, </span>
-<span class="co"># this is done in the cross-validator</span>
-<span class="va">training_set</span> <span class="op">&lt;-</span> <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="va">cv_data</span>, 
-                              <span class="va">time_bin</span> <span class="op">==</span> <span class="st">"time.100_250"</span>, 
-                              <span class="va">CV_1</span> <span class="op">==</span> <span class="st">"train"</span><span class="op">)</span> <span class="op">%&gt;%</span>       <span class="co"># get data from the first CV split</span>
-  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="fu">starts_with</span><span class="op">(</span><span class="st">"site"</span><span class="op">)</span>, <span class="va">train_labels</span><span class="op">)</span>
-        
-<span class="va">test_set</span> <span class="op">&lt;-</span> <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="va">cv_data</span>, <span class="va">CV_1</span> <span class="op">==</span> <span class="st">"test"</span><span class="op">)</span> <span class="op">%&gt;%</span>   <span class="co"># get data from the first CV split</span>
-  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="fu">starts_with</span><span class="op">(</span><span class="st">"site"</span><span class="op">)</span>, <span class="va">test_labels</span>, <span class="va">time_bin</span><span class="op">)</span> 
-
-
-
-<span class="co"># use the cl object to make predictions </span>
-<span class="va">cl</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/cl_max_correlation.html">cl_max_correlation</a></span><span class="op">(</span><span class="op">)</span>
-<span class="va">predictions</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_predictions.html">get_predictions</a></span><span class="op">(</span><span class="va">cl</span>, <span class="va">training_set</span>, <span class="va">test_set</span><span class="op">)</span>
-
-<span class="fu"><a href="https://rdrr.io/r/base/names.html">names</a></span><span class="op">(</span><span class="va">predictions</span><span class="op">)</span></code></pre></div>
-<pre><code>##  [1] "test_time"            "actual_labels"        "predicted_labels"    
-##  [4] "decision_vals.car"    "decision_vals.couch"  "decision_vals.face"  
-##  [7] "decision_vals.flower" "decision_vals.guitar" "decision_vals.hand"  
-## [10] "decision_vals.kiwi"</code></pre>
+<code class="sourceCode R"><span><span class="va">cv_data</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_data.html">get_data</a></span><span class="op">(</span><span class="va">ds</span><span class="op">)</span>  </span>
+<span> </span>
+<span></span>
+<span><span class="co"># an example of spliting the data into a training and test set, </span></span>
+<span><span class="co"># this is done in the cross-validator</span></span>
+<span><span class="va">training_set</span> <span class="op">&lt;-</span> <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">cv_data</span>, </span>
+<span>                              <span class="va">time_bin</span> <span class="op">==</span> <span class="st">"time.100_250"</span>, </span>
+<span>                              <span class="va">CV_1</span> <span class="op">==</span> <span class="st">"train"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span>       <span class="co"># get data from the first CV split</span></span>
+<span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="fu">starts_with</span><span class="op">(</span><span class="st">"site"</span><span class="op">)</span>, <span class="va">train_labels</span><span class="op">)</span></span>
+<span>        </span>
+<span><span class="va">test_set</span> <span class="op">&lt;-</span> <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">cv_data</span>, <span class="va">CV_1</span> <span class="op">==</span> <span class="st">"test"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span>   <span class="co"># get data from the first CV split</span></span>
+<span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="fu">starts_with</span><span class="op">(</span><span class="st">"site"</span><span class="op">)</span>, <span class="va">test_labels</span>, <span class="va">time_bin</span><span class="op">)</span> </span>
+<span></span>
+<span></span>
+<span></span>
+<span><span class="co"># use the cl object to make predictions </span></span>
+<span><span class="va">cl</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/cl_max_correlation.html">cl_max_correlation</a></span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="va">predictions</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_predictions.html">get_predictions</a></span><span class="op">(</span><span class="va">cl</span>, <span class="va">training_set</span>, <span class="va">test_set</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">predictions</span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">##  [1] "test_time"            "actual_labels"        "predicted_labels"    </span></span>
+<span><span class="co">##  [4] "decision_vals.car"    "decision_vals.couch"  "decision_vals.face"  </span></span>
+<span><span class="co">##  [7] "decision_vals.flower" "decision_vals.guitar" "decision_vals.hand"  </span></span>
+<span><span class="co">## [10] "decision_vals.kiwi"</span></span></code></pre>
 <div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="co"># see how accurate the predictions are (chance is 1/7)</span>
-<span class="va">predictions_at_100ms</span> <span class="op">&lt;-</span> <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="va">predictions</span>, <span class="va">test_time</span> <span class="op">==</span> <span class="st">"time.100_250"</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span><span class="op">(</span><span class="va">predictions_at_100ms</span><span class="op">$</span><span class="va">actual_labels</span> <span class="op">==</span> <span class="va">predictions_at_100ms</span><span class="op">$</span><span class="va">predicted_labels</span><span class="op">)</span></code></pre></div>
-<pre><code>## [1] 0.8571429</code></pre>
+<code class="sourceCode R"><span><span class="co"># see how accurate the predictions are (chance is 1/7)</span></span>
+<span><span class="va">predictions_at_100ms</span> <span class="op">&lt;-</span> <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">predictions</span>, <span class="va">test_time</span> <span class="op">==</span> <span class="st">"time.100_250"</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">predictions_at_100ms</span><span class="op">$</span><span class="va">actual_labels</span> <span class="op">==</span> <span class="va">predictions_at_100ms</span><span class="op">$</span><span class="va">predicted_labels</span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">## [1] 0.5714286</span></span></code></pre>
 <p><br></p>
 <p><br></p>
 </div>
 </div>
-<div id="result-metrics-rm" class="section level1">
-<h1 class="hasAnchor">
-<a href="#result-metrics-rm" class="anchor"></a>Result metrics (RM)</h1>
-<p>Result metrics take the predictions made by a classifier and aggregate the results so that they can be interpreted.</p>
-<div id="implementing-an-rm-required-methods-and-data-formats" class="section level3">
-<h3 class="hasAnchor">
-<a href="#implementing-an-rm-required-methods-and-data-formats" class="anchor"></a>Implementing an RM: required methods and data formats</h3>
-<p>To create a result metric two methods must be implemented <code><a href="../reference/aggregate_CV_split_results.html">aggregate_CV_split_results()</a></code> which aggregates the results after a set of cross-validation sweeps have been completed and <code><a href="../reference/aggregate_resample_run_results.html">aggregate_resample_run_results()</a></code> which aggregates the final results across all the resample runs.</p>
-<div id="aggregate_cv_split_results-method" class="section level4">
-<h4 class="hasAnchor">
-<a href="#aggregate_cv_split_results-method" class="anchor"></a>aggregate_CV_split_results() method</h4>
-<p>The <code><a href="../reference/aggregate_CV_split_results.html">aggregate_CV_split_results()</a></code> method takes a data frame that is a concatenation of the prediction data frames made by the classifier (CL) objects across all times and cross-validation splits in one resample run. Thus the input data frame to the <code><a href="../reference/aggregate_CV_split_results.html">aggregate_CV_split_results()</a></code> method has similar variables as in the output of the CL <code><a href="../reference/get_predictions.html">get_predictions()</a></code> method, namely:</p>
+<div class="section level2">
+<h2 id="result-metrics-rm">Result metrics (RM)<a class="anchor" aria-label="anchor" href="#result-metrics-rm"></a>
+</h2>
+<p>Result metrics take the predictions made by a classifier and
+aggregate the results so that they can be interpreted.</p>
+<div class="section level4">
+<h4 id="implementing-an-rm-required-methods-and-data-formats">Implementing an RM: required methods and data formats<a class="anchor" aria-label="anchor" href="#implementing-an-rm-required-methods-and-data-formats"></a>
+</h4>
+<p>To create a result metric two methods must be implemented
+<code><a href="../reference/aggregate_CV_split_results.html">aggregate_CV_split_results()</a></code> which aggregates the results
+after a set of cross-validation sweeps have been completed and
+<code><a href="../reference/aggregate_resample_run_results.html">aggregate_resample_run_results()</a></code> which aggregates the final
+results across all the resample runs.</p>
+<div class="section level5">
+<h5 id="aggregate_cv_split_results-method">aggregate_CV_split_results() method<a class="anchor" aria-label="anchor" href="#aggregate_cv_split_results-method"></a>
+</h5>
+<p>The <code><a href="../reference/aggregate_CV_split_results.html">aggregate_CV_split_results()</a></code> method takes a data
+frame that is a concatenation of the prediction data frames made by the
+classifier (CL) objects across all times and cross-validation splits in
+one resample run. Thus the input data frame to the
+<code><a href="../reference/aggregate_CV_split_results.html">aggregate_CV_split_results()</a></code> method has similar variables
+as in the output of the CL <code><a href="../reference/get_predictions.html">get_predictions()</a></code> method,
+namely:</p>
 <ol style="list-style-type: decimal">
-<li><p><code>CV</code>: a number indicating which cross-validation split the current row comes from</p></li>
-<li><p><code>train_time</code>: the train time that the current row comes from.</p></li>
-<li><p><code>test_time</code>: the test time that the current row comes from.</p></li>
-<li><p><code>actual_labels</code>: the labels that were actually present on each trial.</p></li>
-<li><p><code>predicted_labels</code>: the labels that the classifier predicted.</p></li>
-<li><p><code>decision_vals.X</code> (optional): a group of variables that has values that indicate how strongly the classifier rates a test point as coming from a particular class</p></li>
+<li><p><code>CV</code>: a number indicating which cross-validation split
+the current row comes from</p></li>
+<li><p><code>train_time</code>: the train time that the current row
+comes from.</p></li>
+<li><p><code>test_time</code>: the test time that the current row comes
+from.</p></li>
+<li><p><code>actual_labels</code>: the labels that were actually present
+on each trial.</p></li>
+<li><p><code>predicted_labels</code>: the labels that the classifier
+predicted.</p></li>
+<li><p><code>decision_vals.X</code> (optional): a group of variables
+that has values that indicate how strongly the classifier rates a test
+point as coming from a particular class</p></li>
 </ol>
-<p>The output of the <code>aggregate_CV_split_results</code> is a RM object of the same type that contains inherits from a data frame so that the results can be can be aggregated together (e.g., via rbind) across resample runs. The variables in the data frame can be anything that is useful to capture about the classification performance.</p>
+<p>The output of the <code>aggregate_CV_split_results</code> is a RM
+object of the same type that contains inherits from a data frame so that
+the results can be can be aggregated together (e.g., via rbind) across
+resample runs. The variables in the data frame can be anything that is
+useful to capture about the classification performance.</p>
 </div>
-<div id="aggregate_resample_run_results-method" class="section level4">
-<h4 class="hasAnchor">
-<a href="#aggregate_resample_run_results-method" class="anchor"></a>aggregate_resample_run_results() method</h4>
-<p>The <code><a href="../reference/aggregate_resample_run_results.html">aggregate_resample_run_results()</a></code> method takes result metric data frames that have been aggregated together (e.g., via rbind) across resample runs. Thus this input data frame as the same variables as the data frame returned by the <code><a href="../reference/aggregate_CV_split_results.html">aggregate_CV_split_results()</a></code> along with one additional variable indicating which resample run each row comes from.</p>
-<p>The output of this method should be a RM object of the same type that is a data frame which most likely is of a smaller size.</p>
-<p>Like all NDR objects, RM objects must also implement a <code>get_properties()</code> method which returns a data frame with one row that lists all the properties that have been set to allow for reproducible research.</p>
-<p>RM objects can also have plot methods to allow the different aggregated results to be plotted</p>
+<div class="section level5">
+<h5 id="aggregate_resample_run_results-method">aggregate_resample_run_results() method<a class="anchor" aria-label="anchor" href="#aggregate_resample_run_results-method"></a>
+</h5>
+<p>The <code><a href="../reference/aggregate_resample_run_results.html">aggregate_resample_run_results()</a></code> method takes result
+metric data frames that have been aggregated together (e.g., via rbind)
+across resample runs. Thus this input data frame as the same variables
+as the data frame returned by the
+<code><a href="../reference/aggregate_CV_split_results.html">aggregate_CV_split_results()</a></code> along with one additional
+variable indicating which resample run each row comes from.</p>
+<p>The output of this method should be a RM object of the same type that
+is a data frame which most likely is of a smaller size.</p>
+<p>Like all NDR objects, RM objects must also implement a
+<code>get_properties()</code> method which returns a data frame with one
+row that lists all the properties that have been set to allow for
+reproducible research.</p>
+<p>RM objects can also have plot methods to allow the different
+aggregated results to be plotted</p>
 </div>
 </div>
-<div id="example-of-result-metrics" class="section level3">
-<h3 class="hasAnchor">
-<a href="#example-of-result-metrics" class="anchor"></a>Example of result metrics</h3>
+<div class="section level4">
+<h4 id="example-of-result-metrics">Example of result metrics<a class="anchor" aria-label="anchor" href="#example-of-result-metrics"></a>
+</h4>
 <p>Examples of using result metrics can be seen by going through the <a href="introduction_tutorial.html">Introduction tutorial</a></p>
 <p><br></p>
 <p><br></p>
 </div>
 </div>
-<div id="cross-validators-cv" class="section level1">
-<h1 class="hasAnchor">
-<a href="#cross-validators-cv" class="anchor"></a>Cross-validators (CV)</h1>
-<p>Cross-validators take a classifier (CL), a datasource (DS) feature preprocessors (FP) objects, and result metric (RM) objects and they run a cross-validation decoding scheme by training and testing the classifier with data generated from the datasource object (and possibly fed through the feature pre-processing first).</p>
-<div id="implementing-a-cv-required-methods-and-data-formats" class="section level3">
-<h3 class="hasAnchor">
-<a href="#implementing-a-cv-required-methods-and-data-formats" class="anchor"></a>Implementing a CV: required methods and data formats</h3>
-<p>All cross-validators must implement <code><a href="../reference/run_decoding.html">run_decoding()</a></code> method. This method does not take any additional arguments (apart from the cross-validator itself).</p>
-<p>The cross-validator returns a list <code>DECODING_RESULTS</code> which contains different RM objects that can be used to assess how accurately the classifier made predictions at different points in time.</p>
-<p>Like all NDR objects, CV objects must also implement a <code>get_properties()</code> method which returns a data frame with one row that lists all the properties that have been set and also pulls all properties from the other NDR objects (e.g., from the DS, FP, CL and RM objects) to allow for reproducible research.</p>
+<div class="section level2">
+<h2 id="cross-validators-cv">Cross-validators (CV)<a class="anchor" aria-label="anchor" href="#cross-validators-cv"></a>
+</h2>
+<p>Cross-validators take a classifier (CL), a datasource (DS) feature
+preprocessors (FP) objects, and result metric (RM) objects and they run
+a cross-validation decoding scheme by training and testing the
+classifier with data generated from the datasource object (and possibly
+fed through the feature pre-processing first).</p>
+<div class="section level4">
+<h4 id="implementing-a-cv-required-methods-and-data-formats">Implementing a CV: required methods and data formats<a class="anchor" aria-label="anchor" href="#implementing-a-cv-required-methods-and-data-formats"></a>
+</h4>
+<p>All cross-validators must implement <code><a href="../reference/run_decoding.html">run_decoding()</a></code>
+method. This method does not take any additional arguments (apart from
+the cross-validator itself).</p>
+<p>The cross-validator returns a list <code>DECODING_RESULTS</code>
+which contains different RM objects that can be used to assess how
+accurately the classifier made predictions at different points in
+time.</p>
+<p>Like all NDR objects, CV objects must also implement a
+<code>get_properties()</code> method which returns a data frame with one
+row that lists all the properties that have been set and also pulls all
+properties from the other NDR objects (e.g., from the DS, FP, CL and RM
+objects) to allow for reproducible research.</p>
 </div>
-<div id="example-of-cross-validators" class="section level3">
-<h3 class="hasAnchor">
-<a href="#example-of-cross-validators" class="anchor"></a>Example of cross-validators</h3>
-<p>Examples of using the <code>cv_standard</code> can be seen by going through the <a href="introduction_tutorial.html">Introduction tutorial</a></p>
+<div class="section level4">
+<h4 id="example-of-cross-validators">Example of cross-validators<a class="anchor" aria-label="anchor" href="#example-of-cross-validators"></a>
+</h4>
+<p>Examples of using the <code>cv_standard</code> can be seen by going
+through the <a href="introduction_tutorial.html">Introduction
+tutorial</a></p>
 </div>
 </div>
   </div>
@@ -409,11 +530,13 @@
 
 
       <footer><div class="copyright">
-  <p>Developed by Ethan Meyers.</p>
+  <p></p>
+<p>Developed by Ethan Meyers.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
+  <p></p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
 </div>
 
       </footer>
@@ -421,6 +544,8 @@
 
   
 
+
+  
 
   </body>
 </html>

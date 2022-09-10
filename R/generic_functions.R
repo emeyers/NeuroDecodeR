@@ -27,6 +27,8 @@
 #' @return Returns a data frame with a single row that contains all the NDR
 #'   object's parameter values (e.g., values that were set in the object's
 #'   constructor).
+#'   
+#' @keywords internal
 #'
 #' @export
 get_parameters <- function(ndr_obj) {

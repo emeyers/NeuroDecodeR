@@ -49,5 +49,5 @@ matlab_raster_file_name <- file.path(
 raster_data <- read_matlab_raster_data(matlab_raster_file_name)
 
 
-
 }
+\keyword{internal}

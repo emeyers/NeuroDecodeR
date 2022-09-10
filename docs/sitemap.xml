@@ -1,7 +1,34 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
+    <loc>https://github.com/emeyers/NDTr/404.html</loc>
+  </url>
+  <url>
+    <loc>https://github.com/emeyers/NDTr/articles/NDR_object_specification.html</loc>
+  </url>
+  <url>
+    <loc>https://github.com/emeyers/NDTr/articles/data_formats.html</loc>
+  </url>
+  <url>
+    <loc>https://github.com/emeyers/NDTr/articles/datasets.html</loc>
+  </url>
+  <url>
+    <loc>https://github.com/emeyers/NDTr/articles/generalization_tutorial.html</loc>
+  </url>
+  <url>
+    <loc>https://github.com/emeyers/NDTr/articles/index.html</loc>
+  </url>
+  <url>
+    <loc>https://github.com/emeyers/NDTr/articles/introduction_tutorial.html</loc>
+  </url>
+  <url>
+    <loc>https://github.com/emeyers/NDTr/authors.html</loc>
+  </url>
+  <url>
     <loc>https://github.com/emeyers/NDTr/index.html</loc>
+  </url>
+  <url>
+    <loc>https://github.com/emeyers/NDTr/news/index.html</loc>
   </url>
   <url>
     <loc>https://github.com/emeyers/NDTr/reference/NeuroDecodeR.html</loc>
@@ -61,6 +88,9 @@
     <loc>https://github.com/emeyers/NDTr/reference/get_siteIDs_with_k_label_repetitions.html</loc>
   </url>
   <url>
+    <loc>https://github.com/emeyers/NDTr/reference/index.html</loc>
+  </url>
+  <url>
     <loc>https://github.com/emeyers/NDTr/reference/log_check_results_already_exist.html</loc>
   </url>
   <url>
@@ -107,20 +137,5 @@
   </url>
   <url>
     <loc>https://github.com/emeyers/NDTr/reference/test_valid_raster_format.html</loc>
-  </url>
-  <url>
-    <loc>https://github.com/emeyers/NDTr/articles/NDR_object_specification.html</loc>
-  </url>
-  <url>
-    <loc>https://github.com/emeyers/NDTr/articles/data_formats.html</loc>
-  </url>
-  <url>
-    <loc>https://github.com/emeyers/NDTr/articles/datasets.html</loc>
-  </url>
-  <url>
-    <loc>https://github.com/emeyers/NDTr/articles/generalization_tutorial.html</loc>
-  </url>
-  <url>
-    <loc>https://github.com/emeyers/NDTr/articles/introduction_tutorial.html</loc>
   </url>
 </urlset>

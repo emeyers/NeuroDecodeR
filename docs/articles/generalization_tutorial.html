@@ -19,6 +19,8 @@
 <![endif]-->
 </head>
 <body data-spy="scroll" data-target="#toc">
+    
+
     <div class="container template-article">
       <header><div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
   <div class="container">
@@ -31,7 +33,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">NeuroDecodeR</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.0.9007</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.1.0</span>
       </span>
     </div>
 
@@ -41,7 +43,7 @@
   <a href="../index.html">Home</a>
 </li>
 <li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     Tutorials
      
     <span class="caret"></span>
@@ -59,7 +61,7 @@
   <a href="../reference/index.html">Reference</a>
 </li>
 <li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     Documentation
      
     <span class="caret"></span>
@@ -79,7 +81,7 @@
       </ul>
 <ul class="nav navbar-nav navbar-right">
 <li>
-  <a href="https://github.com/emeyers/NeuroDecodeR/">
+  <a href="https://github.com/emeyers/NeuroDecodeR/" class="external-link">
     <span class="fab fa-github fa-lg"></span>
      
   </a>
@@ -94,106 +96,173 @@
 
       
 
-      </header><script src="generalization_tutorial_files/header-attrs-2.9/header-attrs.js"></script><div class="row">
+      </header><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
-      <h1 data-toc-skip>Tutorial on how to do a generalization analysis</h1>
+      <h1 data-toc-skip>Tutorial on how to do a generalization
+analysis</h1>
             
       
-      <small class="dont-index">Source: <a href="https://github.com/emeyers/NeuroDecodeR/blob/master/vignettes/generalization_tutorial.Rmd"><code>vignettes/generalization_tutorial.Rmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/emeyers/NeuroDecodeR/blob/HEAD/vignettes/generalization_tutorial.Rmd" class="external-link"><code>vignettes/generalization_tutorial.Rmd</code></a></small>
       <div class="hidden name"><code>generalization_tutorial.Rmd</code></div>
 
     </div>
 
     
     
-<p>The following tutorial shows how to use the NeuroDecodeR (NDR) package to conduct a generalization analysis which can test whether a population of neural activity contains information in an invariant/abstract representation. In particular, we will use the Zhang-Desimone 7 object dataset to examine how invariant neural representations in the Inferior Temporal cortex are to changes in the position of stimuli. This tutorial assumes that one is already familiar with the basics of the NDR as covered in the introductory tutorial. The NDR is based on the MATLAB Neural Decoding Toolbox, which you can learn more about at <a href="www.readout.info">www.readout.info</a>.</p>
-<div id="testing-invariant-neural-representations-using-the-ndr" class="section level3">
-<h3 class="hasAnchor">
-<a href="#testing-invariant-neural-representations-using-the-ndr" class="anchor"></a>Testing invariant neural representations using the NDR</h3>
-<p>An important step in solving many complex tasks involves creating abstract/invariant representations from widely varying input patterns. For example, in order to act appropriately in social settings, it is important to be able to recognize individual people. However, the images of a particular person that is projected on our retinas can be very different due to the fact that the person might be at different distances from us, in different lighting conditions, etc. Thus, at some level in our brains, there must be a neural representation that has abstracted away all the details present in particular images, in order to create abstract/invariant representations that are useful for behavior.</p>
-<p>A powerful feature of the Neural Decoding Toolbox is that it can be used to test whether a particular population of neural activity has created representations that are invariant to particular transformations. To do such a <em>generalization analysis</em>, one can train a classifier under one set of conditions, and then see if the classifier can generalize to a new related set of conditions in which a particular transformation has been applied. The datasource object <code><a href="../reference/ds_generalization.html">ds_generalization()</a></code> is designed for this purpose, and we will explain how to use it below.</p>
+<p>The following tutorial shows how to use the NeuroDecodeR (NDR)
+package to conduct a generalization analysis which can test whether a
+population of neural activity contains information in an
+invariant/abstract representation. In particular, we will use the
+Zhang-Desimone 7 object dataset to examine how invariant neural
+representations in the Inferior Temporal cortex are to changes in the
+position of stimuli. This tutorial assumes that one is already familiar
+with the basics of the NDR as covered in the introductory tutorial. The
+NDR is based on the MATLAB Neural Decoding Toolbox, which you can learn
+more about at <a href="www.readout.info">www.readout.info</a>.</p>
+<div class="section level3">
+<h3 id="testing-invariant-neural-representations-using-the-ndr">Testing invariant neural representations using the NDR<a class="anchor" aria-label="anchor" href="#testing-invariant-neural-representations-using-the-ndr"></a>
+</h3>
+<p>An important step in solving many complex tasks involves creating
+abstract/invariant representations from widely varying input patterns.
+For example, in order to act appropriately in social settings, it is
+important to be able to recognize individual people. However, the images
+of a particular person that is projected on our retinas can be very
+different due to the fact that the person might be at different
+distances from us, in different lighting conditions, etc. Thus, at some
+level in our brains, there must be a neural representation that has
+abstracted away all the details present in particular images, in order
+to create abstract/invariant representations that are useful for
+behavior.</p>
+<p>A powerful feature of the Neural Decoding Toolbox is that it can be
+used to test whether a particular population of neural activity has
+created representations that are invariant to particular
+transformations. To do such a <em>generalization analysis</em>, one can
+train a classifier under one set of conditions, and then see if the
+classifier can generalize to a new related set of conditions in which a
+particular transformation has been applied. The datasource object
+<code><a href="../reference/ds_generalization.html">ds_generalization()</a></code> is designed for this purpose, and we
+will explain how to use it below.</p>
 </div>
-<div id="using-the-zhang-desimone-7-object-dataset-to-test-position-invariance" class="section level3">
-<h3 class="hasAnchor">
-<a href="#using-the-zhang-desimone-7-object-dataset-to-test-position-invariance" class="anchor"></a>Using the Zhang-Desimone 7 object dataset to test position invariance</h3>
-<p>In this tutorial, we will use the <a href="datasets.html">Zhang-Desimone 7 object dataset</a> to test how invariant neural representations in Inferior Temporal (IT) cortex are to changes in the retinal position of objects. The Zhang-Desimone 7 object dataset consists of neural responses to 7 different objects that were shown to a monkey at three different retinal locations. To test how invariant neural representations are in IT, we will train the classifier with data from one location, and then test the classifier either at the same location or at a different location. If the neural representation in IT are invariant to position, then training and testing a classifier at different locations should yield an equal level of performance as training and testing a classifier at the same location.</p>
-<p>To start let us by loading some libraries we will use in this tutorial</p>
+<div class="section level3">
+<h3 id="using-the-zhang-desimone-7-object-dataset-to-test-position-invariance">Using the Zhang-Desimone 7 object dataset to test position
+invariance<a class="anchor" aria-label="anchor" href="#using-the-zhang-desimone-7-object-dataset-to-test-position-invariance"></a>
+</h3>
+<p>In this tutorial, we will use the <a href="datasets.html">Zhang-Desimone 7 object dataset</a> to test how
+invariant neural representations in Inferior Temporal (IT) cortex are to
+changes in the retinal position of objects. The Zhang-Desimone 7 object
+dataset consists of neural responses to 7 different objects that were
+shown to a monkey at three different retinal locations. To test how
+invariant neural representations are in IT, we will train the classifier
+with data from one location, and then test the classifier either at the
+same location or at a different location. If the neural representation
+in IT are invariant to position, then training and testing a classifier
+at different locations should yield an equal level of performance as
+training and testing a classifier at the same location.</p>
+<p>To start let us by loading some libraries we will use in this
+tutorial</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/emeyers/NeuroDecodeR">NeuroDecodeR</a></span><span class="op">)</span>
-<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org">ggplot2</a></span><span class="op">)</span>
-<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org">dplyr</a></span><span class="op">)</span>
-<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://tidyr.tidyverse.org">tidyr</a></span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/emeyers/NeuroDecodeR" class="external-link">NeuroDecodeR</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org" class="external-link">ggplot2</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://tidyr.tidyverse.org" class="external-link">tidyr</a></span><span class="op">)</span></span></code></pre></div>
 </div>
-<div id="binning-the-data" class="section level3">
-<h3 class="hasAnchor">
-<a href="#binning-the-data" class="anchor"></a>Binning the data</h3>
-<p>For this tutorial, we will use binned-format data that consists of the firing rate in a 400 ms window that starts 100 ms after the onset of the stimulus. The following code shows how to create this binned data using a small subset of the Zhang-Desimone 7 object data (later in the tutorial we will load binned data from a larger set of neurons for subsequent analyses to get better decoding results). For more information about binning the data, see the <a href="introduction_tutorial.html">introduction tutorial</a>.</p>
+<div class="section level3">
+<h3 id="binning-the-data">Binning the data<a class="anchor" aria-label="anchor" href="#binning-the-data"></a>
+</h3>
+<p>For this tutorial, we will use binned-format data that consists of
+the firing rate in a 400 ms window that starts 100 ms after the onset of
+the stimulus. The following code shows how to create this binned data
+using a small subset of the Zhang-Desimone 7 object data (later in the
+tutorial we will load binned data from a larger set of neurons for
+subsequent analyses to get better decoding results). For more
+information about binning the data, see the <a href="introduction_tutorial.html">introduction tutorial</a>.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">raster_dir_name</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/file.path.html">file.path</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/system.file.html">system.file</a></span><span class="op">(</span><span class="st">"extdata"</span>, package <span class="op">=</span> <span class="st">"NeuroDecodeR"</span><span class="op">)</span>, 
-                             <span class="st">"Zhang_Desimone_7object_raster_data_small_rda"</span><span class="op">)</span>
-
-<span class="va">bin_width</span> <span class="op">&lt;-</span> <span class="fl">400</span>
-<span class="va">step_size</span> <span class="op">&lt;-</span> <span class="fl">400</span>
-<span class="va">start_time</span> <span class="op">&lt;-</span> <span class="fl">100</span>
-<span class="va">end_time</span> <span class="op">&lt;-</span> <span class="fl">500</span>
-
-<span class="va">binned_file_name</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/create_binned_data.html">create_binned_data</a></span><span class="op">(</span><span class="va">raster_dir_name</span>, <span class="st">"ZD"</span>, <span class="va">bin_width</span>, <span class="va">step_size</span>, 
-                                       <span class="va">start_time</span>, <span class="va">end_time</span><span class="op">)</span>
-
-
-<span class="co"># The name of a binned file that has data from more neurons in it that will be</span>
-<span class="co"># used for subsequent analyses. This raster data went into this binned format</span>
-<span class="co"># data was excluded from the NeuroDecodeR package to keep the package size small.</span>
-<span class="va">binned_file_name</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html">system.file</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/file.path.html">file.path</a></span><span class="op">(</span><span class="st">"extdata"</span>, 
-                                          <span class="st">"ZD_400bins_400sampled_start100_end500.Rda"</span><span class="op">)</span>,
-                                package<span class="op">=</span><span class="st">"NeuroDecodeR"</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">raster_dir_name</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"extdata"</span>, package <span class="op">=</span> <span class="st">"NeuroDecodeR"</span><span class="op">)</span>, </span>
+<span>                             <span class="st">"Zhang_Desimone_7object_raster_data_small_rda"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">bin_width</span> <span class="op">&lt;-</span> <span class="fl">400</span></span>
+<span><span class="va">step_size</span> <span class="op">&lt;-</span> <span class="fl">400</span></span>
+<span><span class="va">start_time</span> <span class="op">&lt;-</span> <span class="fl">100</span></span>
+<span><span class="va">end_time</span> <span class="op">&lt;-</span> <span class="fl">500</span></span>
+<span></span>
+<span><span class="va">binned_file_name</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/create_binned_data.html">create_binned_data</a></span><span class="op">(</span><span class="va">raster_dir_name</span>, <span class="st">"ZD"</span>, <span class="va">bin_width</span>, <span class="va">step_size</span>, </span>
+<span>                                       <span class="va">start_time</span>, <span class="va">end_time</span><span class="op">)</span></span>
+<span></span>
+<span></span>
+<span><span class="co"># The name of a binned file that has data from more neurons in it that will be</span></span>
+<span><span class="co"># used for subsequent analyses. This raster data went into this binned format</span></span>
+<span><span class="co"># data was excluded from the NeuroDecodeR package to keep the package size small.</span></span>
+<span><span class="va">binned_file_name</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="st">"extdata"</span>, </span>
+<span>                                          <span class="st">"ZD_400bins_400sampled_start100_end500.Rda"</span><span class="op">)</span>,</span>
+<span>                                package<span class="op">=</span><span class="st">"NeuroDecodeR"</span><span class="op">)</span></span></code></pre></div>
 </div>
-<div id="creating-a-classifier-and-a-preprocessor" class="section level3">
-<h3 class="hasAnchor">
-<a href="#creating-a-classifier-and-a-preprocessor" class="anchor"></a>Creating a classifier and a preprocessor</h3>
-<p>Next, we will create a classifier object, a features preprocessor, and result metric objects that we will use in our analyses. We will use the same classifier, preprocessor and result metrics that were used in the basic tutorial.</p>
+<div class="section level3">
+<h3 id="creating-a-classifier-and-a-preprocessor">Creating a classifier and a preprocessor<a class="anchor" aria-label="anchor" href="#creating-a-classifier-and-a-preprocessor"></a>
+</h3>
+<p>Next, we will create a classifier object, a features preprocessor,
+and result metric objects that we will use in our analyses. We will use
+the same classifier, preprocessor and result metrics that were used in
+the basic tutorial.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">cl</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/cl_max_correlation.html">cl_max_correlation</a></span><span class="op">(</span><span class="op">)</span>
-<span class="va">fps</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span><span class="fu"><a href="../reference/fp_zscore.html">fp_zscore</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span>
-<span class="va">rms</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span><span class="fu"><a href="../reference/rm_main_results.html">rm_main_results</a></span><span class="op">(</span><span class="op">)</span>, <span class="fu"><a href="../reference/rm_confusion_matrix.html">rm_confusion_matrix</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">cl</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/cl_max_correlation.html">cl_max_correlation</a></span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="va">fps</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="fu"><a href="../reference/fp_zscore.html">fp_zscore</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">rms</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="fu"><a href="../reference/rm_main_results.html">rm_main_results</a></span><span class="op">(</span><span class="op">)</span>, <span class="fu"><a href="../reference/rm_confusion_matrix.html">rm_confusion_matrix</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 </div>
-<div id="using-the-ds_generalization-to-train-and-test-at-different-locations" class="section level3">
-<h3 class="hasAnchor">
-<a href="#using-the-ds_generalization-to-train-and-test-at-different-locations" class="anchor"></a>Using the ds_generalization to train and test at different locations</h3>
-<p>In order to train with data from particular locations and test with data from a different location, we will use the <a href="https://emeyers.github.io/NeuroDecodeR/reference/ds_generalization.html"><code>ds_generalization</code></a> datasource. To use this datasource, we need to specify which label levels belong to each training class and which label levels belong to each test class. We can do by setting the <code>train_label_levels</code> and <code>test_label_levels</code> arguments to lists with the appropriate values. Each entry in these lists corresponds to the label levels for one class. For example, if we create a list train_levels[[1]] &lt;- c(‘car_upper’, ‘car_middle’), and test_levels[[1]] = list(‘car_lower’), this means that the first class will be trained with data from trials when the car was shown in the upper and middle positions, and the first class will have test data from trials in which cars where shown in the lower position.</p>
-<p>To create training data for each object identity at upper and middle locations, and test data for each object at lower location, we can use the code below.</p>
+<div class="section level3">
+<h3 id="using-the-ds_generalization-to-train-and-test-at-different-locations">Using the ds_generalization to train and test at different
+locations<a class="anchor" aria-label="anchor" href="#using-the-ds_generalization-to-train-and-test-at-different-locations"></a>
+</h3>
+<p>In order to train with data from particular locations and test with
+data from a different location, we will use the <a href="https://emeyers.github.io/NeuroDecodeR/reference/ds_generalization.html" class="external-link"><code>ds_generalization</code></a>
+datasource. To use this datasource, we need to specify which label
+levels belong to each training class and which label levels belong to
+each test class. We can do by setting the
+<code>train_label_levels</code> and <code>test_label_levels</code>
+arguments to lists with the appropriate values. Each entry in these
+lists corresponds to the label levels for one class. For example, if we
+create a list train_levels[[1]] &lt;- c(‘car_upper’, ‘car_middle’), and
+test_levels[[1]] = list(‘car_lower’), this means that the first class
+will be trained with data from trials when the car was shown in the
+upper and middle positions, and the first class will have test data from
+trials in which cars where shown in the lower position.</p>
+<p>To create training data for each object identity at upper and middle
+locations, and test data for each object at lower location, we can use
+the code below.</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">id_base_levels</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"hand"</span>, <span class="st">"flower"</span>, <span class="st">"guitar"</span>, <span class="st">"face"</span>, <span class="st">"kiwi"</span>, <span class="st">"couch"</span>,  <span class="st">"car"</span><span class="op">)</span>   
-
-<span class="va">train_levels</span> <span class="op">&lt;-</span> <span class="cn">NULL</span>
-<span class="va">test_levels</span> <span class="op">&lt;-</span> <span class="cn">NULL</span>
-
-<span class="kw">for</span> <span class="op">(</span><span class="va">i</span> <span class="kw">in</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html">seq_along</a></span><span class="op">(</span><span class="va">id_base_levels</span><span class="op">)</span><span class="op">)</span><span class="op">{</span>
-   
-  <span class="va">train_levels</span><span class="op">[[</span><span class="va">i</span><span class="op">]</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste</a></span><span class="op">(</span><span class="va">id_base_levels</span><span class="op">[</span><span class="va">i</span><span class="op">]</span>, <span class="st">"upper"</span>,sep <span class="op">=</span> <span class="st">'_'</span><span class="op">)</span>, 
-                              <span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste</a></span><span class="op">(</span><span class="va">id_base_levels</span><span class="op">[</span><span class="va">i</span><span class="op">]</span>, <span class="st">"middle"</span>,sep <span class="op">=</span> <span class="st">'_'</span><span class="op">)</span><span class="op">)</span>
-  
-  <span class="va">test_levels</span><span class="op">[[</span><span class="va">i</span><span class="op">]</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste</a></span><span class="op">(</span><span class="va">id_base_levels</span><span class="op">[</span><span class="va">i</span><span class="op">]</span>, <span class="st">"lower"</span>,sep <span class="op">=</span> <span class="st">'_'</span><span class="op">)</span>
-  
-<span class="op">}</span>
-
-
-<span class="va">ds</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/ds_generalization.html">ds_generalization</a></span><span class="op">(</span><span class="va">binned_file_name</span>, <span class="st">'combined_ID_position'</span>, num_cv_splits <span class="op">=</span> <span class="fl">18</span>,  
-                       train_label_levels <span class="op">=</span> <span class="va">train_levels</span>, test_label_levels <span class="op">=</span> <span class="va">test_levels</span><span class="op">)</span></code></pre></div>
-<pre><code>## Automatically selecting sites_IDs_to_use. Since num_cv_splits = 18 and num_label_repeats_per_cv_split = 1, all sites that have 18 repetitions have been selected. This yields 132 sites that will be used for decoding (out of 132 total).</code></pre>
-<p>Now that we have created this ds_generalization data source, we can create a cross-validator as we did in the basic tutorial and get the results for training at upper and middle locations and testing at a lower location.</p>
+<code class="sourceCode R"><span><span class="va">id_base_levels</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"hand"</span>, <span class="st">"flower"</span>, <span class="st">"guitar"</span>, <span class="st">"face"</span>, <span class="st">"kiwi"</span>, <span class="st">"couch"</span>,  <span class="st">"car"</span><span class="op">)</span>   </span>
+<span></span>
+<span><span class="va">train_levels</span> <span class="op">&lt;-</span> <span class="cn">NULL</span></span>
+<span><span class="va">test_levels</span> <span class="op">&lt;-</span> <span class="cn">NULL</span></span>
+<span></span>
+<span><span class="kw">for</span> <span class="op">(</span><span class="va">i</span> <span class="kw">in</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq_along</a></span><span class="op">(</span><span class="va">id_base_levels</span><span class="op">)</span><span class="op">)</span><span class="op">{</span></span>
+<span>   </span>
+<span>  <span class="va">train_levels</span><span class="op">[[</span><span class="va">i</span><span class="op">]</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span><span class="va">id_base_levels</span><span class="op">[</span><span class="va">i</span><span class="op">]</span>, <span class="st">"upper"</span>,sep <span class="op">=</span> <span class="st">'_'</span><span class="op">)</span>, </span>
+<span>                              <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span><span class="va">id_base_levels</span><span class="op">[</span><span class="va">i</span><span class="op">]</span>, <span class="st">"middle"</span>,sep <span class="op">=</span> <span class="st">'_'</span><span class="op">)</span><span class="op">)</span></span>
+<span>  </span>
+<span>  <span class="va">test_levels</span><span class="op">[[</span><span class="va">i</span><span class="op">]</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span><span class="va">id_base_levels</span><span class="op">[</span><span class="va">i</span><span class="op">]</span>, <span class="st">"lower"</span>,sep <span class="op">=</span> <span class="st">'_'</span><span class="op">)</span></span>
+<span>  </span>
+<span><span class="op">}</span></span>
+<span></span>
+<span></span>
+<span><span class="va">ds</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/ds_generalization.html">ds_generalization</a></span><span class="op">(</span><span class="va">binned_file_name</span>, <span class="st">'combined_ID_position'</span>, num_cv_splits <span class="op">=</span> <span class="fl">18</span>,  </span>
+<span>                       train_label_levels <span class="op">=</span> <span class="va">train_levels</span>, test_label_levels <span class="op">=</span> <span class="va">test_levels</span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">## Automatically selecting sites_IDs_to_use. Since num_cv_splits = 18 and num_label_repeats_per_cv_split = 1, all sites that have 18 repetitions have been selected. This yields 132 sites that will be used for decoding (out of 132 total).</span></span></code></pre>
+<p>Now that we have created this ds_generalization data source, we can
+create a cross-validator as we did in the basic tutorial and get the
+results for training at upper and middle locations and testing at a
+lower location.</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="co"># create the cross-validator</span>
-<span class="va">cv</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/cv_standard.html">cv_standard</a></span><span class="op">(</span>datasource <span class="op">=</span> <span class="va">ds</span>, 
-                  classifier <span class="op">=</span> <span class="va">cl</span>, 
-                  feature_preprocessors <span class="op">=</span> <span class="va">fps</span>, 
-                  result_metrics <span class="op">=</span> <span class="va">rms</span>, 
-                  num_resample_runs <span class="op">=</span> <span class="fl">10</span><span class="op">)</span>
-
-<span class="co"># run the decoding analysis (and time how long it takes to run)</span>
-<span class="fu">tictoc</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/tictoc/man/tic.html">tic</a></span><span class="op">(</span><span class="op">)</span>
-<span class="va">DECODING_RESULTS</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/run_decoding.html">run_decoding</a></span><span class="op">(</span><span class="va">cv</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="co"># create the cross-validator</span></span>
+<span><span class="va">cv</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/cv_standard.html">cv_standard</a></span><span class="op">(</span>datasource <span class="op">=</span> <span class="va">ds</span>, </span>
+<span>                  classifier <span class="op">=</span> <span class="va">cl</span>, </span>
+<span>                  feature_preprocessors <span class="op">=</span> <span class="va">fps</span>, </span>
+<span>                  result_metrics <span class="op">=</span> <span class="va">rms</span>, </span>
+<span>                  num_resample_runs <span class="op">=</span> <span class="fl">10</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># run the decoding analysis (and time how long it takes to run)</span></span>
+<span><span class="fu">tictoc</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/tictoc/man/tic.html" class="external-link">tic</a></span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="va">DECODING_RESULTS</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/run_decoding.html">run_decoding</a></span><span class="op">(</span><span class="va">cv</span><span class="op">)</span></span></code></pre></div>
 <pre><code>## 
   |                                                                            
   |                                                                      |   0%
@@ -218,77 +287,94 @@
   |                                                                            
   |======================================================================| 100%</code></pre>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu">tictoc</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/tictoc/man/tic.html">toc</a></span><span class="op">(</span><span class="op">)</span></code></pre></div>
-<pre><code>## 10.484 sec elapsed</code></pre>
+<code class="sourceCode R"><span><span class="fu">tictoc</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/tictoc/man/tic.html" class="external-link">toc</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">## 10.858 sec elapsed</span></span></code></pre>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="co"># show the zero-one loss decoding accuracy (chance is 1/7)</span>
-<span class="va">DECODING_RESULTS</span><span class="op">$</span><span class="va">rm_main_results</span><span class="op">$</span><span class="va">zero_one_loss</span></code></pre></div>
-<pre><code>## [1] 0.8404762</code></pre>
+<code class="sourceCode R"><span><span class="co"># show the zero-one loss decoding accuracy (chance is 1/7)</span></span>
+<span><span class="va">DECODING_RESULTS</span><span class="op">$</span><span class="va">rm_main_results</span><span class="op">$</span><span class="va">zero_one_loss</span></span></code></pre></div>
+<pre><code><span><span class="co">## [1] 0.8492063</span></span></code></pre>
 </div>
-<div id="training-and-testing-at-all-locations" class="section level3">
-<h3 class="hasAnchor">
-<a href="#training-and-testing-at-all-locations" class="anchor"></a>Training and testing at all locations</h3>
-<p>We will now create a full set of 9 results that are based on training at <strong>one</strong> of the three locations and testing a different locations. This can be done by creating two loops, one for each training location, and one for each test location, and by creating a new datasource each iteration.</p>
-<p>It should be noted that the <code>ds_generalization</code> is built in such a way that if a particular original label is mapped to the same training and test class (e.g., if <code>training_levels[[1]] &lt;- list('car_upper')</code> and <code>test_levels[[1]] &lt;- list('car_upper')</code>, the data used in the training set will still come from different trials than the data used for the test set. Thus, the cross-validation splits will still be valid because there will not be any of the same data in the training and test sets (if this mapping was done for all classes, one would end up getting the same results as using the ds_basic). Because there is no ‘data leakage’, the following code allows for fair comparisons between results where the classifier was trained and tested with data from the same location vs. where the classifier was trained and tested with data from different locations.</p>
+<div class="section level3">
+<h3 id="training-and-testing-at-all-locations">Training and testing at all locations<a class="anchor" aria-label="anchor" href="#training-and-testing-at-all-locations"></a>
+</h3>
+<p>We will now create a full set of 9 results that are based on training
+at <strong>one</strong> of the three locations and testing a different
+locations. This can be done by creating two loops, one for each training
+location, and one for each test location, and by creating a new
+datasource each iteration.</p>
+<p>It should be noted that the <code>ds_generalization</code> is built
+in such a way that if a particular original label is mapped to the same
+training and test class (e.g., if
+<code>training_levels[[1]] &lt;- list('car_upper')</code> and
+<code>test_levels[[1]] &lt;- list('car_upper')</code>, the data used in
+the training set will still come from different trials than the data
+used for the test set. Thus, the cross-validation splits will still be
+valid because there will not be any of the same data in the training and
+test sets (if this mapping was done for all classes, one would end up
+getting the same results as using the ds_basic). Because there is no
+‘data leakage’, the following code allows for fair comparisons between
+results where the classifier was trained and tested with data from the
+same location vs. where the classifier was trained and tested with data
+from different locations.</p>
 <p>Note that the code below will take several minutes to run.</p>
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">results_dir_name</span> <span class="op">&lt;-</span> <span class="st">"position_invariance_results/"</span>
-
-
-<span class="co"># If this code has been run before, delete any results that have been saved </span>
-<span class="kw">if</span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/files.html">file.exists</a></span><span class="op">(</span><span class="va">results_dir_name</span><span class="op">)</span><span class="op">)</span><span class="op">{</span>
-  <span class="va">the_files</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste0</a></span><span class="op">(</span><span class="va">results_dir_name</span>, <span class="fu"><a href="https://rdrr.io/r/base/list.files.html">list.files</a></span><span class="op">(</span><span class="va">results_dir_name</span><span class="op">)</span><span class="op">)</span>
-  <span class="fu"><a href="https://rdrr.io/r/base/files.html">file.remove</a></span><span class="op">(</span><span class="va">the_files</span><span class="op">)</span>
-  <span class="fu"><a href="https://rdrr.io/r/base/files.html">file.remove</a></span><span class="op">(</span><span class="va">results_dir_name</span><span class="op">)</span>
-<span class="op">}</span> </code></pre></div>
-<pre><code>## [1] TRUE</code></pre>
+<code class="sourceCode R"><span><span class="va">results_dir_name</span> <span class="op">&lt;-</span> <span class="st">"position_invariance_results/"</span></span>
+<span></span>
+<span></span>
+<span><span class="co"># If this code has been run before, delete any results that have been saved </span></span>
+<span><span class="kw">if</span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/files.html" class="external-link">file.exists</a></span><span class="op">(</span><span class="va">results_dir_name</span><span class="op">)</span><span class="op">)</span><span class="op">{</span></span>
+<span>  <span class="va">the_files</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="va">results_dir_name</span>, <span class="fu"><a href="https://rdrr.io/r/base/list.files.html" class="external-link">list.files</a></span><span class="op">(</span><span class="va">results_dir_name</span><span class="op">)</span><span class="op">)</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/files.html" class="external-link">file.remove</a></span><span class="op">(</span><span class="va">the_files</span><span class="op">)</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/files.html" class="external-link">file.remove</a></span><span class="op">(</span><span class="va">results_dir_name</span><span class="op">)</span></span>
+<span><span class="op">}</span> </span></code></pre></div>
+<pre><code><span><span class="co">## [1] TRUE</span></span></code></pre>
 <div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/files2.html">dir.create</a></span><span class="op">(</span><span class="va">results_dir_name</span><span class="op">)</span>
-
-<span class="va">id_base_levels</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"hand"</span>, <span class="st">"flower"</span>, <span class="st">"guitar"</span>, <span class="st">"face"</span>, <span class="st">"kiwi"</span>, <span class="st">"couch"</span>,  <span class="st">"car"</span><span class="op">)</span>   
-<span class="va">pos_base_levels</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"upper"</span>, <span class="st">"middle"</span>, <span class="st">"lower"</span><span class="op">)</span>
- 
-
-<span class="co"># loop over all training and test position permutations</span>
-<span class="kw">for</span> <span class="op">(</span><span class="va">iTrainPos</span> <span class="kw">in</span> <span class="fl">1</span><span class="op">:</span><span class="fl">3</span><span class="op">)</span> <span class="op">{</span>
-  <span class="kw">for</span> <span class="op">(</span><span class="va">iTestPos</span> <span class="kw">in</span> <span class="fl">1</span><span class="op">:</span><span class="fl">3</span><span class="op">)</span> <span class="op">{</span> 
-   
-    <span class="co"># create the training and test label levels</span>
-    <span class="va">train_levels</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span><span class="op">)</span>
-    <span class="va">test_levels</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span><span class="op">)</span>
-    <span class="kw">for</span> <span class="op">(</span><span class="va">iID</span> <span class="kw">in</span> <span class="fl">1</span><span class="op">:</span><span class="fl">7</span><span class="op">)</span> <span class="op">{</span>
-        <span class="va">train_levels</span><span class="op">[[</span><span class="va">iID</span><span class="op">]</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste</a></span><span class="op">(</span><span class="va">id_base_levels</span><span class="op">[</span><span class="va">iID</span><span class="op">]</span>, <span class="va">pos_base_levels</span><span class="op">[</span><span class="va">iTrainPos</span><span class="op">]</span>, sep <span class="op">=</span> <span class="st">'_'</span><span class="op">)</span><span class="op">)</span>
-        <span class="va">test_levels</span><span class="op">[[</span><span class="va">iID</span><span class="op">]</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste</a></span><span class="op">(</span><span class="va">id_base_levels</span><span class="op">[</span><span class="va">iID</span><span class="op">]</span>, <span class="va">pos_base_levels</span><span class="op">[</span><span class="va">iTestPos</span><span class="op">]</span>, sep <span class="op">=</span> <span class="st">'_'</span><span class="op">)</span><span class="op">)</span>
-    <span class="op">}</span>
-    
-    
-    <span class="co"># create the ds_generalization data source</span>
-    <span class="va">ds</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/ds_generalization.html">ds_generalization</a></span><span class="op">(</span><span class="va">binned_file_name</span>, <span class="st">'combined_ID_position'</span>, num_cv_splits <span class="op">=</span> <span class="fl">18</span>,  
-                       train_label_levels <span class="op">=</span> <span class="va">train_levels</span>, test_label_levels <span class="op">=</span> <span class="va">test_levels</span><span class="op">)</span>
-
-    
-    <span class="co"># create the cross-validator</span>
-    <span class="va">cv</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/cv_standard.html">cv_standard</a></span><span class="op">(</span>datasource <span class="op">=</span> <span class="va">ds</span>, 
-                  classifier <span class="op">=</span> <span class="va">cl</span>, 
-                  feature_preprocessors <span class="op">=</span> <span class="va">fps</span>, 
-                  result_metrics <span class="op">=</span> <span class="va">rms</span>, 
-                  num_resample_runs <span class="op">=</span> <span class="fl">10</span><span class="op">)</span>
-    
-    <span class="co"># run the decoding analysis (and time how long it takes to run</span>
-    <span class="fu">tictoc</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/tictoc/man/tic.html">tic</a></span><span class="op">(</span><span class="op">)</span>
-    <span class="va">DECODING_RESULTS</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/run_decoding.html">run_decoding</a></span><span class="op">(</span><span class="va">cv</span><span class="op">)</span>
-    <span class="fu">tictoc</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/tictoc/man/tic.html">toc</a></span><span class="op">(</span><span class="op">)</span>
-
-    <span class="co"># create a name for the saved results</span>
-    <span class="va">result_name</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste</a></span><span class="op">(</span><span class="st">"train "</span>, <span class="va">pos_base_levels</span><span class="op">[</span><span class="va">iTrainPos</span><span class="op">]</span>, <span class="st">"test"</span>, <span class="va">pos_base_levels</span><span class="op">[</span><span class="va">iTestPos</span><span class="op">]</span><span class="op">)</span>
-    
-    <span class="co"># save the results</span>
-    <span class="fu"><a href="../reference/log_save_results.html">log_save_results</a></span><span class="op">(</span><span class="va">DECODING_RESULTS</span>, <span class="va">results_dir_name</span>, <span class="va">result_name</span><span class="op">)</span>
-
-
-  <span class="op">}</span>
-<span class="op">}</span></code></pre></div>
-<pre><code>## Automatically selecting sites_IDs_to_use. Since num_cv_splits = 18 and num_label_repeats_per_cv_split = 1, all sites that have 18 repetitions have been selected. This yields 132 sites that will be used for decoding (out of 132 total).</code></pre>
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/files2.html" class="external-link">dir.create</a></span><span class="op">(</span><span class="va">results_dir_name</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">id_base_levels</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"hand"</span>, <span class="st">"flower"</span>, <span class="st">"guitar"</span>, <span class="st">"face"</span>, <span class="st">"kiwi"</span>, <span class="st">"couch"</span>,  <span class="st">"car"</span><span class="op">)</span>   </span>
+<span><span class="va">pos_base_levels</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"upper"</span>, <span class="st">"middle"</span>, <span class="st">"lower"</span><span class="op">)</span></span>
+<span> </span>
+<span></span>
+<span><span class="co"># loop over all training and test position permutations</span></span>
+<span><span class="kw">for</span> <span class="op">(</span><span class="va">iTrainPos</span> <span class="kw">in</span> <span class="fl">1</span><span class="op">:</span><span class="fl">3</span><span class="op">)</span> <span class="op">{</span></span>
+<span>  <span class="kw">for</span> <span class="op">(</span><span class="va">iTestPos</span> <span class="kw">in</span> <span class="fl">1</span><span class="op">:</span><span class="fl">3</span><span class="op">)</span> <span class="op">{</span> </span>
+<span>   </span>
+<span>    <span class="co"># create the training and test label levels</span></span>
+<span>    <span class="va">train_levels</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="op">)</span></span>
+<span>    <span class="va">test_levels</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="op">)</span></span>
+<span>    <span class="kw">for</span> <span class="op">(</span><span class="va">iID</span> <span class="kw">in</span> <span class="fl">1</span><span class="op">:</span><span class="fl">7</span><span class="op">)</span> <span class="op">{</span></span>
+<span>        <span class="va">train_levels</span><span class="op">[[</span><span class="va">iID</span><span class="op">]</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span><span class="va">id_base_levels</span><span class="op">[</span><span class="va">iID</span><span class="op">]</span>, <span class="va">pos_base_levels</span><span class="op">[</span><span class="va">iTrainPos</span><span class="op">]</span>, sep <span class="op">=</span> <span class="st">'_'</span><span class="op">)</span><span class="op">)</span></span>
+<span>        <span class="va">test_levels</span><span class="op">[[</span><span class="va">iID</span><span class="op">]</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span><span class="va">id_base_levels</span><span class="op">[</span><span class="va">iID</span><span class="op">]</span>, <span class="va">pos_base_levels</span><span class="op">[</span><span class="va">iTestPos</span><span class="op">]</span>, sep <span class="op">=</span> <span class="st">'_'</span><span class="op">)</span><span class="op">)</span></span>
+<span>    <span class="op">}</span></span>
+<span>    </span>
+<span>    </span>
+<span>    <span class="co"># create the ds_generalization data source</span></span>
+<span>    <span class="va">ds</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/ds_generalization.html">ds_generalization</a></span><span class="op">(</span><span class="va">binned_file_name</span>, <span class="st">'combined_ID_position'</span>, num_cv_splits <span class="op">=</span> <span class="fl">18</span>,  </span>
+<span>                       train_label_levels <span class="op">=</span> <span class="va">train_levels</span>, test_label_levels <span class="op">=</span> <span class="va">test_levels</span><span class="op">)</span></span>
+<span></span>
+<span>    </span>
+<span>    <span class="co"># create the cross-validator</span></span>
+<span>    <span class="va">cv</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/cv_standard.html">cv_standard</a></span><span class="op">(</span>datasource <span class="op">=</span> <span class="va">ds</span>, </span>
+<span>                  classifier <span class="op">=</span> <span class="va">cl</span>, </span>
+<span>                  feature_preprocessors <span class="op">=</span> <span class="va">fps</span>, </span>
+<span>                  result_metrics <span class="op">=</span> <span class="va">rms</span>, </span>
+<span>                  num_resample_runs <span class="op">=</span> <span class="fl">10</span><span class="op">)</span></span>
+<span>    </span>
+<span>    <span class="co"># run the decoding analysis (and time how long it takes to run</span></span>
+<span>    <span class="fu">tictoc</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/tictoc/man/tic.html" class="external-link">tic</a></span><span class="op">(</span><span class="op">)</span></span>
+<span>    <span class="va">DECODING_RESULTS</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/run_decoding.html">run_decoding</a></span><span class="op">(</span><span class="va">cv</span><span class="op">)</span></span>
+<span>    <span class="fu">tictoc</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/tictoc/man/tic.html" class="external-link">toc</a></span><span class="op">(</span><span class="op">)</span></span>
+<span></span>
+<span>    <span class="co"># create a name for the saved results</span></span>
+<span>    <span class="va">result_name</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span><span class="st">"train "</span>, <span class="va">pos_base_levels</span><span class="op">[</span><span class="va">iTrainPos</span><span class="op">]</span>, <span class="st">"test"</span>, <span class="va">pos_base_levels</span><span class="op">[</span><span class="va">iTestPos</span><span class="op">]</span><span class="op">)</span></span>
+<span>    </span>
+<span>    <span class="co"># save the results</span></span>
+<span>    <span class="fu"><a href="../reference/log_save_results.html">log_save_results</a></span><span class="op">(</span><span class="va">DECODING_RESULTS</span>, <span class="va">results_dir_name</span>, <span class="va">result_name</span><span class="op">)</span></span>
+<span></span>
+<span></span>
+<span>  <span class="op">}</span></span>
+<span><span class="op">}</span></span></code></pre></div>
+<pre><code><span><span class="co">## Automatically selecting sites_IDs_to_use. Since num_cv_splits = 18 and num_label_repeats_per_cv_split = 1, all sites that have 18 repetitions have been selected. This yields 132 sites that will be used for decoding (out of 132 total).</span></span></code></pre>
 <pre><code>## 
   |                                                                            
   |                                                                      |   0%
@@ -311,10 +397,10 @@
   |                                                                            
   |===============================================================       |  90%
   |                                                                            
-  |======================================================================| 100%9.995 sec elapsed</code></pre>
-<pre><code>## Warning in log_save_results(DECODING_RESULTS, results_dir_name, result_name): The manifest file does not exist.
-##   Assuming this is the first result that is saved and creating manifest file</code></pre>
-<pre><code>## Automatically selecting sites_IDs_to_use. Since num_cv_splits = 18 and num_label_repeats_per_cv_split = 1, all sites that have 18 repetitions have been selected. This yields 132 sites that will be used for decoding (out of 132 total).</code></pre>
+  |======================================================================| 100%10.327 sec elapsed</code></pre>
+<pre><code><span><span class="co">## Warning in log_save_results(DECODING_RESULTS, results_dir_name, result_name): The manifest file does not exist.</span></span>
+<span><span class="co">##   Assuming this is the first result that is saved and creating manifest file</span></span></code></pre>
+<pre><code><span><span class="co">## Automatically selecting sites_IDs_to_use. Since num_cv_splits = 18 and num_label_repeats_per_cv_split = 1, all sites that have 18 repetitions have been selected. This yields 132 sites that will be used for decoding (out of 132 total).</span></span></code></pre>
 <pre><code>## 
   |                                                                            
   |                                                                      |   0%
@@ -337,8 +423,8 @@
   |                                                                            
   |===============================================================       |  90%
   |                                                                            
-  |======================================================================| 100%10.501 sec elapsed</code></pre>
-<pre><code>## Automatically selecting sites_IDs_to_use. Since num_cv_splits = 18 and num_label_repeats_per_cv_split = 1, all sites that have 18 repetitions have been selected. This yields 132 sites that will be used for decoding (out of 132 total).</code></pre>
+  |======================================================================| 100%10.814 sec elapsed</code></pre>
+<pre><code><span><span class="co">## Automatically selecting sites_IDs_to_use. Since num_cv_splits = 18 and num_label_repeats_per_cv_split = 1, all sites that have 18 repetitions have been selected. This yields 132 sites that will be used for decoding (out of 132 total).</span></span></code></pre>
 <pre><code>## 
   |                                                                            
   |                                                                      |   0%
@@ -361,8 +447,8 @@
   |                                                                            
   |===============================================================       |  90%
   |                                                                            
-  |======================================================================| 100%10.287 sec elapsed</code></pre>
-<pre><code>## Automatically selecting sites_IDs_to_use. Since num_cv_splits = 18 and num_label_repeats_per_cv_split = 1, all sites that have 18 repetitions have been selected. This yields 132 sites that will be used for decoding (out of 132 total).</code></pre>
+  |======================================================================| 100%10.595 sec elapsed</code></pre>
+<pre><code><span><span class="co">## Automatically selecting sites_IDs_to_use. Since num_cv_splits = 18 and num_label_repeats_per_cv_split = 1, all sites that have 18 repetitions have been selected. This yields 132 sites that will be used for decoding (out of 132 total).</span></span></code></pre>
 <pre><code>## 
   |                                                                            
   |                                                                      |   0%
@@ -385,8 +471,8 @@
   |                                                                            
   |===============================================================       |  90%
   |                                                                            
-  |======================================================================| 100%10.067 sec elapsed</code></pre>
-<pre><code>## Automatically selecting sites_IDs_to_use. Since num_cv_splits = 18 and num_label_repeats_per_cv_split = 1, all sites that have 18 repetitions have been selected. This yields 132 sites that will be used for decoding (out of 132 total).</code></pre>
+  |======================================================================| 100%10.35 sec elapsed</code></pre>
+<pre><code><span><span class="co">## Automatically selecting sites_IDs_to_use. Since num_cv_splits = 18 and num_label_repeats_per_cv_split = 1, all sites that have 18 repetitions have been selected. This yields 132 sites that will be used for decoding (out of 132 total).</span></span></code></pre>
 <pre><code>## 
   |                                                                            
   |                                                                      |   0%
@@ -409,8 +495,8 @@
   |                                                                            
   |===============================================================       |  90%
   |                                                                            
-  |======================================================================| 100%10.056 sec elapsed</code></pre>
-<pre><code>## Automatically selecting sites_IDs_to_use. Since num_cv_splits = 18 and num_label_repeats_per_cv_split = 1, all sites that have 18 repetitions have been selected. This yields 132 sites that will be used for decoding (out of 132 total).</code></pre>
+  |======================================================================| 100%10.528 sec elapsed</code></pre>
+<pre><code><span><span class="co">## Automatically selecting sites_IDs_to_use. Since num_cv_splits = 18 and num_label_repeats_per_cv_split = 1, all sites that have 18 repetitions have been selected. This yields 132 sites that will be used for decoding (out of 132 total).</span></span></code></pre>
 <pre><code>## 
   |                                                                            
   |                                                                      |   0%
@@ -433,8 +519,8 @@
   |                                                                            
   |===============================================================       |  90%
   |                                                                            
-  |======================================================================| 100%10.281 sec elapsed</code></pre>
-<pre><code>## Automatically selecting sites_IDs_to_use. Since num_cv_splits = 18 and num_label_repeats_per_cv_split = 1, all sites that have 18 repetitions have been selected. This yields 132 sites that will be used for decoding (out of 132 total).</code></pre>
+  |======================================================================| 100%10.767 sec elapsed</code></pre>
+<pre><code><span><span class="co">## Automatically selecting sites_IDs_to_use. Since num_cv_splits = 18 and num_label_repeats_per_cv_split = 1, all sites that have 18 repetitions have been selected. This yields 132 sites that will be used for decoding (out of 132 total).</span></span></code></pre>
 <pre><code>## 
   |                                                                            
   |                                                                      |   0%
@@ -457,8 +543,8 @@
   |                                                                            
   |===============================================================       |  90%
   |                                                                            
-  |======================================================================| 100%9.947 sec elapsed</code></pre>
-<pre><code>## Automatically selecting sites_IDs_to_use. Since num_cv_splits = 18 and num_label_repeats_per_cv_split = 1, all sites that have 18 repetitions have been selected. This yields 132 sites that will be used for decoding (out of 132 total).</code></pre>
+  |======================================================================| 100%10.423 sec elapsed</code></pre>
+<pre><code><span><span class="co">## Automatically selecting sites_IDs_to_use. Since num_cv_splits = 18 and num_label_repeats_per_cv_split = 1, all sites that have 18 repetitions have been selected. This yields 132 sites that will be used for decoding (out of 132 total).</span></span></code></pre>
 <pre><code>## 
   |                                                                            
   |                                                                      |   0%
@@ -481,8 +567,8 @@
   |                                                                            
   |===============================================================       |  90%
   |                                                                            
-  |======================================================================| 100%10.229 sec elapsed</code></pre>
-<pre><code>## Automatically selecting sites_IDs_to_use. Since num_cv_splits = 18 and num_label_repeats_per_cv_split = 1, all sites that have 18 repetitions have been selected. This yields 132 sites that will be used for decoding (out of 132 total).</code></pre>
+  |======================================================================| 100%10.416 sec elapsed</code></pre>
+<pre><code><span><span class="co">## Automatically selecting sites_IDs_to_use. Since num_cv_splits = 18 and num_label_repeats_per_cv_split = 1, all sites that have 18 repetitions have been selected. This yields 132 sites that will be used for decoding (out of 132 total).</span></span></code></pre>
 <pre><code>## 
   |                                                                            
   |                                                                      |   0%
@@ -505,47 +591,56 @@
   |                                                                            
   |===============================================================       |  90%
   |                                                                            
-  |======================================================================| 100%10.105 sec elapsed</code></pre>
+  |======================================================================| 100%10.6 sec elapsed</code></pre>
 </div>
-<div id="plotting-the-results" class="section level3">
-<h3 class="hasAnchor">
-<a href="#plotting-the-results" class="anchor"></a>Plotting the results</h3>
-<p>To plot all these results, we will create some custom code. This code loads the results for each training and test location pair using the <code>log_load_results_from_result_name</code> function and save the results to a data frame. This data frame is then plotted using <code>ggplot2</code>.</p>
+<div class="section level3">
+<h3 id="plotting-the-results">Plotting the results<a class="anchor" aria-label="anchor" href="#plotting-the-results"></a>
+</h3>
+<p>To plot all these results, we will create some custom code. This code
+loads the results for each training and test location pair using the
+<code>log_load_results_from_result_name</code> function and save the
+results to a data frame. This data frame is then plotted using
+<code>ggplot2</code>.</p>
 <div class="sourceCode" id="cb34"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="co"># compile all the results that were saved</span>
-
-<span class="va">all_results</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span><span class="op">(</span><span class="op">)</span>
-
-<span class="kw">for</span> <span class="op">(</span><span class="va">iTrainPos</span> <span class="kw">in</span> <span class="fl">1</span><span class="op">:</span><span class="fl">3</span><span class="op">)</span> <span class="op">{</span>
-  <span class="kw">for</span> <span class="op">(</span><span class="va">iTestPos</span> <span class="kw">in</span> <span class="fl">1</span><span class="op">:</span><span class="fl">3</span><span class="op">)</span> <span class="op">{</span> 
-    
-    <span class="co"># get the name of the result and load them </span>
-    <span class="va">result_name</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste</a></span><span class="op">(</span><span class="st">"train "</span>, <span class="va">pos_base_levels</span><span class="op">[</span><span class="va">iTrainPos</span><span class="op">]</span>, <span class="st">"test"</span>, <span class="va">pos_base_levels</span><span class="op">[</span><span class="va">iTestPos</span><span class="op">]</span><span class="op">)</span>
-
-    <span class="va">DECODING_RESULTS</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/log_load_results_from_result_name.html">log_load_results_from_result_name</a></span><span class="op">(</span><span class="va">result_name</span>, <span class="va">results_dir_name</span><span class="op">)</span>
-
-    <span class="va">curr_results</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span><span class="op">(</span>decoding_accuracy <span class="op">=</span> <span class="fl">100</span> <span class="op">*</span> <span class="va">DECODING_RESULTS</span><span class="op">$</span><span class="va">rm_main_results</span><span class="op">$</span><span class="va">zero_one_loss</span>,
-                                        train_location <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste</a></span><span class="op">(</span><span class="st">"Train"</span>, <span class="va">pos_base_levels</span><span class="op">[</span><span class="va">iTrainPos</span><span class="op">]</span><span class="op">)</span>,
-                                        test_location <span class="op">=</span> <span class="va">pos_base_levels</span><span class="op">[</span><span class="va">iTestPos</span><span class="op">]</span><span class="op">)</span>
-    
-    <span class="va">all_results</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/cbind.html">rbind</a></span><span class="op">(</span><span class="va">all_results</span>, <span class="va">curr_results</span><span class="op">)</span>
-    
-  <span class="op">}</span>
-<span class="op">}</span>
-
-
-
-<span class="co"># plot the results</span>
-
-<span class="va">all_results</span> <span class="op">%&gt;%</span>
-  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span><span class="va">test_location</span>, <span class="va">decoding_accuracy</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> 
-  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_bar.html">geom_col</a></span><span class="op">(</span>fill <span class="op">=</span> <span class="st">"blue"</span><span class="op">)</span> <span class="op">+</span> 
-  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_abline.html">geom_hline</a></span><span class="op">(</span>yintercept <span class="op">=</span> <span class="fl">1</span><span class="op">/</span><span class="fl">7</span> <span class="op">*</span> <span class="fl">100</span><span class="op">)</span> <span class="op">+</span> 
-  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/facet_wrap.html">facet_wrap</a></span><span class="op">(</span><span class="op">~</span><span class="va">train_location</span><span class="op">)</span> <span class="op">+</span> 
-  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">ylab</a></span><span class="op">(</span><span class="st">"Decoding Accuracy"</span><span class="op">)</span> <span class="op">+</span> 
-  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">xlab</a></span><span class="op">(</span><span class="st">"Test location"</span><span class="op">)</span>  </code></pre></div>
+<code class="sourceCode R"><span><span class="co"># compile all the results that were saved</span></span>
+<span></span>
+<span><span class="va">all_results</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span><span class="op">)</span></span>
+<span></span>
+<span><span class="kw">for</span> <span class="op">(</span><span class="va">iTrainPos</span> <span class="kw">in</span> <span class="fl">1</span><span class="op">:</span><span class="fl">3</span><span class="op">)</span> <span class="op">{</span></span>
+<span>  <span class="kw">for</span> <span class="op">(</span><span class="va">iTestPos</span> <span class="kw">in</span> <span class="fl">1</span><span class="op">:</span><span class="fl">3</span><span class="op">)</span> <span class="op">{</span> </span>
+<span>    </span>
+<span>    <span class="co"># get the name of the result and load them </span></span>
+<span>    <span class="va">result_name</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span><span class="st">"train "</span>, <span class="va">pos_base_levels</span><span class="op">[</span><span class="va">iTrainPos</span><span class="op">]</span>, <span class="st">"test"</span>, <span class="va">pos_base_levels</span><span class="op">[</span><span class="va">iTestPos</span><span class="op">]</span><span class="op">)</span></span>
+<span></span>
+<span>    <span class="va">DECODING_RESULTS</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/log_load_results_from_result_name.html">log_load_results_from_result_name</a></span><span class="op">(</span><span class="va">result_name</span>, <span class="va">results_dir_name</span><span class="op">)</span></span>
+<span></span>
+<span>    <span class="va">curr_results</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>decoding_accuracy <span class="op">=</span> <span class="fl">100</span> <span class="op">*</span> <span class="va">DECODING_RESULTS</span><span class="op">$</span><span class="va">rm_main_results</span><span class="op">$</span><span class="va">zero_one_loss</span>,</span>
+<span>                                        train_location <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span><span class="st">"Train"</span>, <span class="va">pos_base_levels</span><span class="op">[</span><span class="va">iTrainPos</span><span class="op">]</span><span class="op">)</span>,</span>
+<span>                                        test_location <span class="op">=</span> <span class="va">pos_base_levels</span><span class="op">[</span><span class="va">iTestPos</span><span class="op">]</span><span class="op">)</span></span>
+<span>    </span>
+<span>    <span class="va">all_results</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">rbind</a></span><span class="op">(</span><span class="va">all_results</span>, <span class="va">curr_results</span><span class="op">)</span></span>
+<span>    </span>
+<span>  <span class="op">}</span></span>
+<span><span class="op">}</span></span>
+<span></span>
+<span></span>
+<span></span>
+<span><span class="co"># plot the results</span></span>
+<span></span>
+<span><span class="va">all_results</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span><span class="va">test_location</span>, <span class="va">decoding_accuracy</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> </span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_bar.html" class="external-link">geom_col</a></span><span class="op">(</span>fill <span class="op">=</span> <span class="st">"blue"</span><span class="op">)</span> <span class="op">+</span> </span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_abline.html" class="external-link">geom_hline</a></span><span class="op">(</span>yintercept <span class="op">=</span> <span class="fl">1</span><span class="op">/</span><span class="fl">7</span> <span class="op">*</span> <span class="fl">100</span><span class="op">)</span> <span class="op">+</span> </span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/facet_wrap.html" class="external-link">facet_wrap</a></span><span class="op">(</span><span class="op">~</span><span class="va">train_location</span><span class="op">)</span> <span class="op">+</span> </span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">ylab</a></span><span class="op">(</span><span class="st">"Decoding Accuracy"</span><span class="op">)</span> <span class="op">+</span> </span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">xlab</a></span><span class="op">(</span><span class="st">"Test location"</span><span class="op">)</span>  </span></code></pre></div>
 <p><img src="generalization_tutorial_files/figure-html/plot_results-1.png" width="700"></p>
-<p>Looking at the results, we can see that the highest decoding accuracies are always obtained when training and testing the classifier at the same location. However, the results are well above chance when training the classifier at one location and testing the classifier at a different location, showing there is a large degree of position invariance in the Inferior Temporal Cortex.</p>
+<p>Looking at the results, we can see that the highest decoding
+accuracies are always obtained when training and testing the classifier
+at the same location. However, the results are well above chance when
+training the classifier at one location and testing the classifier at a
+different location, showing there is a large degree of position
+invariance in the Inferior Temporal Cortex.</p>
 </div>
   </div>
 
@@ -558,11 +653,13 @@
 
 
       <footer><div class="copyright">
-  <p>Developed by Ethan Meyers.</p>
+  <p></p>
+<p>Developed by Ethan Meyers.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
+  <p></p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
 </div>
 
       </footer>
@@ -570,6 +667,8 @@
 
   
 
+
+  
 
   </body>
 </html>

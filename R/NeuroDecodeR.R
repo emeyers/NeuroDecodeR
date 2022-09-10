@@ -36,7 +36,7 @@
 #'  then use the [create_binned_data()] to create a `binned format` data file
 #'  that will be used in the decoding analysis.
 #'
-#'
+#' @keywords internal
 #' @docType package
 #' @name NeuroDecodeR
 #'

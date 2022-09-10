@@ -19,6 +19,8 @@
 <![endif]-->
 </head>
 <body data-spy="scroll" data-target="#toc">
+    
+
     <div class="container template-article">
       <header><div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
   <div class="container">
@@ -31,7 +33,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">NeuroDecodeR</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.0.9007</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.1.0</span>
       </span>
     </div>
 
@@ -41,7 +43,7 @@
   <a href="../index.html">Home</a>
 </li>
 <li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     Tutorials
      
     <span class="caret"></span>
@@ -59,7 +61,7 @@
   <a href="../reference/index.html">Reference</a>
 </li>
 <li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     Documentation
      
     <span class="caret"></span>
@@ -79,7 +81,7 @@
       </ul>
 <ul class="nav navbar-nav navbar-right">
 <li>
-  <a href="https://github.com/emeyers/NeuroDecodeR/">
+  <a href="https://github.com/emeyers/NeuroDecodeR/" class="external-link">
     <span class="fab fa-github fa-lg"></span>
      
   </a>
@@ -94,69 +96,121 @@
 
       
 
-      </header><script src="datasets_files/header-attrs-2.9/header-attrs.js"></script><div class="row">
+      </header><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Datasets</h1>
             
       
-      <small class="dont-index">Source: <a href="https://github.com/emeyers/NeuroDecodeR/blob/master/vignettes/datasets.Rmd"><code>vignettes/datasets.Rmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/emeyers/NeuroDecodeR/blob/HEAD/vignettes/datasets.Rmd" class="external-link"><code>vignettes/datasets.Rmd</code></a></small>
       <div class="hidden name"><code>datasets.Rmd</code></div>
 
     </div>
 
     
     
-<p>The following datasets can be used with the NeuroDecodeR to learn how to use the package.</p>
+<p>The following datasets can be used with the NeuroDecodeR to learn how
+to use the package.</p>
 <p><br></p>
-<div id="zhang-desimone-7-object-dataset" class="section level1">
-<h1 class="hasAnchor">
-<a href="#zhang-desimone-7-object-dataset" class="anchor"></a>Zhang-Desimone 7 object dataset</h1>
-<p>The Zhang-Desimone 7 object dataset was collected by Ying Zhang in <a href="http://mcgovern.mit.edu/principal-investigators/robert-desimone">Bob Desimone’s lab</a> in the McGovern Institute at MIT. The data was used in the supplemental figures in the paper <a href="http://www.pnas.org/content/108/21/8850">Object decoding with attention in inferior temporal cortex, PNAS, 2011</a>.</p>
-<p>The data consists of single unit recordings from the 132 neurons in inferior temporal cortex (IT). The recordings were made while a monkey viewed 7 different objects that were presented at three different locations (the monkey was also shown images that consisted of three objects shown simultaneously and had to perform an attention task, however the dataset compiled here only consists of trials when single objects were shown). Each object was presented approximately 20 times at each of the three locations. The data is in <a href="data_formats.html">raster format</a>, and each trial consists of 500 ms of baseline data where a monkey viewed a fixation dot, and 500 ms of data when a monkey viewed one of the 7 different images.</p>
-<div id="accessing-the-dataset" class="section level3">
-<h3 class="hasAnchor">
-<a href="#accessing-the-dataset" class="anchor"></a>Accessing the dataset</h3>
-<p>The Zhang-Desimone 7 object dataset comes with the NeuroDecodeR package. Individual raster files can be found in the directory <code>extdata/Zhang_Desimone_7object_raster_data_rda/</code>. Additionally, binned data using 150 ms bins and 50 ms sampling intervals can be found in the file <code>extdata/ZD_150bins_50sampled.Rda</code>. The code below shows how to load a single raster data file, and the binned data.</p>
+<div class="section level2">
+<h2 id="zhang-desimone-7-object-dataset">Zhang-Desimone 7 object dataset<a class="anchor" aria-label="anchor" href="#zhang-desimone-7-object-dataset"></a>
+</h2>
+<p>The Zhang-Desimone 7 object dataset was collected by Ying Zhang in <a href="http://mcgovern.mit.edu/principal-investigators/robert-desimone" class="external-link">Bob
+Desimone’s lab</a> in the McGovern Institute at MIT. The data was used
+in the supplemental figures in the paper <a href="http://www.pnas.org/content/108/21/8850" class="external-link">Object decoding with
+attention in inferior temporal cortex, PNAS, 2011</a>.</p>
+<p>The data consists of single unit recordings from the 132 neurons in
+inferior temporal cortex (IT). The recordings were made while a monkey
+viewed 7 different objects that were presented at three different
+locations (the monkey was also shown images that consisted of three
+objects shown simultaneously and had to perform an attention task,
+however the dataset compiled here only consists of trials when single
+objects were shown). Each object was presented approximately 20 times at
+each of the three locations. The data is in <a href="data_formats.html">raster format</a>, and each trial consists of
+500 ms of baseline data where a monkey viewed a fixation dot, and 500 ms
+of data when a monkey viewed one of the 7 different images.</p>
+<div class="section level4">
+<h4 id="accessing-the-dataset">Accessing the dataset<a class="anchor" aria-label="anchor" href="#accessing-the-dataset"></a>
+</h4>
+<p>The Zhang-Desimone 7 object dataset comes with the NeuroDecodeR
+package. Individual raster files can be found in the directory
+<code>extdata/Zhang_Desimone_7object_raster_data_rda/</code>.
+Additionally, binned data using 150 ms bins and 50 ms sampling intervals
+can be found in the file <code>extdata/ZD_150bins_50sampled.Rda</code>.
+The code below shows how to load a single raster data file, and the
+binned data.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="co"># load a raster format data file</span>
-<span class="va">raster_dir_name</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/file.path.html">file.path</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/system.file.html">system.file</a></span><span class="op">(</span><span class="st">"extdata"</span>, package <span class="op">=</span> <span class="st">"NeuroDecodeR"</span><span class="op">)</span>, <span class="st">"Zhang_Desimone_7object_raster_data_small_rda"</span><span class="op">)</span>
-<span class="va">file_name</span> <span class="op">&lt;-</span> <span class="st">"bp1001spk_01A_raster_data.rda"</span>
-<span class="fu"><a href="https://rdrr.io/r/base/load.html">load</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/file.path.html">file.path</a></span><span class="op">(</span><span class="va">raster_dir_name</span>, <span class="va">file_name</span><span class="op">)</span><span class="op">)</span>
-
-
-<span class="co"># load the 150 ms binned data</span>
-<span class="va">binned_file_name</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html">system.file</a></span><span class="op">(</span><span class="st">"extdata/ZD_150bins_50sampled.Rda"</span>, package<span class="op">=</span><span class="st">"NeuroDecodeR"</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/base/load.html">load</a></span><span class="op">(</span><span class="va">binned_file_name</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="co"># load a raster format data file</span></span>
+<span><span class="va">raster_dir_name</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"extdata"</span>, package <span class="op">=</span> <span class="st">"NeuroDecodeR"</span><span class="op">)</span>, <span class="st">"Zhang_Desimone_7object_raster_data_small_rda"</span><span class="op">)</span></span>
+<span><span class="va">file_name</span> <span class="op">&lt;-</span> <span class="st">"bp1001spk_01A_raster_data.rda"</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/load.html" class="external-link">load</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="va">raster_dir_name</span>, <span class="va">file_name</span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span></span>
+<span><span class="co"># load the 150 ms binned data</span></span>
+<span><span class="va">binned_file_name</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"extdata/ZD_150bins_50sampled.Rda"</span>, package<span class="op">=</span><span class="st">"NeuroDecodeR"</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/load.html" class="external-link">load</a></span><span class="op">(</span><span class="va">binned_file_name</span><span class="op">)</span></span></code></pre></div>
 <p><br></p>
 <p><br></p>
 </div>
 </div>
-<div id="qi-constantinidis-pre-and-post-training-dataset" class="section level1">
-<h1 class="hasAnchor">
-<a href="#qi-constantinidis-pre-and-post-training-dataset" class="anchor"></a>Qi-Constantinidis pre and post training dataset</h1>
-<p>The Qi-Constantinidis pre and post training dataset was collected by Xue-Lian Qi in <a href="http://neuroscience.graduate.wfu.edu/people/christos-constantinidis/">Christos Constantinidis’ lab</a> in Department of Neurobiology and Anatomy, at the Wake Forest University School of Medicine. The data consists of single unit recordings from the prefrontal cortex (PFC) while monkeys passively viewed images (in a feature and spatial configurations), and also after monkey were trained to engaged in a delayed match-to-sample task with these images.</p>
-<p><strong>If you plan to use this data please cite the publications below.</strong> More information about the experiments and data analyses can be found in these papers as well.</p>
-<p><em>Meyers E, Qi XL, Constantinidis C (2012). Incorporation of new information into prefrontal cortical activity after learning working memory tasks. Proceedings of the National Academy of Sciences, 109:4651-4656.</em></p>
-<p><em>Qi X-L, Meyer T, Stanford TR, Constantinidis C (2011) Changes in prefrontal neuronal activity after learning to perform a spatial working memory task. Cereb Cortex 21:2722–2732</em></p>
-<div id="accessing-the-dataset-1" class="section level3">
-<h3 class="hasAnchor">
-<a href="#accessing-the-dataset-1" class="anchor"></a>Accessing the dataset</h3>
-<p>The MATLAB versions of the raster files can be downloaded from <a href="http://www.readout.info">www.readout.info</a> and can be converted to R raster format data files using the <code><a href="../reference/convert_matlab_raster_data.html">convert_matlab_raster_data()</a></code> function.</p>
+<div class="section level2">
+<h2 id="qi-constantinidis-pre-and-post-training-dataset">Qi-Constantinidis pre and post training dataset<a class="anchor" aria-label="anchor" href="#qi-constantinidis-pre-and-post-training-dataset"></a>
+</h2>
+<p>The Qi-Constantinidis pre and post training dataset was collected by
+Xue-Lian Qi in <a href="http://neuroscience.graduate.wfu.edu/people/christos-constantinidis/" class="external-link">Christos
+Constantinidis’ lab</a> in Department of Neurobiology and Anatomy, at
+the Wake Forest University School of Medicine. The data consists of
+single unit recordings from the prefrontal cortex (PFC) while monkeys
+passively viewed images (in a feature and spatial configurations), and
+also after monkey were trained to engaged in a delayed match-to-sample
+task with these images.</p>
+<p><strong>If you plan to use this data please cite the publications
+below.</strong> More information about the experiments and data analyses
+can be found in these papers as well.</p>
+<p><em>Meyers E, Qi XL, Constantinidis C (2012). Incorporation of new
+information into prefrontal cortical activity after learning working
+memory tasks. Proceedings of the National Academy of Sciences,
+109:4651-4656.</em></p>
+<p><em>Qi X-L, Meyer T, Stanford TR, Constantinidis C (2011) Changes in
+prefrontal neuronal activity after learning to perform a spatial working
+memory task. Cereb Cortex 21:2722–2732</em></p>
+<div class="section level4">
+<h4 id="accessing-the-dataset-1">Accessing the dataset<a class="anchor" aria-label="anchor" href="#accessing-the-dataset-1"></a>
+</h4>
+<p>The MATLAB versions of the raster files can be downloaded from <a href="http://www.readout.info" class="external-link">www.readout.info</a> and can be converted
+to R raster format data files using the
+<code><a href="../reference/convert_matlab_raster_data.html">convert_matlab_raster_data()</a></code> function.</p>
 <p><br></p>
 <p><br></p>
 </div>
 </div>
-<div id="isik-26-letter-meg-dataset" class="section level1">
-<h1 class="hasAnchor">
-<a href="#isik-26-letter-meg-dataset" class="anchor"></a>Isik 26 letter MEG dataset</h1>
-<p>The Isik 26 letter MEG dataset was collected by Leyla Isik in Tommy Poggio’s lab and the MEG Lab at the McGovern Institute at MIT. The data was used in Figure 2b of the paper: <a href="https://www.physiology.org/doi/full/10.1152/jn.00394.2013">The dynamics of invariant object recognition in the human visual system, J.</a> Neurophys 2014.</p>
-<p>The data consists of 306 channel (comprised of 102 magentometers, and 204 planar gradiometers) MEG recordings from an Elekta Neuromag Triux Scanner. One subject was shown 26 black, upper-case letters, on a white background, while their neural response was recorded in the MEG scanner. Each letter was presented approximately 50 times. The data is in raster-format, and each trial consists of 233 ms of baseline data where the subject viewed a fixation cross, followed by 50 ms of data when the subject viewed the image of one letter, and 417 ms of data when they again viewed a fixation cross.</p>
-<p>The data is available in two formats – the raw MEG files output by the scanner (.fif format) and preprocessed data in <a href="raster_format.html">raster format</a>. The raw data download also includes a file with raster labels indicating which stimulus was shown in each trial.</p>
-<div id="accessing-the-dataset-2" class="section level3">
-<h3 class="hasAnchor">
-<a href="#accessing-the-dataset-2" class="anchor"></a>Accessing the dataset</h3>
-<p>The MATLAB versions of the raster files can be downloaded from <a href="http://www.readout.info">www.readout.info</a> and can be converted to R raster format data files using the <code><a href="../reference/convert_matlab_raster_data.html">convert_matlab_raster_data()</a></code> function.</p>
+<div class="section level2">
+<h2 id="isik-26-letter-meg-dataset">Isik 26 letter MEG dataset<a class="anchor" aria-label="anchor" href="#isik-26-letter-meg-dataset"></a>
+</h2>
+<p>The Isik 26 letter MEG dataset was collected by Leyla Isik in Tommy
+Poggio’s lab and the MEG Lab at the McGovern Institute at MIT. The data
+was used in Figure 2b of the paper: <a href="https://www.physiology.org/doi/full/10.1152/jn.00394.2013" class="external-link">The
+dynamics of invariant object recognition in the human visual system,
+J.</a> Neurophys 2014.</p>
+<p>The data consists of 306 channel (comprised of 102 magentometers, and
+204 planar gradiometers) MEG recordings from an Elekta Neuromag Triux
+Scanner. One subject was shown 26 black, upper-case letters, on a white
+background, while their neural response was recorded in the MEG scanner.
+Each letter was presented approximately 50 times. The data is in
+raster-format, and each trial consists of 233 ms of baseline data where
+the subject viewed a fixation cross, followed by 50 ms of data when the
+subject viewed the image of one letter, and 417 ms of data when they
+again viewed a fixation cross.</p>
+<p>The data is available in two formats – the raw MEG files output by
+the scanner (.fif format) and preprocessed data in <a href="raster_format.html">raster format</a>. The raw data download also
+includes a file with raster labels indicating which stimulus was shown
+in each trial.</p>
+<div class="section level4">
+<h4 id="accessing-the-dataset-2">Accessing the dataset<a class="anchor" aria-label="anchor" href="#accessing-the-dataset-2"></a>
+</h4>
+<p>The MATLAB versions of the raster files can be downloaded from <a href="http://www.readout.info" class="external-link">www.readout.info</a> and can be converted
+to R raster format data files using the
+<code><a href="../reference/convert_matlab_raster_data.html">convert_matlab_raster_data()</a></code> function.</p>
 <p><br></p>
 </div>
 </div>
@@ -173,11 +227,13 @@
 
 
       <footer><div class="copyright">
-  <p>Developed by Ethan Meyers.</p>
+  <p></p>
+<p>Developed by Ethan Meyers.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
+  <p></p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
 </div>
 
       </footer>
@@ -185,6 +241,8 @@
 
   
 
+
+  
 
   </body>
 </html>

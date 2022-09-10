@@ -99,23 +99,23 @@ plot(DECODING_RESULTS$rm_main_results)
 
 <img src="man/figures/README-TCD_plot-1.png" style="display: block; margin: auto;" />
 
-## Running an analysis using the magrittr pipe (%\>%)
+## Running an analysis using pipes (\|\>)
 
-One can also run a decoding analysis using the magrittr pipe (%\>%)
-operator to string together the different NDR objects as shown below.
+One can also run a decoding analysis using the pipe (\|\>) operator to
+string together the different NDR objects as shown below.
 
 ``` r
 library(magrittr)
 
 basedir_file_name <- system.file(file.path("extdata", "ZD_500bins_500sampled.Rda"), package="NeuroDecodeR")
   
-  DECODING_RESULTS <- basedir_file_name %>%
-    ds_basic('stimulus_ID', 6, num_label_repeats_per_cv_split = 3) %>%
-    cl_max_correlation() %>%
-    fp_zscore() %>%
-    rm_main_results() %>%
-    rm_confusion_matrix() %>%
-    cv_standard(num_resample_runs = 3) %>%
+  DECODING_RESULTS <- basedir_file_name |>
+    ds_basic('stimulus_ID', 6, num_label_repeats_per_cv_split = 3) |>
+    cl_max_correlation() |>
+    fp_zscore() |>
+    rm_main_results() |>
+    rm_confusion_matrix() |>
+    cv_standard(num_resample_runs = 3) |>
     run_decoding()
 #> Automatically selecting sites_IDs_to_use. Since num_cv_splits = 6 and num_label_repeats_per_cv_split = 3, all sites that have 18 repetitions have been selected. This yields 132 sites that will be used for decoding (out of 132 total).
 #>   |                                                                              |                                                                      |   0%  |                                                                              |=======================                                               |  33%  |                                                                              |===============================================                       |  67%  |                                                                              |======================================================================| 100%

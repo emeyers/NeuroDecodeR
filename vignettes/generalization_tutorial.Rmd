@@ -333,7 +333,7 @@ for (iTrainPos in 1:3) {
 
 # plot the results
 
-all_results %>%
+all_results |>
   ggplot(aes(test_location, decoding_accuracy)) + 
   geom_col(fill = "blue") + 
   geom_hline(yintercept = 1/7 * 100) + 

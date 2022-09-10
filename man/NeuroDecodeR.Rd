@@ -38,3 +38,4 @@ then use the \code{\link[=create_binned_data]{create_binned_data()}} to create a
 that will be used in the decoding analysis.
 }
 
+\keyword{internal}
