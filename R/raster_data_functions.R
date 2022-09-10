@@ -102,7 +102,7 @@ read_raster_data <- function(raster_file_name) {
 #' Reads MATLAB raster data
 #'
 #' Reads MATLAB data in raster format into an R raster_data format data frame. This
-#' is similar to the general read_raster_data() function but it contains addtional
+#' is similar to the general read_raster_data() function but it contains additional
 #' arguments specific to MALTAB raster data.
 #'
 #' @param matlab_raster_file_name A character string specifying the file name, 

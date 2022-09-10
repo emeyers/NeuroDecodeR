@@ -43,7 +43,7 @@
 #' @param run_TCD A Boolean indicating whether a Temporal Cross-Decoding (TCD)
 #'   analysis should be run where the the classifier is trained and tested at
 #'   all points in time. Setting this to FALSE causes the classifier to only be
-#'   tested at same time it is trained on which can speed up the analysis trun
+#'   tested at same time it is trained on which can speed up the analysis run
 #'   time and save memory at the cost of not calculated the temporal cross
 #'   decoding results.
 #'   
