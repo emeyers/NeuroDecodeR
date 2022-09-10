@@ -5,10 +5,13 @@ Authors@R: c(
   person("Ethan", "Meyers", email = "ethan.meyers@gmail.com", 
   role = c("aut", "cre"))
   )
-Description: A system of objects that make it easy to run neural decoding analyses. 
+Description: Neural decoding is method of analyzing neural data that  
+    uses a pattern classifiers to predict experimental conditions based 
+    on neural activity. NeuroDecodeR is a system of objects that 
+    makes it easy to run neural decoding analyses. 
 URL: https://github.com/emeyers/NeuroDecodeR
 BugReports: https://github.com/emeyers/NeuroDecodeR/issues
-Depends: R (>= 3.5.0)
+Depends: R (>= 4.1.0)
 License: GPL-3
 LazyData: true
 Roxygen: list(markdown = TRUE)
