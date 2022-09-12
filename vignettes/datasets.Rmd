@@ -78,7 +78,7 @@ load(binned_file_name)
 
 The Qi-Constantinidis pre and post training dataset was collected by Xue-Lian Qi
 in [Christos Constantinidis’
-lab](http://neuroscience.graduate.wfu.edu/people/christos-constantinidis/) in
+lab](https://lab.vanderbilt.edu/constantinidis-lab/home/) in
 Department of Neurobiology and Anatomy, at the Wake Forest University School of
 Medicine. The data consists of single unit recordings from the prefrontal cortex
 (PFC) while monkeys passively viewed images (in a feature and spatial
@@ -128,7 +128,7 @@ approximately 50 times. The data is in raster-format, and each trial consists of
 data when they again viewed a fixation cross.
 
 The data is available in two formats – the raw MEG files output by the scanner
-(.fif format) and preprocessed data in [raster format](raster_format.html). The
+(.fif format) and preprocessed data in [raster format](data_formats.html). The
 raw data download also includes a file with raster labels indicating which
 stimulus was shown in each trial.
 

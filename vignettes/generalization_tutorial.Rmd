@@ -16,7 +16,7 @@ invariant neural representations in the Inferior Temporal cortex are to changes
 in the position of stimuli. This tutorial assumes that one is already familiar
 with the basics of the NDR as covered in the introductory tutorial. The NDR is
 based on the MATLAB Neural Decoding Toolbox, which you can learn more about at
-[www.readout.info](www.readout.info).
+[www.readout.info](http://www.readout.info/).
 
 
 

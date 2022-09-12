@@ -95,7 +95,7 @@ converting it to [binned format](data_formats.html) using the
 
 To run a decoding analysis using the NDR, you first need to have your data in a
 usable format. In this tutorial we will use data collected by [Ying Zhang in Bob
-Desimone’s lab at MIT](datasets.hmtl). The directory
+Desimone’s lab at MIT](datasets.html). The directory
 extdata/Zhang_Desimone_7objects_raster_data_rda/ contains data in
 raster format. Each file in this directory contains data from one neuron. To
 start, let us load one of these files and examine its contents. 
