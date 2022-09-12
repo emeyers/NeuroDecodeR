@@ -1,3 +1,19 @@
+
+
+## Resubmission
+
+This is a first resubmission of a new package, responding to feedback from Uwe Ligges on intial submission below. In this version I have: 
+
+ * Fixed three broken URLs in the vignettes/pkgdown documentation. 
+
+Thank you for bringing these broken links to my attention and for reviewing my submission!
+
+Regards,
+
+Ethan
+
+
+
 ## Release summary
 
 This is the first submission of the package to CRAN
