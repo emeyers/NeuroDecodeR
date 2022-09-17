@@ -26,7 +26,7 @@ The Zhang-Desimone 7 object dataset was collected by Ying Zhang in [Bob
 Desimone’s lab](http://mcgovern.mit.edu/principal-investigators/robert-desimone)
 in the McGovern Institute at MIT. The data was used in the supplemental figures
 in the paper [Object decoding with attention in inferior temporal cortex, PNAS,
-2011](http://www.pnas.org/content/108/21/8850).
+2011](https://www.pnas.org/doi/10.1073/pnas.1100999108).
 
 The data consists of single unit recordings from the 132 neurons in inferior
 temporal cortex (IT). The recordings were made while a monkey viewed 7 different
@@ -115,7 +115,7 @@ format data files using the `convert_matlab_raster_data()` function.
 The Isik 26 letter MEG dataset was collected by Leyla Isik in Tommy Poggio’s lab
 and the MEG Lab at the McGovern Institute at MIT. The data was used in Figure 2b
 of the paper: [The dynamics of invariant object recognition in the human visual
-system, J.](https://www.physiology.org/doi/full/10.1152/jn.00394.2013) Neurophys
+system, J.](https://journals.physiology.org/doi/full/10.1152/jn.00394.2013) J. Neurophysiology,
 2014.
 
 The data consists of 306 channel (comprised of 102 magentometers, and 204 planar

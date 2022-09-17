@@ -61,7 +61,7 @@ experiment using the basic versions of the four object classes.
 The data used in this tutorial was collected by Ying Zhang in Bob Desimone’s lab
 at MIT and was used in the supplemental figures in the paper [Object decoding
 with attention in inferior temporal cortex, PNAS,
-2011](https://www.pnas.org/content/108/21/8850). The data consists of single
+2011](https://www.pnas.org/doi/10.1073/pnas.1100999108). The data consists of single
 unit recordings from 132 neurons in inferior temporal cortex (IT). The
 recordings were made while a monkey viewed 7 different objects that were
 presented at three different locations (the monkey was also shown images that
