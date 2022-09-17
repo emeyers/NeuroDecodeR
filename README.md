@@ -6,13 +6,13 @@
 <!-- badges: start -->
 
 [![Travis build
-status](https://travis-ci.com/emeyers/NeuroDecodeR.svg?branch=master)](https://travis-ci.com/emeyers/NeuroDecodeR)
+status](https://api.travis-ci.com/emeyers/NeuroDecodeR.svg?branch=master)](https://www.travis-ci.com/emeyers/NeuroDecodeR)
 
 [![AppVeyor build
 status](https://ci.appveyor.com/api/projects/status/github/emeyers/NeuroDecodeR?branch=master&svg=true)](https://ci.appveyor.com/project/emeyers/NeuroDecodeR)
 
 [![Coveralls test
-coverage](https://coveralls.io/repos/github/emeyers/NeuroDecodeR/badge.svg)](https://coveralls.io/r/emeyers/NeuroDecodeR?branch=master)
+coverage](https://coveralls.io/repos/github/emeyers/NeuroDecodeR/badge.svg)](https://coveralls.io/github/emeyers/NeuroDecodeR)
 
 <!-- badges: end -->
 <p>
@@ -105,7 +105,6 @@ One can also run a decoding analysis using the pipe (\|\>) operator to
 string together the different NDR objects as shown below.
 
 ``` r
-library(magrittr)
 
 basedir_file_name <- system.file(file.path("extdata", "ZD_500bins_500sampled.Rda"), package="NeuroDecodeR")
   
