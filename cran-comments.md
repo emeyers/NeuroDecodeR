@@ -1,6 +1,21 @@
 
 
-## Resubmission
+
+## Resubmission 2
+
+Responding to feedback again from Uwe Ligges
+
+ * There appeared to be 5 links in the documentation that while not broken, were being automatically forwarded to new links by the respective websites. These links have now been set to web addresses that they were being forwarded to. Hopefully this fixed there remaining issue.
+
+Thanks again for reviewing my submission!
+
+Regards,
+
+Ethan
+
+
+
+## Resubmission 1
 
 This is a first resubmission of a new package, responding to feedback from Uwe Ligges on intial submission below. In this version I have: 
 
