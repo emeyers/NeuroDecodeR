@@ -5,6 +5,8 @@
 
 <!-- badges: start -->
 
+[![R-CMD-check](https://github.com/emeyers/NeuroDecodeR/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/emeyers/NeuroDecodeR/actions/workflows/R-CMD-check.yaml)
+
 [![AppVeyor build
 status](https://ci.appveyor.com/api/projects/status/github/emeyers/NeuroDecodeR?branch=master&svg=true)](https://ci.appveyor.com/project/emeyers/NeuroDecodeR)
 
