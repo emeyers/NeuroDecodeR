@@ -5,9 +5,6 @@
 
 <!-- badges: start -->
 
-[![Travis build
-status](https://api.travis-ci.com/emeyers/NeuroDecodeR.svg?branch=master)](https://www.travis-ci.com/emeyers/NeuroDecodeR)
-
 [![AppVeyor build
 status](https://ci.appveyor.com/api/projects/status/github/emeyers/NeuroDecodeR?branch=master&svg=true)](https://ci.appveyor.com/project/emeyers/NeuroDecodeR)
 
