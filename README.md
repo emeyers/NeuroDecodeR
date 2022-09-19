@@ -6,14 +6,12 @@
 <!-- badges: start -->
 
 [![R-CMD-check](https://github.com/emeyers/NeuroDecodeR/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/emeyers/NeuroDecodeR/actions/workflows/R-CMD-check.yaml)
-
 [![AppVeyor build
 status](https://ci.appveyor.com/api/projects/status/github/emeyers/NeuroDecodeR?branch=master&svg=true)](https://ci.appveyor.com/project/emeyers/NeuroDecodeR)
-
 [![Coveralls test
 coverage](https://coveralls.io/repos/github/emeyers/NeuroDecodeR/badge.svg)](https://coveralls.io/github/emeyers/NeuroDecodeR)
-
 <!-- badges: end -->
+
 <p>
 
 ## Overview
