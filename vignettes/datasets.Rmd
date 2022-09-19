@@ -26,7 +26,7 @@ The Zhang-Desimone 7 object dataset was collected by Ying Zhang in [Bob
 Desimone’s lab](http://mcgovern.mit.edu/principal-investigators/robert-desimone)
 in the McGovern Institute at MIT. The data was used in the supplemental figures
 in the paper [Object decoding with attention in inferior temporal cortex, PNAS,
-2011](https://www.pnas.org/doi/10.1073/pnas.1100999108).
+2011](https://pubmed.ncbi.nlm.nih.gov/21555594/).
 
 The data consists of single unit recordings from the 132 neurons in inferior
 temporal cortex (IT). The recordings were made while a monkey viewed 7 different
