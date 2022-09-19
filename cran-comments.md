@@ -1,5 +1,16 @@
 
 
+## Resubmission 4
+
+Responding to feedback from Uwe Ligges:
+
+* Fixed the DESCRIPTION file as requested to have a better title, but package name NeuroDecodeR in quotes, and added a reference to the neural decoding methodology including the doi. 
+
+Thanks for your continued help reviewing the package!
+
+
+
+
 ## Resubmission 3
 
 I noticed I was still getting errors that a couple of links were still not working. This is a resubmission prior to getting feedback on submission 2 in order to fix these broken links.
