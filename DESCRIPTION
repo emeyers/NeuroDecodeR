@@ -1,5 +1,5 @@
 Package: NeuroDecodeR
-Title: Neural Population Decoding in R
+Title: Decode Information from Neural Activity 
 Version: 0.1.0
 Authors@R: c(
   person("Ethan", "Meyers", email = "ethan.meyers@gmail.com", 
@@ -7,8 +7,10 @@ Authors@R: c(
   )
 Description: Neural decoding is method of analyzing neural data that  
     uses a pattern classifiers to predict experimental conditions based 
-    on neural activity. NeuroDecodeR is a system of objects that 
-    makes it easy to run neural decoding analyses. 
+    on neural activity. 'NeuroDecodeR' is a system of objects that 
+    makes it easy to run neural decoding analyses. For more information
+    on neural decoding see Meyers & Kreiman (2004)
+    <doi:10.7551/mitpress/8404.003.0024>.
 URL: https://github.com/emeyers/NeuroDecodeR
 BugReports: https://github.com/emeyers/NeuroDecodeR/issues
 Depends: R (>= 4.1.0)
