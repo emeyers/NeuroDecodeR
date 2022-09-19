@@ -1,5 +1,20 @@
 
 
+## Resubmission 3
+
+I noticed I was still getting errors that a couple of links were still not working. This is a resubmission prior to getting feedback on submission 2 in order to fix these broken links.
+
+
+ * Removed the link to Travis CI since I am not longer using it and it was giving a 404. Changed the link to the PNAS article since it was giving a 503, to a link to a pubmed reference to the article.
+
+Hopefully all the links are fixed now!
+
+Regards,
+
+Ethan
+
+
+
 
 ## Resubmission 2
 
