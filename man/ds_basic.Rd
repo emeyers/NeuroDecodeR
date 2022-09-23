@@ -75,8 +75,9 @@ most analyses. It can generate training and tests sets for data that has been
 recorded simultaneously or pseudo-populations for data that was not recorded
 simultaneously.
 
-Like all datasources, this datasource takes binned format data
-and has a \code{get_data()} method that is called by a cross-validation object to
+Like all datasources, this datasource takes binned format data and has a
+\code{get_data()} method that is never explicitly called by the user of the
+package, but rather it is called internally by a cross-validation object to
 get training and testing splits of data that can be passed to a classifier.
 }
 \examples{
@@ -96,11 +97,6 @@ ds <- ds_basic(data_file, "stimulus_ID", 18,
   label_levels = c("car", "hand", "kiwi")
 )
 
-# One never explicitly calls the get_data() function, but rather this is
-# done by the cross-validator. However, to illustrate what this function
-# does, we can call it explicitly here to get training and test data:
-all_cv_data <- NeuroDecodeR:::get_data(ds)
-names(all_cv_data)
 }
 \seealso{
 Other datasource: 
