@@ -72,7 +72,8 @@
 #'
 #' cv <- cv_standard(datasource = ds, 
 #'                  classifier = cl, 
-#'                  feature_preprocessors = fps)
+#'                  feature_preprocessors = fps,
+#'                  num_resample_runs = 2)
 #' 
 #' 
 #' \donttest{
@@ -82,12 +83,12 @@
 #'   package = "NeuroDecodeR")
 #'   
 #' DECODING_RESULTS <- data_file2 |>
-#'     ds_basic('stimulus_ID', 6, num_label_repeats_per_cv_split = 3) |>
+#'     ds_basic('stimulus_ID', 18) |>
 #'     cl_max_correlation() |>
 #'     fp_zscore() |>
 #'     rm_main_results() |>
 #'     rm_confusion_matrix() |>
-#'     cv_standard(num_resample_runs = 3) |>
+#'     cv_standard(num_resample_runs = 2) |>
 #'     run_decoding()
 #' 
 #' }

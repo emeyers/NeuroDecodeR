@@ -45,7 +45,8 @@
 #' cl <- cl_max_correlation()
 #' cv <- cv_standard(datasource = ds, 
 #'                   classifier = cl, 
-#'                   feature_preprocessors = fps)
+#'                   feature_preprocessors = fps,
+#'                   num_resample_runs = 2)
 #' \donttest{
 #' DECODING_RESULTS <- run_decoding(cv)
 #' }

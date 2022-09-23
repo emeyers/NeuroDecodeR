@@ -16,7 +16,7 @@ test_that("cv_standard can run simple decoding analysis", {
   rms <- list(rm_main_results(), rm_confusion_matrix(save_TCD_results = TRUE))
   
   
-  cv <- cv_standard(NULL, ds, cl, fps, rms, 3, run_TCD = TRUE) 
+  cv <- cv_standard(NULL, ds, cl, fps, rms, 2, run_TCD = TRUE) 
 
   
   expect_null(test_valid_cross_validator(cv))
@@ -65,7 +65,7 @@ test_that("cv_standard can run a decoding analysis using magrittr piping", {
     fp_zscore() %>%
     rm_main_results() %>%
     rm_confusion_matrix() %>%
-    cv_standard(num_resample_runs = 3) %>%
+    cv_standard(num_resample_runs = 2) %>%
     run_decoding()
   
   plot(DECODING_RESULTS$rm_confusion_matrix)

@@ -123,7 +123,7 @@ fps <- list()
 cl <- cl_max_correlation()
 rms <- list(rm_main_results(),
             rm_confusion_matrix())
-cv <- cv_standard(NULL, ds, cl, fps, rms, 3)
+cv <- cv_standard(NULL, ds, cl, fps, rms, 2)
 DECODING_RESULTS_1 <- run_decoding(cv)
 
 
@@ -132,7 +132,7 @@ ds <- ds_basic(real_data_binned_file_name, 'stimulus_ID', 18, 0)
 fps <- list(fp_zscore())
 cl <- cl_max_correlation()
 rms <- list(rm_main_results())
-cv <- cv_standard(NULL, ds, cl, fps, rms, 3)
+cv <- cv_standard(NULL, ds, cl, fps, rms, 2)
 DECODING_RESULTS_2 <- run_decoding(cv)
 
 
@@ -142,7 +142,7 @@ fps <- list(fp_zscore())
 cl <- cl_max_correlation()
 rms <- list(rm_main_results(),
             rm_confusion_matrix())
-cv <- cv_standard(NULL, ds, cl, fps, rms, 3)
+cv <- cv_standard(NULL, ds, cl, fps, rms, 2)
 DECODING_RESULTS_3 <- run_decoding(cv)
 
 
@@ -152,7 +152,7 @@ fps <- list(fp_zscore())
 cl <- cl_max_correlation()
 rms <- list(rm_main_results(),
             rm_confusion_matrix())
-cv <- cv_standard(NULL, ds, cl, fps, rms, 3)
+cv <- cv_standard(NULL, ds, cl, fps, rms, 2)
 DECODING_RESULTS_4 <- run_decoding(cv)
 
 
@@ -162,7 +162,7 @@ fps <- list(fp_zscore())
 cl <- cl_max_correlation()
 rms <- list(rm_main_results(),
             rm_confusion_matrix())
-cv <- cv_standard(NULL, ds, cl, fps, rms, 3)
+cv <- cv_standard(NULL, ds, cl, fps, rms, 2)
 DECODING_RESULTS_5 <- run_decoding(cv)
 
 

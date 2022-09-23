@@ -61,7 +61,8 @@
 #' cl <- cl_poisson_naive_bayes()
 #' cv <- cv_standard(datasource = ds, 
 #'                   classifier = cl, 
-#'                   feature_preprocessors = fps)
+#'                   feature_preprocessors = fps,
+#'                   num_resample_runs = 2)
 #' \donttest{
 #' DECODING_RESULTS <- run_decoding(cv)
 #' }
