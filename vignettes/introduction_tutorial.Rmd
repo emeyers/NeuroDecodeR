@@ -144,7 +144,7 @@ specified intervals sampled with a specified frequency (i.e., a boxcar
 filter is used). `create_binned_data()` takes in four arguments:
 
 1. The name of the directory where the raster-format data is stored 
-2. The name (potentially including a directory) that the binned data should be saved as
+2. The name (potentially including a directory path) that the binned data should be saved as
 3. A bin size that specifies how much time the firing rates should be calculated over
 4. A sampling interval that specifies how frequently to calculate these firing rates. 
 
@@ -165,7 +165,10 @@ allowed for examples that are on CRAN.)
 
 library(NeuroDecodeR)
 
-binned_file_name <- create_binned_data(raster_dir_name, "ZD", 150, 50, num_parallel_cores = 2)
+save_dir_name <- tempdir()
+
+binned_file_name <- create_binned_data(raster_dir_name, file.path(save_dir_name, "ZD"), 
+                                       150, 50, num_parallel_cores = 2)
 
 ```
 
@@ -447,7 +450,7 @@ tutorial on saving and managing results.
 
 ```{r save_results}
 
-results_dir_name <- file.path("results", "")
+results_dir_name <- file.path(tempdir(), "results", "")
 dir.create(results_dir_name)
 
 log_save_results(DECODING_RESULTS, results_dir_name)

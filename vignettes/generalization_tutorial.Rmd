@@ -94,10 +94,12 @@ bin_width <- 400
 step_size <- 400
 start_time <- 100
 end_time <- 500
+save_dir_name <- tempdir()
 
 # Note: this code might run quicker if more parallel cores are used
-binned_file_name <- create_binned_data(raster_dir_name, "ZD", bin_width, step_size, 
-                                       start_time, end_time, num_parallel_cores = 2)
+binned_file_name <- create_binned_data(raster_dir_name, file.path(save_dir_name, "ZD"), 
+                                       bin_width, step_size, start_time, end_time, 
+                                       num_parallel_cores = 2)
 
 
 # The name of a binned file that has data from more neurons in it that will be
@@ -233,7 +235,7 @@ Note that the code below will take several minutes to run.
 ```{r generalization_analysis_all_locations}
  
 
-results_dir_name <- "position_invariance_results/"
+results_dir_name <- trimws(file.path(tempdir(), "position_invariance_results", " "))
 
 
 # If this code has been run before, delete any results that have been saved 
