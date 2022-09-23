@@ -132,7 +132,7 @@ variables:
 #### test_set
 
 1. `test_labels`: The labels used to test the classifier
-2. `site_X`: a group of varaibles that has data from multiple sites
+2. `site_X`: a group of variables that has data from multiple sites
 3. `time_bin`: character strings listing which times different rows correspond to
 
 The `preprocess_data()` returns a list with the two data frames *training_set* and
@@ -218,12 +218,12 @@ two data frames called *training_set* and *test_set* have the following variable
 #### training_set
 
 1. `training_labels`: The labels used to train the classifier.
-2. `site_X`: a group of varaibles that has data from multiple sites.
+2. `site_X`: a group of variables that has data from multiple sites.
 
 #### test_set
 
 1. `test_labels` The labels used to test the classifier.
-2. `site_X`: a group of varaibles that has data from multiple sites.
+2. `site_X`: a group of variables that has data from multiple sites.
 3. `time_bin`: character strings listing which times different rows correspond to.
 
 The `get_predictions()` returns a data frame that has the following variables: 
