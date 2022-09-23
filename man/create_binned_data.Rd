@@ -61,8 +61,14 @@ raster_dir_name <- file.path(
   "..", "data-raw", "raster",
   "Zhang_Desimone_7objects_raster_data_rda", ""
 )
-\dontrun{
-binned_file_name <- create_binned_data(raster_dir_name, "ZD", 150, 50)
+
+raster_dir_name <- trimws(file.path(system.file("extdata", package = "NeuroDecodeR"), 
+                          "Zhang_Desimone_7object_raster_data_small_rda", " "))
+
+\donttest{
+binned_file_name <- create_binned_data(raster_dir_name, 
+                                      file.path(tempdir(), "ZD"), 
+                                      150, 50)
 }
 
 }

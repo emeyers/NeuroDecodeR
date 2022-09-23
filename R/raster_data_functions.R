@@ -11,7 +11,7 @@
 #'
 #' @examples
 #' 
-#' \dontrun{
+#' \donttest{
 #' 
 #' # reading in a csv file in raster format
 #' csv_raster_file_name <- file.path(
@@ -361,7 +361,7 @@ read_matlab_raster_data <- function(matlab_raster_file_name,
 #'
 #' @examples
 #' 
-#' \dontrun{
+#' \donttest{
 #' 
 #' matlab_raster_dir_name <- file.path(
 #'   system.file("extdata", package = "NeuroDecodeR"),

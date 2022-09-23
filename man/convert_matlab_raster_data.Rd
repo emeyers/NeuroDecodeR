@@ -57,7 +57,7 @@ the NDR.
 }
 \examples{
 
-\dontrun{
+\donttest{
 
 matlab_raster_dir_name <- file.path(
   system.file("extdata", package = "NeuroDecodeR"),

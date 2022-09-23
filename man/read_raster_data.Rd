@@ -19,7 +19,7 @@ class attribute).
 }
 \examples{
 
-\dontrun{
+\donttest{
 
 # reading in a csv file in raster format
 csv_raster_file_name <- file.path(

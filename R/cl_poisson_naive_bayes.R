@@ -62,7 +62,7 @@
 #' cv <- cv_standard(datasource = ds, 
 #'                   classifier = cl, 
 #'                   feature_preprocessors = fps)
-#' \dontrun{
+#' \donttest{
 #' DECODING_RESULTS <- run_decoding(cv)
 #' }
 #'

@@ -95,7 +95,7 @@ cv <- cv_standard(datasource = ds,
                  feature_preprocessors = fps)
 
 
-\dontrun{
+\donttest{
 
 # alternatively, one can also use the pipe (|>) to do an analysis
 data_file2 <- system.file("extdata/ZD_500bins_500sampled.Rda",
