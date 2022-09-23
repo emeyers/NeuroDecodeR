@@ -44,7 +44,7 @@ time in the raster data.}
 \item{files_contain}{A string that specifies that only raster files that
 contain this string should be included in the binned format data.}
 
-\item{num_parallel_cores}{An integers specifying the number of parallel cores
+\item{num_parallel_cores}{An integer specifying the number of parallel cores
 to use. The default (NULL) value is to use half of the cores detected on
 the system. If this value is set to a value of less than 1, then the code
 will be run serially.}
@@ -66,9 +66,13 @@ raster_dir_name <- trimws(file.path(system.file("extdata", package = "NeuroDecod
                           "Zhang_Desimone_7object_raster_data_small_rda", " "))
 
 \donttest{
+# The code could potentially run faster by using more parallel cores
+# (e.g., by not setting the num_parallel_cores argument, half the cores available
+#  will be used) 
 binned_file_name <- create_binned_data(raster_dir_name, 
                                       file.path(tempdir(), "ZD"), 
-                                      150, 50)
+                                      150, 50,
+                                      num_parallel_cores = 2)
 }
 
 }

@@ -141,21 +141,31 @@ The NDR decoding objects operate on data in binned-format. To convert
 data from raster-format to binned-format, we can use the function
 `create_binned_data()`, which calculates the average firing rate of neurons over
 specified intervals sampled with a specified frequency (i.e., a boxcar
-filter is used). create_binned_data() takes in four arguments:
+filter is used). `create_binned_data()` takes in four arguments:
 
 1. The name of the directory where the raster-format data is stored 
 2. The name (potentially including a directory) that the binned data should be saved as
 3. A bin size that specifies how much time the firing rates should be calculated over
 4. A sampling interval that specifies how frequently to calculate these firing rates. 
 
-To calculate the average firing rates in 150 ms bins sampled every 50 ms, the
-following commands can be used:
+
+To calculate the average firing rates in 150 ms bins sampled every 50 ms, we can
+use the code below.
+
+
+(Note: in the code below we have set the optional argument `num_parallel_cores`
+to specify the number of parallel cores we would like to use. Using more cores
+will speed up the time it takes for this function to run. By default, half the
+cores on the computer will be used which could be a good setting for most
+computers. We have chosen 2 cores here since this is the maximum number of cores
+allowed for examples that are on CRAN.)
+
 
 ```{r bin_data, eval = FALSE}
 
 library(NeuroDecodeR)
 
-binned_file_name <- create_binned_data(raster_dir_name, "ZD", 150, 50)
+binned_file_name <- create_binned_data(raster_dir_name, "ZD", 150, 50, num_parallel_cores = 2)
 
 ```
 

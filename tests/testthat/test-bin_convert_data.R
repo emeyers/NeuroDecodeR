@@ -98,7 +98,8 @@ test_that("create_binned_data() creates binned data from raster data in the corr
   save_prefix <- file.path(temp_dir_name, "ZD")
   
   binned_file_name <- create_binned_data(raster_dir_name, save_prefix, 
-                                         150, 50, files_contain = "bp1001spk")
+                                         150, 50, files_contain = "bp1001spk",
+                                         num_parallel_cores = 2)
 
   expect_equal(name_of_file_that_should_be_created, binned_file_name)
 
@@ -122,7 +123,8 @@ test_that("create_binned_data() creates binned data from csv raster data in the 
   save_prefix <- file.path(temp_dir_name, "csv_ZD")
   
   binned_file_name <- create_binned_data(csv_raster_dir_name, save_prefix, 
-                                         150, 50, files_contain = "bp1001spk")
+                                         150, 50, files_contain = "bp1001spk",
+                                         num_parallel_cores = 2)
   
   expect_equal(name_of_file_that_should_be_created, binned_file_name)
   

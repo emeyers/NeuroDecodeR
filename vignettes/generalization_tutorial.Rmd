@@ -85,8 +85,6 @@ results). For more information about binning the data, see the [introduction
 tutorial](introduction_tutorial.html).
 
 
-
-
 ```{r bin_data, results = 'hide', message = FALSE}
 
 raster_dir_name <- file.path(system.file("extdata", package = "NeuroDecodeR"), 
@@ -97,8 +95,9 @@ step_size <- 400
 start_time <- 100
 end_time <- 500
 
+# Note: this code might run quicker if more parallel cores are used
 binned_file_name <- create_binned_data(raster_dir_name, "ZD", bin_width, step_size, 
-                                       start_time, end_time)
+                                       start_time, end_time, num_parallel_cores = 2)
 
 
 # The name of a binned file that has data from more neurons in it that will be
