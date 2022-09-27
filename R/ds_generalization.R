@@ -183,6 +183,7 @@ ds_generalization <- function(binned_data,
 
 
 #' @inherit get_data
+#' @keywords internal
 #' @export
 get_data.ds_generalization <- function(ds_obj) {
 
@@ -267,6 +268,7 @@ get_data.ds_generalization <- function(ds_obj) {
 
 
 #' @inherit get_parameters
+#' @keywords internal
 #' @export
 get_parameters.ds_generalization <- function(ndr_obj) {
 

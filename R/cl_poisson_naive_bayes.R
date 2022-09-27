@@ -96,6 +96,7 @@ cl_poisson_naive_bayes <- function(ndr_container_or_object = NULL,
 
 # the get_predictions method
 #' @inherit get_predictions
+#' @keywords internal
 #' @export
 get_predictions.cl_poisson_naive_bayes <- function(cl_obj, training_set, test_set) {
 
@@ -179,6 +180,7 @@ get_predictions.cl_poisson_naive_bayes <- function(cl_obj, training_set, test_se
 # since there are no parameters for the cl_poisson_naive_bayes just return a data
 # frame with cl_poisson_naive_bayes.cl_poisson_naive_bayes saying no params...
 #' @inherit get_parameters
+#' @keywords internal
 #' @export
 get_parameters.cl_poisson_naive_bayes <- function(ndr_obj) {
   data.frame(cl_poisson_naive_bayes.cl_poisson_naive_bayes = "does not have settable parameters")

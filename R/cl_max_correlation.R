@@ -86,6 +86,7 @@ cl_max_correlation <- function(ndr_container_or_object = NULL,
 
 # the get_predictions method
 #' @inherit get_predictions
+#' @keywords internal
 #' @export
 get_predictions.cl_max_correlation <- function(cl_obj,
                                                training_set,
@@ -142,6 +143,7 @@ get_predictions.cl_max_correlation <- function(cl_obj,
 # since there are no parameters for the cl_max_correlation, just return a data
 # frame with one variable with a value that there are not settable parameters
 #' @inherit get_parameters
+#' @keywords internal
 #' @export
 get_parameters.cl_max_correlation <- function(ndr_obj) {
   data.frame(cl_max_correlation.cl_max_correlation = "does not have settable parameters")

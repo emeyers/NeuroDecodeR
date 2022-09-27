@@ -34,3 +34,4 @@ instead is used internally by the cross-validator (CV) object.
 \seealso{
 \code{\link[=rm_main_results]{rm_main_results()}}, \code{\link[=rm_confusion_matrix]{rm_confusion_matrix()}}
 }
+\keyword{internal}

@@ -44,3 +44,4 @@ by the cross-validator (CV) object.
 \seealso{
 \code{\link[=cl_max_correlation]{cl_max_correlation()}}, \code{\link[=cl_poisson_naive_bayes]{cl_poisson_naive_bayes()}}, \code{\link[=cl_svm]{cl_svm()}}
 }
+\keyword{internal}

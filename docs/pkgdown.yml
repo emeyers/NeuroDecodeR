@@ -7,7 +7,7 @@ articles:
   datasets: datasets.html
   generalization_tutorial: generalization_tutorial.html
   introduction_tutorial: introduction_tutorial.html
-last_built: 2022-09-19T20:01Z
+last_built: 2022-09-27T03:27Z
 urls:
   reference: https://github.com/emeyers/NDTr/reference
   article: https://github.com/emeyers/NDTr/articles

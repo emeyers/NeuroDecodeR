@@ -40,3 +40,4 @@ instead it is used internally by the cross-validator (CV) object.
 \seealso{
 \code{\link[=fp_zscore]{fp_zscore()}}, \code{\link[=fp_select_k_features]{fp_select_k_features()}}
 }
+\keyword{internal}

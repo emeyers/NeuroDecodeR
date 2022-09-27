@@ -83,7 +83,8 @@ new_rm_main_results <- function(the_data = data.frame(), state = "initial", opti
 
 
 # The aggregate_CV_split_results method needed to fulfill the results metric interface.
-#'@inherit aggregate_CV_split_results
+#' @inherit aggregate_CV_split_results
+#' @keywords internal
 aggregate_CV_split_results.rm_main_results <- function(rm_obj, prediction_results) {
 
 
@@ -242,7 +243,8 @@ if ((sum(grepl("decision", names(prediction_results))) == 0) & (include_norm_ran
 
 
 # The aggregate_resample_run_results method needed to fulfill the results metric interface
-#'@inherit aggregate_resample_run_results
+#' @inherit aggregate_resample_run_results
+#' @keywords internal
 aggregate_resample_run_results.rm_main_results <- function(resample_run_results) {
   
   central_results <- resample_run_results %>%
@@ -321,6 +323,7 @@ plot.rm_main_results <- function(x, ..., results_to_show = "zero_one_loss", type
 
 # Get the parameters for the rm_main_results object
 #' @inherit get_parameters
+#' @keywords internal
 #' @export
 get_parameters.rm_main_results <- function(ndr_obj) {
 

@@ -54,6 +54,7 @@ fp_zscore <- function(ndr_container_or_object = NULL) {
 
 
 #' @inherit preprocess_data
+#' @keywords internal
 #' @export
 preprocess_data.fp_zscore <- function(fp, training_set, test_set) {
 
@@ -98,6 +99,7 @@ preprocess_data.fp_zscore <- function(fp, training_set, test_set) {
 # since there are no parameters for the fp_zscore just return a data frame with
 # fp_zscore.fp_zscore and a value of "No parameters"
 #' @inherit get_parameters
+#' @keywords internal
 #' @export
 get_parameters.fp_zscore <- function(ndr_obj) {
   data.frame(fp_zscore.fp_zscore = "does not have settable parameters")

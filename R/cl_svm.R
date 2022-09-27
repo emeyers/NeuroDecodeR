@@ -92,6 +92,7 @@ cl_svm <- function(ndr_container_or_object = NULL,
 
 # the get_predictions method
 #' @inherit get_predictions
+#' @keywords internal
 #' @export
 get_predictions.cl_svm <- function(cl_obj, training_set, test_set) {
 
@@ -180,6 +181,7 @@ get_predictions.cl_svm <- function(cl_obj, training_set, test_set) {
 
 # Get the parameters that were used in the svm
 #' @inherit get_parameters
+#' @keywords internal
 #' @export
 get_parameters.cl_svm <- function(ndr_obj) {
 

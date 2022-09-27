@@ -26,6 +26,8 @@ reference:
 - title: "Cross-validators"
   contents: 
   - "`cv_standard`"
+  - "`run_decoding.cv_standard`"
+  - "`get_parameters.cv_standard`"  
 
 - title: "Result Metrics"
   contents: 

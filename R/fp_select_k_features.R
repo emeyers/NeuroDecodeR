@@ -77,6 +77,7 @@ fp_select_k_features <- function(ndr_container_or_object = NULL,
 
 
 #' @inherit preprocess_data
+#' @keywords internal
 #' @export
 preprocess_data.fp_select_k_features <- function(fp, training_set, test_set) {
 
@@ -155,6 +156,7 @@ preprocess_data.fp_select_k_features <- function(fp, training_set, test_set) {
 
 
 #' @inherit get_parameters
+#' @keywords internal
 #' @export
 get_parameters.fp_select_k_features <- function(ndr_obj) {
   data.frame(

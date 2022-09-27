@@ -21,3 +21,4 @@ appropriate names. If the data frame is not in correct binned format, an
 error will be thrown that contains a message why the data is not in valid
 binned format.
 }
+\keyword{internal}

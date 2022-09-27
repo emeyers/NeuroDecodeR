@@ -111,6 +111,7 @@ test_valid_raster_format <- function(raster_data) {
 #' @return Returns NULL if object is in valid binned format. Otherwise it will
 #'   give an error message.
 #'   
+#' @keywords internal   
 
 # not exported at the moment
 test_valid_binned_format <- function(binned_data) {

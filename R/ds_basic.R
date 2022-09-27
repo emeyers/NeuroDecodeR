@@ -304,6 +304,7 @@ ds_basic <- function(binned_data,
 
 
 #' @inherit get_data
+#' @keywords internal
 #' @export
 get_data.ds_basic <- function(ds_obj) {
 
@@ -444,6 +445,7 @@ get_data.ds_basic <- function(ds_obj) {
 
 
 #' @inherit get_parameters
+#' @keywords internal
 #' @export
 get_parameters.ds_basic <- function(ndr_obj) {
 

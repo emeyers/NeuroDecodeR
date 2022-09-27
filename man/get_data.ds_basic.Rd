@@ -32,3 +32,4 @@ cross-validator (CV) object.
 \seealso{
 \code{\link[=ds_basic]{ds_basic()}}, \code{\link[=ds_generalization]{ds_generalization()}}
 }
+\keyword{internal}
