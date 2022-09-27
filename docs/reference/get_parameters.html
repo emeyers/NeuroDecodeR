@@ -101,11 +101,11 @@ constructor).</p>
     </div>
     <div id="details">
     <h2>Details</h2>
-    <p>This is a generic function that returns a data frame with the parameters of
-an NeuroDecodeR (NDR) object. All NDR objects (i.e., DS, FP, CL, RM and CV)
-need to define a method that implements this generic function. The CV
-object's <code>get_parameters()</code> method usually will call all the DS, FP, CL, RM
-and CV <code>get_parameters()</code> methods and aggregate and return all the parameters
+    <p>This function that returns a data frame with the parameters of an
+NeuroDecodeR (NDR) object. All NDR objects (i.e., DS, FP, CL, RM and CV) need
+to define a method that implements this generic function. The CV object's
+<code>get_parameters()</code> method usually will call all the DS, FP, CL, RM and CV
+<code>get_parameters()</code> methods and aggregate and return all the parameters
 aggregated from these objects. These aggregated parameters can then be used
 to save the results of a particular analysis based on the parameters using
 the <code><a href="log_save_results.html">log_save_results()</a></code> function. This method is most frequently used

@@ -99,13 +99,26 @@ rda, rds or mat raster data file that has the appropriate raster data
 column names (i.e., columns that start with site.info, labels. and time.)</p></dd>
 
 </dl></div>
+    <div id="value">
+    <h2>Value</h2>
+    
+
+<p>Returns a data frame of data in <code>raster format</code> (i.e., with class
+<code>raster_data</code>). Data that is in <code>raster format</code> as the following variables:</p><ol><li><p><code>labels.XXX</code>  These variables contain labels of which experimental conditions were shown on a given trial.</p></li>
+<li><p><code>time.XXX_YYY</code>  These variables contain the data for a given time, XXX is
+the start time of the data in a particular bin and YYY is the end time.</p></li>
+<li><p><code>site_info.XXX</code> These variables contain additional meta data about the site.</p></li>
+<li><p><code>trial_number</code> This variable specifies a unique number for each row
+indicating which trial a given row of data came from.</p></li>
+</ol><p>For more details on <code>raster format</code> data see the vignette:
+<code><a href="../articles/data_formats.html">vignette("data_formats", package = "NeuroDecodeR")</a></code></p>
+
+
+    </div>
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span></span></span>
-<span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co"># reading in a csv file in raster format</span></span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># reading in a csv file in raster format</span></span></span>
 <span class="r-in"><span><span class="va">csv_raster_file_name</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span></span></span>
 <span class="r-in"><span>  <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"extdata"</span>, package <span class="op">=</span> <span class="st">"NeuroDecodeR"</span><span class="op">)</span>,</span></span>
 <span class="r-in"><span>  <span class="st">"Zhang_Desimone_7object_raster_data_small_csv"</span>,</span></span>
@@ -115,7 +128,6 @@ column names (i.e., columns that start with site.info, labels. and time.)</p></d
 <span class="r-in"><span><span class="co"># read the csv file into a raster_data data frame</span></span></span>
 <span class="r-in"><span><span class="va">raster_data</span> <span class="op">&lt;-</span> <span class="fu">read_raster_data</span><span class="op">(</span><span class="va">csv_raster_file_name</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="op">}</span></span></span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
     </div>

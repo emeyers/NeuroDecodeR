@@ -166,6 +166,14 @@ written to a file name specified. See parallel::makeCluster for more
 details.</p></dd>
 
 </dl></div>
+    <div id="value">
+    <h2>Value</h2>
+    
+
+<p>This constructor creates an NDR cross-validator object with the class
+<code>cv_standard</code>. Like all NDR cross-validator objects, one should use
+<code>run_decoding</code> method to run a decoding analysis.</p>
+    </div>
     <div id="details">
     <h2>Details</h2>
     <p>A cross-validator object takes a datasource (DS), a classifier (CL),
@@ -189,25 +197,28 @@ the results.</p></li>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">cv</span> <span class="op">&lt;-</span> <span class="fu">cv_standard</span><span class="op">(</span>datasource <span class="op">=</span> <span class="va">ds</span>, </span></span>
 <span class="r-in"><span>                 classifier <span class="op">=</span> <span class="va">cl</span>, </span></span>
-<span class="r-in"><span>                 feature_preprocessors <span class="op">=</span> <span class="va">fps</span><span class="op">)</span></span></span>
+<span class="r-in"><span>                 feature_preprocessors <span class="op">=</span> <span class="va">fps</span>,</span></span>
+<span class="r-in"><span>                 num_resample_runs <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span></span></span>
+<span class="r-in"><span><span class="co"># \donttest{</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># alternatively, one can also use the pipe (|&gt;) to do an analysis</span></span></span>
 <span class="r-in"><span><span class="va">data_file2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"extdata/ZD_500bins_500sampled.Rda"</span>,</span></span>
 <span class="r-in"><span>  package <span class="op">=</span> <span class="st">"NeuroDecodeR"</span><span class="op">)</span></span></span>
 <span class="r-in"><span>  </span></span>
 <span class="r-in"><span><span class="va">DECODING_RESULTS</span> <span class="op">&lt;-</span> <span class="va">data_file2</span> <span class="op">|&gt;</span></span></span>
-<span class="r-in"><span>    <span class="fu"><a href="ds_basic.html">ds_basic</a></span><span class="op">(</span><span class="st">'stimulus_ID'</span>, <span class="fl">6</span>, num_label_repeats_per_cv_split <span class="op">=</span> <span class="fl">3</span><span class="op">)</span> <span class="op">|&gt;</span></span></span>
+<span class="r-in"><span>    <span class="fu"><a href="ds_basic.html">ds_basic</a></span><span class="op">(</span><span class="st">'stimulus_ID'</span>, <span class="fl">18</span><span class="op">)</span> <span class="op">|&gt;</span></span></span>
 <span class="r-in"><span>    <span class="fu"><a href="cl_max_correlation.html">cl_max_correlation</a></span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span></span></span>
 <span class="r-in"><span>    <span class="fu"><a href="fp_zscore.html">fp_zscore</a></span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span></span></span>
 <span class="r-in"><span>    <span class="fu"><a href="rm_main_results.html">rm_main_results</a></span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span></span></span>
 <span class="r-in"><span>    <span class="fu"><a href="rm_confusion_matrix.html">rm_confusion_matrix</a></span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span></span></span>
-<span class="r-in"><span>    <span class="fu">cv_standard</span><span class="op">(</span>num_resample_runs <span class="op">=</span> <span class="fl">3</span><span class="op">)</span> <span class="op">|&gt;</span></span></span>
+<span class="r-in"><span>    <span class="fu">cv_standard</span><span class="op">(</span>num_resample_runs <span class="op">=</span> <span class="fl">2</span><span class="op">)</span> <span class="op">|&gt;</span></span></span>
 <span class="r-in"><span>    <span class="fu"><a href="run_decoding.html">run_decoding</a></span><span class="op">(</span><span class="op">)</span></span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Automatically selecting sites_IDs_to_use. Since num_cv_splits = 18 and num_label_repeats_per_cv_split = 1, all sites that have 18 repetitions have been selected. This yields 132 sites that will be used for decoding (out of 132 total).</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   |                                                                              |                                                                      |   0%  |                                                                              |===================================                                   |  50%  |                                                                              |======================================================================| 100%</span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="op">}</span></span></span>
+<span class="r-in"><span><span class="co"># }</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span></span></span>
 </code></pre></div>

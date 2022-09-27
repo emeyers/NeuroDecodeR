@@ -75,11 +75,11 @@ cv <- cv_standard(datasource = ds,
                   classifier = cl, 
                   feature_preprocessors = fps, 
                   result_metrics = rms, 
-                  num_resample_runs = 3)
+                  num_resample_runs = 2)
 
 # run a decoding analysis (this takes a few minutes) 
 DECODING_RESULTS <- run_decoding(cv)
-#>   |                                                                              |                                                                      |   0%  |                                                                              |=======================                                               |  33%  |                                                                              |===============================================                       |  67%  |                                                                              |======================================================================| 100%
+#>   |                                                                              |                                                                      |   0%  |                                                                              |===================================                                   |  50%  |                                                                              |======================================================================| 100%
 ```
 
 ``` r
@@ -111,10 +111,10 @@ basedir_file_name <- system.file(file.path("extdata", "ZD_500bins_500sampled.Rda
     fp_zscore() |>
     rm_main_results() |>
     rm_confusion_matrix() |>
-    cv_standard(num_resample_runs = 3) |>
+    cv_standard(num_resample_runs = 2) |>
     run_decoding()
 #> Automatically selecting sites_IDs_to_use. Since num_cv_splits = 6 and num_label_repeats_per_cv_split = 3, all sites that have 18 repetitions have been selected. This yields 132 sites that will be used for decoding (out of 132 total).
-#>   |                                                                              |                                                                      |   0%  |                                                                              |=======================                                               |  33%  |                                                                              |===============================================                       |  67%  |                                                                              |======================================================================| 100%
+#>   |                                                                              |                                                                      |   0%  |                                                                              |===================================                                   |  50%  |                                                                              |======================================================================| 100%
   
   plot(DECODING_RESULTS$rm_confusion_matrix)
 ```

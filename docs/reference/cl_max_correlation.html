@@ -92,15 +92,15 @@
     <h2>Arguments</h2>
     <dl><dt>ndr_container_or_object</dt>
 <dd><p>The purpose of this argument is to make the
-constructor of the cl_maximum_correlation classifier work with the
-magrittr pipe (%&gt;%) operator. This argument should almost never be directly
-set by the user to anything other than NULL. If this is set to the default
-value of NULL, then the constructor will return a cl_max_correlation
-object. If this is set to an ndr container, then a cl_max_correlation
-object will be added to the container and the container will be returned.
-If this argument is set to another ndr object, then both that ndr object as
-well as a new cl_maximum_correlation object will be added to a new
-container and the container will be returned.</p></dd>
+constructor of the cl_maximum_correlation classifier work with the pipe
+(|&gt;) operator. This argument should almost never be directly set by the
+user to anything other than NULL. If this is set to the default value of
+NULL, then the constructor will return a cl_max_correlation object. If this
+is set to an NDT container, then a cl_max_correlation object will be added
+to the container and the container will be returned. If this argument is
+set to another NDT object, then both that NDR object as well as a new
+cl_maximum_correlation object will be added to a new container and the
+container will be returned.</p></dd>
 
 
 <dt>return_decision_values</dt>
@@ -113,6 +113,16 @@ decision values; e.g., the rm_main_results object won't be able to
 calculate normalized rank decision values.</p></dd>
 
 </dl></div>
+    <div id="value">
+    <h2>Value</h2>
+    
+
+<p>This constructor creates an NDR classifier object with the class
+<code>cl_max_correlation</code>. Like all NDR classifier objects, this classifier will
+be used by a cross-validator to learn the relationship between neural
+activity and experimental conditions on a training set of data, and then it
+will be used to make predictions on a test set of data.</p>
+    </div>
     <div id="details">
     <h2>Details</h2>
     <p>This CL object learns a mean population vector (template) for each
@@ -123,9 +133,9 @@ the training set, and the class with the highest correlation value is
 returned as the predicted label. The decision values returned by the
 classifier are the correlation coefficients between all test points and all
 templates.</p>
-<p>Like all classifiers (CL) objects, this classifier has a get_predictions()
-method which learns a model based on training data and then makes predictions
-on the test data.</p>
+<p>Like all classifiers (CL) objects, this classifier has a private
+get_predictions() method which learns a model based on training data and then
+makes predictions on the test data.</p>
     </div>
     <div id="see-also">
     <h2>See also</h2>
@@ -146,10 +156,12 @@ on the test data.</p>
 <span class="r-in"><span><span class="va">cl</span> <span class="op">&lt;-</span> <span class="fu">cl_max_correlation</span><span class="op">(</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">cv</span> <span class="op">&lt;-</span> <span class="fu"><a href="cv_standard.html">cv_standard</a></span><span class="op">(</span>datasource <span class="op">=</span> <span class="va">ds</span>, </span></span>
 <span class="r-in"><span>                  classifier <span class="op">=</span> <span class="va">cl</span>, </span></span>
-<span class="r-in"><span>                  feature_preprocessors <span class="op">=</span> <span class="va">fps</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span></span></span>
+<span class="r-in"><span>                  feature_preprocessors <span class="op">=</span> <span class="va">fps</span>,</span></span>
+<span class="r-in"><span>                  num_resample_runs <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="co"># \donttest{</span></span></span>
 <span class="r-in"><span><span class="va">DECODING_RESULTS</span> <span class="op">&lt;-</span> <span class="fu"><a href="run_decoding.html">run_decoding</a></span><span class="op">(</span><span class="va">cv</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="op">}</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   |                                                                              |                                                                      |   0%  |                                                                              |===================================                                   |  50%  |                                                                              |======================================================================| 100%</span>
+<span class="r-in"><span><span class="co"># }</span></span></span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
     </div>

@@ -37,7 +37,19 @@
     <loc>https://github.com/emeyers/NDTr/reference/aggregate_CV_split_results.html</loc>
   </url>
   <url>
+    <loc>https://github.com/emeyers/NDTr/reference/aggregate_CV_split_results.rm_confusion_matrix.html</loc>
+  </url>
+  <url>
+    <loc>https://github.com/emeyers/NDTr/reference/aggregate_CV_split_results.rm_main_results.html</loc>
+  </url>
+  <url>
     <loc>https://github.com/emeyers/NDTr/reference/aggregate_resample_run_results.html</loc>
+  </url>
+  <url>
+    <loc>https://github.com/emeyers/NDTr/reference/aggregate_resample_run_results.rm_confusion_matrix.html</loc>
+  </url>
+  <url>
+    <loc>https://github.com/emeyers/NDTr/reference/aggregate_resample_run_results.rm_main_results.html</loc>
   </url>
   <url>
     <loc>https://github.com/emeyers/NDTr/reference/cl_max_correlation.html</loc>
@@ -70,6 +82,12 @@
     <loc>https://github.com/emeyers/NDTr/reference/fp_zscore.html</loc>
   </url>
   <url>
+    <loc>https://github.com/emeyers/NDTr/reference/get_data.ds_basic.html</loc>
+  </url>
+  <url>
+    <loc>https://github.com/emeyers/NDTr/reference/get_data.ds_generalization.html</loc>
+  </url>
+  <url>
     <loc>https://github.com/emeyers/NDTr/reference/get_data.html</loc>
   </url>
   <url>
@@ -79,7 +97,46 @@
     <loc>https://github.com/emeyers/NDTr/reference/get_num_label_repetitions_each_site.html</loc>
   </url>
   <url>
+    <loc>https://github.com/emeyers/NDTr/reference/get_parameters.cl_max_correlation.html</loc>
+  </url>
+  <url>
+    <loc>https://github.com/emeyers/NDTr/reference/get_parameters.cl_poisson_naive_bayes.html</loc>
+  </url>
+  <url>
+    <loc>https://github.com/emeyers/NDTr/reference/get_parameters.cl_svm.html</loc>
+  </url>
+  <url>
+    <loc>https://github.com/emeyers/NDTr/reference/get_parameters.cv_standard.html</loc>
+  </url>
+  <url>
+    <loc>https://github.com/emeyers/NDTr/reference/get_parameters.ds_basic.html</loc>
+  </url>
+  <url>
+    <loc>https://github.com/emeyers/NDTr/reference/get_parameters.ds_generalization.html</loc>
+  </url>
+  <url>
+    <loc>https://github.com/emeyers/NDTr/reference/get_parameters.fp_select_k_features.html</loc>
+  </url>
+  <url>
+    <loc>https://github.com/emeyers/NDTr/reference/get_parameters.fp_zscore.html</loc>
+  </url>
+  <url>
     <loc>https://github.com/emeyers/NDTr/reference/get_parameters.html</loc>
+  </url>
+  <url>
+    <loc>https://github.com/emeyers/NDTr/reference/get_parameters.rm_confusion_matrix.html</loc>
+  </url>
+  <url>
+    <loc>https://github.com/emeyers/NDTr/reference/get_parameters.rm_main_results.html</loc>
+  </url>
+  <url>
+    <loc>https://github.com/emeyers/NDTr/reference/get_predictions.cl_max_correlation.html</loc>
+  </url>
+  <url>
+    <loc>https://github.com/emeyers/NDTr/reference/get_predictions.cl_poisson_naive_bayes.html</loc>
+  </url>
+  <url>
+    <loc>https://github.com/emeyers/NDTr/reference/get_predictions.cl_svm.html</loc>
   </url>
   <url>
     <loc>https://github.com/emeyers/NDTr/reference/get_predictions.html</loc>
@@ -118,6 +175,12 @@
     <loc>https://github.com/emeyers/NDTr/reference/plot_main_results.html</loc>
   </url>
   <url>
+    <loc>https://github.com/emeyers/NDTr/reference/preprocess_data.fp_select_k_features.html</loc>
+  </url>
+  <url>
+    <loc>https://github.com/emeyers/NDTr/reference/preprocess_data.fp_zscore.html</loc>
+  </url>
+  <url>
     <loc>https://github.com/emeyers/NDTr/reference/preprocess_data.html</loc>
   </url>
   <url>
@@ -133,7 +196,16 @@
     <loc>https://github.com/emeyers/NDTr/reference/rm_main_results.html</loc>
   </url>
   <url>
+    <loc>https://github.com/emeyers/NDTr/reference/run_decoding.cv_standard.html</loc>
+  </url>
+  <url>
     <loc>https://github.com/emeyers/NDTr/reference/run_decoding.html</loc>
+  </url>
+  <url>
+    <loc>https://github.com/emeyers/NDTr/reference/test_valid_binned_format.html</loc>
+  </url>
+  <url>
+    <loc>https://github.com/emeyers/NDTr/reference/test_valid_ndr_object.html</loc>
   </url>
   <url>
     <loc>https://github.com/emeyers/NDTr/reference/test_valid_raster_format.html</loc>

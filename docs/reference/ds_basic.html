@@ -168,14 +168,23 @@ get_data() function to return simultaneous populations rather than
 pseudo-populations.</p></dd>
 
 </dl></div>
+    <div id="value">
+    <h2>Value</h2>
+    
+
+<p>This constructor creates an NDR datasource object with the class
+<code>ds_basic</code>. Like all NDR datasource objects, this datasource will be used
+by the cross-validator to generate training and test data sets.</p>
+    </div>
     <div id="details">
     <h2>Details</h2>
     <p>This 'basic' datasource is the datasource that will most commonly be used for
 most analyses. It can generate training and tests sets for data that has been
 recorded simultaneously or pseudo-populations for data that was not recorded
 simultaneously.</p>
-<p>Like all datasources, this datasource takes binned format data
-and has a <code><a href="get_data.html">get_data()</a></code> method that is called by a cross-validation object to
+<p>Like all datasources, this datasource takes binned format data and has a
+<code><a href="get_data.html">get_data()</a></code> method that is never explicitly called by the user of the
+package, but rather it is called internally by a cross-validation object to
 get training and testing splits of data that can be passed to a classifier.</p>
     </div>
     <div id="see-also">
@@ -206,9 +215,9 @@ get training and testing splits of data that can be passed to a classifier.</p>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Automatically selecting sites_IDs_to_use. Since num_cv_splits = 18 and num_label_repeats_per_cv_split = 1, all sites that have 18 repetitions have been selected. This yields 132 sites that will be used for decoding (out of 132 total).</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># One never explicitly calls the get_data() function, but rather this is</span></span></span>
-<span class="r-in"><span><span class="co"># done by the cross-validator. However, to illustrate what this function</span></span></span>
+<span class="r-in"><span><span class="co"># called by the cross-validator. However, to illustrate what this function</span></span></span>
 <span class="r-in"><span><span class="co"># does, we can call it explicitly here to get training and test data:</span></span></span>
-<span class="r-in"><span><span class="va">all_cv_data</span> <span class="op">&lt;-</span> <span class="fu">NeuroDecodeR</span><span class="fu">:::</span><span class="fu"><a href="get_data.html">get_data</a></span><span class="op">(</span><span class="va">ds</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">all_cv_data</span> <span class="op">&lt;-</span> <span class="fu"><a href="get_data.html">get_data</a></span><span class="op">(</span><span class="va">ds</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">all_cv_data</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   [1] "train_labels" "test_labels"  "time_bin"     "site_0001"    "site_0002"   </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   [6] "site_0003"    "site_0004"    "site_0005"    "site_0006"    "site_0007"   </span>
@@ -241,6 +250,7 @@ get training and testing splits of data that can be passed to a classifier.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [141] "CV_6"         "CV_7"         "CV_8"         "CV_9"         "CV_10"       </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [146] "CV_11"        "CV_12"        "CV_13"        "CV_14"        "CV_15"       </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [151] "CV_16"        "CV_17"        "CV_18"       </span>
+<span class="r-in"><span></span></span>
 </code></pre></div>
     </div>
   </div>

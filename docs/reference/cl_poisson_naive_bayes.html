@@ -113,6 +113,16 @@ decision values; e.g., the rm_main_results object won't be able to
 calculate normalized rank decision values.</p></dd>
 
 </dl></div>
+    <div id="value">
+    <h2>Value</h2>
+    
+
+<p>This constructor creates an NDR classifier object with the class
+<code>cl_poisson_naive_bayes</code>. Like all NDR classifier objects, this classifier
+will be used by a cross-validator to learn the relationship between neural
+activity and experimental conditions on a training set of data, and then it
+will be used to make predictions on a test set of data.</p>
+    </div>
     <div id="details">
     <h2>Details</h2>
     <p>This classifier object implements a Poisson Naive Bayes classifier. The
@@ -158,10 +168,12 @@ and then makes predictions on new test data.</p>
 <span class="r-in"><span><span class="va">cl</span> <span class="op">&lt;-</span> <span class="fu">cl_poisson_naive_bayes</span><span class="op">(</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">cv</span> <span class="op">&lt;-</span> <span class="fu"><a href="cv_standard.html">cv_standard</a></span><span class="op">(</span>datasource <span class="op">=</span> <span class="va">ds</span>, </span></span>
 <span class="r-in"><span>                  classifier <span class="op">=</span> <span class="va">cl</span>, </span></span>
-<span class="r-in"><span>                  feature_preprocessors <span class="op">=</span> <span class="va">fps</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span></span></span>
+<span class="r-in"><span>                  feature_preprocessors <span class="op">=</span> <span class="va">fps</span>,</span></span>
+<span class="r-in"><span>                  num_resample_runs <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="co"># \donttest{</span></span></span>
 <span class="r-in"><span><span class="va">DECODING_RESULTS</span> <span class="op">&lt;-</span> <span class="fu"><a href="run_decoding.html">run_decoding</a></span><span class="op">(</span><span class="va">cv</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="op">}</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   |                                                                              |                                                                      |   0%  |                                                                              |===================================                                   |  50%  |                                                                              |======================================================================| 100%</span>
+<span class="r-in"><span><span class="co"># }</span></span></span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
     </div>

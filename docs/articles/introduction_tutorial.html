@@ -216,24 +216,34 @@ time when a neuron emitted an action potential.</p>
 data from raster-format to binned-format, we can use the function
 <code><a href="../reference/create_binned_data.html">create_binned_data()</a></code>, which calculates the average firing
 rate of neurons over specified intervals sampled with a specified
-frequency (i.e., a boxcar filter is used). create_binned_data() takes in
-four arguments:</p>
+frequency (i.e., a boxcar filter is used).
+<code><a href="../reference/create_binned_data.html">create_binned_data()</a></code> takes in four arguments:</p>
 <ol style="list-style-type: decimal">
 <li>The name of the directory where the raster-format data is
 stored</li>
-<li>The name (potentially including a directory) that the binned data
-should be saved as</li>
+<li>The name (potentially including a directory path) that the binned
+data should be saved as</li>
 <li>A bin size that specifies how much time the firing rates should be
 calculated over</li>
 <li>A sampling interval that specifies how frequently to calculate these
 firing rates.</li>
 </ol>
 <p>To calculate the average firing rates in 150 ms bins sampled every 50
-ms, the following commands can be used:</p>
+ms, we can use the code below.</p>
+<p>(Note: in the code below we have set the optional argument
+<code>num_parallel_cores</code> to specify the number of parallel cores
+we would like to use. Using more cores will speed up the time it takes
+for this function to run. By default, half the cores on the computer
+will be used which could be a good setting for most computers. We have
+chosen 2 cores here since this is the maximum number of cores allowed
+for examples that are on CRAN.)</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/emeyers/NeuroDecodeR" class="external-link">NeuroDecodeR</a></span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">binned_file_name</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/create_binned_data.html">create_binned_data</a></span><span class="op">(</span><span class="va">raster_dir_name</span>, <span class="st">"ZD"</span>, <span class="fl">150</span>, <span class="fl">50</span><span class="op">)</span></span></code></pre></div>
+<span><span class="va">save_dir_name</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempdir</a></span><span class="op">(</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">binned_file_name</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/create_binned_data.html">create_binned_data</a></span><span class="op">(</span><span class="va">raster_dir_name</span>, <span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="va">save_dir_name</span>, <span class="st">"ZD"</span><span class="op">)</span>, </span>
+<span>                                       <span class="fl">150</span>, <span class="fl">50</span>, num_parallel_cores <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="determining-how-many-times-each-condition-was-repeated">Determining how many times each condition was repeated<a class="anchor" aria-label="anchor" href="#determining-how-many-times-each-condition-was-repeated"></a>
@@ -459,11 +469,12 @@ function saves the results to the specified directory and logs the
 parameters used in the analysis so that they can later be retrieved. For
 more information, see the tutorial on saving and managing results.</p>
 <div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">results_dir_name</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="st">"results"</span>, <span class="st">""</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/files2.html" class="external-link">dir.create</a></span><span class="op">(</span><span class="va">results_dir_name</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">## Warning in dir.create(results_dir_name): 'results' already exists</span></span></code></pre>
-<div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="../reference/log_save_results.html">log_save_results</a></span><span class="op">(</span><span class="va">DECODING_RESULTS</span>, <span class="va">results_dir_name</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">results_dir_name</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempdir</a></span><span class="op">(</span><span class="op">)</span>, <span class="st">"results"</span>, <span class="st">""</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/files2.html" class="external-link">dir.create</a></span><span class="op">(</span><span class="va">results_dir_name</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="../reference/log_save_results.html">log_save_results</a></span><span class="op">(</span><span class="va">DECODING_RESULTS</span>, <span class="va">results_dir_name</span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">## Warning in log_save_results(DECODING_RESULTS, results_dir_name): The manifest file does not exist.</span></span>
+<span><span class="co">##   Assuming this is the first result that is saved and creating manifest file</span></span></code></pre>
 </div>
 <div class="section level2">
 <h2 id="running-an-analysis-using-the-pipe-operator">Running an analysis using the pipe (|&gt;) operator<a class="anchor" aria-label="anchor" href="#running-an-analysis-using-the-pipe-operator"></a>
@@ -479,7 +490,7 @@ optionally feature preprocessors and result metrics.</li>
 run_decoding() method.</li>
 </ol>
 <p>The code below gives and example of how this can be done.</p>
-<div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">basedir_file_name</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="st">"extdata"</span>, <span class="st">"ZD_500bins_500sampled.Rda"</span><span class="op">)</span>, </span>
 <span>                                   package<span class="op">=</span><span class="st">"NeuroDecodeR"</span><span class="op">)</span></span>
 <span>  </span>
@@ -489,19 +500,17 @@ run_decoding() method.</li>
 <span>    <span class="fu"><a href="../reference/fp_zscore.html">fp_zscore</a></span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>    <span class="fu"><a href="../reference/rm_main_results.html">rm_main_results</a></span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>    <span class="fu"><a href="../reference/rm_confusion_matrix.html">rm_confusion_matrix</a></span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>    <span class="fu"><a href="../reference/cv_standard.html">cv_standard</a></span><span class="op">(</span>num_resample_runs <span class="op">=</span> <span class="fl">3</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>    <span class="fu"><a href="../reference/cv_standard.html">cv_standard</a></span><span class="op">(</span>num_resample_runs <span class="op">=</span> <span class="fl">2</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>    <span class="fu"><a href="../reference/run_decoding.html">run_decoding</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## Automatically selecting sites_IDs_to_use. Since num_cv_splits = 6 and num_label_repeats_per_cv_split = 3, all sites that have 18 repetitions have been selected. This yields 132 sites that will be used for decoding (out of 132 total).</span></span></code></pre>
 <pre><code>## 
   |                                                                            
   |                                                                      |   0%
   |                                                                            
-  |=======================                                               |  33%
-  |                                                                            
-  |===============================================                       |  67%
+  |===================================                                   |  50%
   |                                                                            
   |======================================================================| 100%</code></pre>
-<div class="sourceCode" id="cb24"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span>  <span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">DECODING_RESULTS</span><span class="op">$</span><span class="va">rm_confusion_matrix</span><span class="op">)</span></span></code></pre></div>
 <p><img src="introduction_tutorial_files/figure-html/ndr_piping_example-1.png" width="700"></p>
 </div>
