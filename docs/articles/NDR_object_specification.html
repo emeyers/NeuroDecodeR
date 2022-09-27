@@ -300,11 +300,11 @@ example of how the FP object gets and returns data.</p>
 <span></span>
 <span><span class="co"># prior to z-score normalizing the mean (e.g. for site 1) is not 0</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">training_set</span><span class="op">$</span><span class="va">site_0001</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">## [1] 0.003137255</span></span></code></pre>
+<pre><code><span><span class="co">## [1] 0.003417367</span></span></code></pre>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># after normalizing the data the mean is pretty much 0</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">processed_data</span><span class="op">$</span><span class="va">training_set</span><span class="op">$</span><span class="va">site_0001</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">## [1] -1.504308e-17</span></span></code></pre>
+<pre><code><span><span class="co">## [1] 3.443572e-17</span></span></code></pre>
 <p><br></p>
 <p><br></p>
 </div>

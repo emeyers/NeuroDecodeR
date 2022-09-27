@@ -223,11 +223,12 @@ each test class. We can do by setting the
 <code>train_label_levels</code> and <code>test_label_levels</code>
 arguments to lists with the appropriate values. Each entry in these
 lists corresponds to the label levels for one class. For example, if we
-create a list train_levels[[1]] &lt;- c(‘car_upper’, ‘car_middle’), and
-test_levels[[1]] = list(‘car_lower’), this means that the first class
-will be trained with data from trials when the car was shown in the
-upper and middle positions, and the first class will have test data from
-trials in which cars where shown in the lower position.</p>
+create a list
+<code>train_levels[[1]] &lt;- c('car_upper', 'car_middle')</code>, and
+<code>test_levels[[1]] = list('car_lower')</code>, this means that the
+first class will be trained with data from trials when the car was shown
+in the upper and middle positions, and the first class will have test
+data from trials in which cars where shown in the lower position.</p>
 <p>To create training data for each object identity at upper and middle
 locations, and test data for each object at lower location, we can use
 the code below.</p>
@@ -250,13 +251,13 @@ the code below.</p>
 <span><span class="va">ds</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/ds_generalization.html">ds_generalization</a></span><span class="op">(</span><span class="va">binned_file_name</span>, <span class="st">'combined_ID_position'</span>, num_cv_splits <span class="op">=</span> <span class="fl">18</span>,  </span>
 <span>                       train_label_levels <span class="op">=</span> <span class="va">train_levels</span>, test_label_levels <span class="op">=</span> <span class="va">test_levels</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## Automatically selecting sites_IDs_to_use. Since num_cv_splits = 18 and num_label_repeats_per_cv_split = 1, all sites that have 18 repetitions have been selected. This yields 132 sites that will be used for decoding (out of 132 total).</span></span></code></pre>
-<p>Now that we have created this ds_generalization data source, we can
-create a cross-validator as we did in the basic tutorial and get the
-results for training at upper and middle locations and testing at a
-lower location. We are only using 2 resample runs here to speed up the
-computation, but we recommend using a higher number for this argument to
-get smoother results (for example, but using the default value of
-num_resample_runs = 50).</p>
+<p>Now that we have created this <code>ds_generalization</code> data
+source, we can create a cross-validator as we did in the basic tutorial
+and get the results for training at upper and middle locations and
+testing at a lower location. We are only using 2 resample runs here to
+speed up the computation, but we recommend using a higher number for
+this argument to get smoother results (for example, using the default
+value of <code>num_resample_runs = 50</code>).</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># create the cross-validator</span></span>
 <span><span class="va">cv</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/cv_standard.html">cv_standard</a></span><span class="op">(</span>datasource <span class="op">=</span> <span class="va">ds</span>, </span>
@@ -277,11 +278,11 @@ num_resample_runs = 50).</p>
   |======================================================================| 100%</code></pre>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">tictoc</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/tictoc/man/tic.html" class="external-link">toc</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">## 7.875 sec elapsed</span></span></code></pre>
+<pre><code><span><span class="co">## 7.895 sec elapsed</span></span></code></pre>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># show the zero-one loss decoding accuracy (chance is 1/7)</span></span>
 <span><span class="va">DECODING_RESULTS</span><span class="op">$</span><span class="va">rm_main_results</span><span class="op">$</span><span class="va">zero_one_loss</span></span></code></pre></div>
-<pre><code><span><span class="co">## [1] 0.8412698</span></span></code></pre>
+<pre><code><span><span class="co">## [1] 0.8452381</span></span></code></pre>
 </div>
 <div class="section level3">
 <h3 id="training-and-testing-at-all-locations">Training and testing at all locations<a class="anchor" aria-label="anchor" href="#training-and-testing-at-all-locations"></a>
@@ -300,11 +301,11 @@ the training set will still come from different trials than the data
 used for the test set. Thus, the cross-validation splits will still be
 valid because there will not be any of the same data in the training and
 test sets (if this mapping was done for all classes, one would end up
-getting the same results as using the ds_basic). Because there is no
-‘data leakage’, the following code allows for fair comparisons between
-results where the classifier was trained and tested with data from the
-same location vs. where the classifier was trained and tested with data
-from different locations.</p>
+getting the same results as using the <code>ds_basic</code> datasource).
+Because there is no ‘data leakage’, the following code allows for fair
+comparisons between results where the classifier was trained and tested
+with data from the same location vs. where the classifier was trained
+and tested with data from different locations.</p>
 <p>Note that the code below will take several minutes to run.</p>
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">results_dir_name</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/trimws.html" class="external-link">trimws</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempdir</a></span><span class="op">(</span><span class="op">)</span>, <span class="st">"position_invariance_results"</span>, <span class="st">" "</span><span class="op">)</span><span class="op">)</span></span>
@@ -370,7 +371,7 @@ from different locations.</p>
   |                                                                            
   |===================================                                   |  50%
   |                                                                            
-  |======================================================================| 100%7.269 sec elapsed</code></pre>
+  |======================================================================| 100%7.037 sec elapsed</code></pre>
 <pre><code><span><span class="co">## Warning in log_save_results(DECODING_RESULTS, results_dir_name, result_name): The manifest file does not exist.</span></span>
 <span><span class="co">##   Assuming this is the first result that is saved and creating manifest file</span></span></code></pre>
 <pre><code><span><span class="co">## Automatically selecting sites_IDs_to_use. Since num_cv_splits = 18 and num_label_repeats_per_cv_split = 1, all sites that have 18 repetitions have been selected. This yields 132 sites that will be used for decoding (out of 132 total).</span></span></code></pre>
@@ -380,7 +381,7 @@ from different locations.</p>
   |                                                                            
   |===================================                                   |  50%
   |                                                                            
-  |======================================================================| 100%7.064 sec elapsed</code></pre>
+  |======================================================================| 100%7.32 sec elapsed</code></pre>
 <pre><code><span><span class="co">## Automatically selecting sites_IDs_to_use. Since num_cv_splits = 18 and num_label_repeats_per_cv_split = 1, all sites that have 18 repetitions have been selected. This yields 132 sites that will be used for decoding (out of 132 total).</span></span></code></pre>
 <pre><code>## 
   |                                                                            
@@ -388,7 +389,7 @@ from different locations.</p>
   |                                                                            
   |===================================                                   |  50%
   |                                                                            
-  |======================================================================| 100%7.355 sec elapsed</code></pre>
+  |======================================================================| 100%7.199 sec elapsed</code></pre>
 <pre><code><span><span class="co">## Automatically selecting sites_IDs_to_use. Since num_cv_splits = 18 and num_label_repeats_per_cv_split = 1, all sites that have 18 repetitions have been selected. This yields 132 sites that will be used for decoding (out of 132 total).</span></span></code></pre>
 <pre><code>## 
   |                                                                            
@@ -396,7 +397,7 @@ from different locations.</p>
   |                                                                            
   |===================================                                   |  50%
   |                                                                            
-  |======================================================================| 100%7.104 sec elapsed</code></pre>
+  |======================================================================| 100%6.877 sec elapsed</code></pre>
 <pre><code><span><span class="co">## Automatically selecting sites_IDs_to_use. Since num_cv_splits = 18 and num_label_repeats_per_cv_split = 1, all sites that have 18 repetitions have been selected. This yields 132 sites that will be used for decoding (out of 132 total).</span></span></code></pre>
 <pre><code>## 
   |                                                                            
@@ -404,7 +405,7 @@ from different locations.</p>
   |                                                                            
   |===================================                                   |  50%
   |                                                                            
-  |======================================================================| 100%6.833 sec elapsed</code></pre>
+  |======================================================================| 100%7.173 sec elapsed</code></pre>
 <pre><code><span><span class="co">## Automatically selecting sites_IDs_to_use. Since num_cv_splits = 18 and num_label_repeats_per_cv_split = 1, all sites that have 18 repetitions have been selected. This yields 132 sites that will be used for decoding (out of 132 total).</span></span></code></pre>
 <pre><code>## 
   |                                                                            
@@ -412,7 +413,7 @@ from different locations.</p>
   |                                                                            
   |===================================                                   |  50%
   |                                                                            
-  |======================================================================| 100%7.233 sec elapsed</code></pre>
+  |======================================================================| 100%6.961 sec elapsed</code></pre>
 <pre><code><span><span class="co">## Automatically selecting sites_IDs_to_use. Since num_cv_splits = 18 and num_label_repeats_per_cv_split = 1, all sites that have 18 repetitions have been selected. This yields 132 sites that will be used for decoding (out of 132 total).</span></span></code></pre>
 <pre><code>## 
   |                                                                            
@@ -420,7 +421,7 @@ from different locations.</p>
   |                                                                            
   |===================================                                   |  50%
   |                                                                            
-  |======================================================================| 100%6.879 sec elapsed</code></pre>
+  |======================================================================| 100%7.018 sec elapsed</code></pre>
 <pre><code><span><span class="co">## Automatically selecting sites_IDs_to_use. Since num_cv_splits = 18 and num_label_repeats_per_cv_split = 1, all sites that have 18 repetitions have been selected. This yields 132 sites that will be used for decoding (out of 132 total).</span></span></code></pre>
 <pre><code>## 
   |                                                                            
@@ -428,7 +429,7 @@ from different locations.</p>
   |                                                                            
   |===================================                                   |  50%
   |                                                                            
-  |======================================================================| 100%7.243 sec elapsed</code></pre>
+  |======================================================================| 100%7.649 sec elapsed</code></pre>
 <pre><code><span><span class="co">## Automatically selecting sites_IDs_to_use. Since num_cv_splits = 18 and num_label_repeats_per_cv_split = 1, all sites that have 18 repetitions have been selected. This yields 132 sites that will be used for decoding (out of 132 total).</span></span></code></pre>
 <pre><code>## 
   |                                                                            
@@ -436,7 +437,7 @@ from different locations.</p>
   |                                                                            
   |===================================                                   |  50%
   |                                                                            
-  |======================================================================| 100%6.683 sec elapsed</code></pre>
+  |======================================================================| 100%6.778 sec elapsed</code></pre>
 </div>
 <div class="section level3">
 <h3 id="plotting-the-results">Plotting the results<a class="anchor" aria-label="anchor" href="#plotting-the-results"></a>
