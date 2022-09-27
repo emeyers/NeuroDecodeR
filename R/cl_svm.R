@@ -43,10 +43,15 @@
 #'   decision values; e.g., the rm_main_results object won't be able to
 #'   calculate normalized rank decision values.
 #'
-#'
 #' @param ... All parameters that are available in the e1071 package svm()
 #'   object should work with this CL object.
 #'
+#'
+#' @return This constructor creates an NDR classifier object with the class
+#'   `cl_svm`. Like all NDR classifier objects, this classifier will be used by
+#'   a cross-validator to learn the relationship between neural activity and
+#'   experimental conditions on a training set of data, and then it will be used
+#'   to make predictions on a test set of data.
 #'
 #'
 #' @examples
@@ -85,6 +90,8 @@ cl_svm <- function(ndr_container_or_object = NULL,
 
 
 
+# the get_predictions method
+#' @inherit get_predictions
 #' @export
 get_predictions.cl_svm <- function(cl_obj, training_set, test_set) {
 
@@ -172,6 +179,7 @@ get_predictions.cl_svm <- function(cl_obj, training_set, test_set) {
 
 
 # Get the parameters that were used in the svm
+#' @inherit get_parameters
 #' @export
 get_parameters.cl_svm <- function(ndr_obj) {
 

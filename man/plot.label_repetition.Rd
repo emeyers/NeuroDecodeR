@@ -15,6 +15,10 @@ get_num_label_repetitions() function.}
 \item{show_legend}{A Boolean specifying whether to show a legend
 that list which label each color in the plot corresponds to.}
 }
+\value{
+. Returns a ggplot object that plots the number of sites that
+that have at least k label repetitions as a function of k.
+}
 \description{
 This function plots the number of sites have at least k label repetitions.
 Creating this plot is useful for assessing how to set the number of

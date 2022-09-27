@@ -38,6 +38,10 @@
 #'   to use. The default (NULL) value is to use half of the cores detected on
 #'   the system. If this value is set to a value of less than 1, then the code
 #'   will be run serially.
+#'   
+#' @return Returns a string with the name of the file that was created which has
+#'   the data in binnned format.
+#'   
 #'
 #' @examples
 #' # create binned data with 150 ms bin sizes sampled at 10 ms intervals

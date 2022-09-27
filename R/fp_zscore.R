@@ -14,6 +14,12 @@
 #'   container and the container will be returned. If this argument is set to
 #'   another ndr object, then both that ndr object as well as a new fp_zscore
 #'   object will be added to a new container and the container will be returned.
+#'   
+#' @return This constructor creates an NDR feature preprocessor object with the
+#'   class `fp_zscore`. Like all NDR feature preprocessor objects, this feature
+#'   preprocessor will be used by the cross-validator to pre-process the
+#'   training and test data sets.
+#'   
 #'
 #' @details This feature preprocessor object applies z-score normalization to
 #' each feature by calculating the mean and the standard deviation for each
@@ -47,6 +53,7 @@ fp_zscore <- function(ndr_container_or_object = NULL) {
 
 
 
+#' @inherit preprocess_data
 #' @export
 preprocess_data.fp_zscore <- function(fp, training_set, test_set) {
 
@@ -90,6 +97,7 @@ preprocess_data.fp_zscore <- function(fp, training_set, test_set) {
 
 # since there are no parameters for the fp_zscore just return a data frame with
 # fp_zscore.fp_zscore and a value of "No parameters"
+#' @inherit get_parameters
 #' @export
 get_parameters.fp_zscore <- function(ndr_obj) {
   data.frame(fp_zscore.fp_zscore = "does not have settable parameters")

@@ -38,6 +38,9 @@ plots should say for each result. If this is NULL, the result names will be
 the names from the manifest file's result_name column, or if these are set
 to "No result name set" then the analysisID will be the label.}
 }
+\value{
+Returns a ggplot object that a comparison of main decoding results.
+}
 \description{
 This function can create a line plot of the results or temporal
 cross-decoding results for the the zero-one loss, normalized rank and/or

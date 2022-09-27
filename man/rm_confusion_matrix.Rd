@@ -33,6 +33,13 @@ confusion matrix, each row corresponds to the correct class (like a regular
 confusion matrix) and each column corresponds to the mean decision value of
 the predictions for each class.}
 }
+\value{
+This constructor creates an NDR result metric object with the class
+\code{rm_confusion_matrix}. Like all NDR result metric objects, this result
+metric will be used by a cross-validator to create a measure of decoding
+accuracy by aggregating the results after all cross-validation splits have
+been run, and after all resample runs have completed.
+}
 \description{
 This result metric calculate a confusion matrices from all points in time.
 }

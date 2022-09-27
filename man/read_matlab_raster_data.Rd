@@ -33,6 +33,21 @@ variable to the data called 'trial_number' that has sequential trial. These
 trials numbers are needed for data that was recorded simultaneously so that
 trials can be aligned across different sites.}
 }
+\value{
+Returns a data frame of data in \verb{raster format} (i.e., with class
+\code{raster_data}). Data that is in \verb{raster format} as the following variables:
+\enumerate{
+\item \code{labels.XXX}  These variables contain labels of which experimental conditions were shown on a given trial.
+\item \code{time.XXX_YYY}  These variables contain the data for a given time, XXX is
+the start time of the data in a particular bin and YYY is the end time.
+\item \code{site_info.XXX} These variables contain additional meta data about the site.
+\item \code{trial_number} This variable specifies a unique number for each row
+indicating which trial a given row of data came from.
+}
+
+For more details on \verb{raster format} data see the vignette:
+\code{vignette("data_formats", package = "NeuroDecodeR")}
+}
 \description{
 Reads MATLAB data in raster format into an R raster_data format data frame. This
 is similar to the general read_raster_data() function but it contains additional

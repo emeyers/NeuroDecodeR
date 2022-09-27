@@ -8,10 +8,16 @@ log_load_results_from_params(decoding_params, results_dir_name)
 }
 \arguments{
 \item{decoding_params}{A data frame of decoding parameters that can
-be created by calling the cross-validator's get_parameters() method.}
+be created by calling the cross-validator's \code{get_parameters()} method.}
 
 \item{results_dir_name}{A string containing the path to a directory
 that contains all the decoding results.}
+}
+\value{
+A list that has all the DECODING_RESULTS that match the parameters
+that were specified. If only a single result matches the parameters
+specified, then this DECODING_RESULTS is returned rather than a list of
+DECODING_RESULTS.
 }
 \description{
 A function that loads DECODING_RESULTS based on decoding_parameters

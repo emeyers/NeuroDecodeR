@@ -26,8 +26,8 @@ across cross-validation splits, and thus should take up less memory than
 the original \code{prediction_results} that was passed in to this method.
 }
 \description{
-This is a generic function that must be implemented by all RM objects. This
-function is called by the cross-validator results aggregated across all
+This is a function that must be implemented by all RM objects. This function
+is called by the cross-validator results aggregated across all
 cross-validation splits. This method should not be called directly but
 instead is used internally by the cross-validator (CV) object.
 }

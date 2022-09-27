@@ -61,6 +61,10 @@
 #'   string the output will be written to the screen, otherwise it will be
 #'   written to a file name specified. See parallel::makeCluster for more
 #'   details.
+#'   
+#' @return This constructor creates an NDR cross-validator object with the class
+#'   `cv_standard`. Like all NDR cross-validator objects, one should use
+#'   `run_decoding` method to run a decoding analysis.
 #'
 #' @examples
 #' data_file <- system.file("extdata/ZD_150bins_50sampled.Rda",
@@ -251,7 +255,7 @@ new_cv_standard <- function(datasource,
 
 
 
-
+#' @inherit run_decoding
 #' @export
 run_decoding.cv_standard <- function(cv_obj) {
   
@@ -469,6 +473,8 @@ run_decoding.cv_standard <- function(cv_obj) {
 
 # get parameters from all objects and save the in a data frame so that
 # which will be useful to tell if an analysis has already been run
+#' @inherit get_parameters
+#' @export
 get_parameters.cv_standard <- function(ndr_obj) {
 
 

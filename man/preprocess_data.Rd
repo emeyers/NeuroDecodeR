@@ -30,13 +30,12 @@ A list is returned that contains two data frames called
 the data in these data frames has been processed by the FP object.
 }
 \description{
-This is a generic function that must be implemented by all FP objects. This
-object learns a set of parameters from the training data (i.e., the data
-generated from a datasource get_data() method). The \code{preprocess_data()}
-method then uses these parameters do processing on the training and test data
-before the data is sent to the classifier. This method should not be called
-directly but instead it is used internally by the cross-validator (CV)
-object.
+This is a function that must be implemented by all FP objects. This object
+learns a set of parameters from the training data (i.e., the data generated
+from a datasource get_data() method). The \code{preprocess_data()} method then
+uses these parameters do processing on the training and test data before the
+data is sent to the classifier. This method should not be called directly but
+instead it is used internally by the cross-validator (CV) object.
 }
 \seealso{
 \code{\link[=fp_zscore]{fp_zscore()}}, \code{\link[=fp_select_k_features]{fp_select_k_features()}}

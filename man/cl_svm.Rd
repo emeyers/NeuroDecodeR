@@ -28,6 +28,13 @@ calculate normalized rank decision values.}
 \item{...}{All parameters that are available in the e1071 package svm()
 object should work with this CL object.}
 }
+\value{
+This constructor creates an NDR classifier object with the class
+\code{cl_svm}. Like all NDR classifier objects, this classifier will be used by
+a cross-validator to learn the relationship between neural activity and
+experimental conditions on a training set of data, and then it will be used
+to make predictions on a test set of data.
+}
 \description{
 This classifier uses the e1071 package to implement a support vector machine.
 }

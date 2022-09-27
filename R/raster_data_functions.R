@@ -8,11 +8,25 @@
 #' @param raster_file_name A string specifying the name (and path) to a csv,
 #'   rda, rds or mat raster data file that has the appropriate raster data
 #'   column names (i.e., columns that start with site.info, labels. and time.)
-#'
+#'   
+#' @return Returns a data frame of data in `raster format` (i.e., with class
+#'   `raster_data`). Data that is in `raster format` as the following variables:
+#' 1. `labels.XXX`  These variables contain labels of which experimental conditions were shown on a given trial.
+#' 
+#' 2. `time.XXX_YYY`  These variables contain the data for a given time, XXX is
+#' the start time of the data in a particular bin and YYY is the end time.
+#'  
+#' 3. `site_info.XXX` These variables contain additional meta data about the site.
+#'  
+#' 4. `trial_number` This variable specifies a unique number for each row 
+#'  indicating which trial a given row of data came from. 
+#'  
+#' For more details on `raster format` data see the vignette:
+#' \code{vignette("data_formats", package = "NeuroDecodeR")}
+#' 
+#' 
 #' @examples
-#' 
 #' \donttest{
-#' 
 #' # reading in a csv file in raster format
 #' csv_raster_file_name <- file.path(
 #'   system.file("extdata", package = "NeuroDecodeR"),
@@ -126,6 +140,7 @@ read_raster_data <- function(raster_file_name) {
 #'   trials numbers are needed for data that was recorded simultaneously so that
 #'   trials can be aligned across different sites.
 #'
+#' @inherit read_raster_data return 
 #' 
 #' @examples
 #' 
@@ -358,6 +373,9 @@ read_matlab_raster_data <- function(matlab_raster_file_name,
 #'   variable to the data called 'trial_number' that has sequential trial. These
 #'   trials numbers are needed for data that was recorded simultaneously so that
 #'   trials can be aligned across different sites.
+#'   
+#' @return Returns a string with the name of the directory that the .rda raster
+#'   files have been saved to.
 #'
 #' @examples
 #' 
@@ -496,9 +514,11 @@ convert_dot_back_to_underscore <- function(oldnames) {
 #' @param facet_label If this is set to a string that is the name of one of the
 #' labels in the raster data, then the raster plots will be faceted by 
 #' this label. 
+#' 
+#' @return Returns a ggplot object that plots the raster data.
 #'
 #'
-#' @export
+#' @export 
 plot.raster_data <- function(x, ..., facet_label = NULL) {
   
   

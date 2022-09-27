@@ -32,6 +32,13 @@ testing at the same time. Not returning the full results can speed up the
 run-time of the code and will use less memory so this can be useful for
 large data sets.}
 }
+\value{
+This constructor creates an NDR result metric object with the class
+\code{rm_main_results}. Like all NDR result metric objects, this result
+metric will be used by a cross-validator to create a measure of decoding
+accuracy by aggregating the results after all cross-validation splits have
+been run, and after all resample runs have completed.
+}
 \description{
 This result metric calculate the zero-one loss, the normalized rank, and the
 mean of the decision values. This is also an S3 object which has an

@@ -66,6 +66,11 @@ string the output will be written to the screen, otherwise it will be
 written to a file name specified. See parallel::makeCluster for more
 details.}
 }
+\value{
+This constructor creates an NDR cross-validator object with the class
+\code{cv_standard}. Like all NDR cross-validator objects, one should use
+\code{run_decoding} method to run a decoding analysis.
+}
 \description{
 This object runs a decoding analysis where a classifier is repeatedly trained
 and tested using cross-validation.

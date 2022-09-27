@@ -21,8 +21,13 @@ decoding results should be saved.}
 that are to be saved. This name can be used to load the results later. The
 default value is "No result name set".}
 }
+\value{
+Does not return a value but instead creates a directory that stores
+an .rda file with the decoding results and either creates or updates a
+manifest files that has information about the decoding results.
+}
 \description{
-This function takes results returned by the cross-validator's run_decoding()
-method and uses the cross-validator's get_properties() method to save a log
+This function takes results returned by the cross-validator's \code{run_decoding()}
+method and uses the cross-validator's \code{get_properties()} method to save a log
 of the results that be used to reload the results.
 }

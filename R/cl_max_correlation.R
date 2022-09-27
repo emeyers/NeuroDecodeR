@@ -3,15 +3,15 @@
 #' An implementation of a maximum correlation coefficient classifier.
 #' 
 #' @param ndr_container_or_object The purpose of this argument is to make the
-#'   constructor of the cl_maximum_correlation classifier work with the
-#'   magrittr pipe (%>%) operator. This argument should almost never be directly
-#'   set by the user to anything other than NULL. If this is set to the default
-#'   value of NULL, then the constructor will return a cl_max_correlation
-#'   object. If this is set to an ndr container, then a cl_max_correlation
-#'   object will be added to the container and the container will be returned.
-#'   If this argument is set to another ndr object, then both that ndr object as
-#'   well as a new cl_maximum_correlation object will be added to a new
-#'   container and the container will be returned.
+#'   constructor of the cl_maximum_correlation classifier work with the pipe
+#'   (|>) operator. This argument should almost never be directly set by the
+#'   user to anything other than NULL. If this is set to the default value of
+#'   NULL, then the constructor will return a cl_max_correlation object. If this
+#'   is set to an NDT container, then a cl_max_correlation object will be added
+#'   to the container and the container will be returned. If this argument is
+#'   set to another NDT object, then both that NDR object as well as a new
+#'   cl_maximum_correlation object will be added to a new container and the
+#'   container will be returned.
 #'   
 #' @param return_decision_values A Boolean specifying whether the prediction
 #'   function should return columns that have the decision values. Setting this
@@ -20,6 +20,12 @@
 #'   won't be able to compute decoding accuracy measures that are based on the
 #'   decision values; e.g., the rm_main_results object won't be able to
 #'   calculate normalized rank decision values.
+#'
+#' @return This constructor creates an NDR classifier object with the class
+#'   `cl_max_correlation`. Like all NDR classifier objects, this classifier will
+#'   be used by a cross-validator to learn the relationship between neural
+#'   activity and experimental conditions on a training set of data, and then it
+#'   will be used to make predictions on a test set of data.
 #'
 #' @details This CL object learns a mean population vector (template) for each
 #'   class from the training set (by averaging together the all training points
@@ -30,9 +36,9 @@
 #'   classifier are the correlation coefficients between all test points and all
 #'   templates.
 #'
-#' Like all classifiers (CL) objects, this classifier has a get_predictions()
-#' method which learns a model based on training data and then makes predictions
-#' on the test data.
+#' Like all classifiers (CL) objects, this classifier has a private
+#' get_predictions() method which learns a model based on training data and then
+#' makes predictions on the test data.
 #'
 #'
 #' @examples
@@ -79,11 +85,11 @@ cl_max_correlation <- function(ndr_container_or_object = NULL,
 
 
 # the get_predictions method
+#' @inherit get_predictions
 #' @export
 get_predictions.cl_max_correlation <- function(cl_obj,
                                                training_set,
                                                test_set) {
-
 
   ### Train the classifier  ---------------------------------------------------
   prototypes <- training_set %>%
@@ -130,8 +136,12 @@ get_predictions.cl_max_correlation <- function(cl_obj,
 }
 
 
+
+
+
 # since there are no parameters for the cl_max_correlation, just return a data
 # frame with one variable with a value that there are not settable parameters
+#' @inherit get_parameters
 #' @export
 get_parameters.cl_max_correlation <- function(ndr_obj) {
   data.frame(cl_max_correlation.cl_max_correlation = "does not have settable parameters")

@@ -29,6 +29,12 @@
 #'   confusion matrix, each row corresponds to the correct class (like a regular
 #'   confusion matrix) and each column corresponds to the mean decision value of
 #'   the predictions for each class.
+#'   
+#' @return This constructor creates an NDR result metric object with the class
+#'   `rm_confusion_matrix`. Like all NDR result metric objects, this result
+#'   metric will be used by a cross-validator to create a measure of decoding
+#'   accuracy by aggregating the results after all cross-validation splits have
+#'   been run, and after all resample runs have completed.
 #'
 #' @examples
 #' # If you only want to use the rm_confusion_matrix(), then you can put it in a
@@ -80,6 +86,7 @@ new_rm_confusion_matrix <- function(the_data = data.frame(),
 
 # The aggregate_CV_split_results method needed to fulfill the results metric interface.
 # Not going to export this since it should never be directly called by users of the NDR.
+#'@inherit aggregate_CV_split_results
 aggregate_CV_split_results.rm_confusion_matrix <- function(rm_obj, prediction_results) {
 
   # include a warning if the state is not initial
@@ -166,6 +173,7 @@ aggregate_CV_split_results.rm_confusion_matrix <- function(rm_obj, prediction_re
 
 # The aggregate_resample_run_results method needed to fulfill the results metric interface.
 # Not going to export this since it should never be directly called by users of the NDR.
+#'@inherit aggregate_resample_run_results
 aggregate_resample_run_results.rm_confusion_matrix <- function(resample_run_results) {
   
   confusion_matrix <- resample_run_results
@@ -284,6 +292,8 @@ aggregate_resample_run_results.rm_confusion_matrix <- function(resample_run_resu
 #'   that is specified. If the number passed is not equal to an exact start
 #'   training time, then the closest training time will be used and a message
 #'   saying that the time specified does not exist will be printed.
+#'   
+#' @return Returns a ggplot object that plots the confusion matrix results.   
 #'   
 #' @family result_metrics
 #'
@@ -515,6 +525,7 @@ plot_MI <- function(rm_obj, plot_type = "TCD") {
 
 
 # Returns the parameters that were set in the rm_confusion_matrix object
+#' @inherit get_parameters
 #' @export
 get_parameters.rm_confusion_matrix <- function(ndr_obj) {
 

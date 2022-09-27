@@ -15,10 +15,10 @@ across resample runs. This compressed final results can be plotted (often
 by using the RM plot methods).
 }
 \description{
-This is a generic function that must be implemented by all RM objects. This
-function is called by the cross-validator to aggregate results across all
-resample runs. This method should not be called directly but instead it is
-used internally by the cross-validator (CV) object.
+This is a function that must be implemented by all RM objects. This function
+is called by the cross-validator to aggregate results across all resample
+runs. This method should not be called directly but instead it is used
+internally by the cross-validator (CV) object.
 }
 \seealso{
 \code{\link[=rm_main_results]{rm_main_results()}}, \code{\link[=rm_confusion_matrix]{rm_confusion_matrix()}}

@@ -32,6 +32,11 @@
 #'   run-time of the code and will use less memory so this can be useful for
 #'   large data sets.
 #'
+#' @return This constructor creates an NDR result metric object with the class
+#'   `rm_main_results`. Like all NDR result metric objects, this result
+#'   metric will be used by a cross-validator to create a measure of decoding
+#'   accuracy by aggregating the results after all cross-validation splits have
+#'   been run, and after all resample runs have completed.
 #'
 #' @examples
 #' # If you only want to use the rm_main_results(), then you can put it in a
@@ -78,6 +83,7 @@ new_rm_main_results <- function(the_data = data.frame(), state = "initial", opti
 
 
 # The aggregate_CV_split_results method needed to fulfill the results metric interface.
+#'@inherit aggregate_CV_split_results
 aggregate_CV_split_results.rm_main_results <- function(rm_obj, prediction_results) {
 
 
@@ -236,6 +242,7 @@ if ((sum(grepl("decision", names(prediction_results))) == 0) & (include_norm_ran
 
 
 # The aggregate_resample_run_results method needed to fulfill the results metric interface
+#'@inherit aggregate_resample_run_results
 aggregate_resample_run_results.rm_main_results <- function(resample_run_results) {
   
   central_results <- resample_run_results %>%
@@ -293,7 +300,9 @@ aggregate_resample_run_results.rm_main_results <- function(resample_run_results)
 #'
 #' @param type A string specifying the type of results to plot. Options are
 #'   'TCD' to plot a temporal cross decoding matrix or 'line' to create a line
-#'   plot of the decoding results as a function of time
+#'   plot of the decoding results as a function of time.
+#'   
+#' @return Returns a ggplot object that plots the main results.
 #'
 #' @family result_metrics
 #'
@@ -311,6 +320,7 @@ plot.rm_main_results <- function(x, ..., results_to_show = "zero_one_loss", type
 
 
 # Get the parameters for the rm_main_results object
+#' @inherit get_parameters
 #' @export
 get_parameters.rm_main_results <- function(ndr_obj) {
 
@@ -360,9 +370,9 @@ get_parameters.rm_main_results <- function(ndr_obj) {
 #'   the names from the manifest file's result_name column, or if these are set
 #'   to "No result name set" then the analysisID will be the label. 
 #'   
+#' @return Returns a ggplot object that a comparison of main decoding results.
+#'   
 #' @family result_metrics
-#'
-#'
 #'
 #' @export
 plot_main_results <- function(results_dir_name, 

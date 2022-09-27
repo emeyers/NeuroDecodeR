@@ -15,6 +15,12 @@ returned as a list.}
 \item{results_dir_name}{A string containing the path to a directory
 that contains all the decoding results.}
 }
+\value{
+A list that has all the DECODING_RESULTS that match the \code{result_name}
+argument value in the manifest file's \code{result_name} column. If
+\code{result_name} argument matches only one result, then this DECODING_RESULTS
+is returned rather than a list of DECODING_RESULTS.
+}
 \description{
 A function that loads DECODING_RESULTS based on the result_name
 }

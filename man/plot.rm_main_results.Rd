@@ -19,7 +19,10 @@ are: 'zero_one_loss', 'normalized_rank', 'decision_values', or 'all'.}
 
 \item{type}{A string specifying the type of results to plot. Options are
 'TCD' to plot a temporal cross decoding matrix or 'line' to create a line
-plot of the decoding results as a function of time}
+plot of the decoding results as a function of time.}
+}
+\value{
+Returns a ggplot object that plots the main results.
 }
 \description{
 This function can create a line plot of the results or temporal

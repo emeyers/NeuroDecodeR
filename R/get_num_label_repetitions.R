@@ -23,7 +23,13 @@
 #'   based on the levels of a site_info variable.
 #'   
 #' @param label_levels A character vector specifying which levels to include.
-#'   If not set, all levels will be used.
+#'   If not set, all levels will be used. 
+#'   
+#' @return  A data frame with the class `label_repetition` which allows the
+#'   results to be plotted. The returned data frame has a row for each label
+#'   level, and columns with sequential integer values k = 0, 1, ... The values
+#'   in the data frame show the number of sites that have at least k repetitions
+#'   of a given stimulus.
 #'
 #' @note The returned value is an S3 object that inherits from data.frame that
 #' has an associated plot() method.
@@ -207,7 +213,6 @@ get_num_label_repetitions <- function(binned_data,
 #' use in a datasource. This function returns a ggplot2 object which can be
 #' further modified as needed.
 #'
-#'
 #' @param x A label_repetition object that was generated from calling the
 #'   get_num_label_repetitions() function.
 #' 
@@ -215,6 +220,9 @@ get_num_label_repetitions <- function(binned_data,
 #'
 #' @param show_legend A Boolean specifying whether to show a legend 
 #' that list which label each color in the plot corresponds to. 
+#' 
+#' @return. Returns a ggplot object that plots the number of sites that
+#' that have at least k label repetitions as a function of k.  
 #' 
 #' 
 #' @export
@@ -329,6 +337,9 @@ plot.label_repetition <- function(x, ..., show_legend = TRUE) {
 #'   
 #' @param label_levels A character vector specifying which levels to include.
 #'   If not set, all levels will be used.
+#'   
+#' @return A vector of integers that specific which siteIDs have at least k
+#'   repetitions of each label level (from the label levels that are used).
 #'
 #' @examples
 #' data_file <- system.file("extdata/ZD_150bins_50sampled.Rda", package = "NeuroDecodeR")
@@ -373,10 +384,15 @@ get_siteIDs_with_k_label_repetitions <- function(binned_data,
 #'
 #' @param label_levels A character vector specifying which levels to include.
 #' If not set, all levels will be used.
+#' 
+#' @return A data frame where each row corresponds to a recording site. The columns
+#' in the data frame are:
 #'
-#' @note The returned value is an S3 object that inherits from data.frame that
-#' has an associated plot() method.
-#'
+#'   * \emph{siteID}: The siteID each row in the data frame corresponds to
+#'   * \emph{min_repeats}: minimum number of repeats across all label levels
+#'   * \emph{level_XXX}: The number or repeats for a specific label level 
+#'   * \emph{site_info.XXX}: The site_info for each site
+#'  
 #'
 get_num_label_repetitions_each_site <- function(binned_data,
                                       labels,

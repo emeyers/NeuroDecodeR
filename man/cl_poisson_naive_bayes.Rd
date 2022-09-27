@@ -29,6 +29,13 @@ won't be able to compute decoding accuracy measures that are based on the
 decision values; e.g., the rm_main_results object won't be able to
 calculate normalized rank decision values.}
 }
+\value{
+This constructor creates an NDR classifier object with the class
+\code{cl_poisson_naive_bayes}. Like all NDR classifier objects, this classifier
+will be used by a cross-validator to learn the relationship between neural
+activity and experimental conditions on a training set of data, and then it
+will be used to make predictions on a test set of data.
+}
 \description{
 An implementation of a Poisson Naive Bayes classifier.
 }

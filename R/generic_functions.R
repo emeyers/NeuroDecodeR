@@ -11,11 +11,11 @@
 #'
 #' Returns the parameters set in an NDR object to enable reproducible analyses.
 #'
-#' This is a generic function that returns a data frame with the parameters of
-#' an NeuroDecodeR (NDR) object. All NDR objects (i.e., DS, FP, CL, RM and CV)
-#' need to define a method that implements this generic function. The CV
-#' object's `get_parameters()` method usually will call all the DS, FP, CL, RM
-#' and CV `get_parameters()` methods and aggregate and return all the parameters
+#' This function that returns a data frame with the parameters of an
+#' NeuroDecodeR (NDR) object. All NDR objects (i.e., DS, FP, CL, RM and CV) need
+#' to define a method that implements this generic function. The CV object's
+#' `get_parameters()` method usually will call all the DS, FP, CL, RM and CV
+#' `get_parameters()` methods and aggregate and return all the parameters
 #' aggregated from these objects. These aggregated parameters can then be used
 #' to save the results of a particular analysis based on the parameters using
 #' the [log_save_results()] function. This method is most frequently used
@@ -38,7 +38,7 @@ get_parameters <- function(ndr_obj) {
 
 
 
-#' A classifier (CL) method to train the CL and returns predictions
+#' A classifier (CL) method to train the CL and return predictions
 #'
 #' `get_predictions` takes a training set and a test set of data. It trains the
 #' CL object on the training set and returns the predictions of the on the test
@@ -84,8 +84,8 @@ get_predictions <- function(cl_obj, training_set, test_set) {
 
 #' A datasource (DS) method to generate training and test sets
 #'
-#' This is a generic function that must be implemented by all DS objects. This
-#' method should not be called directly but instead it is used internally by the
+#' This is a function that must be implemented by all DS objects. This method
+#' should not be called directly but instead it is used internally by the
 #' cross-validator (CV) object.
 #'
 #' @param ds_obj The datasource object.
@@ -117,13 +117,12 @@ get_data <- function(ds_obj) {
 
 #' A feature-preprocessor (FP) method to pre-process training and test data
 #'
-#' This is a generic function that must be implemented by all FP objects. This
-#' object learns a set of parameters from the training data (i.e., the data
-#' generated from a datasource get_data() method). The `preprocess_data()`
-#' method then uses these parameters do processing on the training and test data
-#' before the data is sent to the classifier. This method should not be called
-#' directly but instead it is used internally by the cross-validator (CV)
-#' object.
+#' This is a function that must be implemented by all FP objects. This object
+#' learns a set of parameters from the training data (i.e., the data generated
+#' from a datasource get_data() method). The `preprocess_data()` method then
+#' uses these parameters do processing on the training and test data before the
+#' data is sent to the classifier. This method should not be called directly but
+#' instead it is used internally by the cross-validator (CV) object.
 #'
 #' @param fp The FP object.
 #'
@@ -184,13 +183,15 @@ run_decoding <- function(cv_obj) {
 
 
 
+
+
 #' A result metric (RM) method to aggregate results over cross-validation splits
 #'
-#' This is a generic function that must be implemented by all RM objects. This
-#' function is called by the cross-validator results aggregated across all
+#' This is a function that must be implemented by all RM objects. This function
+#' is called by the cross-validator results aggregated across all
 #' cross-validation splits. This method should not be called directly but
 #' instead is used internally by the cross-validator (CV) object.
-#'
+#' 
 #' @param rm_obj The results metric object.
 #'
 #' @param prediction_results A data frame containing the prediction results to
@@ -222,10 +223,10 @@ aggregate_CV_split_results <- function(rm_obj, prediction_results) {
 
 #' A result metric (RM) method to aggregate results over resample runs
 #'
-#' This is a generic function that must be implemented by all RM objects. This
-#' function is called by the cross-validator to aggregate results across all
-#' resample runs. This method should not be called directly but instead it is
-#' used internally by the cross-validator (CV) object.
+#' This is a function that must be implemented by all RM objects. This function
+#' is called by the cross-validator to aggregate results across all resample
+#' runs. This method should not be called directly but instead it is used
+#' internally by the cross-validator (CV) object.
 #'
 #' @param resample_run_results The decoding results from all resample runs.
 #'

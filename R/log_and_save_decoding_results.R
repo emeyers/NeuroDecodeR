@@ -1,7 +1,7 @@
 #'  Saves the DECODING_RESULTS and logs the parameters used in the analysis
 #'
-#' This function takes results returned by the cross-validator's run_decoding()
-#' method and uses the cross-validator's get_properties() method to save a log
+#' This function takes results returned by the cross-validator's `run_decoding()`
+#' method and uses the cross-validator's `get_properties()` method to save a log
 #' of the results that be used to reload the results.
 #'
 #' @param DECODING_RESULTS A list of results returned by the cross-validator's
@@ -13,10 +13,16 @@
 #' @param result_name A string that gives a human readable name for the results
 #'   that are to be saved. This name can be used to load the results later. The
 #'   default value is "No result name set".
+#'   
+#' @return Does not return a value but instead creates a directory that stores
+#'   an .rda file with the decoding results and either creates or updates a
+#'   manifest files that has information about the decoding results.
 #'
 #'
 #' @export
-log_save_results <- function(DECODING_RESULTS, save_directory_name, result_name = "No result name set") {
+log_save_results <- function(DECODING_RESULTS, 
+                             save_directory_name, 
+                             result_name = "No result name set") {
 
 
   # if the directory name does not end with a slash, add a slash to the directory name
@@ -83,10 +89,13 @@ log_save_results <- function(DECODING_RESULTS, save_directory_name, result_name 
 #'  A function that checks if a decoding analysis has already been run
 #'
 #' @param decoding_params A data frame of decoding parameters that can
-#'  be created by calling the cross-validator's get_parameters() method.
+#'  be created by calling the cross-validator's `get_parameters()` method.
 #'
-#' @param manifest_df A manifest file that has the list of parameters
-#'  for which decoding analyses have already been run.
+#' @param manifest_df A manifest data frame that has the list of parameters for
+#'   which decoding analyses have already been run.
+#'  
+#' @return returns a Boolean indicating if results with a given set of 
+#' parameters already exist in the manifest data frame.
 #'
 #'
 #' @export
@@ -94,7 +103,7 @@ log_check_results_already_exist <- function(decoding_params, manifest_df) {
   
   if (dim(manifest_df)[2] == 0) {
 
-    # if the manifest is empty, the results have not been previosly run
+    # if the manifest is empty, the results have not been previously run
     return(FALSE)
     
   } else {
@@ -181,10 +190,15 @@ add_current_parameters_to_manifest <- function(decoding_params, manifest_df) {
 #' A function that loads DECODING_RESULTS based on decoding_parameters
 #'
 #' @param decoding_params A data frame of decoding parameters that can
-#'  be created by calling the cross-validator's get_parameters() method.
+#'  be created by calling the cross-validator's `get_parameters()` method.
 #'
 #' @param results_dir_name A string containing the path to a directory
 #'   that contains all the decoding results.
+#'   
+#' @return A list that has all the DECODING_RESULTS that match the parameters
+#'   that were specified. If only a single result matches the parameters
+#'   specified, then this DECODING_RESULTS is returned rather than a list of
+#'   DECODING_RESULTS.
 #'
 #'
 #' @export
@@ -267,6 +281,11 @@ log_load_results_from_params <- function(decoding_params, results_dir_name) {
 #'
 #' @param results_dir_name A string containing the path to a directory
 #'   that contains all the decoding results.
+#'   
+#' @return A list that has all the DECODING_RESULTS that match the `result_name`
+#'   argument value in the manifest file's `result_name` column. If
+#'   `result_name` argument matches only one result, then this DECODING_RESULTS
+#'   is returned rather than a list of DECODING_RESULTS.
 #'
 #'
 #' @export

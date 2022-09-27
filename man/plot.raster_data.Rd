@@ -16,6 +16,9 @@ name of a file that has data in raster format.}
 labels in the raster data, then the raster plots will be faceted by
 this label.}
 }
+\value{
+Returns a ggplot object that plots the raster data.
+}
 \description{
 This function will plot data that is in raster format. If the data is
 a spike train consisting of only 0's and 1's then it will create a plot

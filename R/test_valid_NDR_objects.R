@@ -12,8 +12,11 @@
 #' error will be thrown that contains a message why the data is not in valid
 #' raster format.
 #'
-#' @param raster_data A data frame that will be checked to see if it
-#' is in valid raster format.
+#' @param raster_data A data frame or string specifying a file that will be
+#'   checked to see if it is in valid raster format.
+#' 
+#' @return Returns NULL if object is in valid raster format. Otherwise it will
+#'   give an error message.
 #'
 #' @examples
 #' # This is valid raster data so the function will return no error message
@@ -94,14 +97,22 @@ test_valid_raster_format <- function(raster_data) {
 
 
 
+#' Tests if a data frame is in valid binned format
+#'
+#' This function takes a data frame and tests that the data frame is in valid
+#' binned format by checking that the data frame contains variables with the
+#' appropriate names. If the data frame is not in correct binned format, an
+#' error will be thrown that contains a message why the data is not in valid
+#' binned format.
+#'
+#' @param binned_data A data frame or string specifying a file that will be
+#'   checked to see if it is in valid binned format.
+#' 
+#' @return Returns NULL if object is in valid binned format. Otherwise it will
+#'   give an error message.
+#'   
 
-# The following functions will not be exported for now. If users want to
-# create new NDR objects they can still use these internal functions to check
-# that the objects they creatd conform to NDR interfaces.
-
-
-
-# A function that checks if binned data is in a valid format
+# not exported at the moment
 test_valid_binned_format <- function(binned_data) {
   
   if (is.character(binned_data)) {
@@ -168,11 +179,38 @@ test_valid_binned_format <- function(binned_data) {
 
 
 
-### Functions for testing if objects are in valid NDR format --------------
+
+### Functions for testing if objects each of the 5 NDR object types are in
+### valid NDR format. These functions are used internally to test appropriate
+### objects are passed to different functions and can could be helpful
+### if developing new NDR objects  --------------
 
 
-# calls the specific test_valid_XXX function below depending on the class of
-# the ndr object to test if the ndr object is valid
+
+
+# The test_valid_ndr_object function works by calling the specific
+# test_valid_XXX function below depending on the class of the NDR object to test
+# if the NDR object is valid
+
+
+
+#' Tests if an object is a valid NDR object
+#'
+#' This function takes an object and tests whether it is a valid NDR object;
+#' i.e., whether it is an object that is either an DS, FP, CL, RM or CV object.
+#' If it is a valid NDR object, then it returns a string specifying the prefix
+#' of the type of object it is; i.e., 'ds', 'fp', 'cl', 'rm' or 'cv'. If it
+#' is not an NDR object then an error is thrown.  
+#'
+#' @param ndr_object An object that should be an NDR object. 
+#'
+#' @return Returns a string if the `ndr_object` is a valid NDR object. The
+#'   string is either 'ds', 'fp', 'cl', 'rm' or 'cv' which specifies what type
+#'   of object it is. If `ndr_object` is not an NDR object, then an error is
+#'   thrown.
+#'  
+#' @keywords internal 
+#' @export 
 test_valid_ndr_object <- function(ndr_object) {
   
   # get the first two characters of the class name
@@ -193,10 +231,12 @@ test_valid_ndr_object <- function(ndr_object) {
 
 
 
+
+
 get_ndr_object_type <- function(ndr_object) {
   
   #if (!inherits(ndr_object, "ndr_object")) {
-  #  stop("Not a valid ndr object. All ndr objects must inhert from the ndr_object class.")
+  #  stop("Not a valid ndr object. All ndr objects must inherit from the ndr_object class.")
   #}
 
   ndr_object_class_name <- class(ndr_object)[1]
@@ -216,13 +256,6 @@ get_ndr_object_type <- function(ndr_object) {
 
 
 
-
-
-
-
-
-### Functions for testing if objects each of the 5 ndr object tyapes are in
-### valid NDR format --------------
 
 
 # A function that checks that a datasource conforms to the NDR interface
@@ -437,7 +470,6 @@ check_df_contains_variable <- function(df, variable_name, error_message_method_n
 
 
 
-
 # A helper function that generates data to test datasources and feature-preprocessors
 get_example_training_and_test_data <- function() {
   
@@ -465,3 +497,5 @@ get_example_training_and_test_data <- function() {
   example_training_test_data
   
 }
+
+

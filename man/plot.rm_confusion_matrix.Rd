@@ -42,6 +42,9 @@ that is specified. If the number passed is not equal to an exact start
 training time, then the closest training time will be used and a message
 saying that the time specified does not exist will be printed.}
 }
+\value{
+Returns a ggplot object that plots the confusion matrix results.
+}
 \description{
 This function plots confusion matrices after the decoding analysis has been
 run (and all results have been aggregated). This function can also plot

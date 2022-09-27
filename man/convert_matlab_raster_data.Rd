@@ -50,6 +50,10 @@ variable to the data called 'trial_number' that has sequential trial. These
 trials numbers are needed for data that was recorded simultaneously so that
 trials can be aligned across different sites.}
 }
+\value{
+Returns a string with the name of the directory that the .rda raster
+files have been saved to.
+}
 \description{
 If one already has raster data created in MATLAB (.mat files), this function
 can be used to convert it to an R format (.rda files) that can be used with

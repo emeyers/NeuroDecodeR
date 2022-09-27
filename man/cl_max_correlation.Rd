@@ -11,15 +11,15 @@ cl_max_correlation(
 }
 \arguments{
 \item{ndr_container_or_object}{The purpose of this argument is to make the
-constructor of the cl_maximum_correlation classifier work with the
-magrittr pipe (\%>\%) operator. This argument should almost never be directly
-set by the user to anything other than NULL. If this is set to the default
-value of NULL, then the constructor will return a cl_max_correlation
-object. If this is set to an ndr container, then a cl_max_correlation
-object will be added to the container and the container will be returned.
-If this argument is set to another ndr object, then both that ndr object as
-well as a new cl_maximum_correlation object will be added to a new
-container and the container will be returned.}
+constructor of the cl_maximum_correlation classifier work with the pipe
+(|>) operator. This argument should almost never be directly set by the
+user to anything other than NULL. If this is set to the default value of
+NULL, then the constructor will return a cl_max_correlation object. If this
+is set to an NDT container, then a cl_max_correlation object will be added
+to the container and the container will be returned. If this argument is
+set to another NDT object, then both that NDR object as well as a new
+cl_maximum_correlation object will be added to a new container and the
+container will be returned.}
 
 \item{return_decision_values}{A Boolean specifying whether the prediction
 function should return columns that have the decision values. Setting this
@@ -28,6 +28,13 @@ temporal resolution data sets. However if this is set to FALSE< metrics
 won't be able to compute decoding accuracy measures that are based on the
 decision values; e.g., the rm_main_results object won't be able to
 calculate normalized rank decision values.}
+}
+\value{
+This constructor creates an NDR classifier object with the class
+\code{cl_max_correlation}. Like all NDR classifier objects, this classifier will
+be used by a cross-validator to learn the relationship between neural
+activity and experimental conditions on a training set of data, and then it
+will be used to make predictions on a test set of data.
 }
 \description{
 An implementation of a maximum correlation coefficient classifier.
@@ -42,9 +49,9 @@ returned as the predicted label. The decision values returned by the
 classifier are the correlation coefficients between all test points and all
 templates.
 
-Like all classifiers (CL) objects, this classifier has a get_predictions()
-method which learns a model based on training data and then makes predictions
-on the test data.
+Like all classifiers (CL) objects, this classifier has a private
+get_predictions() method which learns a model based on training data and then
+makes predictions on the test data.
 }
 \examples{
 # running a basic decoding analysis using the cl_max_correlation

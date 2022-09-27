@@ -7,8 +7,12 @@
 test_valid_raster_format(raster_data)
 }
 \arguments{
-\item{raster_data}{A data frame that will be checked to see if it
-is in valid raster format.}
+\item{raster_data}{A data frame or string specifying a file that will be
+checked to see if it is in valid raster format.}
+}
+\value{
+Returns NULL if object is in valid raster format. Otherwise it will
+give an error message.
 }
 \description{
 This function takes a data frame and tests that the data frame is in valid

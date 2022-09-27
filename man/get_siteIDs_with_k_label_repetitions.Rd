@@ -24,6 +24,10 @@ repetitions of all label levels.}
 \item{label_levels}{A character vector specifying which levels to include.
 If not set, all levels will be used.}
 }
+\value{
+A vector of integers that specific which siteIDs have at least k
+repetitions of each label level (from the label levels that are used).
+}
 \description{
 This function gets the siteIDs that have at least k label level
 repetitions. These siteIDs can be used in a datasource to only get data

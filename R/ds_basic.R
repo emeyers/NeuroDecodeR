@@ -60,6 +60,10 @@
 #'   get_data() function to return simultaneous populations rather than
 #'   pseudo-populations.
 #'
+#' @return This constructor creates an NDR datasource object with the class
+#'   `ds_basic`. Like all NDR datasource objects, this datasource will be used
+#'   by the cross-validator to generate training and test data sets.
+#'
 #'
 #' @examples
 #' # A typical example of creating a datasource to be passed cross-validation object
@@ -77,6 +81,12 @@
 #' ds <- ds_basic(data_file, "stimulus_ID", 18,
 #'   label_levels = c("car", "hand", "kiwi")
 #' )
+#'
+#' # One never explicitly calls the get_data() function, but rather this is
+#' # called by the cross-validator. However, to illustrate what this function
+#' # does, we can call it explicitly here to get training and test data:
+#' all_cv_data <- get_data(ds)
+#' names(all_cv_data)
 #'
 #' @family datasource
 #'
@@ -293,6 +303,7 @@ ds_basic <- function(binned_data,
 
 
 
+#' @inherit get_data
 #' @export
 get_data.ds_basic <- function(ds_obj) {
 
@@ -432,6 +443,7 @@ get_data.ds_basic <- function(ds_obj) {
 
 
 
+#' @inherit get_parameters
 #' @export
 get_parameters.ds_basic <- function(ndr_obj) {
 

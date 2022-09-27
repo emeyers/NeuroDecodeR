@@ -60,6 +60,9 @@
 #'   get_data() function to return simultaneous populations rather than
 #'   pseudo-populations.
 #'
+#' @return This constructor creates an NDR datasource object with the class
+#'   `ds_generalization`. Like all NDR datasource objects, this datasource will
+#'   be used by the cross-validator to generate training and test data sets.
 #'
 #' @examples
 #' # One can test if a neural population contains information that is position
@@ -179,6 +182,7 @@ ds_generalization <- function(binned_data,
 
 
 
+#' @inherit get_data
 #' @export
 get_data.ds_generalization <- function(ds_obj) {
 
@@ -262,6 +266,7 @@ get_data.ds_generalization <- function(ds_obj) {
 
 
 
+#' @inherit get_parameters
 #' @export
 get_parameters.ds_generalization <- function(ndr_obj) {
 

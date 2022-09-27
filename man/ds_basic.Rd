@@ -66,6 +66,11 @@ was recorded simultaneously, then setting this variable to 1 will cause the
 get_data() function to return simultaneous populations rather than
 pseudo-populations.}
 }
+\value{
+This constructor creates an NDR datasource object with the class
+\code{ds_basic}. Like all NDR datasource objects, this datasource will be used
+by the cross-validator to generate training and test data sets.
+}
 \description{
 The standard datasource used to get training and test splits of data.
 }
@@ -96,6 +101,12 @@ ds <- ds_basic(data_file, "stimulus_ID", 6,
 ds <- ds_basic(data_file, "stimulus_ID", 18,
   label_levels = c("car", "hand", "kiwi")
 )
+
+# One never explicitly calls the get_data() function, but rather this is
+# called by the cross-validator. However, to illustrate what this function
+# does, we can call it explicitly here to get training and test data:
+all_cv_data <- get_data(ds)
+names(all_cv_data)
 
 }
 \seealso{

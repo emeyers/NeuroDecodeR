@@ -72,6 +72,11 @@ were recorded simultaneously, then setting this variable to 1 will cause the
 get_data() function to return simultaneous populations rather than
 pseudo-populations.}
 }
+\value{
+This constructor creates an NDR datasource object with the class
+\code{ds_generalization}. Like all NDR datasource objects, this datasource will
+be used by the cross-validator to generate training and test data sets.
+}
 \description{
 This datasource is useful for assessing whether information is
 invariant/abstract to particular conditions.

@@ -8,10 +8,14 @@ log_check_results_already_exist(decoding_params, manifest_df)
 }
 \arguments{
 \item{decoding_params}{A data frame of decoding parameters that can
-be created by calling the cross-validator's get_parameters() method.}
+be created by calling the cross-validator's \code{get_parameters()} method.}
 
-\item{manifest_df}{A manifest file that has the list of parameters
-for which decoding analyses have already been run.}
+\item{manifest_df}{A manifest data frame that has the list of parameters for
+which decoding analyses have already been run.}
+}
+\value{
+returns a Boolean indicating if results with a given set of
+parameters already exist in the manifest data frame.
 }
 \description{
 A function that checks if a decoding analysis has already been run

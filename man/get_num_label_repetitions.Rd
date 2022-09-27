@@ -25,6 +25,13 @@ based on the levels of a site_info variable.}
 \item{label_levels}{A character vector specifying which levels to include.
 If not set, all levels will be used.}
 }
+\value{
+A data frame with the class \code{label_repetition} which allows the
+results to be plotted. The returned data frame has a row for each label
+level, and columns with sequential integer values k = 0, 1, ... The values
+in the data frame show the number of sites that have at least k repetitions
+of a given stimulus.
+}
 \description{
 Calculates number of sites that have at least k label level
 repetitions for all values k. This information is useful for assessing how to

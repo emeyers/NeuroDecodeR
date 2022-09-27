@@ -16,13 +16,19 @@ used for calculating the minimum number of level repetitions.}
 \item{label_levels}{A character vector specifying which levels to include.
 If not set, all levels will be used.}
 }
+\value{
+A data frame where each row corresponds to a recording site. The columns
+in the data frame are:
+\itemize{
+\item \emph{siteID}: The siteID each row in the data frame corresponds to
+\item \emph{min_repeats}: minimum number of repeats across all label levels
+\item \emph{level_XXX}: The number or repeats for a specific label level
+\item \emph{site_info.XXX}: The site_info for each site
+}
+}
 \description{
 Calculates how many repeated trials there are for each label
 level for each site. This can be useful for selecting sites that have a
 minimum number of repetitions of each stimulus or other experimental
 condition.
-}
-\note{
-The returned value is an S3 object that inherits from data.frame that
-has an associated plot() method.
 }

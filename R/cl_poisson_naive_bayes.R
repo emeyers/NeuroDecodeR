@@ -21,6 +21,12 @@
 #'   decision values; e.g., the rm_main_results object won't be able to
 #'   calculate normalized rank decision values.
 #'
+#' @return This constructor creates an NDR classifier object with the class
+#'   `cl_poisson_naive_bayes`. Like all NDR classifier objects, this classifier
+#'   will be used by a cross-validator to learn the relationship between neural
+#'   activity and experimental conditions on a training set of data, and then it
+#'   will be used to make predictions on a test set of data.
+#'
 #'
 #' @details
 #'
@@ -71,7 +77,6 @@
 
 
 
-
 # the constructor
 #' @export
 cl_poisson_naive_bayes <- function(ndr_container_or_object = NULL,
@@ -88,6 +93,9 @@ cl_poisson_naive_bayes <- function(ndr_container_or_object = NULL,
 
 
 
+
+# the get_predictions method
+#' @inherit get_predictions
 #' @export
 get_predictions.cl_poisson_naive_bayes <- function(cl_obj, training_set, test_set) {
 
@@ -167,8 +175,10 @@ get_predictions.cl_poisson_naive_bayes <- function(cl_obj, training_set, test_se
 
 
 
+
 # since there are no parameters for the cl_poisson_naive_bayes just return a data
 # frame with cl_poisson_naive_bayes.cl_poisson_naive_bayes saying no params...
+#' @inherit get_parameters
 #' @export
 get_parameters.cl_poisson_naive_bayes <- function(ndr_obj) {
   data.frame(cl_poisson_naive_bayes.cl_poisson_naive_bayes = "does not have settable parameters")

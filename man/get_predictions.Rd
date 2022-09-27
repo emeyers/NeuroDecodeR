@@ -2,7 +2,7 @@
 % Please edit documentation in R/generic_functions.R
 \name{get_predictions}
 \alias{get_predictions}
-\title{A classifier (CL) method to train the CL and returns predictions}
+\title{A classifier (CL) method to train the CL and return predictions}
 \usage{
 get_predictions(cl_obj, training_set, test_set)
 }

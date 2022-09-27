@@ -27,6 +27,12 @@ and the container will be returned.}
 \item{num_sites_to_exclude}{The number of features with the smallest p-values
 that should be excluded.}
 }
+\value{
+This constructor creates an NDR feature preprocessor object with the
+class \code{fp_select_k_features}. Like all NDR feature preprocessor objects,
+this feature preprocessor will be used by the cross-validator to
+pre-process the training and test data sets.
+}
 \description{
 This feature preprocessor object applies an ANOVA to the training data to
 find the p-value of all features. It then either uses the top k features with

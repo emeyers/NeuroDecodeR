@@ -49,6 +49,10 @@ to use. The default (NULL) value is to use half of the cores detected on
 the system. If this value is set to a value of less than 1, then the code
 will be run serially.}
 }
+\value{
+Returns a string with the name of the file that was created which has
+the data in binnned format.
+}
 \description{
 This function takes the name of a directory that contains files in raster
 format and averages the data within a specified bin width at specified

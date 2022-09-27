@@ -17,6 +17,12 @@ container and the container will be returned. If this argument is set to
 another ndr object, then both that ndr object as well as a new fp_zscore
 object will be added to a new container and the container will be returned.}
 }
+\value{
+This constructor creates an NDR feature preprocessor object with the
+class \code{fp_zscore}. Like all NDR feature preprocessor objects, this feature
+preprocessor will be used by the cross-validator to pre-process the
+training and test data sets.
+}
 \description{
 This feature preprocessor object finds the mean and standard deviation using
 the training data. The preprocessor then z-score transforms the training and

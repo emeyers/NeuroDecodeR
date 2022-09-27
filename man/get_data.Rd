@@ -25,8 +25,8 @@ set.
 }
 }
 \description{
-This is a generic function that must be implemented by all DS objects. This
-method should not be called directly but instead it is used internally by the
+This is a function that must be implemented by all DS objects. This method
+should not be called directly but instead it is used internally by the
 cross-validator (CV) object.
 }
 \seealso{

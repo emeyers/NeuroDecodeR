@@ -24,6 +24,12 @@
 #'
 #' @param num_sites_to_exclude The number of features with the smallest p-values
 #'   that should be excluded.
+#'   
+#' @return This constructor creates an NDR feature preprocessor object with the
+#'   class `fp_select_k_features`. Like all NDR feature preprocessor objects,
+#'   this feature preprocessor will be used by the cross-validator to
+#'   pre-process the training and test data sets.
+#'   
 #'
 #' @examples
 #' # This will cause the cross-validator use only the 50 most selective sites
@@ -70,6 +76,7 @@ fp_select_k_features <- function(ndr_container_or_object = NULL,
 
 
 
+#' @inherit preprocess_data
 #' @export
 preprocess_data.fp_select_k_features <- function(fp, training_set, test_set) {
 
@@ -147,6 +154,7 @@ preprocess_data.fp_select_k_features <- function(fp, training_set, test_set) {
 
 
 
+#' @inherit get_parameters
 #' @export
 get_parameters.fp_select_k_features <- function(ndr_obj) {
   data.frame(
