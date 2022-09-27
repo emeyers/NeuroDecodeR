@@ -144,11 +144,10 @@ datasource. To use this datasource, we need to specify which label levels belong
 to each training class and which label levels belong to each test class. We can do
 by setting the `train_label_levels` and `test_label_levels` arguments to lists
 with the appropriate values. Each entry in these lists corresponds to the label
-levels for one class. For example, if we create a list train_levels[[1]]
-<- c('car_upper', 'car_middle'), and test_levels[[1]] = list('car_lower'),
-this means that the first class will be trained with data from trials when
-the car was shown in the upper and middle positions, and the first class will
-have test data from trials in which cars where shown in the lower position.
+levels for one class. For example, if we create a list `train_levels[[1]] <- c('car_upper', 'car_middle')`, and `test_levels[[1]] = list('car_lower')`, this means that the first class will be 
+trained with data from trials when the car was shown in the upper and middle
+positions, and the first class will have test data from trials in which cars
+where shown in the lower position.
 
 To create training data for each object identity at upper and middle locations,
 and test data for each object at lower location, we can use the code below. 
@@ -177,12 +176,12 @@ ds <- ds_generalization(binned_file_name, 'combined_ID_position', num_cv_splits 
 ```
 
 
-Now that we have created this ds_generalization data source, we can create a
+Now that we have created this `ds_generalization` data source, we can create a
 cross-validator as we did in the basic tutorial and get the results for training
 at upper and middle locations and testing at a lower location. We are only using
 2 resample runs here to speed up the computation, but we recommend using a
-higher number for this argument to get smoother results (for example, but using
-the default value of num_resample_runs = 50).
+higher number for this argument to get smoother results (for example, using
+the default value of `num_resample_runs = 50`).
 
 
 ```{r ds_generalization_run}
@@ -218,16 +217,15 @@ location, and by creating a new datasource each iteration.
 
 It should be noted that the `ds_generalization` is built in such a way that
 if a particular original label is mapped to the same training and test class
-(e.g., if `training_levels[[1]] <- list('car_upper')` and `test_levels[[1]]
-<- list('car_upper')`, the data used in the training set will still come from
-different trials than the data used for the test set. Thus, the cross-validation
-splits will still be valid because there will not be any of the same data in the
-training and test sets (if this mapping was done for all classes, one would end
-up getting the same results as using the ds_basic). Because there is no 'data
+(e.g., if `training_levels[[1]] <- list('car_upper')` and `test_levels[[1]] <- list('car_upper')`, 
+the data used in the training set will still come from different trials than the
+data used for the test set. Thus, the cross-validation splits will still be
+valid because there will not be any of the same data in the training and test
+sets (if this mapping was done for all classes, one would end up getting the
+same results as using the `ds_basic` datasource). Because there is no 'data
 leakage’, the following code allows for fair comparisons between results where
 the classifier was trained and tested with data from the same location vs. where
-the classifier was trained and tested with data from different
-locations.
+the classifier was trained and tested with data from different locations.
 
 Note that the code below will take several minutes to run. 
 

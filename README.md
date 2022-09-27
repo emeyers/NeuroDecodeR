@@ -63,11 +63,13 @@ package vignettes.
 library(NeuroDecodeR)
 
 # file to data in "binned format"
-basedir_file_name <- system.file(file.path("extdata", "ZD_150bins_50sampled.Rda"), package="NeuroDecodeR")
+basedir_file_name <- system.file(file.path("extdata", "ZD_150bins_50sampled.Rda"), 
+                                 package="NeuroDecodeR")
 
 # create the DS, FP, CL, RM, and CV objects
 ds <- ds_basic(basedir_file_name, 'stimulus_ID', 5, num_label_repeats_per_cv_split = 3)
 #> Automatically selecting sites_IDs_to_use. Since num_cv_splits = 5 and num_label_repeats_per_cv_split = 3, all sites that have 15 repetitions have been selected. This yields 132 sites that will be used for decoding (out of 132 total).
+
 fps <- list(fp_zscore())
 cl <- cl_max_correlation()
 rms <- list(rm_main_results(), rm_confusion_matrix())
@@ -75,7 +77,7 @@ cv <- cv_standard(datasource = ds,
                   classifier = cl, 
                   feature_preprocessors = fps, 
                   result_metrics = rms, 
-                  num_resample_runs = 2)
+                  num_resample_runs = 2)  # better to use more resample runs for actual analyses (default is 50)
 
 # run a decoding analysis (this takes a few minutes) 
 DECODING_RESULTS <- run_decoding(cv)

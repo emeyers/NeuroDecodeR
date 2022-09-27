@@ -52,7 +52,7 @@
 #' cv <- cv_standard(datasource = ds, 
 #'                   classifier = cl, 
 #'                   feature_preprocessors = fps,
-#'                   num_resample_runs = 2)
+#'                   num_resample_runs = 2) # better to use more resample runs for actual analyses (default is 50)
 #' \donttest{
 #' DECODING_RESULTS <- run_decoding(cv)
 #' }
