@@ -26,7 +26,6 @@
 #' 
 #' 
 #' @examples
-#' \donttest{
 #' # reading in a csv file in raster format
 #' csv_raster_file_name <- file.path(
 #'   system.file("extdata", package = "NeuroDecodeR"),
@@ -37,7 +36,6 @@
 #' # read the csv file into a raster_data data frame
 #' raster_data <- read_raster_data(csv_raster_file_name)
 #'
-#'}
 #'
 #' @export
 read_raster_data <- function(raster_file_name) {

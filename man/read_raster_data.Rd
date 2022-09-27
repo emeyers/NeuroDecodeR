@@ -33,7 +33,6 @@ and returns data in raster_data format (i.e., a data frame with the raster.data
 class attribute).
 }
 \examples{
-\donttest{
 # reading in a csv file in raster format
 csv_raster_file_name <- file.path(
   system.file("extdata", package = "NeuroDecodeR"),
@@ -44,6 +43,5 @@ csv_raster_file_name <- file.path(
 # read the csv file into a raster_data data frame
 raster_data <- read_raster_data(csv_raster_file_name)
 
-}
 
 }
