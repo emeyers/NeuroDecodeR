@@ -1,5 +1,37 @@
 
 
+## Resubmission 5
+
+Thank you for the feedback Beni Altmann! I have made the required changes mentioned which are: 
+
+ * Added \value statements describing the outputs of all the methods in the package using the roxygen
+   @return tag. 
+
+ * Removed the reference to the unexported get_data() function in the documentation for the ds_basic 
+    (i.e., removed the reference that involved :::).
+    
+ * Updated all references to \dontrun{} to now be \donttest{} in the documentation as requested. 
+ 
+ * Went through all the examples/vignettes/tests and checked where all files were being written.
+   Changed two vignettes so that they write to temporary directory. All files now should only be 
+   written to temporal directories.
+ 
+ * Changed all the examples, vignettes, and tests so that they only uses 2 parallel cores. 
+    FYI, this is not be ideal since I feel like some examples might mislead the 
+    user to choose settings that are not the best way to use the package. However, I 
+    still made the changes to conform to CRANs standards, and I made comments in the 
+    examples that one should choose different settings when running an actual analysis, 
+    so hopefully that will be ok.
+
+   
+Thanks for your help reviewing the package!
+
+Ethan
+
+
+
+
+
 ## Resubmission 4
 
 Responding to feedback from Uwe Ligges:
