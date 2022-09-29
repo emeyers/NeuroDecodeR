@@ -1,4 +1,10 @@
 
+## Resubmission 5b
+
+I tried to resubmit to CRAN addressing the comments made by Beni Altmann. I just received an email that my resubmission did not pass the incoming checks because there was a note, but the only note was addressed in my initial submission, namely, I am using the doSnow package so that I can use the txtProgressBar. Additionally,
+there was a message that the name Kreiman is a spelling mistake, but this is the correct spelling of an author of a paper that was requested that I cite. Thus, I believe my resubmission passes all the checks and is ready for further review. 
+
+
 
 ## Resubmission 5
 

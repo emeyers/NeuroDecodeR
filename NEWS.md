@@ -1,3 +1,10 @@
+
+# NeuroDecodeR (development version)
+
+Updates made to the next version of the package will be added here.
+
+
+
 # NeuroDecodeR 0.1.0
 
 ## Initial release!
