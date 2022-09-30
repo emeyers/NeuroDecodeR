@@ -89,7 +89,7 @@ library(NeuroDecodeR)
 
 ```{r}
 
-data_file_name <- system.file("extdata/ZD_150bins_50sampled.Rda", package="NeuroDecodeR")
+data_file_name <- system.file(file.path("extdata", "ZD_150bins_50sampled.Rda"), package="NeuroDecodeR")
 ds <- ds_basic(data_file_name, 'stimulus_ID', 18)
 
 all_cv_data <- get_data(ds)  
@@ -159,7 +159,7 @@ library(dplyr)
 ```{r}
 
 # create a ds_basic to get the data
-data_file_name <- system.file("extdata/ZD_150bins_50sampled.Rda", package="NeuroDecodeR")
+data_file_name <- system.file(file.path("extdata", "ZD_150bins_50sampled.Rda"), package="NeuroDecodeR")
 ds <- ds_basic(data_file_name, 'stimulus_ID', 18)
 cv_data <- get_data(ds)  
  
@@ -259,7 +259,7 @@ library(dplyr)
 ```{r}
 
 # create a ds_basic to get the data
-data_file_name <- system.file("extdata/ZD_150bins_50sampled.Rda", package="NeuroDecodeR")
+data_file_name <- system.file(file.path("extdata", "ZD_150bins_50sampled.Rda"), package="NeuroDecodeR")
 ds <- ds_basic(data_file_name, 'stimulus_ID', 18)
 cv_data <- get_data(ds)  
  

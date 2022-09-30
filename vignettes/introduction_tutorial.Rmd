@@ -189,7 +189,7 @@ see how many times the labels were repeated.
 
 ```{r label_repetitions}
 
-binned_file_name <- system.file("extdata/ZD_150bins_50sampled.Rda", package="NeuroDecodeR")
+binned_file_name <- system.file(file.path("extdata", "ZD_150bins_50sampled.Rda"), package="NeuroDecodeR")
 label_rep_info <- get_num_label_repetitions(binned_file_name, "stimulus_ID") 
 plot(label_rep_info)  
 

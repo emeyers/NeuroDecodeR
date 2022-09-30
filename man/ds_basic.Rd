@@ -87,7 +87,7 @@ get training and testing splits of data that can be passed to a classifier.
 }
 \examples{
 # A typical example of creating a datasource to be passed cross-validation object
-data_file <- system.file("extdata/ZD_150bins_50sampled.Rda", package = "NeuroDecodeR")
+data_file <- system.file(file.path("extdata", "ZD_150bins_50sampled.Rda"), package = "NeuroDecodeR")
 ds <- ds_basic(data_file, "stimulus_ID", 18)
 
 # If one has many repeats of each label, decoding can be faster if one

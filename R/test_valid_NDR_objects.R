@@ -33,7 +33,8 @@
 #' # Binned data is not in raster format (it has an extra column called siteID) so
 #' # checking if it is in raster format should return an error.
 #'
-#' binned_file_name <- system.file("extdata/ZD_150bins_50sampled.Rda", package = "NeuroDecodeR")
+#' binned_file_name <- system.file(file.path("extdata", "ZD_150bins_50sampled.Rda"), 
+#'                                 package = "NeuroDecodeR")
 #' try(test_valid_raster_format(binned_file_name))
 #' 
 #' 

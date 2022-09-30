@@ -129,7 +129,7 @@ create_binned_data <- function(raster_dir_name,
       # doing this to avoid a message being printed that the read_matlab_raster_data() function should be used
       raster_data <- read_matlab_raster_data(file.path(raster_dir_name, curr_file))
     } else {
-      raster_data <- NeuroDecodeR::read_raster_data(file.path(raster_dir_name, curr_file))
+      raster_data <- read_raster_data(file.path(raster_dir_name, curr_file))
     }
 
     
