@@ -121,20 +121,34 @@ aggregate_CV_split_results.rm_confusion_matrix <- function(rm_obj, prediction_re
 
   if (options$create_decision_vals_confusion_matrix) {
 
-    # create the decision value confusion matrix
-    confusion_matrix_decision_vals <- prediction_results %>%
-      select(-.data$predicted_labels, -.data$CV) %>%
-      dplyr::group_by(.data$train_time, .data$test_time, .data$actual_labels) %>%
-      summarize_all(mean) %>%
-      tidyr::pivot_longer(starts_with("decision_vals"),
-        names_to = "predicted_labels",
-        values_to = "mean_decision_vals") %>%
-      mutate(predicted_labels = gsub("decision_vals.", "", .data$predicted_labels))
-
-    confusion_matrix <- left_join(confusion_matrix_decision_vals, confusion_matrix,
-      by = c("train_time", "test_time", "actual_labels", "predicted_labels"))
-
-    confusion_matrix$n[is.na(confusion_matrix$n)] <- 0
+    if ( sum(grepl("decision_vals", names(prediction_results))) == 0) {
+      
+      warning(paste("The classifier selected did not returned decision values.", 
+              "Setting rm_confusion_matrix option 'create_decision_vals_confusion_matrix' to FALSE.",
+              "A decision values confusion matrix will not be created.\n"))
+      
+      options$create_decision_vals_confusion_matrix <- FALSE 
+      attr(rm_obj, "options") <- options
+      
+      
+    } else {
+    
+      # create the decision value confusion matrix
+      confusion_matrix_decision_vals <- prediction_results %>%
+        select(-.data$predicted_labels, -.data$CV) %>%
+        dplyr::group_by(.data$train_time, .data$test_time, .data$actual_labels) %>%
+        summarize_all(mean) %>%
+        tidyr::pivot_longer(starts_with("decision_vals"),
+          names_to = "predicted_labels",
+          values_to = "mean_decision_vals") %>%
+        mutate(predicted_labels = gsub("decision_vals.", "", .data$predicted_labels))
+  
+      confusion_matrix <- left_join(confusion_matrix_decision_vals, confusion_matrix,
+        by = c("train_time", "test_time", "actual_labels", "predicted_labels"))
+  
+      confusion_matrix$n[is.na(confusion_matrix$n)] <- 0
+    }
+    
     
   }
 

@@ -108,7 +108,7 @@ if ((sum(grepl("decision", names(prediction_results))) == 0) & (include_norm_ran
   # Perhaps this should be an error instead of just resetting the argument value which in general
   #  is a pretty bad thing to do. However, likely 
   error_message <- paste("The classifier selected did not returned decision values.", 
-                         "Setting argument 'include_norm_rank_results' to FALSE.")
+                         "Setting argument 'include_norm_rank_results' to FALSE.\n")
   
   warning(error_message)
   

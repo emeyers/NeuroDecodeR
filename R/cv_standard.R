@@ -216,6 +216,10 @@ new_cv_standard <- function(datasource,
   
   
   if (is.null(result_metrics)) {
+    
+    warning(paste("The result_metrics argument is NULL in the cv_standard constructor.", 
+                   "Setting the result_metrics to default values of rm_main_results and rm_confusion_matrix."))
+    
     result_metrics <- list(
       rm_main_results(),
       rm_confusion_matrix())
@@ -307,7 +311,7 @@ run_decoding.cv_standard <- function(cv_obj) {
                                                .options.snow=opts) %do_type% { 
 
     
-    message(paste0("Start resample run: ", strrep(" ", 3 - nchar(as.character(iResample))),  iResample, 
+    message(paste0("\nStart resample run: ", strrep(" ", 3 - nchar(as.character(iResample))),  iResample, 
                      "   Start time: ",  Sys.time()))
     
     
