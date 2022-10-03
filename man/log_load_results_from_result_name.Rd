@@ -16,10 +16,12 @@ returned as a list.}
 that contains all the decoding results.}
 }
 \value{
-A list that has all the DECODING_RESULTS that match the \code{result_name}
-argument value in the manifest file's \code{result_name} column. If
-\code{result_name} argument matches only one result, then this DECODING_RESULTS
-is returned rather than a list of DECODING_RESULTS.
+A named list that has all the DECODING_RESULTS that match the
+\code{result_name} argument value in the manifest file's \code{result_name} column.
+The names on the list that are returned correspond to the result_names for
+each result in the manifest file. If \code{result_name} argument matches only
+one result, then this DECODING_RESULTS is returned rather than a list of
+DECODING_RESULTS.
 }
 \description{
 A function that loads DECODING_RESULTS based on the result_name

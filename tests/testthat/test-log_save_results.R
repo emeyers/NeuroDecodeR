@@ -122,10 +122,6 @@ test_that("log_load_results_from_result_name() can load saved results based on t
   decoding_retrieved_2 <- log_load_results_from_result_name("results .*", results_dir_name)
   
   
-  # the names here are null since this is a list of decoding results
-  expect_null(names(decoding_retrieved_2))
-  
-  
   # expect an error when trying to get a result for a name that does not exist
   expect_error(log_load_results_from_result_name("e = 2r", results_dir_name))
   

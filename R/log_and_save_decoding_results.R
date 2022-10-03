@@ -282,10 +282,12 @@ log_load_results_from_params <- function(decoding_params, results_dir_name) {
 #' @param results_dir_name A string containing the path to a directory
 #'   that contains all the decoding results.
 #'   
-#' @return A list that has all the DECODING_RESULTS that match the `result_name`
-#'   argument value in the manifest file's `result_name` column. If
-#'   `result_name` argument matches only one result, then this DECODING_RESULTS
-#'   is returned rather than a list of DECODING_RESULTS.
+#' @return A named list that has all the DECODING_RESULTS that match the
+#'   `result_name` argument value in the manifest file's `result_name` column.
+#'   The names on the list that are returned correspond to the result_names for
+#'   each result in the manifest file. If `result_name` argument matches only
+#'   one result, then this DECODING_RESULTS is returned rather than a list of
+#'   DECODING_RESULTS.
 #'
 #'
 #' @export
@@ -341,6 +343,9 @@ log_load_results_from_result_name <- function(result_name, results_dir_name) {
       load(paste0(results_dir_name, matching_results$analysis_ID[i], ".rda"))
       all_decoding_results[[i]] <- DECODING_RESULTS
     }
+
+    # adding result_name and the list names (alternatively, could use the analysis_ID) 
+    names(all_decoding_results) <- matching_results$result_name   # matching_results$analysis_ID 
 
     # return all the decoding results as a list
     all_decoding_results
