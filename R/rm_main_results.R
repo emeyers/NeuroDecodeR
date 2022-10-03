@@ -407,15 +407,46 @@ plot_main_results <- function(results_dir_name,
     
     # check that rm_main_results exist in the current DECODING_RESULTS file
     if (!("rm_main_results" %in% names(decoding_results))) {
-      stop(paste("The DECODING_RESULTS named", result_name, "with analysis_ID",  
-                 decoding_results$cross_validation_paramaters$analysis_ID,
-                 "does not contain rm_main_results so can not plot this result."))
+      
+      # if decoding_results is a list containing multiple DECODING_RESULTS, 
+      #  create a data frame with all the rm_main_results together
+
+      # very ugly/hacky solution to get unique names but quick fix for now
+      multi_result_names <- names(decoding_results)
+      if (length(unique(multi_result_names)) != length(multi_result_names)) {
+        multi_result_names <- paste(multi_result_names, "--", sprintf("%003d", 1:length(multi_result_names)))
+      }
+      
+      for (iMultiResult in 1:length(decoding_results)) {
+        
+        curr_multi_result <- decoding_results[[iMultiResult]]
+        
+        # rm_main_results was not saved in one of the result files
+        if (!("rm_main_results" %in% names(curr_multi_result))) { 
+          stop(paste("The DECODING_RESULTS named", result_name, "with analysis_ID",  
+                     decoding_results$cross_validation_paramaters$analysis_ID,
+                     "does not contain rm_main_results so can not plot this result."))
+        }
+        
+        curr_multi_result <- curr_multi_result$rm_main_results
+        curr_multi_result$result_name <- multi_result_names[iMultiResult]
+        
+        if (iMultiResult == 1) {
+          curr_rm_main_results <- curr_multi_result
+        } else {
+          curr_rm_main_results <- rbind(curr_rm_main_results, curr_multi_result)
+        }
+        
+      }
+      
+      
+    } else {
+      
+      curr_rm_main_results <- decoding_results$rm_main_results
+      curr_rm_main_results$result_name <- result_name
     }
     
-    curr_rm_main_results <- decoding_results$rm_main_results
-    
-    curr_rm_main_results$result_name <- result_name
-    
+
     curr_rm_main_results
     
   }
@@ -427,7 +458,7 @@ plot_main_results <- function(results_dir_name,
    
     if (is.character(results_to_plot)) {
       
-      # load all results based on their result_names
+      # load all results based on their result_names - this could be a list that has multiple DECODING_RESULTS
       DECODING_RESULTS <- log_load_results_from_result_name(results_to_plot[iResult], results_dir_name)
       
       # use the display_names if they are not null
@@ -444,8 +475,6 @@ plot_main_results <- function(results_dir_name,
       load(file.path(results_dir_name, "results_manifest.rda"))
       load(file.path(results_dir_name, paste0(manifest_df$analysis_ID[results_to_plot[iResult]], ".rda")))
         
-      
-      
       # use the display_names if they are not null
       if (!is.null(display_names)) {
         curr_result_name <- display_names[iResult]
@@ -465,7 +494,7 @@ plot_main_results <- function(results_dir_name,
 
   }
     
-
+  
   # plot the results using the helper_plot_rm_main_results() helper function
   helper_plot_rm_main_results(all_main_results, results_to_show, type)
   

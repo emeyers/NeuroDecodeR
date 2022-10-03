@@ -17,6 +17,13 @@ decision values, the and `create_decision_vals_confusion_matrix` is set to
 argument is NULL, it will print a warning to let the user know that the default
 `rm_main_rsults` and `rm_confusion_matrix` result metrics are being used.
 
+* Updated `log_load_results_from_result_name` so that if multiple names match it
+returns a named list where the names are given by the manifest `result_name`
+column.
+
+* Updated `plot_main_results` so that if the `results_to_plot` is character
+vector and multiple manifest `result_names` match in the manifest file, it will
+plot all the results that match rather than give an error.
 
 
 # NeuroDecodeR 0.1.0
