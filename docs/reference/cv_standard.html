@@ -18,7 +18,7 @@ and tested using cross-validation."><!-- mathjax --><script src="https://cdnjs.c
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">NeuroDecodeR</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.1.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.1.0.9000</span>
       </span>
     </div>
 
@@ -198,7 +198,8 @@ the results.</p></li>
 <span class="r-in"><span><span class="va">cv</span> <span class="op">&lt;-</span> <span class="fu">cv_standard</span><span class="op">(</span>datasource <span class="op">=</span> <span class="va">ds</span>, </span></span>
 <span class="r-in"><span>                 classifier <span class="op">=</span> <span class="va">cl</span>, </span></span>
 <span class="r-in"><span>                 feature_preprocessors <span class="op">=</span> <span class="va">fps</span>,</span></span>
-<span class="r-in"><span>                 num_resample_runs <span class="op">=</span> <span class="fl">2</span><span class="op">)</span>  <span class="co"># better to use more resample runs for actual analyses (default is 50)</span></span></span>
+<span class="r-in"><span>                  num_resample_runs <span class="op">=</span> <span class="fl">2</span><span class="op">)</span>  <span class="co"># better to use more resample runs (default is 50)</span></span></span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>The result_metrics argument is NULL in the cv_standard constructor. Setting the result_metrics to default values of rm_main_results and rm_confusion_matrix.</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># \donttest{</span></span></span>

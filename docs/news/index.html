@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">NeuroDecodeR</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.1.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.1.0.9000</span>
       </span>
     </div>
 
@@ -77,7 +77,15 @@
     </div>
 
     <div class="section level2">
-<h2 class="page-header" data-toc-text="0.1.0" id="neurodecoder-010">NeuroDecodeR 0.1.0<a class="anchor" aria-label="anchor" href="#neurodecoder-010"></a></h2>
+<h2 class="page-header" data-toc-text="development version" id="neurodecoder-development-version">NeuroDecodeR (development version)<a class="anchor" aria-label="anchor" href="#neurodecoder-development-version"></a></h2>
+<p>BUG FIXES AND MINOR IMPROVEMENTS</p>
+<ul><li><p>Fixed the <code>rm_confusion_matrix</code> so that if a classifier does not return decision values, the and <code>create_decision_vals_confusion_matrix</code> is set to <code>TRUE</code>, a warning message will be given and <code>create_decision_vals_confusion_matrix</code> will be set to <code>FALSE</code>.</p></li>
+<li><p>Added a warning message to the <code>cv_standard</code> constructor. If the result_metric argument is NULL, it will print a warning to let the user know that the default <code>rm_main_rsults</code> and <code>rm_confusion_matrix</code> result metrics are being used.</p></li>
+<li><p>Updated <code>log_load_results_from_result_name</code> so that if multiple names match it returns a named list where the names are given by the manifest <code>result_name</code> column.</p></li>
+<li><p>Updated <code>plot_main_results</code> so that if the <code>results_to_plot</code> is character vector and multiple manifest <code>result_names</code> match in the manifest file, it will plot all the results that match rather than give an error.</p></li>
+</ul></div>
+    <div class="section level2">
+<h2 class="page-header" data-toc-text="0.1.0" id="neurodecoder-010">NeuroDecodeR 0.1.0<small>2022-09-29</small><a class="anchor" aria-label="anchor" href="#neurodecoder-010"></a></h2>
 <div class="section level3">
 <h3 id="initial-release-0-1-0">Initial release!<a class="anchor" aria-label="anchor" href="#initial-release-0-1-0"></a></h3>
 <ul><li>This is the initial release of the NeuroDecodeR package. When new versions of the package are created, changes will be noted in this file.</li>

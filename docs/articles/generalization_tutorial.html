@@ -33,7 +33,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">NeuroDecodeR</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.1.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.1.0.9000</span>
       </span>
     </div>
 
@@ -278,11 +278,11 @@ value of <code>num_resample_runs = 50</code>).</p>
   |======================================================================| 100%</code></pre>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">tictoc</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/tictoc/man/tic.html" class="external-link">toc</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">## 7.895 sec elapsed</span></span></code></pre>
+<pre><code><span><span class="co">## 7.696 sec elapsed</span></span></code></pre>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># show the zero-one loss decoding accuracy (chance is 1/7)</span></span>
 <span><span class="va">DECODING_RESULTS</span><span class="op">$</span><span class="va">rm_main_results</span><span class="op">$</span><span class="va">zero_one_loss</span></span></code></pre></div>
-<pre><code><span><span class="co">## [1] 0.8452381</span></span></code></pre>
+<pre><code><span><span class="co">## [1] 0.8611111</span></span></code></pre>
 </div>
 <div class="section level3">
 <h3 id="training-and-testing-at-all-locations">Training and testing at all locations<a class="anchor" aria-label="anchor" href="#training-and-testing-at-all-locations"></a>
@@ -371,7 +371,7 @@ and tested with data from different locations.</p>
   |                                                                            
   |===================================                                   |  50%
   |                                                                            
-  |======================================================================| 100%7.037 sec elapsed</code></pre>
+  |======================================================================| 100%6.321 sec elapsed</code></pre>
 <pre><code><span><span class="co">## Warning in log_save_results(DECODING_RESULTS, results_dir_name, result_name): The manifest file does not exist.</span></span>
 <span><span class="co">##   Assuming this is the first result that is saved and creating manifest file</span></span></code></pre>
 <pre><code><span><span class="co">## Automatically selecting sites_IDs_to_use. Since num_cv_splits = 18 and num_label_repeats_per_cv_split = 1, all sites that have 18 repetitions have been selected. This yields 132 sites that will be used for decoding (out of 132 total).</span></span></code></pre>
@@ -381,7 +381,7 @@ and tested with data from different locations.</p>
   |                                                                            
   |===================================                                   |  50%
   |                                                                            
-  |======================================================================| 100%7.32 sec elapsed</code></pre>
+  |======================================================================| 100%7.006 sec elapsed</code></pre>
 <pre><code><span><span class="co">## Automatically selecting sites_IDs_to_use. Since num_cv_splits = 18 and num_label_repeats_per_cv_split = 1, all sites that have 18 repetitions have been selected. This yields 132 sites that will be used for decoding (out of 132 total).</span></span></code></pre>
 <pre><code>## 
   |                                                                            
@@ -389,7 +389,7 @@ and tested with data from different locations.</p>
   |                                                                            
   |===================================                                   |  50%
   |                                                                            
-  |======================================================================| 100%7.199 sec elapsed</code></pre>
+  |======================================================================| 100%7.133 sec elapsed</code></pre>
 <pre><code><span><span class="co">## Automatically selecting sites_IDs_to_use. Since num_cv_splits = 18 and num_label_repeats_per_cv_split = 1, all sites that have 18 repetitions have been selected. This yields 132 sites that will be used for decoding (out of 132 total).</span></span></code></pre>
 <pre><code>## 
   |                                                                            
@@ -397,7 +397,7 @@ and tested with data from different locations.</p>
   |                                                                            
   |===================================                                   |  50%
   |                                                                            
-  |======================================================================| 100%6.877 sec elapsed</code></pre>
+  |======================================================================| 100%7.02 sec elapsed</code></pre>
 <pre><code><span><span class="co">## Automatically selecting sites_IDs_to_use. Since num_cv_splits = 18 and num_label_repeats_per_cv_split = 1, all sites that have 18 repetitions have been selected. This yields 132 sites that will be used for decoding (out of 132 total).</span></span></code></pre>
 <pre><code>## 
   |                                                                            
@@ -405,7 +405,7 @@ and tested with data from different locations.</p>
   |                                                                            
   |===================================                                   |  50%
   |                                                                            
-  |======================================================================| 100%7.173 sec elapsed</code></pre>
+  |======================================================================| 100%6.578 sec elapsed</code></pre>
 <pre><code><span><span class="co">## Automatically selecting sites_IDs_to_use. Since num_cv_splits = 18 and num_label_repeats_per_cv_split = 1, all sites that have 18 repetitions have been selected. This yields 132 sites that will be used for decoding (out of 132 total).</span></span></code></pre>
 <pre><code>## 
   |                                                                            
@@ -413,7 +413,7 @@ and tested with data from different locations.</p>
   |                                                                            
   |===================================                                   |  50%
   |                                                                            
-  |======================================================================| 100%6.961 sec elapsed</code></pre>
+  |======================================================================| 100%7.259 sec elapsed</code></pre>
 <pre><code><span><span class="co">## Automatically selecting sites_IDs_to_use. Since num_cv_splits = 18 and num_label_repeats_per_cv_split = 1, all sites that have 18 repetitions have been selected. This yields 132 sites that will be used for decoding (out of 132 total).</span></span></code></pre>
 <pre><code>## 
   |                                                                            
@@ -421,7 +421,7 @@ and tested with data from different locations.</p>
   |                                                                            
   |===================================                                   |  50%
   |                                                                            
-  |======================================================================| 100%7.018 sec elapsed</code></pre>
+  |======================================================================| 100%6.659 sec elapsed</code></pre>
 <pre><code><span><span class="co">## Automatically selecting sites_IDs_to_use. Since num_cv_splits = 18 and num_label_repeats_per_cv_split = 1, all sites that have 18 repetitions have been selected. This yields 132 sites that will be used for decoding (out of 132 total).</span></span></code></pre>
 <pre><code>## 
   |                                                                            
@@ -429,7 +429,7 @@ and tested with data from different locations.</p>
   |                                                                            
   |===================================                                   |  50%
   |                                                                            
-  |======================================================================| 100%7.649 sec elapsed</code></pre>
+  |======================================================================| 100%7.476 sec elapsed</code></pre>
 <pre><code><span><span class="co">## Automatically selecting sites_IDs_to_use. Since num_cv_splits = 18 and num_label_repeats_per_cv_split = 1, all sites that have 18 repetitions have been selected. This yields 132 sites that will be used for decoding (out of 132 total).</span></span></code></pre>
 <pre><code>## 
   |                                                                            
@@ -437,7 +437,7 @@ and tested with data from different locations.</p>
   |                                                                            
   |===================================                                   |  50%
   |                                                                            
-  |======================================================================| 100%6.778 sec elapsed</code></pre>
+  |======================================================================| 100%6.953 sec elapsed</code></pre>
 </div>
 <div class="section level3">
 <h3 id="plotting-the-results">Plotting the results<a class="anchor" aria-label="anchor" href="#plotting-the-results"></a>
