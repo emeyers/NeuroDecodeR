@@ -37,9 +37,14 @@ package makes it easy to do neural decoding analyses in R.
 
 ## Installation
 
-You can install NeuroDecodeR package from github using:
+You can install NeuroDecodeR package from CRAN of the development version on GitHub.
 
-```{r gh-installation, eval = FALSE}
+```{r installation, eval = FALSE}
+# Current release on CRAN:
+install.packages("NeuroDecodeR")
+
+
+# Development version on GitHub:
 # install.packages("devtools")
 devtools::install_github("emeyers/NeuroDecodeR")
 ```

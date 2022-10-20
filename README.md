@@ -23,9 +23,15 @@ R.
 
 ## Installation
 
-You can install NeuroDecodeR package from github using:
+You can install NeuroDecodeR package from CRAN of the development
+version on GitHub.
 
 ``` r
+# Current release on CRAN:
+install.packages("NeuroDecodeR")
+
+
+# Development version on GitHub:
 # install.packages("devtools")
 devtools::install_github("emeyers/NeuroDecodeR")
 ```
