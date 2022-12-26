@@ -25,6 +25,10 @@ column.
 vector and multiple manifest `result_names` match in the manifest file, it will
 plot all the results that match rather than give an error.
 
+* Small fix to the `plot()` function for the `rm_main_results` object so that
+it works with version 3.4.0 of `ggplot2`. 
+
+
 
 # NeuroDecodeR 0.1.0
 

@@ -575,21 +575,18 @@ helper_plot_rm_main_results <- function(main_results, results_to_show = "zero_on
   plot_result_names <- c("Zero-one loss", "Normalized rank", "Decision values")
   names(plot_result_names) <- c("zero_one_loss", "normalized_rank", "decision_vals")
   main_results$results_to_show <- factor(main_results$results_to_show, 
-                                         levels = results_to_show, 
-                                         labels = plot_result_names[results_to_show],
-                                         ordered = TRUE)
-  
-  
+                                         levels = unique(main_results$results_to_show), 
+                                         labels = plot_result_names[results_to_show])
+
   # create data frame for chance decoding levels
-  chance_accuracy_df <- data.frame( 
-    results_to_show = c("zero_one_loss", "normalized_rank", "decision_vals"), 
+  chance_accuracy_df <- data.frame(
+    results_to_show = c("zero_one_loss", "normalized_rank", "decision_vals"),
     chance_level = c(zero_one_loss_chance, .5, NA)) %>%
-    dplyr::mutate(results_to_show = factor(.data$results_to_show, 
-                                           levels = results_to_show, 
+    dplyr::mutate(results_to_show = factor(.data$results_to_show,
+                                           levels = results_to_show,
                                            labels = plot_result_names[results_to_show],
                                            ordered = TRUE)) %>%
-    dplyr::filter(.data$results_to_show %in% unique(main_results$results_to_show)) 
-  
+    dplyr::filter(.data$results_to_show %in% unique(main_results$results_to_show))
   
   
   # actually plot the data...
@@ -639,7 +636,6 @@ helper_plot_rm_main_results <- function(main_results, results_to_show = "zero_on
         dplyr::filter(.data$train_time == .data$test_time) %>%
         ggplot(aes(.data$test_time, .data$accuracy)) 
     }
-    
     
     
     g <- g +
