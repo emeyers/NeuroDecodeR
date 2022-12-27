@@ -155,7 +155,7 @@ test_that("convert_matlab_raster_data() convert MATLAB raster data to R raster d
   # delete any saved results and manifest files that already exist
   if (file.exists(file.path(dirname(r_raster_dir_name), basename(r_raster_dir_name)))) {
     the_files <- paste0(r_raster_dir_name, list.files(r_raster_dir_name))
-    file.remove(the_files)
+    # file.remove(the_files, recursive = TRUE)
     unlink(file.path(dirname(r_raster_dir_name), basename(r_raster_dir_name)), recursive = TRUE, force = TRUE)
   } 
   
