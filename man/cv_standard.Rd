@@ -19,7 +19,7 @@ cv_standard(
 \arguments{
 \item{ndr_container}{The purpose of this argument is to make the
 constructor of the cv_standard cross-validator work with the magrittr
-pipe (\%>\%) operator. This argument would almost always be set at the
+pipe (|>) operator. This argument would almost always be set at the
 end of a sequence of piping operators that include a datasource and a
 classifier. Alternatively, one can keep this set to NULL and directly use
 the datasource and classifier arguments (one would almost never use

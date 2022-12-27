@@ -10,7 +10,7 @@
 #' 
 #' @param ndr_container_or_object The purpose of this argument is to make the
 #'   constructor of the rm_confusion_matrix feature preprocessor work with the
-#'   magrittr pipe (%>%) operator. This argument should almost never be directly
+#'   magrittr pipe (|>) operator. This argument should almost never be directly
 #'   set by the user to anything other than NULL. If this is set to the default
 #'   value of NULL, then the constructor will return a rm_confusion_matrix
 #'   object. If this is set to an ndr container, then a rm_confusion_matrix
@@ -108,14 +108,14 @@ aggregate_CV_split_results.rm_confusion_matrix <- function(rm_obj, prediction_re
   options <- attr(rm_obj, "options")
 
   if (!options$save_TCD_results) {
-    prediction_results <- prediction_results %>%
+    prediction_results <- prediction_results |>
       dplyr::filter(.data$train_time == .data$test_time)
   }
 
 
   # create the confusion matrix
-  confusion_matrix <- prediction_results %>%
-    dplyr::group_by(.data$train_time, .data$test_time, .data$actual_labels, .data$predicted_labels) %>%
+  confusion_matrix <- prediction_results |>
+    dplyr::group_by(.data$train_time, .data$test_time, .data$actual_labels, .data$predicted_labels) |>
     summarize(n = n())
 
 
@@ -134,13 +134,13 @@ aggregate_CV_split_results.rm_confusion_matrix <- function(rm_obj, prediction_re
     } else {
     
       # create the decision value confusion matrix
-      confusion_matrix_decision_vals <- prediction_results %>%
-        select(-.data$predicted_labels, -.data$CV) %>%
-        dplyr::group_by(.data$train_time, .data$test_time, .data$actual_labels) %>%
-        summarize_all(mean) %>%
+      confusion_matrix_decision_vals <- prediction_results |>
+        select(-"predicted_labels", -"CV") |>
+        dplyr::group_by(.data$train_time, .data$test_time, .data$actual_labels) |>
+        summarize_all(mean) |>
         tidyr::pivot_longer(starts_with("decision_vals"),
           names_to = "predicted_labels",
-          values_to = "mean_decision_vals") %>%
+          values_to = "mean_decision_vals") |>
         mutate(predicted_labels = gsub("decision_vals.", "", .data$predicted_labels))
   
       confusion_matrix <- left_join(confusion_matrix_decision_vals, confusion_matrix,
@@ -168,8 +168,8 @@ aggregate_CV_split_results.rm_confusion_matrix <- function(rm_obj, prediction_re
   # confusion_matrix <- dplyr::bind_rows(confusion_matrix, empty_cm)
   #
   # # add in the zero results...
-  # confusion_matrix <-  confusion_matrix %>%
-  #   dplyr::group_by(train_time,  test_time, actual_labels,  predicted_labels) %>%
+  # confusion_matrix <-  confusion_matrix |>
+  #   dplyr::group_by(train_time,  test_time, actual_labels,  predicted_labels) |>
   #   summarize(n = sum(n))
 
 
@@ -239,17 +239,17 @@ aggregate_resample_run_results.rm_confusion_matrix <- function(resample_run_resu
 
 
   # calculate the final confusion matrix
-  confusion_matrix <- confusion_matrix %>%
-    dplyr::group_by(.data$train_time, .data$test_time, .data$actual_labels, .data$predicted_labels) %>%
-    summarize(n = sum(n)) %>%
-    dplyr::group_by(.data$train_time, .data$test_time, .data$actual_labels) %>%
+  confusion_matrix <- confusion_matrix |>
+    dplyr::group_by(.data$train_time, .data$test_time, .data$actual_labels, .data$predicted_labels) |>
+    summarize(n = sum(n)) |>
+    dplyr::group_by(.data$train_time, .data$test_time, .data$actual_labels) |>
     mutate(conditional_pred_freq = n / sum(n)) # Pr(predicted = y | actual = k)
 
 
   if (options$create_decision_vals_confusion_matrix) {
     
-    confusion_matrix_decision_vals <- resample_run_results %>%
-      dplyr::group_by(.data$train_time, .data$test_time, .data$actual_labels, .data$predicted_labels) %>%
+    confusion_matrix_decision_vals <- resample_run_results |>
+      dplyr::group_by(.data$train_time, .data$test_time, .data$actual_labels, .data$predicted_labels) |>
       summarize(mean_decision_vals = mean(.data$mean_decision_vals))
 
     if (dim(confusion_matrix_decision_vals)[1] != dim(confusion_matrix)[1]) {
@@ -257,7 +257,7 @@ aggregate_resample_run_results.rm_confusion_matrix <- function(resample_run_resu
                     "confusion_matrix do not have the same number of rows'))
     }
 
-    confusion_matrix <- confusion_matrix %>%
+    confusion_matrix <- confusion_matrix |>
       left_join(confusion_matrix_decision_vals,
         by = c("train_time", "test_time", "actual_labels", "predicted_labels"))
     
@@ -389,7 +389,7 @@ plot_confusion_matrix <- function(confusion_matrix_obj,
 
   # if only want the results plotted for the same training and test times
   if (!only_has_same_train_test_time_results && !plot_TCD_results) {
-    confusion_matrix_obj <- confusion_matrix_obj %>%
+    confusion_matrix_obj <- confusion_matrix_obj |>
       filter(.data$train_time == .data$test_time)
   }
   
@@ -417,7 +417,7 @@ plot_confusion_matrix <- function(confusion_matrix_obj,
     }
     
     
-    confusion_matrix_obj <- confusion_matrix_obj %>%
+    confusion_matrix_obj <- confusion_matrix_obj |>
       filter(.data$train_time == plot_only_one_train_time)
     
      
@@ -447,7 +447,7 @@ plot_confusion_matrix <- function(confusion_matrix_obj,
 
   if (plot_decision_vals_confusion_matrix) {
     
-    g <- confusion_matrix_obj %>%
+    g <- confusion_matrix_obj |>
       ggplot(aes(.data$predicted_labels, forcats::fct_rev(.data$actual_labels), fill = .data$mean_decision_vals)) +
       geom_tile() +
       theme(axis.text.x = element_text(angle = 90, hjust = 1)) +
@@ -457,7 +457,7 @@ plot_confusion_matrix <- function(confusion_matrix_obj,
     
   } else {
     
-    g <- confusion_matrix_obj %>%
+    g <- confusion_matrix_obj |>
       ggplot(aes(.data$predicted_labels, forcats::fct_rev(.data$actual_labels), fill = .data$conditional_pred_freq * 100)) +
       geom_tile() +
       theme(axis.text.x = element_text(angle = 90, hjust = 1)) +
@@ -491,18 +491,18 @@ plot_MI <- function(rm_obj, plot_type = "TCD") {
 
   # calculate the mutual information ------------------------------------------
 
-  MI_obj <- rm_obj %>%
-    group_by(.data$train_time, .data$test_time) %>%
-    mutate(joint_probability = n / sum(n)) %>%
-    group_by(.data$train_time, .data$test_time, .data$actual_labels) %>%
-    mutate(log_marginal_actual = log2(sum(.data$joint_probability))) %>%
-    group_by(.data$train_time, .data$test_time, .data$predicted_labels) %>%
-    mutate(log_marginal_predicted = log2(sum(.data$joint_probability))) %>%
-    ungroup() %>%
-    mutate(log_joint_probability = log2(.data$joint_probability)) %>%
-    mutate(log_joint_probability = replace(.data$log_joint_probability, .data$log_joint_probability == -Inf, 0)) %>%
-    mutate(MI_piece = .data$joint_probability * (.data$log_joint_probability - .data$log_marginal_actual - .data$log_marginal_predicted)) %>%
-    group_by(.data$train_time, .data$test_time) %>%
+  MI_obj <- rm_obj |>
+    group_by(.data$train_time, .data$test_time) |>
+    mutate(joint_probability = n / sum(n)) |>
+    group_by(.data$train_time, .data$test_time, .data$actual_labels) |>
+    mutate(log_marginal_actual = log2(sum(.data$joint_probability))) |>
+    group_by(.data$train_time, .data$test_time, .data$predicted_labels) |>
+    mutate(log_marginal_predicted = log2(sum(.data$joint_probability))) |>
+    ungroup() |>
+    mutate(log_joint_probability = log2(.data$joint_probability)) |>
+    mutate(log_joint_probability = replace(.data$log_joint_probability, .data$log_joint_probability == -Inf, 0)) |>
+    mutate(MI_piece = .data$joint_probability * (.data$log_joint_probability - .data$log_marginal_actual - .data$log_marginal_predicted)) |>
+    group_by(.data$train_time, .data$test_time) |>
     summarize(MI = sum(.data$MI_piece))
 
 
@@ -515,8 +515,8 @@ plot_MI <- function(rm_obj, plot_type = "TCD") {
   if ((sum(MI_obj$train_time == MI_obj$test_time) == dim(MI_obj)[1]) || plot_type == "line") {
 
     # if only trained and tested at the same time, create line plot
-    MI_obj %>%
-      dplyr::filter(.data$train_time == .data$test_time) %>%
+    MI_obj |>
+      dplyr::filter(.data$train_time == .data$test_time) |>
       ggplot(aes(.data$test_time, .data$MI)) +
       geom_line() +
       xlab("Time") +
@@ -525,7 +525,7 @@ plot_MI <- function(rm_obj, plot_type = "TCD") {
     
   } else {
     
-    MI_obj %>%
+    MI_obj |>
       ggplot(aes(.data$test_time, .data$train_time, fill = .data$MI)) +
       geom_tile() +
       ylab("Test time") +

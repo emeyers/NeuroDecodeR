@@ -129,11 +129,11 @@ ds_basic <- function(binned_data,
 
   # also keep the variable trial_number if it exists
   if (("trial_number" %in% colnames(binned_data))) {
-    binned_data <- binned_data %>%
-      dplyr::select(.data$siteID, starts_with("time"), .data$trial_number, labels = label_col_ind)
+    binned_data <- binned_data |>
+      dplyr::select("siteID", starts_with("time"), "trial_number", labels = all_of(label_col_ind))
   } else {
-    binned_data <- binned_data %>%
-      dplyr::select(.data$siteID, starts_with("time"), labels = label_col_ind)
+    binned_data <- binned_data |>
+      dplyr::select("siteID", starts_with("time"), labels = all_of(label_col_ind))
   }
 
 
@@ -210,10 +210,10 @@ ds_basic <- function(binned_data,
   if (create_simultaneous_populations == 1 || create_simultaneous_populations == TRUE) {
 
     # for simultaneously recorded data there should be the same number of labels for each site
-    num_trials_for_each_label_for_each_site <- binned_data %>%
-      dplyr::group_by(.data$siteID, labels) %>%
-      dplyr::summarize(n = n()) %>% 
-      tidyr::pivot_wider(names_from = .data$labels, values_from = .data$n) 
+    num_trials_for_each_label_for_each_site <- binned_data |>
+      dplyr::group_by(.data$siteID, labels) |>
+      dplyr::summarize(n = n()) |> 
+      tidyr::pivot_wider(names_from = "labels", values_from = "n") 
 
     # for some reason select(-.data$siteID) isn't working
     num_trials_for_each_label_for_each_site$siteID <- NULL
@@ -235,15 +235,15 @@ ds_basic <- function(binned_data,
         "by assuming all trials for each site are in the same sequential order."
       ))
 
-      num_trials_each_site <- binned_data %>%
-        dplyr::group_by(.data$siteID) %>%
-        dplyr::summarize(n = n()) %>%
-        dplyr::select(.data$n)
+      num_trials_each_site <- binned_data |>
+        dplyr::group_by(.data$siteID) |>
+        dplyr::summarize(n = n()) |>
+        dplyr::select("n")
 
       # assuming the trials are in order for each site, otherwise there is no way to align them
       binned_data$trial_number <- rep(1:num_trials_each_site$n[1], dim(num_trials_each_site)[1])
 
-      binned_data <- dplyr::select(binned_data, .data$siteID, .data$trial_number, everything())
+      binned_data <- dplyr::select(binned_data, "siteID", "trial_number", everything())
 
     }
 
@@ -261,7 +261,7 @@ ds_basic <- function(binned_data,
 
 
     # add variable label_trial_combo
-    binned_data <- binned_data %>%
+    binned_data <- binned_data |>
       mutate(label_trial_combo = paste0(binned_data$labels, "_", binned_data$trial_number))
 
 
@@ -270,10 +270,10 @@ ds_basic <- function(binned_data,
 
     # shuffle the labels if specified
     if (randomly_shuffled_labels == TRUE) {
-      binned_data <- binned_data %>%
-        ungroup() %>%
-        group_by(.data$siteID) %>%
-        mutate(labels = labels[sample(row_number())]) %>%
+      binned_data <- binned_data |>
+        ungroup() |>
+        group_by(.data$siteID) |>
+        mutate(labels = labels[sample(row_number())]) |>
         ungroup()
     }
   }
@@ -331,16 +331,16 @@ get_data.ds_basic <- function(ds_obj) {
   if (create_simultaneous_populations == 1) {
 
     # use one site to select the trials to use and then apply to all sites
-    curr_label_trials_to_use <- binned_data %>%
-      dplyr::filter(.data$siteID == binned_data$siteID[1]) %>%
-      select(labels, .data$label_trial_combo) %>%
-      group_by(labels) %>%
-      sample_n(size = num_trials_used_per_label) %>%
+    curr_label_trials_to_use <- binned_data |>
+      dplyr::filter(.data$siteID == binned_data$siteID[1]) |>
+      select(labels, "label_trial_combo") |>
+      group_by(labels) |>
+      sample_n(size = num_trials_used_per_label) |>
       pull(.data$label_trial_combo)
 
     # apply specific simultaneous trials selected to all sites
-    all_k_fold_data <- binned_data %>%
-      dplyr::filter(.data$label_trial_combo %in% curr_label_trials_to_use) %>%
+    all_k_fold_data <- binned_data |>
+      dplyr::filter(.data$label_trial_combo %in% curr_label_trials_to_use) |>
       dplyr::mutate(label_trial_siteID_combo = paste0(.data$label_trial_combo, '_', .data$siteID))
 
     
@@ -353,23 +353,23 @@ get_data.ds_basic <- function(ds_obj) {
     all_k_fold_data <- all_k_fold_data[match(curr_label_trials_to_use_siteID, 
                                              all_k_fold_data$label_trial_siteID_combo), ]
    
-    all_k_fold_data <- all_k_fold_data %>% 
-      dplyr::select(-.data$label_trial_combo, -.data$label_trial_siteID_combo)
+    all_k_fold_data <- all_k_fold_data |> 
+      dplyr::select(-"label_trial_combo", -"label_trial_siteID_combo")
     
                                               
 
   } else {
 
     # for data not recorded simultaneously
-    all_k_fold_data <- binned_data %>%
-      group_by(labels, .data$siteID) %>%
+    all_k_fold_data <- binned_data |>
+      group_by(labels, .data$siteID) |>
       sample_n(size = num_trials_used_per_label)
   }
 
 
   # remove the variable trial_number if it exists in all_k_fold_data
   if ("trial_number" %in% names(all_k_fold_data)) {
-    all_k_fold_data <- select(all_k_fold_data, -.data$trial_number)
+    all_k_fold_data <- select(all_k_fold_data, -"trial_number")
   }
 
 
@@ -397,21 +397,21 @@ get_data.ds_basic <- function(ds_obj) {
   
   # older version that uses gather/spread
   #melted_data <- tidyr::gather(all_k_fold_data, "time_bin", "activity", -.data$siteID, -labels, -CV_slice_ID)
-  #all_cv_data_old <- tidyr::spread(melted_data, .data$siteID, .data$activity) %>%
-  #  select(labels, .data$time_bin, CV_slice_ID, everything()) %>%
-  #  mutate(time_bin = as.factor(.data$time_bin)) #  %>%  arrange(labels, time_bin)
+  #all_cv_data_old <- tidyr::spread(melted_data, .data$siteID, .data$activity) |>
+  #  select(labels, .data$time_bin, CV_slice_ID, everything()) |>
+  #  mutate(time_bin = as.factor(.data$time_bin)) #  |>  arrange(labels, time_bin)
 
   
   long_data <- tidyr::pivot_longer(all_k_fold_data, 
-                                   -c(.data$siteID, .data$labels, .data$CV_slice_ID),
+                                   -c("siteID", "labels", "CV_slice_ID"),
                                    names_to = "time_bin", 
                                    values_to = "activity")
 
    all_cv_data <- tidyr::pivot_wider(long_data, 
-                                    names_from = .data$siteID, 
-                                    values_from = .data$activity) %>%
-    select(labels, .data$time_bin, CV_slice_ID, everything()) %>%
-    mutate(time_bin = as.factor(.data$time_bin)) #  %>%  arrange(labels, time_bin)
+                                    names_from = "siteID", 
+                                    values_from = "activity") |>
+    select(labels, "time_bin", CV_slice_ID, everything()) |>
+    mutate(time_bin = as.factor(.data$time_bin)) #  |>  arrange(labels, time_bin)
   
 
    
@@ -424,15 +424,15 @@ get_data.ds_basic <- function(ds_obj) {
   }
 
 
-  all_cv_data <- dplyr::select(all_cv_data, -CV_slice_ID) %>%
+  all_cv_data <- dplyr::select(all_cv_data, -CV_slice_ID) |>
     dplyr::ungroup() # fails tests if I don't ungroup. Also remove the original CV_slice_ID field
 
 
   # add train_labels and test_labels columns
-  all_cv_data <- all_cv_data %>%
-    mutate(train_labels = labels) %>%
-    rename(test_labels = labels) %>%
-    select(.data$train_labels, .data$test_labels, everything())
+  all_cv_data <- all_cv_data |>
+    mutate(train_labels = labels) |>
+    rename(test_labels = labels) |>
+    select("train_labels", "test_labels", everything())
 
 
   all_cv_data
@@ -458,9 +458,9 @@ get_parameters.ds_basic <- function(ndr_obj) {
   # convert null values to NAs so that the variables are retained
   length_one_variables <- sapply(length_one_variables, function(x) ifelse(is.null(x), NA, x))
 
-  parameter_df <- data.frame(val = unlist(length_one_variables)) %>%
-    tibble::rownames_to_column("key") %>%
-    tidyr::spread("key", "val") %>%
+  parameter_df <- data.frame(val = unlist(length_one_variables)) |>
+    tibble::rownames_to_column("key") |>
+    tidyr::spread("key", "val") |>
     dplyr::mutate(dplyr::across(where(is.factor), as.character))
 
   parameter_df$label_levels <- list(sort(unlist(ndr_obj$label_levels)))

@@ -532,7 +532,7 @@ plot.raster_data <- function(x, ..., facet_label = NULL) {
   # check that indeed the data is in valid raster format
   test_valid_raster_format(raster_data)
   
-  activity_data_only_df <- raster_data %>%
+  activity_data_only_df <- raster_data |>
     dplyr::select(-starts_with("site_info"))
   
   # if there is not column called trial_number add it to the data
@@ -543,9 +543,9 @@ plot.raster_data <- function(x, ..., facet_label = NULL) {
 
   if (!(is.null(facet_label))) {
     
-    activity_data_only_df <- activity_data_only_df %>%
+    activity_data_only_df <- activity_data_only_df |>
       dplyr::select(starts_with(paste0("labels.", facet_label)), 
-                    starts_with("time"), starts_with("trial_number")) %>%
+                    starts_with("time"), starts_with("trial_number")) |>
       dplyr::rename(label = paste0("labels.", facet_label))
     
     
@@ -553,25 +553,25 @@ plot.raster_data <- function(x, ..., facet_label = NULL) {
     #  to be 1 to number trials for each label
     
     # first arrange the data so that it is in order of the original trial number
-    activity_data_only_df <- activity_data_only_df %>%
+    activity_data_only_df <- activity_data_only_df |>
       dplyr::arrange(.data$trial_number)
     
     # overwrite the trial number with trial numbers for each label
-    activity_data_only_df <- activity_data_only_df %>%
-      group_by(.data$label) %>%
+    activity_data_only_df <- activity_data_only_df |>
+      group_by(.data$label) |>
       mutate(trial_number = 1:n())
     
     
   } else {
-    activity_data_only_df <- activity_data_only_df %>%
+    activity_data_only_df <- activity_data_only_df |>
       dplyr::select(-starts_with("label"))
   }
   
   
 
   # convert to long format for plotting and time as a numeric value
-  activity_data_only_df <- activity_data_only_df %>%
-    tidyr::pivot_longer(starts_with("time"), names_to = "time", values_to = "activity") %>%   
+  activity_data_only_df <- activity_data_only_df |>
+    tidyr::pivot_longer(starts_with("time"), names_to = "time", values_to = "activity") |>   
     dplyr::mutate(time = floor(get_center_bin_time(.data$time)))  
 
   

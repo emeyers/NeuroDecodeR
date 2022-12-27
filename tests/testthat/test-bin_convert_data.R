@@ -260,8 +260,8 @@ test_that("test_valid_raster_format() correctly assesses if data is in valid ras
   
   # making sure test_valid_raster_format() correct tests that raster data has right variables 
   load(raster_file_name)
-  expect_error(test_valid_raster_format(dplyr::select(raster_data, -.data$time)))
-  expect_error(test_valid_raster_format(dplyr::select(raster_data, -.data$labels)))
+  expect_error(test_valid_raster_format(dplyr::select(raster_data, -"time")))
+  expect_error(test_valid_raster_format(dplyr::select(raster_data, -"labels")))
   expect_error(test_valid_raster_format(dplyr::mutate(raster_data, blah = raster_data[, 1])))
   
   # make sure that one can plot the raster data
@@ -288,9 +288,9 @@ test_that("test_valid_binned_format() correctly assesses if data is in valid bin
   
   # making sure test_valid_binned_format() correct tests that raster data has right variables 
   load(binned_file_name)
-  expect_error(test_valid_binned_format(dplyr::select(binned_data, -.data$siteID)))
-  expect_error(test_valid_binned_format(dplyr::select(binned_data, -.data$time)))
-  expect_error(test_valid_binned_format(dplyr::select(binned_data, -.data$labels)))
+  expect_error(test_valid_binned_format(dplyr::select(binned_data, -"siteID")))
+  expect_error(test_valid_binned_format(dplyr::select(binned_data, -"time")))
+  expect_error(test_valid_binned_format(dplyr::select(binned_data, -"labels")))
   expect_error(test_valid_binned_format(dplyr::mutate(binned_data, blah = binned_data[, 1])))
   
 })

@@ -57,7 +57,7 @@ get_num_label_repetitions <- function(binned_data,
   
   if (is.null(site_info_grouping_name)) {
     
-    label_rep_each_site_df <- dplyr::mutate(label_rep_each_site_df, grouping_var = 1) %>%
+    label_rep_each_site_df <- dplyr::mutate(label_rep_each_site_df, grouping_var = 1) |>
       dplyr::select(-starts_with("site_info"))
     
   } else {
@@ -82,7 +82,7 @@ get_num_label_repetitions <- function(binned_data,
     }
     
     
-    label_rep_each_site_df <- label_rep_each_site_df %>% 
+    label_rep_each_site_df <- label_rep_each_site_df |> 
       dplyr::select(-starts_with("site_info"), grouping_var = {{site_info_grouping_name}})
     
   }
@@ -101,20 +101,20 @@ get_num_label_repetitions <- function(binned_data,
                                         values_to = "num_reps")
   
   
-  num_label_repeats_obj <- label_rep_long %>%
-    dplyr::group_by(.data$grouping_var, .data$label) %>%
+  num_label_repeats_obj <- label_rep_long |>
+    dplyr::group_by(.data$grouping_var, .data$label) |>
     dplyr::summarize("0" = sum(.data$num_reps >= 0))
   
   
   
   for (k in 1:max_min_num_reps) {
     
-    curr_count <- label_rep_long %>%
-      dplyr::group_by(.data$grouping_var, .data$label, .drop = TRUE) %>%
-      dplyr::summarize(num_with_k_reps = sum(.data$num_reps >= k)) %>%
-      dplyr::ungroup() %>%
-      dplyr::select(.data$num_with_k_reps)
-    
+    curr_count <- label_rep_long |>
+      dplyr::group_by(.data$grouping_var, .data$label, .drop = TRUE) |>
+      dplyr::summarize(num_with_k_reps = sum(.data$num_reps >= k)) |>
+      dplyr::ungroup() |>
+      dplyr::select("num_with_k_reps")
+
     names(curr_count) <- as.character(k)      # paste0("reps_", sprintf('%03d', k))
     
     num_label_repeats_obj <- cbind(num_label_repeats_obj, curr_count)
@@ -127,9 +127,9 @@ get_num_label_repetitions <- function(binned_data,
   
   get_num_sites_with_k_reps_all_levels <- function(k) {
     
-    curr_all_levels_num_sites_with_at_least_k_reps <- label_rep_each_site_df %>%
-      dplyr::group_by(.data$grouping_var) %>%   
-      dplyr::mutate(max_sites = n()) %>% 
+    curr_all_levels_num_sites_with_at_least_k_reps <- label_rep_each_site_df |>
+      dplyr::group_by(.data$grouping_var) |>   
+      dplyr::mutate(max_sites = n()) |> 
       dplyr::summarize(k = sum(.data$min_repeats >= k)) 
     
     names(curr_all_levels_num_sites_with_at_least_k_reps) <- c(names(curr_all_levels_num_sites_with_at_least_k_reps[1]), as.character(k))  
@@ -141,14 +141,14 @@ get_num_label_repetitions <- function(binned_data,
   
   num_sites_with_k_reps_all_levels <- get_num_sites_with_k_reps_all_levels(0)
   for (k in 1:max(label_rep_each_site_df$min_repeats)) {
-    num_sites_with_k_reps_all_levels <- num_sites_with_k_reps_all_levels %>%
+    num_sites_with_k_reps_all_levels <- num_sites_with_k_reps_all_levels |>
       left_join(get_num_sites_with_k_reps_all_levels(k), by = "grouping_var")
   }
   
   
-  num_sites_with_k_reps_all_levels <- num_sites_with_k_reps_all_levels %>% 
-    dplyr::mutate(label = "level.all_levels") %>%
-    select(.data$grouping_var, .data$label, everything())
+  num_sites_with_k_reps_all_levels <- num_sites_with_k_reps_all_levels |> 
+    dplyr::mutate(label = "level.all_levels") |>
+    select("grouping_var", "label", everything())
   
   
   num_label_repeats_obj <- rbind(num_label_repeats_obj, num_sites_with_k_reps_all_levels)
@@ -161,10 +161,10 @@ get_num_label_repetitions <- function(binned_data,
   # if no grouping variable, remove the column for it, otherwise rename it back to the site_info name
   if (is.null(site_info_grouping_name)) {
     
-    num_label_repeats_obj <- num_label_repeats_obj %>%
-      dplyr::ungroup() %>%
-      dplyr::select(-.data$grouping_var)
-    
+    num_label_repeats_obj <- num_label_repeats_obj |>
+      dplyr::ungroup() |>
+      dplyr::select(-"grouping_var")
+
   } else {
     
     col_names <- names(num_label_repeats_obj)
@@ -188,7 +188,7 @@ get_num_label_repetitions <- function(binned_data,
   names(num_label_repeats_obj) <- col_names
   
   
-  # rename "num_label_repeats_obj"to "num_label_repeats_obj"
+  # rename "num_label_repeats_obj" to "num_label_repeats_obj"
   
   
   # making this an S3 object so that it can have an associated plot() function
@@ -254,13 +254,13 @@ plot.label_repetition <- function(x, ..., show_legend = TRUE) {
 
 
   # pivot_longer() is giving an error message here so sticking with gather()
-  #num_label_repeats_obj_long <- num_label_repeats_obj %>%
-  #  tidyr::pivot_longer(-starts_with("grouping_var", "label")) %>%
+  #num_label_repeats_obj_long <- num_label_repeats_obj |>
+  #  tidyr::pivot_longer(-starts_with("grouping_var", "label")) |>
   #  mutate(min_reps = as.numeric(.data$min_reps))
 
-  num_label_repeats_obj_long <- num_label_repeats_obj %>%
-    tidyr::gather("min_reps", "num_sites", -.data$label, -.data$grouping_var) %>%
-    dplyr::mutate(min_reps = as.numeric(.data$min_reps)) %>%
+  num_label_repeats_obj_long <- num_label_repeats_obj |>
+    tidyr::gather("min_reps", "num_sites", -"label", -"grouping_var") |>
+    dplyr::mutate(min_reps = as.numeric(.data$min_reps)) |>
     dplyr::mutate(line_type = ifelse(.data$label != "all_levels", "dotted", "solid"))
   
   
@@ -276,9 +276,9 @@ plot.label_repetition <- function(x, ..., show_legend = TRUE) {
 
  
   # just plot the minimum number of repeats
-  g <- num_label_repeats_obj_long %>%
-    dplyr::filter(.data$label != "min_repeats") %>%
-    dplyr::mutate(label = gsub("^level.", "", .data$label)) %>%
+  g <- num_label_repeats_obj_long |>
+    dplyr::filter(.data$label != "min_repeats") |>
+    dplyr::mutate(label = gsub("^level.", "", .data$label)) |>
     ggplot(aes(.data$min_reps, .data$num_sites, col = .data$label, linetype = .data$line_type)) +
     geom_line() +
     geom_point() +
@@ -353,8 +353,8 @@ get_siteIDs_with_k_label_repetitions <- function(binned_data,
                                                  label_levels = NULL) {
   
   
-  siteIDs <- get_num_label_repetitions_each_site(binned_data, labels, label_levels) %>%
-    dplyr::filter(.data$min_repeats >= k) %>%
+  siteIDs <- get_num_label_repetitions_each_site(binned_data, labels, label_levels) |>
+    dplyr::filter(.data$min_repeats >= k) |>
     dplyr::pull(.data$siteID)
   
   
@@ -405,16 +405,15 @@ get_num_label_repetitions_each_site <- function(binned_data,
   
   # get the site_info which will be returned along with num label repetitions 
   #  to allow additional filtering
-  site_info <- binned_data %>%
+  site_info <- binned_data |>
     select("siteID", starts_with("site_info")) 
   
   
   # select only the siteID and labels we want to count number of repetitions
-  binned_data <- select(binned_data, .data$siteID, label = paste0("labels.", labels))
+  binned_data <- select(binned_data, "siteID", label = paste0("labels.", labels))
   
-
     # make sure that the labels are a factors
-  binned_data <- binned_data %>%
+  binned_data <- binned_data |>
     mutate(label = as.factor(.data$label))
   
   
@@ -434,9 +433,9 @@ get_num_label_repetitions_each_site <- function(binned_data,
   # reduce data to only the levels specified
   binned_data <- dplyr::filter(binned_data, binned_data$label %in% label_levels)
   
-  num_repeats_per_level <- binned_data %>%
-    dplyr::group_by(.data$siteID, .data$label) %>%
-    count() %>%
+  num_repeats_per_level <- binned_data |>
+    dplyr::group_by(.data$siteID, .data$label) |>
+    count() |>
     dplyr::mutate(label = paste0("level.", .data$label))
   
   # if some label levels don't exist in the data, add them with a value of n = 0
@@ -444,41 +443,40 @@ get_num_label_repetitions_each_site <- function(binned_data,
                                   label = rep(paste0("level.", label_levels), length(unique(num_repeats_per_level$siteID))),
                                   n = 0)
   
-  num_repeats_per_level <- rbind(num_repeats_per_level, zero_n_repeats_df) %>%
-    group_by(.data$siteID, .data$label) %>%
+  num_repeats_per_level <- rbind(num_repeats_per_level, zero_n_repeats_df) |>
+    group_by(.data$siteID, .data$label) |>
     summarize(n = max(n))
     
   
   # get the value of the level that has the minimum repetitions
-  min_num_repeats_per_level <- num_repeats_per_level %>%
-    dplyr::group_by(.data$siteID) %>%
+  min_num_repeats_per_level <- num_repeats_per_level |>
+    dplyr::group_by(.data$siteID) |>
     dplyr::summarize(min_repeats = min(n)) 
   
   
   label_rep_each_site_df <- tidyr::pivot_wider(num_repeats_per_level, 
-                                      names_from = .data$label, 
-                                      values_from = n) %>%
-    dplyr::full_join(min_num_repeats_per_level, by = "siteID") %>%
-    dplyr::select(.data$siteID, .data$min_repeats, everything())  
-  
-  
-  
+                                      names_from = "label",
+                                      # names_from = .data$label, 
+                                      values_from = n) |>
+    dplyr::full_join(min_num_repeats_per_level, by = "siteID") |>
+    dplyr::select("siteID", "min_repeats", everything())  
+
   
   # add the site_info to the label_rep_each_site_df if site_info variables exist
   
-  if ((site_info %>% select(-.data$siteID) %>% ncol()) != 0) {
-
-    max_unique_site_info_vals <- site_info %>%
-      dplyr::group_by(.data$siteID) %>%
-      dplyr::summarize(across(everything(), n_distinct)) %>%
-      dplyr::summarize(across(everything(), max)) %>%
-      dplyr::select(-.data$siteID) %>%
+  if ((site_info |> select(-"siteID") |> ncol()) != 0) {
+    
+    max_unique_site_info_vals <- site_info |>
+      dplyr::group_by(.data$siteID) |>
+      dplyr::summarize(across(everything(), n_distinct)) |>
+      dplyr::summarize(across(everything(), max)) |>
+      dplyr::select(-"siteID") |>
       tidyr::pivot_longer(everything()) 
     
     
     # include site_info variables that only have a single value for each site
-    site_info_variables_names_to_include <- max_unique_site_info_vals %>%
-      dplyr::filter(.data$value == 1) %>%
+    site_info_variables_names_to_include <- max_unique_site_info_vals |>
+      dplyr::filter(.data$value == 1) |>
       dplyr::pull(.data$name)
     
     
@@ -486,8 +484,8 @@ get_num_label_repetitions_each_site <- function(binned_data,
     #  send a message that these site_info variables are not available to filter a site on
     if (length(site_info_variables_names_to_include) != nrow(max_unique_site_info_vals)) {
       
-      site_info_variables_names_not_to_include <- max_unique_site_info_vals %>%
-        dplyr::filter(.data$value != 1) %>%
+      site_info_variables_names_not_to_include <- max_unique_site_info_vals |>
+        dplyr::filter(.data$value != 1) |>
         dplyr::pull(.data$name) 
       
       # print out that particular site_info variables different values in
@@ -502,9 +500,9 @@ get_num_label_repetitions_each_site <- function(binned_data,
     # add the site info variables to the label_rep_info so that one can filter particular sites
     #  based on site_info values
     get_first <- function(df) df[1]
-    site_info_to_use <- site_info %>%
-      dplyr::select("siteID", all_of(site_info_variables_names_to_include)) %>%
-      dplyr::group_by(.data$siteID) %>%
+    site_info_to_use <- site_info |>
+      dplyr::select("siteID", all_of(site_info_variables_names_to_include)) |>
+      dplyr::group_by(.data$siteID) |>
       summarize(across(everything(), get_first))
     
     # dplyr::first() doesn't work when vectors are nested in data frames, 

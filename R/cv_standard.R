@@ -15,7 +15,7 @@
 #'
 #' @param ndr_container The purpose of this argument is to make the
 #'   constructor of the cv_standard cross-validator work with the magrittr
-#'   pipe (%>%) operator. This argument would almost always be set at the
+#'   pipe (|>) operator. This argument would almost always be set at the
 #'   end of a sequence of piping operators that include a datasource and a 
 #'   classifier. Alternatively, one can keep this set to NULL and directly use
 #'   the datasource and classifier arguments (one would almost never use
@@ -342,10 +342,10 @@ run_decoding.cv_standard <- function(cv_obj) {
 
         training_set <- dplyr::filter(
           cv_data, .data$time_bin == unique_times[iTrain],
-          all_cv_train_test_inds[iCV] == "train") %>%
+          all_cv_train_test_inds[iCV] == "train") |>
           dplyr::select(starts_with("site"), .data$train_labels)
 
-        test_set <- dplyr::filter(cv_data, all_cv_train_test_inds[iCV] == "test") %>%
+        test_set <- dplyr::filter(cv_data, all_cv_train_test_inds[iCV] == "test") |>
           dplyr::select(starts_with("site"), .data$test_labels, .data$time_bin)
 
         if (!run_TCD) {
@@ -367,8 +367,8 @@ run_decoding.cv_standard <- function(cv_obj) {
         curr_cv_prediction_results <- get_predictions(classifier, training_set, test_set)
 
         # add the current CV run number, train time to the results data frame
-        curr_cv_prediction_results <- curr_cv_prediction_results %>%
-          dplyr::mutate(CV = iCV, train_time = unique_times[iTrain]) %>%
+        curr_cv_prediction_results <- curr_cv_prediction_results |>
+          dplyr::mutate(CV = iCV, train_time = unique_times[iTrain]) |>
           select(.data$CV, .data$train_time, everything())
 
         # all_cv_results <- rbind(all_cv_results, curr_cv_prediction_results)

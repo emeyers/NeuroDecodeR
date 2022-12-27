@@ -24,8 +24,8 @@ test_reasonable_classification_accuracy <- function(cl){
       prediction_results <- get_predictions(cl, normalized_training_set, normalized_test_set)
     }
     
-    accuracies <- prediction_results %>%
-      dplyr::group_by(test_time) %>%
+    accuracies <- prediction_results |>
+      dplyr::group_by(test_time) |>
       dplyr::summarize(mean_accuracy = mean(actual_labels == predicted_labels))
     
     expect_gt(dplyr::filter(accuracies, test_time == "stimulus")$mean_accuracy, .7)
@@ -44,8 +44,8 @@ test_shuffle_results_at_chance <- function(cl){
     #prediction_results <- get_predictions(cl, shuffled_normalized_training_set, shuffled_normalized_test_set)
     prediction_results <- get_predictions(cl, shuffled_count_training_set, shuffled_count_test_set)
     
-    accuracies <- prediction_results %>%
-      dplyr::group_by(test_time) %>%
+    accuracies <- prediction_results |>
+      dplyr::group_by(test_time) |>
       dplyr::summarize(mean_accuracy = mean(actual_labels == predicted_labels))
     
     expect_lt(dplyr::filter(accuracies, test_time == "stimulus")$mean_accuracy, .3)
@@ -82,11 +82,11 @@ test_that("the cl_max_correlation classifier constructor correctly adds objects 
   expect_equal(class(raw_cl), "cl_max_correlation")
   
   fp <- fp_zscore()
-  cl_combined_with_an_fp <- fp %>% cl_max_correlation()
+  cl_combined_with_an_fp <- fp |> cl_max_correlation()
   expect_equal(class(cl_combined_with_an_fp), "ndr_container")
   
   an_ndr_container <- ndr_container()
-  cl_combined_with_container <- an_ndr_container %>% cl_max_correlation()
+  cl_combined_with_container <- an_ndr_container |> cl_max_correlation()
   expect_equal(class(cl_combined_with_container), "ndr_container")
   
 })
@@ -119,11 +119,11 @@ test_that("the cl_poisson_naive_bayes classifier constructor correctly adds obje
   expect_equal(class(raw_cl), "cl_poisson_naive_bayes")
   
   fp <- fp_zscore()
-  cl_combined_with_an_fp <- fp %>% cl_poisson_naive_bayes()
+  cl_combined_with_an_fp <- fp |> cl_poisson_naive_bayes()
   expect_equal(class(cl_combined_with_an_fp), "ndr_container")
   
   an_ndr_container <- ndr_container()
-  cl_combined_with_container <- an_ndr_container %>% cl_poisson_naive_bayes()
+  cl_combined_with_container <- an_ndr_container |> cl_poisson_naive_bayes()
   expect_equal(class(cl_combined_with_container), "ndr_container")
   
 })
@@ -160,11 +160,11 @@ test_that("the cl_svm classifier constructor correctly adds objects to an ndr co
   expect_equal(class(raw_cl), "cl_svm")
   
   fp <- fp_zscore()
-  cl_combined_with_an_fp <- fp %>% cl_svm()
+  cl_combined_with_an_fp <- fp |> cl_svm()
   expect_equal(class(cl_combined_with_an_fp), "ndr_container")
   
   an_ndr_container <- ndr_container()
-  cl_combined_with_container <- an_ndr_container %>% cl_svm()
+  cl_combined_with_container <- an_ndr_container |> cl_svm()
   expect_equal(class(cl_combined_with_container), "ndr_container")
   
 })

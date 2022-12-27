@@ -8,7 +8,7 @@ cl_svm(ndr_container_or_object = NULL, return_decision_values = TRUE, ...)
 }
 \arguments{
 \item{ndr_container_or_object}{The purpose of this argument is to make the
-constructor of the cl_svm classifier works with the magrittr pipe (\%>\%)
+constructor of the cl_svm classifier works with the magrittr pipe (|>)
 operator. This argument should almost never be directly set by the user to
 anything other than NULL. If this is set to the default value of NULL, then
 the constructor will return a cl_svm object. If this is set to an ndr

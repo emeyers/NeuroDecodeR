@@ -12,7 +12,7 @@ cl_poisson_naive_bayes(
 \arguments{
 \item{ndr_container_or_object}{The purpose of this argument is to make the
 constructor of the cl_poisson_naive_bayes classifier work with magrittr
-pipe (\%>\%) operator. This argument should almost never be directly set by
+pipe (|>) operator. This argument should almost never be directly set by
 the user to anything other than NULL. If this is set to the default value
 of NULL, then the constructor will return a cl_poisson_naive_bayes object.
 If this is set to an ndr container, then a cl_poisson_naive_bayes object

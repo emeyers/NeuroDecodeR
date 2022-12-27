@@ -60,8 +60,8 @@ log_save_results <- function(DECODING_RESULTS,
 
 
   # add the result_name (human readible name of the results) and put the results in order
-  decoding_params <- decoding_params %>%
-    dplyr::mutate(result_name = result_name) %>%
+  decoding_params <- decoding_params |>
+    dplyr::mutate(result_name = result_name) |>
     select(.data$analysis_ID, .data$result_name, everything())
 
 
@@ -239,7 +239,7 @@ log_load_results_from_params <- function(decoding_params, results_dir_name) {
   }
 
 
-  manifest_with_results_added <- add_current_parameters_to_manifest(decoding_params, manifest_df) %>%
+  manifest_with_results_added <- add_current_parameters_to_manifest(decoding_params, manifest_df) |>
     select(-.data$analysis_ID, -.data$result_name)
 
   # find all rows that match the last row...

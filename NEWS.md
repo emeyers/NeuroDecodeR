@@ -28,6 +28,7 @@ plot all the results that match rather than give an error.
 * Small fix to the `plot()` function for the `rm_main_results` object so that
 it works with version 3.4.0 of `ggplot2`. 
 
+* Fixed the package so that it works with tidyselect 1.2.0
 
 
 # NeuroDecodeR 0.1.0
