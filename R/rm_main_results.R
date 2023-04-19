@@ -551,8 +551,8 @@ helper_plot_rm_main_results <- function(main_results, results_to_show = "zero_on
   main_results <- dplyr::mutate(main_results, zero_one_loss = .data$zero_one_loss * 100)
   
   
-  main_results$train_time <- round(get_center_bin_time(main_results$train_time))
-  main_results$test_time <- round(get_center_bin_time(main_results$test_time))
+  main_results$train_time <- floor(get_center_bin_time(main_results$train_time))
+  main_results$test_time <- floor(get_center_bin_time(main_results$test_time))
   
   # an alternative way to display the labels (not used)
   # main_results$train_time <- get_time_range_strings(main_results$train_time)

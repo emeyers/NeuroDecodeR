@@ -8,6 +8,12 @@
 
 BUG FIXES AND MINOR IMPROVEMENTS
 
+* Fixed the `plot_main_results()` function so that if 1 ms bins are used, times
+are plotting correctly rather than there being multiple points at a given time
+(which creating a vertical line artifact). This was done by rounding the times
+to be plotted using the `floor()` function rather than `round()` function.
+
+
 * Fixed the `rm_confusion_matrix` so that if a classifier does not return
 decision values, the and `create_decision_vals_confusion_matrix` is set to
 `TRUE`, a warning message will be given and
