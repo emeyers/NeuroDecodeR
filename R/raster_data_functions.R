@@ -136,7 +136,9 @@ read_raster_data <- function(raster_file_name) {
 #' @param add_sequential_trial_numbers A Boolean specifying one should add a
 #'   variable to the data called 'trial_number' that has sequential trial. These
 #'   trials numbers are needed for data that was recorded simultaneously so that
-#'   trials can be aligned across different sites.
+#'   trials can be aligned across different sites. If the MATLAB raster data has
+#'   a field site_info.trial_number then this will override the trial_number that
+#'   would automatically be set to that value (and print a message about it). 
 #'
 #' @inherit read_raster_data return 
 #' 
@@ -317,6 +319,27 @@ read_matlab_raster_data <- function(matlab_raster_file_name,
   
   
   
+  
+  # If there is a variable site_info.trial_number convert it to be just trial_number
+  # Also make trial_number the first column
+  if ("site_info.trial_number" %in% names(raster_data)) {
+    
+    # if specified, add a variable trial_number as a sequential number do that instead of using site_info.trial_number
+    if (add_sequential_trial_numbers) {
+      
+      message("Adding sequential trial numbers rather than using site_info.trial_number as the trial numbers")
+      
+    } else {
+      
+      raster_data <- raster_data |>
+        rename(trial_number = .data$site_info.trial_number) |>
+        select(.data$trial_number, everything())  
+    } 
+    
+  }
+  
+  
+
   
   
   # change the class to be raster_data, data.frame

@@ -31,7 +31,9 @@ as time 0. The default (NULL value) is to use the first bin as time 1.}
 \item{add_sequential_trial_numbers}{A Boolean specifying one should add a
 variable to the data called 'trial_number' that has sequential trial. These
 trials numbers are needed for data that was recorded simultaneously so that
-trials can be aligned across different sites.}
+trials can be aligned across different sites. If the MATLAB raster data has
+a field site_info.trial_number then this will override the trial_number that
+would automatically be set to that value (and print a message about it).}
 }
 \value{
 Returns a data frame of data in \verb{raster format} (i.e., with class

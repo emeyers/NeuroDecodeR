@@ -8,6 +8,11 @@
 
 BUG FIXES AND MINOR IMPROVEMENTS
 
+* Changed `read_matlab_raster_data()` function so that if there is a field called
+trial_number in the MATLAB site_info, this this will automatically be set to be
+the trial_number in the R raster_data unless it is overwritten by setting
+sequential trial numbers using the `add_sequential_trial_numbers` argument.
+
 * Fixed the `plot_main_results()` function so that if 1 ms bins are used, times
 are plotting correctly rather than there being multiple points at a given time
 (which creating a vertical line artifact). This was done by rounding the times
