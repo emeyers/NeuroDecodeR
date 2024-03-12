@@ -8,6 +8,12 @@
 
 BUG FIXES AND MINOR IMPROVEMENTS
 
+* Changed the `rm_main_results` so it now calculates approximate standard 
+deviations and standard errors for all decoding results. These decoding standard
+deviations/standard errors are likely a slight underestimate that one would get 
+from new trials from the same set of neurons since they do not take into account 
+that there is some dependencies between the test data when cross-validation is used. 
+
 * Changed `read_matlab_raster_data()` function so that if there is a field called
 trial_number in the MATLAB site_info, this this will automatically be set to be
 the trial_number in the R raster_data unless it is overwritten by setting
@@ -17,7 +23,6 @@ sequential trial numbers using the `add_sequential_trial_numbers` argument.
 are plotting correctly rather than there being multiple points at a given time
 (which creating a vertical line artifact). This was done by rounding the times
 to be plotted using the `floor()` function rather than `round()` function.
-
 
 * Fixed the `rm_confusion_matrix` so that if a classifier does not return
 decision values, the and `create_decision_vals_confusion_matrix` is set to

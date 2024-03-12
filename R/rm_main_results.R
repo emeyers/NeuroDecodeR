@@ -126,7 +126,9 @@ if ((sum(grepl("decision", names(prediction_results))) == 0) & (include_norm_ran
     dplyr::mutate(correct = .data$actual_labels == .data$predicted_labels) %>%
     #dplyr::group_by(.data$CV, .data$train_time, .data$test_time) %>%
     dplyr::group_by(.data$train_time, .data$test_time) %>%           # also aggregating over CV splits here
-    summarize(zero_one_loss = mean(.data$correct, na.rm = TRUE))
+    summarize(zero_one_loss = mean(.data$correct, na.rm = TRUE),
+              sd_zero_one_loss = sd(.data$correct, na.rm = TRUE),
+              se_zero_one_loss = sd(.data$correct, na.rm = TRUE)/sqrt(length(na.omit(.data$correct))))
 
   
   # calculate the chance level for the zero one loss results
@@ -181,7 +183,10 @@ if ((sum(grepl("decision", names(prediction_results))) == 0) & (include_norm_ran
       mutate(decision_vals = correct_class_decision_val) %>%
       # dplyr::group_by(.data$CV, .data$train_time, .data$test_time) %>%    
       dplyr::group_by(.data$train_time, .data$test_time) %>%     # also aggregating over CV splits here
-      summarize(decision_vals = mean(.data$decision_vals, na.rm = TRUE))
+      summarize(sd_decision_vals = sd(.data$decision_vals, na.rm = TRUE),
+                se_decision_vals = sd(.data$decision_vals, na.rm = TRUE)/sqrt(length(na.omit(.data$decision_vals))),
+                decision_vals = mean(.data$decision_vals, na.rm = TRUE)) %>%
+      select(.data$decision_vals, .data$sd_decision_vals, .data$se_decision_vals, everything())
       
       # the_results <- left_join(the_results, summarized_correct_decision_val_results,
       #                         by = c("CV", "train_time", "test_time"))
@@ -204,7 +209,10 @@ if ((sum(grepl("decision", names(prediction_results))) == 0) & (include_norm_ran
         mutate(normalized_rank = normalized_rank_results) %>%
         # dplyr::group_by(.data$CV, .data$train_time, .data$test_time) %>%
         dplyr::group_by(.data$train_time, .data$test_time) %>%    # also aggregating over CV splits here
-        summarize(normalized_rank = mean(.data$normalized_rank, na.rm = TRUE))
+        summarize(sd_normalized_rank = sd(.data$normalized_rank, na.rm = TRUE),
+                  se_normalized_rank = sd(.data$normalized_rank, na.rm = TRUE)/sqrt(length(na.omit(.data$normalized_rank))),
+                  normalized_rank = mean(.data$normalized_rank, na.rm = TRUE)) %>%
+        select(.data$normalized_rank, .data$sd_normalized_rank, .data$se_normalized_rank, everything())
       
       
       # the_results <- left_join(the_results, summarized_normalized_rank_results,
@@ -247,16 +255,21 @@ if ((sum(grepl("decision", names(prediction_results))) == 0) & (include_norm_ran
 #' @keywords internal
 aggregate_resample_run_results.rm_main_results <- function(resample_run_results) {
   
+  
   central_results <- resample_run_results %>%
     group_by(.data$train_time, .data$test_time) %>%
-    summarize(zero_one_loss = mean(.data$zero_one_loss))
+    summarize(zero_one_loss = mean(.data$zero_one_loss),
+              sd_zero_one_loss = mean(.data$sd_zero_one_loss),
+              se_zero_one_loss = mean(.data$se_zero_one_loss))
 
 
   if ("normalized_rank" %in% names(resample_run_results)) {
     
     normalized_rank_results <- resample_run_results %>%
       group_by(.data$train_time, .data$test_time) %>%
-      summarize(normalized_rank = mean(.data$normalized_rank))
+      summarize(normalized_rank = mean(.data$normalized_rank),
+                sd_normalized_rank = mean(.data$sd_normalized_rank),
+                se_normalized_rank = mean(.data$se_normalized_rank))
 
     central_results <- left_join(central_results, normalized_rank_results, by = c("train_time", "test_time"))
   }
@@ -266,7 +279,9 @@ aggregate_resample_run_results.rm_main_results <- function(resample_run_results)
     
     decision_vals_results <- resample_run_results %>%
       group_by(.data$train_time, .data$test_time) %>%
-      summarize(decision_vals = mean(.data$decision_vals))
+      summarize(decision_vals = mean(.data$decision_vals),
+                sd_decision_vals = mean(.data$sd_decision_vals),
+                se_decision_vals = mean(.data$se_decision_vals))
 
     central_results <- left_join(central_results, decision_vals_results, by = c("train_time", "test_time"))
   }
