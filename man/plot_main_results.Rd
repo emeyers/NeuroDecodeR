@@ -9,6 +9,7 @@ plot_main_results(
   results_to_plot,
   results_to_show = "zero_one_loss",
   type = "line",
+  errorbar = NULL,
   display_names = NULL
 )
 }
@@ -32,6 +33,17 @@ are: 'zero_one_loss', 'normalized_rank', 'decision_values', or 'all'.}
 \item{type}{A string specifying the type of results to plot. Options are
 'TCD' to plot a temporal cross decoding matrix or 'line' to create a line
 plot of the decoding results as a function of time.}
+
+\item{errorbar}{A string specifying if error bars should be plotted. Options
+are: 'sd', 'se', or '2se'. If this is set to NULL, then no error bars will
+be plotted. If this is set to 'sd', then the standard deviation of the
+results will be plotted. If this is set to 'se', then the standard error of
+the results will be plotted. If this is set to '2se', then two times the
+standard error of the results will be plotted (which is often used to
+represent a 95\% confidence interval). Note, these error bars are slight
+underestimates of the sd and sderr because when using cross-validation the
+test data is not independent of the training data. Also, note that error
+bars can only be plotted for line plots and not for TCD plots.}
 
 \item{display_names}{A vector of strings specifying what the labels on the
 plots should say for each result. If this is NULL, the result names will be
