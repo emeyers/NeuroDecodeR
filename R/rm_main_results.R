@@ -126,7 +126,9 @@ if ((sum(grepl("decision", names(prediction_results))) == 0) & (include_norm_ran
     dplyr::mutate(correct = .data$actual_labels == .data$predicted_labels) %>%
     #dplyr::group_by(.data$CV, .data$train_time, .data$test_time) %>%
     dplyr::group_by(.data$train_time, .data$test_time) %>%           # also aggregating over CV splits here
-    summarize(zero_one_loss = mean(.data$correct, na.rm = TRUE))
+    summarize(zero_one_loss = mean(.data$correct, na.rm = TRUE),
+              sd_zero_one_loss = sd(.data$correct, na.rm = TRUE),
+              se_zero_one_loss = sd(.data$correct, na.rm = TRUE)/sqrt(length(na.omit(.data$correct))))
 
   
   # calculate the chance level for the zero one loss results
@@ -181,7 +183,10 @@ if ((sum(grepl("decision", names(prediction_results))) == 0) & (include_norm_ran
       mutate(decision_vals = correct_class_decision_val) %>%
       # dplyr::group_by(.data$CV, .data$train_time, .data$test_time) %>%    
       dplyr::group_by(.data$train_time, .data$test_time) %>%     # also aggregating over CV splits here
-      summarize(decision_vals = mean(.data$decision_vals, na.rm = TRUE))
+      summarize(sd_decision_vals = sd(.data$decision_vals, na.rm = TRUE),
+                se_decision_vals = sd(.data$decision_vals, na.rm = TRUE)/sqrt(length(na.omit(.data$decision_vals))),
+                decision_vals = mean(.data$decision_vals, na.rm = TRUE)) %>%
+      select(.data$decision_vals, .data$sd_decision_vals, .data$se_decision_vals, everything())
       
       # the_results <- left_join(the_results, summarized_correct_decision_val_results,
       #                         by = c("CV", "train_time", "test_time"))
@@ -204,7 +209,10 @@ if ((sum(grepl("decision", names(prediction_results))) == 0) & (include_norm_ran
         mutate(normalized_rank = normalized_rank_results) %>%
         # dplyr::group_by(.data$CV, .data$train_time, .data$test_time) %>%
         dplyr::group_by(.data$train_time, .data$test_time) %>%    # also aggregating over CV splits here
-        summarize(normalized_rank = mean(.data$normalized_rank, na.rm = TRUE))
+        summarize(sd_normalized_rank = sd(.data$normalized_rank, na.rm = TRUE),
+                  se_normalized_rank = sd(.data$normalized_rank, na.rm = TRUE)/sqrt(length(na.omit(.data$normalized_rank))),
+                  normalized_rank = mean(.data$normalized_rank, na.rm = TRUE)) %>%
+        select(.data$normalized_rank, .data$sd_normalized_rank, .data$se_normalized_rank, everything())
       
       
       # the_results <- left_join(the_results, summarized_normalized_rank_results,
@@ -247,16 +255,21 @@ if ((sum(grepl("decision", names(prediction_results))) == 0) & (include_norm_ran
 #' @keywords internal
 aggregate_resample_run_results.rm_main_results <- function(resample_run_results) {
   
+  
   central_results <- resample_run_results %>%
     group_by(.data$train_time, .data$test_time) %>%
-    summarize(zero_one_loss = mean(.data$zero_one_loss))
+    summarize(zero_one_loss = mean(.data$zero_one_loss),
+              sd_zero_one_loss = mean(.data$sd_zero_one_loss),
+              se_zero_one_loss = mean(.data$se_zero_one_loss))
 
 
   if ("normalized_rank" %in% names(resample_run_results)) {
     
     normalized_rank_results <- resample_run_results %>%
       group_by(.data$train_time, .data$test_time) %>%
-      summarize(normalized_rank = mean(.data$normalized_rank))
+      summarize(normalized_rank = mean(.data$normalized_rank),
+                sd_normalized_rank = mean(.data$sd_normalized_rank),
+                se_normalized_rank = mean(.data$se_normalized_rank))
 
     central_results <- left_join(central_results, normalized_rank_results, by = c("train_time", "test_time"))
   }
@@ -266,7 +279,9 @@ aggregate_resample_run_results.rm_main_results <- function(resample_run_results)
     
     decision_vals_results <- resample_run_results %>%
       group_by(.data$train_time, .data$test_time) %>%
-      summarize(decision_vals = mean(.data$decision_vals))
+      summarize(decision_vals = mean(.data$decision_vals),
+                sd_decision_vals = mean(.data$sd_decision_vals),
+                se_decision_vals = mean(.data$se_decision_vals))
 
     central_results <- left_join(central_results, decision_vals_results, by = c("train_time", "test_time"))
   }
@@ -304,6 +319,17 @@ aggregate_resample_run_results.rm_main_results <- function(resample_run_results)
 #'   'TCD' to plot a temporal cross decoding matrix or 'line' to create a line
 #'   plot of the decoding results as a function of time.
 #'   
+#' @param errorbar A string specifying if error bars should be plotted. Options
+#'  are: 'sd', 'se', or '2se'. If this is set to NULL, then no error bars will
+#'  be plotted. If this is set to 'sd', then the standard deviation of the
+#'  results will be plotted. If this is set to 'se', then the standard error of
+#'  the results will be plotted. If this is set to '2se', then two times the
+#'  standard error of the results will be plotted (which is often used to
+#'  represent a 95% confidence interval). Note, these error bars are slight 
+#'  underestimates of the sd and sderr because when using cross-validation the 
+#'  test data is not independent of the training data. Also, note that error 
+#'  bars can only be plotted for line plots and not for TCD plots. 
+#'  
 #' @return Returns a ggplot object that plots the main results.
 #'
 #' @family result_metrics
@@ -311,10 +337,10 @@ aggregate_resample_run_results.rm_main_results <- function(resample_run_results)
 #'
 #'
 #' @export
-plot.rm_main_results <- function(x, ..., results_to_show = "zero_one_loss", type = "TCD") {
+plot.rm_main_results <- function(x, ..., results_to_show = "zero_one_loss", errorbar = NULL, type = "TCD") {
 
   # call the helper function to do all the hard work
-  helper_plot_rm_main_results(x, results_to_show, type)
+  helper_plot_rm_main_results(x, results_to_show, type, errorbar)
 
 }
   
@@ -368,6 +394,17 @@ get_parameters.rm_main_results <- function(ndr_obj) {
 #'   'TCD' to plot a temporal cross decoding matrix or 'line' to create a line
 #'   plot of the decoding results as a function of time.
 #'   
+#' @param errorbar A string specifying if error bars should be plotted. Options
+#'  are: 'sd', 'se', or '2se'. If this is set to NULL, then no error bars will
+#'  be plotted. If this is set to 'sd', then the standard deviation of the
+#'  results will be plotted. If this is set to 'se', then the standard error of
+#'  the results will be plotted. If this is set to '2se', then two times the
+#'  standard error of the results will be plotted (which is often used to
+#'  represent a 95% confidence interval). Note, these error bars are slight 
+#'  underestimates of the sd and sderr because when using cross-validation the 
+#'  test data is not independent of the training data. Also, note that error 
+#'  bars can only be plotted for line plots and not for TCD plots. 
+#'   
 #' @param display_names A vector of strings specifying what the labels on the
 #'   plots should say for each result. If this is NULL, the result names will be
 #'   the names from the manifest file's result_name column, or if these are set
@@ -382,6 +419,7 @@ plot_main_results <- function(results_dir_name,
                               results_to_plot, 
                               results_to_show = "zero_one_loss", 
                               type = "line",
+                              errorbar = NULL,
                               display_names = NULL) {
   
   
@@ -496,7 +534,7 @@ plot_main_results <- function(results_dir_name,
     
   
   # plot the results using the helper_plot_rm_main_results() helper function
-  helper_plot_rm_main_results(all_main_results, results_to_show, type)
+  helper_plot_rm_main_results(all_main_results, results_to_show, type, errorbar)
   
   
 }
@@ -510,8 +548,12 @@ plot_main_results <- function(results_dir_name,
 
 
 # A private helper function that does all the hard work of plotting the results
-helper_plot_rm_main_results <- function(main_results, results_to_show = "zero_one_loss", type = "TCD") {  
+helper_plot_rm_main_results <- function(main_results, 
+                                        results_to_show = "zero_one_loss", 
+                                        type = "TCD",
+                                        errorbar = NULL) {  
   
+
   
   # sanity check that only trying to plot final aggregated results
   if (attributes(main_results)$state != "final results") {
@@ -522,6 +564,12 @@ helper_plot_rm_main_results <- function(main_results, results_to_show = "zero_on
   # check arguments are valid
   if (!(type == "TCD" || type == "line")) {
     stop("type must be set to 'TCD' or 'line'. Using the default value of 'TCD'")
+  }
+  
+  
+  # check if errorbar has been supplied when trying to create a TCD plot
+  if ((type == "TCD") && !is.null(errorbar)) {
+     message("Can't plot errorbars for TCD plots. Ignoring the errorbar argument.")
   }
   
   
@@ -548,8 +596,9 @@ helper_plot_rm_main_results <- function(main_results, results_to_show = "zero_on
   zero_one_loss_chance <- 100 * attributes(main_results)$options$zero_one_loss_chance_level
   
   # convert the zero-one loss results to percentages
-  main_results <- dplyr::mutate(main_results, zero_one_loss = .data$zero_one_loss * 100)
-  
+  main_results <- dplyr::mutate(main_results, zero_one_loss = .data$zero_one_loss * 100) |>
+    dplyr::mutate(sd_zero_one_loss = .data$sd_zero_one_loss * 100) |>
+    dplyr::mutate(se_zero_one_loss = .data$se_zero_one_loss * 100)
   
   main_results$train_time <- floor(get_center_bin_time(main_results$train_time))
   main_results$test_time <- floor(get_center_bin_time(main_results$test_time))
@@ -562,13 +611,59 @@ helper_plot_rm_main_results <- function(main_results, results_to_show = "zero_on
   # remove result types that are not being used
   result_types_to_remove <- setdiff(c("zero_one_loss",  "normalized_rank", "decision_vals"), results_to_show)
   result_types_to_remove <- intersect(names(main_results), result_types_to_remove) # in case "normalized_rank", "decision_vals" are not in the results
-  main_results <- dplyr::select(main_results, -{{result_types_to_remove}})
+  main_results <- dplyr::select(main_results, -contains({{result_types_to_remove}}))
   
   
+  # keep only the errorbars needed
+  if (is.null(errorbar)) {
+      errorbar_df <- NULL
+  } else if (errorbar == "sd") {
+      errorbar_df <- select(main_results, contains("time"), contains("result_name"), contains("sd"))
+  } else if (errorbar == "se") {
+      errorbar_df <- select(main_results, contains("time"), contains("result_name"), contains("se"))
+  } else if (errorbar == "2se") {
+      errorbar_df <- cbind(select(main_results, contains("time")), select(main_results, contains("result_name")),
+                           2 * select(main_results, contains("se")))
+  } else {
+      message("errorbar must be set to the string 'sd', 'se', or '2se'. Ignoring the errorbar argument.")
+  }
+      
+  
+  
+  # remove the errorbars from the main results
+  main_results <-  dplyr::select(main_results, -contains("sd"), -contains("se"))
+  
+  
+  # pivot the main_results and errorbar_df to make then long and then join them
   main_results <- main_results %>%
     tidyr::pivot_longer(all_of(results_to_show), 
                         names_to = "results_to_show",
                         values_to = "accuracy") 
+
+  
+  
+  # if plotting errorbars, add them to the results
+  if (!is.null(errorbar)) {
+    
+    cols_not_to_pivot <- c("train_time", "test_time")
+    
+    if ("result_name" %in% names(errorbar_df)) {
+      cols_not_to_pivot <- c(cols_not_to_pivot, "result_name")
+    }
+    
+
+    errorbar_df <- errorbar_df %>%
+      tidyr::pivot_longer(!all_of(cols_not_to_pivot),
+                          names_to = "results_to_show",
+                          values_to = "errorbar") %>%
+      dplyr::mutate(results_to_show = substring(results_to_show, 4, nchar(results_to_show))) 
+      
+    
+    main_results <- main_results |>
+      left_join(errorbar_df, by = c(cols_not_to_pivot, "results_to_show"))
+  }
+  
+
   
   
   # rename results for better printing on plots and order according to the order given
@@ -589,6 +684,10 @@ helper_plot_rm_main_results <- function(main_results, results_to_show = "zero_on
     dplyr::filter(.data$results_to_show %in% unique(main_results$results_to_show))
   
   
+
+  
+  
+
   # actually plot the data...
   
   
@@ -613,6 +712,9 @@ helper_plot_rm_main_results <- function(main_results, results_to_show = "zero_on
       xlab("Time") +
       ylab("Accuracy")
     
+    
+    # should add an errorbar here too if applicable...
+    
     g
     
     
@@ -622,18 +724,22 @@ helper_plot_rm_main_results <- function(main_results, results_to_show = "zero_on
     # if only trained and tested at the same time, create line plot
     
     
+    # make sure only plot the results where the train and test times are the same
+    main_results <- main_results |>
+      dplyr::filter(.data$train_time == .data$test_time)
+    
+    
     # the "result_name" variable indicates there are multiple results to compare
     # so plot them in different colors...
     if ("result_name" %in% names(main_results)) {
       
       g <- main_results %>%
-        dplyr::filter(.data$train_time == .data$test_time) %>%
-        ggplot(aes(.data$test_time, .data$accuracy, color = .data$result_name)) 
+        ggplot(aes(.data$test_time, .data$accuracy, 
+                   color = .data$result_name, fill = .data$result_name)) 
       
     } else {   # only a single result being plotted
       
       g <- main_results %>%
-        dplyr::filter(.data$train_time == .data$test_time) %>%
         ggplot(aes(.data$test_time, .data$accuracy)) 
     }
     
@@ -645,7 +751,7 @@ helper_plot_rm_main_results <- function(main_results, results_to_show = "zero_on
       geom_hline(data = chance_accuracy_df, 
                  aes(yintercept = .data$chance_level),
                  color = "maroon", na.rm=TRUE) + 
-      geom_line() + 
+      geom_line(linewidth = 1.2) + 
       theme_classic() + 
       theme(
         panel.grid.major = element_blank(),
@@ -653,8 +759,21 @@ helper_plot_rm_main_results <- function(main_results, results_to_show = "zero_on
         strip.background = element_rect(colour = "white", fill = "white"),
         legend.title=element_blank())
 
-    g
+   
     
+    # if there is an error bar, add it to the plot
+    if (!is.null(errorbar)) {
+      g <- g + geom_ribbon(data = main_results, 
+                           aes(ymin = .data$accuracy - .data$errorbar, 
+                               ymax = .data$accuracy + .data$errorbar,
+                               color = NULL),
+                           alpha = 0.2)
+    }
+    
+    
+    g   # return the ggplot object
+    
+
     
   } else {
     
