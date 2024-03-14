@@ -186,10 +186,8 @@ if ((sum(grepl("decision", names(prediction_results))) == 0) & (include_norm_ran
       summarize(sd_decision_vals = sd(.data$decision_vals, na.rm = TRUE),
                 se_decision_vals = sd(.data$decision_vals, na.rm = TRUE)/sqrt(length(na.omit(.data$decision_vals))),
                 decision_vals = mean(.data$decision_vals, na.rm = TRUE)) %>%
-      select(.data$decision_vals, .data$sd_decision_vals, .data$se_decision_vals, everything())
-      
-      # the_results <- left_join(the_results, summarized_correct_decision_val_results,
-      #                         by = c("CV", "train_time", "test_time"))
+      select("decision_vals", "sd_decision_vals", "se_decision_vals", everything())
+    
       
       the_results <- left_join(the_results, summarized_correct_decision_val_results,
                                by = c("train_time", "test_time"))
@@ -212,11 +210,7 @@ if ((sum(grepl("decision", names(prediction_results))) == 0) & (include_norm_ran
         summarize(sd_normalized_rank = sd(.data$normalized_rank, na.rm = TRUE),
                   se_normalized_rank = sd(.data$normalized_rank, na.rm = TRUE)/sqrt(length(na.omit(.data$normalized_rank))),
                   normalized_rank = mean(.data$normalized_rank, na.rm = TRUE)) %>%
-        select(.data$normalized_rank, .data$sd_normalized_rank, .data$se_normalized_rank, everything())
-      
-      
-      # the_results <- left_join(the_results, summarized_normalized_rank_results,
-      #                          by = c("CV", "train_time", "test_time"))
+        select("normalized_rank", "sd_normalized_rank", "se_normalized_rank", everything())
       
       the_results <- left_join(the_results, summarized_normalized_rank_results,
                                by = c("train_time", "test_time"))
