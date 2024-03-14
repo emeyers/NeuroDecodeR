@@ -309,6 +309,7 @@ run_decoding.cv_standard <- function(cv_obj) {
   all_resample_run_decoding_results <- list() 
   all_resample_run_decoding_results <- foreach(iResample = 1:num_resample_runs,
                                                .packages="NeuroDecodeR", 
+                                               .export=c("read_raster_data","get_data"),
                                                .options.snow=opts) %do_type% { 
 
     
