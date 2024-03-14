@@ -111,6 +111,13 @@ test_that("basic_ds: the correct number of resampled sites is returned", {
   
   expect_equal(num_resample_sites, length(site_names))
   
+  
+  # check that an error message is given if a negative value is provided 
+  # for the number of resample sites
+  expect_error(ds_basic("fake_binned_data.Rda", "stim_names", 10,  
+                       num_resample_sites = -1))
+  
+  
 })
 
 

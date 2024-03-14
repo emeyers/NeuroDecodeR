@@ -201,6 +201,10 @@ ds_basic <- function(binned_data,
     num_resample_sites <- length(site_IDs_to_use)
   }
 
+  if (num_resample_sites < 1) {
+    stop("num_resample_sites must be greater than 0.")
+  }
+  
   if (create_simultaneous_populations > 2 || create_simultaneous_populations < 0) {
     stop("create_simultaneous_populations must be set to 0 or 1.")
   }
