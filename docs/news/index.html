@@ -79,10 +79,15 @@
     <div class="section level2">
 <h2 class="page-header" data-toc-text="development version" id="neurodecoder-development-version">NeuroDecodeR (development version)<a class="anchor" aria-label="anchor" href="#neurodecoder-development-version"></a></h2>
 <p>BUG FIXES AND MINOR IMPROVEMENTS</p>
-<ul><li><p>Fixed the <code>rm_confusion_matrix</code> so that if a classifier does not return decision values, the and <code>create_decision_vals_confusion_matrix</code> is set to <code>TRUE</code>, a warning message will be given and <code>create_decision_vals_confusion_matrix</code> will be set to <code>FALSE</code>.</p></li>
+<ul><li><p>Changed the <code>rm_main_results</code> so it now calculates approximate standard deviations and standard errors for all decoding results. These decoding standard deviations/standard errors are likely a slight underestimate that one would get from new trials from the same set of neurons since they do not take into account that there is some dependencies between the test data when cross-validation is used. Also, added options to the <code>rm_main_results</code> <code><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot()</a></code> and <code><a href="../reference/plot_main_results.html">plot_main_results()</a></code> functions so that they can plot the standard deviations/standard errors as shaded regions.</p></li>
+<li><p>Changed <code><a href="../reference/read_matlab_raster_data.html">read_matlab_raster_data()</a></code> function so that if there is a field called trial_number in the MATLAB site_info, this this will automatically be set to be the trial_number in the R raster_data unless it is overwritten by setting sequential trial numbers using the <code>add_sequential_trial_numbers</code> argument.</p></li>
+<li><p>Fixed the <code><a href="../reference/plot_main_results.html">plot_main_results()</a></code> function so that if 1 ms bins are used, times are plotting correctly rather than there being multiple points at a given time (which creating a vertical line artifact). This was done by rounding the times to be plotted using the <code><a href="https://rdrr.io/r/base/Round.html" class="external-link">floor()</a></code> function rather than <code><a href="https://rdrr.io/r/base/Round.html" class="external-link">round()</a></code> function.</p></li>
+<li><p>Fixed the <code>rm_confusion_matrix</code> so that if a classifier does not return decision values, the and <code>create_decision_vals_confusion_matrix</code> is set to <code>TRUE</code>, a warning message will be given and <code>create_decision_vals_confusion_matrix</code> will be set to <code>FALSE</code>.</p></li>
 <li><p>Added a warning message to the <code>cv_standard</code> constructor. If the result_metric argument is NULL, it will print a warning to let the user know that the default <code>rm_main_rsults</code> and <code>rm_confusion_matrix</code> result metrics are being used.</p></li>
 <li><p>Updated <code>log_load_results_from_result_name</code> so that if multiple names match it returns a named list where the names are given by the manifest <code>result_name</code> column.</p></li>
 <li><p>Updated <code>plot_main_results</code> so that if the <code>results_to_plot</code> is character vector and multiple manifest <code>result_names</code> match in the manifest file, it will plot all the results that match rather than give an error.</p></li>
+<li><p>Small fix to the <code><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot()</a></code> function for the <code>rm_main_results</code> object so that it works with version 3.4.0 of <code>ggplot2</code>.</p></li>
+<li><p>Fixed the package so that it works with tidyselect 1.2.0</p></li>
 </ul></div>
     <div class="section level2">
 <h2 class="page-header" data-toc-text="0.1.0" id="neurodecoder-010">NeuroDecodeR 0.1.0<small>2022-09-29</small><a class="anchor" aria-label="anchor" href="#neurodecoder-010"></a></h2>
@@ -105,7 +110,7 @@
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.7.</p>
 </div>
 
       </footer></div>

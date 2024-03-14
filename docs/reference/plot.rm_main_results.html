@@ -89,7 +89,7 @@ have been aggregated).</p>
 
     <div id="ref-usage">
     <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="co"># S3 method for rm_main_results</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">x</span>, <span class="va">...</span>, results_to_show <span class="op">=</span> <span class="st">"zero_one_loss"</span>, type <span class="op">=</span> <span class="st">"TCD"</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">x</span>, <span class="va">...</span>, results_to_show <span class="op">=</span> <span class="st">"zero_one_loss"</span>, errorbar <span class="op">=</span> <span class="cn">NULL</span>, type <span class="op">=</span> <span class="st">"TCD"</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
@@ -108,6 +108,19 @@ run_decoding(cv) then this argument should be
 <dt>results_to_show</dt>
 <dd><p>A string specifying the types of results to plot. Options
 are: 'zero_one_loss', 'normalized_rank', 'decision_values', or 'all'.</p></dd>
+
+
+<dt>errorbar</dt>
+<dd><p>A string specifying if error bars should be plotted. Options
+are: 'sd', 'se', or '2se'. If this is set to NULL, then no error bars will
+be plotted. If this is set to 'sd', then the standard deviation of the
+results will be plotted. If this is set to 'se', then the standard error of
+the results will be plotted. If this is set to '2se', then two times the
+standard error of the results will be plotted (which is often used to
+represent a 95% confidence interval). Note, these error bars are slight
+underestimates of the sd and sderr because when using cross-validation the
+test data is not independent of the training data. Also, note that error
+bars can only be plotted for line plots and not for TCD plots.</p></dd>
 
 
 <dt>type</dt>
@@ -143,7 +156,7 @@ plot of the decoding results as a function of time.</p></dd>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.7.</p>
 </div>
 
       </footer></div>
