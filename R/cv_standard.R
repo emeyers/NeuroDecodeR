@@ -307,7 +307,8 @@ run_decoding.cv_standard <- function(cv_obj) {
   # Do a parallel loop over resample runs
   iResample <- 0  # to deal with an R check note
   all_resample_run_decoding_results <- list() 
-  all_resample_run_decoding_results <- foreach(iResample = 1:num_resample_runs, 
+  all_resample_run_decoding_results <- foreach(iResample = 1:num_resample_runs,
+                                               .packages="NeuroDecodeR", 
                                                .options.snow=opts) %do_type% { 
 
     
