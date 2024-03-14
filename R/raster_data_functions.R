@@ -595,7 +595,7 @@ plot.raster_data <- function(x, ..., facet_label = NULL) {
   # convert to long format for plotting and time as a numeric value
   activity_data_only_df <- activity_data_only_df |>
     tidyr::pivot_longer(starts_with("time"), names_to = "time", values_to = "activity") |>   
-    dplyr::mutate(time = floor(get_center_bin_time(.data$time)))  
+    dplyr::mutate(time = floor(get_time_bin_center(.data$time)))  
 
   
   # if the data is a spike train of 0's and 1's

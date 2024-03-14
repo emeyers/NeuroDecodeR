@@ -600,8 +600,8 @@ helper_plot_rm_main_results <- function(main_results,
     dplyr::mutate(sd_zero_one_loss = .data$sd_zero_one_loss * 100) |>
     dplyr::mutate(se_zero_one_loss = .data$se_zero_one_loss * 100)
   
-  main_results$train_time <- floor(get_center_bin_time(main_results$train_time))
-  main_results$test_time <- floor(get_center_bin_time(main_results$test_time))
+  main_results$train_time <- floor(get_time_bin_center(main_results$train_time))
+  main_results$test_time <- floor(get_time_bin_center(main_results$test_time))
   
   # an alternative way to display the labels (not used)
   # main_results$train_time <- get_time_range_strings(main_results$train_time)

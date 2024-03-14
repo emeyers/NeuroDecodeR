@@ -129,12 +129,36 @@ check_and_load_binned_data <- function(binned_data) {
 # calculates the mean of X and Y. This is primarily used by the result metric
 # plot() functions to label the time axes on plots.
 
-get_center_bin_time <- function(time_vector) {
+get_time_bin_center <- function(time_vector) {
   
   start_time_values <- as.numeric(sapply(strsplit(gsub("time.", "", time_vector), "_"), function(l) l[1]))
   end_time_values <- as.numeric(sapply(strsplit(gsub("time.", "", time_vector), "_"), function(l) l[2]))
   
   (start_time_values + end_time_values)/2
+  
+}
+
+
+# Returns the starting time of time bin strings as numbers.
+get_time_bin_start <- function(time_vector) {
+  as.numeric(sapply(strsplit(gsub("time.", "", time_vector), "_"), function(l) l[1]))
+}
+
+
+# Returns the end time of time bin strings as numbers.
+get_time_bin_end <- function(time_vector) {
+  as.numeric(sapply(strsplit(gsub("time.", "", time_vector), "_"), function(l) l[2]))
+}
+
+
+
+# Renamed this function to get_time_bin_center. Added deprecation notice for this.
+# Given this is a private function this should not be a big deal. 
+get_center_bin_time <- function(time_vector) {
+  
+  .Deprecated("get_time_bin_center")
+  
+  get_time_bin_center(time_vector)
   
 }
   

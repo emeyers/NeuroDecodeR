@@ -381,8 +381,8 @@ plot_confusion_matrix <- function(confusion_matrix_obj,
   only_has_same_train_test_time_results <-
     (sum(confusion_matrix_obj$train_time == confusion_matrix_obj$test_time) == dim(confusion_matrix_obj)[1])
 
-  confusion_matrix_obj$train_time <- round(get_center_bin_time(confusion_matrix_obj$train_time))
-  confusion_matrix_obj$test_time <- round(get_center_bin_time(confusion_matrix_obj$test_time))
+  confusion_matrix_obj$train_time <- round(get_time_bin_center(confusion_matrix_obj$train_time))
+  confusion_matrix_obj$test_time <- round(get_time_bin_center(confusion_matrix_obj$test_time))
 
   # confusion_matrix_obj$train_time <- get_time_range_strings(confusion_matrix_obj$train_time)
   # confusion_matrix_obj$test_time <- get_time_range_strings(confusion_matrix_obj$test_time)
@@ -508,8 +508,8 @@ plot_MI <- function(rm_obj, plot_type = "TCD") {
 
   # plot the mutual information  ----------------------------------------------
 
-  MI_obj$train_time <- round(get_center_bin_time(MI_obj$train_time))
-  MI_obj$test_time <- round(get_center_bin_time(MI_obj$test_time))
+  MI_obj$train_time <- round(get_time_bin_center(MI_obj$train_time))
+  MI_obj$test_time <- round(get_time_bin_center(MI_obj$test_time))
 
 
   if ((sum(MI_obj$train_time == MI_obj$test_time) == dim(MI_obj)[1]) || plot_type == "line") {

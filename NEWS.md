@@ -4,14 +4,20 @@
 
 BUG FIXES AND MINOR IMPROVEMENTS
 
-* Changed the `rm_main_results` so it now calculates approximate standard 
-deviations and standard errors for all decoding results. These decoding standard
-deviations/standard errors are likely a slight underestimate that one would get 
-from new trials from the same set of neurons since they do not take into account 
-that there is some dependencies between the test data when cross-validation is used.
-Also, added options to the `rm_main_results` `plot()` and `plot_main_results()`
-functions so that they can plot the standard deviations/standard errors as shaded 
-regions. 
+* Changed the name of the private function `get_center_bin_time()` to be 
+`get_time_bin_center()` (and deprecated the `get_center_bin_time()` function).
+Also added functions `get_time_bin_start()` and `get_time_bin_end()` to get the
+start and end times of time bin strings (these are not used by the package but
+could be useful for users of the package).
+
+* Added functionality to the the `rm_main_results` so it now calculates 
+approximate standard deviations and standard errors for all decoding results. 
+These decoding standard deviations/standard errors are likely a slight 
+underestimate that one would get from new trials from the same set of neurons 
+since they do not take into account that there is some dependencies between the 
+test data when cross-validation is used.Also, added options to the 
+`rm_main_results` `plot()` and `plot_main_results()`functions so that they can 
+plot the standard deviations/standard errors as shaded regions. 
 
 * Changed `read_matlab_raster_data()` function so that if there is a field called
 trial_number in the MATLAB site_info, this this will automatically be set to be
