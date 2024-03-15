@@ -9,7 +9,7 @@ Description: Neural decoding is method of analyzing neural data that
     uses a pattern classifiers to predict experimental conditions based 
     on neural activity. 'NeuroDecodeR' is a system of objects that 
     makes it easy to run neural decoding analyses. For more information
-    on neural decoding see Meyers & Kreiman (2004)
+    on neural decoding see Meyers & Kreiman (2011)
     <doi:10.7551/mitpress/8404.003.0024>.
 URL: https://emeyers.github.io/NeuroDecodeR/, https://github.com/emeyers/NeuroDecodeR
 BugReports: https://github.com/emeyers/NeuroDecodeR/issues

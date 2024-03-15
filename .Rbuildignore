@@ -14,3 +14,4 @@
 ^NEWS\.md$
 ^CRAN-SUBMISSION$
 ^\.github$
+^revdep$
