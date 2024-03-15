@@ -308,7 +308,6 @@ run_decoding.cv_standard <- function(cv_obj) {
   iResample <- 0  # to deal with an R check note
   all_resample_run_decoding_results <- list() 
   all_resample_run_decoding_results <- foreach(iResample = 1:num_resample_runs,
-                                               .export=c("read_raster_data","get_data"),
                                                .options.snow=opts) %do_type% { 
 
     
