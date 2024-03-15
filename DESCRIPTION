@@ -1,6 +1,6 @@
 Package: NeuroDecodeR
 Title: Decode Information from Neural Activity 
-Version: 0.1.0.9000
+Version: 0.2.0
 Authors@R: c(
   person("Ethan", "Meyers", email = "ethan.meyers@gmail.com", 
   role = c("aut", "cre"))
