@@ -85,6 +85,7 @@ new_rm_main_results <- function(the_data = data.frame(), state = "initial", opti
 # The aggregate_CV_split_results method needed to fulfill the results metric interface.
 #' @inherit aggregate_CV_split_results
 #' @keywords internal
+#' @export
 aggregate_CV_split_results.rm_main_results <- function(rm_obj, prediction_results) {
 
 
@@ -247,6 +248,7 @@ if ((sum(grepl("decision", names(prediction_results))) == 0) & (include_norm_ran
 # The aggregate_resample_run_results method needed to fulfill the results metric interface
 #' @inherit aggregate_resample_run_results
 #' @keywords internal
+#' @export
 aggregate_resample_run_results.rm_main_results <- function(resample_run_results) {
   
   

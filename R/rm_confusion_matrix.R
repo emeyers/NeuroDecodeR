@@ -88,6 +88,7 @@ new_rm_confusion_matrix <- function(the_data = data.frame(),
 # Not going to export this since it should never be directly called by users of the NDR.
 #' @inherit aggregate_CV_split_results
 #' @keywords internal
+#' @export
 aggregate_CV_split_results.rm_confusion_matrix <- function(rm_obj, prediction_results) {
 
   # include a warning if the state is not initial
@@ -190,6 +191,7 @@ aggregate_CV_split_results.rm_confusion_matrix <- function(rm_obj, prediction_re
 # Not going to export this since it should never be directly called by users of the NDR.
 #' @inherit aggregate_resample_run_results
 #' @keywords internal
+#' @export
 aggregate_resample_run_results.rm_confusion_matrix <- function(resample_run_results) {
   
   confusion_matrix <- resample_run_results
