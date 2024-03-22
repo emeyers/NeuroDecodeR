@@ -160,7 +160,9 @@ test_that("convert_matlab_raster_data() convert MATLAB raster data to R raster d
   } 
   
   
-  dir.create(r_raster_dir_name)
+  if (!file.exists(r_raster_dir_name)) {
+    dir.create(r_raster_dir_name)
+  }
 
   
   r_raster_dir_name <- convert_matlab_raster_data(matlab_raster_dir_name, 
@@ -216,11 +218,7 @@ test_that("convert_matlab_raster_data() convert MATLAB raster data to R raster d
   #unlink(file.path(dirname(r_raster_dir_name), basename(r_raster_dir_name)), 
   #       recursive = TRUE, force = TRUE)
   
-  
-  
-  
-  
-  
+
 })
 
 

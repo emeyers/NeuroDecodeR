@@ -126,6 +126,10 @@ ds_basic <- function(binned_data,
 
   # remove all labels that aren't being used, and rename the labels that are being used to "labels"
   label_col_ind <- match(paste0("labels.", labels), names(binned_data))
+  
+  if (is.na(label_col_ind)) {
+    stop(paste("The labels ", labels, " were not found in the binned data."))
+  }
 
   # also keep the variable trial_number if it exists
   if (("trial_number" %in% colnames(binned_data))) {
@@ -280,6 +284,7 @@ ds_basic <- function(binned_data,
         mutate(labels = labels[sample(row_number())]) |>
         ungroup()
     }
+    
   }
 
 
@@ -362,29 +367,43 @@ get_data.ds_basic <- function(ds_obj) {
     
                                               
 
-  } else {
+  } else {   # create pseudo-populations
 
     # for data not recorded simultaneously
     all_k_fold_data <- binned_data |>
       group_by(labels, .data$siteID) |>
       sample_n(size = num_trials_used_per_label)
+    
+    # if trial numbers exist because data is really simultaneously recorded 
+    # remove the trial number to generate pseudo-populations 
+    # otherwise will always just get the simultaneously recorded trial data
+    if ("trial_number" %in% names(all_k_fold_data)) {
+       all_k_fold_data <- select(all_k_fold_data, -"trial_number")
+    }
+    
+    
   }
 
 
-  # remove the variable trial_number if it exists in all_k_fold_data
-  if ("trial_number" %in% names(all_k_fold_data)) {
-    all_k_fold_data <- select(all_k_fold_data, -"trial_number")
+  # add a fake variable trial_number if it does not exists in all_k_fold_data
+  if (!("trial_number" %in% names(all_k_fold_data))) {
+    
+    all_k_fold_data <- all_k_fold_data |>
+      group_by(.data$siteID) |>
+      mutate(trial_number = 1:n())
+    
   }
-
-
+  
+  
   unique_labels <- unique(all_k_fold_data$labels)
   num_sites <- length(unique(binned_data$siteID))
   num_labels <- length(unique_labels)
 
 
   # arrange the data by siteID and labels before adding on the CV_slide_ID
+  #all_k_fold_data <- dplyr::arrange(all_k_fold_data, .data$siteID, trial_number, labels)
   all_k_fold_data <- dplyr::arrange(all_k_fold_data, .data$siteID, labels)
-
+  
   
   # CV_slice_ID is a groups of data that have one example for each label
   #  - these groups are mapped into CV blocks where blocks contain num_label_repeats_per_cv_split of each label
@@ -397,27 +416,20 @@ get_data.ds_basic <- function(ds_obj) {
   all_k_fold_data$siteID <- paste0("site_", stringr::str_pad(all_k_fold_data$siteID, 4, pad = "0"))
 
   
+  
   # convert so that there are one column for each site
   
-  # older version that uses gather/spread
-  #melted_data <- tidyr::gather(all_k_fold_data, "time_bin", "activity", -.data$siteID, -labels, -CV_slice_ID)
-  #all_cv_data_old <- tidyr::spread(melted_data, .data$siteID, .data$activity) |>
-  #  select(labels, .data$time_bin, CV_slice_ID, everything()) |>
-  #  mutate(time_bin = as.factor(.data$time_bin)) #  |>  arrange(labels, time_bin)
-
-  
   long_data <- tidyr::pivot_longer(all_k_fold_data, 
-                                   -c("siteID", "labels", "CV_slice_ID"),
+                                   -c("siteID", "labels", "trial_number", "CV_slice_ID"),
                                    names_to = "time_bin", 
                                    values_to = "activity")
 
    all_cv_data <- tidyr::pivot_wider(long_data, 
                                     names_from = "siteID", 
                                     values_from = "activity") |>
-    select(labels, "time_bin", CV_slice_ID, everything()) |>
+    select(labels, "trial_number", "time_bin", CV_slice_ID, everything()) |>
     mutate(time_bin = as.factor(.data$time_bin)) #  |>  arrange(labels, time_bin)
   
-
    
   # create different CV_1, CV_2 which list which points are training points and which points are test points
   for (iCV in 1:num_cv_splits) {
@@ -427,7 +439,7 @@ get_data.ds_basic <- function(ds_obj) {
     eval(parse(text = paste0("all_cv_data$CV_", iCV, "= ifelse(all_cv_data$CV_slice_ID %in% curr_cv_block_inds, 'test', 'train')")))
   }
 
-
+   
   all_cv_data <- dplyr::select(all_cv_data, -CV_slice_ID) |>
     dplyr::ungroup() # fails tests if I don't ungroup. Also remove the original CV_slice_ID field
 

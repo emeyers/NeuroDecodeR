@@ -74,3 +74,28 @@ test_that("cv_standard can run a decoding analysis using magrittr piping", {
   
 })
 
+
+
+
+test_that("cv_standard can run a decoding analysis saving invidual trial results", {
+  
+  # not simultaneously recorded data, but ok for testing purposes
+  basedir_file_name <- system.file(file.path("extdata", "ZD_500bins_500sampled.Rda"), 
+                                   package="NeuroDecodeR")
+  
+  DECODING_RESULTS <- basedir_file_name %>%
+    ds_basic('stimulus_ID', 6, num_label_repeats_per_cv_split = 3) %>%
+    cl_max_correlation() %>%
+    fp_zscore() %>%
+    rm_main_results(save_individual_trial_results = TRUE) %>%
+    cv_standard(num_resample_runs = 2, run_TCD = TRUE) %>%
+    run_decoding()
+
+  
+  plot(DECODING_RESULTS$rm_main_results)
+  
+  expect_equal(class(DECODING_RESULTS), "list")
+  
+})
+
+

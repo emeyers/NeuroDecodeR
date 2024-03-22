@@ -343,11 +343,13 @@ run_decoding.cv_standard <- function(cv_obj) {
         training_set <- dplyr::filter(
           cv_data, .data$time_bin == unique_times[iTrain],
           all_cv_train_test_inds[iCV] == "train") |>
-          dplyr::select(starts_with("site"), .data$train_labels)
+          dplyr::select(starts_with("site"), "train_labels", "trial_number")
+          #dplyr::select(starts_with("site"), .data$train_labels)
 
         test_set <- dplyr::filter(cv_data, all_cv_train_test_inds[iCV] == "test") |>
-          dplyr::select(starts_with("site"), .data$test_labels, .data$time_bin)
-
+          #dplyr::select(starts_with("site"), .data$test_labels, .data$time_bin)
+          dplyr::select(starts_with("site"), "test_labels", "time_bin", "trial_number")
+        
         if (!run_TCD) {
           test_set <- dplyr::filter(test_set, .data$time_bin == unique_times[iTrain])
         }

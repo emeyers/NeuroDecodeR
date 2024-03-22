@@ -65,11 +65,16 @@ that has the following variables in it:
 
 2. `test_labels`: The label levels that occur on each trial in the test data set
 
-3. `time_bin`: The time in the experiment where the *test* data comes from
+3. `trial_number`: The trial number in the experiment where the *test* data
+comes from. For simultaneously recorded data this is the actual trial number
+that the data was recorded from, for pseudo-population data, this variables is
+just a random number that is different on each resample run.
 
-4. `site_XXX`: A collection of variables that each has data from one site  (e.g., neuron, EEG channel etc.) 
+4. `time_bin`: The time in the experiment where the *test* data comes from
 
-5. `CV_XXX`: A list for each CV split whether a given row is in that train or test set
+5. `site_XXX`: A collection of variables that each has data from one site  (e.g., neuron, EEG channel etc.) 
+
+6. `CV_XXX`: A list for each CV split whether a given row is in that train or test set
 
 
 Like all NDR objects, DS objects must also implement a `get_properties()` method
@@ -127,13 +132,20 @@ variables:
 
 1. `training_labels`: The labels used to train the classifier.
 2. `site_X`: a group of variables that has data from multiple sites.
-
+3. `trial_number`: The trial number in the experiment where the data comes from.
+For simultaneously recorded data this is the actual trial number that the data
+was recorded from, for pseudo-population data, this variables is just a random
+number that is different on each resample run.
 
 #### test_set
 
 1. `test_labels`: The labels used to test the classifier
 2. `site_X`: a group of variables that has data from multiple sites
 3. `time_bin`: character strings listing which times different rows correspond to
+4. `trial_number`: The trial number in the experiment where the data comes from.
+For simultaneously recorded data this is the actual trial number that the data
+was recorded from, for pseudo-population data, this variables is just a random
+number that is different on each resample run.
 
 The `preprocess_data()` returns a list with the two data frames *training_set* and
 *test_set* but the data in these data frames has been preprocessed based on
@@ -164,15 +176,15 @@ ds <- ds_basic(data_file_name, 'stimulus_ID', 18)
 cv_data <- get_data(ds)  
  
 
-# an example of spliting the data into a training and test set, 
+# an example of splitting the data into a training and test set, 
 # this is done in the cross-validator
 training_set <- dplyr::filter(cv_data, 
                               time_bin == "time.100_250", 
                               CV_1 == "train") %>%       # get data from the first CV split
-  dplyr::select(starts_with("site"), train_labels)
+  dplyr::select(starts_with("site"), train_labels, trial_number)
         
 test_set <- dplyr::filter(cv_data, CV_1 == "test") %>%   # get data from the first CV split
-  dplyr::select(starts_with("site"), test_labels, time_bin) 
+  dplyr::select(starts_with("site"), test_labels, time_bin, trial_number) 
 
 
 
@@ -219,22 +231,32 @@ two data frames called *training_set* and *test_set* have the following variable
 
 1. `training_labels`: The labels used to train the classifier.
 2. `site_X`: a group of variables that has data from multiple sites.
+3. `trial_number`: The trial number in the experiment where the data comes from.
+For simultaneously recorded data this is the actual trial number that the data
+was recorded from, for pseudo-population data, this variables is just a random
+number that is different on each resample run.
 
 #### test_set
 
 1. `test_labels` The labels used to test the classifier.
 2. `site_X`: a group of variables that has data from multiple sites.
 3. `time_bin`: character strings listing which times different rows correspond to.
+4. `trial_number`: The trial number in the experiment where the data comes from.
+For simultaneously recorded data this is the actual trial number that the data
+was recorded from, for pseudo-population data, this variables is just a random
+number that is different on each resample run.
 
 The `get_predictions()` returns a data frame that has the following variables: 
 
-1. `test_time`: a character vector indicating the times which the rows come from
+1. `trial_number`: The trial number in the experiment where the *test* data comes from.
 
-2. `actual_labels`: the labels that were actually present on each trial
+2. `test_time`: a character vector indicating the times which the rows come from
 
-3. `predicted_labels`: the labels that the classifier predicted
+3. `actual_labels`: the labels that were actually present on each trial
 
-4. `decision_vals.X` (optional): a group of variables that has values that indicate how strongly
+4. `predicted_labels`: the labels that the classifier predicted
+
+5. `decision_vals.X` (optional): a group of variables that has values that indicate how strongly
 the classifier rates a test point as coming from a particular class
 
 
@@ -269,10 +291,10 @@ cv_data <- get_data(ds)
 training_set <- dplyr::filter(cv_data, 
                               time_bin == "time.100_250", 
                               CV_1 == "train") %>%       # get data from the first CV split
-  dplyr::select(starts_with("site"), train_labels)
+  dplyr::select(starts_with("site"), train_labels, trial_number)
         
 test_set <- dplyr::filter(cv_data, CV_1 == "test") %>%   # get data from the first CV split
-  dplyr::select(starts_with("site"), test_labels, time_bin) 
+  dplyr::select(starts_with("site"), test_labels, time_bin, trial_number) 
 
 
 
@@ -332,6 +354,8 @@ in the output of the CL `get_predictions()` method, namely:
 6. `decision_vals.X` (optional): a group of variables that has values that
 indicate how strongly the classifier rates a test point as coming from a
 particular class
+
+7. `trial_number` (optional): The trial number in the experiment where the *test* data comes from.
 
 
 The output of the `aggregate_CV_split_results` is a RM object of the same type

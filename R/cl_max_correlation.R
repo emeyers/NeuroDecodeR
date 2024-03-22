@@ -91,9 +91,9 @@ cl_max_correlation <- function(ndr_container_or_object = NULL,
 get_predictions.cl_max_correlation <- function(cl_obj,
                                                training_set,
                                                test_set) {
-
   ### Train the classifier  ---------------------------------------------------
   prototypes <- training_set |>
+    dplyr::select(-"trial_number") |>
     dplyr::group_by(.data$train_labels) |>
     dplyr::summarise_all(mean)
 
@@ -102,14 +102,14 @@ get_predictions.cl_max_correlation <- function(cl_obj,
   ### Test the classifier  ---------------------------------------------------
   train_test_cor <- cor(
     t(prototypes[, 2:dim(prototypes)[2]]),
-    t(dplyr::select(test_set, -"test_labels", -"time_bin"))
+    t(dplyr::select(test_set, -"test_labels", -"time_bin", -"trial_number"))
   )
 
   # get the predicted labels
   predicted_inds <- apply(train_test_cor, 2, rand_which_max)
   predicted_labels <- prototypes$train_labels[predicted_inds]
 
-
+  
   if (sum(is.na(predicted_labels))) {
     warning("some of the predicted results returned by the max correlation classifier are NAs")
   }
@@ -117,6 +117,7 @@ get_predictions.cl_max_correlation <- function(cl_obj,
 
   # create a data frame that has all the results
   results <- data.frame(
+    trial_number = test_set$trial_number,
     test_time = test_set$time_bin,
     actual_labels = test_set$test_labels,
     predicted_labels = predicted_labels)

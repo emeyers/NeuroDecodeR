@@ -201,14 +201,21 @@ test_that("basic_ds: simultaneously recorded data is returned correctly", {
 test_that("basic_ds: shuffling labels works", {
   
   
+  binned_data_file_name <- "fake_simultaneous_binned_data.Rda"
+  label_name <- "stim_names"
+  
+  # load(binned_data_file_name)
+  # binned_data_file_name <- select(binned_data, -trial_number) 
+  
+  
   num_CV <- 5
   num_reps <- 2
 
-  # check 1: when the label levels are not shuffled and we pull all 10 sites, there
-  # should always be the same mapping for sites and labels everytime we get a
-  # new set of data
+  # check 1: when the label levels are not shuffled and we pull all data from
+  # all 10 repeats, there should always be the same mapping for sites and labels
+  # every time we get a new set of data (because we're pulling all the data)
   
-  ds1 <- ds_basic("fake_simultaneous_binned_data.Rda", "stim_names", num_CV,
+  ds1 <- ds_basic(binned_data_file_name, label_name, num_CV,
                   num_label_repeats_per_cv_split = num_reps)
   
   unshuffled_data1 <- get_data(ds1) %>% 
@@ -216,7 +223,7 @@ test_that("basic_ds: shuffling labels works", {
     arrange(train_labels, test_labels, site_0001)
   
   
-  ds2 <- ds_basic("fake_simultaneous_binned_data.Rda", "stim_names", num_CV,
+  ds2 <- ds_basic(binned_data_file_name, label_name, num_CV,
                   num_label_repeats_per_cv_split = num_reps)
   
   unshuffled_data2 <- get_data(ds2) %>% 
@@ -228,10 +235,10 @@ test_that("basic_ds: shuffling labels works", {
   
   
   # check 2a: when the label levels are shuffled before running, and we pull all 10 sites,
-  # there be a different mapping for sites and labels everytime we get a new set
+  # there be a different mapping for sites and labels every time we get a new set
   # of data
   
-  ds1 <- ds_basic("fake_simultaneous_binned_data.Rda", "stim_names", num_CV,
+  ds1 <- ds_basic(binned_data_file_name, label_name, num_CV,
                  num_label_repeats_per_cv_split = num_reps,
                       randomly_shuffled_labels = TRUE)
   
@@ -239,7 +246,7 @@ test_that("basic_ds: shuffling labels works", {
     select(site_0001, train_labels, test_labels) %>%
     arrange(train_labels, test_labels, site_0001)
   
-  ds2 <- ds_basic("fake_simultaneous_binned_data.Rda", "stim_names", num_CV,
+  ds2 <- ds_basic(binned_data_file_name, label_name, num_CV,
                   num_label_repeats_per_cv_split = num_reps,
                   randomly_shuffled_labels = TRUE)
   
@@ -261,10 +268,15 @@ test_that("basic_ds: shuffling labels works", {
   
   
   
-  # check 3: when suffling simulatenous data, all sites should have the same
+
+  
+  # check 3: when shuffling simultaneous data, all sites should have the same
   # random trial to label mapping...
   
-  ds_simul1 <- ds_basic("fake_simultaneous_binned_data.Rda", "stim_names", num_CV,
+  binned_data_file_name <- "fake_simultaneous_binned_data.Rda"
+  label_name <- "stim_names"
+  
+  ds_simul1 <- ds_basic(binned_data_file_name, label_name, num_CV,
                   num_label_repeats_per_cv_split = num_reps,
                   randomly_shuffled_labels = TRUE,
                   create_simultaneous_populations = TRUE)
@@ -283,7 +295,7 @@ test_that("basic_ds: shuffling labels works", {
   # time.
   
   
-  ds_simul2 <- ds_basic("fake_simultaneous_binned_data.Rda", "stim_names", num_CV,
+  ds_simul2 <- ds_basic(binned_data_file_name, label_name, num_CV,
                         num_label_repeats_per_cv_split = num_reps,
                         randomly_shuffled_labels = TRUE,
                         create_simultaneous_populations = TRUE)
@@ -356,7 +368,7 @@ for (i in seq_along(id_levels)){
 
 
 
-test_that("generalization_ds constructor and get data work", {
+test_that("ds_generalization constructor and get data work", {
   
   
   ds <- ds_generalization(real_data_binned_file_name, 
@@ -391,7 +403,7 @@ test_that("generalization_ds constructor and get data work", {
 # test that ds_generalization leads to results at chance in baseline 
 #  and above chance in stimulus period (more of an integration test than a unit test)
 
-test_that("generalization_ds classification accuracy seem reasonable", {
+test_that("ds_generalization classification accuracy seem reasonable", {
   
   # get firing rate data
   ds <- ds_generalization(real_data_binned_file_name, 'combined_ID_position',
@@ -402,10 +414,10 @@ test_that("generalization_ds classification accuracy seem reasonable", {
   cv_data <- get_data(ds)
   
   training_set <- dplyr::filter(cv_data, time_bin == "time.200_350", CV_1 == "train") %>% 
-    select(starts_with("site"), train_labels = train_labels)
+    select(starts_with("site"), train_labels = train_labels, "trial_number")
   
   test_set <- dplyr::filter(cv_data, time_bin %in% c("time.-350_-200", "time.200_350"), CV_1 == "test") %>% 
-    select(starts_with("site"), test_labels = test_labels, time_bin)
+    select(starts_with("site"), test_labels = test_labels, time_bin, "trial_number")
   
   levels(test_set$time_bin)[levels(test_set$time_bin)=="time.-350_-200"] <- "baseline"
   levels(test_set$time_bin)[levels(test_set$time_bin)=="time.200_350"] <- "stimulus"

@@ -486,10 +486,10 @@ get_example_training_and_test_data <- function() {
   cv_data <- get_data(ds)
 
   training_set <- filter(cv_data, .data$time_bin == "time.200_350", .data$CV_1 == "train") |>
-    select(starts_with("site"), "train_labels")
+    select(starts_with("site"), "train_labels", "trial_number")
 
   test_set <- filter(cv_data, .data$time_bin %in% c("time.-350_-200", "time.200_349"), .data$CV_1 == "test") |>
-    dplyr::select(starts_with("site"), "test_labels", "time_bin")
+    dplyr::select(starts_with("site"), "test_labels", "time_bin", "trial_number")
   
 
   levels(test_set$time_bin)[levels(test_set$time_bin) == "time.-350_-200"] <- "baseline"

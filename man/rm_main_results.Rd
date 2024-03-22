@@ -6,7 +6,8 @@
 \usage{
 rm_main_results(
   ndr_container_or_object = NULL,
-  include_norm_rank_results = TRUE
+  include_norm_rank_results = TRUE,
+  save_individual_trial_results = FALSE
 )
 }
 \arguments{
@@ -31,6 +32,13 @@ decision values will only be calculated when for results when training and
 testing at the same time. Not returning the full results can speed up the
 run-time of the code and will use less memory so this can be useful for
 large data sets.}
+
+\item{save_individual_trial_results}{A Boolean specifying if one should save
+the results for separately for each individual test trial, rather than just
+returning the results average over all test trials. This is only useful for
+simultaneously recorded data but could potentially show how decoding accuracy
+varies on individual trials which could be related to other experimental
+variables such as the reaction times on individual trials.}
 }
 \value{
 This constructor creates an NDR result metric object with the class

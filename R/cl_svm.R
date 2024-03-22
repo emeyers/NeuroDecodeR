@@ -105,12 +105,12 @@ get_predictions.cl_svm <- function(cl_obj, training_set, test_set) {
   # if arguments to the svm have been supplied, use them
   if (length(cl_obj$svm_options) == 0) {
     
-    all_arguments <- list(x = select(training_set, -"train_labels"), y = training_set$train_labels)
+    all_arguments <- list(x = select(training_set, -"train_labels", -"trial_number"), y = training_set$train_labels)
 
   } else {
 
     all_arguments <- list(
-      x = select(training_set, -"train_labels"),
+      x = select(training_set, -"train_labels", -"trial_number"),
       y = training_set$train_labels,
       unlist(cl_obj$svm_options))
 
@@ -128,6 +128,7 @@ get_predictions.cl_svm <- function(cl_obj, training_set, test_set) {
                               decision.values = TRUE)
   
   results <- data.frame(
+    trial_number = test_set$trial_number,
     test_time = test_set$time_bin,
     actual_labels = test_set$test_labels,
     predicted_labels = predicted_labels)

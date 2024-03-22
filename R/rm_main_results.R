@@ -31,6 +31,13 @@
 #'   testing at the same time. Not returning the full results can speed up the
 #'   run-time of the code and will use less memory so this can be useful for
 #'   large data sets.
+#'   
+#' @param save_individual_trial_results A Boolean specifying if one should save
+#'  the results for separately for each individual test trial, rather than just 
+#'  returning the results average over all test trials. This is only useful for
+#'  simultaneously recorded data but could potentially show how decoding accuracy
+#'  varies on individual trials which could be related to other experimental 
+#'  variables such as the reaction times on individual trials.
 #'
 #' @return This constructor creates an NDR result metric object with the class
 #'   `rm_main_results`. Like all NDR result metric objects, this result
@@ -50,9 +57,11 @@
 #'
 #' @export
 rm_main_results <- function(ndr_container_or_object = NULL, 
-                            include_norm_rank_results = TRUE) {
+                            include_norm_rank_results = TRUE,
+                            save_individual_trial_results = FALSE) {
   
-  options <- list(include_norm_rank_results = include_norm_rank_results)
+  options <- list(include_norm_rank_results = include_norm_rank_results,
+                  save_individual_trial_results = save_individual_trial_results)
 
   rm_obj <- new_rm_main_results(options = options)
   
@@ -88,7 +97,7 @@ new_rm_main_results <- function(the_data = data.frame(), state = "initial", opti
 #' @export
 aggregate_CV_split_results.rm_main_results <- function(rm_obj, prediction_results) {
 
-
+  
   # return a warning if the state is not initial
   if (attr(rm_obj, "state") != "initial") {
     
@@ -98,56 +107,79 @@ aggregate_CV_split_results.rm_main_results <- function(rm_obj, prediction_result
       "Any data that was already stored in this object will be overwritten"))
     
   }
-
-
+  
+  
+  save_individual_trial_results <- attr(rm_obj, "options")$save_individual_trial_results
+  
+  
   # get the options for how the normalized rank and decision values should be aggregated
   include_norm_rank_results <- attr(rm_obj, "options")$include_norm_rank_results
-
   
-if ((sum(grepl("decision", names(prediction_results))) == 0) & (include_norm_rank_results != FALSE)) {
   
-  # Perhaps this should be an error instead of just resetting the argument value which in general
-  #  is a pretty bad thing to do. However, likely 
-  error_message <- paste("The classifier selected did not returned decision values.", 
-                         "Setting argument 'include_norm_rank_results' to FALSE.\n")
+  if ((sum(grepl("decision", names(prediction_results))) == 0) & (include_norm_rank_results != FALSE)) {
+    
+    # Perhaps this should be an error instead of just resetting the argument value which in general
+    #  is a pretty bad thing to do. However, likely 
+    error_message <- paste("The classifier selected did not returned decision values.", 
+                           "Setting argument 'include_norm_rank_results' to FALSE.\n")
+    
+    warning(error_message)
+    
+    # change the parameter value to the warning message to let the user know this
+    # parameter was reset when they look at the cross-validation parameters
+    attr(rm_obj, "options")$include_norm_rank_results <- error_message
+    
+    include_norm_rank_results <- FALSE
+    
+  }
   
-  warning(error_message)
   
-  # change the parameter value to the warning message to let the user know this
-  # parameter was reset when they look at the cross-validation parameters
-  attr(rm_obj, "options")$include_norm_rank_results <- error_message
-  
-  include_norm_rank_results <- FALSE
-  
-}
- 
- 
   # get the zero-one loss loss results
   the_results <- prediction_results %>%
-    dplyr::mutate(correct = .data$actual_labels == .data$predicted_labels) %>%
-    #dplyr::group_by(.data$CV, .data$train_time, .data$test_time) %>%
-    dplyr::group_by(.data$train_time, .data$test_time) %>%           # also aggregating over CV splits here
+    dplyr::mutate(correct = .data$actual_labels == .data$predicted_labels)
+  
+  if (save_individual_trial_results) {
+    
+    the_results <- the_results |> 
+      #dplyr::group_by(.data$CV, .data$train_time, .data$test_time) %>%
+      dplyr::group_by(.data$train_time, .data$test_time, .data$trial_number)           # also aggregating over CV splits here
+    
+    join_col_names <- c("train_time", "test_time", "trial_number")  # col names to join normalized rank and decision values on
+    
+    
+  }  else {
+    
+    the_results <- the_results |> 
+      #dplyr::group_by(.data$CV, .data$train_time, .data$test_time) %>%
+      dplyr::group_by(.data$train_time, .data$test_time)           # also aggregating over CV splits here
+    
+    join_col_names <- c("train_time", "test_time")  # col names to join normalized rank and decision values on
+    
+  }
+  
+  
+  the_results <- the_results |> 
     summarize(zero_one_loss = mean(.data$correct, na.rm = TRUE),
               sd_zero_one_loss = sd(.data$correct, na.rm = TRUE),
               se_zero_one_loss = sd(.data$correct, na.rm = TRUE)/sqrt(length(na.omit(.data$correct))))
-
+  
   
   # calculate the chance level for the zero one loss results
   zero_one_loss_chance_level <- 1/length(unique(prediction_results$actual_labels))
-
+  
   
   # newly added code to speed things up
   if (include_norm_rank_results != FALSE) {
-      
+    
     
     # check for invalid include_norm_rank_results argument values
     if (!((include_norm_rank_results == TRUE) || (include_norm_rank_results == 'only_same_train_test_time'))) {
-    
+      
       stop(paste0("'include_norm_rank_results' argument was set to ", include_norm_rank_results, ". ", 
                   "'include_norm_rank_results' must be set to one of the following: TRUE, FALSE, or 'only_same_train_test_time'"))
     }
-
-  
+    
+    
     # if "only_same_train_test_time" option is selected only use data for training and testing at the same time
     if (include_norm_rank_results == "only_same_train_test_time") {
       prediction_results <- prediction_results %>%
@@ -166,63 +198,97 @@ if ((sum(grepl("decision", names(prediction_results))) == 0) & (include_norm_ran
     # Could use the below code to remove them, but better to remove them at the classification stage.
     # data_matrix[is.na(data_matrix)] <- 0
     
-
+    
     # get the indices of the column that each actual label corresponds to
     get_actual_label_ind <- function(actual_label) {
       which(actual_label == col_names)
     }
     actual_label_inds <- sapply(actual_labels, get_actual_label_ind)
- 
-       
+    
+    
     correct_class_decision_val <- data_matrix[matrix(c(seq_along(actual_label_inds), actual_label_inds), 
                                                      nrow = length(actual_label_inds))]
- 
+    
     
     # add the decision values to the results
     summarized_correct_decision_val_results <- prediction_results %>%
       select(-starts_with("decision")) %>%
-      mutate(decision_vals = correct_class_decision_val) %>%
-      # dplyr::group_by(.data$CV, .data$train_time, .data$test_time) %>%    
-      dplyr::group_by(.data$train_time, .data$test_time) %>%     # also aggregating over CV splits here
+      mutate(decision_vals = correct_class_decision_val)
+    
+    if (save_individual_trial_results) {
+      
+      summarized_correct_decision_val_results <- summarized_correct_decision_val_results |>
+        # dplyr::group_by(.data$CV, .data$train_time, .data$test_time) %>%    
+        dplyr::group_by(.data$train_time, .data$test_time, .data$trial_number)      # also aggregating over CV splits here
+      
+    } else {
+      
+      summarized_correct_decision_val_results <- summarized_correct_decision_val_results |>
+        # dplyr::group_by(.data$CV, .data$train_time, .data$test_time) %>%    
+        dplyr::group_by(.data$train_time, .data$test_time)      # also aggregating over CV splits here
+      
+    }
+    
+    
+    summarized_correct_decision_val_results <- summarized_correct_decision_val_results |>
       summarize(sd_decision_vals = sd(.data$decision_vals, na.rm = TRUE),
                 se_decision_vals = sd(.data$decision_vals, na.rm = TRUE)/sqrt(length(na.omit(.data$decision_vals))),
                 decision_vals = mean(.data$decision_vals, na.rm = TRUE)) %>%
       select("decision_vals", "sd_decision_vals", "se_decision_vals", everything())
     
-      
-      the_results <- left_join(the_results, summarized_correct_decision_val_results,
-                               by = c("train_time", "test_time"))
-
-
+    
+    
+    the_results <- left_join(the_results, summarized_correct_decision_val_results,
+                             by = join_col_names)
+    
+    
     # get the normalized rank results...
-      diff_decision_vals <- sweep(data_matrix, 1, correct_class_decision_val)
+    diff_decision_vals <- sweep(data_matrix, 1, correct_class_decision_val)
+    
+    
+    # not dealing with tied ranks which perhaps I should
+    the_ranks <- rowSums(diff_decision_vals < 0)
+    normalized_rank_results <- the_ranks/(dim(data_matrix)[2] - 1)
+    
+    
+    summarized_normalized_rank_results <- prediction_results %>%
+      select(-starts_with("decision")) %>%
+      mutate(normalized_rank = normalized_rank_results) 
+    
+    
+    if (save_individual_trial_results) {
       
-      
-      # not dealing with tied ranks which perhaps I should
-      the_ranks <- rowSums(diff_decision_vals < 0)
-      normalized_rank_results <- the_ranks/(dim(data_matrix)[2] - 1)
-      
-      
-      summarized_normalized_rank_results <- prediction_results %>%
-        select(-starts_with("decision")) %>%
-        mutate(normalized_rank = normalized_rank_results) %>%
+      summarized_normalized_rank_results <- summarized_normalized_rank_results |>
         # dplyr::group_by(.data$CV, .data$train_time, .data$test_time) %>%
-        dplyr::group_by(.data$train_time, .data$test_time) %>%    # also aggregating over CV splits here
-        summarize(sd_normalized_rank = sd(.data$normalized_rank, na.rm = TRUE),
-                  se_normalized_rank = sd(.data$normalized_rank, na.rm = TRUE)/sqrt(length(na.omit(.data$normalized_rank))),
-                  normalized_rank = mean(.data$normalized_rank, na.rm = TRUE)) %>%
-        select("normalized_rank", "sd_normalized_rank", "se_normalized_rank", everything())
+        dplyr::group_by(.data$train_time, .data$test_time, .data$trial_number)    # also aggregating over CV splits here
       
-      the_results <- left_join(the_results, summarized_normalized_rank_results,
-                               by = c("train_time", "test_time"))
+    } else {
       
-
-      # clean up memory
-      rm(data_matrix)
-      rm(diff_decision_vals)
-      gc()
+      summarized_normalized_rank_results <- summarized_normalized_rank_results |>
+        # dplyr::group_by(.data$CV, .data$train_time, .data$test_time) %>%
+        dplyr::group_by(.data$train_time, .data$test_time)    # also aggregating over CV splits here
+      
+    }
+    
+    
+    summarized_normalized_rank_results <- summarized_normalized_rank_results |>
+      summarize(sd_normalized_rank = sd(.data$normalized_rank, na.rm = TRUE),
+                se_normalized_rank = sd(.data$normalized_rank, na.rm = TRUE)/sqrt(length(na.omit(.data$normalized_rank))),
+                normalized_rank = mean(.data$normalized_rank, na.rm = TRUE)) %>%
+      select("normalized_rank", "sd_normalized_rank", "se_normalized_rank", everything())
+    
+    
+    the_results <- left_join(the_results, summarized_normalized_rank_results,
+                             by = join_col_names)
+    
+    
+    # clean up memory
+    rm(data_matrix)
+    rm(diff_decision_vals)
+    gc()
     
   }  # end for decision values and normalized rank results
+  
   
   
   # try to clear up even more memory (does this do anything?)
@@ -252,8 +318,26 @@ if ((sum(grepl("decision", names(prediction_results))) == 0) & (include_norm_ran
 aggregate_resample_run_results.rm_main_results <- function(resample_run_results) {
   
   
-  central_results <- resample_run_results %>%
-    group_by(.data$train_time, .data$test_time) %>%
+  save_individual_trial_results <- attr(resample_run_results, "options")$save_individual_trial_results
+  
+  
+  if (save_individual_trial_results) {
+
+    central_results <- resample_run_results |>
+      group_by(.data$train_time, .data$test_time, .data$trial_number)
+    
+    join_col_names <- c("train_time", "test_time", "trial_number")
+    
+  } else {
+    
+    central_results <- resample_run_results |>
+      group_by(.data$train_time, .data$test_time)
+    
+    join_col_names <- c("train_time", "test_time")
+    
+  }
+  
+  central_results <- central_results |>
     summarize(zero_one_loss = mean(.data$zero_one_loss),
               sd_zero_one_loss = mean(.data$sd_zero_one_loss),
               se_zero_one_loss = mean(.data$se_zero_one_loss))
@@ -261,28 +345,50 @@ aggregate_resample_run_results.rm_main_results <- function(resample_run_results)
 
   if ("normalized_rank" %in% names(resample_run_results)) {
     
-    normalized_rank_results <- resample_run_results %>%
-      group_by(.data$train_time, .data$test_time) %>%
+    if (save_individual_trial_results) { 
+      normalized_rank_results <- resample_run_results |>
+        group_by(.data$train_time, .data$test_time, .data$trial_number) 
+       
+    } else {
+      normalized_rank_results <- resample_run_results |>
+        group_by(.data$train_time, .data$test_time)         
+    }
+
+    
+    normalized_rank_results <- normalized_rank_results |>
       summarize(normalized_rank = mean(.data$normalized_rank),
                 sd_normalized_rank = mean(.data$sd_normalized_rank),
                 se_normalized_rank = mean(.data$se_normalized_rank))
 
-    central_results <- left_join(central_results, normalized_rank_results, by = c("train_time", "test_time"))
+    central_results <- left_join(central_results, normalized_rank_results, by = join_col_names)
   }
 
 
   if ("decision_vals" %in% names(resample_run_results)) {
     
-    decision_vals_results <- resample_run_results %>%
-      group_by(.data$train_time, .data$test_time) %>%
+    
+    if (save_individual_trial_results) { 
+      
+      decision_vals_results <- resample_run_results |>
+        group_by(.data$train_time, .data$test_time, .data$trial_number) 
+      
+    } else {
+      
+      decision_vals_results <- resample_run_results |>
+        group_by(.data$train_time, .data$test_time) 
+    }
+    
+    
+    decision_vals_results <- decision_vals_results |>
       summarize(decision_vals = mean(.data$decision_vals),
                 sd_decision_vals = mean(.data$sd_decision_vals),
                 se_decision_vals = mean(.data$se_decision_vals))
 
-    central_results <- left_join(central_results, decision_vals_results, by = c("train_time", "test_time"))
+    central_results <- left_join(central_results, decision_vals_results, by = join_col_names)
+    
   }
 
-
+  
   new_rm_main_results(
     central_results,
     "final results",

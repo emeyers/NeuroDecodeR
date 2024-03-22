@@ -75,7 +75,7 @@ test_that("fp_select_k_features p-values are correct", {
   
   # test the the ANOVA function that I will write works
   all_pvals <- NULL
-  for (iSite in 1:(ncol(training_set) - 1)){
+  for (iSite in 1:(ncol(training_set) - 2)){
        curr_data <- training_set[, iSite][[1]]
        all_pvals[iSite] <- anova(lm(curr_data ~ training_set$train_labels))$Pr[1]
     }

@@ -110,6 +110,7 @@ get_predictions.cl_poisson_naive_bayes <- function(cl_obj, training_set, test_se
 
   # Train the classifier --------------------------------------------------
   lambdas_and_labels <- training_set |>
+    select(-"trial_number") |>
     group_by(.data$train_labels) |>
     summarise_all(mean)
 
@@ -153,6 +154,7 @@ get_predictions.cl_poisson_naive_bayes <- function(cl_obj, training_set, test_se
 
   # create a data frame that has all the results
   results <- data.frame(
+    trial_number = test_set$trial_number,
     test_time = test_set$time_bin,
     actual_labels = test_set$test_labels,
     predicted_labels = predicted_labels

@@ -42,8 +42,10 @@ real_data_binned_file_name <- system.file(file.path("extdata", "ZD_150bins_50sam
 ds <- ds_basic(real_data_binned_file_name, "stimulus_ID", site_IDs_to_exclude = 63,
                num_cv_splits = 3, num_label_repeats_per_cv_split = 6, use_count_data = TRUE)
 cv_data <- get_data(ds)
-training_set <- filter(cv_data, time_bin == "time.200_350", CV_1 == "train") %>% select(starts_with("site"), train_labels)
-test_set <- filter(cv_data, time_bin %in% c("time.-350_-200", "time.200_350"), CV_1 == "test") %>% select(starts_with("site"), test_labels, time_bin)
+#training_set <- filter(cv_data, time_bin == "time.200_350", CV_1 == "train") %>% select(starts_with("site"), train_labels)
+#test_set <- filter(cv_data, time_bin %in% c("time.-350_-200", "time.200_350"), CV_1 == "test") %>% select(starts_with("site"), test_labels, time_bin)
+training_set <- filter(cv_data, time_bin == "time.200_350", CV_1 == "train") %>% select(starts_with("site"), train_labels, trial_number)
+test_set <- filter(cv_data, time_bin %in% c("time.-350_-200", "time.200_350"), CV_1 == "test") %>% select(starts_with("site"), test_labels, time_bin, trial_number)
 levels(test_set$time_bin)[levels(test_set$time_bin)=="time.-350_-200"] <- "baseline"
 levels(test_set$time_bin)[levels(test_set$time_bin)=="time.200_350"] <- "stimulus"
 
@@ -53,8 +55,10 @@ levels(test_set$time_bin)[levels(test_set$time_bin)=="time.200_350"] <- "stimulu
 ds <- ds_basic(real_data_binned_file_name, "stimulus_ID", site_IDs_to_exclude = 63,
                num_cv_splits = 3, num_label_repeats_per_cv_split = 6, use_count_data = TRUE)
 cv_data <- get_data(ds)
-count_training_set <- filter(cv_data, time_bin == "time.200_350", CV_1 == "train") %>% select(starts_with("site"), train_labels)
-count_test_set <- filter(cv_data, time_bin %in% c("time.-350_-200", "time.200_350"), CV_1 == "test") %>% select(starts_with("site"), test_labels, time_bin)
+#count_training_set <- filter(cv_data, time_bin == "time.200_350", CV_1 == "train") %>% select(starts_with("site"), train_labels)
+#count_test_set <- filter(cv_data, time_bin %in% c("time.-350_-200", "time.200_350"), CV_1 == "test") %>% select(starts_with("site"), test_labels, time_bin)
+count_training_set <- filter(cv_data, time_bin == "time.200_350", CV_1 == "train") %>% select(starts_with("site"), train_labels, trial_number)
+count_test_set <- filter(cv_data, time_bin %in% c("time.-350_-200", "time.200_350"), CV_1 == "test") %>% select(starts_with("site"), test_labels, time_bin, trial_number)
 levels(count_test_set$time_bin)[levels(count_test_set$time_bin)=="time.-350_-200"] <- "baseline"
 levels(count_test_set$time_bin)[levels(count_test_set$time_bin)=="time.200_350"] <- "stimulus"
 
@@ -70,9 +74,12 @@ normalized_test_set <- processed_data$test_set
 ds <- ds_basic(real_data_binned_file_name, "stimulus_ID", site_IDs_to_exclude = 63,
                num_cv_splits = 3, num_label_repeats_per_cv_split = 6, randomly_shuffled_labels = TRUE)
 cv_data <- get_data(ds)
-training_set <- filter(cv_data, time_bin == "time.200_350", CV_1 == "train") %>% select(starts_with("site"), train_labels)
+#training_set <- filter(cv_data, time_bin == "time.200_350", CV_1 == "train") %>% select(starts_with("site"), train_labels)
+#test_set <- filter(cv_data, time_bin %in% c("time.-350_-200", "time.200_350"), CV_1 == "test") %>% 
+#  select(starts_with("site"), test_labels, time_bin)
+training_set <- filter(cv_data, time_bin == "time.200_350", CV_1 == "train") %>% select(starts_with("site"), train_labels, trial_number)
 test_set <- filter(cv_data, time_bin %in% c("time.-350_-200", "time.200_350"), CV_1 == "test") %>% 
-  select(starts_with("site"), test_labels, time_bin)
+  select(starts_with("site"), test_labels, time_bin, trial_number)
 levels(test_set$time_bin)[levels(test_set$time_bin)=="time.-350_-200"] <- "baseline"
 levels(test_set$time_bin)[levels(test_set$time_bin)=="time.200_350"] <- "stimulus"
 fp <- fp_zscore()
@@ -88,9 +95,13 @@ ds <- ds_basic(real_data_binned_file_name, "stimulus_ID", site_IDs_to_exclude = 
                randomly_shuffled_labels = TRUE, 
                use_count_data = TRUE)
 cv_data <- get_data(ds)
-training_set <- filter(cv_data, time_bin == "time.200_350", CV_1 == "train") %>% select(starts_with("site"), train_labels)
+#training_set <- filter(cv_data, time_bin == "time.200_350", CV_1 == "train") %>% select(starts_with("site"), train_labels)
+#test_set <- filter(cv_data, time_bin %in% c("time.-350_-200", "time.200_350"), CV_1 == "test") %>% 
+#  select(starts_with("site"), test_labels, time_bin)
+training_set <- filter(cv_data, time_bin == "time.200_350", CV_1 == "train") %>% select(starts_with("site"), train_labels, trial_number)
 test_set <- filter(cv_data, time_bin %in% c("time.-350_-200", "time.200_350"), CV_1 == "test") %>% 
-  select(starts_with("site"), test_labels, time_bin)
+  select(starts_with("site"), test_labels, time_bin, trial_number)
+
 levels(test_set$time_bin)[levels(test_set$time_bin)=="time.-350_-200"] <- "baseline"
 levels(test_set$time_bin)[levels(test_set$time_bin)=="time.200_350"] <- "stimulus"
 shuffled_count_training_set <- training_set
